@@ -65,19 +65,19 @@ a, button, summary {
 
 .button-control:not([data-variant="text"])[data-size="sm"] {
   min-height: var(--size-control-sm);
-  padding-inline: var(--space-sm);
+  /* padding-inline: var(--space-sm); */
   font-size: var(--text-xs);
 }
 
 .button-control:not([data-variant="text"])[data-size="md"] {
   min-height: var(--size-control-md);
-  padding-inline: var(--space-md);
+  /* padding-inline: var(--space-md); */
   font-size: var(--text-sm);
 }
 
 .button-control:not([data-variant="text"])[data-size="lg"] {
   min-height: var(--size-control-lg);
-  padding-inline: var(--space-lg);
+  /* padding-inline: var(--space-lg); */
   font-size: var(--text-base);
 }
 
