@@ -1,0 +1,24 @@
+---
+import ProjectArchive from '../../../components/sections/ProjectArchive.astro';
+import { archiveContent } from '../../../data/archive';
+import { projects } from '../../../data/site';
+import type { Project, TaxonomyTerm } from '../../../types/content';
+import { getTags } from '../../../utils/taxonomy';
+
+export function getStaticPaths() {
+  return getTags(projects).map((tag) => ({
+    params: { tag: tag.slug },
+    props: { tag, matchedProjects: projects.filter((project) => project.tags.some((item) => item.slug === tag.slug)) },
+  }));
+}
+
+interface Props {
+  tag: TaxonomyTerm;
+  matchedProjects: Project[];
+}
+
+const { tag, matchedProjects } = Astro.props;
+const content = archiveContent.projects;
+---
+
+<ProjectArchive eyebrow={content.tagPrefix} title={tag.label} description={content.description} projects={matchedProjects} emptyLabel={content.emptyLabel} />

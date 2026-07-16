@@ -1,0 +1,21 @@
+---
+import { interfaceContent } from '../../data/content';
+import type { SectionHeadingProps } from '../../types/ui';
+import MetaLabel from './MetaLabel.astro';
+
+type Props = SectionHeadingProps;
+
+const { number, label, title, description, dark = true } = Astro.props;
+const kickerClass = ['section-kicker', !dark ? '!text-on-light-muted' : ''].filter(Boolean).join(' ');
+const descriptionClass = dark ? 'text-on-dark-muted' : 'text-on-light-muted';
+---
+
+<header class="grid gap-xl lg:grid-cols-12">
+  <div class="lg:col-span-3">
+    <MetaLabel class={kickerClass}>{number} {interfaceContent.separators.slash} {label}</MetaLabel>
+  </div>
+  <div class="grid lg:col-span-9 lg:grid-cols-9">
+    <h2 class="font-semibold text-balance lg:col-span-9 text-h2">{title}</h2>
+    {description && <p class:list={['mt-7 text-base leading-7 md:text-lg lg:col-span-6', descriptionClass]}>{description}</p>}
+  </div>
+</header>

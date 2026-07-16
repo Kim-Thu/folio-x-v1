@@ -1,0 +1,29 @@
+---
+import type { SectionProps } from '../../types/ui';
+
+type Props = SectionProps;
+
+const {
+  id,
+  class: className = '',
+  theme = 'none',
+  spacing = false,
+} = Astro.props;
+
+const themeClasses = {
+  dark: 'bg-surface-dark',
+  light: 'bg-surface-light text-on-light',
+  accent: 'bg-brand text-on-brand',
+  none: '',
+};
+
+const sectionClass = [
+  spacing ? 'py-3xl md:py-5xl lg:py-6xl' : '',
+  themeClasses[theme],
+  className,
+].filter(Boolean).join(' ');
+---
+
+<section id={id} data-section class={sectionClass}>
+  <slot />
+</section>

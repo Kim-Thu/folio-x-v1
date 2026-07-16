@@ -1,0 +1,43 @@
+{
+  "order": 4,
+  "readingMinutes": 7,
+  "slug": "code-khong-can-nguoi-trong-nom",
+  "category": "Process",
+  "categorySlug": "process",
+  "tags": [
+    {
+      "label": "Observability",
+      "slug": "observability"
+    },
+    {
+      "label": "Team",
+      "slug": "team"
+    }
+  ],
+  "title": "Code không cần người trông nom",
+  "excerpt": "Từ convention đến observability: xây hệ thống để team vận hành tự tin.",
+  "publishedAt": "2026-03-12",
+  "author": "Nguyễn Kim Thu",
+  "image": "https://images.unsplash.com/photo-1516321318423-f06f85e504b3?auto=format&fit=crop&w=1400&q=82",
+  "imageAlt": "Nhóm kỹ thuật cộng tác trước màn hình máy tính",
+  "sections": [
+    {
+      "title": "Khả năng vận hành là một tính năng",
+      "paragraphs": [
+        "Code hoàn thành chưa có nghĩa sản phẩm đã sẵn sàng. Team cần biết cách phát hiện lỗi, truy vết thay đổi và khôi phục mà không phụ thuộc vào trí nhớ của một người."
+      ]
+    },
+    {
+      "title": "Convention giảm quyết định lặp lại",
+      "paragraphs": [
+        "Tên gọi, cấu trúc log, quy trình release và cách xử lý lỗi cần đủ nhất quán để người mới có thể dự đoán hệ thống hoạt động ra sao."
+      ]
+    },
+    {
+      "title": "Observability tạo quyền chủ động",
+      "paragraphs": [
+        "Dashboard và cảnh báo chỉ hữu ích khi chúng dẫn tới hành động cụ thể. Mỗi tín hiệu nên có chủ sở hữu, ngưỡng và một bước xử lý tiếp theo."
+      ]
+    }
+  ]
+}

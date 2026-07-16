@@ -1,0 +1,17 @@
+---
+import BlogDetailLayout from '../../components/sections/BlogDetailLayout.astro';
+import { insights } from '../../data/site';
+import type { Insight } from '../../types/content';
+
+export function getStaticPaths() {
+  return insights.map((post) => ({ params: { slug: post.slug }, props: { post } }));
+}
+
+interface Props {
+  post: Insight;
+}
+
+const { post } = Astro.props;
+---
+
+<BlogDetailLayout post={post} />

@@ -1,0 +1,45 @@
+---
+import type { EmptyStateProps } from '../../types/ui';
+import Button from './Button.astro';
+import MetaLabel from './MetaLabel.astro';
+
+type Props = EmptyStateProps;
+
+const { content } = Astro.props;
+---
+
+<section aria-labelledby={content.id} class="grid gap-xl py-6xl lg:grid-cols-12">
+  <MetaLabel variant="eyebrow" class="text-on-light-subtle lg:col-span-12">
+    {content.eyebrow}
+  </MetaLabel>
+
+  <h1 id={content.id} class="text-h1 font-semibold text-balance lg:col-span-9">
+    {content.title}
+  </h1>
+
+  <p class="text-base text-on-light-muted md:text-lg lg:col-span-6 lg:col-start-7">
+    {content.description}
+  </p>
+
+  <nav aria-label={content.eyebrow} class="flex flex-wrap items-center gap-lg lg:col-span-6 lg:col-start-7">
+    <Button
+      href={content.primaryAction.href}
+      label={content.primaryAction.label}
+      icon={content.primaryAction.icon}
+      iconPosition="start"
+      variant="outline"
+      tone="light"
+      class="gap-xs text-sm text-on-light"
+    />
+    {content.secondaryAction && (
+      <Button
+        href={content.secondaryAction.href}
+        label={content.secondaryAction.label}
+        icon={content.secondaryAction.icon}
+        variant="text"
+        tone="light"
+        class="gap-xs text-sm text-on-light"
+      />
+    )}
+  </nav>
+</section>

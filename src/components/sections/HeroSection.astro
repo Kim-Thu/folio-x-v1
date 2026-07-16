@@ -1,0 +1,36 @@
+---
+import { heroContent } from '../../data/content';
+import { site } from '../../data/site';
+import Button from '../ui/Button.astro';
+import Container from '../ui/Container.astro';
+import MetaLabel from '../ui/MetaLabel.astro';
+import Section from '../ui/Section.astro';
+---
+
+<Section id="top" theme="dark" class="relative min-h-viewport overflow-hidden">
+  <img class="absolute inset-0 h-full w-full object-cover object-hero opacity-70 saturate-hero sm:object-center" src={heroContent.image.src} alt={heroContent.image.alt} fetchpriority="high" />
+  <div class="absolute inset-0 bg-hero-side" aria-hidden="true"></div>
+  <div class="absolute inset-0 bg-hero-floor" aria-hidden="true"></div>
+  <div class="grid-dots absolute inset-0 opacity-20" aria-hidden="true"></div>
+
+  <Container class="relative z-10 flex min-h-viewport flex-col justify-end pb-8 pt-6xl md:pb-10">
+    <div class="mb-auto flex items-start justify-between pt-6 text-on-dark-muted">
+      <MetaLabel variant="eyebrow">{heroContent.identityLines[0]}<br />{heroContent.identityLines[1]}</MetaLabel>
+      <MetaLabel variant="eyebrow" class="hidden text-right sm:block">{heroContent.locationLines[0]}<br /><span class="text-brand-soft">{heroContent.statusSymbol}</span> {heroContent.locationLines[1]}</MetaLabel>
+    </div>
+
+    <div>
+      <p class="mb-5 text-sm leading-6 text-on-dark-muted md:ml-half md:text-base">
+        {heroContent.summary}
+      </p>
+      <h1 class="text-display font-semibold uppercase">
+        <span class="block">{heroContent.titleLines[0]}</span>
+        <span class="block text-on-dark-faint">{heroContent.titleLines[1]}</span>
+      </h1>
+      <div class="mt-7 flex items-end justify-between border-t-hairline border-line-dark pt-8">
+        <MetaLabel variant="eyebrow" class="text-on-dark-subtle">{heroContent.scrollLabel}</MetaLabel>
+        <Button href={`mailto:${site.email}`} label={heroContent.contactLabel} icon="arrowUpRight" variant="text" class="gap-md text-sm font-medium" />
+      </div>
+    </div>
+  </Container>
+</Section>

@@ -1,0 +1,25 @@
+{
+  "skipToContent": "Đi tới nội dung chính",
+  "backToTop": "Về đầu trang",
+  "openMenu": "Mở menu",
+  "navigation": {
+    "primaryLabel": "Điều hướng chính",
+    "mobileLabel": "Điều hướng mobile",
+    "socialLabel": "Mạng xã hội",
+    "footerSocialLabel": "Mạng xã hội ở chân trang"
+  },
+  "progress": {
+    "railLabel": "Tiến trình trang",
+    "readingLabel": "Tiến độ đọc trang",
+    "initialSection": "01 / 06",
+    "initialValue": "0%"
+  },
+  "separators": {
+    "slash": "/",
+    "dot": "·"
+  },
+  "contentFormatting": {
+    "readingTimeTemplate": "{minutes} phút đọc",
+    "dateLocale": "vi-VN"
+  }
+}

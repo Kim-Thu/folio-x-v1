@@ -1,0 +1,20 @@
+---
+import { footerContent, interfaceContent } from '../../data/content';
+import { footerColumns } from '../../data/footer';
+import { site } from '../../data/site';
+import Container from '../ui/Container.astro';
+import FooterColumn from '../ui/FooterColumn.astro';
+---
+
+<footer class="border-t-hairline border-line-dark bg-surface-dark text-on-dark">
+  <Container>
+    <div class="grid gap-10 py-2xl md:grid-cols-12">
+      {footerColumns.map((column) => <FooterColumn column={column} />)}
+    </div>
+
+    <div class="flex flex-col gap-sm border-t-hairline border-line-dark py-7 font-mono text-caption uppercase tracking-meta text-on-dark-faint md:flex-row md:items-center md:justify-between">
+      <p>{footerContent.copyrightSymbol} {new Date().getFullYear()} {site.name}</p>
+      <p>{footerContent.buildLabel} {interfaceContent.separators.dot} {site.location}</p>
+    </div>
+  </Container>
+</footer>

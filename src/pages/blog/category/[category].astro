@@ -1,0 +1,24 @@
+---
+import BlogArchive from '../../../components/sections/BlogArchive.astro';
+import { archiveContent } from '../../../data/archive';
+import { insights } from '../../../data/site';
+import type { Insight, TaxonomyTerm } from '../../../types/content';
+import { getCategories } from '../../../utils/taxonomy';
+
+export function getStaticPaths() {
+  return getCategories(insights).map((category) => ({
+    params: { category: category.slug },
+    props: { category, posts: insights.filter((post) => post.categorySlug === category.slug) },
+  }));
+}
+
+interface Props {
+  category: TaxonomyTerm;
+  posts: Insight[];
+}
+
+const { category, posts } = Astro.props;
+const content = archiveContent.blog;
+---
+
+<BlogArchive eyebrow={content.categoryPrefix} title={category.label} description={content.description} posts={posts} emptyLabel={content.emptyLabel} />

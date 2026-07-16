@@ -1,0 +1,38 @@
+{
+  "notFound": {
+    "id": "not-found-title",
+    "eyebrow": "404 / Không tìm thấy trang",
+    "title": "Đường dẫn này không dẫn đến nội dung nào.",
+    "description": "Trang có thể đã được di chuyển, đổi tên hoặc không còn tồn tại. Bạn có thể quay về trang chủ hoặc xem các project đã xuất bản.",
+    "primaryAction": {
+      "href": "/",
+      "label": "Về trang chủ",
+      "icon": "arrowLeft"
+    },
+    "secondaryAction": {
+      "href": "/projects",
+      "label": "Xem projects",
+      "icon": "arrowRight"
+    },
+    "metadataTitle": "Không tìm thấy trang — Nguyễn Kim Thu",
+    "metadataDescription": "Trang bạn yêu cầu không tồn tại hoặc đã được di chuyển."
+  },
+  "empty": {
+    "id": "empty-content-title",
+    "eyebrow": "Chưa có nội dung",
+    "title": "Không có nội dung để hiển thị ở đây.",
+    "description": "Bộ lọc hoặc khu vực này hiện chưa có nội dung phù hợp. Hãy quay lại danh sách đầy đủ để tiếp tục khám phá.",
+    "primaryAction": {
+      "href": "/blog",
+      "label": "Xem tất cả bài viết",
+      "icon": "arrowLeft"
+    },
+    "secondaryAction": {
+      "href": "/",
+      "label": "Về trang chủ",
+      "icon": "arrowRight"
+    },
+    "metadataTitle": "Chưa có nội dung — Nguyễn Kim Thu",
+    "metadataDescription": "Khu vực này hiện chưa có nội dung để hiển thị."
+  }
+}

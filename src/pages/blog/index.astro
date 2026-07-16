@@ -1,0 +1,10 @@
+---
+import BlogArchive from '../../components/sections/BlogArchive.astro';
+import { archiveContent } from '../../data/archive';
+import { insights } from '../../data/site';
+import { getCategories } from '../../utils/taxonomy';
+
+const content = archiveContent.blog;
+---
+
+<BlogArchive eyebrow={content.eyebrow} title={content.title} description={content.description} posts={insights} categories={getCategories(insights)} filterLabel={content.filterLabel} allLabel={content.allLabel} emptyLabel={content.emptyLabel} />

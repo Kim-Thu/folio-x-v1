@@ -1,0 +1,374 @@
+backend:
+  name: github
+  repo: Kim-Thu/folio-x-v1
+  branch: main
+
+local_backend: true
+
+locale: vi
+media_folder: public/uploads
+public_folder: /uploads
+
+collections:
+  - name: settings
+    label: Cấu hình website
+    label_singular: Cấu hình
+    delete: false
+    editor:
+      preview: false
+    files:
+      - name: site
+        label: Thông tin chung
+        file: src/content/cms/settings/site.json
+        format: json
+        fields:
+          - label: Thông tin cá nhân
+            name: site
+            widget: object
+            fields:
+              - { label: Tên đầy đủ, name: name, widget: string }
+              - { label: Tên viết tắt, name: shortName, widget: string }
+              - { label: Vai trò, name: role, widget: string }
+              - { label: Địa điểm, name: location, widget: string }
+              - { label: Email, name: email, widget: string }
+          - label: Metadata mặc định
+            name: metadata
+            widget: object
+            fields:
+              - { label: Ngôn ngữ, name: language, widget: string, default: vi }
+              - { label: Tiêu đề SEO, name: title, widget: string }
+              - { label: Mô tả SEO, name: description, widget: text }
+
+      - name: navigation
+        label: Điều hướng
+        file: src/content/cms/settings/navigation.json
+        format: json
+        fields:
+          - label: Menu chính
+            name: navItems
+            widget: list
+            fields: &navigation_fields
+              - { label: Nhãn, name: label, widget: string }
+              - { label: Đường dẫn, name: href, widget: string }
+          - label: Menu chân trang
+            name: footerNavItems
+            widget: list
+            fields: *navigation_fields
+          - label: Liên kết pháp lý
+            name: legalLinks
+            widget: list
+            fields: *navigation_fields
+          - label: Mạng xã hội
+            name: socialLinks
+            widget: list
+            fields:
+              - { label: Tên mạng xã hội, name: label, widget: string }
+              - { label: Nhãn viết tắt, name: shortLabel, widget: string }
+              - { label: Đường dẫn, name: href, widget: string }
+
+      - name: homepage
+        label: Trang chủ
+        file: src/content/cms/settings/homepage.json
+        format: json
+        fields:
+          - label: Header
+            name: header
+            widget: object
+            fields:
+              - { label: Tên thương hiệu, name: brand, widget: string }
+              - { label: Nhãn liên hệ, name: contactLabel, widget: string }
+          - label: Hero
+            name: hero
+            widget: object
+            fields:
+              - label: Ảnh hero
+                name: image
+                widget: object
+                fields: &image_fields
+                  - { label: Ảnh, name: src, widget: image }
+                  - { label: Mô tả ảnh, name: alt, widget: string }
+              - { label: Dòng nhận diện, name: identityLines, widget: list, field: { label: Dòng, name: line, widget: string } }
+              - { label: Dòng địa điểm, name: locationLines, widget: list, field: { label: Dòng, name: line, widget: string } }
+              - { label: Ký hiệu trạng thái, name: statusSymbol, widget: string }
+              - { label: Nội dung giới thiệu, name: summary, widget: text }
+              - { label: Tiêu đề, name: titleLines, widget: list, field: { label: Dòng, name: line, widget: string } }
+              - { label: Nhãn cuộn trang, name: scrollLabel, widget: string }
+              - { label: Nhãn liên hệ, name: contactLabel, widget: string }
+          - label: Giới thiệu
+            name: about
+            widget: object
+            fields:
+              - &section_heading
+                label: Tiêu đề section
+                name: heading
+                widget: object
+                fields:
+                  - { label: Số thứ tự, name: number, widget: string }
+                  - { label: Nhãn, name: label, widget: string }
+                  - { label: Tiêu đề, name: title, widget: text }
+                  - { label: Mô tả, name: description, widget: text, required: false }
+              - label: Nguyên tắc
+                name: principles
+                widget: list
+                fields:
+                  - { label: Số thứ tự, name: index, widget: string }
+                  - { label: Đường dẫn, name: href, widget: string }
+                  - { label: Nhãn, name: label, widget: string }
+                  - { label: Tiêu đề, name: title, widget: list, field: { label: Dòng, name: line, widget: string } }
+                  - { label: Mô tả, name: description, widget: text, required: false }
+                  - { label: Kiểu trình bày, name: variant, widget: select, options: [statement, graphic, image] }
+                  - { label: Ảnh, name: image, widget: image, required: false }
+                  - { label: Mô tả ảnh, name: imageAlt, widget: string, required: false }
+              - label: Năng lực
+                name: capability
+                widget: object
+                fields:
+                  - { label: Nhãn, name: label, widget: string }
+                  - { label: Nội dung chính, name: primary, widget: text }
+                  - { label: Nội dung bổ sung, name: secondary, widget: text }
+          - label: Dự án nổi bật
+            name: works
+            widget: object
+            fields:
+              - *section_heading
+              - { label: Nhãn kết quả, name: outcomeLabel, widget: string }
+              - { label: Nhãn mở dự án, name: linkLabel, widget: string }
+              - { label: Nhãn xem tất cả, name: archiveLabel, widget: string }
+              - { label: Số dự án xem trước, name: previewLimit, widget: number, value_type: int, min: 1 }
+          - label: Bài viết nổi bật
+            name: insights
+            widget: object
+            fields:
+              - *section_heading
+              - { label: Nhãn bài nổi bật, name: featuredLabel, widget: string }
+              - { label: Mô tả ảnh nổi bật, name: featuredImageAlt, widget: string }
+          - label: Hỏi đáp
+            name: qa
+            widget: object
+            fields:
+              - *section_heading
+          - label: Danh sách câu hỏi
+            name: faqs
+            widget: list
+            fields:
+              - { label: Câu hỏi, name: question, widget: string }
+              - { label: Câu trả lời, name: answer, widget: text }
+          - label: Kêu gọi hành động
+            name: cta
+            widget: object
+            fields:
+              - { label: Nhãn đầu mục, name: eyebrow, widget: string }
+              - { label: Tiêu đề, name: title, widget: text }
+              - { label: Mô tả, name: description, widget: text }
+              - { label: Trạng thái nhận dự án, name: availability, widget: string }
+
+      - name: interface
+        label: Nội dung giao diện
+        file: src/content/cms/settings/interface.json
+        format: json
+        fields:
+          - { label: Bỏ qua tới nội dung, name: skipToContent, widget: string }
+          - { label: Về đầu trang, name: backToTop, widget: string }
+          - { label: Mở menu, name: openMenu, widget: string }
+          - label: Nhãn điều hướng
+            name: navigation
+            widget: object
+            fields:
+              - { label: Menu chính, name: primaryLabel, widget: string }
+              - { label: Menu mobile, name: mobileLabel, widget: string }
+              - { label: Mạng xã hội, name: socialLabel, widget: string }
+              - { label: Mạng xã hội ở chân trang, name: footerSocialLabel, widget: string }
+          - label: Nhãn tiến trình
+            name: progress
+            widget: object
+            fields:
+              - { label: Thanh tiến trình, name: railLabel, widget: string }
+              - { label: Tiến độ đọc, name: readingLabel, widget: string }
+              - { label: Section ban đầu, name: initialSection, widget: string }
+              - { label: Giá trị ban đầu, name: initialValue, widget: string }
+          - label: Ký tự phân cách
+            name: separators
+            widget: object
+            fields:
+              - { label: Dấu gạch chéo, name: slash, widget: string }
+              - { label: Dấu chấm giữa, name: dot, widget: string }
+          - label: Định dạng nội dung
+            name: contentFormatting
+            widget: object
+            fields:
+              - { label: Mẫu thời gian đọc, name: readingTimeTemplate, widget: string, hint: 'Dùng {minutes} tại vị trí cần chèn số phút.' }
+              - { label: Locale định dạng ngày, name: dateLocale, widget: string, hint: 'Ví dụ: vi-VN' }
+      - name: archive
+        label: Trang danh sách và chi tiết
+        file: src/content/cms/settings/archive.json
+        format: json
+        fields:
+          - &archive_group
+            label: Danh sách dự án
+            name: projects
+            widget: object
+            fields: &archive_fields
+              - { label: Nhãn đầu mục, name: eyebrow, widget: string }
+              - { label: Tiêu đề, name: title, widget: string }
+              - { label: Mô tả, name: description, widget: text }
+              - { label: Nhãn bộ lọc, name: filterLabel, widget: string }
+              - { label: Nhãn tất cả, name: allLabel, widget: string }
+              - { label: Thông báo không có kết quả, name: emptyLabel, widget: text }
+              - { label: Nhãn quay lại, name: backLabel, widget: string }
+              - { label: Tiền tố danh mục, name: categoryPrefix, widget: string }
+              - { label: Tiền tố thẻ, name: tagPrefix, widget: string }
+          - label: Danh sách bài viết
+            name: blog
+            widget: object
+            fields: *archive_fields
+          - label: Trang chi tiết
+            name: detail
+            widget: object
+            fields:
+              - { label: Tổng quan dự án, name: projectOverviewLabel, widget: string }
+              - { label: Kết quả dự án, name: projectResultLabel, widget: string }
+              - { label: Nhãn tác giả, name: articleByLabel, widget: string }
+              - { label: Nhãn ngày xuất bản, name: articlePublishedLabel, widget: string }
+              - { label: Nhãn thẻ, name: tagsLabel, widget: string }
+
+      - name: footer
+        label: Chân trang
+        file: src/content/cms/settings/footer.json
+        format: json
+        fields:
+          - { label: Tiêu đề liên hệ, name: contactLabel, widget: string }
+          - { label: Tiêu đề menu, name: menuLabel, widget: string }
+          - { label: Tiêu đề pháp lý, name: legalLabel, widget: string }
+          - { label: Tiêu đề địa điểm, name: locationLabel, widget: string }
+          - { label: Ký hiệu bản quyền, name: copyrightSymbol, widget: string }
+          - { label: Nhãn công nghệ, name: buildLabel, widget: string }
+
+      - name: system_states
+        label: Trang trạng thái hệ thống
+        file: src/content/cms/settings/system-states.json
+        format: json
+        fields:
+          - &system_state
+            label: Trang 404
+            name: notFound
+            widget: object
+            fields: &system_state_fields
+              - { label: ID tiêu đề, name: id, widget: string }
+              - { label: Nhãn đầu mục, name: eyebrow, widget: string }
+              - { label: Tiêu đề, name: title, widget: text }
+              - { label: Mô tả, name: description, widget: text }
+              - label: Hành động chính
+                name: primaryAction
+                widget: object
+                fields: &action_fields
+                  - { label: Nhãn, name: label, widget: string }
+                  - { label: Đường dẫn, name: href, widget: string }
+                  - { label: Icon, name: icon, widget: select, options: [arrowLeft, arrowRight, arrowUpRight] }
+              - label: Hành động phụ
+                name: secondaryAction
+                widget: object
+                fields: *action_fields
+              - { label: Tiêu đề SEO, name: metadataTitle, widget: string }
+              - { label: Mô tả SEO, name: metadataDescription, widget: text }
+          - label: Trang chưa có nội dung
+            name: empty
+            widget: object
+            fields: *system_state_fields
+
+  - name: projects
+    label: Dự án
+    label_singular: Dự án
+    folder: src/content/cms/projects
+    create: true
+    format: json
+    extension: json
+    identifier_field: title
+    slug: "{{fields.slug}}"
+    summary: "{{title}} — {{client}}"
+    editor:
+      preview: false
+    fields:
+      - { label: Thứ tự hiển thị, name: order, widget: number, value_type: int, min: 1 }
+      - { label: Slug, name: slug, widget: string, pattern: ['^[a-z0-9]+(?:-[a-z0-9]+)*$', 'Chỉ dùng chữ thường, số và dấu gạch nối'] }
+      - { label: Tiêu đề, name: title, widget: string }
+      - { label: Khách hàng, name: client, widget: string }
+      - { label: Năm thực hiện, name: year, widget: string }
+      - { label: Lĩnh vực, name: category, widget: string }
+      - { label: Slug lĩnh vực, name: categorySlug, widget: string }
+      - label: Thẻ
+        name: tags
+        widget: list
+        fields: &tag_fields
+          - { label: Tên thẻ, name: label, widget: string }
+          - { label: Slug thẻ, name: slug, widget: string }
+      - { label: Tóm tắt, name: summary, widget: text }
+      - { label: Kết quả nổi bật, name: outcome, widget: string }
+      - { label: Ảnh đại diện, name: image, widget: image }
+      - { label: Mô tả ảnh, name: alt, widget: string }
+      - { label: Tông màu, name: tone, widget: select, options: [light, dark] }
+      - label: Nội dung case study
+        name: sections
+        widget: list
+        fields: &content_section_fields
+          - { label: Tiêu đề, name: title, widget: string }
+          - { label: Đoạn văn, name: paragraphs, widget: list, field: { label: Đoạn văn, name: paragraph, widget: text } }
+
+  - name: blog
+    label: Bài viết
+    label_singular: Bài viết
+    folder: src/content/cms/blog
+    create: true
+    format: json
+    extension: json
+    identifier_field: title
+    slug: "{{fields.slug}}"
+    summary: "{{title}} — {{publishedAt}}"
+    editor:
+      preview: false
+    fields:
+      - { label: Thứ tự hiển thị, name: order, widget: number, value_type: int, min: 1 }
+      - { label: Số phút đọc, name: readingMinutes, widget: number, value_type: int, min: 1 }
+      - { label: Slug, name: slug, widget: string, pattern: ['^[a-z0-9]+(?:-[a-z0-9]+)*$', 'Chỉ dùng chữ thường, số và dấu gạch nối'] }
+      - { label: Tiêu đề, name: title, widget: string }
+      - { label: Chuyên mục, name: category, widget: string }
+      - { label: Slug chuyên mục, name: categorySlug, widget: string }
+      - label: Thẻ
+        name: tags
+        widget: list
+        fields: *tag_fields
+      - { label: Mô tả ngắn, name: excerpt, widget: text }
+      - { label: Ngày xuất bản, name: publishedAt, widget: datetime, date_format: YYYY-MM-DD, time_format: false, format: YYYY-MM-DD }
+      - { label: Tác giả, name: author, widget: string }
+      - { label: Ảnh đại diện, name: image, widget: image }
+      - { label: Mô tả ảnh, name: imageAlt, widget: string }
+      - label: Nội dung bài viết
+        name: sections
+        widget: list
+        fields: *content_section_fields
+
+  - name: policies
+    label: Trang chính sách
+    label_singular: Trang chính sách
+    delete: false
+    editor:
+      preview: false
+    files:
+      - name: privacy_policy
+        label: Privacy Policy
+        file: src/content/cms/policies/privacy-policy.json
+        format: json
+        fields: &policy_fields
+          - { label: Nhãn đầu mục, name: eyebrow, widget: string }
+          - { label: Tiêu đề, name: title, widget: string }
+          - { label: Mô tả, name: description, widget: text }
+          - { label: Nhãn ngày cập nhật, name: lastUpdatedLabel, widget: string }
+          - { label: Ngày cập nhật, name: lastUpdated, widget: string }
+          - label: Nội dung chính sách
+            name: sections
+            widget: list
+            fields: *content_section_fields
+      - name: terms_of_use
+        label: Terms of Use
+        file: src/content/cms/policies/terms-of-use.json
+        format: json
+        fields: *policy_fields

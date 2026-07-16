@@ -1,0 +1,37 @@
+---
+import { headerContent, interfaceContent } from '../../data/content';
+import { navItems, site } from '../../data/site';
+import type { HeaderProps } from '../../types/layout';
+import PrimaryNav from '../navigation/PrimaryNav.astro';
+import Button from '../ui/Button.astro';
+import Container from '../ui/Container.astro';
+import HeroIcon from '../ui/HeroIcon.astro';
+import IconButton from '../ui/IconButton.astro';
+
+type Props = HeaderProps;
+
+const { solid = false } = Astro.props;
+---
+
+<header id="site-header" data-solid-header={String(solid)} class:list={['fixed inset-x-0 top-0 z-40 border-b-hairline border-transparent transition-all duration-interaction', solid ? 'bg-surface-dark/80' : '']}>
+  <Container class="flex h-16 items-center justify-between md:h-20">
+    <a href="/" class="relative z-50 flex items-center gap-sm font-bold" aria-label={site.name}>
+      <span class="grid size-8 place-items-center rounded-full bg-brand text-label text-on-brand">{site.shortName}</span>
+      <span class="hidden text-sm sm:block">{headerContent.brand}</span>
+    </a>
+
+    <PrimaryNav items={navItems} variant="desktop" />
+
+    <Button href={`mailto:${site.email}`} label={headerContent.contactLabel} icon="arrowUpRight" variant="text" class="relative z-50 hidden gap-xs text-xs font-semibold uppercase tracking-contact md:flex" />
+
+    <IconButton id="menu-button" label={interfaceContent.openMenu} variant="ghost" size="md" class="relative z-50 lg:hidden" aria-expanded="false" aria-controls="mobile-menu">
+      <HeroIcon name="bars3" class="menu-icon-open size-6" />
+      <HeroIcon name="xMark" class="menu-icon-close invisible absolute size-6" />
+    </IconButton>
+  </Container>
+
+  <div id="mobile-menu" class="invisible fixed inset-0 z-40 flex -translate-y-3 flex-col justify-between bg-surface-dark px-6 pb-10 pt-28 opacity-0 transition-all duration-interaction lg:hidden" aria-hidden="true" inert>
+    <PrimaryNav items={navItems} variant="mobile" />
+    <Button href={`mailto:${site.email}`} label={site.email} icon="arrowUpRight" variant="text" class="gap-xs text-sm text-brand" />
+  </div>
+</header>

@@ -1,0 +1,27 @@
+---
+import type { IconButtonProps } from '../../types/ui';
+
+type Props = IconButtonProps;
+
+const {
+  label,
+  variant = 'ghost',
+  size = 'md',
+  tone = 'dark',
+  class: className = '',
+  type = 'button',
+  ...attributes
+} = Astro.props;
+---
+
+<button
+  {...attributes}
+  type={type}
+  aria-label={label}
+  class:list={['button-control button-control--icon inline-grid place-items-center', className]}
+  data-variant={variant}
+  data-size={size}
+  data-tone={tone}
+>
+  <slot />
+</button>

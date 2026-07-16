@@ -1,0 +1,54 @@
+---
+import type { ButtonProps } from '../../types/ui';
+import type { HTMLAttributes } from 'astro/types';
+import ButtonContent from './ButtonContent.astro';
+
+type Props = ButtonProps;
+
+const {
+  label,
+  icon,
+  iconPosition = 'end',
+  variant = 'primary',
+  size = 'md',
+  tone = 'dark',
+  class: className = '',
+  ariaLabel,
+  href,
+  type = 'button',
+  ...attributes
+} = Astro.props;
+
+const linkAttributes = attributes as HTMLAttributes<'a'>;
+const buttonAttributes = attributes as HTMLAttributes<'button'>;
+---
+
+{href ? (
+  <a
+    {...linkAttributes}
+    href={href}
+    aria-label={ariaLabel}
+    class:list={['button-control inline-flex items-center justify-center', className]}
+    data-variant={variant}
+    data-size={size}
+    data-tone={tone}
+    data-icon={icon}
+    data-icon-position={icon ? iconPosition : undefined}
+  >
+    <ButtonContent label={label} icon={icon} iconPosition={iconPosition} />
+  </a>
+) : (
+  <button
+    {...buttonAttributes}
+    type={type}
+    aria-label={ariaLabel}
+    class:list={['button-control inline-flex items-center justify-center', className]}
+    data-variant={variant}
+    data-size={size}
+    data-tone={tone}
+    data-icon={icon}
+    data-icon-position={icon ? iconPosition : undefined}
+  >
+    <ButtonContent label={label} icon={icon} iconPosition={iconPosition} />
+  </button>
+)}

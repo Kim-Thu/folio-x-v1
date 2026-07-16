@@ -1,0 +1,30 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Header from '../components/layout/Header.astro';
+import StickyRail from '../components/layout/StickyRail.astro';
+import Footer from '../components/layout/Footer.astro';
+import HeroSection from '../components/sections/HeroSection.astro';
+import AboutSection from '../components/sections/AboutSection.astro';
+import WorksSection from '../components/sections/WorksSection.astro';
+import InsightsSection from '../components/sections/InsightsSection.astro';
+import QASection from '../components/sections/QASection.astro';
+import CTASection from '../components/sections/CTASection.astro';
+import { interfaceContent } from '../data/content';
+---
+
+<BaseLayout>
+  <a href="#main-content" class="fixed left-4 top-4 z-skip-link -translate-y-24 bg-brand-soft px-4 py-3 text-sm font-semibold text-on-brand transition-transform focus:translate-y-0">
+    {interfaceContent.skipToContent}
+  </a>
+  <Header />
+  <StickyRail />
+  <main id="main-content" tabindex="-1">
+    <HeroSection />
+    <AboutSection />
+    <WorksSection />
+    <InsightsSection />
+    <QASection />
+    <CTASection />
+  </main>
+  <Footer />
+</BaseLayout>

@@ -1,0 +1,30 @@
+---
+import { ctaContent } from '../../data/content';
+import { site } from '../../data/site';
+import Button from '../ui/Button.astro';
+import Container from '../ui/Container.astro';
+import MetaLabel from '../ui/MetaLabel.astro';
+import Section from '../ui/Section.astro';
+---
+
+<Section id="contact" theme="accent" class="relative overflow-hidden py-3xl md:py-5xl lg:py-6xl">
+  <div class="grid-dots pointer-events-none absolute inset-0 opacity-25" aria-hidden="true"></div>
+
+  <Container class="relative z-10">
+    <div class="rounded-card bg-surface-light p-xl text-on-light md:p-2xl lg:p-4xl">
+      <div class="grid items-center gap-2xl lg:grid-cols-12">
+        <header class="lg:col-span-12 text-center">
+          <MetaLabel variant="eyebrow" class="text-on-light-muted">{ctaContent.eyebrow}</MetaLabel>
+          <h2 class="mt-10 text-7xl font-semibold uppercase text-balance">{ctaContent.title}</h2>
+        </header>
+      </div>
+      <div class="mt-4 grid gap-10 pt-4 md:grid-cols-12">
+        <p class="text-sm leading-7 text-on-light-muted md:col-span-5">{ctaContent.description}</p>
+        <address class="min-w-0 not-italic md:col-span-7 md:text-right">
+          <Button href={`mailto:${site.email}`} label={site.email} icon="arrowUpRight" variant="text" tone="light" class="gap-sm break-all border-b-hairline border-line-light pb-2 text-xl font-semibold md:text-3xl lg:text-4xl" />
+          <MetaLabel class="mt-5 text-caption tracking-meta text-on-light-subtle">{ctaContent.availability}</MetaLabel>
+        </address>
+      </div>
+    </div>
+  </Container>
+</Section>

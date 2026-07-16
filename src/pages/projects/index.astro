@@ -1,0 +1,10 @@
+---
+import ProjectArchive from '../../components/sections/ProjectArchive.astro';
+import { archiveContent } from '../../data/archive';
+import { projects } from '../../data/site';
+import { getCategories } from '../../utils/taxonomy';
+
+const content = archiveContent.projects;
+---
+
+<ProjectArchive eyebrow={content.eyebrow} title={content.title} description={content.description} projects={projects} categories={getCategories(projects)} filterLabel={content.filterLabel} allLabel={content.allLabel} emptyLabel={content.emptyLabel} />

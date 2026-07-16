@@ -1,0 +1,21 @@
+---
+import { interfaceContent } from '../../data/content';
+import { socialLinks } from '../../data/site';
+import SocialNav from '../navigation/SocialNav.astro';
+import HeroIcon from '../ui/HeroIcon.astro';
+import IconButton from '../ui/IconButton.astro';
+---
+
+<aside class="pointer-events-none fixed bottom-7 right-7 top-28 z-30 hidden flex-col items-center xl:flex" aria-label={interfaceContent.progress.railLabel}>
+  <span id="section-count" class="font-mono text-label text-on-dark-muted">{interfaceContent.progress.initialSection}</span>
+  <progress id="reading-progress" class="sr-only" max="100" value="0" aria-label={interfaceContent.progress.readingLabel}>{interfaceContent.progress.initialValue}</progress>
+  <div class="relative my-4 h-full w-hairline overflow-hidden bg-line-dark" aria-hidden="true">
+    <span id="scroll-progress-bar" class="absolute inset-x-0 top-0 h-0 bg-brand"></span>
+  </div>
+  <SocialNav links={socialLinks} variant="rail" />
+</aside>
+
+<IconButton id="back-to-top" label={interfaceContent.backToTop} variant="outline" size="lg" class="fixed bottom-5 right-5 z-40 translate-y-4 opacity-0 md:bottom-7 md:right-7" inert>
+  <span id="progress-ring" class="progress-ring absolute inset-0 rounded-full" aria-hidden="true"></span>
+  <HeroIcon name="arrowUp" class="size-5" />
+</IconButton>

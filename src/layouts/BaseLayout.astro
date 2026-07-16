@@ -1,0 +1,33 @@
+---
+import '../styles/global.css';
+import { metadata } from '../data/content';
+import type { BaseLayoutProps } from '../types/layout';
+
+type Props = BaseLayoutProps;
+
+const {
+  title = metadata.title,
+  description = metadata.description,
+} = Astro.props;
+---
+
+<!doctype html>
+<html lang={metadata.language}>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width" />
+    <meta name="description" content={description} />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:type" content="website" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link rel="preconnect" href="https://images.unsplash.com" />
+    <link href="https://fonts.googleapis.com/css2?family=Google+Sans+Flex:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet" />
+    <title>{title}</title>
+  </head>
+  <body>
+    <slot />
+    <script src="../scripts/main.ts"></script>
+  </body>
+</html>

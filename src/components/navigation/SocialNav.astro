@@ -1,0 +1,41 @@
+---
+import { interfaceContent } from '../../data/content';
+import type { SocialNavProps } from '../../types/navigation';
+import HeroIcon from '../ui/HeroIcon.astro';
+
+type Props = SocialNavProps;
+
+const {
+  links,
+  variant = 'footer',
+} = Astro.props;
+
+const isRail = variant === 'rail';
+---
+
+<nav
+  aria-label={isRail ? interfaceContent.navigation.socialLabel : interfaceContent.navigation.footerSocialLabel}
+  class:list={[
+    isRail
+      ? 'pointer-events-auto flex flex-col gap-sm font-mono text-caption uppercase tracking-meta text-on-dark-faint'
+      : 'flex flex-col gap-sm text-sm text-on-dark-muted',
+  ]}
+>
+  {links.map((link) => (
+    <a
+      href={link.href}
+      target="_blank"
+      rel="noreferrer"
+      class="transition-colors hover:text-brand"
+    >
+      {isRail ? (
+        <>
+          <span aria-hidden="true">{link.shortLabel}</span>
+          <span class="sr-only">{link.label}</span>
+        </>
+      ) : (
+        <span class="inline-flex items-center gap-1">{link.label}<HeroIcon name="arrowUpRight" /></span>
+      )}
+    </a>
+  ))}
+</nav>

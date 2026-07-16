@@ -1,0 +1,38 @@
+---
+import { interfaceContent } from '../../data/content';
+import type { PrimaryNavProps } from '../../types/navigation';
+
+type Props = PrimaryNavProps;
+
+const {
+  items,
+  variant = 'desktop',
+} = Astro.props;
+
+const isMobile = variant === 'mobile';
+---
+
+<nav
+  aria-label={isMobile ? interfaceContent.navigation.mobileLabel : interfaceContent.navigation.primaryLabel}
+  class:list={[
+    isMobile
+      ? 'flex flex-col'
+      : 'hidden items-center gap-xl text-xs font-medium text-on-dark-muted lg:flex',
+  ]}
+>
+  {items.map((item, index) => (
+    <a
+      href={item.href}
+      class:list={[
+        isMobile
+          ? 'mobile-link flex items-center justify-between border-b-hairline border-line-dark py-5 text-4xl font-semibold'
+          : 'transition-colors hover:text-on-dark',
+      ]}
+    >
+      {item.label}
+      {isMobile && (
+        <span class="font-mono text-xs text-on-dark-faint">{String(index + 2).padStart(2, '0')}</span>
+      )}
+    </a>
+  ))}
+</nav>
