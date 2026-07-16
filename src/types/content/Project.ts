@@ -1,5 +1,5 @@
-import type { ContentSection } from './ContentSection';
-import type { TaxonomyTerm } from './TaxonomyTerm';
+import type { ContentSection } from '@/types/content/ContentSection';
+import type { TaxonomyTerm } from '@/types/content/TaxonomyTerm';
 
 export interface Project {
   number: string;

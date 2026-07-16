@@ -1,0 +1,35 @@
+---
+import { interfaceContent } from '@/data/content';
+import type { InsightCardProps } from '@/types/ui';
+import CardItem from '@/components/patterns/Cards/CardItem.astro';
+import Text from '@/components/primitives/Text/Text.astro';
+import Image from '@/components/primitives/Image/Image.astro';
+import Link from '@/components/primitives/Link/Link.astro';
+import { getInsightHoverImageClass } from '@/components/features/blog/InsightCard/variants/getInsightHoverImageClass';
+
+type Props = Pick<InsightCardProps, 'insight'>;
+
+const { insight }: Props = Astro.props;
+const hoverImageClass = getInsightHoverImageClass(insight.index);
+---
+
+<CardItem variant="plain" class="group relative isolate grid grid-cols-index-content gap-md border-b-hairline border-line-light py-7 last:border-b-0">
+  {insight.image && (
+    <figure class:list={[
+      'pointer-events-none absolute bottom-lg right-lg z-20 hidden w-48 origin-bottom-right translate-y-3 rotate-(--rotate-insight-hover) scale-95 overflow-hidden rounded-card opacity-0 transition duration-(--duration-interaction) ease-reveal group-hover:translate-y-0 group-hover:scale-100 group-hover:opacity-100 group-focus-visible:translate-y-0 group-focus-visible:scale-100 group-focus-visible:opacity-100 motion-reduce:translate-y-0 xl:w-64 lg:block',
+      hoverImageClass,
+    ]} aria-hidden="true">
+      <Image class="block h-auto w-full" src={insight.image} alt="" />
+    </figure>
+  )}
+  <Text as="span" variant="meta" size="label" class="relative z-10 text-on-light-subtle">{insight.index}</Text>
+  <div class="relative z-10">
+    <div class="flex flex-wrap items-center gap-xs font-mono text-caption uppercase tracking-meta text-on-light-subtle">
+      <Link href={`/blog/category/${insight.categorySlug}`} class="transition-colors hover:text-on-light">{insight.category}</Link>
+      <span aria-hidden="true">{interfaceContent.separators.dot}</span>
+      <time datetime={insight.duration}>{insight.readTime}</time>
+    </div>
+    <Text as="h3" variant="heading" size="h3" class="mt-3"><Link href={insight.href}>{insight.title}</Link></Text>
+    <Text size="sm" class="mt-4 leading-6 text-on-light-muted">{insight.excerpt}</Text>
+  </div>
+</CardItem>

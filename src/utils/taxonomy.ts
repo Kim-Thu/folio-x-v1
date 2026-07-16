@@ -1,4 +1,4 @@
-import type { TaxonomyTerm } from '../types/content';
+import type { TaxonomyTerm } from '@/types/content';
 
 export function getCategories<T extends { category: string; categorySlug: string }>(items: T[]): TaxonomyTerm[] {
   return Array.from(

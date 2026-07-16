@@ -1,4 +1,4 @@
-import { getHomepageSettings, getInsights, getNavigationSettings, getProjects, getSiteSettings } from './cms';
+import { getHomepageSettings, getInsights, getNavigationSettings, getProjects, getSiteSettings } from '@/data/cms';
 
 const [siteSettings, navigationSettings, homepageSettings, projectEntries, insightEntries] = await Promise.all([
   getSiteSettings(),

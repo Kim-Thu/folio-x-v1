@@ -1,0 +1,18 @@
+---
+import { interfaceContent } from '@/data/content';
+import type { SocialNavProps } from '@/types/navigation';
+import Icon from '@/components/primitives/Icon/Icon.astro';
+import Link from '@/components/primitives/Link/Link.astro';
+
+type Props = Pick<SocialNavProps, 'links'>;
+
+const { links }: Props = Astro.props;
+---
+
+<nav aria-label={interfaceContent.navigation.footerSocialLabel} class="flex flex-col gap-sm text-sm text-on-dark-muted">
+  {links.map((link) => (
+    <Link href={link.href} class="transition-colors hover:text-brand">
+      <span class="inline-flex items-center gap-1">{link.label}<Icon name="arrowUpRight" /></span>
+    </Link>
+  ))}
+</nav>

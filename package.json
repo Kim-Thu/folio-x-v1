@@ -8,12 +8,17 @@
     "cms": "decap-server",
     "build": "astro check && astro build",
     "preview": "astro preview",
-    "check": "astro check"
+    "check": "astro check",
+    "validate": "npm run build && npm audit --audit-level=high",
+    "prepare": "git config core.hooksPath .githooks"
   },
   "dependencies": {
+    "@fontsource-variable/google-sans-flex": "5.2.3",
+    "@fontsource/ibm-plex-mono": "5.2.7",
     "@tailwindcss/vite": "^4.3.2",
     "astro": "^7.0.9",
     "heroicons": "^2.2.0",
+    "tailwind-merge": "3.6.0",
     "tailwindcss": "^4.3.2"
   },
   "devDependencies": {

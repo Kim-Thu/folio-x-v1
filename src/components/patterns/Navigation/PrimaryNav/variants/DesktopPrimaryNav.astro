@@ -1,0 +1,13 @@
+---
+import { interfaceContent } from '@/data/content';
+import type { PrimaryNavProps } from '@/types/navigation';
+import Link from '@/components/primitives/Link/Link.astro';
+
+type Props = Pick<PrimaryNavProps, 'items'>;
+
+const { items }: Props = Astro.props;
+---
+
+<nav aria-label={interfaceContent.navigation.primaryLabel} class="hidden items-center gap-xl text-xs font-medium text-on-dark-muted lg:flex">
+  {items.map((item) => <Link href={item.href} class="transition-colors hover:text-on-dark">{item.label}</Link>)}
+</nav>

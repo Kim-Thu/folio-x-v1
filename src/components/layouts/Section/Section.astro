@@ -1,0 +1,24 @@
+---
+import type { SectionProps } from '@/types/ui';
+import { cn } from '@/utils/cn';
+import { getSectionClasses } from '@/components/layouts/Section/variants/getSectionClasses';
+
+type Props = SectionProps;
+
+const {
+  id,
+  class: className = '',
+  theme = 'none',
+  spacing = false,
+  ...attributes
+} = Astro.props;
+
+const sectionClass = cn(
+  getSectionClasses(theme, spacing),
+  className,
+);
+---
+
+<section {...attributes} id={id} data-section class={sectionClass}>
+  <slot />
+</section>

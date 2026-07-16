@@ -1,0 +1,28 @@
+---
+import arrowLeft from 'heroicons/24/outline/arrow-left.svg?raw';
+import arrowRight from 'heroicons/24/outline/arrow-right.svg?raw';
+import arrowUpRight from 'heroicons/24/outline/arrow-up-right.svg?raw';
+import arrowUp from 'heroicons/24/outline/arrow-up.svg?raw';
+import bars3 from 'heroicons/24/outline/bars-3.svg?raw';
+import xMark from 'heroicons/24/outline/x-mark.svg?raw';
+import type { IconName, IconProps } from '@/types/ui';
+import { cn } from '@/utils/cn';
+
+type Props = IconProps;
+
+const { name, class: className = '' } = Astro.props;
+const hasExplicitSize = className.split(/\s+/).some((classToken) => classToken.startsWith('size-'));
+const sizeClass = hasExplicitSize ? '' : 'size-icon-inline';
+const iconClasses = cn('inline-flex shrink-0 [&>svg]:size-full', sizeClass, className);
+
+const icons: Record<IconName, string> = {
+  arrowLeft,
+  arrowRight,
+  arrowUp,
+  arrowUpRight,
+  bars3,
+  xMark,
+};
+---
+
+<span class={iconClasses} aria-hidden="true" set:html={icons[name]}></span>

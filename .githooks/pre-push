@@ -1,0 +1,6 @@
+#!/bin/sh
+set -eu
+
+# Keep the local push gate identical to the validation command used by CI.
+echo "Running portfolio validation before push..."
+npm run validate

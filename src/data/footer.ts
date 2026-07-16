@@ -1,13 +1,8 @@
-import type { FooterColumn } from '../types/ui';
-import { footerContent, interfaceContent } from './content';
-import { footerNavItems, legalLinks, site, socialLinks } from './site';
+import type { FooterColumn } from '@/types/ui';
+import { footerContent, interfaceContent } from '@/data/content';
+import { footerNavItems, legalLinks, site, socialLinks } from '@/data/site';
 
 export const footerColumns = [
-  {
-    kind: 'contact',
-    label: footerContent.contactLabel,
-    email: site.email,
-  },
   {
     kind: 'navigation',
     label: footerContent.menuLabel,
@@ -27,6 +22,5 @@ export const footerColumns = [
     kind: 'location',
     label: footerContent.locationLabel,
     location: site.location,
-    email: site.email,
   },
 ] satisfies FooterColumn[];

@@ -1,0 +1,46 @@
+---
+import type { EmptyStateProps } from '@/types/ui';
+import Button from '@/components/primitives/Button/Button.astro';
+import Text from '@/components/primitives/Text/Text.astro';
+import Section from '@/components/layouts/Section/Section.astro';
+
+type Props = EmptyStateProps;
+
+const { content } = Astro.props;
+---
+
+<Section aria-labelledby={content.id} class="grid gap-xl py-6xl lg:grid-cols-12">
+  <Text variant="eyebrow" class="text-on-light-subtle lg:col-span-12">
+    {content.eyebrow}
+  </Text>
+
+  <Text id={content.id} as="h1" variant="heading" size="h1" class="lg:col-span-9">
+    {content.title}
+  </Text>
+
+  <Text size="base" class="text-on-light-muted md:text-lg lg:col-span-6 lg:col-start-7">
+    {content.description}
+  </Text>
+
+  <nav aria-label={content.eyebrow} class="flex flex-wrap items-center gap-lg lg:col-span-6 lg:col-start-7">
+    <Button
+      href={content.primaryAction.href}
+      label={content.primaryAction.label}
+      icon={content.primaryAction.icon}
+      iconPosition="start"
+      variant="outline"
+      tone="light"
+      class="gap-xs text-sm text-on-light"
+    />
+    {content.secondaryAction && (
+      <Button
+        href={content.secondaryAction.href}
+        label={content.secondaryAction.label}
+        icon={content.secondaryAction.icon}
+        variant="text"
+        tone="light"
+        class="gap-xs text-sm text-on-light"
+      />
+    )}
+  </nav>
+</Section>

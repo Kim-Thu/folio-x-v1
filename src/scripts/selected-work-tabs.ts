@@ -1,0 +1,42 @@
+export function initSelectedWorkTabs(): void {
+  document.querySelectorAll<HTMLElement>('[data-selected-work]').forEach((root) => {
+    const tabs = Array.from(root.querySelectorAll<HTMLButtonElement>('[data-work-tab]'));
+    const cards = Array.from(root.querySelectorAll<HTMLElement>('[data-work-card]'));
+    const panel = root.querySelector<HTMLElement>('[data-work-panel]');
+
+    if (!tabs.length || !cards.length || !panel) return;
+
+    const selectTab = (selectedTab: HTMLButtonElement): void => {
+      const category = selectedTab.dataset.workTab ?? 'all';
+      cards.forEach((card) => {
+        const isVisible = category === 'all' || card.dataset.projectCategory === category;
+        card.hidden = !isVisible;
+      });
+
+      tabs.forEach((tab) => {
+        const isSelected = tab === selectedTab;
+        tab.setAttribute('aria-selected', String(isSelected));
+        tab.tabIndex = isSelected ? 0 : -1;
+      });
+
+      panel.setAttribute('aria-labelledby', selectedTab.id);
+    };
+
+    tabs.forEach((tab, tabIndex) => {
+      tab.addEventListener('click', () => selectTab(tab));
+      tab.addEventListener('keydown', (event) => {
+        const keyOffsets: Record<string, number> = { ArrowLeft: -1, ArrowRight: 1 };
+        let nextIndex = tabIndex;
+
+        if (event.key in keyOffsets) nextIndex = (tabIndex + keyOffsets[event.key] + tabs.length) % tabs.length;
+        else if (event.key === 'Home') nextIndex = 0;
+        else if (event.key === 'End') nextIndex = tabs.length - 1;
+        else return;
+
+        event.preventDefault();
+        tabs[nextIndex].focus();
+        selectTab(tabs[nextIndex]);
+      });
+    });
+  });
+}

@@ -1,4 +1,4 @@
-import type { PolicySection } from './PolicySection';
+import type { PolicySection } from '@/types/content/PolicySection';
 
 export interface PolicyPageContent {
   eyebrow: string;

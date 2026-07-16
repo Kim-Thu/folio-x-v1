@@ -1,0 +1,62 @@
+---
+import { archiveContent } from '@/data/archive';
+import { interfaceContent } from '@/data/content';
+import type { BlogDetailProps } from '@/types/ui';
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import Footer from '@/components/layouts/Footer.astro';
+import Header from '@/components/layouts/Header/Header.astro';
+import Button from '@/components/primitives/Button/Button.astro';
+import Container from '@/components/layouts/Container.astro';
+import Text from '@/components/primitives/Text/Text.astro';
+import Image from '@/components/primitives/Image/Image.astro';
+import Link from '@/components/primitives/Link/Link.astro';
+import Section from '@/components/layouts/Section/Section.astro';
+
+type Props = BlogDetailProps;
+
+const { post } = Astro.props;
+---
+
+<BaseLayout title={post.title} description={post.excerpt}>
+  <Header solid />
+  <main class="bg-surface-light pb-3xl pt-6xl text-on-light md:pb-5xl lg:pb-6xl">
+    <Container>
+      <Button href="/blog" label={archiveContent.blog.backLabel} icon="arrowLeft" iconPosition="start" variant="text" tone="light" class="gap-xs text-sm text-on-light-muted" />
+      <article>
+        <header class="mt-12 grid text-center lg:grid-cols-12">
+          <div class="lg:col-span-8 lg:col-start-3">
+            <Text variant="eyebrow" class="text-on-light-muted"><Link href={`/blog/category/${post.categorySlug}`}>{post.category}</Link> {interfaceContent.separators.dot} {post.readTime}</Text>
+            <Text as="h1" variant="heading" size="h1" class="mt-6">{post.title}</Text>
+            <Text size="base" class="mt-7 leading-7 text-on-light-muted md:text-lg">{post.excerpt}</Text>
+            <div class="mt-8 flex flex-wrap justify-center gap-5 font-mono text-caption uppercase tracking-meta text-on-light-subtle">
+              <span>{archiveContent.detail.articleByLabel} {post.author}</span>
+              <time datetime={post.publishedAt}>{archiveContent.detail.articlePublishedLabel} {post.publishedLabel}</time>
+            </div>
+          </div>
+        </header>
+
+        <figure class="mt-12 overflow-hidden rounded-card">
+          {post.image && <Image src={post.image} alt={post.imageAlt} class="aspect-editorial w-full object-cover" />}
+        </figure>
+
+        <div class="grid gap-2xl py-3xl md:py-5xl lg:grid-cols-12 lg:py-6xl">
+          <aside class="lg:col-span-3">
+            <Text variant="eyebrow" class="text-on-light-subtle">{archiveContent.detail.tagsLabel}</Text>
+            <ul class="flex flex-wrap gap-xs">
+              {post.tags.map((tag) => <li><Button href={`/blog/tag/${tag.slug}`} label={tag.label} variant="outline" size="sm" tone="light" /></li>)}
+            </ul>
+          </aside>
+          <div class="space-y-14 lg:col-span-8 lg:col-start-5">
+            {post.sections.map((section) => (
+              <Section>
+                <Text as="h2" variant="heading" size="h3">{section.title}</Text>
+                <div class="mt-5 space-y-4 text-base leading-8 text-on-light-muted">{section.paragraphs.map((paragraph) => <p>{paragraph}</p>)}</div>
+              </Section>
+            ))}
+          </div>
+        </div>
+      </article>
+    </Container>
+  </main>
+  <Footer />
+</BaseLayout>

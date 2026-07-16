@@ -1,0 +1,48 @@
+---
+import { worksContent } from '@/data/content';
+import { projects } from '@/data/site';
+import { archiveContent } from '@/data/archive';
+import { getCategories } from '@/utils/taxonomy';
+import Button from '@/components/primitives/Button/Button.astro';
+import Container from '@/components/layouts/Container.astro';
+import ProjectTabs from '@/components/patterns/Navigation/ProjectTabs.astro';
+import ProjectGrid from '@/components/features/projects/ProjectGrid/ProjectGrid.astro';
+import Section from '@/components/layouts/Section/Section.astro';
+import SectionHeading from '@/components/patterns/SectionHeading/SectionHeading.astro';
+
+const visibleProjects = projects.slice(0, worksContent.previewLimit);
+const categories = getCategories(visibleProjects);
+const panelId = 'selected-work-panel';
+---
+
+<Section id="work" theme="dark" spacing>
+  <Container>
+    <SectionHeading {...worksContent.heading} />
+
+    <div class="mt-4xl" data-selected-work>
+      <ProjectTabs
+        categories={categories}
+        allLabel={archiveContent.projects.allLabel}
+        label={archiveContent.projects.filterLabel}
+        panelId={panelId}
+      />
+
+      <ProjectGrid
+        id={panelId}
+        projects={visibleProjects}
+        linkLabel={worksContent.linkLabel}
+        outcomeLabel={worksContent.outcomeLabel}
+      />
+
+      <div class="mt-10 flex justify-center">
+        <Button
+          href="/projects"
+          label={worksContent.archiveLabel}
+          icon="arrowRight"
+          variant="text"
+          class="gap-xs text-sm font-medium text-on-dark "
+        />
+      </div>
+    </div>
+  </Container>
+</Section>

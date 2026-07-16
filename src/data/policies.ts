@@ -1,5 +1,5 @@
-import type { PolicyPageContent } from '../types/content';
-import { getPolicies } from './cms';
+import type { PolicyPageContent } from '@/types/content';
+import { getPolicies } from '@/data/cms';
 
 const policies = await getPolicies();
 

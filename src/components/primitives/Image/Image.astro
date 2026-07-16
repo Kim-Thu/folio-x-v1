@@ -1,0 +1,10 @@
+---
+import type { ImageProps } from '@/types/ui';
+import { cn } from '@/utils/cn';
+
+type Props = ImageProps;
+
+const { src, alt, class: className = '', loading = 'lazy', decoding = 'async', fetchpriority = 'auto', width, height } = Astro.props;
+---
+
+<img src={src} alt={alt} loading={loading} decoding={decoding} fetchpriority={fetchpriority} width={width} height={height} data-media-image class={cn('bg-(image:--background-image-skeleton) [background-size:var(--background-size-skeleton)]', className)} />

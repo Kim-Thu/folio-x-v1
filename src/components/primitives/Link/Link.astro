@@ -1,0 +1,23 @@
+---
+import type { LinkProps } from '@/types/ui';
+import { isExternalUrl } from '@/utils/url/isExternalUrl';
+
+type Props = LinkProps;
+
+const {
+  href,
+  class: className = '',
+  ariaLabel,
+  target: requestedTarget,
+  rel: requestedRel,
+  ...attributes
+} = Astro.props;
+
+const external = isExternalUrl(href, Astro.site ?? Astro.url);
+const target = requestedTarget ?? (external ? '_blank' : undefined);
+const rel = requestedRel ?? (external ? 'noopener noreferrer' : undefined);
+---
+
+<a {...attributes} href={href} aria-label={ariaLabel} class={className} target={target} rel={rel}>
+  <slot />
+</a>

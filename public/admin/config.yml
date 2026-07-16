@@ -140,8 +140,6 @@ collections:
             widget: object
             fields:
               - *section_heading
-              - { label: Nhãn bài nổi bật, name: featuredLabel, widget: string }
-              - { label: Mô tả ảnh nổi bật, name: featuredImageAlt, widget: string }
           - label: Hỏi đáp
             name: qa
             widget: object
@@ -170,6 +168,12 @@ collections:
           - { label: Bỏ qua tới nội dung, name: skipToContent, widget: string }
           - { label: Về đầu trang, name: backToTop, widget: string }
           - { label: Mở menu, name: openMenu, widget: string }
+          - label: Màn hình tải
+            name: loadingScreen
+            widget: object
+            fields:
+              - { label: Nhãn, name: label, widget: string }
+              - { label: Trạng thái, name: status, widget: string }
           - label: Nhãn điều hướng
             name: navigation
             widget: object
@@ -236,7 +240,6 @@ collections:
         file: src/content/cms/settings/footer.json
         format: json
         fields:
-          - { label: Tiêu đề liên hệ, name: contactLabel, widget: string }
           - { label: Tiêu đề menu, name: menuLabel, widget: string }
           - { label: Tiêu đề pháp lý, name: legalLabel, widget: string }
           - { label: Tiêu đề địa điểm, name: locationLabel, widget: string }

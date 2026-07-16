@@ -1,0 +1,18 @@
+---
+import { qaContent } from '@/data/content';
+import { faqs } from '@/data/site';
+import Container from '@/components/layouts/Container.astro';
+import FaqItem from '@/components/patterns/Accordion/FaqItem.astro';
+import Section from '@/components/layouts/Section/Section.astro';
+import SectionHeading from '@/components/patterns/SectionHeading/SectionHeading.astro';
+---
+
+<Section id="qa" theme="dark" spacing>
+  <Container>
+    <SectionHeading {...qaContent.heading} />
+
+    <div class="mt-3xl lg:ml-1/4">
+      {faqs.map((item, index) => <FaqItem item={item} index={index} />)}
+    </div>
+  </Container>
+</Section>

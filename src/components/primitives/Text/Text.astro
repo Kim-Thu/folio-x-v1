@@ -1,0 +1,13 @@
+---
+import type { TextProps } from '@/types/ui';
+import { cn } from '@/utils/cn';
+import { getTextClasses } from '@/components/primitives/Text/variants/getTextClasses';
+
+type Props = TextProps;
+
+const { as: Tag = 'p', variant = 'body', size = 'inherit', class: className = '', id }: Props = Astro.props;
+---
+
+<Tag id={id} class={cn(getTextClasses(variant, size), className)}>
+  <slot />
+</Tag>

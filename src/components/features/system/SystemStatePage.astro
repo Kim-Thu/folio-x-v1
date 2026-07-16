@@ -1,0 +1,22 @@
+---
+import type { SystemStatePageProps } from '@/types/ui';
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import Footer from '@/components/layouts/Footer.astro';
+import Header from '@/components/layouts/Header/Header.astro';
+import Container from '@/components/layouts/Container.astro';
+import EmptyState from '@/components/patterns/Feedback/EmptyState.astro';
+
+type Props = SystemStatePageProps;
+
+const { content } = Astro.props;
+---
+
+<BaseLayout title={content.metadataTitle} description={content.metadataDescription}>
+  <Header solid />
+  <main class="bg-surface-light pt-20 text-on-light">
+    <Container class="grid items-center py-6xl">
+      <EmptyState content={content} />
+    </Container>
+  </main>
+  <Footer />
+</BaseLayout>

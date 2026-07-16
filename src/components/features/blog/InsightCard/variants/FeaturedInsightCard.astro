@@ -1,0 +1,27 @@
+---
+import { interfaceContent } from '@/data/content';
+import type { InsightCardProps } from '@/types/ui';
+import CardItem from '@/components/patterns/Cards/CardItem.astro';
+import Text from '@/components/primitives/Text/Text.astro';
+import Image from '@/components/primitives/Image/Image.astro';
+import Link from '@/components/primitives/Link/Link.astro';
+
+type Props = Omit<InsightCardProps, 'variant'>;
+
+const { insight }: Props = Astro.props;
+---
+
+<CardItem variant="plain" class="lg:col-span-7">
+  <Link href={insight.href} ariaLabel={insight.title} class="group block">
+    <figure class="aspect-editorial overflow-hidden rounded-card bg-surface-dark">
+      {insight.image && <Image class="size-full object-cover grayscale transition duration-(--duration-reveal) group-hover:scale-media group-hover:grayscale-0" src={insight.image} alt={insight.imageAlt} />}
+    </figure>
+  </Link>
+  <div class="mt-5 flex flex-wrap items-center gap-xs font-mono text-label uppercase tracking-meta text-on-light-subtle">
+    <Link href={`/blog/category/${insight.categorySlug}`} class="transition-colors hover:text-on-light">{insight.category}</Link>
+    <span aria-hidden="true">{interfaceContent.separators.dot}</span>
+    <time datetime={insight.duration}>{insight.readTime}</time>
+  </div>
+  <Text as="h3" variant="heading" size="h3" class="mt-4"><Link href={insight.href}>{insight.title}</Link></Text>
+  <Text size="base" class="mt-5 leading-7 text-on-light-muted">{insight.excerpt}</Text>
+</CardItem>

@@ -1,0 +1,17 @@
+---
+import type { FilterBarProps } from '@/types/ui';
+import Button from '@/components/primitives/Button/Button.astro';
+import { getFilterBarTone } from '@/components/patterns/Navigation/FilterBar/variants/getFilterBarTone';
+
+type Props = FilterBarProps;
+
+const { categories, allLabel, label, theme = 'dark' } = Astro.props;
+const tone = getFilterBarTone(theme);
+---
+
+<div data-filter-bar role="group" aria-label={label} class="flex flex-wrap gap-xs">
+  <Button label={allLabel} variant="outline" size="sm" tone={tone} data-filter-value="all" aria-pressed="true" />
+  {categories.map((category) => (
+    <Button label={category.label} variant="outline" size="sm" tone={tone} data-filter-value={category.slug} aria-pressed="false" />
+  ))}
+</div>

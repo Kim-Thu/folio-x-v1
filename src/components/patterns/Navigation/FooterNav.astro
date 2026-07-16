@@ -1,0 +1,20 @@
+---
+import type { FooterNavProps } from '@/types/navigation';
+import Link from '@/components/primitives/Link/Link.astro';
+
+type Props = FooterNavProps;
+
+const { items, label } = Astro.props;
+---
+
+<nav aria-label={label}>
+  <ul class="space-y-3">
+    {items.map((item) => (
+      <li>
+        <Link class="inline-flex text-sm text-on-dark-muted transition-colors hover:text-on-dark" href={item.href}>
+          {item.label}
+        </Link>
+      </li>
+    ))}
+  </ul>
+</nav>

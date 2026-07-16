@@ -1,0 +1,14 @@
+---
+import type { FooterColumn } from '@/types/ui';
+import FooterNav from '@/components/patterns/Navigation/FooterNav.astro';
+import Text from '@/components/primitives/Text/Text.astro';
+
+interface Props { column: Extract<FooterColumn, { kind: 'navigation' }> }
+
+const { column }: Props = Astro.props;
+---
+
+<div class="min-w-0">
+  <Text variant="eyebrow" class="mb-4 text-on-dark-faint">{column.label}</Text>
+  <FooterNav items={column.items} label={column.label} />
+</div>

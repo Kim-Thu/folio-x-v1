@@ -1,0 +1,11 @@
+---
+import type { SkeletonProps } from '@/types/ui';
+import { cn } from '@/utils/cn';
+import { getSkeletonShapeClass } from '@/components/patterns/Feedback/Skeleton/variants/getSkeletonShapeClass';
+
+type Props = SkeletonProps;
+
+const { class: className = '', shape = 'block' } = Astro.props;
+---
+
+<span aria-hidden="true" class={cn('block animate-skeleton bg-(image:--background-image-skeleton) [background-size:var(--background-size-skeleton)]', getSkeletonShapeClass(shape), className)}></span>

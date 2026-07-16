@@ -1,0 +1,36 @@
+---
+import { site } from '@/data/site';
+import type { BlogArchiveProps } from '@/types/ui';
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import Footer from '@/components/layouts/Footer.astro';
+import Header from '@/components/layouts/Header/Header.astro';
+import FilterBar from '@/components/patterns/Navigation/FilterBar/FilterBar.astro';
+import BlogArchiveCard from '@/components/features/blog/BlogArchiveCard.astro';
+import Container from '@/components/layouts/Container.astro';
+import Text from '@/components/primitives/Text/Text.astro';
+import Cards from '@/components/patterns/Cards/Cards.astro';
+
+type Props = BlogArchiveProps;
+
+const { eyebrow, title, description, posts, categories = [], filterLabel = '', allLabel = '', emptyLabel } = Astro.props;
+const hasFilter = categories.length > 0;
+---
+
+<BaseLayout title={`${title} — ${site.name}`} description={description}>
+  <Header solid />
+  <main class="bg-surface-light pb-3xl pt-6xl text-on-light md:pb-5xl lg:pb-6xl" data-filter-root>
+    <Container>
+      <header class="grid border-b-hairline border-line-light pb-12 lg:grid-cols-12">
+        <Text variant="eyebrow" class="text-on-light-muted lg:col-span-12">{eyebrow}</Text>
+        <Text as="h1" variant="heading" size="h1" class="mt-6 lg:col-span-10">{title}</Text>
+        <Text size="base" class="mt-7 leading-7 text-on-light-muted md:text-lg lg:col-span-7">{description}</Text>
+        {hasFilter && <div class="mt-10 lg:col-span-12"><FilterBar categories={categories} allLabel={allLabel} label={filterLabel} theme="light" /></div>}
+      </header>
+      <Cards class="mt-8" aria-live="polite">
+        {posts.map((post) => <BlogArchiveCard post={post} />)}
+      </Cards>
+      <p data-filter-empty hidden class="py-3xl text-center text-on-light-muted">{emptyLabel}</p>
+    </Container>
+  </main>
+  <Footer />
+</BaseLayout>

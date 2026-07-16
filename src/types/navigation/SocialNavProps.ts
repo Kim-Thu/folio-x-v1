@@ -1,4 +1,4 @@
-import type { SocialLink } from './SocialLink';
+import type { SocialLink } from '@/types/navigation/SocialLink';
 
 export interface SocialNavProps {
   links: SocialLink[];

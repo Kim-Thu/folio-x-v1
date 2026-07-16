@@ -1,4 +1,4 @@
-import type { Insight, TaxonomyTerm } from '../content';
+import type { Insight, TaxonomyTerm } from '@/types/content';
 
 export interface BlogArchiveProps {
   eyebrow: string;

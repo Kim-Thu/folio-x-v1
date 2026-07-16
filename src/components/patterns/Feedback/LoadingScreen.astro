@@ -1,0 +1,25 @@
+---
+import type { LoadingScreenProps } from '@/types/ui';
+import Skeleton from '@/components/patterns/Feedback/Skeleton/Skeleton.astro';
+
+type Props = LoadingScreenProps;
+
+const { label, status } = Astro.props;
+---
+
+<div
+  id="loading-screen"
+  data-loading-screen
+  aria-hidden="true"
+  class="pointer-events-none fixed inset-0 z-loading-screen grid bg-surface-dark px-md py-lg text-on-dark"
+>
+  <div class="flex items-start justify-between font-mono text-label uppercase tracking-eyebrow text-on-dark-subtle">
+    <span>{label}</span>
+    <span>{status}</span>
+  </div>
+  <div class="mt-auto grid gap-md" aria-hidden="true">
+    <Skeleton shape="line" class="w-1/4" />
+    <Skeleton shape="line" class="w-1/2" />
+    <Skeleton shape="line" class="w-3/4" />
+  </div>
+</div>

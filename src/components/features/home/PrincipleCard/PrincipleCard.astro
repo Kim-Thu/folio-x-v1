@@ -1,0 +1,16 @@
+---
+import type { PrincipleCardProps } from '@/types/ui';
+import StatementPrincipleCard from '@/components/features/home/PrincipleCard/variants/StatementPrincipleCard.astro';
+import GraphicPrincipleCard from '@/components/features/home/PrincipleCard/variants/GraphicPrincipleCard.astro';
+import ImagePrincipleCard from '@/components/features/home/PrincipleCard/variants/ImagePrincipleCard.astro';
+
+type Props = PrincipleCardProps;
+
+const { title, variant, ...props }: Props = Astro.props;
+const titleLines = Array.isArray(title) ? title : [title];
+const variantProps = { ...props, titleLines };
+---
+
+{variant === 'statement' && <StatementPrincipleCard {...variantProps} />}
+{variant === 'graphic' && <GraphicPrincipleCard {...variantProps} />}
+{variant === 'image' && <ImagePrincipleCard {...variantProps} />}

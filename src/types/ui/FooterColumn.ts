@@ -1,11 +1,6 @@
-import type { NavigationItem, SocialLink } from '../navigation';
+import type { NavigationItem, SocialLink } from '@/types/navigation';
 
 export type FooterColumn =
-  | {
-      kind: 'contact';
-      label: string;
-      email: string;
-    }
   | {
       kind: 'navigation';
       label: string;
@@ -20,5 +15,4 @@ export type FooterColumn =
       kind: 'location';
       label: string;
       location: string;
-      email: string;
     };

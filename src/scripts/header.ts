@@ -1,7 +1,7 @@
 const OPEN_CLASS_NAMES = ['invisible', 'opacity-0', '-translate-y-3'] as const;
 
 export function initHeader(): void {
-  const header = document.querySelector<HTMLElement>('#site-header');
+  const header = document.querySelector<HTMLElement>('#header');
   const menuButton = document.querySelector<HTMLButtonElement>('#menu-button');
   const mobileMenu = document.querySelector<HTMLElement>('#mobile-menu');
   const mobileLinks = document.querySelectorAll<HTMLAnchorElement>('.mobile-link');

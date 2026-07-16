@@ -1,0 +1,18 @@
+---
+import { interfaceContent } from '@/data/content';
+import type { SocialNavProps } from '@/types/navigation';
+import Link from '@/components/primitives/Link/Link.astro';
+
+type Props = Pick<SocialNavProps, 'links'>;
+
+const { links }: Props = Astro.props;
+---
+
+<nav aria-label={interfaceContent.navigation.socialLabel} class="pointer-events-auto flex flex-col gap-sm font-mono text-caption uppercase tracking-meta text-on-dark-faint">
+  {links.map((link) => (
+    <Link href={link.href} class="transition-colors hover:text-brand">
+      <span aria-hidden="true">{link.shortLabel}</span>
+      <span class="sr-only">{link.label}</span>
+    </Link>
+  ))}
+</nav>

@@ -1,4 +1,4 @@
-import type { HeroIconName } from './HeroIconName';
+import type { IconName } from '@/types/ui/IconName';
 
 export type ButtonIconPosition = 'start' | 'end';
 export type ButtonSize = 'sm' | 'md' | 'lg';
@@ -7,7 +7,8 @@ export type ButtonVariant = 'primary' | 'secondary' | 'outline' | 'ghost' | 'tex
 
 export interface ButtonCommonProps {
   label: string;
-  icon?: HeroIconName;
+  icon?: IconName;
+  iconOnly?: boolean;
   iconPosition?: ButtonIconPosition;
   variant?: ButtonVariant;
   size?: ButtonSize;

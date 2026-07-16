@@ -1,4 +1,4 @@
-import type { Faq } from '../content/Faq';
+import type { Faq } from '@/types/content/Faq';
 
 export interface FaqItemProps {
   item: Faq;

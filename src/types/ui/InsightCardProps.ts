@@ -1,8 +1,6 @@
-import type { Insight } from '../content/Insight';
+import type { Insight } from '@/types/content/Insight';
 
 export interface InsightCardProps {
   insight: Insight;
   variant?: 'featured' | 'compact';
-  featuredLabel?: string;
-  featuredImageAlt?: string;
 }

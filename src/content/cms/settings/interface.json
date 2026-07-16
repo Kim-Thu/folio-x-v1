@@ -2,6 +2,10 @@
   "skipToContent": "Đi tới nội dung chính",
   "backToTop": "Về đầu trang",
   "openMenu": "Mở menu",
+  "loadingScreen": {
+    "label": "Nguyễn Kim Thu",
+    "status": "Đang tải"
+  },
   "navigation": {
     "primaryLabel": "Điều hướng chính",
     "mobileLabel": "Điều hướng mobile",

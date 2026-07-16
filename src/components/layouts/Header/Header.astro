@@ -1,0 +1,26 @@
+---
+import type { HeaderProps } from '@/types/layout';
+import { navItems } from '@/data/site';
+import BrandLogo from '@/components/patterns/BrandLogo/BrandLogo.astro';
+import PrimaryNav from '@/components/patterns/Navigation/PrimaryNav/PrimaryNav.astro';
+import Container from '@/components/layouts/Container.astro';
+import HeaderContact from '@/components/layouts/Header/HeaderContact/HeaderContact.astro';
+import MobileMenu from '@/components/layouts/Header/MobileMenu/MobileMenu.astro';
+import MobileMenuButton from '@/components/layouts/Header/MobileMenuButton/MobileMenuButton.astro';
+import { getHeaderClasses, getHeaderContainerClasses } from '@/components/layouts/Header/variants/getHeaderClasses';
+
+type Props = HeaderProps;
+
+const { solid = false } = Astro.props;
+const headerClasses = getHeaderClasses(solid);
+---
+
+<header id="header" data-solid-header={String(solid)} class={headerClasses}>
+  <Container class={getHeaderContainerClasses()}>
+    <BrandLogo />
+    <PrimaryNav items={navItems} variant="desktop" />
+    <HeaderContact variant="bar" />
+    <MobileMenuButton />
+  </Container>
+  <MobileMenu />
+</header>

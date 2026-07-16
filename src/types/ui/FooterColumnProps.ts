@@ -1,4 +1,4 @@
-import type { FooterColumn } from './FooterColumn';
+import type { FooterColumn } from '@/types/ui/FooterColumn';
 
 export interface FooterColumnProps {
   column: FooterColumn;

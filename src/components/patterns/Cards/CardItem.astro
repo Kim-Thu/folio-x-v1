@@ -1,0 +1,20 @@
+---
+import type { CardItemProps } from '@/types/ui';
+import { cn } from '@/utils/cn';
+import Link from '@/components/primitives/Link/Link.astro';
+import { getCardItemClasses, getCardItemLinkClasses } from '@/components/patterns/Cards/variants/getCardItemClasses';
+
+type Props = CardItemProps;
+
+const { href, ariaLabel, class: className = '', linkClass = '', reveal = true, variant = 'surface' } = Astro.props;
+---
+
+<article class={cn(getCardItemClasses(reveal), !href && getCardItemLinkClasses(variant), className)} data-reveal={reveal ? '' : undefined}>
+  {href ? (
+    <Link href={href} ariaLabel={ariaLabel} class={cn(getCardItemLinkClasses(variant), linkClass)}>
+      <slot />
+    </Link>
+  ) : (
+    <slot />
+  )}
+</article>

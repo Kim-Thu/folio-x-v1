@@ -1,0 +1,14 @@
+---
+import type { FooterColumnProps } from '@/types/ui';
+import NavigationFooterColumn from '@/components/patterns/Footer/FooterColumn/variants/NavigationFooterColumn.astro';
+import SocialFooterColumn from '@/components/patterns/Footer/FooterColumn/variants/SocialFooterColumn.astro';
+import LocationFooterColumn from '@/components/patterns/Footer/FooterColumn/variants/LocationFooterColumn.astro';
+
+type Props = FooterColumnProps;
+
+const { column }: Props = Astro.props;
+---
+
+{column.kind === 'navigation' && <NavigationFooterColumn column={column} />}
+{column.kind === 'social' && <SocialFooterColumn column={column} />}
+{column.kind === 'location' && <LocationFooterColumn column={column} />}

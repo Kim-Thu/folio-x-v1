@@ -1,4 +1,4 @@
-import { getSystemStatesSettings } from './cms';
+import { getSystemStatesSettings } from '@/data/cms';
 
 const systemStates = await getSystemStatesSettings();
 

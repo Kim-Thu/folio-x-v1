@@ -1,9 +1,9 @@
 ---
-import ProjectArchive from '../../../components/sections/ProjectArchive.astro';
-import { archiveContent } from '../../../data/archive';
-import { projects } from '../../../data/site';
-import type { Project, TaxonomyTerm } from '../../../types/content';
-import { getCategories } from '../../../utils/taxonomy';
+import ProjectArchive from '@/components/features/projects/ProjectArchive.astro';
+import { archiveContent } from '@/data/archive';
+import { projects } from '@/data/site';
+import type { Project, TaxonomyTerm } from '@/types/content';
+import { getCategories } from '@/utils/taxonomy';
 
 export function getStaticPaths() {
   return getCategories(projects).map((category) => ({

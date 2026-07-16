@@ -1,0 +1,12 @@
+---
+import type { ButtonContentProps } from '@/types/ui';
+import Icon from '@/components/primitives/Icon/Icon.astro';
+
+type Props = ButtonContentProps;
+
+const { label, icon, iconPosition, iconClass = '' } = Astro.props;
+---
+
+{icon && iconPosition === 'start' && <Icon name={icon} class={iconClass} />}
+<span>{label}</span>
+{icon && iconPosition === 'end' && <Icon name={icon} class={iconClass} />}

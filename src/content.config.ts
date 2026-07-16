@@ -11,7 +11,7 @@ import {
   projectEntrySchema,
   siteSettingsSchema,
   systemStatesSettingsSchema,
-} from './content/schemas';
+} from '@/content/schemas';
 
 const settingsBase = './src/content/cms/settings';
 

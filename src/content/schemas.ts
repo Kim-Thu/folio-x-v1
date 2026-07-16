@@ -119,8 +119,6 @@ export const homepageSettingsSchema = z.object({
   }),
   insights: z.object({
     heading: sectionHeadingSchema,
-    featuredLabel: z.string().min(1),
-    featuredImageAlt: z.string().min(1),
   }),
   qa: z.object({ heading: sectionHeadingSchema }),
   cta: z.object({
@@ -136,6 +134,10 @@ export const interfaceSettingsSchema = z.object({
   skipToContent: z.string().min(1),
   backToTop: z.string().min(1),
   openMenu: z.string().min(1),
+  loadingScreen: z.object({
+    label: z.string().min(1),
+    status: z.string().min(1),
+  }),
   navigation: z.object({
     primaryLabel: z.string().min(1),
     mobileLabel: z.string().min(1),
@@ -168,7 +170,6 @@ export const archiveSettingsSchema = z.object({
 });
 
 export const footerSettingsSchema = z.object({
-  contactLabel: z.string().min(1),
   menuLabel: z.string().min(1),
   legalLabel: z.string().min(1),
   locationLabel: z.string().min(1),

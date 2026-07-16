@@ -1,0 +1,11 @@
+---
+import type { PrimaryNavProps } from '@/types/navigation';
+import DesktopPrimaryNav from '@/components/patterns/Navigation/PrimaryNav/variants/DesktopPrimaryNav.astro';
+import MobilePrimaryNav from '@/components/patterns/Navigation/PrimaryNav/variants/MobilePrimaryNav.astro';
+
+type Props = PrimaryNavProps;
+
+const { items, variant = 'desktop' }: Props = Astro.props;
+---
+
+{variant === 'mobile' ? <MobilePrimaryNav items={items} /> : <DesktopPrimaryNav items={items} />}

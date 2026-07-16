@@ -1,9 +1,9 @@
-import type { HeroIconName } from '../ui/HeroIconName';
+import type { IconName } from '@/types/ui/IconName';
 
 export interface SystemStateAction {
   href: string;
   label: string;
-  icon?: HeroIconName;
+  icon?: IconName;
 }
 
 export interface SystemStateContent {

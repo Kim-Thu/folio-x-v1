@@ -1,4 +1,4 @@
-import type { TaxonomyTerm } from '../content';
+import type { TaxonomyTerm } from '@/types/content';
 
 export interface FilterBarProps {
   categories: TaxonomyTerm[];

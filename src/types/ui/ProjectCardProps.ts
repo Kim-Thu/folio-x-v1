@@ -1,4 +1,4 @@
-import type { Project } from '../content/Project';
+import type { Project } from '@/types/content/Project';
 
 export interface ProjectCardProps {
   project: Project;

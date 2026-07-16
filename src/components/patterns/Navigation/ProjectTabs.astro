@@ -1,0 +1,40 @@
+---
+import type { ProjectTabsProps } from '@/types/ui';
+import Button from '@/components/primitives/Button/Button.astro';
+
+type Props = ProjectTabsProps;
+
+const { categories, allLabel, label, panelId } = Astro.props;
+const tabClass = 'aria-selected:border-brand aria-selected:bg-brand aria-selected:text-on-brand';
+---
+
+<div class="overflow-x-auto pb-xs">
+  <div data-work-tablist role="tablist" aria-label={label} class="flex min-w-max gap-xs">
+    <Button
+      id={`${panelId}-tab-all`}
+      label={allLabel}
+      role="tab"
+      variant="outline"
+      size="sm"
+      data-work-tab="all"
+      aria-controls={panelId}
+      aria-selected="true"
+      tabindex="0"
+      class={tabClass}
+    />
+    {categories.map((category) => (
+      <Button
+        id={`${panelId}-tab-${category.slug}`}
+        label={category.label}
+        role="tab"
+        variant="outline"
+        size="sm"
+        data-work-tab={category.slug}
+        aria-controls={panelId}
+        aria-selected="false"
+        tabindex="-1"
+        class={tabClass}
+      />
+    ))}
+  </div>
+</div>

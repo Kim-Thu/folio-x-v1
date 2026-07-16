@@ -1,4 +1,4 @@
-import type { Project, TaxonomyTerm } from '../content';
+import type { Project, TaxonomyTerm } from '@/types/content';
 
 export interface ProjectArchiveProps {
   eyebrow: string;

@@ -1,6 +1,6 @@
 import { getCollection } from 'astro:content';
 import type { CollectionEntry, CollectionKey } from 'astro:content';
-import type { Insight, PolicyPageContent, Project } from '../types/content';
+import type { Insight, PolicyPageContent, Project } from '@/types/content';
 
 async function getSingleton<C extends CollectionKey>(collection: C): Promise<CollectionEntry<C>['data']> {
   const entries = await getCollection(collection);

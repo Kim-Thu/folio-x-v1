@@ -23,11 +23,11 @@
   --color-line-light: #c7d0d8;
   --color-button-outline: rgb(230 234 240 / 12%);
   --color-button-surface: rgb(18 19 23 / 18%);
-  --color-black: #000000;
-  --color-transparent: transparent;
+  --color-skeleton-base: rgb(230 234 240 / 6%);
+  --color-skeleton-highlight: rgb(230 234 240 / 12%);
 
   /* Font families */
-  --font-sans: "Google Sans Flex", ui-sans-serif, system-ui, sans-serif;
+  --font-sans: "Google Sans Flex Variable", ui-sans-serif, system-ui, sans-serif;
   --font-mono: "IBM Plex Mono", ui-monospace, monospace;
 
   /* Type scale */
@@ -73,59 +73,73 @@
 
   /* Spacing scale — all numeric Tailwind spacing derives from --spacing */
   --spacing: 0.25rem;
-  --space-xs: 0.5rem;
-  --space-sm: 0.75rem;
-  --space-md: 1rem;
-  --space-lg: 1.5rem;
-  --space-xl: 2rem;
-  --space-2xl: 3rem;
-  --space-3xl: 4rem;
-  --space-4xl: 5rem;
-  --space-5xl: 6rem;
-  --space-6xl: 8rem;
-  --size-icon-inline: 1em;
-  --size-control-sm: 2rem;
-  --size-control-md: 2.5rem;
-  --size-control-lg: 3rem;
-  --size-viewport: 100svh;
+  --spacing-xs: 0.5rem;
+  --spacing-sm: 0.75rem;
+  --spacing-md: 1rem;
+  --spacing-lg: 1.5rem;
+  --spacing-xl: 2rem;
+  --spacing-2xl: 3rem;
+  --spacing-3xl: 4rem;
+  --spacing-4xl: 5rem;
+  --spacing-5xl: 6rem;
+  --spacing-6xl: 8rem;
+  --spacing-icon-inline: 1em;
+  --spacing-control-sm: 2rem;
+  --spacing-control-md: 2.5rem;
+  --spacing-control-lg: 3rem;
 
   /* Containers */
-  --container-sm: 24rem;
-  --container-md: 28rem;
-  --container-xl: 36rem;
-  --container-2xl: 42rem;
-  --container-3xl: 48rem;
-  --container-5xl: 64rem;
-  --container-6xl: 72rem;
   --container-site: 92.5rem;
 
   /* Shape and position */
   --radius-card: 2rem;
   --radius-full: 9999px;
-  --position-half: 50%;
-  --position-quarter: 25%;
   --aspect-editorial: 16 / 10;
   --border-width-hairline: 0.0625rem;
   --border-width-focus: 0.125rem;
+  --border-width-principle-orbit: 2.5rem;
+  --grid-template-columns-index-content: 2.5rem minmax(0, 1fr);
   --z-index-skip-link: 100;
+  --z-index-loading-screen: 110;
 
   /* Backgrounds */
   --background-image-hero-side: linear-gradient(90deg, color-mix(in srgb, var(--color-surface-dark) 92%, transparent) 0%, color-mix(in srgb, var(--color-surface-dark) 35%, transparent) 58%, color-mix(in srgb, var(--color-surface-dark) 12%, transparent) 100%);
   --background-image-hero-floor: linear-gradient(0deg, var(--color-surface-dark) 0%, transparent 35%);
   --background-image-grid-dots: radial-gradient(color-mix(in srgb, var(--color-on-dark) 10%, transparent) var(--border-width-hairline), transparent var(--border-width-hairline));
+  --background-size-grid-dots: 1.25rem 1.25rem;
+  --background-image-skeleton: linear-gradient(90deg, var(--color-skeleton-base), var(--color-skeleton-highlight), var(--color-skeleton-base));
+  --background-size-skeleton: 200% 100%;
 
   /* Motion */
   --duration-interaction: 250ms;
   --duration-reveal: 700ms;
+  --duration-loader: 450ms;
+  --duration-loader-fallback: 480ms;
+  --duration-skeleton: 1400ms;
   --duration-reduced-motion: 0.01ms;
   --ease-reveal: cubic-bezier(0.2, 0.75, 0.25, 1);
+  --ease-skeleton: ease-in-out;
+  --animate-skeleton: skeleton var(--duration-skeleton) var(--ease-skeleton) infinite;
+  --animate-loader-fallback: loader-fallback var(--duration-loader-fallback) var(--ease-reveal) forwards;
   --rotate-progress-full: 1turn;
+  --rotate-hover-image-a: -5deg;
+  --rotate-hover-image-b: 3deg;
+  --rotate-hover-image-c: -2deg;
+  --rotate-hover-image-d: 6deg;
 
   /* Effects */
-  --scale-media-hover: 1.025;
+  --scale-media: 1.025;
   --saturate-hero: 0.7;
   --object-position-hero: 62% center;
   --blur-button-outline: 0.375rem;
   --blur-2xl: 2.5rem;
   --opacity-disabled: 0.5;
+}
+
+@utility z-skip-link {
+  z-index: var(--z-index-skip-link);
+}
+
+@utility z-loading-screen {
+  z-index: var(--z-index-loading-screen);
 }
