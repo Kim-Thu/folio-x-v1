@@ -22,7 +22,7 @@ const { project, linkLabel, outcomeLabel } = Astro.props;
     <Link href={project.href} ariaLabel={project.title} class="block">
       <figure class="aspect-editorial overflow-hidden">
         <Image
-          class="size-full object-cover transition-transform duration-(--duration-reveal) group-hover/card:scale-media"
+          variant="interactiveCover"
           src={project.image}
           alt={project.alt}
           loading="lazy"

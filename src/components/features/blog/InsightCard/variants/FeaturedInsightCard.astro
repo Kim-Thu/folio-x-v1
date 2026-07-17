@@ -14,7 +14,7 @@ const { insight }: Props = Astro.props;
 <CardItem variant="plain" class="lg:col-span-7">
   <Link href={insight.href} ariaLabel={insight.title} class="group block">
     <figure class="aspect-editorial overflow-hidden rounded-card bg-surface-dark">
-      {insight.image && <Image class="size-full object-cover grayscale transition duration-(--duration-reveal) group-hover:scale-media group-hover:grayscale-0" src={insight.image} alt={insight.imageAlt} />}
+      {insight.image && <Image variant="interactiveCover" class="grayscale group-hover:grayscale-0" src={insight.image} alt={insight.imageAlt} />}
     </figure>
   </Link>
   <div class="mt-5 flex flex-wrap items-center gap-xs font-mono text-label uppercase tracking-meta text-on-light-subtle">

@@ -23,6 +23,14 @@
 - `.github/workflows/quality.yml` repeats validation for pull requests and pushes to `main`.
 - Netlify builds with Node 24, publishes `dist`, applies security headers, and disables caching for Decap CMS administration routes.
 
+## Refactor audit
+
+- Repeated media behavior now belongs to named `Image` variants; feature templates no longer repeat cover, fill, hero, skeleton, or interaction class groups.
+- Token-backed Tailwind utilities replace arbitrary CSS-variable syntax for motion, skeleton, grid, hero positioning, and saturation.
+- Blog and project archives share one archive layout; article, project, and policy content share one section renderer; detail taxonomies share one navigation pattern.
+- Raw anchors, buttons, images, and sections only exist inside their corresponding primitives/layout components.
+- Application scripts remain external modules. The only third-party script tag is the external Decap CMS bundle in the admin page.
+
 ## Known verification limitation
 
 - Source, generated HTML, generated CSS, routes, and production builds have been checked.

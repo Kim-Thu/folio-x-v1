@@ -1,9 +1,8 @@
 import { twJoin } from '@/utils/cn';
-
-const revealClasses = 'translate-y-6 opacity-0 transition duration-(--duration-reveal) ease-reveal data-[visible=true]:translate-y-0 data-[visible=true]:opacity-100 motion-reduce:translate-y-0 motion-reduce:opacity-100';
+import { getRevealClasses } from '@/components/patterns/Feedback/variants/getRevealClasses';
 
 export function getCardItemClasses(reveal: boolean): string {
-  return twJoin(reveal && revealClasses);
+  return twJoin(reveal && getRevealClasses());
 }
 
 const linkVariantClasses = {

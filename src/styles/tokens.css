@@ -143,3 +143,27 @@
 @utility z-loading-screen {
   z-index: var(--z-index-loading-screen);
 }
+
+@utility bg-skeleton-size {
+  background-size: var(--background-size-skeleton);
+}
+
+@utility bg-grid-size {
+  background-size: var(--background-size-grid-dots);
+}
+
+@utility object-hero {
+  object-position: var(--object-position-hero);
+}
+
+@utility saturate-hero {
+  filter: saturate(var(--saturate-hero));
+}
+
+@utility duration-interaction {
+  transition-duration: var(--duration-interaction);
+}
+
+@utility duration-reveal {
+  transition-duration: var(--duration-reveal);
+}

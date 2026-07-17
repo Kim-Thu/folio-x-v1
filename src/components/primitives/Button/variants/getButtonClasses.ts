@@ -1,7 +1,7 @@
 import type { ButtonSize, ButtonStyleOptions, ButtonTone, ButtonVariant } from '@/types/ui';
 import { twJoin } from '@/utils/cn';
 
-const baseClasses = 'group/button inline-flex cursor-pointer items-center justify-center gap-xs border-hairline border-transparent font-medium leading-none no-underline transition-colors duration-(--duration-interaction) disabled:cursor-not-allowed disabled:opacity-disabled aria-disabled:cursor-not-allowed aria-disabled:opacity-disabled aria-pressed:border-brand aria-pressed:bg-brand aria-pressed:text-on-brand';
+const baseClasses = 'group/button inline-flex cursor-pointer items-center justify-center gap-xs border-hairline border-transparent font-medium leading-none no-underline transition-colors duration-interaction disabled:cursor-not-allowed disabled:opacity-disabled aria-disabled:cursor-not-allowed aria-disabled:opacity-disabled aria-pressed:border-brand aria-pressed:bg-brand aria-pressed:text-on-brand';
 
 const sizeClasses: Record<ButtonSize, string> = {
   sm: 'px-sm py-xs text-xs',

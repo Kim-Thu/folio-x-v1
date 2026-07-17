@@ -16,10 +16,10 @@ const hoverImageClass = getInsightHoverImageClass(insight.index);
 <CardItem variant="plain" class="group relative isolate grid grid-cols-index-content gap-md border-b-hairline border-line-light py-7 last:border-b-0">
   {insight.image && (
     <figure class:list={[
-      'pointer-events-none absolute bottom-lg right-lg z-20 hidden w-48 origin-bottom-right translate-y-3 rotate-(--rotate-insight-hover) scale-95 overflow-hidden rounded-card opacity-0 transition duration-(--duration-interaction) ease-reveal group-hover:translate-y-0 group-hover:scale-100 group-hover:opacity-100 group-focus-visible:translate-y-0 group-focus-visible:scale-100 group-focus-visible:opacity-100 motion-reduce:translate-y-0 xl:w-64 lg:block',
+      'pointer-events-none absolute bottom-lg right-lg z-20 hidden w-48 origin-bottom-right translate-y-3 scale-95 overflow-hidden rounded-card opacity-0 transition duration-interaction ease-reveal group-hover:translate-y-0 group-hover:scale-100 group-hover:opacity-100 group-focus-visible:translate-y-0 group-focus-visible:scale-100 group-focus-visible:opacity-100 motion-reduce:translate-y-0 xl:w-64 lg:block',
       hoverImageClass,
     ]} aria-hidden="true">
-      <Image class="block h-auto w-full" src={insight.image} alt="" />
+      <Image variant="natural" src={insight.image} alt="" />
     </figure>
   )}
   <Text as="span" variant="meta" size="label" class="relative z-10 text-on-light-subtle">{insight.index}</Text>

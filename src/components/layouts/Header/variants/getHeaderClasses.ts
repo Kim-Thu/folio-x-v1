@@ -2,7 +2,7 @@ import { twJoin } from '@/utils/cn';
 
 export function getHeaderClasses(solid: boolean): string {
   return twJoin(
-    'fixed inset-x-0 top-0 z-40 border-b-hairline border-transparent transition-all duration-(--duration-interaction)',
+    'fixed inset-x-0 top-0 z-40 border-b-hairline border-transparent transition-all duration-interaction',
     solid && 'bg-surface-dark/80',
   );
 }

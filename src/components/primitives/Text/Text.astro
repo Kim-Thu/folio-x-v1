@@ -5,9 +5,9 @@ import { getTextClasses } from '@/components/primitives/Text/variants/getTextCla
 
 type Props = TextProps;
 
-const { as: Tag = 'p', variant = 'body', size = 'inherit', class: className = '', id }: Props = Astro.props;
+const { as: Tag = 'p', variant = 'body', size = 'inherit', class: className = '', ...attributes }: Props = Astro.props;
 ---
 
-<Tag id={id} class={cn(getTextClasses(variant, size), className)}>
+<Tag {...attributes} class={cn(getTextClasses(variant, size), className)}>
   <slot />
 </Tag>

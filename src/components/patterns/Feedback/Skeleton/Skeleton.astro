@@ -8,4 +8,4 @@ type Props = SkeletonProps;
 const { class: className = '', shape = 'block' } = Astro.props;
 ---
 
-<span aria-hidden="true" class={cn('block animate-skeleton bg-(image:--background-image-skeleton) [background-size:var(--background-size-skeleton)]', getSkeletonShapeClass(shape), className)}></span>
+<span aria-hidden="true" class={cn('block animate-skeleton bg-skeleton bg-skeleton-size', getSkeletonShapeClass(shape), className)}></span>

@@ -5,4 +5,3 @@ export type { Project } from '@/types/content/Project';
 export type { TaxonomyTerm } from '@/types/content/TaxonomyTerm';
 export type { SystemStateAction, SystemStateContent } from '@/types/content/SystemStateContent';
 export type { PolicyPageContent } from '@/types/content/PolicyPageContent';
-export type { PolicySection } from '@/types/content/PolicySection';

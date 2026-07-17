@@ -8,7 +8,7 @@ const { item, index } = Astro.props;
 ---
 
 <details class="faq group border-t-hairline border-line-dark last:border-b-hairline">
-  <summary class="flex cursor-pointer list-none items-center gap-5 py-7 [&::-webkit-details-marker]:hidden">
+  <summary class="flex cursor-pointer list-none items-center gap-5 py-7">
     <span class="font-mono text-label text-on-dark-faint">{String(index + 1).padStart(2, '0')}</span>
     <Text as="h3" variant="heading" size="h3" class="flex-1">{item.question}</Text>
     <span class="relative size-5 shrink-0" aria-hidden="true">

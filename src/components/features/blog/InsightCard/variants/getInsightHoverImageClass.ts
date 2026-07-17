@@ -1,8 +1,8 @@
 const rotationClasses = [
-  '[--rotate-insight-hover:var(--rotate-hover-image-a)]',
-  '[--rotate-insight-hover:var(--rotate-hover-image-b)]',
-  '[--rotate-insight-hover:var(--rotate-hover-image-c)]',
-  '[--rotate-insight-hover:var(--rotate-hover-image-d)]',
+  'rotate-hover-image-a',
+  'rotate-hover-image-b',
+  'rotate-hover-image-c',
+  'rotate-hover-image-d',
 ] as const;
 
 export function getInsightHoverImageClass(index: string): string {

@@ -10,12 +10,13 @@ import InsightsSection from '@/components/features/home/Insights.astro';
 import QASection from '@/components/features/home/QA.astro';
 import CTASection from '@/components/features/home/CTA.astro';
 import { interfaceContent } from '@/data/content';
+import Link from '@/components/primitives/Link/Link.astro';
 ---
 
 <BaseLayout>
-  <a href="#main-content" class="fixed left-4 top-4 z-skip-link -translate-y-24 bg-brand-soft px-4 py-3 text-sm font-semibold text-on-brand transition-transform focus:translate-y-0">
+  <Link href="#main-content" class="fixed left-4 top-4 z-skip-link -translate-y-24 bg-brand-soft px-4 py-3 text-sm font-semibold text-on-brand transition-transform focus:translate-y-0">
     {interfaceContent.skipToContent}
-  </a>
+  </Link>
   <Header />
   <StickyRail />
   <main id="main-content" tabindex="-1">

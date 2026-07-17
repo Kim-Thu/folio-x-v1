@@ -14,7 +14,7 @@ const { project, linkLabel, outcomeLabel } = Astro.props;
     <Text variant="meta" class="text-on-dark-faint lg:col-span-1">{project.number}</Text>
 
     <figure class="aspect-editorial overflow-hidden rounded-card lg:col-span-3">
-      <Image class="h-full w-full object-cover transition duration-(--duration-reveal) group-hover:scale-media" src={project.image} alt={project.alt} />
+      <Image variant="interactiveCover" src={project.image} alt={project.alt} />
     </figure>
 
     <div class="lg:col-span-5">

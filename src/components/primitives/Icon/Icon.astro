@@ -13,7 +13,7 @@ type Props = IconProps;
 const { name, class: className = '' } = Astro.props;
 const hasExplicitSize = className.split(/\s+/).some((classToken) => classToken.startsWith('size-'));
 const sizeClass = hasExplicitSize ? '' : 'size-icon-inline';
-const iconClasses = cn('inline-flex shrink-0 [&>svg]:size-full', sizeClass, className);
+const iconClasses = cn('inline-flex shrink-0', sizeClass, className);
 
 const icons: Record<IconName, string> = {
   arrowLeft,
@@ -23,6 +23,7 @@ const icons: Record<IconName, string> = {
   bars3,
   xMark,
 };
+const iconMarkup = icons[name].replace('<svg ', '<svg class="size-full" ');
 ---
 
-<span class={iconClasses} aria-hidden="true" set:html={icons[name]}></span>
+<span class={iconClasses} aria-hidden="true" set:html={iconMarkup}></span>

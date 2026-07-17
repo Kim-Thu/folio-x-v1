@@ -4,15 +4,17 @@ import type { SectionHeadingProps } from '@/types/ui';
 import { cn } from '@/utils/cn';
 import Text from '@/components/primitives/Text/Text.astro';
 import { getSectionHeadingToneClasses } from '@/components/patterns/SectionHeading/variants/getSectionHeadingToneClasses';
+import { getRevealClasses } from '@/components/patterns/Feedback/variants/getRevealClasses';
 
 type Props = SectionHeadingProps;
 
 const { number, label, title, description, dark = true } = Astro.props;
 const toneClasses = getSectionHeadingToneClasses(dark);
 const descriptionClasses = cn('mt-7 leading-7 md:text-lg lg:col-span-6', toneClasses.description);
+const revealClasses = getRevealClasses();
 ---
 
-<header data-reveal class="grid translate-y-6 gap-xl opacity-0 transition duration-(--duration-reveal) ease-reveal data-[visible=true]:translate-y-0 data-[visible=true]:opacity-100 motion-reduce:translate-y-0 motion-reduce:opacity-100 lg:grid-cols-12">
+<header data-reveal class:list={['grid gap-xl lg:grid-cols-12', revealClasses]}>
   <div class="lg:col-span-3">
     <Text variant="meta" class={toneClasses.kicker}>{number} {interfaceContent.separators.slash} {label}</Text>
   </div>

@@ -7,4 +7,7 @@ export interface ImageProps {
   fetchpriority?: 'high' | 'low' | 'auto';
   width?: number;
   height?: number;
+  variant?: ImageVariant;
 }
+
+export type ImageVariant = 'default' | 'cover' | 'editorial' | 'fillCover' | 'interactiveCover' | 'interactiveFillCover' | 'hero' | 'natural';

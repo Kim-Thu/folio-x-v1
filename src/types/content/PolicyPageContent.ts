@@ -1,4 +1,4 @@
-import type { PolicySection } from '@/types/content/PolicySection';
+import type { ContentSection } from '@/types/content/ContentSection';
 
 export interface PolicyPageContent {
   eyebrow: string;
@@ -6,5 +6,5 @@ export interface PolicyPageContent {
   description: string;
   lastUpdatedLabel: string;
   lastUpdated: string;
-  sections: PolicySection[];
+  sections: ContentSection[];
 }

@@ -33,7 +33,7 @@ const iconMotionClasses = {
   bars3: '',
   xMark: '',
 };
-const iconClass = icon ? `transition-transform duration-(--duration-interaction) ${iconMotionClasses[icon]}` : '';
+const iconClass = icon ? `transition-transform duration-interaction ${iconMotionClasses[icon]}` : '';
 const mergedClasses = cn(buttonClasses, className);
 ---
 

@@ -11,7 +11,8 @@ import Container from '@/components/layouts/Container.astro';
 import Text from '@/components/primitives/Text/Text.astro';
 import Image from '@/components/primitives/Image/Image.astro';
 import Link from '@/components/primitives/Link/Link.astro';
-import Section from '@/components/layouts/Section/Section.astro';
+import ContentSections from '@/components/patterns/Content/ContentSections/ContentSections.astro';
+import TaxonomyLinks from '@/components/patterns/Navigation/TaxonomyLinks/TaxonomyLinks.astro';
 
 type Props = ProjectDetailProps;
 
@@ -36,23 +37,15 @@ const { project } = Astro.props;
       </header>
 
       <figure class="mt-12 overflow-hidden rounded-card">
-        <Image src={project.image} alt={project.alt} class="aspect-editorial w-full object-cover" />
+        <Image src={project.image} alt={project.alt} variant="editorial" />
       </figure>
 
       <div class="grid gap-2xl py-3xl md:py-5xl lg:grid-cols-12 lg:py-6xl">
-        <aside class="lg:col-span-3">
-          <Text variant="eyebrow" class="text-on-dark-faint">{archiveContent.detail.tagsLabel}</Text>
-          <ul class="flex flex-wrap gap-xs">
-            {project.tags.map((tag) => <li><Button href={`/projects/tag/${tag.slug}`} label={tag.label} variant="outline" size="sm" /></li>)}
-          </ul>
-        </aside>
+        <div class="lg:col-span-3">
+          <TaxonomyLinks terms={project.tags} basePath="/projects/tag" label={archiveContent.detail.tagsLabel} tone="dark" />
+        </div>
         <div class="space-y-14 lg:col-span-8 lg:col-start-5">
-          {project.sections.map((section) => (
-            <Section>
-              <Text as="h2" variant="heading" size="h3">{section.title}</Text>
-              <div class="mt-5 space-y-4 text-base leading-8 text-on-dark-muted">{section.paragraphs.map((paragraph) => <p>{paragraph}</p>)}</div>
-            </Section>
-          ))}
+          <ContentSections sections={project.sections} tone="dark" variant="article" />
         </div>
       </div>
     </Container>

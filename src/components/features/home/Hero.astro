@@ -9,10 +9,10 @@ import Image from '@/components/primitives/Image/Image.astro';
 ---
 
 <Section id="top" theme="dark" class="relative overflow-hidden">
-  <Image class="absolute inset-0 h-full w-full object-cover object-(--object-position-hero) opacity-70 saturate-(--saturate-hero) sm:object-center" src={heroContent.image.src} alt={heroContent.image.alt} loading="eager" decoding="sync" fetchpriority="high" />
+  <Image variant="hero" src={heroContent.image.src} alt={heroContent.image.alt} loading="eager" decoding="sync" fetchpriority="high" />
   <div class="absolute inset-0 bg-hero-side" aria-hidden="true"></div>
   <div class="absolute inset-0 bg-hero-floor" aria-hidden="true"></div>
-  <div class="absolute inset-0 bg-grid-dots bg-size-(--background-size-grid-dots) opacity-20" aria-hidden="true"></div>
+  <div class="absolute inset-0 bg-grid-dots bg-grid-size opacity-20" aria-hidden="true"></div>
 
   <Container class="relative z-10 grid gap-2xl pb-8 pt-6xl md:gap-3xl md:pb-10">
     <div class="flex items-start justify-between pt-6 text-on-dark-muted">
