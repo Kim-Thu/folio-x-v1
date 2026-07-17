@@ -10,6 +10,6 @@ export const imageDimensions: Partial<Record<ImageVariant, ImageDimensions>> = {
   fillCover: { width: 1600, height: 1000 },
   interactiveCover: { width: 1600, height: 1000 },
   interactiveFillCover: { width: 1600, height: 1000 },
-  hero: { width: 1100, height: 1636 },
+  hero: { width: 1600, height: 2399 },
   natural: { width: 640, height: 400 },
 };
