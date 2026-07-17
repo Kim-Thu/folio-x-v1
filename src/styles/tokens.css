@@ -28,7 +28,7 @@
 
   /* Font families */
   --font-sans: "Google Sans Flex Variable", ui-sans-serif, system-ui, sans-serif;
-  --font-mono: "IBM Plex Mono", ui-monospace, monospace;
+  --font-mono: ui-monospace, "Cascadia Mono", "Segoe UI Mono", monospace;
 
   /* Type scale */
   --text-caption: 0.6875rem;

@@ -1,5 +1,7 @@
 ---
 import '@/styles/global.css';
+import googleSansLatinUrl from '@fontsource-variable/google-sans-flex/files/google-sans-flex-latin-wght-normal.woff2?url';
+import googleSansVietnameseUrl from '@fontsource-variable/google-sans-flex/files/google-sans-flex-vietnamese-wght-normal.woff2?url';
 import { interfaceContent, metadata } from '@/data/content';
 import type { BaseLayoutProps } from '@/types/layout';
 import LoadingScreen from '@/components/patterns/Feedback/LoadingScreen.astro';
@@ -17,6 +19,8 @@ const {
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width" />
+    <link rel="preload" href={googleSansLatinUrl} as="font" type="font/woff2" crossorigin />
+    <link rel="preload" href={googleSansVietnameseUrl} as="font" type="font/woff2" crossorigin />
     <meta name="description" content={description} />
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
