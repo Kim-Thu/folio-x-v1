@@ -19,13 +19,13 @@ body {
 }
 
 @keyframes skeleton {
-  from { background-position: 200% 0; }
-  to { background-position: -200% 0; }
+  from { transform: translateX(-100%); }
+  to { transform: translateX(100%); }
 }
 
 @keyframes loader-fallback {
-  0%, 70% { opacity: 1; visibility: visible; }
-  100% { opacity: 0; visibility: hidden; }
+  0%, 70% { opacity: 1; }
+  100% { opacity: 0; }
 }
 
 [data-loading-screen] {

@@ -41,3 +41,4 @@ export type { ContentSectionsProps, ContentSectionsTone, ContentSectionsVariant 
 export type { TaxonomyLinksProps } from '@/types/ui/TaxonomyLinksProps';
 export type { ArchivePageProps, ArchivePageTheme, ArchivePageListVariant } from '@/types/ui/ArchivePageProps';
 export type { ResponsiveImageAttributes } from '@/types/ui/ResponsiveImageAttributes';
+export type { ImageDimensions } from '@/types/ui/ImageDimensions';

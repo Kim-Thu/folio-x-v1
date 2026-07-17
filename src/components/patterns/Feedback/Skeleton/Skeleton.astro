@@ -8,4 +8,6 @@ type Props = SkeletonProps;
 const { class: className = '', shape = 'block' } = Astro.props;
 ---
 
-<span aria-hidden="true" class={cn('block animate-skeleton bg-skeleton bg-skeleton-size', getSkeletonShapeClass(shape), className)}></span>
+<span aria-hidden="true" class={cn('relative block overflow-hidden bg-skeleton-base', getSkeletonShapeClass(shape), className)}>
+  <span class="absolute inset-0 animate-skeleton bg-skeleton will-change-transform"></span>
+</span>

@@ -2,12 +2,16 @@
 import type { ImageProps } from '@/types/ui';
 import { getImageClasses } from '@/components/primitives/Image/variants/getImageClasses';
 import { getResponsiveImageAttributes } from '@/utils/media/getResponsiveImageAttributes';
+import { imageDimensions } from '@/config/media';
 
 type Props = ImageProps;
 
 const { src, alt, class: className = '', loading = 'lazy', decoding = 'async', fetchpriority = 'auto', width, height, variant = 'default' } = Astro.props;
 const imageClasses = getImageClasses(variant, className);
 const responsiveAttributes = getResponsiveImageAttributes(src, variant);
+const intrinsicDimensions = imageDimensions[variant];
+const imageWidth = width ?? intrinsicDimensions?.width;
+const imageHeight = height ?? intrinsicDimensions?.height;
 ---
 
-<img src={responsiveAttributes.src} srcset={responsiveAttributes.srcset} sizes={responsiveAttributes.sizes} alt={alt} loading={loading} decoding={decoding} fetchpriority={fetchpriority} width={width} height={height} data-media-image class={imageClasses} />
+<img src={responsiveAttributes.src} srcset={responsiveAttributes.srcset} sizes={responsiveAttributes.sizes} alt={alt} loading={loading} decoding={decoding} fetchpriority={fetchpriority} width={imageWidth} height={imageHeight} data-media-image class={imageClasses} />

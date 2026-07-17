@@ -1,5 +1,3 @@
-const SECTION_TOTAL = 6;
-
 export function initScrollProgress(): void {
   const progressBar = document.querySelector<HTMLElement>('#scroll-progress-bar');
   const readingProgress = document.querySelector<HTMLProgressElement>('#reading-progress');
@@ -10,9 +8,22 @@ export function initScrollProgress(): void {
 
   if (!progressBar || !readingProgress || !sectionCount || !backToTop || !progressRing || sections.length === 0) return;
 
+  let sectionOffsets: number[] = [];
+  let frameRequested = false;
+
+  const refreshSectionOffsets = (): void => {
+    sectionOffsets = sections.map((section) => section.offsetTop);
+  };
+
   const updateProgress = (): void => {
     const scrollableHeight = document.documentElement.scrollHeight - window.innerHeight;
     const progress = scrollableHeight > 0 ? Math.min(window.scrollY / scrollableHeight, 1) : 0;
+    const activeThreshold = window.scrollY + window.innerHeight * 0.45;
+    let activeSectionIndex = 0;
+
+    sectionOffsets.forEach((offset, index) => {
+      if (offset <= activeThreshold) activeSectionIndex = index;
+    });
 
     progressBar.style.height = `${progress * 100}%`;
     readingProgress.value = progress * 100;
@@ -25,19 +36,31 @@ export function initScrollProgress(): void {
     backToTop.classList.toggle('pointer-events-none', !isVisible);
     backToTop.inert = !isVisible;
 
-    let activeSectionIndex = 0;
-    sections.forEach((section, index) => {
-      if (section.getBoundingClientRect().top <= window.innerHeight * 0.45) {
-        activeSectionIndex = index;
-      }
-    });
-
-    sectionCount.textContent = `${String(activeSectionIndex + 1).padStart(2, '0')} / ${String(SECTION_TOTAL).padStart(2, '0')}`;
+    sectionCount.textContent = `${String(activeSectionIndex + 1).padStart(2, '0')} / ${String(sections.length).padStart(2, '0')}`;
   };
 
-  window.addEventListener('scroll', updateProgress, { passive: true });
-  window.addEventListener('resize', updateProgress);
+  const requestProgressUpdate = (): void => {
+    if (frameRequested) return;
+
+    frameRequested = true;
+    window.requestAnimationFrame(() => {
+      updateProgress();
+      frameRequested = false;
+    });
+  };
+
+  window.addEventListener('scroll', requestProgressUpdate, { passive: true });
+  window.addEventListener('resize', () => {
+    refreshSectionOffsets();
+    requestProgressUpdate();
+  });
   backToTop.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
 
+  refreshSectionOffsets();
   updateProgress();
+
+  document.fonts.ready.then(() => {
+    refreshSectionOffsets();
+    requestProgressUpdate();
+  });
 }
