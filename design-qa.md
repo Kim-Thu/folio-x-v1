@@ -31,6 +31,13 @@
 - Raw anchors, buttons, images, and sections only exist inside their corresponding primitives/layout components.
 - Application scripts remain external modules. The only third-party script tag is the external Decap CMS bundle in the admin page.
 
+## Performance audit
+
+- The shared `Image` primitive generates responsive Unsplash `srcset` and `sizes` values from one media configuration.
+- Lighthouse 12.8.2 production baseline: mobile 73 with 10.8 s LCP; desktop 92 with 1.9 s LCP.
+- Validated deploy preview after responsive-image delivery: mobile 98–99 with 1.23–2.30 s LCP; desktop 100 with 0.31 s LCP.
+- Mobile transfer size fell from about 2.5 MB to about 0.31 MB, while CLS remained effectively zero and TBT reached zero.
+
 ## Known verification limitation
 
 - Source, generated HTML, generated CSS, routes, and production builds have been checked.

@@ -40,3 +40,4 @@ export type { CardItemProps } from '@/types/ui/CardItemProps';
 export type { ContentSectionsProps, ContentSectionsTone, ContentSectionsVariant } from '@/types/ui/ContentSectionsProps';
 export type { TaxonomyLinksProps } from '@/types/ui/TaxonomyLinksProps';
 export type { ArchivePageProps, ArchivePageTheme, ArchivePageListVariant } from '@/types/ui/ArchivePageProps';
+export type { ResponsiveImageAttributes } from '@/types/ui/ResponsiveImageAttributes';
