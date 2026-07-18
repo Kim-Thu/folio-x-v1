@@ -23,15 +23,6 @@ body {
   to { transform: translateX(100%); }
 }
 
-@keyframes loader-fallback {
-  0%, 70% { opacity: 1; }
-  100% { opacity: 0; }
-}
-
-[data-loading-screen] {
-  animation: var(--animate-loader-fallback);
-}
-
 ::selection {
   color: var(--color-surface-dark);
   background: var(--color-brand-soft);
@@ -61,5 +52,4 @@ a, button, summary {
     transition-duration: var(--duration-reduced-motion) !important;
   }
 
-  [data-loading-screen] { display: none; }
 }

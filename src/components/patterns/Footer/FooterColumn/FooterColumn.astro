@@ -3,12 +3,17 @@ import type { FooterColumnProps } from '@/types/ui';
 import NavigationFooterColumn from '@/components/patterns/Footer/FooterColumn/variants/NavigationFooterColumn.astro';
 import SocialFooterColumn from '@/components/patterns/Footer/FooterColumn/variants/SocialFooterColumn.astro';
 import LocationFooterColumn from '@/components/patterns/Footer/FooterColumn/variants/LocationFooterColumn.astro';
+import Text from '@/components/primitives/Text/Text.astro';
 
 type Props = FooterColumnProps;
 
 const { column }: Props = Astro.props;
+const Wrapper = column.kind === 'location' ? 'address' : 'div';
 ---
 
-{column.kind === 'navigation' && <NavigationFooterColumn column={column} />}
-{column.kind === 'social' && <SocialFooterColumn column={column} />}
-{column.kind === 'location' && <LocationFooterColumn column={column} />}
+<Wrapper class:list={['min-w-0', column.kind === 'location' && 'not-italic']}>
+  <Text variant="eyebrow" class="mb-4 text-on-dark-faint">{column.label}</Text>
+  {column.kind === 'navigation' && <NavigationFooterColumn column={column} />}
+  {column.kind === 'social' && <SocialFooterColumn column={column} />}
+  {column.kind === 'location' && <LocationFooterColumn column={column} />}
+</Wrapper>

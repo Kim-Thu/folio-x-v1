@@ -5,7 +5,7 @@ import RailSocialNav from '@/components/patterns/Navigation/SocialNav/variants/R
 
 type Props = SocialNavProps;
 
-const { links, variant = 'footer' }: Props = Astro.props;
+const { links, variant = 'footer', display = 'icon' }: Props = Astro.props;
 ---
 
-{variant === 'rail' ? <RailSocialNav links={links} /> : <FooterSocialNav links={links} />}
+{variant === 'rail' ? <RailSocialNav links={links} display={display} /> : <FooterSocialNav links={links} display={display} />}

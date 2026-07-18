@@ -1,4 +1,5 @@
 import type { ContentSectionsTone, ContentSectionsVariant } from '@/types/ui';
+import { twJoin } from '@/utils/cn';
 
 const toneClasses: Record<ContentSectionsTone, string> = {
   dark: 'text-on-dark-muted',
@@ -11,5 +12,5 @@ const variantClasses: Record<ContentSectionsVariant, string> = {
 };
 
 export function getContentSectionsBodyClasses(tone: ContentSectionsTone, variant: ContentSectionsVariant): string {
-  return `mt-5 space-y-4 text-base ${toneClasses[tone]} ${variantClasses[variant]}`;
+  return twJoin('mt-5 space-y-4 text-base', toneClasses[tone], variantClasses[variant]);
 }

@@ -1,7 +1,17 @@
 {
+  "brandDescription": "Xây dựng sản phẩm số rõ ràng, bền vững và không cần người trông nom.",
+  "socialDisplay": "icon",
   "menuLabel": "Explore",
-  "legalLabel": "Legal",
+  "resourcesLabel": "Resources",
+  "legalLabel": "Info",
   "locationLabel": "Based in",
   "copyrightSymbol": "©",
-  "buildLabel": "Built with Astro"
+  "buildLabel": "Built with Astro",
+  "newsletter": {
+    "label": "Cập nhật mới nhất",
+    "description": "Nhận thông tin về bài viết và dự án mới.",
+    "inputLabel": "Địa chỉ email",
+    "placeholder": "Email của bạn",
+    "submitLabel": "Đăng ký nhận cập nhật"
+  }
 }

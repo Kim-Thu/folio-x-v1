@@ -1,6 +1,6 @@
 ---
 import type { ProjectGridProps } from '@/types/ui';
-import ProjectTile from '@/components/features/projects/ProjectTile/ProjectTile.astro';
+import ProjectCard from '@/components/features/projects/ProjectCard/ProjectCard.astro';
 import Cards from '@/components/patterns/Cards/Cards.astro';
 
 type Props = ProjectGridProps;
@@ -16,7 +16,7 @@ const { id, projects, linkLabel, outcomeLabel } = Astro.props;
   class="mt-xl grid grid-cols-1 items-stretch gap-md md:grid-cols-2 lg:grid-cols-3"
 >
   {projects.map((project) => (
-    <ProjectTile
+    <ProjectCard
       project={project}
       linkLabel={linkLabel}
       outcomeLabel={outcomeLabel}

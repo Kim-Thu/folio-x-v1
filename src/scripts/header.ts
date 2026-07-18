@@ -8,9 +8,28 @@ export function initHeader(): void {
 
   if (!header || !menuButton || !mobileMenu) return;
 
-  const updateHeaderSurface = (): void => {
+  let previousScrollY = window.scrollY;
+  let scrollFrame = 0;
+
+  const updateHeader = (): void => {
+    const currentScrollY = window.scrollY;
     const isSolid = header.dataset.solidHeader === 'true';
-    header.classList.toggle('bg-surface-dark/80', isSolid || window.scrollY > 20);
+    const isMenuOpen = menuButton.getAttribute('aria-expanded') === 'true';
+    const isPastHeader = currentScrollY > header.offsetHeight;
+    const isScrollingDown = currentScrollY > previousScrollY;
+
+    header.classList.toggle('bg-surface-dark/80', isSolid || isPastHeader);
+    header.dataset.scrollState = !isMenuOpen && isPastHeader && isScrollingDown ? 'hidden' : 'visible';
+    previousScrollY = currentScrollY;
+  };
+
+  const requestHeaderUpdate = (): void => {
+    if (scrollFrame) return;
+
+    scrollFrame = window.requestAnimationFrame(() => {
+      updateHeader();
+      scrollFrame = 0;
+    });
   };
 
   const setMenuState = (isOpen: boolean): void => {
@@ -19,16 +38,17 @@ export function initHeader(): void {
     mobileMenu.inert = !isOpen;
     OPEN_CLASS_NAMES.forEach((className) => mobileMenu.classList.toggle(className, !isOpen));
     document.body.style.overflow = isOpen ? 'hidden' : '';
+    header.dataset.scrollState = 'visible';
 
     menuButton.querySelector<HTMLElement>('.menu-icon-open')?.classList.toggle('invisible', isOpen);
     menuButton.querySelector<HTMLElement>('.menu-icon-close')?.classList.toggle('invisible', !isOpen);
   };
 
-  window.addEventListener('scroll', updateHeaderSurface, { passive: true });
+  window.addEventListener('scroll', requestHeaderUpdate, { passive: true });
   menuButton.addEventListener('click', () => {
     setMenuState(menuButton.getAttribute('aria-expanded') !== 'true');
   });
   mobileLinks.forEach((link) => link.addEventListener('click', () => setMenuState(false)));
 
-  updateHeaderSurface();
+  updateHeader();
 }

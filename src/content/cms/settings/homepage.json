@@ -4,8 +4,9 @@
     "contactLabel": "Let's talk"
   },
   "hero": {
+    "id": "top",
     "image": {
-      "src": "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=2200&q=88",
+      "src": "/uploads/hero-image.png",
       "alt": "Chân dung chuyên nghiệp trong ánh sáng tối giản"
     },
     "identityLines": [
@@ -27,6 +28,7 @@
   },
   "about": {
     "heading": {
+      "id": "about",
       "number": "02",
       "label": "About",
       "title": "Tôi xây hệ thống để con người làm việc nhẹ hơn.",
@@ -75,6 +77,7 @@
   },
   "works": {
     "heading": {
+      "id": "work",
       "number": "03",
       "label": "Selected work",
       "title": "Vấn đề thật. Quyết định rõ. Kết quả đo được.",
@@ -87,6 +90,7 @@
   },
   "insights": {
     "heading": {
+      "id": "insights",
       "number": "04",
       "label": "Insights",
       "title": "Ghi chú từ việc xây, phá và sửa hệ thống."
@@ -94,16 +98,23 @@
   },
   "qa": {
     "heading": {
+      "id": "qa",
       "number": "05",
       "label": "Q&A",
       "title": "Trước khi chúng ta bắt đầu."
     }
   },
   "cta": {
-    "eyebrow": "06 / Start something useful",
-    "title": "Có một vấn đề đáng để giải?",
-    "description": "Kể cho tôi điều đang chậm, thủ công hoặc dễ vỡ. Chúng ta sẽ bắt đầu từ vấn đề — không phải từ danh sách tính năng.",
-    "availability": "Available for selected collaborations · 2026"
+    "id": "contact",
+    "title": "Bạn có ý tưởng dự án?",
+    "description": "Hãy cùng tạo ra một sản phẩm rõ ràng, hữu ích và đáng nhớ.",
+    "actionLabel": "Liên hệ tôi",
+    "image": {
+      "src": "/uploads/cta-banner.png",
+      "alt": "Nhân vật 3D đang làm việc tại bàn máy tính trong ánh đèn ấm",
+      "width": 1536,
+      "height": 720
+    }
   },
   "faqs": [
     {

@@ -1,14 +1,10 @@
 ---
-import type { FooterColumn } from '@/types/ui';
+import type { SocialFooterColumnProps } from '@/types/ui';
 import SocialNav from '@/components/patterns/Navigation/SocialNav/SocialNav.astro';
-import Text from '@/components/primitives/Text/Text.astro';
 
-interface Props { column: Extract<FooterColumn, { kind: 'social' }> }
+type Props = SocialFooterColumnProps;
 
 const { column }: Props = Astro.props;
 ---
 
-<div class="min-w-0">
-  <Text variant="eyebrow" class="mb-4 text-on-dark-faint">{column.label}</Text>
-  <SocialNav links={column.links} variant="footer" />
-</div>
+<SocialNav links={column.links} variant="footer" />

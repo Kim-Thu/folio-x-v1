@@ -6,15 +6,18 @@ import { getContentSectionsBodyClasses } from '@/components/patterns/Content/Con
 
 type Props = ContentSectionsProps;
 
-const { sections, tone = 'light', variant = 'article' } = Astro.props;
+const { sections, tone = 'light', variant = 'article', idPrefix = 'content' } = Astro.props;
 const bodyClasses = getContentSectionsBodyClasses(tone, variant);
 ---
 
-{sections.map((section) => (
-  <Section>
-    <Text as="h2" variant="heading" size="h3">{section.title}</Text>
+{sections.map((section, index) => {
+  const sectionId = `${idPrefix}-section-${index + 1}`;
+  return (
+  <Section id={sectionId} variant="content" theme={tone}>
+    <Text id={`${sectionId}-title`} as="h2" variant="heading" size="h3">{section.title}</Text>
     <div class={bodyClasses}>
       {section.paragraphs.map((paragraph) => <Text>{paragraph}</Text>)}
     </div>
   </Section>
-))}
+  );
+})}

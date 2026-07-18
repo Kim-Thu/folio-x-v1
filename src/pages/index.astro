@@ -1,14 +1,12 @@
 ---
 import BaseLayout from '@/layouts/BaseLayout.astro';
-import Header from '@/components/layouts/Header/Header.astro';
-import StickyRail from '@/components/layouts/StickyRail.astro';
-import Footer from '@/components/layouts/Footer.astro';
-import HeroSection from '@/components/features/home/Hero.astro';
-import AboutSection from '@/components/features/home/About.astro';
-import WorksSection from '@/components/features/home/Works.astro';
-import InsightsSection from '@/components/features/home/Insights.astro';
-import QASection from '@/components/features/home/QA.astro';
-import CTASection from '@/components/features/home/CTA.astro';
+import PageProgressRail from '@/components/layouts/PageProgressRail.astro';
+import HeroSection from '@/components/features/home/HeroSection.astro';
+import AboutSection from '@/components/features/home/AboutSection.astro';
+import ProjectsSection from '@/components/features/home/ProjectsSection.astro';
+import InsightsSection from '@/components/features/home/InsightsSection.astro';
+import FaqSection from '@/components/features/home/FaqSection.astro';
+import ContactSection from '@/components/features/home/ContactSection.astro';
 import { interfaceContent } from '@/data/content';
 import Link from '@/components/primitives/Link/Link.astro';
 ---
@@ -17,15 +15,13 @@ import Link from '@/components/primitives/Link/Link.astro';
   <Link href="#main-content" class="fixed left-4 top-4 z-skip-link -translate-y-24 bg-brand-soft px-4 py-3 text-sm font-semibold text-on-brand transition-transform focus:translate-y-0">
     {interfaceContent.skipToContent}
   </Link>
-  <Header />
-  <StickyRail />
+  <PageProgressRail />
   <main id="main-content" tabindex="-1">
     <HeroSection />
     <AboutSection />
-    <WorksSection />
+    <ProjectsSection />
     <InsightsSection />
-    <QASection />
-    <CTASection />
+    <FaqSection />
+    <ContactSection />
   </main>
-  <Footer />
 </BaseLayout>

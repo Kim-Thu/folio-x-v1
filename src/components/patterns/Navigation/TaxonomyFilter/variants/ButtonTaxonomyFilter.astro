@@ -1,0 +1,15 @@
+---
+import type { ButtonTaxonomyFilterProps } from '@/types/ui';
+import Button from '@/components/primitives/Button/Button.astro';
+
+type Props = ButtonTaxonomyFilterProps;
+
+const { categories, allLabel, label, tone = 'dark' } = Astro.props;
+---
+
+<div data-filter-bar role="group" aria-label={label} class="flex flex-wrap gap-xs">
+  <Button label={allLabel} variant="outline" size="sm" {tone} data-filter-value="all" aria-pressed="true" />
+  {categories.map((category) => (
+    <Button label={category.label} variant="outline" size="sm" {tone} data-filter-value={category.slug} aria-pressed="false" />
+  ))}
+</div>

@@ -16,6 +16,7 @@ async function getSingleton<C extends CollectionKey>(collection: C): Promise<Col
 export const getSiteSettings = () => getSingleton('siteSettings');
 export const getNavigationSettings = () => getSingleton('navigationSettings');
 export const getHomepageSettings = () => getSingleton('homepageSettings');
+export const getClosingProfileSettings = () => getSingleton('closingProfileSettings');
 export const getInterfaceSettings = () => getSingleton('interfaceSettings');
 export const getArchiveSettings = () => getSingleton('archiveSettings');
 export const getFooterSettings = () => getSingleton('footerSettings');

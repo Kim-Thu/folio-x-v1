@@ -1,44 +1,79 @@
-# Portfolio implementation checkpoint
+# Design QA — loading screen
 
-## Architecture
+- Source visual truth: user-provided loading-screen reference image in the current conversation.
+- Implementation: shared `LoadingScreen.astro` rendered by `BaseLayout.astro` on every route.
+- Intended viewports: responsive mobile, tablet, and desktop layouts.
+- State: active loading state from 0% through 100% and fade-out.
+- Implementation screenshot: unavailable because the configured in-app browser is not available in this session.
 
-- Astro components are organized into `primitives`, `patterns`, `features`, and `layouts`.
-- Reusable component props live in the matching files under `src/types`.
-- Site copy and CMS-editable values come from `src/content/cms`; Astro components do not own editorial content.
-- Shared colors, typography, spacing, shape, motion, and layer values are defined in `src/styles/tokens.css`.
-- Interactive behavior remains in `src/scripts`; Astro templates contain no inline application logic.
+## Full-view comparison evidence
 
-## Current interface
+Blocked. The reference is available, but a browser-rendered loading state could not be captured at the same viewport.
 
-- Homepage contains Hero, About, Selected Work, Insights, Q&A, CTA, Header, Footer, and sticky progress navigation.
-- Selected Work uses stable responsive grid placement with category tabs. Card position does not change on reload.
-- Project cards expose separate links for the image, title, category archive, and CTA; cards are not wrapped by a competing outer anchor.
-- Insight cards expose separate article and category links, while reading duration is semantic `<time>` content.
-- Detail, category, tag, policy, 404, and empty-content routes are generated as static pages.
+## Focused region comparison evidence
 
-## Validation and delivery
+Blocked for the same reason. Static output verifies the centered transparent image, enlarged tabular progress number, and full-width bottom progress track, but static markup is not visual comparison evidence.
 
-- `npm run validate` runs Astro diagnostics, the production build, and a high-severity dependency audit.
-- `.githooks/pre-push` runs the same validation before local pushes.
-- `.github/workflows/quality.yml` repeats validation for pull requests and pushes to `main`.
-- Netlify builds with Node 24, publishes `dist`, applies security headers, and disables caching for Decap CMS administration routes.
+## Verified implementation details
 
-## Refactor audit
+- The supplied 3D astronaut asset has a dedicated 720 × 720 WebP derivative weighing 79,486 bytes.
+- Loading content and image metadata are sourced from the interface CMS document and validated by the content schema.
+- The progress track is the final flex item in normal flow, spans the full viewport width, and does not use absolute positioning.
+- The external loading script updates the numeric value and ARIA progress value, animates to 100%, then removes the overlay after its token-based fade transition.
+- `npm run validate` completed successfully and generated 38 routes with zero dependency vulnerabilities.
 
-- Repeated media behavior now belongs to named `Image` variants; feature templates no longer repeat cover, fill, hero, skeleton, or interaction class groups.
-- Token-backed Tailwind utilities replace arbitrary CSS-variable syntax for motion, skeleton, grid, hero positioning, and saturation.
-- Blog and project archives share one archive layout; article, project, and policy content share one section renderer; detail taxonomies share one navigation pattern.
-- Raw anchors, buttons, images, and sections only exist inside their corresponding primitives/layout components.
-- Application scripts remain external modules. The only third-party script tag is the external Decap CMS bundle in the admin page.
+## Comparison history
 
-## Performance audit
+- Initial implementation: replaced the dark skeleton loader with the light, centered 3D composition from the reference.
+- Progress hierarchy: promoted the percentage to the display type scale and moved the full-width bar to the viewport bottom.
+- Performance pass: generated a 79 KB delivery asset instead of loading the 1.63 MB source PNG.
+- Visual comparison: blocked before the first comparison because the in-app browser could not be opened.
 
-- The shared `Image` primitive generates responsive Unsplash `srcset` and `sizes` values from one media configuration.
-- Lighthouse 12.8.2 production baseline: mobile 73 with 10.8 s LCP; desktop 92 with 1.9 s LCP.
-- Validated deploy preview after responsive-image delivery: mobile 98–99 with 1.23–2.30 s LCP; desktop 100 with 0.31 s LCP.
-- Mobile transfer size fell from about 2.5 MB to about 0.31 MB, while CLS remained effectively zero and TBT reached zero.
+## Final result
 
-## Known verification limitation
+final result: blocked
 
-- Source, generated HTML, generated CSS, routes, and production builds have been checked.
-- Visual browser automation was unavailable during the final checkpoint. Responsive visual QA should be resumed before considering the design final.
+Blocker: no browser-rendered loading-state screenshot is available for the required side-by-side comparison.
+
+---
+
+# Design QA — ClosingProfile split-name motion
+
+- Source visual truth: user-provided Figma mockup in the current conversation, with collapsed and expanded scroll states.
+- Implementation: `ClosingProfile.astro` rendered through the global footer reveal.
+- Intended viewport: desktop reference, with the same bounded behavior retained responsively.
+- State: collapsed while scrolling upward; expanded when the footer reveal reaches the end of the page.
+- Implementation screenshot: unavailable because the configured in-app browser is not available in this session.
+
+## Full-view comparison evidence
+
+Blocked. Static output confirms the intended grouping but is not sufficient visual evidence.
+
+## Focused region comparison evidence
+
+Blocked. The implementation could not be captured in both scroll states at the reference viewport.
+
+## Verified implementation details
+
+- The name is rendered through one reusable SVG rich-text primitive with a fixed viewBox and responsive intrinsic ratio.
+- `NGUYỄN` is the left motion group.
+- `KIM THU` and the role label share the right motion group.
+- Both groups occupy the same CSS Grid cell when collapsed; no absolute positioning is used for the name groups.
+- Motion bounds are measured in the foreignObject coordinate system so the groups remain inside the SVG track.
+- The text remains inside the `foreignObject`, while both portraits are rendered as native SVG `<image>` elements in the same viewBox. This keeps the complete composition responsive while avoiding browser-dependent lazy image behavior inside `foreignObject`.
+- The collapsed state uses `avatar.png`; the expanded state uses the distinct waving `avatar-2.png` asset from the reference.
+- Both portraits crossfade from the shared footer reveal progress, so reversing scroll direction reverses the image transition.
+- A semantic screen-reader heading remains outside the decorative SVG.
+- Astro check and production build completed with zero errors, warnings, or hints.
+
+## Comparison history
+
+- Previous structure: the two name values were separate vertical lines and the role moved independently.
+- Current structure: both name groups overlap at center, then split left/right; role travels with `KIM THU`.
+- Visual comparison: blocked before the first browser comparison because the in-app browser could not be opened.
+
+## Final result
+
+final result: blocked
+
+Blocker: no browser-rendered ClosingProfile screenshots are available for the required two-state comparison.

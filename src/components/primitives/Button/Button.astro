@@ -1,9 +1,11 @@
 ---
-import type { ButtonProps } from '@/types/ui';
-import type { HTMLAttributes } from 'astro/types';
-import { cn } from '@/utils/cn';
-import { getButtonClasses } from '@/components/primitives/Button/variants/getButtonClasses';
 import ButtonContent from '@/components/primitives/Button/ButtonContent.astro';
+import { getButtonClasses } from '@/components/primitives/Button/variants/getButtonClasses';
+import { getButtonIconMotionClass } from '@/components/primitives/Button/variants/getButtonIconMotionClass';
+import Link from '@/components/primitives/Link/Link.astro';
+import type { ButtonProps } from '@/types/ui';
+import { cn } from '@/utils/cn';
+import type { HTMLAttributes } from 'astro/types';
 
 type Props = ButtonProps;
 
@@ -25,27 +27,19 @@ const {
 const linkAttributes = attributes as HTMLAttributes<'a'>;
 const buttonAttributes = attributes as HTMLAttributes<'button'>;
 const buttonClasses = getButtonClasses({ iconOnly, size, tone, variant });
-const iconMotionClasses = {
-  arrowUpRight: 'group-hover/button:translate-x-1 group-hover/button:-translate-y-1',
-  arrowRight: 'group-hover/button:translate-x-1',
-  arrowLeft: 'group-hover/button:-translate-x-1',
-  arrowUp: 'group-hover/button:-translate-y-1',
-  bars3: '',
-  xMark: '',
-};
-const iconClass = icon ? `transition-transform duration-interaction ${iconMotionClasses[icon]}` : '';
-const mergedClasses = cn(buttonClasses, className);
+const iconClass = icon ? cn('transition-transform duration-interaction', getButtonIconMotionClass(icon)) : '';
+const mergedClasses = cn(buttonClasses, icon && !iconOnly && 'gap-xs', className);
 ---
 
 {href ? (
-  <a
+  <Link
     {...linkAttributes}
     href={href}
     aria-label={ariaLabel}
     class={mergedClasses}
   >
     {iconOnly ? <slot /> : <ButtonContent label={label} icon={icon} iconPosition={iconPosition} iconClass={iconClass} />}
-  </a>
+  </Link>
 ) : (
   <button
     {...buttonAttributes}

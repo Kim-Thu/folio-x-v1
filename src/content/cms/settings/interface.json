@@ -4,18 +4,33 @@
   "openMenu": "Mở menu",
   "loadingScreen": {
     "label": "Nguyễn Kim Thu",
-    "status": "Đang tải"
+    "status": "Đang chuẩn bị thế giới mới cho bạn...",
+    "tips": [
+      "Mẹo nhỏ: Uống nước và nghỉ ngơi nhẹ sẽ giúp bạn sáng tạo hơn đấy!",
+      "Mẹo nhỏ: Rời mắt khỏi màn hình vài phút giúp bạn nhìn vấn đề rõ hơn.",
+      "Mẹo nhỏ: Ghi lại ý tưởng ngay khi nó xuất hiện, đừng chờ đến lúc hoàn hảo.",
+      "Mẹo nhỏ: Một lần vươn vai ngắn cũng đủ để cơ thể và đầu óc tỉnh táo hơn."
+    ],
+    "holdOpen": false,
+    "progressLabel": "Tiến độ tải trang",
+    "image": {
+      "src": "/uploads/loading-screen.png",
+      "alt": "Phi hành gia ngồi trên một hành tinh nhỏ giữa các thiên thạch",
+      "width": 720,
+      "height": 720
+    }
   },
   "navigation": {
     "primaryLabel": "Điều hướng chính",
     "mobileLabel": "Điều hướng mobile",
     "socialLabel": "Mạng xã hội",
-    "footerSocialLabel": "Mạng xã hội ở chân trang"
+    "footerSocialLabel": "Mạng xã hội ở chân trang",
+    "railSocialDisplay": "icon"
   },
   "progress": {
     "railLabel": "Tiến trình trang",
     "readingLabel": "Tiến độ đọc trang",
-    "initialSection": "01 / 06",
+    "initialSection": "01 / 07",
     "initialValue": "0%"
   },
   "separators": {

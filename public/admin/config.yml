@@ -31,6 +31,10 @@ collections:
               - { label: Vai trò, name: role, widget: string }
               - { label: Địa điểm, name: location, widget: string }
               - { label: Email, name: email, widget: string }
+              - { label: Logo, name: logo, widget: image, required: false }
+              - { label: Logo sáng, name: logoLight, widget: image, required: false }
+              - { label: Logo tối, name: logoDark, widget: image, required: false }
+              - { label: Favicon, name: favicon, widget: image, required: false }
           - label: Metadata mặc định
             name: metadata
             widget: object
@@ -54,6 +58,10 @@ collections:
             name: footerNavItems
             widget: list
             fields: *navigation_fields
+          - label: Resources
+            name: resourceLinks
+            widget: list
+            fields: *navigation_fields
           - label: Liên kết pháp lý
             name: legalLinks
             widget: list
@@ -64,6 +72,7 @@ collections:
             fields:
               - { label: Tên mạng xã hội, name: label, widget: string }
               - { label: Nhãn viết tắt, name: shortLabel, widget: string }
+              - { label: Icon, name: icon, widget: select, required: false, options: [linkedin, github] }
               - { label: Đường dẫn, name: href, widget: string }
 
       - name: homepage
@@ -81,6 +90,7 @@ collections:
             name: hero
             widget: object
             fields:
+              - { label: ID section, name: id, widget: string }
               - label: Ảnh hero
                 name: image
                 widget: object
@@ -103,6 +113,7 @@ collections:
                 name: heading
                 widget: object
                 fields:
+                  - { label: ID section, name: id, widget: string }
                   - { label: Số thứ tự, name: number, widget: string }
                   - { label: Nhãn, name: label, widget: string }
                   - { label: Tiêu đề, name: title, widget: text }
@@ -155,10 +166,57 @@ collections:
             name: cta
             widget: object
             fields:
-              - { label: Nhãn đầu mục, name: eyebrow, widget: string }
+              - { label: ID section, name: id, widget: string }
               - { label: Tiêu đề, name: title, widget: text }
               - { label: Mô tả, name: description, widget: text }
-              - { label: Trạng thái nhận dự án, name: availability, widget: string }
+              - { label: Nhãn hành động, name: actionLabel, widget: string }
+              - label: Hình ảnh
+                name: image
+                widget: object
+                fields:
+                  - { label: Tệp ảnh, name: src, widget: image }
+                  - { label: Mô tả ảnh, name: alt, widget: string }
+                  - { label: Chiều rộng, name: width, widget: number, value_type: int }
+                  - { label: Chiều cao, name: height, widget: number, value_type: int }
+
+      - name: closing_profile
+        label: Kết trang cá nhân
+        file: src/content/cms/settings/closing-profile.json
+        format: json
+        fields:
+          - { label: ID section, name: id, widget: string }
+          - { label: Nhãn mở đầu, name: eyebrow, widget: string }
+          - { label: Các dòng tên, name: nameLines, widget: list, field: { label: Dòng, name: line, widget: string } }
+          - { label: Vai trò, name: roleLabel, widget: string }
+          - label: Liên kết kết nối
+            name: followAction
+            widget: object
+            fields:
+              - { label: Nhãn, name: label, widget: string }
+              - { label: Đường dẫn, name: href, widget: string }
+          - { label: Nhãn email, name: emailActionLabel, widget: string }
+          - { label: Nhãn địa điểm, name: locationLabel, widget: string }
+          - label: Ảnh nhân vật theo trạng thái
+            name: portraits
+            widget: object
+            required: false
+            fields:
+              - label: Trạng thái thu
+                name: collapsed
+                widget: object
+                fields:
+                  - { label: Ảnh, name: src, widget: image }
+                  - { label: Mô tả ảnh, name: alt, widget: string }
+                  - { label: Chiều rộng gốc, name: width, widget: number, value_type: int, min: 1 }
+                  - { label: Chiều cao gốc, name: height, widget: number, value_type: int, min: 1 }
+              - label: Trạng thái mở
+                name: expanded
+                widget: object
+                fields:
+                  - { label: Ảnh, name: src, widget: image }
+                  - { label: Mô tả ảnh, name: alt, widget: string }
+                  - { label: Chiều rộng gốc, name: width, widget: number, value_type: int, min: 1 }
+                  - { label: Chiều cao gốc, name: height, widget: number, value_type: int, min: 1 }
 
       - name: interface
         label: Nội dung giao diện
@@ -174,6 +232,20 @@ collections:
             fields:
               - { label: Nhãn, name: label, widget: string }
               - { label: Trạng thái, name: status, widget: string }
+              - label: Danh sách mẹo nhỏ
+                name: tips
+                widget: list
+                field: { label: Mẹo, name: tip, widget: string }
+              - { label: Giữ màn hình để duyệt, name: holdOpen, widget: boolean, default: false }
+              - { label: Nhãn tiến độ, name: progressLabel, widget: string }
+              - label: Hình ảnh
+                name: image
+                widget: object
+                fields:
+                  - { label: Tệp ảnh, name: src, widget: image }
+                  - { label: Mô tả ảnh, name: alt, widget: string }
+                  - { label: Chiều rộng, name: width, widget: number, value_type: int, min: 1 }
+                  - { label: Chiều cao, name: height, widget: number, value_type: int, min: 1 }
           - label: Nhãn điều hướng
             name: navigation
             widget: object
@@ -182,6 +254,7 @@ collections:
               - { label: Menu mobile, name: mobileLabel, widget: string }
               - { label: Mạng xã hội, name: socialLabel, widget: string }
               - { label: Mạng xã hội ở chân trang, name: footerSocialLabel, widget: string }
+              - { label: Kiểu hiển thị social trên rail, name: railSocialDisplay, widget: select, options: [label, shortLabel, icon], default: shortLabel }
           - label: Nhãn tiến trình
             name: progress
             widget: object
@@ -240,6 +313,18 @@ collections:
         file: src/content/cms/settings/footer.json
         format: json
         fields:
+          - { label: Brand description, name: brandDescription, widget: text }
+          - { label: Social display, name: socialDisplay, widget: select, options: [label, shortLabel, icon], default: icon }
+          - { label: Resources heading, name: resourcesLabel, widget: string }
+          - label: Newsletter
+            name: newsletter
+            widget: object
+            fields:
+              - { label: Heading, name: label, widget: string }
+              - { label: Description, name: description, widget: text }
+              - { label: Email label, name: inputLabel, widget: string }
+              - { label: Placeholder, name: placeholder, widget: string }
+              - { label: Submit label, name: submitLabel, widget: string }
           - { label: Tiêu đề menu, name: menuLabel, widget: string }
           - { label: Tiêu đề pháp lý, name: legalLabel, widget: string }
           - { label: Tiêu đề địa điểm, name: locationLabel, widget: string }
@@ -257,6 +342,7 @@ collections:
             widget: object
             fields: &system_state_fields
               - { label: ID tiêu đề, name: id, widget: string }
+              - { label: Mã hiển thị, name: displayCode, widget: string, required: false }
               - { label: Nhãn đầu mục, name: eyebrow, widget: string }
               - { label: Tiêu đề, name: title, widget: text }
               - { label: Mô tả, name: description, widget: text }
@@ -266,11 +352,19 @@ collections:
                 fields: &action_fields
                   - { label: Nhãn, name: label, widget: string }
                   - { label: Đường dẫn, name: href, widget: string }
-                  - { label: Icon, name: icon, widget: select, options: [arrowLeft, arrowRight, arrowUpRight] }
+                  - { label: Icon, name: icon, widget: select, options: [arrowLeft, arrowRight, arrowUpRight, chevronLeft, chevronRight] }
               - label: Hành động phụ
                 name: secondaryAction
                 widget: object
                 fields: *action_fields
+              - label: Hình ảnh
+                name: image
+                widget: object
+                fields:
+                  - { label: Tệp ảnh, name: src, widget: image }
+                  - { label: Mô tả ảnh, name: alt, widget: string }
+                  - { label: Chiều rộng, name: width, widget: number, value_type: int }
+                  - { label: Chiều cao, name: height, widget: number, value_type: int }
               - { label: Tiêu đề SEO, name: metadataTitle, widget: string }
               - { label: Mô tả SEO, name: metadataDescription, widget: text }
           - label: Trang chưa có nội dung

@@ -2,11 +2,9 @@
 import { site } from '@/data/site';
 import type { ArchivePageProps } from '@/types/ui';
 import BaseLayout from '@/layouts/BaseLayout.astro';
-import Footer from '@/components/layouts/Footer.astro';
-import Header from '@/components/layouts/Header/Header.astro';
 import Container from '@/components/layouts/Container.astro';
 import Cards from '@/components/patterns/Cards/Cards.astro';
-import FilterBar from '@/components/patterns/Navigation/FilterBar/FilterBar.astro';
+import TaxonomyFilter from '@/components/patterns/Navigation/TaxonomyFilter/TaxonomyFilter.astro';
 import Text from '@/components/primitives/Text/Text.astro';
 import { getArchivePageListClasses, getArchivePageThemeClasses } from '@/components/layouts/ArchivePage/variants/getArchivePageClasses';
 import { cn } from '@/utils/cn';
@@ -35,7 +33,6 @@ const emptyClasses = cn('py-3xl text-center', themeClasses.empty);
 ---
 
 <BaseLayout title={`${title} — ${site.name}`} description={description}>
-  <Header solid />
   <main class={mainClasses} data-filter-root>
     <Container>
       <header class={headerClasses}>
@@ -44,7 +41,7 @@ const emptyClasses = cn('py-3xl text-center', themeClasses.empty);
         <Text size="base" class={descriptionClasses}>{description}</Text>
         {hasFilter && (
           <div class="mt-10 lg:col-span-12">
-            <FilterBar categories={categories} allLabel={allLabel} label={filterLabel} theme={theme} />
+            <TaxonomyFilter categories={categories} allLabel={allLabel} label={filterLabel} tone={theme} />
           </div>
         )}
       </header>
@@ -52,5 +49,4 @@ const emptyClasses = cn('py-3xl text-center', themeClasses.empty);
       <Text data-filter-empty hidden class={emptyClasses}>{emptyLabel}</Text>
     </Container>
   </main>
-  <Footer />
 </BaseLayout>

@@ -8,8 +8,8 @@ import { getRevealClasses } from '@/components/patterns/Feedback/variants/getRev
 
 type Props = SectionHeadingProps;
 
-const { number, label, title, description, dark = true } = Astro.props;
-const toneClasses = getSectionHeadingToneClasses(dark);
+const { id, number, label, title, description, tone = 'dark' } = Astro.props;
+const toneClasses = getSectionHeadingToneClasses(tone);
 const descriptionClasses = cn('mt-7 leading-7 md:text-lg lg:col-span-6', toneClasses.description);
 const revealClasses = getRevealClasses();
 ---
@@ -19,7 +19,7 @@ const revealClasses = getRevealClasses();
     <Text variant="meta" class={toneClasses.kicker}>{number} {interfaceContent.separators.slash} {label}</Text>
   </div>
   <div class="grid lg:col-span-9 lg:grid-cols-9">
-    <Text as="h2" variant="heading" size="h2" class="lg:col-span-9">{title}</Text>
+    <Text id={`${id}-title`} as="h2" variant="heading" size="h2" class="lg:col-span-9">{title}</Text>
     {description && <Text size="base" class={descriptionClasses}>{description}</Text>}
   </div>
 </header>

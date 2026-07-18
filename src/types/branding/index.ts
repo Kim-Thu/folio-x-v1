@@ -1,1 +1,1 @@
-export type { BrandLogoProps } from '@/types/branding/BrandLogoProps';
+export type { BrandLogoProps, BrandLogoSize, BrandLogoVariant } from '@/types/branding/BrandLogoProps';

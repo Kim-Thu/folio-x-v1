@@ -4,7 +4,9 @@
     "shortName": "NKT",
     "role": "Full-stack Engineer & Systems Builder",
     "location": "Ho Chi Minh City, Vietnam",
-    "email": "thunk.work.91@gmail.com"
+    "email": "thunk.work.91@gmail.com",
+    "logo": "/uploads/logo.svg",
+    "favicon": "/uploads/favicon.ico"
   },
   "metadata": {
     "language": "vi",

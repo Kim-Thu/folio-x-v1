@@ -1,0 +1,25 @@
+---
+import Container from '@/components/layouts/Container.astro';
+import { aboutContent } from '@/data/content';
+import PrincipleCard from '@/components/features/home/PrincipleCard/PrincipleCard.astro';
+import Section from '@/components/layouts/Section/Section.astro';
+import SectionHeading from '@/components/patterns/SectionHeading/SectionHeading.astro';
+import Cards from '@/components/patterns/Cards/Cards.astro';
+import Text from '@/components/primitives/Text/Text.astro';
+---
+
+<Section id={aboutContent.heading.id}>
+  <Container>
+    <SectionHeading {...aboutContent.heading} tone="light" />
+
+    <Cards class="mt-4xl grid items-stretch gap-md md:grid-cols-12">
+      {aboutContent.principles.map((principle) => <PrincipleCard {...principle} />)}
+    </Cards>
+
+    <div class="mt-3xl grid gap-lg pt-6 text-sm leading-6 md:grid-cols-2 lg:grid-cols-3">
+      <Text variant="meta" size="label" class="tracking-meta text-on-light-subtle md:col-span-2 lg:col-span-1">{aboutContent.capability.label}</Text>
+      <Text>{aboutContent.capability.primary}</Text>
+      <Text class="text-on-light-muted">{aboutContent.capability.secondary}</Text>
+    </div>
+  </Container>
+</Section>

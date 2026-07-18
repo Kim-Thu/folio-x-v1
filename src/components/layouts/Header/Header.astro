@@ -15,9 +15,9 @@ const { solid = false } = Astro.props;
 const headerClasses = getHeaderClasses(solid);
 ---
 
-<header id="header" data-solid-header={String(solid)} class={headerClasses}>
+<header id="header" data-solid-header={String(solid)} data-scroll-state="visible" class={headerClasses}>
   <Container class={getHeaderContainerClasses()}>
-    <BrandLogo />
+    <BrandLogo variant="light" />
     <PrimaryNav items={navItems} variant="desktop" />
     <HeaderContact variant="bar" />
     <MobileMenuButton />

@@ -2,8 +2,6 @@
 import { site } from '@/data/site';
 import type { PolicyPageProps } from '@/types/ui';
 import BaseLayout from '@/layouts/BaseLayout.astro';
-import Footer from '@/components/layouts/Footer.astro';
-import Header from '@/components/layouts/Header/Header.astro';
 import Container from '@/components/layouts/Container.astro';
 import Text from '@/components/primitives/Text/Text.astro';
 import ContentSections from '@/components/patterns/Content/ContentSections/ContentSections.astro';
@@ -14,7 +12,6 @@ const { content } = Astro.props;
 ---
 
 <BaseLayout title={`${content.title} — ${site.name}`} description={content.description}>
-  <Header solid />
   <main class="bg-surface-light pb-3xl pt-6xl text-on-light md:pb-5xl lg:pb-6xl">
     <Container>
       <header class="grid border-b-hairline border-line-light pb-12 lg:grid-cols-12">
@@ -26,10 +23,9 @@ const { content } = Astro.props;
 
       <div class="grid gap-2xl pt-12 lg:grid-cols-12">
         <div class="space-y-12 lg:col-span-8 lg:col-start-4">
-          <ContentSections sections={content.sections} tone="light" variant="policy" />
+          <ContentSections sections={content.sections} tone="light" variant="policy" idPrefix="policy" />
         </div>
       </div>
     </Container>
   </main>
-  <Footer />
 </BaseLayout>

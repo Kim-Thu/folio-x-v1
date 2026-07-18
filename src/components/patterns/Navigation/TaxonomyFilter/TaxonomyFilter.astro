@@ -1,0 +1,11 @@
+---
+import type { TaxonomyFilterProps } from '@/types/ui';
+import ButtonTaxonomyFilter from '@/components/patterns/Navigation/TaxonomyFilter/variants/ButtonTaxonomyFilter.astro';
+import TabTaxonomyFilter from '@/components/patterns/Navigation/TaxonomyFilter/variants/TabTaxonomyFilter.astro';
+
+type Props = TaxonomyFilterProps;
+
+const props = Astro.props;
+---
+
+{props.variant === 'tabs' ? <TabTaxonomyFilter {...props} /> : <ButtonTaxonomyFilter {...props} />}

@@ -1,0 +1,24 @@
+---
+import { interfaceContent } from '@/data/content';
+import type { ArticleMetaProps } from '@/types/ui';
+import Link from '@/components/primitives/Link/Link.astro';
+import { getArticleMetaCategoryClasses, getArticleMetaClasses } from '@/components/patterns/Content/ArticleMeta/variants/getArticleMetaClasses';
+
+type Props = ArticleMetaProps;
+
+const {
+  category,
+  categoryHref,
+  detail,
+  dateTime,
+  tone = 'light',
+  size = 'caption',
+  class: className = '',
+} = Astro.props;
+---
+
+<div class={getArticleMetaClasses(tone, size, className)}>
+  <Link href={categoryHref} class={getArticleMetaCategoryClasses(tone)}>{category}</Link>
+  <span aria-hidden="true">{interfaceContent.separators.dot}</span>
+  {dateTime ? <time datetime={dateTime}>{detail}</time> : <span>{detail}</span>}
+</div>

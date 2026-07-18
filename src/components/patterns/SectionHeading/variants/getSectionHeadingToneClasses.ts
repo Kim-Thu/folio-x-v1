@@ -1,10 +1,10 @@
-export interface SectionHeadingToneClasses {
-  kicker: string;
-  description: string;
-}
+import type { SectionHeadingTone, SectionHeadingToneClasses } from '@/types/ui';
 
-export function getSectionHeadingToneClasses(dark: boolean): SectionHeadingToneClasses {
-  return dark
-    ? { kicker: 'text-on-dark-muted', description: 'text-on-dark-muted' }
-    : { kicker: 'text-on-light-muted', description: 'text-on-light-muted' };
+const toneClasses: Record<SectionHeadingTone, SectionHeadingToneClasses> = {
+  dark: { kicker: 'text-on-dark-muted', description: 'text-on-dark-muted' },
+  light: { kicker: 'text-on-light-muted', description: 'text-on-light-muted' },
+};
+
+export function getSectionHeadingToneClasses(tone: SectionHeadingTone): SectionHeadingToneClasses {
+  return toneClasses[tone];
 }

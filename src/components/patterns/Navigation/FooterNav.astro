@@ -4,7 +4,7 @@ import Link from '@/components/primitives/Link/Link.astro';
 
 type Props = FooterNavProps;
 
-const { items, label } = Astro.props;
+const { items = [], label } = Astro.props;
 ---
 
 <nav aria-label={label}>

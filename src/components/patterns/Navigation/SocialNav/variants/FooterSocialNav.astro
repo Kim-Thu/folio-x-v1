@@ -1,18 +1,32 @@
 ---
 import { interfaceContent } from '@/data/content';
 import type { SocialNavProps } from '@/types/navigation';
-import Icon from '@/components/primitives/Icon/Icon.astro';
+import SocialNavContent from '@/components/patterns/Navigation/SocialNav/SocialNavContent.astro';
 import Link from '@/components/primitives/Link/Link.astro';
+import { cn } from '@/utils/cn';
 
-type Props = Pick<SocialNavProps, 'links'>;
+type Props = Pick<SocialNavProps, 'links' | 'display'>;
 
-const { links }: Props = Astro.props;
+const { links, display = 'icon' }: Props = Astro.props;
+const compact = display !== 'label';
 ---
 
-<nav aria-label={interfaceContent.navigation.footerSocialLabel} class="flex flex-col gap-sm text-sm text-on-dark-muted">
-  {links.map((link) => (
-    <Link href={link.href} class="transition-colors hover:text-brand">
-      <span class="inline-flex items-center gap-1">{link.label}<Icon name="arrowUpRight" /></span>
-    </Link>
-  ))}
+<nav aria-label={interfaceContent.navigation.footerSocialLabel}>
+  <ul class="flex flex-wrap gap-sm">
+    {links.map((link) => (
+      <li>
+        <Link
+          href={link.href}
+          ariaLabel={display === 'label' ? undefined : link.label}
+          class={cn(
+            'inline-flex items-center text-on-dark-muted transition-colors hover:text-on-dark',
+            compact && 'size-8 justify-center rounded-full border-hairline border-line-dark hover:border-brand',
+            display === 'label' ? 'text-sm' : 'font-mono text-caption',
+          )}
+        >
+          <SocialNavContent link={link} display={display} />
+        </Link>
+      </li>
+    ))}
+  </ul>
 </nav>

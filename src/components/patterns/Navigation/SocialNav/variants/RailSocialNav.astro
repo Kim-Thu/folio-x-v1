@@ -2,17 +2,29 @@
 import { interfaceContent } from '@/data/content';
 import type { SocialNavProps } from '@/types/navigation';
 import Link from '@/components/primitives/Link/Link.astro';
+import SocialNavContent from '@/components/patterns/Navigation/SocialNav/SocialNavContent.astro';
+import { cn } from '@/utils/cn';
 
-type Props = Pick<SocialNavProps, 'links'>;
+type Props = Pick<SocialNavProps, 'links' | 'display'>;
 
-const { links }: Props = Astro.props;
+const { links, display = 'icon' }: Props = Astro.props;
 ---
 
 <nav aria-label={interfaceContent.navigation.socialLabel} class="pointer-events-auto flex flex-col gap-sm font-mono text-caption uppercase tracking-meta text-on-dark-faint">
-  {links.map((link) => (
-    <Link href={link.href} class="transition-colors hover:text-brand">
-      <span aria-hidden="true">{link.shortLabel}</span>
-      <span class="sr-only">{link.label}</span>
-    </Link>
-  ))}
+  <ul class="flex flex-col gap-sm">
+    {links.map((link) => (
+      <li>
+        <Link
+          href={link.href}
+          ariaLabel={display === 'label' ? undefined : link.label}
+          class={cn(
+            'inline-flex items-center transition-colors hover:text-brand',
+            display === 'label' ? 'text-sm normal-case' : 'size-8 justify-center',
+          )}
+        >
+          <SocialNavContent link={link} display={display} />
+        </Link>
+      </li>
+    ))}
+  </ul>
 </nav>

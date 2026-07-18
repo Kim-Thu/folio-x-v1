@@ -7,4 +7,5 @@ export interface ContentSectionsProps {
   sections: ContentSection[];
   tone?: ContentSectionsTone;
   variant?: ContentSectionsVariant;
+  idPrefix?: string;
 }

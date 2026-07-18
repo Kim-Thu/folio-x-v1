@@ -2,17 +2,23 @@
   "notFound": {
     "id": "not-found-title",
     "eyebrow": "404 / Không tìm thấy trang",
-    "title": "Đường dẫn này không dẫn đến nội dung nào.",
+    "title": "Ồ!!! Có vẻ bạn đã lạc đến một hành tinh khác.",
     "description": "Trang có thể đã được di chuyển, đổi tên hoặc không còn tồn tại. Bạn có thể quay về trang chủ hoặc xem các project đã xuất bản.",
     "primaryAction": {
       "href": "/",
-      "label": "Về trang chủ",
-      "icon": "arrowLeft"
+      "label": "Quay về trang chủ",
+      "icon": "chevronLeft"
     },
     "secondaryAction": {
       "href": "/projects",
       "label": "Xem projects",
-      "icon": "arrowRight"
+      "icon": "chevronRight"
+    },
+    "image": {
+      "src": "/uploads/not-found.webp",
+      "alt": "Phi hành gia ngồi trên một hành tinh nhỏ giữa những thiên thạch",
+      "width": 1200,
+      "height": 1200
     },
     "metadataTitle": "Không tìm thấy trang — Nguyễn Kim Thu",
     "metadataDescription": "Trang bạn yêu cầu không tồn tại hoặc đã được di chuyển."
@@ -25,12 +31,18 @@
     "primaryAction": {
       "href": "/blog",
       "label": "Xem tất cả bài viết",
-      "icon": "arrowLeft"
+      "icon": "chevronLeft"
     },
     "secondaryAction": {
       "href": "/",
-      "label": "Về trang chủ",
-      "icon": "arrowRight"
+      "label": "Quay về trang chủ",
+      "icon": "chevronLeft"
+    },
+    "image": {
+      "src": "/uploads/not-found.webp",
+      "alt": "Hành tinh nhỏ biểu thị khu vực chưa có nội dung",
+      "width": 1200,
+      "height": 1200
     },
     "metadataTitle": "Chưa có nội dung — Nguyễn Kim Thu",
     "metadataDescription": "Khu vực này hiện chưa có nội dung để hiển thị."

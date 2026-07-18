@@ -1,0 +1,24 @@
+---
+import type { FooterNewsletterProps } from '@/types/ui';
+import Button from '@/components/primitives/Button/Button.astro';
+import Icon from '@/components/primitives/Icon/Icon.astro';
+import Input from '@/components/primitives/Input/Input.astro';
+import Text from '@/components/primitives/Text/Text.astro';
+
+type Props = FooterNewsletterProps;
+
+const { content } = Astro.props;
+---
+
+<form name="newsletter" method="post" data-netlify="true">
+  <Input type="hidden" name="form-name" value="newsletter" variant="hidden" />
+  <Text variant="eyebrow" class="text-on-dark-faint">{content.label}</Text>
+  <Text size="sm" class="mt-md text-on-dark-muted">{content.description}</Text>
+  <label class="sr-only" for="footer-newsletter-email">{content.inputLabel}</label>
+  <div class="mt-lg flex items-center rounded-full border-hairline border-line-dark bg-button-surface p-1">
+    <Input id="footer-newsletter-email" name="email" type="email" autocomplete="email" placeholder={content.placeholder} required />
+    <Button type="submit" label={content.submitLabel} ariaLabel={content.submitLabel} iconOnly variant="secondary" size="sm">
+      <Icon name="arrowUpRight" />
+    </Button>
+  </div>
+</form>

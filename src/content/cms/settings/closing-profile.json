@@ -1,0 +1,29 @@
+{
+  "id": "closing-profile",
+  "eyebrow": "Cảm ơn bạn đã cuộn đến đây",
+  "nameLines": [
+    "NGUYỄN",
+    "KIM THU"
+  ],
+  "roleLabel": "FULL-STACK ENGINEER & SYSTEMS BUILDER",
+  "followAction": {
+    "label": "Kết nối trên LinkedIn",
+    "href": "https://www.linkedin.com"
+  },
+  "emailActionLabel": "Gửi email",
+  "locationLabel": "Làm việc tại",
+  "portraits": {
+    "collapsed": {
+      "src": "/uploads/avatar.png",
+      "alt": "Nguyễn Kim Thu làm việc trên máy tính xách tay",
+      "width": 1054,
+      "height": 1492
+    },
+    "expanded": {
+      "src": "/uploads/avatar-2.png",
+      "alt": "Nguyễn Kim Thu vẫy tay và cầm máy tính xách tay",
+      "width": 810,
+      "height": 1024
+    }
+  }
+}

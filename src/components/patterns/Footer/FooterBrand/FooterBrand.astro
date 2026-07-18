@@ -1,0 +1,18 @@
+---
+import type { FooterBrandProps } from '@/types/ui';
+import BrandLogo from '@/components/patterns/BrandLogo/BrandLogo.astro';
+import SocialNav from '@/components/patterns/Navigation/SocialNav/SocialNav.astro';
+import Text from '@/components/primitives/Text/Text.astro';
+
+type Props = FooterBrandProps;
+
+const { description, socialLinks, socialDisplay = 'icon' } = Astro.props;
+---
+
+<div class="min-w-0">
+  <BrandLogo variant="light" />
+  <Text size="sm" class="mt-md text-on-dark-muted">{description}</Text>
+  <div class="mt-lg">
+    <SocialNav links={socialLinks} variant="footer" display={socialDisplay} />
+  </div>
+</div>

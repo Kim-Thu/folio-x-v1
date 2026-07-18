@@ -1,16 +1,40 @@
 ---
+import { getBrandLogoImageClasses } from '@/components/patterns/BrandLogo/variants/getBrandLogoImageClasses';
+import {
+  getBrandLogoImageSizeClass,
+  getBrandLogoLabelSizeClass,
+  getBrandLogoMarkSizeClass,
+} from '@/components/patterns/BrandLogo/variants/getBrandLogoSizeClasses';
+import Link from '@/components/primitives/Link/Link.astro';
+import Image from '@/components/primitives/Image/Image.astro';
 import { headerContent } from '@/data/content';
 import { site } from '@/data/site';
 import type { BrandLogoProps } from '@/types/branding';
-import Link from '@/components/primitives/Link/Link.astro';
 import { cn } from '@/utils/cn';
 
 type Props = BrandLogoProps;
 
-const { class: className = '' } = Astro.props;
+const { class: className = '', size = 'md', variant = 'default' } = Astro.props;
+const variantLogo = variant === 'light' ? site.logoLight : variant === 'dark' ? site.logoDark : site.logo;
+const logo = variantLogo ?? site.logo;
+const usesFallbackAsset = variant !== 'default' && !variantLogo;
 ---
 
 <Link href="/" class={cn('flex items-center gap-sm font-bold', className)} ariaLabel={site.name}>
-  <span class="grid size-8 place-items-center rounded-full bg-brand text-label text-on-brand" aria-hidden="true">{site.shortName}</span>
-  <span class="hidden text-sm sm:block">{headerContent.brand}</span>
+  {logo ? (
+    <Image
+      src={logo}
+      alt={site.name}
+      class={cn(getBrandLogoImageSizeClass(size), getBrandLogoImageClasses(variant, usesFallbackAsset))}
+      width={1734}
+      height={375}
+      loading="eager"
+      variant="natural"
+    />
+  ) : (
+    <>
+      <span class={cn('grid place-items-center rounded-full bg-brand text-on-brand', getBrandLogoMarkSizeClass(size))} aria-hidden="true">{site.shortName}</span>
+      <span class={cn('hidden sm:block', getBrandLogoLabelSizeClass(size))}>{headerContent.brand}</span>
+    </>
+  )}
 </Link>

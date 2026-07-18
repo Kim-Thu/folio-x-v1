@@ -39,6 +39,20 @@
       "label": "Q&A"
     }
   ],
+  "resourceLinks": [
+    {
+      "href": "/projects",
+      "label": "Projects"
+    },
+    {
+      "href": "/blog",
+      "label": "Blog & Insights"
+    },
+    {
+      "href": "/#qa",
+      "label": "Q&A"
+    }
+  ],
   "legalLinks": [
     {
       "href": "/privacy-policy",
@@ -53,12 +67,14 @@
     {
       "href": "https://www.linkedin.com",
       "label": "LinkedIn",
-      "shortLabel": "LI"
+      "shortLabel": "LI",
+      "icon": "linkedin"
     },
     {
       "href": "https://github.com",
       "label": "GitHub",
-      "shortLabel": "GH"
+      "shortLabel": "GH",
+      "icon": "github"
     }
   ]
 }

@@ -1,24 +1,39 @@
 ---
 import type { SectionProps } from '@/types/ui';
 import { cn } from '@/utils/cn';
-import { getSectionClasses } from '@/components/layouts/Section/variants/getSectionClasses';
+import { getSectionClasses, getSectionVariantConfig } from '@/components/layouts/Section/variants/getSectionClasses';
 
 type Props = SectionProps;
 
 const {
   id,
   class: className = '',
-  theme = 'none',
-  spacing = false,
+  variant = 'default',
+  theme,
+  spacing,
+  trackProgress,
+  'aria-labelledby': ariaLabelledBy,
   ...attributes
 } = Astro.props;
 
+const variantConfig = getSectionVariantConfig(variant);
+const resolvedTheme = theme ?? variantConfig.theme;
+const resolvedSpacing = spacing ?? variantConfig.spacing;
+const resolvedTrackProgress = trackProgress ?? variantConfig.trackProgress;
+const resolvedAriaLabelledBy = ariaLabelledBy ?? (id ? `${id}-title` : undefined);
+
 const sectionClass = cn(
-  getSectionClasses(theme, spacing),
+  getSectionClasses(resolvedTheme, resolvedSpacing, variantConfig.classes),
   className,
 );
 ---
 
-<section {...attributes} id={id} data-section class={sectionClass}>
+<section
+  {...attributes}
+  id={id}
+  aria-labelledby={resolvedAriaLabelledBy}
+  data-section={resolvedTrackProgress ? '' : undefined}
+  class={sectionClass}
+>
   <slot />
 </section>

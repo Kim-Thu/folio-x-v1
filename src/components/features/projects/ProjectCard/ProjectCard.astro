@@ -1,37 +1,11 @@
 ---
-import { interfaceContent } from '@/data/content';
 import type { ProjectCardProps } from '@/types/ui';
-import CardItem from '@/components/patterns/Cards/CardItem.astro';
-import Icon from '@/components/primitives/Icon/Icon.astro';
-import Text from '@/components/primitives/Text/Text.astro';
-import Image from '@/components/primitives/Image/Image.astro';
-import { getProjectVisualClasses } from '@/components/features/projects/ProjectCard/variants/getProjectVisualClasses';
+import TileProjectCard from '@/components/features/projects/ProjectCard/variants/TileProjectCard.astro';
+import ArchiveProjectCard from '@/components/features/projects/ProjectCard/variants/ArchiveProjectCard.astro';
 
 type Props = ProjectCardProps;
 
-const { project, reverse = false, linkLabel, outcomeLabel } = Astro.props;
-const visualClasses = getProjectVisualClasses(reverse);
+const props = Astro.props;
 ---
 
-<CardItem href={project.href} linkClass="group grid lg:grid-cols-12" ariaLabel={project.title}>
-    <figure class={visualClasses}>
-      <Image variant="interactiveFillCover" src={project.image} alt={project.alt} />
-      <div class="absolute inset-0 bg-gradient-to-t from-black/55 via-transparent to-transparent" aria-hidden="true"></div>
-      <figcaption class="absolute bottom-6 left-6 text-5xl font-semibold text-on-dark md:text-7xl">
-        <span class="sr-only">{outcomeLabel} </span>{project.outcome}
-      </figcaption>
-    </figure>
-    <div class="flex flex-col p-7 lg:col-span-5 lg:p-10">
-      <Text variant="meta" class="flex items-center justify-between text-label tracking-meta text-on-dark-faint">
-        <span>{project.number} {interfaceContent.separators.slash} {project.category}</span><span>{project.year}</span>
-      </Text>
-      <div class="my-auto py-2xl">
-        <Text size="sm" class="mb-4 text-brand">{project.client}</Text>
-        <Text as="h3" variant="heading" size="h3">{project.title}</Text>
-        <Text size="sm" class="mt-7 leading-7 text-on-dark-muted md:text-base">{project.summary}</Text>
-      </div>
-      <span class="flex items-center justify-between border-t-hairline border-line-dark pt-5 text-sm font-medium">
-        {linkLabel}<Icon name="arrowUpRight" />
-      </span>
-    </div>
-</CardItem>
+{props.variant === 'archive' ? <ArchiveProjectCard {...props} /> : <TileProjectCard {...props} />}

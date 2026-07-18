@@ -1,7 +1,7 @@
 ---
 import type { ProjectArchiveProps } from '@/types/ui';
 import ArchivePage from '@/components/layouts/ArchivePage/ArchivePage.astro';
-import ProjectArchiveCard from '@/components/features/projects/ProjectArchiveCard.astro';
+import ProjectCard from '@/components/features/projects/ProjectCard/ProjectCard.astro';
 
 type Props = ProjectArchiveProps;
 
@@ -9,5 +9,5 @@ const { eyebrow, title, description, projects, categories = [], filterLabel = ''
 ---
 
 <ArchivePage {eyebrow} {title} {description} {categories} {filterLabel} {allLabel} {emptyLabel} theme="dark" listVariant="stack">
-  {projects.map((project) => <ProjectArchiveCard project={project} />)}
+  {projects.map((project) => <ProjectCard project={project} variant="archive" />)}
 </ArchivePage>
