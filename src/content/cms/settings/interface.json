@@ -14,7 +14,7 @@
     "holdOpen": false,
     "progressLabel": "Tiến độ tải trang",
     "image": {
-      "src": "/uploads/loading-screen.png",
+      "src": "/uploads/loading-screen.webp",
       "alt": "Phi hành gia ngồi trên một hành tinh nhỏ giữa các thiên thạch",
       "width": 720,
       "height": 720

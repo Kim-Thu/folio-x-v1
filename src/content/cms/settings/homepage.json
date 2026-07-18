@@ -6,7 +6,7 @@
   "hero": {
     "id": "top",
     "image": {
-      "src": "/uploads/hero-image.png",
+      "src": "/uploads/hero-image.webp",
       "alt": "Chân dung chuyên nghiệp trong ánh sáng tối giản"
     },
     "identityLines": [
@@ -110,7 +110,7 @@
     "description": "Hãy cùng tạo ra một sản phẩm rõ ràng, hữu ích và đáng nhớ.",
     "actionLabel": "Liên hệ tôi",
     "image": {
-      "src": "/uploads/cta-banner.png",
+      "src": "/uploads/cta-banner.webp",
       "alt": "Nhân vật 3D đang làm việc tại bàn máy tính trong ánh đèn ấm",
       "width": 1536,
       "height": 720

@@ -14,13 +14,13 @@
   "locationLabel": "Làm việc tại",
   "portraits": {
     "collapsed": {
-      "src": "/uploads/avatar.png",
+      "src": "/uploads/avatar.webp",
       "alt": "Nguyễn Kim Thu làm việc trên máy tính xách tay",
       "width": 1054,
       "height": 1492
     },
     "expanded": {
-      "src": "/uploads/avatar-2.png",
+      "src": "/uploads/avatar-2.webp",
       "alt": "Nguyễn Kim Thu vẫy tay và cầm máy tính xách tay",
       "width": 810,
       "height": 1024

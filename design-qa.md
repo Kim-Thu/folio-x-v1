@@ -61,7 +61,7 @@ Blocked. The implementation could not be captured in both scroll states at the r
 - Both groups occupy the same CSS Grid cell when collapsed; no absolute positioning is used for the name groups.
 - Motion bounds are measured in the foreignObject coordinate system so the groups remain inside the SVG track.
 - The text remains inside the `foreignObject`, while both portraits are rendered as native SVG `<image>` elements in the same viewBox. This keeps the complete composition responsive while avoiding browser-dependent lazy image behavior inside `foreignObject`.
-- The collapsed state uses `avatar.png`; the expanded state uses the distinct waving `avatar-2.png` asset from the reference.
+- The collapsed state uses `avatar.webp`; the expanded state uses the distinct waving `avatar-2.webp` asset from the reference.
 - Both portraits crossfade from the shared footer reveal progress, so reversing scroll direction reverses the image transition.
 - A semantic screen-reader heading remains outside the decorative SVG.
 - Astro check and production build completed with zero errors, warnings, or hints.
