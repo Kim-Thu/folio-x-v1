@@ -1,0 +1,15 @@
+{
+  "id": 6,
+  "slug": "image-optimizer",
+  "title": "Image Optimizer",
+  "category": "WordPress Plugin",
+  "categorySlug": "plugins",
+  "platform": "WordPress",
+  "description": "Optimize and compress images automatically.",
+  "price": 19,
+  "oldPrice": 29,
+  "rating": 4.6,
+  "reviews": 35,
+  "badge": "v1.2.3",
+  "image": "/uploads/page-header-insight.png"
+}
