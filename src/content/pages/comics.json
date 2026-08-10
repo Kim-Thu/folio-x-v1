@@ -12,7 +12,6 @@
         "template": "immersive",
         "settings": { "theme": "canvas", "spacing": "none", "container": "none" },
         "content": {
-          "source": { "collection": "comics" },
           "id": "comics-hero",
           "eyebrow": "Comics",
           "title": "Worlds drawn into",
@@ -20,8 +19,8 @@
           "description": "Discover illustrated series, graphic stories, and original comics built panel by panel.",
           "actionsLabel": "Comics actions",
           "actions": [
-            { "label": "Browse comics", "href": "/comics#featured-title", "icon": "arrowRight", "iconPosition": "end", "variant": "primary", "tone": "light", "size": "md" },
-            { "label": "Creator guide", "href": "/comics#latest-title", "icon": "archiveBox", "iconPosition": "end", "variant": "outline", "tone": "light", "size": "md" }
+            { "label": "Browse comics", "href": "/comics#catalog", "icon": "arrowRight", "iconPosition": "end", "variant": "primary", "tone": "light", "size": "md" },
+            { "label": "Creator guide", "href": "/comics#catalog", "icon": "archiveBox", "iconPosition": "end", "variant": "outline", "tone": "light", "size": "md" }
           ],
           "image": { "src": "/uploads/library-hero-drawing.webp", "alt": "An illustrator creating a fantasy comic at night", "width": 1672, "height": 941 },
           "quote": "Every panel opens another world.",
@@ -36,32 +35,25 @@
       },
       {
         "id": "catalog",
-        "type": "publication-catalog",
-        "template": "sidebar",
+        "type": "collection",
+        "template": "cards",
         "settings": { "theme": "canvas", "spacing": "body", "container": "site" },
         "content": {
-          "source": { "collection": "comics" },
-          "asideLabel": "Comics discovery",
-          "asidePosition": "end",
-          "search": { "label": "Search comics", "placeholder": "Search title or author..." },
-          "filters": {
-            "genreLabel": "Genre",
-            "allGenresLabel": "All genres",
-            "statusLabel": "Status",
-            "allStatusesLabel": "All statuses",
-            "ongoingLabel": "Ongoing",
-            "completeLabel": "Complete"
+          "heading": {
+            "label": "Library",
+            "title": ["Explore", "Comics"],
+            "description": "Browse illustrated series, graphic stories, and original comics.",
+            "action": { "label": "View all", "href": "/comics", "icon": "arrowRight" }
           },
-          "sort": { "label": "Sort", "options": [{ "label": "Newest", "value": "newest" }, { "label": "Oldest", "value": "oldest" }] },
-          "view": { "label": "View", "gridLabel": "Grid view", "listLabel": "List view" },
-          "sections": {
-            "featuredTitle": "Featured",
-            "latestTitle": "Latest updates",
-            "popularGenresTitle": "Popular genres",
-            "genresTitle": "Genres",
-            "trendingTitle": "Trending",
-            "authorsTitle": "Popular authors",
-            "viewAllLabel": "View all"
+          "source": { "collection": "comics", "limit": 24 },
+          "cards": {
+            "template": "media-metrics",
+            "layout": "grid",
+            "columns": 4,
+            "gap": "sm",
+            "mediaRatio": "portrait",
+            "headingLevel": 3,
+            "slots": { "excerpt": true, "tags": true, "metrics": true, "action": false }
           }
         }
       },
