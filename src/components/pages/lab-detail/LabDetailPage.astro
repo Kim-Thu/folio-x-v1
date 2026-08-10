@@ -9,80 +9,114 @@ import CColumns from "@/components/object/component/CColumns.astro";
 import CDescriptionList from "@/components/object/component/CDescriptionList.astro";
 import CTags from "@/components/object/component/CTags.astro";
 import type { LabDetailPageProps } from "@/types/components/pages/lab-detail/LabDetailPage.types";
+import type { LSectionSpacing, LSectionTheme } from "@/types/components/layout/LSection.types";
+import type { PCardProps } from "@/types/components/object/project/card/PCard.types";
 
 const { data } = Astro.props as LabDetailPageProps;
 const { lab } = data;
+const page = lab.detail?.page;
+const sections = page?.sections ?? [];
+const byId = (id: string) => sections.find((section) => section.id === id);
+const record = (value: unknown) => value && typeof value === "object" && !Array.isArray(value) ? value as Record<string, unknown> : {};
+const stringValue = (value: unknown, fallback = "") => typeof value === "string" ? value : fallback;
+const numberValue = (value: unknown, fallback: number) => typeof value === "number" ? value : fallback;
+const frame = (section: NonNullable<typeof sections>[number]) => {
+	const settings = record(section.settings);
+	return {
+		theme: stringValue(settings.theme, "canvas") as LSectionTheme,
+		spacing: stringValue(settings.spacing, "compact") as LSectionSpacing,
+		container: stringValue(settings.container, "site") as "site" | "content" | "none",
+	};
+};
 const articleBlocks = lab.sections.map((section, index) => ({
 	id: index === 0 ? "overview" : section.title.toLowerCase().replace(/\s+/g, "-"),
 	title: section.title,
 	paragraphs: section.paragraphs,
 }));
+const summarySection = byId("lab-summary");
+const summaryContent = record(summarySection?.content);
+const summaryLabels = record(summaryContent.labels);
 const actions = [
-	...(lab.liveUrl ? [{ label: "Live demo", href: lab.liveUrl, icon: "arrowUpRight" as const, variant: "primary" as const }] : []),
-	...(lab.sourceUrl ? [{ label: "Source code", href: lab.sourceUrl, icon: "github" as const, variant: "outline" as const }] : []),
+	...(lab.liveUrl ? [{ label: stringValue(summaryLabels.live), href: lab.liveUrl, icon: "arrowUpRight" as const, variant: "primary" as const }] : []),
+	...(lab.sourceUrl ? [{ label: stringValue(summaryLabels.source), href: lab.sourceUrl, icon: "github" as const, variant: "outline" as const }] : []),
 ];
+const contentSection = byId("lab-content");
+const contentConfig = record(contentSection?.content);
+const featuresSection = byId("features");
+const featuresContent = record(featuresSection?.content);
+const featuresHeading = record(featuresContent.heading);
+const featuresCards = record(featuresContent.cards);
+const gallerySection = byId("gallery");
+const galleryContent = record(gallerySection?.content);
+const galleryHeading = record(galleryContent.heading);
+const galleryCards = record(galleryContent.cards);
+const galleryLabels = record(galleryContent.labels);
 ---
 
-<LPage template="fluid">
-	<LSection theme="canvas" spacing="compact">
-		<PPageHeader
-			template="media-aside"
-			data={{
-				breadcrumb: {
-					label: "Breadcrumb",
-					items: [
-						{ label: "Labs", href: "/labs" },
-						{ label: lab.category.label, href: `/labs/category/${lab.category.slug}` },
+<LPage template={page?.template ?? "fluid"}>
+	{summarySection && (
+		<LSection {...frame(summarySection)}>
+			<PPageHeader
+				template={summarySection.template as "media-aside"}
+				data={{
+					breadcrumb: {
+						label: stringValue(summaryLabels.breadcrumb),
+						items: [
+							{ label: "Labs", href: "/labs" },
+							{ label: lab.category.label, href: `/labs/category/${lab.category.slug}` },
+						],
+						current: lab.title,
+					},
+					image: lab.image,
+					category: { label: lab.category.label, href: `/labs/category/${lab.category.slug}` },
+					badge: lab.statusLabel,
+					title: lab.title,
+					description: lab.summary,
+					metrics: [
+						{ icon: "star", label: String(lab.stars) },
+						{ icon: "github", label: String(lab.forks) },
+						{ icon: "clock01", label: lab.updatedLabel },
 					],
-					current: lab.title,
-				},
-				image: lab.image,
-				category: { label: lab.category.label, href: `/labs/category/${lab.category.slug}` },
-				badge: lab.statusLabel,
-				title: lab.title,
-				description: lab.summary,
-				metrics: [
-					{ icon: "star", label: String(lab.stars) },
-					{ icon: "github", label: String(lab.forks) },
-					{ icon: "clock01", label: lab.updatedLabel },
-				],
-				actionsLabel: `${lab.title} actions`,
-				actions,
-			}}
-		/>
-	</LSection>
+					actionsLabel: stringValue(summaryLabels.actions),
+					actions,
+				}}
+			/>
+		</LSection>
+	)}
 
-	<LSection theme="canvas" spacing="body">
-		<CColumns columns="twelve" gap="lg">
-			<div class="lg:col-span-8">
-				<PArticle appearance="compact" blocks={articleBlocks} />
-			</div>
-			<aside class="lg:col-span-4">
-				<CColumns columns="one" gap="md">
-					<CDescriptionList items={lab.facts} />
-					<CTags
-						label={`${lab.title} technology stack`}
-						items={lab.technologies.map((technology) => ({
-							label: technology.label,
-							href: `/labs/technology/${technology.slug}`,
-						}))}
-					/>
-				</CColumns>
-			</aside>
-		</CColumns>
-	</LSection>
+	{contentSection && (
+		<LSection {...frame(contentSection)}>
+			<CColumns columns="twelve" gap="lg">
+				<div class="lg:col-span-8">
+					<PArticle appearance={stringValue(contentConfig.appearance, "compact") as "compact"} blocks={articleBlocks} />
+				</div>
+				<aside class="lg:col-span-4">
+					<CColumns columns="one" gap="md">
+						<CDescriptionList items={lab.facts} />
+						<CTags
+							label={stringValue(summaryLabels.technology)}
+							items={lab.technologies.map((technology) => ({
+								label: technology.label,
+								href: `/labs/technology/${technology.slug}`,
+							}))}
+						/>
+					</CColumns>
+				</aside>
+			</CColumns>
+		</LSection>
+	)}
 
-	{lab.features.length > 0 && (
-		<LSection id="features" theme="canvas" spacing="compact">
+	{featuresSection && lab.features.length > 0 && (
+		<LSection id={featuresSection.id} {...frame(featuresSection)}>
 			<CColumns columns="one" gap="md">
-				<PSectionHeader data={{ title: "Features" }} headingLevel={2} appearance="compact" />
+				<PSectionHeader data={{ title: stringValue(featuresHeading.title) }} headingLevel={2} appearance="compact" />
 				<PCard
-					template="icon-summary"
-					layout="grid"
-					columns={2}
-					gap="sm"
+					template={stringValue(featuresCards.template, "icon-summary") as PCardProps["template"]}
+					layout={stringValue(featuresCards.layout, "grid") as PCardProps["layout"]}
+					columns={numberValue(featuresCards.columns, 2) as PCardProps["columns"]}
+					gap={stringValue(featuresCards.gap, "sm") as PCardProps["gap"]}
 					items={lab.features.map((feature) => ({
-						href: "#features",
+						href: `#${featuresSection.id}`,
 						ariaLabel: feature.title,
 						title: [feature.title],
 						excerpt: feature.description,
@@ -93,19 +127,19 @@ const actions = [
 		</LSection>
 	)}
 
-	{lab.gallery.length > 0 && (
-		<LSection id="gallery" theme="canvas" spacing="compact">
+	{gallerySection && lab.gallery.length > 0 && (
+		<LSection id={gallerySection.id} {...frame(gallerySection)}>
 			<CColumns columns="one" gap="md">
-				<PSectionHeader data={{ title: "Gallery" }} headingLevel={2} appearance="compact" />
+				<PSectionHeader data={{ title: stringValue(galleryHeading.title) }} headingLevel={2} appearance="compact" />
 				<PCard
-					template="media-only"
-					layout="grid"
-					columns={5}
-					gap="sm"
+					template={stringValue(galleryCards.template, "media-only") as PCardProps["template"]}
+					layout={stringValue(galleryCards.layout, "grid") as PCardProps["layout"]}
+					columns={numberValue(galleryCards.columns, 5) as PCardProps["columns"]}
+					gap={stringValue(galleryCards.gap, "sm") as PCardProps["gap"]}
 					items={lab.gallery.map((image, index) => ({
 						href: image.src,
-						ariaLabel: `Open gallery image ${index + 1}`,
-						title: [`Gallery image ${index + 1}`],
+						ariaLabel: `${stringValue(galleryLabels.openImage)} ${index + 1}`,
+						title: [`${stringValue(galleryLabels.imageTitle)} ${index + 1}`],
 						media: image,
 					}))}
 				/>
