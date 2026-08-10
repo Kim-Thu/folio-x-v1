@@ -1,1 +1,85 @@
-{"slug":"/comics","meta":{"title":"Comics","description":"Illustrated series and graphic stories."},"content":{"sections":[]}}
+{
+  "slug": "/comics",
+  "meta": {
+    "title": "Comics",
+    "description": "Illustrated series and graphic stories."
+  },
+  "content": {
+    "sections": [
+      {
+        "id": "comics-hero",
+        "type": "page-header",
+        "template": "immersive",
+        "settings": {
+          "theme": "canvas",
+          "spacing": "none",
+          "container": "none"
+        },
+        "content": {
+          "source": { "collection": "publications", "catalog": "comics" },
+          "actionsLabel": "Comics actions"
+        }
+      },
+      {
+        "id": "catalog",
+        "type": "publication-catalog",
+        "template": "sidebar",
+        "settings": {
+          "theme": "canvas",
+          "spacing": "body",
+          "container": "site"
+        },
+        "content": {
+          "source": { "collection": "publications", "catalog": "comics" },
+          "asidePosition": "end",
+          "search": {
+            "label": "Search comics",
+            "placeholder": "Search title or author..."
+          },
+          "filters": {
+            "genreLabel": "Genre",
+            "allGenresLabel": "All genres",
+            "statusLabel": "Status",
+            "allStatusesLabel": "All statuses",
+            "ongoingLabel": "Ongoing",
+            "completeLabel": "Complete"
+          },
+          "sort": {
+            "label": "Sort",
+            "options": [
+              { "label": "Newest", "value": "newest" },
+              { "label": "Oldest", "value": "oldest" }
+            ]
+          },
+          "view": {
+            "label": "View",
+            "gridLabel": "Grid view",
+            "listLabel": "List view"
+          },
+          "sections": {
+            "featuredTitle": "Featured",
+            "latestTitle": "Latest updates",
+            "popularGenresTitle": "Popular genres",
+            "genresTitle": "Genres",
+            "trendingTitle": "Trending",
+            "authorsTitle": "Popular authors",
+            "viewAllLabel": "View all"
+          }
+        }
+      },
+      {
+        "id": "comics-newsletter",
+        "type": "cta",
+        "template": "subscription",
+        "settings": {
+          "theme": "canvas",
+          "spacing": "closing",
+          "container": "site"
+        },
+        "content": {
+          "source": { "collection": "publications", "catalog": "comics", "field": "newsletter" }
+        }
+      }
+    ]
+  }
+}
