@@ -8,6 +8,10 @@ export interface WorksPageContext {
 export interface WorksPageData {
 	page: PageEntryData;
 	context: WorksPageContext;
+	metadata: {
+		title: string;
+		description: string;
+	};
 }
 
 export interface WorksPageProps {
