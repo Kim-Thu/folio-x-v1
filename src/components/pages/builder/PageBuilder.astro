@@ -82,16 +82,14 @@ const sectionHeader = (section: PageSectionData): PSectionHeaderProps => {
 			title:
 				typeof rawTitle === "string"
 					? rawTitle
-					: asArray(rawTitle).filter(
-							(value): value is string => typeof value === "string",
-						),
+					: asArray(rawTitle).filter((value): value is string => typeof value === "string"),
 			description: asString(heading.description),
 		},
 		action: action.href
 			? {
 					href: asString(action.href),
 					label: asString(action.label),
-					icon: action.icon as PSectionHeaderProps["action"] extends infer T ? any : never,
+					icon: action.icon as any,
 					iconPosition: action.iconPosition as any,
 					variant: action.variant as any,
 					tone: action.tone as any,
@@ -124,12 +122,9 @@ const cardConfig = (
 	};
 };
 
-const resolveCollectionItems = async (
-	section: PageSectionData,
-): Promise<PCardData[]> => {
+const resolveCollectionItems = async (section: PageSectionData): Promise<PCardData[]> => {
 	const content = asRecord(section.content);
 	const staticItems = asArray(content.items);
-
 	if (staticItems.length > 0) return staticItems as PCardData[];
 
 	const source = asRecord(content.source);
@@ -179,11 +174,11 @@ const buildProjectsArchive = async (
 	content: RecordValue,
 ): Promise<ArchiveRegion> => {
 	const toolbar = asRecord(content.toolbar);
-	const sort = asRecord(toolbar.sort);
-	const view = asRecord(toolbar.view);
 	const cards = asRecord(content.cards);
 	const taxonomy = asRecord(content.taxonomy);
+	const routes = asRecord(content.routes);
 	const { pagination, pageSize, emptyLabel } = archiveBase(content);
+	const allValue = asString(toolbar.allValue);
 	const projects = await getProjects();
 	const visibleProjects = projects.filter((project) => {
 		if (context.categorySlug) return project.categorySlug === context.categorySlug;
@@ -194,7 +189,11 @@ const buildProjectsArchive = async (
 		new Map(
 			projects.map((project) => [
 				project.categorySlug,
-				{ label: project.category, value: project.categorySlug },
+				{
+					label: project.category,
+					value: project.categorySlug,
+					href: `${asString(routes.categoryBase)}${project.categorySlug}`,
+				},
 			]),
 		).values(),
 	);
@@ -209,21 +208,21 @@ const buildProjectsArchive = async (
 				data: {
 					filter: {
 						label: asString(toolbar.filterLabel),
-						activeValue: context.categorySlug ?? "all",
+						activeValue: context.categorySlug ?? allValue,
 						tabs: [
-							{ label: asString(toolbar.allLabel), value: "all" },
+							{ label: asString(toolbar.allLabel), value: allValue, href: asString(routes.base) },
 							...categories,
 						],
 					},
 					sort: {
-						label: asString(sort.label || toolbar.sortLabel),
-						value: asString(sort.value),
-						options: optionList(sort.options ?? toolbar.sortOptions),
+						label: asString(toolbar.sortLabel),
+						value: asString(toolbar.sortValue),
+						options: optionList(toolbar.sortOptions),
 					},
 					view: {
-						label: asString(view.label || toolbar.viewLabel),
-						gridLabel: asString(view.gridLabel || toolbar.gridViewLabel),
-						listLabel: asString(view.listLabel || toolbar.listViewLabel),
+						label: asString(toolbar.viewLabel),
+						gridLabel: asString(toolbar.gridViewLabel),
+						listLabel: asString(toolbar.listViewLabel),
 					},
 				},
 			},
@@ -264,21 +263,17 @@ const buildLabsArchive = async (
 	const sidebar = asRecord(content.sidebar);
 	const categoryCopy = asRecord(sidebar.category);
 	const technologyCopy = asRecord(sidebar.technology);
-	const routes = asRecord(content.routes);
 	const cards = asRecord(content.cards);
+	const routes = asRecord(content.routes);
 	const { pagination, pageSize, emptyLabel } = archiveBase(content);
 	const labs = await getLabs();
 	const visibleLabs = labs.filter((lab) =>
 		(!context.categorySlug || lab.category.slug === context.categorySlug) &&
 		(!context.technologySlug || lab.technologies.some((technology) => technology.slug === context.technologySlug)),
 	);
-	const categories = Array.from(
-		new Map(labs.map((lab) => [lab.category.slug, lab.category])).values(),
-	);
+	const categories = Array.from(new Map(labs.map((lab) => [lab.category.slug, lab.category])).values());
 	const technologies = Array.from(
-		new Map(
-			labs.flatMap((lab) => lab.technologies.map((technology) => [technology.slug, technology] as const)),
-		).values(),
+		new Map(labs.flatMap((lab) => lab.technologies.map((technology) => [technology.slug, technology] as const))).values(),
 	);
 
 	return {
@@ -336,7 +331,7 @@ const buildLabsArchive = async (
 								...categories.map((category) => ({
 									label: category.label,
 									value: category.slug,
-									href: `${asString(routes.categoryBase)}/${category.slug}`,
+									href: `${asString(routes.categoryBase)}${category.slug}`,
 									count: labs.filter((lab) => lab.category.slug === category.slug).length,
 									checked: context.categorySlug === category.slug,
 								})),
@@ -352,7 +347,7 @@ const buildLabsArchive = async (
 								options: technologies.map((technology) => ({
 									label: technology.label,
 									value: technology.slug,
-									href: `${asString(routes.technologyBase)}/${technology.slug}`,
+									href: `${asString(routes.technologyBase)}${technology.slug}`,
 									count: labs.filter((lab) => lab.technologies.some((item) => item.slug === technology.slug)).length,
 									checked: context.technologySlug === technology.slug,
 								})),
@@ -397,17 +392,11 @@ const buildProductsArchive = async (
 	const sidebar = asRecord(content.sidebar);
 	const categoryCopy = asRecord(sidebar.category);
 	const platformCopy = asRecord(sidebar.platform);
-	const price = asRecord(sidebar.price);
-	const license = asRecord(sidebar.license);
-	const ratings = asRecord(sidebar.ratings);
 	const advertisement = asRecord(sidebar.advertisement);
 	const cards = asRecord(content.cards);
 	const result = asRecord(content.result);
 	const { pagination, pageSize, emptyLabel } = archiveBase(content);
-	const [products, categoryFilters] = await Promise.all([
-		getProducts(),
-		getProductCategories(),
-	]);
+	const [products, categoryFilters] = await Promise.all([getProducts(), getProductCategories()]);
 	const visibleProducts = context.categorySlug
 		? products.filter((product) => product.categorySlug === context.categorySlug)
 		: products;
