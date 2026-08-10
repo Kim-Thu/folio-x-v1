@@ -11,5 +11,47 @@
   "rating": 4.8,
   "reviews": 96,
   "badge": "v2.1.0",
-  "image": "https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&w=900&q=88"
+  "image": "https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&w=900&q=88",
+  "detail": {
+    "page": {
+      "template": "fluid",
+      "sections": [
+        {
+          "id": "product-summary",
+          "type": "page-header",
+          "template": "gallery-summary",
+          "settings": { "theme": "canvas", "spacing": "compact", "container": "site" },
+          "content": {
+            "breadcrumbLabel": "Breadcrumb",
+            "productsLabel": "Products",
+            "galleryLabel": "Auto Post System gallery",
+            "thumbnailLabel": "Select preview",
+            "salesLabel": "96 reviews",
+            "features": [],
+            "facts": [
+              { "label": "Platform", "value": "WordPress" },
+              { "label": "Category", "value": "WordPress Plugin" }
+            ],
+            "actionsLabel": "Auto Post System actions",
+            "actions": [
+              { "label": "Contact to purchase", "href": "mailto:hello@nkt.studio?subject=Auto%20Post%20System", "icon": "shoppingBag", "variant": "primary" },
+              { "label": "View preview", "href": "https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&w=900&q=88", "icon": "arrowUpRight", "variant": "outline" }
+            ],
+            "paymentLabel": "Payment methods",
+            "paymentMethods": []
+          }
+        },
+        {
+          "id": "product-overview",
+          "type": "article",
+          "settings": { "theme": "canvas", "spacing": "body", "container": "site" },
+          "content": {
+            "blocks": [
+              { "id": "product-overview", "title": "Overview", "paragraphs": ["Automatically share your content to social media."] }
+            ]
+          }
+        }
+      ]
+    }
+  }
 }
