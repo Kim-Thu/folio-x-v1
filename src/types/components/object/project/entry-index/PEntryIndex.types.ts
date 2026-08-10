@@ -10,7 +10,7 @@ export interface PEntryIndexItem {
 	views: string;
 	href: string;
 	badge?: string;
-	status: "available" | "locked" | "read";
+	action?: CButtonProps;
 }
 
 export interface PEntryIndexProps {
