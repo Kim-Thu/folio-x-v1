@@ -168,9 +168,9 @@ const regionFromSection = async (section: PageSectionData): Promise<PageRegion> 
 				placement: "header",
 				section: frame,
 				props: {
-					template: asString(section.template, "split-media") as PPageHeaderProps["template"],
-					data: content as unknown as PPageHeaderProps["data"],
-				},
+					template: asString(section.template, "split-media"),
+					data: content,
+				} as unknown as PPageHeaderProps,
 			};
 
 		case "article":
@@ -324,9 +324,9 @@ const regionFromSection = async (section: PageSectionData): Promise<PageRegion> 
 			}
 
 			const header = sectionHeader(section);
-			const headerTitle = Array.isArray(header.data.title)
-				? header.data.title.join(" ")
-				: (header.data.title ?? section.id);
+			const headerTitle = typeof header.data.title === "string"
+				? header.data.title
+				: (header.data.title?.join(" ") ?? section.id);
 			return {
 				key: section.id,
 				component: "group",
