@@ -9,9 +9,15 @@ export interface WorksPageQuery {
 export async function getWorksPageData(
 	query: WorksPageQuery = {},
 ): Promise<WorksPageData> {
+	const page = await getPage("/projects");
+
 	return {
-		page: await getPage("/projects"),
+		page,
 		context: query,
+		metadata: {
+			title: page.meta.title,
+			description: page.meta.description ?? "",
+		},
 	};
 }
 
