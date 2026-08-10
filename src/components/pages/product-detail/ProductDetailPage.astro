@@ -4,65 +4,81 @@ import LSection from "@/components/layout/LSection.astro";
 import PPageHeader from "@/components/object/project/page-header/PPageHeader.astro";
 import PArticle from "@/components/object/project/article/PArticle.astro";
 import type { ProductDetailPageProps } from "@/types/components/pages/product-detail/ProductDetailPage.types";
+import type { LSectionSpacing, LSectionTheme } from "@/types/components/layout/LSection.types";
 
 const { data } = Astro.props as ProductDetailPageProps;
 const { product } = data;
+const page = product.detail?.page;
+if (!page) throw new Error(`Missing CMS product detail page: ${product.slug}`);
+
+type RecordValue = Record<string, unknown>;
+const asRecord = (value: unknown): RecordValue => value && typeof value === "object" && !Array.isArray(value) ? value as RecordValue : {};
+const asString = (value: unknown) => typeof value === "string" ? value : "";
+const asArray = (value: unknown) => Array.isArray(value) ? value : [];
+const frame = (section: (typeof page.sections)[number]) => {
+	const settings = asRecord(section.settings);
+	return {
+		id: section.id,
+		theme: asString(settings.theme) as LSectionTheme,
+		spacing: asString(settings.spacing) as LSectionSpacing,
+		container: asString(settings.container) as "site" | "content" | "none",
+	};
+};
+
 const price = {
 	current: `$${product.price}`,
 	previous: product.oldPrice ? `$${product.oldPrice}` : undefined,
-	discount: product.oldPrice
-		? `-${Math.round((1 - product.price / product.oldPrice) * 100)}%`
-		: undefined,
+	discount: product.oldPrice ? `-${Math.round((1 - product.price / product.oldPrice) * 100)}%` : undefined,
 };
 ---
 
-<LPage template="fluid">
-	<LSection theme="canvas" spacing="compact">
-		<PPageHeader
-			template="gallery-summary"
-			data={{
-				breadcrumb: {
-					label: "Breadcrumb",
-					items: [
-						{ label: "Products", href: "/products" },
-						{ label: product.category, href: `/products/category/${product.categorySlug}` },
-					],
-					current: product.title,
-				},
-				category: { label: product.category, href: `/products/category/${product.categorySlug}` },
-				title: product.title,
-				description: product.description,
-				badge: product.badge,
-				images: [{ src: product.image, alt: `${product.title} preview`, width: 900, height: 562 }],
-				galleryLabel: `${product.title} gallery`,
-				thumbnailLabel: "Select preview",
-				rating: { value: product.rating, maximum: 5, count: product.reviews, salesLabel: `${product.reviews} reviews` },
-				price,
-				features: [],
-				facts: [
-					{ label: "Platform", value: product.platform },
-					{ label: "Category", value: product.category },
-				],
-				actionsLabel: `${product.title} actions`,
-				actions: [
-					{ label: "Contact to purchase", href: `mailto:hello@nkt.studio?subject=${encodeURIComponent(product.title)}`, icon: "shoppingBag", variant: "primary" },
-					{ label: "View preview", href: product.image, icon: "arrowUpRight", variant: "outline" },
-				],
-				paymentLabel: "Payment methods",
-				paymentMethods: [],
-			}}
-		/>
-	</LSection>
+<LPage template={page.template}>
+	{page.sections.map((section) => {
+		const content = asRecord(section.content);
 
-	<LSection theme="canvas" spacing="body">
-		<PArticle
-			blocks={[
-				{
-					id: "product-overview",
-					title: "Overview",
-					paragraphs: [product.description],
-				},
-			]}
-		/>
-	</LSection>
+		if (section.type === "page-header") {
+			return (
+				<LSection {...frame(section)}>
+					<PPageHeader
+						template={section.template as "gallery-summary"}
+						data={{
+							breadcrumb: {
+								label: asString(content.breadcrumbLabel),
+								items: [
+									{ label: asString(content.productsLabel), href: "/products" },
+									{ label: product.category, href: `/products/category/${product.categorySlug}` },
+								],
+								current: product.title,
+							},
+							category: { label: product.category, href: `/products/category/${product.categorySlug}` },
+							title: product.title,
+							description: product.description,
+							badge: product.badge,
+							images: [{ src: product.image, alt: `${product.title} preview`, width: 900, height: 562 }],
+							galleryLabel: asString(content.galleryLabel),
+							thumbnailLabel: asString(content.thumbnailLabel),
+							rating: { value: product.rating, maximum: 5, count: product.reviews, salesLabel: asString(content.salesLabel) },
+							price,
+							features: asArray(content.features) as Array<RecordValue>,
+							facts: asArray(content.facts) as Array<{ label: string; value: string }>,
+							actionsLabel: asString(content.actionsLabel),
+							actions: asArray(content.actions) as Array<{ label: string; href: string; icon?: string; variant?: string }>,
+							paymentLabel: asString(content.paymentLabel),
+							paymentMethods: asArray(content.paymentMethods),
+						}}
+					/>
+				</LSection>
+			);
+		}
+
+		if (section.type === "article") {
+			return (
+				<LSection {...frame(section)}>
+					<PArticle blocks={asArray(content.blocks) as Array<{ id: string; title: string; paragraphs: string[] }>} />
+				</LSection>
+			);
+		}
+
+		return null;
+	})}
 </LPage>
