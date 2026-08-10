@@ -16,5 +16,54 @@
   "features": [{ "title": "Composable flows", "description": "Connect reusable steps with visible dependencies.", "icon": "arrowPath" }],
   "gallery": [{ "src": "/uploads/page-header-projects.png", "alt": "Automation workflow", "width": 1372, "height": 1147 }],
   "resources": [{ "title": "Source code", "description": "Review the repository.", "href": "https://github.com", "icon": "github" }],
-  "facts": [{ "label": "Category", "value": "Automation" }, { "label": "Status", "value": "In progress" }]
+  "facts": [{ "label": "Category", "value": "Automation" }, { "label": "Status", "value": "In progress" }],
+  "detail": {
+    "page": {
+      "template": "fluid",
+      "sections": [
+        {
+          "id": "lab-summary",
+          "type": "page-header",
+          "template": "media-aside",
+          "settings": { "theme": "canvas", "spacing": "compact", "container": "site" },
+          "content": {
+            "labels": {
+              "breadcrumb": "Breadcrumb",
+              "actions": "Smart Automation actions",
+              "live": "Live demo",
+              "source": "Source code",
+              "technology": "Smart Automation technology stack"
+            }
+          }
+        },
+        {
+          "id": "lab-content",
+          "type": "article",
+          "settings": { "theme": "canvas", "spacing": "body", "container": "site" },
+          "content": { "appearance": "compact" }
+        },
+        {
+          "id": "features",
+          "type": "collection",
+          "template": "cards",
+          "settings": { "theme": "canvas", "spacing": "compact", "container": "site" },
+          "content": {
+            "heading": { "title": "Features" },
+            "cards": { "template": "icon-summary", "layout": "grid", "columns": 2, "gap": "sm" }
+          }
+        },
+        {
+          "id": "gallery",
+          "type": "collection",
+          "template": "cards",
+          "settings": { "theme": "canvas", "spacing": "compact", "container": "site" },
+          "content": {
+            "heading": { "title": "Gallery" },
+            "cards": { "template": "media-only", "layout": "grid", "columns": 5, "gap": "sm" },
+            "labels": { "openImage": "Open gallery image", "imageTitle": "Gallery image" }
+          }
+        }
+      ]
+    }
+  }
 }
