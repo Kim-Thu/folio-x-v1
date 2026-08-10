@@ -10,5 +10,57 @@
   "rating": 4.7,
   "reviews": 72,
   "badge": "v1.0.0",
-  "image": "https://images.unsplash.com/photo-1559028012-d74eadee55f3?auto=format&fit=crop&w=900&q=88"
+  "image": "https://images.unsplash.com/photo-1559028012-d74eadee55f3?auto=format&fit=crop&w=900&q=88",
+  "detail": {
+    "page": {
+      "template": "fluid",
+      "sections": [
+        {
+          "id": "product-summary",
+          "type": "page-header",
+          "template": "gallery-summary",
+          "settings": {
+            "theme": "canvas",
+            "spacing": "lead",
+            "container": "site"
+          },
+          "content": {
+            "breadcrumbLabel": "Breadcrumb",
+            "collectionLabel": "Products",
+            "galleryLabel": "SaaS Landing UI gallery",
+            "previewLabel": "Select preview",
+            "ratingMaximum": 5,
+            "reviewsLabel": "reviews",
+            "platformLabel": "Platform",
+            "categoryLabel": "Category",
+            "purchaseLabel": "Contact to purchase",
+            "purchaseHref": "mailto:hello@kimthu.dev",
+            "previewActionLabel": "View preview",
+            "paymentLabel": "Payment methods"
+          }
+        },
+        {
+          "id": "product-overview",
+          "type": "article",
+          "template": "flow",
+          "settings": {
+            "theme": "canvas",
+            "spacing": "body",
+            "container": "content"
+          },
+          "content": {
+            "blocks": [
+              {
+                "id": "overview",
+                "title": "Overview",
+                "paragraphs": [
+                  "Landing page template for SaaS and digital products."
+                ]
+              }
+            ]
+          }
+        }
+      ]
+    }
+  }
 }
