@@ -23,16 +23,14 @@ const contentSectionSchema = z.object({
 const systemStateActionSchema = z.object({
   href: z.string().min(1),
   label: z.string().min(1),
-  icon: z
-    .enum([
-      "arrowLeft",
-      "arrowRight",
-      "arrowUp",
-      "arrowUpRight",
-      "chevronLeft",
-      "chevronRight",
-    ])
-    .optional(),
+  icon: z.enum(["arrowLeft", "arrowRight", "arrowUp", "arrowUpRight", "chevronLeft", "chevronRight"]).optional(),
+});
+
+const imageSchema = z.object({
+  src: z.string().min(1),
+  alt: z.string(),
+  width: z.number().int().positive(),
+  height: z.number().int().positive(),
 });
 
 const systemStateSchema = z.object({
@@ -43,12 +41,7 @@ const systemStateSchema = z.object({
   description: z.string().min(1),
   primaryAction: systemStateActionSchema,
   secondaryAction: systemStateActionSchema.optional(),
-  image: z.object({
-    src: z.string().min(1),
-    alt: z.string().min(1),
-    width: z.number().int().positive(),
-    height: z.number().int().positive(),
-  }),
+  image: imageSchema,
   metadataTitle: z.string().min(1),
   metadataDescription: z.string().min(1),
 });
@@ -65,20 +58,8 @@ const archiveGroupSchema = z.object({
   tagPrefix: z.string().min(1),
 });
 
-const imageSchema = z.object({
-  src: z.string().min(1),
-  alt: z.string(),
-  width: z.number().int().positive(),
-  height: z.number().int().positive(),
-});
-
 const insightContentNodeSchema = z.discriminatedUnion("type", [
-  z.object({
-    type: z.literal("heading"),
-    id: z.string().regex(/^[a-z0-9]+(?:-[a-z0-9]+)*$/),
-    level: z.union([z.literal(2), z.literal(3)]),
-    text: z.string().min(1),
-  }),
+  z.object({ type: z.literal("heading"), id: z.string().regex(/^[a-z0-9]+(?:-[a-z0-9]+)*$/), level: z.union([z.literal(2), z.literal(3)]), text: z.string().min(1) }),
   z.object({ type: z.literal("paragraph"), text: z.string().min(1) }),
   z.object({ type: z.literal("image"), image: imageSchema }),
 ]);
@@ -103,48 +84,26 @@ const worksArchiveSchema = archiveGroupSchema.extend({
 
 export const siteSettingsSchema = z.object({
   site: z.object({
-    name: z.string().min(1),
-    shortName: z.string().min(1),
-    role: z.string().min(1),
-    location: z.string().min(1),
-    email: z.email(),
-    logo: z.string().optional(),
-    logoLight: z.string().optional(),
-    logoDark: z.string().optional(),
-    favicon: z.string().optional(),
-    contactLabel: z.string().min(1).default("LET'S TALK"),
+    name: z.string().min(1), shortName: z.string().min(1), role: z.string().min(1), location: z.string().min(1), email: z.email(),
+    logo: z.string().optional(), logoLight: z.string().optional(), logoDark: z.string().optional(), favicon: z.string().optional(), contactLabel: z.string().min(1).default("LET'S TALK"),
   }),
   metadata: z.object({ language: z.string().min(2), title: z.string().min(1), description: z.string().min(1) }),
 });
 
 export const navigationSettingsSchema = z.object({
-  navItems: z.array(navigationItemSchema),
-  footerNavItems: z.array(navigationItemSchema),
-  resourceLinks: z.array(navigationItemSchema).default([]),
-  legalLinks: z.array(navigationItemSchema),
-  socialLinks: z.array(socialLinkSchema),
+  navItems: z.array(navigationItemSchema), footerNavItems: z.array(navigationItemSchema), resourceLinks: z.array(navigationItemSchema).default([]), legalLinks: z.array(navigationItemSchema), socialLinks: z.array(socialLinkSchema),
 });
 
 const pageSectionSettingsSchema = z.record(z.string(), z.unknown());
 const pageSectionContentSchema = z.record(z.string(), z.unknown());
 
 export const pageSectionSchema = z.object({
-  id: z.string(),
-  type: z.string(),
-  template: z.string().optional(),
-  settings: pageSectionSettingsSchema.default({}),
-  content: pageSectionContentSchema.default({}),
+  id: z.string(), type: z.string(), template: z.string().optional(), settings: pageSectionSettingsSchema.default({}), content: pageSectionContentSchema.default({}),
 });
 
 export const pageSchema = z.object({
   slug: z.string(),
-  meta: z.object({
-    title: z.string(),
-    description: z.string().optional(),
-    author: z.string().optional(),
-    publishedAt: z.string().optional(),
-    updatedAt: z.string().optional(),
-  }),
+  meta: z.object({ title: z.string(), description: z.string().optional(), author: z.string().optional(), publishedAt: z.string().optional(), updatedAt: z.string().optional() }),
   seo: z.record(z.string(), z.unknown()).nullable().optional(),
   content: z.object({ sections: z.array(pageSectionSchema) }),
 });
@@ -155,80 +114,32 @@ const entryDetailPageSchema = z.object({
 });
 
 export const closingProfileSettingsSchema = z.object({
-  id: z.string().min(1),
-  eyebrow: z.string().min(1),
-  nameLines: z.array(z.string().min(1)).min(1),
-  roleLabel: z.string().min(1),
-  followAction: z.object({ label: z.string().min(1), href: z.string().min(1) }),
-  emailActionLabel: z.string().min(1),
-  locationLabel: z.string().min(1),
-  portraits: z.object({ collapsed: imageSchema, expanded: imageSchema }).optional(),
+  id: z.string().min(1), eyebrow: z.string().min(1), nameLines: z.array(z.string().min(1)).min(1), roleLabel: z.string().min(1), followAction: z.object({ label: z.string().min(1), href: z.string().min(1) }), emailActionLabel: z.string().min(1), locationLabel: z.string().min(1), portraits: z.object({ collapsed: imageSchema, expanded: imageSchema }).optional(),
 });
 
 export const interfaceSettingsSchema = z.object({
-  skipToContent: z.string().min(1),
-  backToTop: z.string().min(1),
-  openMenu: z.string().min(1),
-  closeMenu: z.string().min(1),
-  loadingScreen: z.object({
-    label: z.string().min(1),
-    status: z.string().min(1),
-    tips: z.array(z.string().min(1)).min(1),
-    holdOpen: z.boolean().default(false),
-    progressLabel: z.string().min(1),
-    image: imageSchema,
-  }),
-  navigation: z.object({
-    primaryLabel: z.string().min(1),
-    mobileLabel: z.string().min(1),
-    socialLabel: z.string().min(1),
-    footerSocialLabel: z.string().min(1),
-    railSocialDisplay: z.enum(["label", "shortLabel", "icon"]).default("icon"),
-  }),
-  progress: z.object({
-    railLabel: z.string().min(1),
-    readingLabel: z.string().min(1),
-    initialSection: z.string().min(1),
-    initialValue: z.string().min(1),
-  }),
+  skipToContent: z.string().min(1), backToTop: z.string().min(1), openMenu: z.string().min(1), closeMenu: z.string().min(1),
+  loadingScreen: z.object({ label: z.string().min(1), status: z.string().min(1), tips: z.array(z.string().min(1)).min(1), holdOpen: z.boolean().default(false), progressLabel: z.string().min(1), image: imageSchema }),
+  navigation: z.object({ primaryLabel: z.string().min(1), mobileLabel: z.string().min(1), socialLabel: z.string().min(1), footerSocialLabel: z.string().min(1), railSocialDisplay: z.enum(["label", "shortLabel", "icon"]).default("icon") }),
+  progress: z.object({ railLabel: z.string().min(1), readingLabel: z.string().min(1), initialSection: z.string().min(1), initialValue: z.string().min(1) }),
   separators: z.object({ slash: z.string(), dot: z.string() }),
   contentFormatting: z.object({ readingTimeTemplate: z.string().includes("{minutes}"), dateLocale: z.string().min(2) }),
 });
 
 const reviewsSchema = z.object({
-  eyebrow: z.string().min(1),
-  title: z.string().min(1),
-  summary: z.object({
-    score: z.number().min(0),
-    maximum: z.number().int().positive(),
-    totalLabel: z.string().min(1),
-    distribution: z.array(z.object({ label: z.string().min(1), value: z.number().min(0).max(100) })),
-  }),
-  items: z.array(z.object({
-    name: z.string().min(1),
-    date: z.string().min(1),
-    quote: z.string().min(1),
-    rating: z.number().int().positive(),
-    avatar: imageSchema.optional(),
-  })).min(1),
+  eyebrow: z.string().min(1), title: z.string().min(1),
+  summary: z.object({ score: z.number().min(0), maximum: z.number().int().positive(), totalLabel: z.string().min(1), distribution: z.array(z.object({ label: z.string().min(1), value: z.number().min(0).max(100) })) }),
+  items: z.array(z.object({ name: z.string().min(1), date: z.string().min(1), quote: z.string().min(1), rating: z.number().int().positive(), avatar: imageSchema.optional() })).min(1),
 });
 
 export const pageBuilderSchema = z.object({
-  layout: z.object({
-    template: z.enum(["fluid", "contained", "boxed", "sidebar", "centered"]),
-    containerSize: z.enum(["site", "content"]).optional(),
-    asideLabel: z.string().min(1).optional(),
-    asidePosition: z.enum(["start", "end"]).optional(),
-  }),
+  layout: z.object({ template: z.enum(["fluid", "contained", "boxed", "sidebar", "centered"]), containerSize: z.enum(["site", "content"]).optional(), asideLabel: z.string().min(1).optional(), asidePosition: z.enum(["start", "end"]).optional() }),
   regions: z.array(z.object({
-    key: z.string().regex(/^[a-z0-9]+(?:-[a-z0-9]+)*$/),
-    enabled: z.boolean().default(true),
+    key: z.string().regex(/^[a-z0-9]+(?:-[a-z0-9]+)*$/), enabled: z.boolean().default(true),
     component: z.enum(["page-header","hero","section-header","article","reviews","cards","cta","post-navigation","collection","archive","advertisement","details","group","profile","status","tabs","toc","entry-index","reader"]),
     placement: z.enum(["header", "main", "aside", "cta"]).default("main"),
     template: z.enum(["split-media","editorial","immersive","slider-aside","split-benefits","gallery-summary","stacked","horizontal","overlay","featured","boxed","media-details","compact-media","compact-bordered","icon-panel","icon-summary","media-only","media-summary","default","callout","media-pricing","inline","subscription","split","sidebar","stack","taxonomy","faceted","media-aside","media-metrics","cover-summary"]).optional(),
-    theme: z.enum(["dark", "light", "canvas", "accent", "none"]).default("none"),
-    spacing: z.enum(["compact", "default", "none", "lead", "body", "closing"]).default("none"),
-    container: z.enum(["site", "content", "none"]).default("none"),
+    theme: z.enum(["dark", "light", "canvas", "accent", "none"]).default("none"), spacing: z.enum(["compact", "default", "none", "lead", "body", "closing"]).default("none"), container: z.enum(["site", "content", "none"]).default("none"),
   })),
 });
 
@@ -236,125 +147,32 @@ export const archiveSettingsSchema = z.object({
   projects: worksArchiveSchema,
   blog: archiveGroupSchema,
   detail: z.object({
-    projectOverviewLabel: z.string().min(1),
-    projectResultLabel: z.string().min(1),
-    featuresLabel: z.string().min(1),
-    galleryLabel: z.string().min(1),
-    techStackLabel: z.string().min(1),
-    testimonialLabel: z.string().min(1),
-    clientLabel: z.string().min(1),
-    roleLabel: z.string().min(1),
-    durationLabel: z.string().min(1),
-    onThisPageLabel: z.string().min(1),
-    liveActionLabel: z.string().min(1),
-    sourceActionLabel: z.string().min(1),
-    previousLabel: z.string().min(1),
-    nextLabel: z.string().min(1),
-    articleByLabel: z.string().min(1),
-    articlePublishedLabel: z.string().min(1),
-    tagsLabel: z.string().min(1),
-    pageHeaderPattern: imageSchema,
-    defaultReviews: reviewsSchema,
+    projectOverviewLabel: z.string().min(1), projectResultLabel: z.string().min(1), featuresLabel: z.string().min(1), galleryLabel: z.string().min(1), techStackLabel: z.string().min(1), testimonialLabel: z.string().min(1), clientLabel: z.string().min(1), roleLabel: z.string().min(1), durationLabel: z.string().min(1), onThisPageLabel: z.string().min(1), liveActionLabel: z.string().min(1), sourceActionLabel: z.string().min(1), previousLabel: z.string().min(1), nextLabel: z.string().min(1), articleByLabel: z.string().min(1), articlePublishedLabel: z.string().min(1), tagsLabel: z.string().min(1), pageHeaderPattern: imageSchema, defaultReviews: reviewsSchema,
   }),
 });
 
 export const blogEntrySchema = z.object({
-  order: z.number().int().positive(),
-  readingMinutes: z.number().int().positive(),
-  slug: z.string().regex(/^[a-z0-9]+(?:-[a-z0-9]+)*$/),
-  category: z.string().min(1),
-  categorySlug: z.string().regex(/^[a-z0-9]+(?:-[a-z0-9]+)*$/),
-  tags: z.array(taxonomyTermSchema).min(1),
-  title: z.string().min(1),
-  excerpt: z.string().min(1),
-  publishedAt: z.iso.date(),
-  author: z.string().min(1),
-  image: z.string().min(1),
-  imageAlt: z.string().min(1),
-  content: z.array(insightContentNodeSchema).min(1),
+  order: z.number().int().positive(), readingMinutes: z.number().int().positive(), slug: z.string().regex(/^[a-z0-9]+(?:-[a-z0-9]+)*$/), category: z.string().min(1), categorySlug: z.string().regex(/^[a-z0-9]+(?:-[a-z0-9]+)*$/), tags: z.array(taxonomyTermSchema).min(1), title: z.string().min(1), excerpt: z.string().min(1), publishedAt: z.iso.date(), author: z.string().min(1), image: z.string().min(1), imageAlt: z.string().min(1), content: z.array(insightContentNodeSchema).min(1), detail: z.object({ page: entryDetailPageSchema }).optional(),
 });
 
 export const productEntrySchema = z.object({
-  id: z.number().int().positive(),
-  slug: z.string().regex(/^[a-z0-9]+(?:-[a-z0-9]+)*$/),
-  title: z.string().min(1),
-  category: z.string().min(1),
-  categorySlug: z.string().min(1),
-  platform: z.string().min(1),
-  description: z.string().min(1),
-  price: z.number().nonnegative(),
-  oldPrice: z.number().nonnegative().optional(),
-  rating: z.number().min(0).max(5),
-  reviews: z.number().int().nonnegative(),
-  badge: z.string().optional(),
-  image: z.string().min(1),
-  detail: z.object({ page: entryDetailPageSchema }).optional(),
+  id: z.number().int().positive(), slug: z.string().regex(/^[a-z0-9]+(?:-[a-z0-9]+)*$/), title: z.string().min(1), category: z.string().min(1), categorySlug: z.string().min(1), platform: z.string().min(1), description: z.string().min(1), price: z.number().nonnegative(), oldPrice: z.number().nonnegative().optional(), rating: z.number().min(0).max(5), reviews: z.number().int().nonnegative(), badge: z.string().optional(), image: z.string().min(1), detail: z.object({ page: entryDetailPageSchema }).optional(),
 });
 
 export const labEntrySchema = z.object({
-  order: z.number().int().positive(),
-  slug: z.string().regex(/^[a-z0-9]+(?:-[a-z0-9]+)*$/),
-  title: z.string().min(1),
-  category: taxonomyTermSchema,
-  status: z.enum(["experiment", "in-progress", "complete"]),
-  statusLabel: z.string().min(1),
-  summary: z.string().min(1),
-  image: imageSchema,
-  technologies: z.array(taxonomyTermSchema).min(1),
-  stars: z.number().int().nonnegative(),
-  forks: z.number().int().nonnegative(),
-  updatedLabel: z.string().min(1),
-  liveUrl: z.string().min(1).optional(),
-  sourceUrl: z.string().min(1).optional(),
-  sections: z.array(contentSectionSchema).min(1),
-  features: z.array(z.object({
-    title: z.string().min(1),
-    description: z.string().min(1),
-    icon: z.enum(["lightBulb", "bolt", "globeAlt", "arrowPath"]),
-  })).default([]),
+  order: z.number().int().positive(), slug: z.string().regex(/^[a-z0-9]+(?:-[a-z0-9]+)*$/), title: z.string().min(1), category: taxonomyTermSchema, status: z.enum(["experiment", "in-progress", "complete"]), statusLabel: z.string().min(1), summary: z.string().min(1), image: imageSchema, technologies: z.array(taxonomyTermSchema).min(1), stars: z.number().int().nonnegative(), forks: z.number().int().nonnegative(), updatedLabel: z.string().min(1), liveUrl: z.string().min(1).optional(), sourceUrl: z.string().min(1).optional(), sections: z.array(contentSectionSchema).min(1),
+  features: z.array(z.object({ title: z.string().min(1), description: z.string().min(1), icon: z.enum(["lightBulb", "bolt", "globeAlt", "arrowPath"]) })).default([]),
   gallery: z.array(imageSchema).default([]),
-  resources: z.array(z.object({
-    title: z.string().min(1),
-    description: z.string().min(1),
-    href: z.string().min(1),
-    icon: z.enum(["folder01", "github", "play"]),
-  })).default([]),
+  resources: z.array(z.object({ title: z.string().min(1), description: z.string().min(1), href: z.string().min(1), icon: z.enum(["folder01", "github", "play"]) })).default([]),
   facts: z.array(z.object({ label: z.string().min(1), value: z.string().min(1) })).default([]),
   detail: z.object({ page: entryDetailPageSchema }).optional(),
 });
 
 export const publicationEntrySchema = z.object({
-  order: z.number().int().positive(),
-  slug: z.string().regex(/^[a-z0-9]+(?:-[a-z0-9]+)*$/),
-  title: z.string().min(1),
-  summary: z.string().min(1),
-  cover: imageSchema,
-  genres: z.array(taxonomyTermSchema).min(1),
-  status: z.enum(["complete", "ongoing"]),
-  rating: z.number().min(0).max(5),
-  views: z.string().min(1),
-  chapters: z.number().int().nonnegative(),
-  updatedLabel: z.string().min(1),
-  author: z.string().min(1),
+  order: z.number().int().positive(), slug: z.string().regex(/^[a-z0-9]+(?:-[a-z0-9]+)*$/), title: z.string().min(1), summary: z.string().min(1), cover: imageSchema, genres: z.array(taxonomyTermSchema).min(1), status: z.enum(["complete", "ongoing"]), rating: z.number().min(0).max(5), views: z.string().min(1), chapters: z.number().int().nonnegative(), updatedLabel: z.string().min(1), author: z.string().min(1),
   detail: z.object({
-    language: z.string().min(1),
-    followers: z.string().min(1),
-    description: z.array(z.string().min(1)).min(1),
-    tags: z.array(taxonomyTermSchema).min(1),
-    chapterTitles: z.array(z.string().min(1)).min(1),
-    reader: z.array(z.object({
-      number: z.number().int().positive(),
-      title: z.string().min(1),
-      publishedAt: z.string().min(1),
-      publishedLabel: z.string().min(1),
-      readTime: z.string().min(1),
-      views: z.string().min(1),
-      kind: z.enum(["prose", "sequential-media"]),
-      prose: z.array(z.object({
-        kind: z.enum(["paragraph", "emphasis", "separator"]).optional(),
-        text: z.string().min(1),
-      })).optional(),
-      images: z.array(imageSchema).optional(),
-    })).optional(),
+    language: z.string().min(1), followers: z.string().min(1), description: z.array(z.string().min(1)).min(1), tags: z.array(taxonomyTermSchema).min(1), chapterTitles: z.array(z.string().min(1)).min(1),
+    reader: z.array(z.object({ number: z.number().int().positive(), title: z.string().min(1), publishedAt: z.string().min(1), publishedLabel: z.string().min(1), readTime: z.string().min(1), views: z.string().min(1), kind: z.enum(["prose", "sequential-media"]), prose: z.array(z.object({ kind: z.enum(["paragraph", "emphasis", "separator"]).optional(), text: z.string().min(1) })).optional(), images: z.array(imageSchema).optional() })).optional(),
+    page: entryDetailPageSchema.optional(),
   }).optional(),
 });
