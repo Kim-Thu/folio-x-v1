@@ -5,4 +5,4 @@ import type { WorksPageProps } from "@/types/components/pages/works/WorksPage.ty
 const { data } = Astro.props as WorksPageProps;
 ---
 
-<PageBuilder config={data.builder} />
+<PageBuilder page={data.page} context={data.context} />
