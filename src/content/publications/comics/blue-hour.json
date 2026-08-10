@@ -1,0 +1,17 @@
+{
+  "order": 2,
+  "slug": "blue-hour",
+  "title": "Blue Hour",
+  "summary": "A warm coming-of-age series set between the sea and the city.",
+  "cover": { "src": "/uploads/cover-sunset-threads.webp", "alt": "Blue hour comic cover", "width": 1024, "height": 1536 },
+  "genres": [
+    { "label": "Romance", "slug": "romance" },
+    { "label": "Slice of Life", "slug": "slice-of-life" }
+  ],
+  "status": "complete",
+  "rating": 4.8,
+  "views": "91K",
+  "chapters": 72,
+  "updatedLabel": "6 hours ago",
+  "author": "Minh Ha"
+}
