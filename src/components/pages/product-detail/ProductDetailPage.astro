@@ -4,26 +4,10 @@ import LSection from "@/components/layout/LSection.astro";
 import PPageHeader from "@/components/object/project/page-header/PPageHeader.astro";
 import PArticle from "@/components/object/project/article/PArticle.astro";
 import type { ProductDetailPageProps } from "@/types/components/pages/product-detail/ProductDetailPage.types";
-import type { LSectionSpacing, LSectionTheme } from "@/types/components/layout/LSection.types";
 
 const { data } = Astro.props as ProductDetailPageProps;
 const { product } = data;
-const page = product.detail?.page;
-if (!page) throw new Error(`Missing CMS product detail page: ${product.slug}`);
-
-type RecordValue = Record<string, unknown>;
-const asRecord = (value: unknown): RecordValue => value && typeof value === "object" && !Array.isArray(value) ? value as RecordValue : {};
-const asString = (value: unknown) => typeof value === "string" ? value : "";
-const asArray = (value: unknown) => Array.isArray(value) ? value : [];
-const frame = (section: (typeof page.sections)[number]) => {
-	const settings = asRecord(section.settings);
-	return {
-		id: section.id,
-		theme: asString(settings.theme) as LSectionTheme,
-		spacing: asString(settings.spacing) as LSectionSpacing,
-		container: asString(settings.container) as "site" | "content" | "none",
-	};
-};
+const page = product.detail.page;
 
 const price = {
 	current: `$${product.price}`,
@@ -34,18 +18,17 @@ const price = {
 
 <LPage template={page.template}>
 	{page.sections.map((section) => {
-		const content = asRecord(section.content);
-
 		if (section.type === "page-header") {
+			const { content, settings } = section;
 			return (
-				<LSection {...frame(section)}>
+				<LSection id={section.id} theme={settings.theme} spacing={settings.spacing} container={settings.container}>
 					<PPageHeader
-						template={section.template as "gallery-summary"}
+						template={section.template}
 						data={{
 							breadcrumb: {
-								label: asString(content.breadcrumbLabel),
+								label: content.breadcrumbLabel,
 								items: [
-									{ label: asString(content.productsLabel), href: "/products" },
+									{ label: content.productsLabel, href: "/products" },
 									{ label: product.category, href: `/products/category/${product.categorySlug}` },
 								],
 								current: product.title,
@@ -54,17 +37,17 @@ const price = {
 							title: product.title,
 							description: product.description,
 							badge: product.badge,
-							images: [{ src: product.image, alt: `${product.title} preview`, width: 900, height: 562 }],
-							galleryLabel: asString(content.galleryLabel),
-							thumbnailLabel: asString(content.thumbnailLabel),
-							rating: { value: product.rating, maximum: 5, count: product.reviews, salesLabel: asString(content.salesLabel) },
+							images: [{ src: product.image, alt: content.galleryLabel, width: 900, height: 562 }],
+							galleryLabel: content.galleryLabel,
+							thumbnailLabel: content.thumbnailLabel,
+							rating: { value: product.rating, maximum: 5, count: product.reviews, salesLabel: content.salesLabel },
 							price,
-							features: asArray(content.features) as Array<RecordValue>,
-							facts: asArray(content.facts) as Array<{ label: string; value: string }>,
-							actionsLabel: asString(content.actionsLabel),
-							actions: asArray(content.actions) as Array<{ label: string; href: string; icon?: string; variant?: string }>,
-							paymentLabel: asString(content.paymentLabel),
-							paymentMethods: asArray(content.paymentMethods),
+							features: content.features,
+							facts: content.facts,
+							actionsLabel: content.actionsLabel,
+							actions: content.actions,
+							paymentLabel: content.paymentLabel,
+							paymentMethods: content.paymentMethods,
 						}}
 					/>
 				</LSection>
@@ -72,9 +55,10 @@ const price = {
 		}
 
 		if (section.type === "article") {
+			const { content, settings } = section;
 			return (
-				<LSection {...frame(section)}>
-					<PArticle blocks={asArray(content.blocks) as Array<{ id: string; title: string; paragraphs: string[] }>} />
+				<LSection id={section.id} theme={settings.theme} spacing={settings.spacing} container={settings.container}>
+					<PArticle blocks={content.blocks} />
 				</LSection>
 			);
 		}
