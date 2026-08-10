@@ -10,13 +10,8 @@
         "id": "novels-hero",
         "type": "page-header",
         "template": "immersive",
-        "settings": {
-          "theme": "canvas",
-          "spacing": "none",
-          "container": "none"
-        },
+        "settings": { "theme": "canvas", "spacing": "none", "container": "none" },
         "content": {
-          "source": { "collection": "novels" },
           "id": "novels-hero",
           "eyebrow": "Novels",
           "title": "Stories beyond",
@@ -24,8 +19,8 @@
           "description": "Explore novels, light novels, and web fiction with vivid worlds and stories worth staying up late for.",
           "actionsLabel": "Novels actions",
           "actions": [
-            { "label": "Start reading", "href": "/novels#featured-title", "icon": "arrowRight", "iconPosition": "end", "variant": "primary", "tone": "light", "size": "md" },
-            { "label": "Reading guide", "href": "/novels#latest-title", "icon": "archiveBox", "iconPosition": "end", "variant": "outline", "tone": "light", "size": "md" }
+            { "label": "Start reading", "href": "/novels#catalog", "icon": "arrowRight", "iconPosition": "end", "variant": "primary", "tone": "light", "size": "md" },
+            { "label": "Reading guide", "href": "/novels#catalog", "icon": "archiveBox", "iconPosition": "end", "variant": "outline", "tone": "light", "size": "md" }
           ],
           "image": { "src": "/uploads/library-hero-reading.webp", "alt": "A reader discovering a fantasy city through an open book", "width": 1672, "height": 941 },
           "quote": "Some stories stay with us forever.",
@@ -40,36 +35,25 @@
       },
       {
         "id": "catalog",
-        "type": "publication-catalog",
-        "template": "sidebar",
-        "settings": {
-          "theme": "canvas",
-          "spacing": "body",
-          "container": "site"
-        },
+        "type": "collection",
+        "template": "cards",
+        "settings": { "theme": "canvas", "spacing": "body", "container": "site" },
         "content": {
-          "source": { "collection": "novels" },
-          "asideLabel": "Novels discovery",
-          "asidePosition": "end",
-          "search": { "label": "Search novels", "placeholder": "Search title or author..." },
-          "filters": {
-            "genreLabel": "Genre",
-            "allGenresLabel": "All genres",
-            "statusLabel": "Status",
-            "allStatusesLabel": "All statuses",
-            "ongoingLabel": "Ongoing",
-            "completeLabel": "Complete"
+          "heading": {
+            "label": "Library",
+            "title": ["Explore", "Novels"],
+            "description": "Browse original novels, light novels, and web fiction.",
+            "action": { "label": "View all", "href": "/novels", "icon": "arrowRight" }
           },
-          "sort": { "label": "Sort", "options": [{ "label": "Newest", "value": "newest" }, { "label": "Oldest", "value": "oldest" }] },
-          "view": { "label": "View", "gridLabel": "Grid view", "listLabel": "List view" },
-          "sections": {
-            "featuredTitle": "Featured",
-            "latestTitle": "Latest updates",
-            "popularGenresTitle": "Popular genres",
-            "genresTitle": "Genres",
-            "trendingTitle": "Trending",
-            "authorsTitle": "Popular authors",
-            "viewAllLabel": "View all"
+          "source": { "collection": "novels", "limit": 24 },
+          "cards": {
+            "template": "media-metrics",
+            "layout": "grid",
+            "columns": 4,
+            "gap": "sm",
+            "mediaRatio": "portrait",
+            "headingLevel": 3,
+            "slots": { "excerpt": true, "tags": true, "metrics": true, "action": false }
           }
         }
       },
