@@ -264,6 +264,7 @@ const buildLabsArchive = async (
 	const sidebar = asRecord(content.sidebar);
 	const categoryCopy = asRecord(sidebar.category);
 	const technologyCopy = asRecord(sidebar.technology);
+	const routes = asRecord(content.routes);
 	const cards = asRecord(content.cards);
 	const { pagination, pageSize, emptyLabel } = archiveBase(content);
 	const labs = await getLabs();
@@ -327,15 +328,15 @@ const buildLabsArchive = async (
 							options: [
 								{
 									label: asString(categoryCopy.allLabel),
-									value: "all",
-									href: "/labs",
+									value: asString(categoryCopy.allValue),
+									href: asString(categoryCopy.allHref),
 									count: labs.length,
 									checked: !context.categorySlug,
 								},
 								...categories.map((category) => ({
 									label: category.label,
 									value: category.slug,
-									href: `/labs/category/${category.slug}`,
+									href: `${asString(routes.categoryBase)}/${category.slug}`,
 									count: labs.filter((lab) => lab.category.slug === category.slug).length,
 									checked: context.categorySlug === category.slug,
 								})),
@@ -351,7 +352,7 @@ const buildLabsArchive = async (
 								options: technologies.map((technology) => ({
 									label: technology.label,
 									value: technology.slug,
-									href: `/labs/technology/${technology.slug}`,
+									href: `${asString(routes.technologyBase)}/${technology.slug}`,
 									count: labs.filter((lab) => lab.technologies.some((item) => item.slug === technology.slug)).length,
 									checked: context.technologySlug === technology.slug,
 								})),
@@ -567,7 +568,7 @@ const regions: PageRegion[] = "config" in props
 const config: PageBuilderConfig = "config" in props
 	? props.config
 	: {
-		layout: { template: props.page.content.sections.length ? "fluid" : "fluid" },
+		layout: { template: "fluid" },
 		regions,
 	};
 
