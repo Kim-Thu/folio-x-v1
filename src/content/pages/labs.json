@@ -6,6 +6,9 @@
   },
   "seo": null,
   "content": {
+    "layout": {
+      "template": "fluid"
+    },
     "sections": [
       {
         "id": "labs-hero",
