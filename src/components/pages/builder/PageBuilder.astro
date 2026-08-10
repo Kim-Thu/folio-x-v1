@@ -1,6 +1,6 @@
 ---
 import LPage from "@/components/layout/LPage.astro";
-import PageRegion from "@/components/pages/builder/PageRegion.astro";
+import PageRegionView from "@/components/pages/builder/PageRegion.astro";
 import {
 	getInsights,
 	getLabs,
@@ -27,7 +27,7 @@ import type { PCardData, PCardProps } from "@/types/components/object/project/ca
 import type { PCtaProps } from "@/types/components/object/project/cta/PCta.types";
 import type { PHeroProps } from "@/types/components/object/project/hero/PHero.types";
 import type { PPageHeaderProps } from "@/types/components/object/project/page-header/PPageHeader.types";
-import type { PSectionHeaderData } from "@/types/components/object/project/section-header/PSectionHeader.types";
+import type { PSectionHeaderProps } from "@/types/components/object/project/section-header/PSectionHeader.types";
 
 const props = Astro.props as PageBuilderProps;
 const context = "page" in props ? (props.context ?? {}) : {};
@@ -55,17 +55,19 @@ const sectionFrame = (section: PageSectionData) => {
 	};
 };
 
-const sectionHeader = (section: PageSectionData): PSectionHeaderData => {
+const sectionHeader = (section: PageSectionData): PSectionHeaderProps => {
 	const heading = asRecord(asRecord(section.content).heading);
 	const action = asRecord(heading.action);
 
 	return {
-		number: asString(heading.number),
-		label: asString(heading.label),
-		title: asArray(heading.title).filter(
-			(value): value is string => typeof value === "string",
-		),
-		description: asString(heading.description),
+		data: {
+			number: asString(heading.number),
+			label: asString(heading.label),
+			title: asArray(heading.title).filter(
+				(value): value is string => typeof value === "string",
+			),
+			description: asString(heading.description),
+		},
 		action: action.href
 			? {
 					href: asString(action.href),
@@ -298,7 +300,7 @@ const regionFromSection = async (section: PageSectionData): Promise<PageRegion> 
 					section: frame,
 					props: {
 						template: "split",
-						header: { template: "split", data: sectionHeader(section) },
+						header: { ...sectionHeader(section), template: "split" },
 						cardGroups: [
 							cardConfig(section, items.slice(0, 1)),
 							cardConfig(section, items.slice(1), {
@@ -322,13 +324,16 @@ const regionFromSection = async (section: PageSectionData): Promise<PageRegion> 
 			}
 
 			const header = sectionHeader(section);
+			const headerTitle = Array.isArray(header.data.title)
+				? header.data.title.join(" ")
+				: (header.data.title ?? section.id);
 			return {
 				key: section.id,
 				component: "group",
 				section: frame,
 				props: {
 					template: "sidebar",
-					asideLabel: header.title.join(" ") || section.id,
+					asideLabel: headerTitle,
 					asidePosition: "start",
 					regions: [
 						{
@@ -336,7 +341,7 @@ const regionFromSection = async (section: PageSectionData): Promise<PageRegion> 
 							component: "section-header",
 							section: false,
 							placement: "aside",
-							props: { data: header },
+							props: header,
 						},
 						{
 							key: `${section.id}-cards`,
@@ -378,21 +383,21 @@ const ctaRegions = regionsFor("cta");
 <LPage {...config.layout} id="main-content" tabindex="-1">
 	{headerRegions.length > 0 && (
 		<Fragment slot="header">
-			{headerRegions.map((region) => <PageRegion {region} />)}
+			{headerRegions.map((region) => <PageRegionView {region} />)}
 		</Fragment>
 	)}
 
-	{mainRegions.map((region) => <PageRegion {region} />)}
+	{mainRegions.map((region) => <PageRegionView {region} />)}
 
 	{asideRegions.length > 0 && (
 		<Fragment slot="aside">
-			{asideRegions.map((region) => <PageRegion {region} />)}
+			{asideRegions.map((region) => <PageRegionView {region} />)}
 		</Fragment>
 	)}
 
 	{ctaRegions.length > 0 && (
 		<Fragment slot="cta">
-			{ctaRegions.map((region) => <PageRegion {region} />)}
+			{ctaRegions.map((region) => <PageRegionView {region} />)}
 		</Fragment>
 	)}
 </LPage>
