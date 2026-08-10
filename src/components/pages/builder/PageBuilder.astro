@@ -6,7 +6,7 @@ import {
 	getLabs,
 	getProducts,
 	getProjects,
-	getPublicationCatalogs,
+	getPublications,
 } from "@/data/cms";
 import {
 	mapInsightToCard,
@@ -132,13 +132,23 @@ const resolveCollectionItems = async (
 			return (await getInsights())
 				.slice(0, limit)
 				.map((item) => mapInsightToCard(item, "·"));
+		case "comics":
+			return (await getPublications("comics"))
+				.slice(0, limit)
+				.map((item) => mapPublicationToCard(item, "comics"));
+		case "novels":
+			return (await getPublications("novels"))
+				.slice(0, limit)
+				.map((item) => mapPublicationToCard(item, "novels"));
 		case "publications": {
-			const catalogs = await getPublicationCatalogs();
-			return catalogs
-				.flatMap((catalog) =>
-					catalog.entries.map((item) => mapPublicationToCard(item, catalog.slug)),
-				)
-				.slice(0, limit);
+			const [novels, comics] = await Promise.all([
+				getPublications("novels"),
+				getPublications("comics"),
+			]);
+			return [
+				...novels.map((item) => mapPublicationToCard(item, "novels")),
+				...comics.map((item) => mapPublicationToCard(item, "comics")),
+			].slice(0, limit);
 		}
 		default:
 			return [];
