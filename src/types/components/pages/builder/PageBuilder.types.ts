@@ -1,3 +1,4 @@
+import type { CollectionEntry } from "astro:content";
 import type { LContainerSize } from "@/types/components/layout/LContainer.types";
 import type { LPageProps } from "@/types/components/layout/LPage.types";
 import type {
@@ -27,6 +28,9 @@ import type { PStatusProps } from "@/types/components/object/project/status/PSta
 import type { PEntryIndexProps } from "@/types/components/object/project/entry-index/PEntryIndex.types";
 import type { PReaderProps } from "@/types/components/object/project/reader/PReader.types";
 import type { PHeroProps } from "@/types/components/object/project/hero/PHero.types";
+
+export type PageEntryData = CollectionEntry<"pages">["data"];
+export type PageSectionData = PageEntryData["content"]["sections"][number];
 
 export type PageRegionPlacement = "header" | "main" | "aside" | "cta";
 export type PageRegionContainer = LContainerSize | "none";
@@ -236,9 +240,9 @@ export interface PageBuilderConfig {
 	regions: PageRegion[];
 }
 
-export interface PageBuilderProps {
-	config: PageBuilderConfig;
-}
+export type PageBuilderProps =
+	| { page: PageEntryData; config?: never }
+	| { config: PageBuilderConfig; page?: never };
 
 export interface PageRegionProps {
 	region: PageRegion;
