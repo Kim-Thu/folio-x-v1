@@ -1,10 +1,11 @@
 import type { CollectionEntry } from "astro:content";
 import type { PageBuilderConfig, PageRegion } from "@/types/components/pages/builder/PageBuilder.types";
 import type { HomePageData } from "@/types/components/pages/home/HomePage.types";
-import type { PCardData } from "@/types/components/object/project/card/PCard.types";
+import type { PCardData, PCardProps } from "@/types/components/object/project/card/PCard.types";
 import type { PHeroProps } from "@/types/components/object/project/hero/PHero.types";
 import type { PCtaProps } from "@/types/components/object/project/cta/PCta.types";
-import type { PCardProps } from "@/types/components/object/project/card/PCard.types";
+import type { PPageHeaderProps } from "@/types/components/object/project/page-header/PPageHeader.types";
+import type { PArticleProps } from "@/types/components/object/project/article/PArticle.types";
 import type { PSectionHeaderData } from "@/types/components/object/project/section-header/PSectionHeader.types";
 import { getLabs, getInsights, getProjects, getProducts, getPublicationCatalogs } from "@/data/cms";
 import { mapInsightToCard, mapLabToCard, mapProductToCard, mapProjectToCard, mapPublicationToCard } from "@/data/mappers/card";
@@ -38,7 +39,7 @@ function sectionBase(section: Section) {
 	return {
 		id: section.id,
 		theme: string(settings.theme, "light") as "light" | "dark",
-		spacing: string(settings.spacing, "compact") as "lead" | "compact" | "none",
+		spacing: string(settings.spacing, "compact") as "lead" | "body" | "compact" | "none",
 		container: string(settings.container, "site") as "site" | "content" | "none",
 	};
 }
@@ -114,6 +115,31 @@ export async function resolvePage(page: PageEntry): Promise<HomePageData> {
 	const regions: PageRegion[] = [];
 	for (const section of page.content.sections) {
 		const content = record(section.content);
+
+		if (section.type === "page-header") {
+			regions.push({
+				key: section.id,
+				component: "page-header",
+				placement: "header",
+				section: sectionBase(section),
+				props: {
+					template: string(section.template, "split-media") as PPageHeaderProps["template"],
+					data: content as unknown as PPageHeaderProps["data"],
+				},
+			});
+			continue;
+		}
+
+		if (section.type === "article") {
+			regions.push({
+				key: section.id,
+				component: "article",
+				section: sectionBase(section),
+				props: content as unknown as PArticleProps,
+			});
+			continue;
+		}
+
 		if (section.type === "hero") {
 			regions.push({ key: section.id, component: "hero", section: sectionBase(section), props: { template: string(section.template, "split-media") as PHeroProps["template"], data: content as unknown as PHeroProps["data"] } });
 			continue;
