@@ -1,0 +1,17 @@
+{
+  "order": 6,
+  "slug": "parallel-worlds",
+  "title": "Parallel Worlds",
+  "summary": "A student wakes in a city that exists only between seconds.",
+  "cover": { "src": "/uploads/cover-neon-portal.webp", "alt": "Parallel worlds linked by a neon portal", "width": 1024, "height": 1536 },
+  "genres": [
+    { "label": "Science Fiction", "slug": "science-fiction" },
+    { "label": "Mystery", "slug": "mystery" }
+  ],
+  "status": "ongoing",
+  "rating": 4.6,
+  "views": "54K",
+  "chapters": 56,
+  "updatedLabel": "3 days ago",
+  "author": "Akira"
+}
