@@ -107,6 +107,16 @@ const detailSectionSettingsSchema = z.object({
   container: z.enum(["site", "content", "none"]),
 });
 
+const buttonActionSchema = z.object({
+  label: z.string().min(1),
+  href: z.string().min(1).optional(),
+  icon: z.string().optional(),
+  iconPosition: z.enum(["start", "end"]).optional(),
+  variant: z.string().optional(),
+  tone: z.string().optional(),
+  size: z.string().optional(),
+});
+
 const productActionSchema = z.object({
   label: z.string().min(1),
   href: z.string().min(1),
@@ -147,6 +157,79 @@ const productDetailPageSchema = z.object({
           title: z.string().min(1),
           paragraphs: z.array(z.string().min(1)).min(1),
         })).min(1),
+      }),
+    }),
+  ])),
+});
+
+const publicationDetailPageSchema = z.object({
+  template: z.enum(["fluid", "contained", "boxed", "sidebar", "centered"]),
+  sections: z.array(z.discriminatedUnion("type", [
+    z.object({
+      id: z.string().min(1),
+      type: z.literal("page-header"),
+      template: z.literal("cover-summary"),
+      settings: detailSectionSettingsSchema,
+      content: z.object({
+        breadcrumbLabel: z.string().min(1),
+        collectionLabel: z.string().min(1),
+        tagsLabel: z.string().min(1),
+        authorLabel: z.string().min(1),
+        metrics: z.object({
+          ratingLabel: z.string().min(1),
+          readsLabel: z.string().min(1),
+          chaptersLabel: z.string().min(1),
+          followersLabel: z.string().min(1),
+        }),
+        actionsLabel: z.string().min(1),
+        primaryActionLabel: z.string().min(1),
+        factsTitle: z.string().min(1),
+        facts: z.object({
+          authorLabel: z.string().min(1),
+          genresLabel: z.string().min(1),
+          languageLabel: z.string().min(1),
+          statusLabel: z.string().min(1),
+          updatedLabel: z.string().min(1),
+          viewsLabel: z.string().min(1),
+          ongoingLabel: z.string().min(1),
+          completeLabel: z.string().min(1),
+        }),
+      }),
+    }),
+    z.object({
+      id: z.string().min(1),
+      type: z.literal("tabs"),
+      template: z.string().optional(),
+      settings: detailSectionSettingsSchema,
+      content: z.object({
+        label: z.string().min(1),
+        appearance: z.literal("underline"),
+        tone: z.literal("light"),
+        activeValue: z.string().min(1),
+        tabs: z.array(z.object({ label: z.string().min(1), value: z.string().min(1), href: z.string().min(1) })).min(1),
+      }),
+    }),
+    z.object({
+      id: z.string().min(1),
+      type: z.literal("entry-index"),
+      template: z.string().optional(),
+      settings: detailSectionSettingsSchema,
+      content: z.object({
+        asideLabel: z.string().min(1),
+        introductionLabel: z.string().min(1),
+        tagsLabel: z.string().min(1),
+        chapterIndexLabel: z.string().min(1),
+        title: z.string().min(1),
+        sort: z.object({
+          id: z.string().min(1),
+          label: z.string().min(1),
+          value: z.string().min(1),
+          options: z.array(z.object({ label: z.string().min(1), value: z.string().min(1) })).min(1),
+        }),
+        listViewLabel: z.string().min(1),
+        numberPrefix: z.string(),
+        chapterLabel: z.string().min(1),
+        itemAction: buttonActionSchema.optional(),
       }),
     }),
   ])),
@@ -247,9 +330,9 @@ export const labEntrySchema = z.object({
 export const publicationEntrySchema = z.object({
   order: z.number().int().positive(), slug: z.string().regex(/^[a-z0-9]+(?:-[a-z0-9]+)*$/), title: z.string().min(1), summary: z.string().min(1), cover: imageSchema, genres: z.array(taxonomyTermSchema).min(1), status: z.enum(["complete", "ongoing"]), rating: z.number().min(0).max(5), views: z.string().min(1), chapters: z.number().int().nonnegative(), updatedLabel: z.string().min(1), author: z.string().min(1),
   detail: z.object({
-    language: z.string().min(1), followers: z.string().min(1), description: z.array(z.string().min(1)).min(1), tags: z.array(taxonomyTermSchema).min(1), chapterTitles: z.array(z.string().min(1)).min(1),
+    language: z.string().min(1), followers: z.string(), description: z.array(z.string().min(1)).min(1), tags: z.array(taxonomyTermSchema), chapterTitles: z.array(z.string().min(1)),
     reader: z.array(z.object({ number: z.number().int().positive(), title: z.string().min(1), publishedAt: z.string().min(1), publishedLabel: z.string().min(1), readTime: z.string().min(1), views: z.string().min(1), kind: z.enum(["prose", "sequential-media"]), prose: z.array(z.object({ kind: z.enum(["paragraph", "emphasis", "separator"]).optional(), text: z.string().min(1) })).optional(), images: z.array(imageSchema).optional() })).optional(),
-    page: entryDetailPageSchema.optional(),
+    page: publicationDetailPageSchema,
     readerPage: readerPageSchema.optional(),
-  }).optional(),
+  }),
 });
