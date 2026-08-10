@@ -1,5 +1,6 @@
 import type { ContentSection } from "@/types/content/ContentSection";
 import type { TaxonomyTerm } from "@/types/content/TaxonomyTerm";
+import type { PageSectionData } from "@/types/components/pages/builder/PageBuilder.types";
 
 export interface LabImage {
 	src: string;
@@ -38,4 +39,10 @@ export interface Lab {
 		icon: "folder01" | "github" | "play";
 	}>;
 	facts: Array<{ label: string; value: string }>;
+	detail?: {
+		page: {
+			template: "fluid" | "contained" | "boxed" | "sidebar" | "centered";
+			sections: PageSectionData[];
+		};
+	};
 }
