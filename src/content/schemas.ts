@@ -67,7 +67,7 @@ const archiveGroupSchema = z.object({
 
 const imageSchema = z.object({
   src: z.string().min(1),
-  alt: z.string().min(1),
+  alt: z.string(),
   width: z.number().int().positive(),
   height: z.number().int().positive(),
 });
@@ -147,6 +147,11 @@ export const pageSchema = z.object({
   }),
   seo: z.record(z.string(), z.unknown()).nullable().optional(),
   content: z.object({ sections: z.array(pageSectionSchema) }),
+});
+
+const entryDetailPageSchema = z.object({
+  template: z.enum(["fluid", "contained", "boxed", "sidebar", "centered"]).default("fluid"),
+  sections: z.array(pageSectionSchema),
 });
 
 export const closingProfileSettingsSchema = z.object({
@@ -337,6 +342,7 @@ export const productEntrySchema = z.object({
   reviews: z.number().int().nonnegative(),
   badge: z.string().optional(),
   image: z.string().min(1),
+  detail: z.object({ page: entryDetailPageSchema }).optional(),
 });
 
 export const labEntrySchema = z.object({
