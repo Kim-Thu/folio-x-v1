@@ -125,8 +125,6 @@ const readerPageSchema = z.object({
     collectionLabel: z.string().min(1),
     chapterLabel: z.string().min(1),
     viewsSuffix: z.string().min(1),
-    defaultPublishedAt: z.string().min(1),
-    defaultReadTime: z.string().min(1),
     actionsLabel: z.string().min(1),
     chapterListLabel: z.string().min(1),
     settingsLabel: z.string().min(1),
