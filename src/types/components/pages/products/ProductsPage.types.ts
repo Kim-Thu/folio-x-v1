@@ -1,11 +1,9 @@
-import type { PageBuilderConfig } from "@/types/components/pages/builder/PageBuilder.types";
+import type { CollectionEntry } from "astro:content";
+import type { PageBuilderContext } from "@/types/components/pages/builder/PageBuilder.types";
 
 export interface ProductsPageData {
-	metadata: {
-		title: string;
-		description: string;
-	};
-	builder: PageBuilderConfig;
+	page: CollectionEntry<"pages">["data"];
+	context: PageBuilderContext;
 }
 
 export interface ProductsPageProps {
