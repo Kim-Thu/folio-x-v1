@@ -1,0 +1,15 @@
+{
+  "id": 9,
+  "slug": "blog-starter",
+  "title": "Blog Starter",
+  "category": "WordPress Theme",
+  "categorySlug": "themes",
+  "platform": "WordPress",
+  "description": "Minimal blog theme for writers and creators.",
+  "price": 39,
+  "oldPrice": 49,
+  "rating": 4.8,
+  "reviews": 61,
+  "badge": "v1.0.1",
+  "image": "https://images.unsplash.com/photo-1499951360447-b19be8fe80f5?auto=format&fit=crop&w=900&q=88"
+}
