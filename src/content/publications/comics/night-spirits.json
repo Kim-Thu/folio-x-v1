@@ -1,0 +1,17 @@
+{
+  "order": 8,
+  "slug": "night-spirits",
+  "title": "Night Spirits",
+  "summary": "A visual horror anthology told through legends from forgotten stations.",
+  "cover": { "src": "/uploads/cover-moon-warrior.webp", "alt": "Night Spirits horror comic cover", "width": 1024, "height": 1536 },
+  "genres": [
+    { "label": "Horror", "slug": "horror" },
+    { "label": "Mystery", "slug": "mystery" }
+  ],
+  "status": "ongoing",
+  "rating": 4.6,
+  "views": "39K",
+  "chapters": 35,
+  "updatedLabel": "5 days ago",
+  "author": "Lac Vu"
+}
