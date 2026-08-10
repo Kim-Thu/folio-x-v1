@@ -132,8 +132,13 @@
             "listViewLabel": "List view",
             "numberPrefix": "#",
             "chapterLabel": "Chapter",
-            "defaultPublishedAt": "2024-04-30",
-            "defaultPublishedLabel": "30 Apr, 2024"
+            "itemAction": {
+              "label": "Read now",
+              "icon": "arrowUpRight",
+              "iconPosition": "end",
+              "size": "sm",
+              "variant": "primary"
+            }
           }
         }
       ]
@@ -146,8 +151,6 @@
         "collectionLabel": "Novels",
         "chapterLabel": "Chapter",
         "viewsSuffix": "views",
-        "defaultPublishedAt": "2024-04-30",
-        "defaultReadTime": "Read",
         "actionsLabel": "Reading controls",
         "chapterListLabel": "Chapter list",
         "settingsLabel": "Change text size",
