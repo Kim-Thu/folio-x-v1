@@ -8,7 +8,6 @@ import {
   pageSchema,
   interfaceSettingsSchema,
   navigationSettingsSchema,
-  policyEntrySchema,
   projectEntrySchema,
   productCatalogSchema,
   labEntrySchema,
@@ -31,7 +30,6 @@ const products = defineCollection({ loader: glob({ base: './src/content/products
 const labs = defineCollection({ loader: glob({ base: './src/content/labs', pattern: '*.json' }), schema: labEntrySchema });
 const blog = defineCollection({ loader: glob({ base: './src/content/blog', pattern: '*.json' }), schema: blogEntrySchema });
 const publicationCatalogs = defineCollection({ loader: glob({ base: './src/content/publications', pattern: '*.json' }), schema: publicationCatalogSchema });
-const policies = defineCollection({ loader: glob({ base: './src/content/cms/policies', pattern: '*.json' }), schema: policyEntrySchema });
 const pages = defineCollection({ loader: glob({ base: './src/content/pages', pattern: '*.json' }), schema: pageSchema });
 
 export const collections = {
@@ -47,6 +45,5 @@ export const collections = {
   labs,
   blog,
   publicationCatalogs,
-  policies,
   pages,
 };
