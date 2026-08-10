@@ -89,14 +89,26 @@
             "label": "Lab filters",
             "filterLabel": "Technology",
             "category": {
+              "appearance": "navigation",
+              "control": "category",
               "legend": "Categories",
               "name": "labs-category",
-              "allLabel": "All projects"
+              "type": "radio",
+              "allLabel": "All projects",
+              "allValue": "all",
+              "allHref": "/labs"
             },
             "technology": {
+              "appearance": "navigation",
+              "control": "technology",
               "legend": "Tech stack",
-              "name": "labs-technology"
+              "name": "labs-technology",
+              "type": "checkbox"
             }
+          },
+          "routes": {
+            "categoryBase": "/labs/category",
+            "technologyBase": "/labs/technology"
           },
           "resultLabel": "experiments found",
           "cards": {
