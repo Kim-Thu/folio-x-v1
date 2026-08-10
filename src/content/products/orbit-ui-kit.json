@@ -1,0 +1,15 @@
+{
+  "id": 3,
+  "slug": "orbit-ui-kit",
+  "title": "Orbit UI Kit",
+  "category": "Figma UI Kit",
+  "categorySlug": "ui-kits",
+  "platform": "Figma",
+  "description": "Modern UI kit with 300+ components and elegant system.",
+  "price": 49,
+  "oldPrice": 69,
+  "rating": 4.9,
+  "reviews": 154,
+  "badge": "UI KIT",
+  "image": "/uploads/page-header-insight.png"
+}
