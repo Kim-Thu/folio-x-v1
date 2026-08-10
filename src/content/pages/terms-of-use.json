@@ -1,1 +1,79 @@
-{"slug":"/terms-of-use","meta":{"title":"Terms of Use"},"content":{"sections":[]}}
+{
+  "slug": "/terms-of-use",
+  "meta": {
+    "title": "Terms of Use",
+    "description": "Các điều kiện cơ bản khi truy cập và sử dụng nội dung trên website portfolio này.",
+    "author": "NKT Studio",
+    "updatedAt": "2026-07-16"
+  },
+  "seo": null,
+  "content": {
+    "sections": [
+      {
+        "id": "lead",
+        "type": "page-header",
+        "template": "split-media",
+        "settings": {
+          "theme": "light",
+          "spacing": "lead",
+          "container": "site"
+        },
+        "content": {
+          "breadcrumb": {
+            "label": "Breadcrumb",
+            "items": [
+              {
+                "label": "Home",
+                "href": "/"
+              }
+            ],
+            "current": "Terms of Use"
+          },
+          "title": ["Terms of Use"],
+          "description": "Các điều kiện cơ bản khi truy cập và sử dụng nội dung trên website portfolio này. Cập nhật lần cuối: 16 tháng 7, 2026."
+        }
+      },
+      {
+        "id": "content",
+        "type": "article",
+        "settings": {
+          "theme": "light",
+          "spacing": "body",
+          "container": "content"
+        },
+        "content": {
+          "blocks": [
+            {
+              "id": "policy-1",
+              "title": "Phạm vi sử dụng",
+              "paragraphs": [
+                "Website được cung cấp nhằm giới thiệu kinh nghiệm, dự án, góc nhìn chuyên môn và phương thức liên hệ. Bạn có thể truy cập nội dung cho mục đích tham khảo hợp pháp và phi thương mại."
+              ]
+            },
+            {
+              "id": "policy-2",
+              "title": "Quyền sở hữu nội dung",
+              "paragraphs": [
+                "Trừ khi được ghi chú khác, nội dung chữ, cấu trúc trình bày và tài sản thương hiệu thuộc quyền của chủ website. Hình ảnh giữ chỗ từ Unsplash thuộc quyền và điều khoản của tác giả hoặc nhà cung cấp tương ứng."
+              ]
+            },
+            {
+              "id": "policy-3",
+              "title": "Thông tin dự án",
+              "paragraphs": [
+                "Các case study có thể được biên tập, rút gọn hoặc ẩn một phần dữ liệu để bảo vệ thông tin nội bộ. Kết quả được trình bày nhằm cung cấp bối cảnh và không phải cam kết rằng mọi dự án khác sẽ đạt kết quả tương tự."
+              ]
+            },
+            {
+              "id": "policy-4",
+              "title": "Liên kết và giới hạn trách nhiệm",
+              "paragraphs": [
+                "Website có thể chứa liên kết tới dịch vụ bên thứ ba. Chủ website không kiểm soát nội dung, tính khả dụng hoặc chính sách của các dịch vụ đó. Website được cung cấp theo hiện trạng và có thể được cập nhật mà không cần thông báo trước."
+              ]
+            }
+          ]
+        }
+      }
+    ]
+  }
+}
