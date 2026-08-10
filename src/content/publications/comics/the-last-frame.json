@@ -1,0 +1,17 @@
+{
+  "order": 5,
+  "slug": "the-last-frame",
+  "title": "The Last Frame",
+  "summary": "An artist finds a doorway hidden inside an unfinished comic panel.",
+  "cover": { "src": "/uploads/cover-violet-citadel.webp", "alt": "Mystery comic cover in violet light", "width": 1024, "height": 1536 },
+  "genres": [
+    { "label": "Mystery", "slug": "mystery" },
+    { "label": "Drama", "slug": "drama" }
+  ],
+  "status": "complete",
+  "rating": 4.7,
+  "views": "57K",
+  "chapters": 49,
+  "updatedLabel": "2 days ago",
+  "author": "NKT Studio"
+}
