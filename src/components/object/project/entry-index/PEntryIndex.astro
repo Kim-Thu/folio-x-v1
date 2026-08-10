@@ -6,7 +6,6 @@ import CColumns from "@/components/object/component/CColumns.astro";
 import CFeature from "@/components/object/component/CFeature.astro";
 import CHeading from "@/components/object/component/CHeading.astro";
 import CGridItem from "@/components/object/component/CGridItem.astro";
-import CIcon from "@/components/object/component/CIcon.astro";
 import CLink from "@/components/object/component/CLink.astro";
 import CMetadata from "@/components/object/component/CMetadata.astro";
 import CRow from "@/components/object/component/CRow.astro";
@@ -34,7 +33,7 @@ const { id, label, title, sort, listViewLabel, items, visibleCount = items.lengt
 						<CGridItem mdSpan={1}><CText as="span" variant="label" tone="muted">{item.number}</CText></CGridItem>
 						<CGridItem mdSpan={5}>
 						<CRow align="center" gap="xs" wrap>
-							<CLink href={item.href} aria-label={`Read ${item.title}`}>
+							<CLink href={item.href}>
 								<CHeading level={3} variant="h6">{item.title}</CHeading>
 							</CLink>
 							{item.badge && <CBadge tone="brand">{item.badge}</CBadge>}
@@ -48,18 +47,12 @@ const { id, label, title, sort, listViewLabel, items, visibleCount = items.lengt
 						</CGridItem>
 						<CGridItem mdSpan={2}><CFeature icon="eye" label={item.views} appearance="caption" /></CGridItem>
 						<CGridItem mdSpan={2}>
-						{item.status === "available" ? (
-							<CButton href={item.href} label="Read now" icon="arrowUpRight" iconPosition="end" size="sm" variant="primary" />
-						) : item.status === "locked" ? (
-							<CIcon name="lockClosed" size="md" />
-						) : (
-							<CIcon name="check" size="md" />
-						)}
+							{item.action && <CButton {...item.action} href={item.href} />}
 						</CGridItem>
 					</CColumns>
 				</CBox>
 			))}
-			{footerAction && <CBox spacing="sm" data-entry-footer><CButton {...footerAction} tone="light" wide variant={footerAction.variant ?? "outline"} data-entry-show-all /></CBox>}
+			{footerAction && <CBox spacing="sm" data-entry-footer><CButton {...footerAction} wide data-entry-show-all /></CBox>}
 		</CColumns>
 	</CBox>
 </CColumns>
