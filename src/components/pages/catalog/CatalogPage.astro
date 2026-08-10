@@ -7,5 +7,5 @@ const { data } = Astro.props as CatalogPageProps;
 ---
 
 <CBox data-collection-filter-root>
-	<PageBuilder config={data.builder} />
+	<PageBuilder page={data.page} />
 </CBox>
