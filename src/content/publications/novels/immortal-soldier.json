@@ -1,0 +1,17 @@
+{
+  "order": 5,
+  "slug": "immortal-soldier",
+  "title": "The Immortal Soldier",
+  "summary": "An oath-bound guardian faces the cost of a life without an ending.",
+  "cover": { "src": "/uploads/cover-violet-citadel.webp", "alt": "Fantasy guardian in violet light", "width": 1024, "height": 1536 },
+  "genres": [
+    { "label": "Action", "slug": "action" },
+    { "label": "Fantasy", "slug": "fantasy" }
+  ],
+  "status": "ongoing",
+  "rating": 4.7,
+  "views": "65K",
+  "chapters": 94,
+  "updatedLabel": "2 days ago",
+  "author": "NKT Studio"
+}
