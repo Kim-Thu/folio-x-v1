@@ -1,0 +1,62 @@
+{
+  "order": 1,
+  "slug": "violet-citadel",
+  "title": "Violet Citadel",
+  "summary": "A cinematic fantasy comic about the last defender of a floating city.",
+  "cover": {
+    "src": "/uploads/cover-violet-citadel.webp",
+    "alt": "Violet fantasy citadel comic cover",
+    "width": 1024,
+    "height": 1536
+  },
+  "genres": [
+    { "label": "Fantasy", "slug": "fantasy" },
+    { "label": "Action", "slug": "action" }
+  ],
+  "status": "ongoing",
+  "rating": 4.9,
+  "views": "112K",
+  "chapters": 84,
+  "updatedLabel": "2 hours ago",
+  "author": "NKT Studio",
+  "detail": {
+    "language": "English",
+    "followers": "9.4K",
+    "description": [
+      "The last defender of a floating city follows a trail of violet light through a world coming apart at its seams.",
+      "A cinematic fantasy about courage, memory, and the cost of protecting a home in the sky."
+    ],
+    "tags": [
+      { "label": "Floating city", "slug": "floating-city" },
+      { "label": "Adventure", "slug": "adventure" },
+      { "label": "Action", "slug": "action" },
+      { "label": "Mystery", "slug": "mystery" }
+    ],
+    "chapterTitles": [
+      "The broken panel",
+      "Last defender",
+      "A city in the clouds",
+      "Violet signal",
+      "The hidden bridge",
+      "Memory shards",
+      "Falling upward",
+      "At the citadel gate"
+    ],
+    "reader": [
+      {
+        "number": 18,
+        "title": "Fragments of Memory",
+        "publishedAt": "2024-04-30",
+        "publishedLabel": "30 Apr, 2024",
+        "readTime": "24 panels",
+        "views": "18.7K",
+        "kind": "sequential-media",
+        "images": [
+          { "src": "/uploads/cover-violet-citadel.webp", "alt": "The Violet Citadel appears through a storm", "width": 1024, "height": 1536 },
+          { "src": "/uploads/library-hero-drawing.webp", "alt": "An illustrated chapter scene", "width": 1672, "height": 941 },
+          { "src": "/uploads/cover-moon-warrior.webp", "alt": "A warrior crosses the moonlit ruins", "width": 1024, "height": 1536 }
+        ]
+      }
+    ]
+  }
+}
