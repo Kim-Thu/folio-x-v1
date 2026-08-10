@@ -2,7 +2,7 @@
 import PageBuilder from "@/components/pages/builder/PageBuilder.astro";
 import { getHomePageData } from "@/data/pages/getHomePageData";
 
-const data = await getHomePageData();
+const page = await getHomePageData();
 ---
 
-<PageBuilder config={data.builder} />
+<PageBuilder {page} />
