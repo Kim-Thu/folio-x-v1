@@ -16,5 +16,54 @@
   "features": [{ "title": "Token experiments", "description": "Validate foundations across real component states.", "icon": "arrowPath" }],
   "gallery": [{ "src": "/uploads/page-header-products.png", "alt": "Design system components", "width": 1536, "height": 1024 }],
   "resources": [{ "title": "Usage guide", "description": "Explore the system rules.", "href": "#overview", "icon": "folder01" }],
-  "facts": [{ "label": "Category", "value": "Design & Interaction" }, { "label": "Status", "value": "Experiment" }]
+  "facts": [{ "label": "Category", "value": "Design & Interaction" }, { "label": "Status", "value": "Experiment" }],
+  "detail": {
+    "page": {
+      "template": "fluid",
+      "sections": [
+        {
+          "id": "lab-summary",
+          "type": "page-header",
+          "template": "media-aside",
+          "settings": { "theme": "canvas", "spacing": "compact", "container": "site" },
+          "content": {
+            "labels": {
+              "breadcrumb": "Breadcrumb",
+              "actions": "System Playground actions",
+              "live": "Live demo",
+              "source": "Source code",
+              "technology": "System Playground technology stack"
+            }
+          }
+        },
+        {
+          "id": "lab-content",
+          "type": "article",
+          "settings": { "theme": "canvas", "spacing": "body", "container": "site" },
+          "content": { "appearance": "compact" }
+        },
+        {
+          "id": "features",
+          "type": "collection",
+          "template": "cards",
+          "settings": { "theme": "canvas", "spacing": "compact", "container": "site" },
+          "content": {
+            "heading": { "title": "Features" },
+            "cards": { "template": "icon-summary", "layout": "grid", "columns": 2, "gap": "sm" }
+          }
+        },
+        {
+          "id": "gallery",
+          "type": "collection",
+          "template": "cards",
+          "settings": { "theme": "canvas", "spacing": "compact", "container": "site" },
+          "content": {
+            "heading": { "title": "Gallery" },
+            "cards": { "template": "media-only", "layout": "grid", "columns": 5, "gap": "sm" },
+            "labels": { "openImage": "Open gallery image", "imageTitle": "Gallery image" }
+          }
+        }
+      ]
+    }
+  }
 }
