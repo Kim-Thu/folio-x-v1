@@ -113,6 +113,33 @@ const entryDetailPageSchema = z.object({
   sections: z.array(pageSectionSchema),
 });
 
+const readerPageSchema = z.object({
+  template: z.enum(["fluid", "contained", "boxed", "sidebar", "centered"]).default("fluid"),
+  settings: z.object({
+    theme: z.enum(["dark", "light", "canvas", "accent", "none"]),
+    spacing: z.enum(["compact", "default", "none", "lead", "body", "closing"]),
+    container: z.enum(["site", "content", "none"]),
+  }),
+  content: z.object({
+    breadcrumbLabel: z.string().min(1),
+    collectionLabel: z.string().min(1),
+    chapterLabel: z.string().min(1),
+    viewsSuffix: z.string().min(1),
+    defaultPublishedAt: z.string().min(1),
+    defaultReadTime: z.string().min(1),
+    actionsLabel: z.string().min(1),
+    chapterListLabel: z.string().min(1),
+    settingsLabel: z.string().min(1),
+    themeLabel: z.string().min(1),
+    nextLabel: z.string().min(1),
+    previousLabel: z.string().min(1),
+    shareLabel: z.string().min(1),
+    reactionsLabel: z.string().min(1),
+    bookmarkLabel: z.string().min(1),
+    navigationLabel: z.string().min(1),
+  }),
+});
+
 export const closingProfileSettingsSchema = z.object({
   id: z.string().min(1), eyebrow: z.string().min(1), nameLines: z.array(z.string().min(1)).min(1), roleLabel: z.string().min(1), followAction: z.object({ label: z.string().min(1), href: z.string().min(1) }), emailActionLabel: z.string().min(1), locationLabel: z.string().min(1), portraits: z.object({ collapsed: imageSchema, expanded: imageSchema }).optional(),
 });
@@ -174,5 +201,6 @@ export const publicationEntrySchema = z.object({
     language: z.string().min(1), followers: z.string().min(1), description: z.array(z.string().min(1)).min(1), tags: z.array(taxonomyTermSchema).min(1), chapterTitles: z.array(z.string().min(1)).min(1),
     reader: z.array(z.object({ number: z.number().int().positive(), title: z.string().min(1), publishedAt: z.string().min(1), publishedLabel: z.string().min(1), readTime: z.string().min(1), views: z.string().min(1), kind: z.enum(["prose", "sequential-media"]), prose: z.array(z.object({ kind: z.enum(["paragraph", "emphasis", "separator"]).optional(), text: z.string().min(1) })).optional(), images: z.array(imageSchema).optional() })).optional(),
     page: entryDetailPageSchema.optional(),
+    readerPage: readerPageSchema.optional(),
   }).optional(),
 });
