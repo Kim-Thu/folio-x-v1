@@ -1,11 +1,9 @@
-import type { PageBuilderConfig } from "@/types/components/pages/builder/PageBuilder.types";
+import type { PublicationEntry } from "@/types/content";
 
 export interface ReaderPageData {
-	metadata: {
-		title: string;
-		description: string;
-	};
-	builder: PageBuilderConfig;
+	entry: PublicationEntry;
+	catalogSlug: "comics" | "novels";
+	chapter: number;
 }
 
 export interface ReaderPageProps {
