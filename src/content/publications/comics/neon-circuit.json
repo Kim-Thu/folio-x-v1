@@ -13,5 +13,90 @@
   "views": "83K",
   "chapters": 61,
   "updatedLabel": "1 day ago",
-  "author": "Akira"
+  "author": "Akira",
+  "detail": {
+    "language": "English",
+    "followers": "",
+    "description": ["Street racers cross a city controlled by predictive machines."],
+    "tags": [
+      { "label": "Science Fiction", "slug": "science-fiction" },
+      { "label": "Action", "slug": "action" }
+    ],
+    "chapterTitles": [],
+    "page": {
+      "template": "fluid",
+      "sections": [
+        {
+          "id": "publication-summary",
+          "type": "page-header",
+          "template": "cover-summary",
+          "settings": { "theme": "canvas", "spacing": "compact", "container": "site" },
+          "content": {
+            "breadcrumbLabel": "Breadcrumb",
+            "collectionLabel": "Comics",
+            "tagsLabel": "Genres",
+            "authorLabel": "Author",
+            "metrics": {
+              "ratingLabel": "Rating",
+              "readsLabel": "Reads",
+              "chaptersLabel": "Chapters",
+              "followersLabel": "Followers"
+            },
+            "actionsLabel": "Publication actions",
+            "primaryActionLabel": "Read from start",
+            "factsTitle": "Information",
+            "facts": {
+              "authorLabel": "Author",
+              "genresLabel": "Genres",
+              "languageLabel": "Language",
+              "statusLabel": "Status",
+              "updatedLabel": "Updated",
+              "viewsLabel": "Views",
+              "ongoingLabel": "Ongoing",
+              "completeLabel": "Complete"
+            }
+          }
+        },
+        {
+          "id": "publication-navigation",
+          "type": "tabs",
+          "settings": { "theme": "canvas", "spacing": "none", "container": "site" },
+          "content": {
+            "label": "Publication sections",
+            "appearance": "underline",
+            "tone": "light",
+            "activeValue": "chapters",
+            "tabs": [
+              { "label": "Chapters", "value": "chapters", "href": "#chapters" },
+              { "label": "Introduction", "value": "overview", "href": "#overview" }
+            ]
+          }
+        },
+        {
+          "id": "chapters",
+          "type": "entry-index",
+          "settings": { "theme": "canvas", "spacing": "body", "container": "site" },
+          "content": {
+            "asideLabel": "Supporting information",
+            "introductionLabel": "Introduction",
+            "tagsLabel": "Tags",
+            "chapterIndexLabel": "Chapter index",
+            "title": "Chapter list",
+            "sort": {
+              "id": "chapter-sort",
+              "label": "Sort chapters",
+              "value": "newest",
+              "options": [
+                { "label": "Newest", "value": "newest" },
+                { "label": "Oldest", "value": "oldest" }
+              ]
+            },
+            "listViewLabel": "List view",
+            "numberPrefix": "#",
+            "chapterLabel": "Chapter"
+          }
+        }
+      ]
+    }
+  }
 }
