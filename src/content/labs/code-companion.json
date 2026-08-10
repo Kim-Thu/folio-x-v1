@@ -16,5 +16,46 @@
   "features": [{ "title": "Controlled context", "description": "Choose what the assistant can inspect and change.", "icon": "lightBulb" }],
   "gallery": [{ "src": "/uploads/page-header-work.webp", "alt": "Developer tool interface", "width": 1400, "height": 1050 }],
   "resources": [{ "title": "Source code", "description": "Review the repository.", "href": "https://github.com", "icon": "github" }],
-  "facts": [{ "label": "Category", "value": "Developer Tools" }, { "label": "Status", "value": "In progress" }]
+  "facts": [{ "label": "Category", "value": "Developer Tools" }, { "label": "Status", "value": "In progress" }],
+  "detail": {
+    "page": {
+      "template": "fluid",
+      "sections": [
+        {
+          "id": "lab-summary",
+          "type": "page-header",
+          "template": "media-aside",
+          "settings": { "theme": "canvas", "spacing": "lead", "container": "site" },
+          "content": {
+            "breadcrumbLabel": "Breadcrumb",
+            "collectionLabel": "Labs",
+            "liveActionLabel": "Live demo",
+            "sourceActionLabel": "Source code",
+            "technologyLabel": "Technology stack"
+          }
+        },
+        {
+          "id": "lab-content",
+          "type": "article",
+          "template": "flow",
+          "settings": { "theme": "canvas", "spacing": "body", "container": "content" },
+          "content": { "source": "sections" }
+        },
+        {
+          "id": "features",
+          "type": "cards",
+          "template": "icon-panel",
+          "settings": { "theme": "canvas", "spacing": "body", "container": "site", "columns": 3, "gap": "md" },
+          "content": { "title": "Features", "source": "features" }
+        },
+        {
+          "id": "gallery",
+          "type": "cards",
+          "template": "media-only",
+          "settings": { "theme": "canvas", "spacing": "closing", "container": "site", "columns": 2, "gap": "md" },
+          "content": { "title": "Gallery", "source": "gallery", "label": "Code Companion gallery", "previousImageLabel": "Previous image", "nextImageLabel": "Next image" }
+        }
+      ]
+    }
+  }
 }
