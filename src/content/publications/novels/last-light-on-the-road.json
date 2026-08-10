@@ -1,0 +1,17 @@
+{
+  "order": 4,
+  "slug": "last-light-on-the-road",
+  "title": "Last Light on the Road",
+  "summary": "At the edge of night, one traveler carries the final map home.",
+  "cover": { "src": "/uploads/cover-moon-warrior.webp", "alt": "Warrior traveling beneath a full moon", "width": 1024, "height": 1536 },
+  "genres": [
+    { "label": "Slice of Life", "slug": "slice-of-life" },
+    { "label": "Drama", "slug": "drama" }
+  ],
+  "status": "complete",
+  "rating": 4.7,
+  "views": "64K",
+  "chapters": 64,
+  "updatedLabel": "2 days ago",
+  "author": "Lac Vu"
+}
