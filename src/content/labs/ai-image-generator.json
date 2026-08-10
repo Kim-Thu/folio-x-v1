@@ -59,5 +59,54 @@
     { "label": "Framework", "value": "FastAPI, React" },
     { "label": "Last updated", "value": "20 Apr, 2024" },
     { "label": "License", "value": "MIT License" }
-  ]
+  ],
+  "detail": {
+    "page": {
+      "template": "fluid",
+      "sections": [
+        {
+          "id": "lab-summary",
+          "type": "page-header",
+          "template": "media-aside",
+          "settings": { "theme": "canvas", "spacing": "compact", "container": "site" },
+          "content": {
+            "labels": {
+              "breadcrumb": "Breadcrumb",
+              "actions": "AI Image Generator actions",
+              "live": "Live demo",
+              "source": "Source code",
+              "technology": "AI Image Generator technology stack"
+            }
+          }
+        },
+        {
+          "id": "lab-content",
+          "type": "article",
+          "settings": { "theme": "canvas", "spacing": "body", "container": "site" },
+          "content": { "appearance": "compact" }
+        },
+        {
+          "id": "features",
+          "type": "collection",
+          "template": "cards",
+          "settings": { "theme": "canvas", "spacing": "compact", "container": "site" },
+          "content": {
+            "heading": { "title": "Features" },
+            "cards": { "template": "icon-summary", "layout": "grid", "columns": 2, "gap": "sm" }
+          }
+        },
+        {
+          "id": "gallery",
+          "type": "collection",
+          "template": "cards",
+          "settings": { "theme": "canvas", "spacing": "compact", "container": "site" },
+          "content": {
+            "heading": { "title": "Gallery" },
+            "cards": { "template": "media-only", "layout": "grid", "columns": 5, "gap": "sm" },
+            "labels": { "openImage": "Open gallery image", "imageTitle": "Gallery image" }
+          }
+        }
+      ]
+    }
+  }
 }
