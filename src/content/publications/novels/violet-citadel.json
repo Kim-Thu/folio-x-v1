@@ -1,0 +1,65 @@
+{
+  "order": 1,
+  "slug": "violet-citadel",
+  "title": "The Violet Citadel",
+  "summary": "A lone mage searches a ruined city for the memory that can change two worlds.",
+  "cover": { "src": "/uploads/cover-violet-citadel.webp", "alt": "Mage beneath a violet citadel", "width": 1024, "height": 1536 },
+  "genres": [
+    { "label": "Fantasy", "slug": "fantasy" },
+    { "label": "Action", "slug": "action" }
+  ],
+  "status": "ongoing",
+  "rating": 4.9,
+  "views": "128K",
+  "chapters": 128,
+  "updatedLabel": "2 hours ago",
+  "author": "NKT Studio",
+  "detail": {
+    "language": "English",
+    "followers": "12.6K",
+    "description": [
+      "Beyond the violet walls, every star keeps a memory that can alter the fate of two worlds.",
+      "A story about hope, impossible choices, and people brave enough to dream beyond the last light."
+    ],
+    "tags": [
+      { "label": "Magic academy", "slug": "magic-academy" },
+      { "label": "Future", "slug": "future" },
+      { "label": "Adventure", "slug": "adventure" },
+      { "label": "Mystery", "slug": "mystery" }
+    ],
+    "chapterTitles": [
+      "The light at the gate",
+      "The final choice",
+      "Elysia's memory",
+      "The second wing",
+      "Source of the shadow",
+      "Fragments of memory",
+      "The turning point",
+      "The watcher"
+    ],
+    "reader": [
+      {
+        "number": 18,
+        "title": "Fragments of Memory",
+        "publishedAt": "2024-04-30",
+        "publishedLabel": "30 Apr, 2024",
+        "readTime": "12 min read",
+        "views": "18.7K",
+        "kind": "prose",
+        "prose": [
+          { "text": "The neon lights of Elysia flickered through the cold rain." },
+          { "text": "Rin walked between narrow alleys where steam rose from the drains and mixed with the metallic scent of the city." },
+          { "text": "In her hand, a small device sent out a faint signal, but it was enough to guide her forward." },
+          { "kind": "emphasis", "text": "If this map is right, the place is at the end of this alley." },
+          { "text": "She tightened her coat and moved on. Then a sound rose from the darkness behind her." },
+          { "kind": "separator", "text": "* * *" },
+          { "text": "When Rin woke, she was lying in a dark room surrounded by old screens." },
+          { "text": "A voice came from the shadows and a silver-haired man stepped into the dim light." },
+          { "kind": "emphasis", "text": "At last, you are awake." },
+          { "text": "Rin blinked, trying to remember what had happened and why she had been brought here." },
+          { "text": "The man watched her quietly. The answers she wanted were closer than she knew." }
+        ]
+      }
+    ]
+  }
+}
