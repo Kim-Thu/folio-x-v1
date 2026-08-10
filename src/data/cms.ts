@@ -1,4 +1,4 @@
-import type { Insight, Lab, PolicyPageContent, Product, Project, PublicationCatalog } from "@/types/content";
+import type { Insight, Lab, Product, Project, PublicationCatalog } from "@/types/content";
 import type { CollectionEntry, CollectionKey } from "astro:content";
 import { getCollection } from "astro:content";
 
@@ -151,13 +151,4 @@ function assertUnique(values: Array<string | number>, label: string): void {
 	if (new Set(values).size !== values.length) {
 		throw new Error(`CMS content contains duplicate ${label} values`);
 	}
-}
-
-export async function getPolicies(): Promise<
-	Record<string, PolicyPageContent>
-> {
-	const entries = await getCollection("policies");
-	return Object.fromEntries(
-		entries.map((entry) => [entry.id.replace(/\.json$/, ""), entry.data]),
-	);
 }
