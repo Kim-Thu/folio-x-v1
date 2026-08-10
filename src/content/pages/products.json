@@ -5,6 +5,9 @@
     "description": "Premium themes, plugins, templates and UI kits for modern web creators."
   },
   "content": {
+    "layout": {
+      "template": "fluid"
+    },
     "sections": [
       {
         "id": "products-hero",
