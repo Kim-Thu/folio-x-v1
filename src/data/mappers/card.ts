@@ -1,38 +1,99 @@
 import type { PCardData } from "@/types/components/object/project/card/PCard.types";
 import type { Insight, Lab, Product, Project, PublicationEntry } from "@/types/content";
 
-export function mapProductToCard(product: Product): PCardData {
+export interface CardRouteConfig {
+	base: string;
+	categoryBase?: string;
+	tagBase?: string;
+	technologyBase?: string;
+}
+
+export interface ProductCardPresentation {
+	routes: CardRouteConfig;
+	ariaLabelPrefix: string;
+	imageAltSuffix: string;
+	imageWidth: number;
+	imageHeight: number;
+	categoryDisplay: "text";
+	actionHref: string;
+	actionLabelPrefix: string;
+	actionIcon: string;
+	license: string;
+}
+
+export interface LabCardPresentation {
+	routes: CardRouteConfig;
+	ariaLabelPrefix: string;
+	categoryDisplay: "text";
+	completeBadgeTone: string;
+	activeBadgeTone: string;
+	tagsLabelSuffix: string;
+	metricIcons: [string, string, string];
+}
+
+export interface PublicationCardPresentation {
+	routes: CardRouteConfig;
+	ariaLabelPrefix: string;
+	categoryDisplay: "text";
+	tagsLabelSuffix: string;
+	viewsIcon: string;
+}
+
+export interface ProjectCardPresentation {
+	routes: CardRouteConfig;
+	actionLabel?: string;
+	actionIcon?: string;
+	separator?: string;
+	size?: PCardData["size"];
+	tagsLabel?: string;
+	lightAppearance?: string;
+	darkAppearance?: string;
+	metadataDisplay?: "text";
+	imageWidth?: number;
+	imageHeight?: number;
+}
+
+export interface InsightCardPresentation {
+	routes: CardRouteConfig;
+	separator?: string;
+	metadataDisplay?: "text";
+	tagsLabelSuffix?: string;
+	imageWidth?: number;
+	imageHeight?: number;
+}
+
+export function mapProductToCard(product: Product, presentation: ProductCardPresentation): PCardData {
 	return {
-		href: `/products/${product.slug}`,
-		ariaLabel: `View ${product.title}`,
+		href: `${presentation.routes.base}${product.slug}`,
+		ariaLabel: `${presentation.ariaLabelPrefix}${product.title}`,
 		title: [product.title],
 		excerpt: product.description,
 		media: {
 			src: product.image,
-			alt: `${product.title} preview`,
-			width: 900,
-			height: 562,
+			alt: `${product.title}${presentation.imageAltSuffix}`,
+			width: presentation.imageWidth,
+			height: presentation.imageHeight,
 		},
 		metadata: {
 			items: [
 				{
 					type: "category",
 					label: product.category,
-					href: `/products/category/${product.categorySlug}`,
-					display: "text",
+					href: presentation.routes.categoryBase ? `${presentation.routes.categoryBase}${product.categorySlug}` : undefined,
+					display: presentation.categoryDisplay,
 				},
 			],
 		},
 		action: {
-			href: "#products",
-			label: `Add ${product.title} to cart`,
-			icon: "shoppingBag",
+			href: presentation.actionHref,
+			label: `${presentation.actionLabelPrefix}${product.title}`,
+			icon: presentation.actionIcon,
 		},
 		product: {
 			badge: product.badge,
 			category: product.category,
 			categorySlug: product.categorySlug,
-			license: "pro",
+			license: presentation.license,
 			oldPrice: product.oldPrice,
 			platform: product.platform,
 			price: product.price,
@@ -42,10 +103,10 @@ export function mapProductToCard(product: Product): PCardData {
 	};
 }
 
-export function mapLabToCard(lab: Lab): PCardData {
+export function mapLabToCard(lab: Lab, presentation: LabCardPresentation): PCardData {
 	return {
 		href: lab.href,
-		ariaLabel: `View ${lab.title}`,
+		ariaLabel: `${presentation.ariaLabelPrefix}${lab.title}`,
 		title: [lab.title],
 		excerpt: lab.summary,
 		media: lab.image,
@@ -54,47 +115,43 @@ export function mapLabToCard(lab: Lab): PCardData {
 				{
 					type: "category",
 					label: lab.category.label,
-					href: `/labs/category/${lab.category.slug}`,
-					display: "text",
+					href: presentation.routes.categoryBase ? `${presentation.routes.categoryBase}${lab.category.slug}` : undefined,
+					display: presentation.categoryDisplay,
 				},
 			],
 		},
 		badge: {
 			label: lab.statusLabel,
-			tone: lab.status === "complete" ? "neutral" : "brand",
+			tone: lab.status === "complete" ? presentation.completeBadgeTone : presentation.activeBadgeTone,
 		},
 		tags: lab.technologies.map((technology) => ({
 			label: technology.label,
-			href: `/labs/technology/${technology.slug}`,
+			href: presentation.routes.technologyBase ? `${presentation.routes.technologyBase}${technology.slug}` : undefined,
 		})),
-		tagsLabel: `${lab.title} technologies`,
+		tagsLabel: `${lab.title}${presentation.tagsLabelSuffix}`,
 		metrics: [
-			{ icon: "star", label: String(lab.stars) },
-			{ icon: "github", label: String(lab.forks) },
-			{ icon: "clock01", label: lab.updatedLabel },
+			{ icon: presentation.metricIcons[0], label: String(lab.stars) },
+			{ icon: presentation.metricIcons[1], label: String(lab.forks) },
+			{ icon: presentation.metricIcons[2], label: lab.updatedLabel },
 		],
 		facets: {
 			category: [lab.category.slug],
 			status: [lab.status],
 			technology: lab.technologies.map((technology) => technology.slug),
 		},
-		searchValue: [
-			lab.title,
-			lab.summary,
-			lab.category.label,
-			...lab.technologies.map((technology) => technology.label),
-		].join(" "),
+		searchValue: [lab.title, lab.summary, lab.category.label, ...lab.technologies.map((technology) => technology.label)].join(" "),
 	};
 }
 
 export function mapPublicationToCard(
 	entry: PublicationEntry,
 	catalogSlug: "comics" | "novels",
+	presentation: PublicationCardPresentation,
 ): PCardData {
-	const href = `/${catalogSlug}/${entry.slug}`;
+	const href = `${presentation.routes.base}${entry.slug}`;
 	return {
 		href,
-		ariaLabel: `Read ${entry.title}`,
+		ariaLabel: `${presentation.ariaLabelPrefix}${entry.title}`,
 		title: [entry.title],
 		excerpt: entry.summary,
 		media: entry.cover,
@@ -102,38 +159,27 @@ export function mapPublicationToCard(
 			items: entry.genres.map((genre) => ({
 				type: "category" as const,
 				label: genre.label,
-				href: `/${catalogSlug}/category/${genre.slug}`,
-				display: "text" as const,
+				href: presentation.routes.categoryBase ? `${presentation.routes.categoryBase}${genre.slug}` : undefined,
+				display: presentation.categoryDisplay,
 			})),
 		},
 		tags: entry.genres.map((genre) => ({
 			label: genre.label,
-			href: `/${catalogSlug}/category/${genre.slug}`,
+			href: presentation.routes.categoryBase ? `${presentation.routes.categoryBase}${genre.slug}` : undefined,
 		})),
-		tagsLabel: `${entry.title} genres`,
-		metrics: [{ icon: "globeAlt", label: entry.views }],
+		tagsLabel: `${entry.title}${presentation.tagsLabelSuffix}`,
+		metrics: [{ icon: presentation.viewsIcon, label: entry.views }],
 		rating: { value: entry.rating },
 		facets: {
 			genre: entry.genres.map((genre) => genre.slug),
 			status: [entry.status],
 		},
-		searchValue: [
-			entry.title,
-			entry.summary,
-			entry.author,
-			...entry.genres.map((genre) => genre.label),
-		].join(" "),
+		searchValue: [entry.title, entry.summary, entry.author, ...entry.genres.map((genre) => genre.label)].join(" "),
 		sortValue: String(entry.order).padStart(4, "0"),
 	};
 }
 
-export function mapProjectToCard(
-	project: Project,
-	actionLabel: string,
-	separator: string,
-	size: PCardData["size"] = "standard",
-	tagsLabel?: string,
-): PCardData {
+export function mapProjectToCard(project: Project, presentation: ProjectCardPresentation): PCardData {
 	return {
 		href: project.href,
 		ariaLabel: project.title,
@@ -141,106 +187,92 @@ export function mapProjectToCard(
 		excerpt: project.summary,
 		filterValue: project.category,
 		sortValue: project.year,
-		size,
+		size: presentation.size,
 		supportingLabel: project.outcome,
 		tags: project.tags.map((tag) => ({
 			label: tag.label,
-			href: `/projects/tag/${tag.slug}`,
+			href: presentation.routes.tagBase ? `${presentation.routes.tagBase}${tag.slug}` : undefined,
 		})),
-		tagsLabel,
-		appearance: project.tone === "dark" ? "inverse" : "default",
+		tagsLabel: presentation.tagsLabel,
+		appearance: project.tone === "dark" ? presentation.darkAppearance : presentation.lightAppearance,
 		metadata: {
-			separator,
+			separator: presentation.separator,
 			items: [
-				{ type: "index", label: project.number, display: "text" },
+				{ type: "index", label: project.number, display: presentation.metadataDisplay },
 				{
 					type: "category",
 					label: project.category.toUpperCase(),
-					href: `/projects/category/${project.categorySlug}`,
-					display: "text",
+					href: presentation.routes.categoryBase ? `${presentation.routes.categoryBase}${project.categorySlug}` : undefined,
+					display: presentation.metadataDisplay,
 				},
 				{
 					type: "datetime",
 					label: project.year,
 					datetime: project.year,
-					display: "text",
+					display: presentation.metadataDisplay,
 				},
 			],
 		},
-		action: {
-			label: actionLabel,
+		action: presentation.actionLabel ? {
+			label: presentation.actionLabel,
 			href: project.href,
-			icon: "arrowUpRight",
-		},
-		media: project.image
-			? {
-					src: project.image,
-					alt: project.alt || project.title,
-					width: 800,
-					height: 600,
-				}
-			: undefined,
+			icon: presentation.actionIcon,
+		} : undefined,
+		media: project.image ? {
+			src: project.image,
+			alt: project.alt || project.title,
+			width: presentation.imageWidth,
+			height: presentation.imageHeight,
+		} : undefined,
 	};
 }
 
-export function mapInsightToCard(
-	insight: Insight,
-	separator: string,
-): PCardData {
+export function mapInsightToCard(insight: Insight, presentation: InsightCardPresentation): PCardData {
 	return {
 		href: insight.href,
 		ariaLabel: insight.title,
 		title: [insight.title],
 		excerpt: insight.excerpt,
 		metadata: {
-			separator,
+			separator: presentation.separator,
 			items: [
 				{
 					type: "category",
 					label: insight.category,
-					href: insight.categorySlug ? `/blog/category/${insight.categorySlug}` : undefined,
-					display: "text",
+					href: presentation.routes.categoryBase ? `${presentation.routes.categoryBase}${insight.categorySlug}` : undefined,
+					display: presentation.metadataDisplay,
 				},
-				{ type: "reading-time", label: insight.readTime, display: "text" },
+				{ type: "reading-time", label: insight.readTime, display: presentation.metadataDisplay },
 			],
 		},
 		secondaryMetadata: {
-			separator,
+			separator: presentation.separator,
 			items: [
-				{ type: "author", label: insight.author, display: "text" },
+				{ type: "author", label: insight.author, display: presentation.metadataDisplay },
 				{
 					type: "datetime",
 					label: insight.publishedLabel,
 					datetime: insight.publishedAt,
-					display: "text",
+					display: presentation.metadataDisplay,
 				},
 			],
 		},
 		tags: insight.tags.map((tag) => ({
 			label: tag.label,
-			href: `/blog/tag/${tag.slug}`,
+			href: presentation.routes.tagBase ? `${presentation.routes.tagBase}${tag.slug}` : undefined,
 		})),
-		tagsLabel: `${insight.title} tags`,
+		tagsLabel: presentation.tagsLabelSuffix ? `${insight.title}${presentation.tagsLabelSuffix}` : undefined,
 		facets: {
 			category: [insight.categorySlug],
 			tag: insight.tags.map((tag) => tag.slug),
 		},
-		searchValue: [
-			insight.title,
-			insight.excerpt,
-			insight.category,
-			insight.author,
-			...insight.tags.map((tag) => tag.label),
-		].join(" "),
+		searchValue: [insight.title, insight.excerpt, insight.category, insight.author, ...insight.tags.map((tag) => tag.label)].join(" "),
 		sortValue: insight.publishedAt,
-		media:
-			insight.image && insight.imageAlt
-				? {
-						src: insight.image,
-						alt: insight.imageAlt,
-						width: 1536,
-						height: 1536,
-					}
-				: undefined,
+		media: insight.image && insight.imageAlt ? {
+			src: insight.image,
+			alt: insight.imageAlt,
+			width: presentation.imageWidth,
+			height: presentation.imageHeight,
+		} : undefined,
 	};
 }
