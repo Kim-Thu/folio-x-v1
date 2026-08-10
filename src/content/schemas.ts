@@ -101,6 +101,13 @@ export const pageSectionSchema = z.object({
   id: z.string(), type: z.string(), template: z.string().optional(), settings: pageSectionSettingsSchema.default({}), content: pageSectionContentSchema.default({}),
 });
 
+const pageLayoutSchema = z.object({
+  template: z.enum(["fluid", "contained", "boxed", "sidebar", "centered"]),
+  containerSize: z.enum(["site", "content"]).optional(),
+  asideLabel: z.string().min(1).optional(),
+  asidePosition: z.enum(["start", "end"]).optional(),
+});
+
 const detailSectionSettingsSchema = z.object({
   theme: z.enum(["dark", "light", "canvas", "accent", "none"]),
   spacing: z.enum(["compact", "default", "none", "lead", "body", "closing"]),
@@ -239,16 +246,16 @@ export const pageSchema = z.object({
   slug: z.string(),
   meta: z.object({ title: z.string(), description: z.string().optional(), author: z.string().optional(), publishedAt: z.string().optional(), updatedAt: z.string().optional() }),
   seo: z.record(z.string(), z.unknown()).nullable().optional(),
-  content: z.object({ sections: z.array(pageSectionSchema) }),
+  content: z.object({ layout: pageLayoutSchema, sections: z.array(pageSectionSchema) }),
 });
 
 const entryDetailPageSchema = z.object({
-  template: z.enum(["fluid", "contained", "boxed", "sidebar", "centered"]).default("fluid"),
+  template: z.enum(["fluid", "contained", "boxed", "sidebar", "centered"]),
   sections: z.array(pageSectionSchema),
 });
 
 const readerPageSchema = z.object({
-  template: z.enum(["fluid", "contained", "boxed", "sidebar", "centered"]).default("fluid"),
+  template: z.enum(["fluid", "contained", "boxed", "sidebar", "centered"]),
   settings: z.object({
     theme: z.enum(["dark", "light", "canvas", "accent", "none"]),
     spacing: z.enum(["compact", "default", "none", "lead", "body", "closing"]),
@@ -292,7 +299,7 @@ const reviewsSchema = z.object({
 });
 
 export const pageBuilderSchema = z.object({
-  layout: z.object({ template: z.enum(["fluid", "contained", "boxed", "sidebar", "centered"]), containerSize: z.enum(["site", "content"]).optional(), asideLabel: z.string().min(1).optional(), asidePosition: z.enum(["start", "end"]).optional() }),
+  layout: pageLayoutSchema,
   regions: z.array(z.object({
     key: z.string().regex(/^[a-z0-9]+(?:-[a-z0-9]+)*$/), enabled: z.boolean().default(true),
     component: z.enum(["page-header","hero","section-header","article","reviews","cards","cta","post-navigation","collection","archive","advertisement","details","group","profile","status","tabs","toc","entry-index","reader"]),
