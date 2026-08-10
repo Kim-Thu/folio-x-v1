@@ -1,5 +1,6 @@
 import type { PublicationEntry } from "@/types/content";
-import type { PublicationCollection } from "@/data/pages/getPublicationDetailPageData";
+
+export type PublicationCollection = "comics" | "novels";
 
 export interface PublicationDetailPageData {
 	entry: PublicationEntry;
