@@ -1,8 +1,9 @@
-import type { PageBuilderConfig } from "@/types/components/pages/builder/PageBuilder.types";
+import type { PublicationEntry } from "@/types/content";
+import type { PublicationCollection } from "@/data/pages/getPublicationDetailPageData";
 
 export interface PublicationDetailPageData {
-	metadata: { title: string; description: string };
-	builder: PageBuilderConfig;
+	entry: PublicationEntry;
+	collection: PublicationCollection;
 }
 
 export interface PublicationDetailPageProps {
