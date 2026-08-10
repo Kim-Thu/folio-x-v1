@@ -1,11 +1,7 @@
-import type { PageBuilderConfig } from "@/types/components/pages/builder/PageBuilder.types";
+import type { Insight } from "@/types/content";
 
 export interface InsightDetailPageData {
-	post: {
-		excerpt: string;
-		title: string;
-	};
-	builder: PageBuilderConfig;
+	post: Insight;
 }
 
 export interface InsightDetailPageProps {
