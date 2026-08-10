@@ -59,12 +59,9 @@ export async function getProducts(): Promise<Product[]> {
 
 export async function getProductCategories(): Promise<ReadonlyArray<{ value: string; label: string }>> {
 	const products = await getProducts();
-	return [
-		{ value: "all", label: "All products" },
-		...Array.from(
-			new Map(products.map((product) => [product.categorySlug, { value: product.categorySlug, label: product.category }])).values(),
-		),
-	];
+	return Array.from(
+		new Map(products.map((product) => [product.categorySlug, { value: product.categorySlug, label: product.category }])).values(),
+	);
 }
 
 export async function getLabs(): Promise<Lab[]> {
