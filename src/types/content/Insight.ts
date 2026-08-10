@@ -21,6 +21,14 @@ export type InsightContentNode =
       };
     };
 
+export interface InsightDetailPageSection {
+  id: string;
+  type: string;
+  template?: string;
+  settings?: Record<string, unknown>;
+  content?: Record<string, unknown>;
+}
+
 export interface Insight {
   index: string;
   slug: string;
@@ -38,4 +46,10 @@ export interface Insight {
   image?: string;
   imageAlt: string;
   content: InsightContentNode[];
+  detail?: {
+    page: {
+      template: "fluid" | "contained" | "boxed" | "sidebar" | "centered";
+      sections: InsightDetailPageSection[];
+    };
+  };
 }
