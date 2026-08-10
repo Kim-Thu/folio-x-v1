@@ -1,33 +1,30 @@
-import novelsCatalog from "@/content/publications/novels.json";
-import comicsCatalog from "@/content/publications/comics.json";
+import { getPublications } from "@/data/cms";
 import type { ReaderPageData } from "@/types/components/pages/reader/ReaderPage.types";
 import type { PageBuilderConfig } from "@/types/components/pages/builder/PageBuilder.types";
 import type { PReaderContent } from "@/types/components/object/project/reader/PReader.types";
-import type { PublicationCatalog, PublicationEntry } from "@/types/content";
+import type { PublicationEntry } from "@/types/content";
 
-type CatalogSlug = PublicationCatalog["slug"];
+type CatalogSlug = "comics" | "novels";
 
-const catalogs: Record<CatalogSlug, PublicationCatalog> = {
-	novels: novelsCatalog as PublicationCatalog,
-	comics: comicsCatalog as PublicationCatalog,
-};
+const catalogLabel = (catalogSlug: CatalogSlug) =>
+	catalogSlug === "novels" ? "Novels" : "Comics";
 
-export function getPublicationReaderPaths(catalogSlug: CatalogSlug) {
-	const catalog = catalogs[catalogSlug];
-	return catalog.entries.flatMap((entry) =>
+export async function getPublicationReaderPaths(catalogSlug: CatalogSlug) {
+	const entries = await getPublications(catalogSlug);
+	return entries.flatMap((entry) =>
 		Array.from({ length: entry.chapters }, (_, index) => ({
 			params: { slug: entry.slug, chapter: String(index + 1) },
 		})),
 	);
 }
 
-export function getPublicationReaderPageData(
+export async function getPublicationReaderPageData(
 	catalogSlug: CatalogSlug,
 	entrySlug: string,
 	chapterParam: string,
-): ReaderPageData {
-	const catalog = catalogs[catalogSlug];
-	const entry = catalog.entries.find((item) => item.slug === entrySlug);
+): Promise<ReaderPageData> {
+	const entries = await getPublications(catalogSlug);
+	const entry = entries.find((item) => item.slug === entrySlug);
 	if (!entry) throw new Error(`Missing publication: ${catalogSlug}/${entrySlug}`);
 
 	const chapter = Number.parseInt(chapterParam, 10);
@@ -38,10 +35,10 @@ export function getPublicationReaderPageData(
 	const configuredChapter = entry.detail?.reader?.find((item) => item.number === chapter);
 	const title = configuredChapter?.title ?? getChapterTitle(entry, chapter);
 	const content = getReaderContent(catalogSlug, entry, configuredChapter);
-	const indexHref = `/${catalog.slug}/${entry.slug}#chapters`;
+	const indexHref = `/${catalogSlug}/${entry.slug}#chapters`;
 	const previous = chapter > 1 ? chapter - 1 : undefined;
 	const next = chapter < entry.chapters ? chapter + 1 : undefined;
-	const chapterHref = (number: number) => `/${catalog.slug}/${entry.slug}/chapter/${number}`;
+	const chapterHref = (number: number) => `/${catalogSlug}/${entry.slug}/chapter/${number}`;
 
 	const builder: PageBuilderConfig = {
 		layout: { template: "fluid" },
@@ -56,8 +53,8 @@ export function getPublicationReaderPageData(
 						breadcrumb: {
 							label: "Breadcrumb",
 							items: [
-								{ label: catalog.label, href: `/${catalog.slug}` },
-								{ label: entry.title, href: `/${catalog.slug}/${entry.slug}` },
+								{ label: catalogLabel(catalogSlug), href: `/${catalogSlug}` },
+								{ label: entry.title, href: `/${catalogSlug}/${entry.slug}` },
 							],
 							current: `Chapter ${chapter}`,
 						},
@@ -131,8 +128,7 @@ function getReaderContent(
 		return { kind: "sequential-media", images: configured.images };
 	}
 	if (catalogSlug === "comics") {
-		const images = [entry.cover, catalogs.comics.hero, catalogs.comics.newsletter.image];
-		return { kind: "sequential-media", images };
+		return { kind: "sequential-media", images: [entry.cover] };
 	}
 
 	const [opening, direction = opening] = entry.detail?.description ?? [entry.summary];
@@ -140,13 +136,7 @@ function getReaderContent(
 		kind: "prose",
 		items: [
 			{ text: opening },
-			{ text: "The city lights flickered through the cold rain as the road narrowed ahead." },
 			{ text: direction },
-			{ kind: "emphasis", text: "If the map was right, the answer waited at the end of this street." },
-			{ text: "A sound rose from the dark behind them, close enough to stop every thought." },
-			{ kind: "separator", text: "* * *" },
-			{ text: "When the silence returned, the room was filled with old screens and half-remembered light." },
-			{ text: "A figure stepped forward and the next part of the story finally began." },
 		],
 	};
 }
