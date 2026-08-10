@@ -10,32 +10,40 @@
         "id": "comics-hero",
         "type": "page-header",
         "template": "immersive",
-        "settings": {
-          "theme": "canvas",
-          "spacing": "none",
-          "container": "none"
-        },
+        "settings": { "theme": "canvas", "spacing": "none", "container": "none" },
         "content": {
-          "source": { "collection": "publications", "catalog": "comics" },
-          "actionsLabel": "Comics actions"
+          "source": { "collection": "comics" },
+          "id": "comics-hero",
+          "eyebrow": "Comics",
+          "title": "Worlds drawn into",
+          "accent": "motion.",
+          "description": "Discover illustrated series, graphic stories, and original comics built panel by panel.",
+          "actionsLabel": "Comics actions",
+          "actions": [
+            { "label": "Browse comics", "href": "/comics#featured-title", "icon": "arrowRight", "iconPosition": "end", "variant": "primary", "tone": "light", "size": "md" },
+            { "label": "Creator guide", "href": "/comics#latest-title", "icon": "archiveBox", "iconPosition": "end", "variant": "outline", "tone": "light", "size": "md" }
+          ],
+          "image": { "src": "/uploads/library-hero-drawing.webp", "alt": "An illustrator creating a fantasy comic at night", "width": 1672, "height": 941 },
+          "quote": "Every panel opens another world.",
+          "quoteCredit": "NKT Studio",
+          "metrics": [
+            { "label": "Series", "value": "96+", "icon": "archiveBox" },
+            { "label": "Episodes", "value": "8.4K+", "icon": "folder01" },
+            { "label": "Views", "value": "1.8M+", "icon": "globeAlt" },
+            { "label": "Rating", "value": "4.8", "icon": "star" }
+          ]
         }
       },
       {
         "id": "catalog",
         "type": "publication-catalog",
         "template": "sidebar",
-        "settings": {
-          "theme": "canvas",
-          "spacing": "body",
-          "container": "site"
-        },
+        "settings": { "theme": "canvas", "spacing": "body", "container": "site" },
         "content": {
-          "source": { "collection": "publications", "catalog": "comics" },
+          "source": { "collection": "comics" },
+          "asideLabel": "Comics discovery",
           "asidePosition": "end",
-          "search": {
-            "label": "Search comics",
-            "placeholder": "Search title or author..."
-          },
+          "search": { "label": "Search comics", "placeholder": "Search title or author..." },
           "filters": {
             "genreLabel": "Genre",
             "allGenresLabel": "All genres",
@@ -44,18 +52,8 @@
             "ongoingLabel": "Ongoing",
             "completeLabel": "Complete"
           },
-          "sort": {
-            "label": "Sort",
-            "options": [
-              { "label": "Newest", "value": "newest" },
-              { "label": "Oldest", "value": "oldest" }
-            ]
-          },
-          "view": {
-            "label": "View",
-            "gridLabel": "Grid view",
-            "listLabel": "List view"
-          },
+          "sort": { "label": "Sort", "options": [{ "label": "Newest", "value": "newest" }, { "label": "Oldest", "value": "oldest" }] },
+          "view": { "label": "View", "gridLabel": "Grid view", "listLabel": "List view" },
           "sections": {
             "featuredTitle": "Featured",
             "latestTitle": "Latest updates",
@@ -71,13 +69,19 @@
         "id": "comics-newsletter",
         "type": "cta",
         "template": "subscription",
-        "settings": {
-          "theme": "canvas",
-          "spacing": "closing",
-          "container": "site"
-        },
+        "settings": { "theme": "canvas", "spacing": "closing", "container": "site" },
         "content": {
-          "source": { "collection": "publications", "catalog": "comics", "field": "newsletter" }
+          "id": "comics-newsletter",
+          "title": "New episodes, right on time",
+          "description": "Subscribe for updates whenever your favorite illustrated series continues.",
+          "image": { "src": "/uploads/library-newsletter-book.webp", "alt": "An open illustrated book with floating pages", "width": 1448, "height": 1086 },
+          "form": {
+            "formName": "comics-newsletter",
+            "inputId": "comics-newsletter-email",
+            "inputLabel": "Email address",
+            "placeholder": "Your email address...",
+            "submitLabel": "Subscribe"
+          }
         }
       }
     ]
