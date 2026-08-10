@@ -13,7 +13,7 @@ interface Props {
 	categorySlug: string;
 }
 
-const { categorySlug } = Astro.props;
+const { categorySlug } = Astro.props as Props;
 const [layout, data] = await Promise.all([
 	getLayoutData(),
 	getProductsPageData({ categorySlug }),
@@ -23,8 +23,8 @@ const [layout, data] = await Promise.all([
 <BaseLayout
 	{...layout}
 	tone="light"
-	title={`${data.metadata.title} | ${layout.title}`}
-	description={data.metadata.description}
+	title={`${data.page.meta.title} | ${layout.title}`}
+	description={data.page.meta.description ?? ""}
 >
 	<ProductsPage {data} />
 </BaseLayout>
