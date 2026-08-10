@@ -17,5 +17,54 @@
   "features": [{ "title": "Spatial navigation", "description": "Move through work without losing content clarity.", "icon": "globeAlt" }],
   "gallery": [{ "src": "/uploads/hero-image.webp", "alt": "Spatial interface", "width": 1440, "height": 1080 }],
   "resources": [{ "title": "Source code", "description": "Review the repository.", "href": "https://github.com", "icon": "github" }],
-  "facts": [{ "label": "Category", "value": "Web & Frontend" }, { "label": "Status", "value": "Complete" }]
+  "facts": [{ "label": "Category", "value": "Web & Frontend" }, { "label": "Status", "value": "Complete" }],
+  "detail": {
+    "page": {
+      "template": "fluid",
+      "sections": [
+        {
+          "id": "lab-summary",
+          "type": "page-header",
+          "template": "media-aside",
+          "settings": { "theme": "canvas", "spacing": "compact", "container": "site" },
+          "content": {
+            "labels": {
+              "breadcrumb": "Breadcrumb",
+              "actions": "Spatial Portfolio actions",
+              "live": "Live demo",
+              "source": "Source code",
+              "technology": "Spatial Portfolio technology stack"
+            }
+          }
+        },
+        {
+          "id": "lab-content",
+          "type": "article",
+          "settings": { "theme": "canvas", "spacing": "body", "container": "site" },
+          "content": { "appearance": "compact" }
+        },
+        {
+          "id": "features",
+          "type": "collection",
+          "template": "cards",
+          "settings": { "theme": "canvas", "spacing": "compact", "container": "site" },
+          "content": {
+            "heading": { "title": "Features" },
+            "cards": { "template": "icon-summary", "layout": "grid", "columns": 2, "gap": "sm" }
+          }
+        },
+        {
+          "id": "gallery",
+          "type": "collection",
+          "template": "cards",
+          "settings": { "theme": "canvas", "spacing": "compact", "container": "site" },
+          "content": {
+            "heading": { "title": "Gallery" },
+            "cards": { "template": "media-only", "layout": "grid", "columns": 5, "gap": "sm" },
+            "labels": { "openImage": "Open gallery image", "imageTitle": "Gallery image" }
+          }
+        }
+      ]
+    }
+  }
 }
