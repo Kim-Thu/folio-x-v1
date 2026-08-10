@@ -1,5 +1,3 @@
-import type { PageBuilderConfig } from "@/types/components/pages/builder/PageBuilder.types";
+import type { CollectionEntry } from "astro:content";
 
-export interface HomePageData {
-	builder: PageBuilderConfig;
-}
+export type HomePageData = CollectionEntry<"pages">["data"];
