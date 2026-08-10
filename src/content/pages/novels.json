@@ -1,1 +1,85 @@
-{"slug":"/novels","meta":{"title":"Novels","description":"Original novels and illustrated stories."},"content":{"sections":[]}}
+{
+  "slug": "/novels",
+  "meta": {
+    "title": "Novels",
+    "description": "Original novels and illustrated stories."
+  },
+  "content": {
+    "sections": [
+      {
+        "id": "novels-hero",
+        "type": "page-header",
+        "template": "immersive",
+        "settings": {
+          "theme": "canvas",
+          "spacing": "none",
+          "container": "none"
+        },
+        "content": {
+          "source": { "collection": "publications", "catalog": "novels" },
+          "actionsLabel": "Novels actions"
+        }
+      },
+      {
+        "id": "catalog",
+        "type": "publication-catalog",
+        "template": "sidebar",
+        "settings": {
+          "theme": "canvas",
+          "spacing": "body",
+          "container": "site"
+        },
+        "content": {
+          "source": { "collection": "publications", "catalog": "novels" },
+          "asidePosition": "end",
+          "search": {
+            "label": "Search novels",
+            "placeholder": "Search title or author..."
+          },
+          "filters": {
+            "genreLabel": "Genre",
+            "allGenresLabel": "All genres",
+            "statusLabel": "Status",
+            "allStatusesLabel": "All statuses",
+            "ongoingLabel": "Ongoing",
+            "completeLabel": "Complete"
+          },
+          "sort": {
+            "label": "Sort",
+            "options": [
+              { "label": "Newest", "value": "newest" },
+              { "label": "Oldest", "value": "oldest" }
+            ]
+          },
+          "view": {
+            "label": "View",
+            "gridLabel": "Grid view",
+            "listLabel": "List view"
+          },
+          "sections": {
+            "featuredTitle": "Featured",
+            "latestTitle": "Latest updates",
+            "popularGenresTitle": "Popular genres",
+            "genresTitle": "Genres",
+            "trendingTitle": "Trending",
+            "authorsTitle": "Popular authors",
+            "viewAllLabel": "View all"
+          }
+        }
+      },
+      {
+        "id": "novels-newsletter",
+        "type": "cta",
+        "template": "subscription",
+        "settings": {
+          "theme": "canvas",
+          "spacing": "closing",
+          "container": "site"
+        },
+        "content": {
+          "source": { "collection": "publications", "catalog": "novels", "field": "newsletter" }
+        }
+      }
+    ]
+  }
+}
