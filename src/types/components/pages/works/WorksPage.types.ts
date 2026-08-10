@@ -1,11 +1,13 @@
-import type { PageBuilderConfig } from "@/types/components/pages/builder/PageBuilder.types";
+import type { PageEntryData } from "@/types/components/pages/builder/PageBuilder.types";
+
+export interface WorksPageContext {
+	categorySlug?: string;
+	tagSlug?: string;
+}
 
 export interface WorksPageData {
-	metadata: {
-		title: string;
-		description: string;
-	};
-	builder: PageBuilderConfig;
+	page: PageEntryData;
+	context: WorksPageContext;
 }
 
 export interface WorksPageProps {
