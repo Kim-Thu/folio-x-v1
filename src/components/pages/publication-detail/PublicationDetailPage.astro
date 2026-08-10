@@ -33,19 +33,17 @@ const frame = (section: (typeof page.sections)[number]) => {
 
 const chapterSection = page.sections.find((section) => section.type === "entry-index");
 const chapterConfig = asRecord(chapterSection?.content);
-const chapterItems = Array.from({ length: Math.min(entry.chapters, detail?.chapterTitles.length ?? 0) }, (_, index) => {
-	const number = entry.chapters - index;
-	return {
-		order: number,
-		number: `${asString(chapterConfig.numberPrefix)}${number}`,
-		title: detail?.chapterTitles[index] ?? `${asString(chapterConfig.chapterLabel)} ${number}`,
-		publishedAt: asString(chapterConfig.defaultPublishedAt),
-		publishedLabel: asString(chapterConfig.defaultPublishedLabel),
-		views: entry.views,
-		href: `/${collection}/${entry.slug}/chapter/${number}`,
-		status: "available" as const,
-	};
-});
+const configuredChapters = [...(detail?.reader ?? [])].sort((a, b) => b.number - a.number);
+const chapterItems = configuredChapters.map((chapter) => ({
+	order: chapter.number,
+	number: `${asString(chapterConfig.numberPrefix)}${chapter.number}`,
+	title: chapter.title,
+	publishedAt: chapter.publishedAt,
+	publishedLabel: chapter.publishedLabel,
+	views: chapter.views,
+	href: `/${collection}/${entry.slug}/chapter/${chapter.number}`,
+	status: "available" as const,
+}));
 ---
 
 <LPage template={page.template}>
