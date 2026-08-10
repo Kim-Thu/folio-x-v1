@@ -47,6 +47,11 @@
           "source": {
             "collection": "projects"
           },
+          "routes": {
+            "base": "/projects",
+            "categoryBase": "/projects/category/",
+            "tagBase": "/projects/tag/"
+          },
           "taxonomy": {
             "categoryPrefix": "Project category",
             "tagPrefix": "Project tag"
@@ -54,7 +59,9 @@
           "toolbar": {
             "filterLabel": "Lọc project theo category",
             "allLabel": "Tất cả",
+            "allValue": "all",
             "sortLabel": "Sắp xếp dự án",
+            "sortValue": "featured",
             "sortOptions": [
               { "label": "Nổi bật", "value": "featured" },
               { "label": "Mới nhất", "value": "newest" },
