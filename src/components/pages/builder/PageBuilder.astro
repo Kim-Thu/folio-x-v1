@@ -569,7 +569,7 @@ const regions: PageRegion[] = "config" in props
 const config: PageBuilderConfig = "config" in props
 	? props.config
 	: {
-		layout: { template: "fluid" },
+		layout: props.page.content.layout,
 		regions,
 	};
 
