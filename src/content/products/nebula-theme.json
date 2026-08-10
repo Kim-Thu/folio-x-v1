@@ -1,0 +1,15 @@
+{
+  "id": 1,
+  "slug": "nebula-theme",
+  "title": "Nebula Theme",
+  "category": "WordPress Theme",
+  "categorySlug": "themes",
+  "platform": "WordPress",
+  "description": "WordPress theme for SaaS, startup and digital products.",
+  "price": 59,
+  "oldPrice": 79,
+  "rating": 4.9,
+  "reviews": 128,
+  "badge": "v1.3.0",
+  "image": "https://images.unsplash.com/photo-1558655146-d09347e92766?auto=format&fit=crop&w=900&q=88"
+}
