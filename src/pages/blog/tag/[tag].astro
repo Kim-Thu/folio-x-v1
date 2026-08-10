@@ -16,15 +16,15 @@ interface Props {
 const { tagSlug } = Astro.props as Props;
 const [layout, data] = await Promise.all([
 	getLayoutData(),
-	getInsightsPageData({ tag: tagSlug }),
+	getInsightsPageData({ tagSlug }),
 ]);
 ---
 
 <BaseLayout
 	{...layout}
 	tone="light"
-	title={`${data.metadata.title} | ${layout.title}`}
-	description={data.metadata.description}
+	title={`${data.page.meta.title} | ${layout.title}`}
+	description={data.page.meta.description ?? ""}
 >
 	<InsightsPage {data} />
 </BaseLayout>
