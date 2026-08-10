@@ -1,16 +1,184 @@
 {
   "slug": "/blog",
-  "meta": {"title": "Insights", "description": "Ideas, insights, and practical notes about design, engineering, and product systems."},
-  "content": {"sections": [{
-    "id": "blog-archive",
-    "type": "archive",
-    "template": "faceted",
-    "settings": {"theme":"canvas","spacing":"body","container":"site"},
-    "content": {
-      "hero": {"eyebrow":"Stories & Insights","title":"Ideas. Insights. Inspiration","accent":".","image":{"src":"/uploads/page-header-insight.png","alt":"Editorial interface and modular content blocks","width":1536,"height":1024}},
-      "labels": {"search":"Search articles","placeholder":"Search articles...","allTopics":"All topics","newest":"Newest","featured":"Featured articles","allArticles":"All articles","empty":"No articles match your filters.","newsletterTitle":"Never miss a new article","newsletterDescription":"Join the newsletter for practical ideas and behind-the-scenes notes.","subscribe":"Subscribe","email":"Email address","emailPlaceholder":"Your email..."},
-      "newsletter": {"image":{"src":"/uploads/ads-1.png","alt":"","width":1402,"height":1122},"href":"mailto:thunk.work.91@gmail.com"},
-      "cards": {"template":"editorial","layout":"grid","columns":3,"gap":"sm","pageSize":9,"slots":{"tags":false,"action":false}}
-    }
-  }]}
+  "meta": {
+    "title": "Insights",
+    "description": "Ideas, insights, and practical notes about design, engineering, and product systems."
+  },
+  "content": {
+    "sections": [
+      {
+        "id": "insights-hero",
+        "type": "page-header",
+        "template": "split-benefits",
+        "settings": {
+          "theme": "canvas",
+          "spacing": "lead",
+          "container": "site"
+        },
+        "content": {
+          "id": "insights-hero",
+          "eyebrow": "Stories & Insights",
+          "title": "Ideas. Insights. Inspiration",
+          "accent": ".",
+          "description": "Ideas, insights, and practical notes about design, engineering, and product systems.",
+          "source": {
+            "collection": "blog"
+          },
+          "benefits": {
+            "articleLabel": "articles",
+            "topicLabel": "topics",
+            "minuteLabel": "min"
+          },
+          "image": {
+            "src": "/uploads/page-header-insight.png",
+            "alt": "Editorial interface and modular content blocks",
+            "width": 1536,
+            "height": 1024
+          }
+        }
+      },
+      {
+        "id": "insights",
+        "type": "archive",
+        "template": "faceted",
+        "settings": {
+          "theme": "canvas",
+          "spacing": "body",
+          "container": "site"
+        },
+        "content": {
+          "source": {
+            "collection": "blog"
+          },
+          "toolbar": {
+            "search": {
+              "id": "insights-search",
+              "label": "Search articles",
+              "name": "search",
+              "placeholder": "Search articles..."
+            },
+            "category": {
+              "control": "category",
+              "id": "insights-category",
+              "label": "All topics",
+              "allLabel": "All topics"
+            },
+            "sort": {
+              "label": "Newest",
+              "value": "newest",
+              "options": [
+                { "label": "Newest", "value": "newest" },
+                { "label": "Oldest", "value": "oldest" }
+              ]
+            },
+            "view": {
+              "label": "Article view",
+              "gridLabel": "Grid view",
+              "listLabel": "List view"
+            }
+          },
+          "sidebar": {
+            "label": "Insight navigation",
+            "filter": {
+              "legend": "Topics",
+              "allLabel": "All"
+            },
+            "featured": {
+              "title": "Featured articles",
+              "limit": 4,
+              "cards": {
+                "template": "compact-media",
+                "layout": "list",
+                "columns": 1,
+                "gap": "sm",
+                "slots": {
+                  "excerpt": false,
+                  "tags": false
+                }
+              }
+            },
+            "newsletter": {
+              "template": "form-first",
+              "title": "Never miss a new article",
+              "description": "Join the newsletter for practical ideas and behind-the-scenes notes.",
+              "image": {
+                "src": "/uploads/ads-1.png",
+                "alt": "",
+                "width": 1402,
+                "height": 1122
+              },
+              "action": {
+                "label": "Subscribe",
+                "href": "mailto:thunk.work.91@gmail.com"
+              },
+              "form": {
+                "formName": "insights-sidebar-newsletter",
+                "inputId": "insights-sidebar-email",
+                "inputLabel": "Email address",
+                "placeholder": "Your email...",
+                "submitLabel": "Subscribe",
+                "tone": "dark"
+              }
+            }
+          },
+          "result": {
+            "title": "All articles"
+          },
+          "cards": {
+            "template": "editorial",
+            "layout": "grid",
+            "columns": 3,
+            "gap": "sm",
+            "slots": {
+              "tags": false,
+              "action": false
+            }
+          },
+          "emptyLabel": "No articles match your filters.",
+          "pagination": {
+            "label": "Article pages",
+            "previousLabel": "Previous page",
+            "nextLabel": "Next page",
+            "pageSize": 9
+          },
+          "taxonomy": {
+            "separator": "·"
+          }
+        }
+      },
+      {
+        "id": "insights-newsletter",
+        "type": "cta",
+        "template": "subscription",
+        "settings": {
+          "theme": "canvas",
+          "spacing": "compact",
+          "container": "site"
+        },
+        "content": {
+          "id": "insights-newsletter",
+          "title": "Never miss a new article",
+          "description": "Join the newsletter for practical ideas and behind-the-scenes notes.",
+          "action": {
+            "label": "Subscribe",
+            "href": "mailto:thunk.work.91@gmail.com"
+          },
+          "image": {
+            "src": "/uploads/ads-1.png",
+            "alt": "",
+            "width": 1402,
+            "height": 1122
+          },
+          "form": {
+            "formName": "insights-newsletter",
+            "inputId": "insights-newsletter-email",
+            "inputLabel": "Email address",
+            "placeholder": "Your email...",
+            "submitLabel": "Subscribe",
+            "tone": "light"
+          }
+        }
+      }
+    ]
+  }
 }
