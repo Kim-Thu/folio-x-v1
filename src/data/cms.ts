@@ -1,4 +1,4 @@
-import type { Insight, Lab, Product, Project, PublicationCatalog } from "@/types/content";
+import type { Insight, Lab, Product, Project, PublicationEntry } from "@/types/content";
 import type { CollectionEntry, CollectionKey } from "astro:content";
 import { getCollection } from "astro:content";
 
@@ -17,13 +17,11 @@ async function getSingleton<C extends CollectionKey>(
 
 export const getSiteSettings = () => getSingleton("siteSettings");
 export const getNavigationSettings = () => getSingleton("navigationSettings");
-export const getClosingProfileSettings = () =>
-	getSingleton("closingProfileSettings");
+export const getClosingProfileSettings = () => getSingleton("closingProfileSettings");
 export const getInterfaceSettings = () => getSingleton("interfaceSettings");
 export const getArchiveSettings = () => getSingleton("archiveSettings");
 export const getFooterSettings = () => getSingleton("footerSettings");
-export const getSystemStatesSettings = () =>
-	getSingleton("systemStatesSettings");
+export const getSystemStatesSettings = () => getSingleton("systemStatesSettings");
 
 export async function getPage(slug: string): Promise<CollectionEntry<"pages">["data"]> {
 	const pages = await getCollection("pages");
@@ -37,13 +35,8 @@ export async function getPage(slug: string): Promise<CollectionEntry<"pages">["d
 
 export async function getProjects(): Promise<Project[]> {
 	const entries = await getCollection("projects");
-	assertUnique(
-		entries.map((entry) => entry.data.order),
-		"project order",
-	);
-	entries.forEach((entry) =>
-		assertEntrySlug(entry.id, entry.data.slug, "project"),
-	);
+	assertUnique(entries.map((entry) => entry.data.order), "project order");
+	entries.forEach((entry) => assertEntrySlug(entry.id, entry.data.slug, "project"));
 
 	return entries
 		.sort((a, b) => a.data.order - b.data.order)
@@ -55,35 +48,33 @@ export async function getProjects(): Promise<Project[]> {
 }
 
 export async function getProducts(): Promise<Product[]> {
-  const entries = await getCollection("products");
-  const catalog = entries[0];
-  if (!catalog) throw new Error("Missing CMS product catalog");
-  assertUnique(catalog.data.items.map((item) => item.id), "product id");
-  assertUnique(catalog.data.items.map((item) => item.slug), "product slug");
-  return catalog.data.items;
+	const entries = await getCollection("products");
+	assertUnique(entries.map((entry) => entry.data.id), "product id");
+	assertUnique(entries.map((entry) => entry.data.slug), "product slug");
+	entries.forEach((entry) => assertEntrySlug(entry.id, entry.data.slug, "product"));
+	return entries
+		.sort((a, b) => a.data.id - b.data.id)
+		.map(({ data }) => data);
 }
 
 export async function getProductCategories(): Promise<ReadonlyArray<{ value: string; label: string }>> {
-  const entries = await getCollection("products");
-  return entries[0]?.data.categories ?? [];
+	const products = await getProducts();
+	return [
+		{ value: "all", label: "All products" },
+		...Array.from(
+			new Map(products.map((product) => [product.categorySlug, { value: product.categorySlug, label: product.category }])).values(),
+		),
+	];
 }
 
 export async function getLabs(): Promise<Lab[]> {
 	const entries = await getCollection("labs");
-	assertUnique(
-		entries.map((entry) => entry.data.order),
-		"lab order",
-	);
-	entries.forEach((entry) =>
-		assertEntrySlug(entry.id, entry.data.slug, "lab"),
-	);
+	assertUnique(entries.map((entry) => entry.data.order), "lab order");
+	entries.forEach((entry) => assertEntrySlug(entry.id, entry.data.slug, "lab"));
 
 	return entries
 		.sort((a, b) => a.data.order - b.data.order)
-		.map(({ data }) => ({
-			...data,
-			href: `/labs/${data.slug}`,
-		}));
+		.map(({ data }) => ({ ...data, href: `/labs/${data.slug}` }));
 }
 
 export async function getInsights(): Promise<Insight[]> {
@@ -91,22 +82,12 @@ export async function getInsights(): Promise<Insight[]> {
 		getCollection("blog"),
 		getInterfaceSettings(),
 	]);
-	assertUnique(
-		entries.map((entry) => entry.data.order),
-		"blog order",
-	);
-	entries.forEach((entry) =>
-		assertEntrySlug(entry.id, entry.data.slug, "blog post"),
-	);
+	assertUnique(entries.map((entry) => entry.data.order), "blog order");
+	entries.forEach((entry) => assertEntrySlug(entry.id, entry.data.slug, "blog post"));
 
 	const dateFormatter = new Intl.DateTimeFormat(
 		interfaceSettings.contentFormatting.dateLocale,
-		{
-			day: "numeric",
-			month: "long",
-			year: "numeric",
-			timeZone: "UTC",
-		},
+		{ day: "numeric", month: "long", year: "numeric", timeZone: "UTC" },
 	);
 
 	return entries
@@ -115,35 +96,23 @@ export async function getInsights(): Promise<Insight[]> {
 			...data,
 			index: String(index + 1).padStart(2, "0"),
 			href: `/blog/${data.slug}`,
-			readTime: interfaceSettings.contentFormatting.readingTimeTemplate.replace(
-				"{minutes}",
-				String(data.readingMinutes),
-			),
+			readTime: interfaceSettings.contentFormatting.readingTimeTemplate.replace("{minutes}", String(data.readingMinutes)),
 			duration: `PT${data.readingMinutes}M`,
-			publishedLabel: dateFormatter.format(
-				new Date(`${data.publishedAt}T00:00:00Z`),
-			),
+			publishedLabel: dateFormatter.format(new Date(`${data.publishedAt}T00:00:00Z`)),
 		}));
 }
 
-export async function getPublicationCatalogs(): Promise<PublicationCatalog[]> {
-	const entries = await getCollection("publicationCatalogs");
-	assertUnique(entries.map((entry) => entry.data.order), "publication catalog order");
-	entries.forEach((entry) =>
-		assertEntrySlug(entry.id, entry.data.slug, "publication catalog"),
-	);
-
-	return entries
-		.sort((a, b) => a.data.order - b.data.order)
-		.map(({ data }) => data);
+export async function getPublications(collection: "comics" | "novels"): Promise<PublicationEntry[]> {
+	const entries = await getCollection(collection);
+	assertUnique(entries.map((entry) => entry.data.order), `${collection} order`);
+	entries.forEach((entry) => assertEntrySlug(entry.id, entry.data.slug, collection.slice(0, -1)));
+	return entries.sort((a, b) => a.data.order - b.data.order).map(({ data }) => data);
 }
 
 function assertEntrySlug(id: string, slug: string, contentType: string): void {
-	const fileSlug = id.replace(/\.json$/, "");
+	const fileSlug = id.replace(/\.json$/, "").split("/").pop() ?? id;
 	if (fileSlug !== slug) {
-		throw new Error(
-			`CMS ${contentType} slug "${slug}" must match its filename "${fileSlug}"`,
-		);
+		throw new Error(`CMS ${contentType} slug "${slug}" must match its filename "${fileSlug}"`);
 	}
 }
 
