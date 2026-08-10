@@ -1,0 +1,17 @@
+{
+  "order": 3,
+  "slug": "neon-circuit",
+  "title": "Neon Circuit",
+  "summary": "Street racers cross a city controlled by predictive machines.",
+  "cover": { "src": "/uploads/cover-neon-portal.webp", "alt": "Neon science fiction comic cover", "width": 1024, "height": 1536 },
+  "genres": [
+    { "label": "Science Fiction", "slug": "science-fiction" },
+    { "label": "Action", "slug": "action" }
+  ],
+  "status": "ongoing",
+  "rating": 4.9,
+  "views": "83K",
+  "chapters": 61,
+  "updatedLabel": "1 day ago",
+  "author": "Akira"
+}
