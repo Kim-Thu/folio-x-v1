@@ -1,11 +1,15 @@
-import type { PageBuilderConfig } from "@/types/components/pages/builder/PageBuilder.types";
+import type {
+	PageBuilderContext,
+	PageEntryData,
+} from "@/types/components/pages/builder/PageBuilder.types";
 
 export interface LabsPageData {
+	page: PageEntryData;
+	context: PageBuilderContext;
 	metadata: {
 		title: string;
 		description: string;
 	};
-	builder: PageBuilderConfig;
 }
 
 export interface LabsPageProps {
