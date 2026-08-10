@@ -1,0 +1,17 @@
+{
+  "order": 8,
+  "slug": "spirit-hunter",
+  "title": "Spirit Hunter",
+  "summary": "A reluctant hunter follows a trail of stars into the forbidden forest.",
+  "cover": { "src": "/uploads/cover-moon-warrior.webp", "alt": "Spirit hunter in a moonlit forest", "width": 1024, "height": 1536 },
+  "genres": [
+    { "label": "Fantasy", "slug": "fantasy" },
+    { "label": "Horror", "slug": "horror" }
+  ],
+  "status": "ongoing",
+  "rating": 4.7,
+  "views": "38K",
+  "chapters": 37,
+  "updatedLabel": "5 days ago",
+  "author": "Lac Vu"
+}
