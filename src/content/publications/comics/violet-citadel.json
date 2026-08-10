@@ -128,7 +128,14 @@
             },
             "listViewLabel": "List view",
             "numberPrefix": "#",
-            "chapterLabel": "Chapter"
+            "chapterLabel": "Chapter",
+            "itemAction": {
+              "label": "Read now",
+              "icon": "arrowUpRight",
+              "iconPosition": "end",
+              "size": "sm",
+              "variant": "primary"
+            }
           }
         }
       ]
