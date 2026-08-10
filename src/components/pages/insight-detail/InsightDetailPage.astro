@@ -1,8 +1,48 @@
 ---
-import PageBuilder from "@/components/pages/builder/PageBuilder.astro";
+import LPage from "@/components/layout/LPage.astro";
+import LSection from "@/components/layout/LSection.astro";
+import PPageHeader from "@/components/object/project/page-header/PPageHeader.astro";
+import PArticle from "@/components/object/project/article/PArticle.astro";
 import type { InsightDetailPageProps } from "@/types/components/pages/insight-detail/InsightDetailPage.types";
 
 const { data } = Astro.props as InsightDetailPageProps;
+const { post } = data;
+const articleContent = post.content.map((item) =>
+	item.type === "image" ? { type: "image" as const, image: item.image } : { ...item },
+);
 ---
 
-<PageBuilder config={data.builder} />
+<LPage template="fluid">
+	<LSection theme="canvas" spacing="lead">
+		<PPageHeader
+			template="editorial"
+			data={{
+				breadcrumb: {
+					label: "Breadcrumb",
+					items: [
+						{ label: "Stories", href: "/blog" },
+						{ label: post.category, href: `/blog/category/${post.categorySlug}` },
+					],
+					current: post.title,
+				},
+				category: { label: post.category, href: `/blog/category/${post.categorySlug}` },
+				title: post.title,
+				description: post.excerpt,
+				author: post.author,
+				publishedAt: post.publishedAt,
+				publishedLabel: post.publishedLabel,
+				readTime: post.readTime,
+				image: {
+					src: post.image,
+					alt: post.imageAlt,
+					width: 1400,
+					height: 900,
+				},
+			}}
+		/>
+	</LSection>
+
+	<LSection theme="canvas" spacing="body">
+		<PArticle template="flow" content={articleContent} />
+	</LSection>
+</LPage>
