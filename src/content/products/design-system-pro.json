@@ -9,5 +9,55 @@
   "price": 59,
   "rating": 4.9,
   "reviews": 82,
-  "image": "https://images.unsplash.com/photo-1559028012-481c04fa702d?auto=format&fit=crop&w=900&q=88"
+  "image": "https://images.unsplash.com/photo-1559028012-481c04fa702d?auto=format&fit=crop&w=900&q=88",
+  "detail": {
+    "page": {
+      "template": "fluid",
+      "sections": [
+        {
+          "id": "product-summary",
+          "type": "page-header",
+          "template": "gallery-summary",
+          "settings": {
+            "theme": "canvas",
+            "spacing": "compact",
+            "container": "site"
+          },
+          "content": {
+            "breadcrumbLabel": "Breadcrumb",
+            "productsLabel": "Products",
+            "galleryLabel": "Design System Pro gallery",
+            "thumbnailLabel": "Select preview",
+            "reviewsLabel": "reviews",
+            "platformLabel": "Platform",
+            "categoryLabel": "Category",
+            "actionsLabel": "Design System Pro actions",
+            "primaryActionLabel": "Contact to purchase",
+            "secondaryActionLabel": "View preview",
+            "paymentLabel": "Payment methods"
+          }
+        },
+        {
+          "id": "product-overview",
+          "type": "article",
+          "settings": {
+            "theme": "canvas",
+            "spacing": "body",
+            "container": "content"
+          },
+          "content": {
+            "blocks": [
+              {
+                "id": "product-overview",
+                "title": "Overview",
+                "paragraphs": [
+                  "Complete design system with components and guidelines."
+                ]
+              }
+            ]
+          }
+        }
+      ]
+    }
+  }
 }
