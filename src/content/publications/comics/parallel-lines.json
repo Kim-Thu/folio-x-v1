@@ -1,0 +1,17 @@
+{
+  "order": 6,
+  "slug": "parallel-lines",
+  "title": "Parallel Lines",
+  "summary": "Two lives intersect across timelines in a quiet science-fiction romance.",
+  "cover": { "src": "/uploads/cover-neon-portal.webp", "alt": "Parallel Lines comic cover", "width": 1024, "height": 1536 },
+  "genres": [
+    { "label": "Science Fiction", "slug": "science-fiction" },
+    { "label": "Romance", "slug": "romance" }
+  ],
+  "status": "ongoing",
+  "rating": 4.6,
+  "views": "51K",
+  "chapters": 44,
+  "updatedLabel": "3 days ago",
+  "author": "Akira"
+}
