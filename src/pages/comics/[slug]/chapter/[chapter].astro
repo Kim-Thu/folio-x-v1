@@ -10,8 +10,10 @@ export function getStaticPaths() {
 
 const slug = Astro.params.slug ?? "";
 const chapter = Astro.params.chapter ?? "";
-const layout = await getLayoutData();
-const data = getPublicationReaderPageData("comics", slug, chapter);
+const [layout, data] = await Promise.all([
+	getLayoutData(),
+	getPublicationReaderPageData("comics", slug, chapter),
+]);
 ---
 
 <BaseLayout {...layout} tone="light" title={`${data.metadata.title} | ${layout.title}`} description={data.metadata.description}>
