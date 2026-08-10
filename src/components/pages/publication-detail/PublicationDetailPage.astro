@@ -9,84 +9,66 @@ import PEntryIndex from "@/components/object/project/entry-index/PEntryIndex.ast
 import CDescriptionList from "@/components/object/component/CDescriptionList.astro";
 import CTags from "@/components/object/component/CTags.astro";
 import type { PublicationDetailPageProps } from "@/types/components/pages/publication-detail/PublicationDetailPage.types";
-import type { LSectionSpacing, LSectionTheme } from "@/types/components/layout/LSection.types";
-import type { CButtonProps } from "@/types/components/object/component/CButton.types";
 
 const { data } = Astro.props as PublicationDetailPageProps;
 const { entry, collection } = data;
 const detail = entry.detail;
-const page = detail?.page;
-if (!detail || !page) throw new Error(`Missing CMS publication detail page: ${collection}/${entry.slug}`);
-
-type RecordValue = Record<string, unknown>;
-const asRecord = (value: unknown): RecordValue => value && typeof value === "object" && !Array.isArray(value) ? value as RecordValue : {};
-const asString = (value: unknown) => typeof value === "string" ? value : "";
-const asArray = (value: unknown) => Array.isArray(value) ? value : [];
-const frame = (section: (typeof page.sections)[number]) => {
-	const settings = asRecord(section.settings);
-	return {
-		id: section.id,
-		theme: asString(settings.theme) as LSectionTheme,
-		spacing: asString(settings.spacing) as LSectionSpacing,
-		container: asString(settings.container) as "site" | "content" | "none",
-	};
-};
+if (!detail) throw new Error(`Missing CMS publication detail: ${collection}/${entry.slug}`);
+const page = detail.page;
 
 const chapterSection = page.sections.find((section) => section.type === "entry-index");
-const chapterConfig = asRecord(chapterSection?.content);
-const itemAction = asRecord(chapterConfig.itemAction) as CButtonProps;
 const configuredChapters = [...(detail.reader ?? [])].sort((a, b) => b.number - a.number);
-const chapterItems = configuredChapters.map((chapter) => ({
-	order: chapter.number,
-	number: `${asString(chapterConfig.numberPrefix)}${chapter.number}`,
-	title: chapter.title,
-	publishedAt: chapter.publishedAt,
-	publishedLabel: chapter.publishedLabel,
-	views: chapter.views,
-	href: `/${collection}/${entry.slug}/chapter/${chapter.number}`,
-	action: Object.keys(itemAction).length ? itemAction : undefined,
-}));
+const chapterItems = chapterSection
+	? configuredChapters.map((chapter) => ({
+		order: chapter.number,
+		number: `${chapterSection.content.numberPrefix}${chapter.number}`,
+		title: chapter.title,
+		publishedAt: chapter.publishedAt,
+		publishedLabel: chapter.publishedLabel,
+		views: chapter.views,
+		href: `/${collection}/${entry.slug}/chapter/${chapter.number}`,
+		action: chapterSection.content.itemAction,
+	}))
+	: [];
 ---
 
 <LPage template={page.template}>
 	{page.sections.map((section) => {
-		const content = asRecord(section.content);
 		if (section.type === "page-header") {
-			const metrics = asRecord(content.metrics);
-			const facts = asRecord(content.facts);
+			const { content } = section;
 			return (
-				<LSection {...frame(section)}>
+				<LSection id={section.id} {...section.settings}>
 					<PPageHeader
-						template={section.template as "cover-summary"}
+						template={section.template}
 						data={{
 							breadcrumb: {
-								label: asString(content.breadcrumbLabel),
-								items: [{ label: asString(content.collectionLabel), href: `/${collection}` }],
+								label: content.breadcrumbLabel,
+								items: [{ label: content.collectionLabel, href: `/${collection}` }],
 								current: entry.title,
 							},
 							cover: entry.cover,
-							tagsLabel: asString(content.tagsLabel),
+							tagsLabel: content.tagsLabel,
 							tags: entry.genres.map((genre) => ({ label: genre.label, href: `/${collection}/category/${genre.slug}` })),
 							title: entry.title,
-							author: { label: asString(content.authorLabel), name: entry.author },
+							author: { label: content.authorLabel, name: entry.author },
 							metrics: [
-								{ label: asString(metrics.ratingLabel), value: String(entry.rating), icon: "star" },
-								{ label: asString(metrics.readsLabel), value: entry.views, icon: "eye" },
-								{ label: asString(metrics.chaptersLabel), value: String(entry.chapters), icon: "bookOpen" },
-								{ label: asString(metrics.followersLabel), value: detail.followers, icon: "bookmark" },
+								{ label: content.metrics.ratingLabel, value: String(entry.rating), icon: "star" },
+								{ label: content.metrics.readsLabel, value: entry.views, icon: "eye" },
+								{ label: content.metrics.chaptersLabel, value: String(entry.chapters), icon: "bookOpen" },
+								{ label: content.metrics.followersLabel, value: detail.followers, icon: "bookmark" },
 							],
-							actionsLabel: asString(content.actionsLabel),
-							actions: [{ label: asString(content.primaryActionLabel), href: "#chapters", icon: "bookOpen", variant: "primary", size: "md" }],
+							actionsLabel: content.actionsLabel,
+							actions: [{ label: content.primaryActionLabel, href: "#chapters", icon: "bookOpen", variant: "primary", size: "md" }],
 							description: detail.description,
 							facts: {
-								title: asString(content.factsTitle),
+								title: content.factsTitle,
 								items: [
-									{ label: asString(facts.authorLabel), value: entry.author },
-									{ label: asString(facts.genresLabel), value: entry.genres.map((genre) => genre.label).join(", ") },
-									{ label: asString(facts.languageLabel), value: detail.language },
-									{ label: asString(facts.statusLabel), value: entry.status === "ongoing" ? asString(facts.ongoingLabel) : asString(facts.completeLabel) },
-									{ label: asString(facts.updatedLabel), value: entry.updatedLabel },
-									{ label: asString(facts.viewsLabel), value: entry.views },
+									{ label: content.facts.authorLabel, value: entry.author },
+									{ label: content.facts.genresLabel, value: entry.genres.map((genre) => genre.label).join(", ") },
+									{ label: content.facts.languageLabel, value: detail.language },
+									{ label: content.facts.statusLabel, value: entry.status === "ongoing" ? content.facts.ongoingLabel : content.facts.completeLabel },
+									{ label: content.facts.updatedLabel, value: entry.updatedLabel },
+									{ label: content.facts.viewsLabel, value: entry.views },
 								],
 							},
 						}}
@@ -97,35 +79,29 @@ const chapterItems = configuredChapters.map((chapter) => ({
 
 		if (section.type === "tabs") {
 			return (
-				<LSection {...frame(section)}>
-					<CTabList
-						label={asString(content.label)}
-						appearance={asString(content.appearance) as "underline"}
-						tone={asString(content.tone) as "light"}
-						activeValue={asString(content.activeValue)}
-						tabs={asArray(content.tabs) as Array<{ label: string; value: string; href: string }>}
-					/>
+				<LSection id={section.id} {...section.settings}>
+					<CTabList {...section.content} />
 				</LSection>
 			);
 		}
 
 		if (section.type === "entry-index") {
-			const sort = asRecord(content.sort);
+			const { content } = section;
 			return (
-				<LSection {...frame(section)}>
-					<LSidebar label={asString(content.asideLabel)}>
+				<LSection id={section.id} {...section.settings}>
+					<LSidebar label={content.asideLabel}>
 						<CColumns slot="sidebar" columns="one" gap="md">
-							<CDescriptionList items={[{ label: asString(content.introductionLabel), value: detail.description[0] }]} />
+							<CDescriptionList items={[{ label: content.introductionLabel, value: detail.description[0] }]} />
 							{detail.tags.length ? (
-								<CTags label={asString(content.tagsLabel)} items={detail.tags.map((tag) => ({ label: tag.label, href: `/${collection}/tag/${tag.slug}` }))} />
+								<CTags label={content.tagsLabel} items={detail.tags.map((tag) => ({ label: tag.label, href: `/${collection}/tag/${tag.slug}` }))} />
 							) : null}
 						</CColumns>
 						<PEntryIndex
 							id={section.id}
-							label={asString(content.chapterIndexLabel)}
-							title={asString(content.title)}
-							sort={{ id: asString(sort.id), label: asString(sort.label), value: asString(sort.value), options: asArray(sort.options) as Array<{ label: string; value: string }> }}
-							listViewLabel={asString(content.listViewLabel)}
+							label={content.chapterIndexLabel}
+							title={content.title}
+							sort={content.sort}
+							listViewLabel={content.listViewLabel}
 							items={chapterItems}
 							visibleCount={chapterItems.length}
 						/>
