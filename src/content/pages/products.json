@@ -7,74 +7,179 @@
   "content": {
     "sections": [
       {
-        "id": "products-copy",
-        "type": "copy",
+        "id": "products-hero",
+        "type": "page-header",
+        "template": "split-benefits",
+        "settings": {
+          "theme": "canvas",
+          "spacing": "lead",
+          "container": "site"
+        },
         "content": {
-          "hero": {
-            "id": "products-hero",
-            "eyebrow": "Digital products",
-            "title": "Build faster. Create better",
-            "accent": ".",
-            "description": "Premium themes, plugins and UI kits crafted for modern web creators.",
-            "benefits": [
+          "id": "products-hero",
+          "eyebrow": "Digital products",
+          "title": "Build faster. Create better",
+          "accent": ".",
+          "description": "Premium themes, plugins and UI kits crafted for modern web creators.",
+          "benefits": {
+            "items": [
               { "label": "High quality", "icon": "star" },
               { "label": "Regular updates", "icon": "clock01" },
               { "label": "Easy to customize", "icon": "lightBulb" }
-            ],
-            "image": {
-              "src": "/uploads/page-header-projects.png",
-              "alt": "A collection of digital products emerging from a black box",
-              "width": 1372,
-              "height": 1147
+            ]
+          },
+          "image": {
+            "src": "/uploads/page-header-projects.png",
+            "alt": "A collection of digital products emerging from a black box",
+            "width": 1372,
+            "height": 1147
+          }
+        }
+      },
+      {
+        "id": "products",
+        "type": "archive",
+        "template": "faceted",
+        "settings": {
+          "theme": "canvas",
+          "spacing": "body",
+          "container": "site"
+        },
+        "content": {
+          "source": {
+            "collection": "products"
+          },
+          "toolbar": {
+            "search": {
+              "id": "product-search",
+              "label": "Search products",
+              "name": "search",
+              "placeholder": "Search products..."
+            },
+            "category": {
+              "control": "category",
+              "id": "product-category",
+              "label": "Category",
+              "allLabel": "Category"
+            },
+            "platform": {
+              "control": "platform",
+              "id": "product-platform",
+              "label": "Platform",
+              "allLabel": "All platforms",
+              "options": ["WordPress", "Figma", "HTML / Tailwind", "React / Next.js", "Other"]
+            },
+            "sort": {
+              "label": "Sort products",
+              "value": "newest",
+              "options": [
+                { "label": "Sort: Newest", "value": "newest" },
+                { "label": "Price: Low to high", "value": "price-low" },
+                { "label": "Price: High to low", "value": "price-high" },
+                { "label": "Top rated", "value": "rating" }
+              ]
+            },
+            "view": {
+              "label": "Product view",
+              "gridLabel": "Grid view",
+              "listLabel": "List view"
             }
           },
-          "catalog": {
-            "filterLabel": "Product filters",
-            "resultLabel": "products found",
-            "emptyLabel": "No products match your filters.",
-            "searchLabel": "Search products",
-            "searchPlaceholder": "Search products...",
-            "categoryLabel": "Category",
-            "platformLabel": "Platform",
-            "sortLabel": "Sort products",
-            "sortOptions": [
-              { "label": "Sort: Newest", "value": "newest" },
-              { "label": "Price: Low to high", "value": "price-low" },
-              { "label": "Price: High to low", "value": "price-high" },
-              { "label": "Top rated", "value": "rating" }
-            ],
-            "viewLabel": "Product view",
-            "gridViewLabel": "Grid view",
-            "listViewLabel": "List view",
-            "paginationLabel": "Product page",
+          "sidebar": {
+            "label": "Product filters",
+            "category": {
+              "legend": "Category"
+            },
+            "platform": {
+              "legend": "Platform"
+            },
+            "price": {
+              "id": "product-price",
+              "label": "Price",
+              "name": "price",
+              "min": 0,
+              "max": 99,
+              "value": 99,
+              "maxSuffix": "+",
+              "prefix": "$"
+            },
+            "license": {
+              "legend": "Free / Pro",
+              "freeLabel": "Free",
+              "proLabel": "Pro"
+            },
+            "ratings": {
+              "legend": "Ratings"
+            },
+            "advertisement": {
+              "title": "Bundle tiết kiệm",
+              "description": "Tiết kiệm đến 30% khi mua sản phẩm theo bundle.",
+              "image": {
+                "src": "/uploads/ads-1.png",
+                "alt": "Bundle sản phẩm tiết kiệm",
+                "width": 1402,
+                "height": 1122
+              },
+              "action": {
+                "href": "#products",
+                "label": "Xem bundles",
+                "icon": "arrowRight"
+              }
+            }
+          },
+          "result": {
+            "label": "products found"
+          },
+          "cards": {
+            "template": "media-details",
+            "layout": "grid",
+            "columns": 3,
+            "gap": "md"
+          },
+          "emptyLabel": "No products match your filters.",
+          "pagination": {
+            "label": "Product page",
             "previousLabel": "Previous page",
             "nextLabel": "Next page",
-            "pageSize": 9,
-            "priceLabel": "Price",
-            "licenseLabel": "Free / Pro",
-            "freeLabel": "Free",
-            "proLabel": "Pro",
-            "ratingsLabel": "Ratings"
+            "pageSize": 9
+          }
+        }
+      },
+      {
+        "id": "all-access",
+        "type": "cta",
+        "template": "media-pricing",
+        "settings": {
+          "theme": "canvas",
+          "spacing": "closing",
+          "container": "site"
+        },
+        "content": {
+          "id": "all-access",
+          "title": "NKT All Access",
+          "description": "Get unlimited access to all products and future updates.",
+          "action": {
+            "href": "mailto:hello@nkt.studio",
+            "label": "Get All Access"
           },
-          "advertisement": {
-            "title": "Bundle tiết kiệm",
-            "description": "Tiết kiệm đến 30% khi mua sản phẩm theo bundle.",
-            "image": {"src":"/uploads/ads-1.png","alt":"Bundle sản phẩm tiết kiệm","width":1402,"height":1122},
-            "action": {"href":"#products","label":"Xem bundles","icon":"arrowRight"}
+          "image": {
+            "src": "/uploads/cta-2.png",
+            "alt": "",
+            "width": 1402,
+            "height": 1122
           },
-          "access": {
-            "id": "all-access",
-            "title": "NKT All Access",
-            "description": "Get unlimited access to all products and future updates.",
-            "actionLabel": "Get All Access",
-            "image": { "src": "/uploads/cta-2.png", "alt": "", "width": 1402, "height": 1122 },
-            "features": [
+          "features": {
+            "items": [
               { "icon": "check", "label": "All products" },
               { "icon": "check", "label": "Lifetime updates" },
               { "icon": "check", "label": "Premium support" },
               { "icon": "check", "label": "Cancel anytime" }
-            ],
-            "price": { "current": "$149", "period": "/ year", "previous": "$199" }
+            ]
+          },
+          "price": {
+            "current": "$149",
+            "period": "/ year",
+            "previous": "$199"
           }
         }
       }
