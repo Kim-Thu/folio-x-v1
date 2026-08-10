@@ -11,5 +11,54 @@
   "rating": 4.9,
   "reviews": 154,
   "badge": "UI KIT",
-  "image": "/uploads/page-header-insight.png"
+  "image": "/uploads/page-header-insight.png",
+  "detail": {
+    "page": {
+      "template": "fluid",
+      "sections": [
+        {
+          "id": "product-summary",
+          "type": "page-header",
+          "template": "gallery-summary",
+          "settings": {
+            "theme": "canvas",
+            "spacing": "compact",
+            "container": "site"
+          },
+          "content": {
+            "breadcrumbLabel": "Breadcrumb",
+            "collectionLabel": "Products",
+            "galleryLabel": "Orbit UI Kit gallery",
+            "previewLabel": "Select preview",
+            "reviewLabel": "reviews",
+            "platformLabel": "Platform",
+            "categoryLabel": "Category",
+            "primaryActionLabel": "Contact to purchase",
+            "primaryActionHref": "mailto:thunk.work.91@gmail.com",
+            "secondaryActionLabel": "View preview",
+            "paymentLabel": "Payment methods"
+          }
+        },
+        {
+          "id": "product-overview",
+          "type": "article",
+          "template": "flow",
+          "settings": {
+            "theme": "canvas",
+            "spacing": "body",
+            "container": "content"
+          },
+          "content": {
+            "title": "Overview",
+            "blocks": [
+              {
+                "type": "paragraph",
+                "text": "Modern UI kit with 300+ components and elegant system."
+              }
+            ]
+          }
+        }
+      ]
+    }
+  }
 }
