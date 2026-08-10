@@ -1,0 +1,14 @@
+{
+  "id": 10,
+  "slug": "react-commerce",
+  "title": "React Commerce",
+  "category": "Template",
+  "categorySlug": "templates",
+  "platform": "React / Next.js",
+  "description": "A fast storefront starter built for modern teams.",
+  "price": 69,
+  "rating": 4.9,
+  "reviews": 44,
+  "badge": "NEXT.JS",
+  "image": "https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?auto=format&fit=crop&w=900&q=88"
+}
