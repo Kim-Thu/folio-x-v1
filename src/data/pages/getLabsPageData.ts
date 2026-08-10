@@ -30,17 +30,11 @@ export async function getLabTechnologyPaths() {
 export async function getLabsPageData(
 	selection: LabsPageSelection = {},
 ): Promise<LabsPageData> {
-	const page = await getPage("/labs");
-
 	return {
-		page,
+		page: await getPage("/labs"),
 		context: {
 			categorySlug: selection.category,
 			technologySlug: selection.technology,
-		},
-		metadata: {
-			title: page.meta.title,
-			description: page.meta.description ?? "",
 		},
 	};
 }
