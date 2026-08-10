@@ -4,45 +4,52 @@ import LSection from "@/components/layout/LSection.astro";
 import PPageHeader from "@/components/object/project/page-header/PPageHeader.astro";
 import PArticle from "@/components/object/project/article/PArticle.astro";
 import type { InsightDetailPageProps } from "@/types/components/pages/insight-detail/InsightDetailPage.types";
+import type { PPageHeaderProps } from "@/types/components/object/project/page-header/PPageHeader.types";
+import type { LSectionSpacing, LSectionTheme } from "@/types/components/layout/LSection.types";
 
 const { data } = Astro.props as InsightDetailPageProps;
 const { post } = data;
+const page = post.detail?.page;
+if (!page) throw new Error(`Missing insight detail page config: ${post.slug}`);
+
 const articleContent = post.content.map((item) =>
 	item.type === "image" ? { type: "image" as const, image: item.image } : { ...item },
 );
+
+const asRecord = (value: unknown): Record<string, unknown> =>
+	value && typeof value === "object" && !Array.isArray(value) ? value as Record<string, unknown> : {};
+const asString = (value: unknown, fallback = "") => typeof value === "string" ? value : fallback;
 ---
 
-<LPage template="fluid">
-	<LSection theme="canvas" spacing="lead">
-		<PPageHeader
-			template="editorial"
-			data={{
-				breadcrumb: {
-					label: "Breadcrumb",
-					items: [
-						{ label: "Stories", href: "/blog" },
-						{ label: post.category, href: `/blog/category/${post.categorySlug}` },
-					],
-					current: post.title,
-				},
-				category: { label: post.category, href: `/blog/category/${post.categorySlug}` },
-				title: post.title,
-				description: post.excerpt,
-				author: post.author,
-				publishedAt: post.publishedAt,
+<LPage template={page.template}>
+	{page.sections.map((section) => {
+		const settings = asRecord(section.settings);
+		const content = asRecord(section.content);
+		const theme = asString(settings.theme, "canvas") as LSectionTheme;
+		const spacing = asString(settings.spacing, "body") as LSectionSpacing;
+		const container = asString(settings.container, "site") as "site" | "content" | "none";
+
+		if (section.type === "page-header") {
+			const headerData = {
+				...content,
 				publishedLabel: post.publishedLabel,
 				readTime: post.readTime,
-				image: {
-					src: post.image,
-					alt: post.imageAlt,
-					width: 1400,
-					height: 900,
-				},
-			}}
-		/>
-	</LSection>
+			} as unknown as PPageHeaderProps["data"];
+			return (
+				<LSection id={section.id} theme={theme} spacing={spacing} container={container}>
+					<PPageHeader template={section.template as PPageHeaderProps["template"]} data={headerData} />
+				</LSection>
+			);
+		}
 
-	<LSection theme="canvas" spacing="body">
-		<PArticle template="flow" content={articleContent} />
-	</LSection>
+		if (section.type === "article") {
+			return (
+				<LSection id={section.id} theme={theme} spacing={spacing} container={container}>
+					<PArticle template={section.template as "flow" | undefined} content={articleContent} />
+				</LSection>
+			);
+		}
+
+		return null;
+	})}
 </LPage>
