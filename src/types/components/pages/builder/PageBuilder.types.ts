@@ -35,6 +35,7 @@ export type PageSectionData = PageEntryData["content"]["sections"][number];
 export interface PageBuilderContext {
 	categorySlug?: string;
 	tagSlug?: string;
+	technologySlug?: string;
 }
 
 export type PageRegionPlacement = "header" | "main" | "aside" | "cta";
