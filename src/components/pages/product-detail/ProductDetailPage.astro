@@ -1,8 +1,68 @@
 ---
-import PageBuilder from "@/components/pages/builder/PageBuilder.astro";
+import LPage from "@/components/layout/LPage.astro";
+import LSection from "@/components/layout/LSection.astro";
+import PPageHeader from "@/components/object/project/page-header/PPageHeader.astro";
+import PArticle from "@/components/object/project/article/PArticle.astro";
 import type { ProductDetailPageProps } from "@/types/components/pages/product-detail/ProductDetailPage.types";
 
 const { data } = Astro.props as ProductDetailPageProps;
+const { product } = data;
+const price = {
+	current: `$${product.price}`,
+	previous: product.oldPrice ? `$${product.oldPrice}` : undefined,
+	discount: product.oldPrice
+		? `-${Math.round((1 - product.price / product.oldPrice) * 100)}%`
+		: undefined,
+};
 ---
 
-<PageBuilder config={data.builder} />
+<LPage template="fluid">
+	<LSection theme="canvas" spacing="compact">
+		<PPageHeader
+			template="gallery-summary"
+			data={{
+				breadcrumb: {
+					label: "Breadcrumb",
+					items: [
+						{ label: "Products", href: "/products" },
+						{ label: product.category, href: `/products/category/${product.categorySlug}` },
+					],
+					current: product.title,
+				},
+				category: { label: product.category, href: `/products/category/${product.categorySlug}` },
+				title: product.title,
+				description: product.description,
+				badge: product.badge,
+				images: [{ src: product.image, alt: `${product.title} preview`, width: 900, height: 562 }],
+				galleryLabel: `${product.title} gallery`,
+				thumbnailLabel: "Select preview",
+				rating: { value: product.rating, maximum: 5, count: product.reviews, salesLabel: `${product.reviews} reviews` },
+				price,
+				features: [],
+				facts: [
+					{ label: "Platform", value: product.platform },
+					{ label: "Category", value: product.category },
+				],
+				actionsLabel: `${product.title} actions`,
+				actions: [
+					{ label: "Contact to purchase", href: `mailto:hello@nkt.studio?subject=${encodeURIComponent(product.title)}`, icon: "shoppingBag", variant: "primary" },
+					{ label: "View preview", href: product.image, icon: "arrowUpRight", variant: "outline" },
+				],
+				paymentLabel: "Payment methods",
+				paymentMethods: [],
+			}}
+		/>
+	</LSection>
+
+	<LSection theme="canvas" spacing="body">
+		<PArticle
+			blocks={[
+				{
+					id: "product-overview",
+					title: "Overview",
+					paragraphs: [product.description],
+				},
+			]}
+		/>
+	</LSection>
+</LPage>
