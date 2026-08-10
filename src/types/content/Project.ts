@@ -1,6 +1,13 @@
 import type { ContentSection } from '@/types/content/ContentSection';
 import type { TaxonomyTerm } from '@/types/content/TaxonomyTerm';
-import type { PageBuilderControl } from "@/types/components/pages/builder/PageBuilder.types";
+
+export interface ProjectDetailPageSection {
+  id: string;
+  type: string;
+  template?: string;
+  settings?: Record<string, unknown>;
+  content?: Record<string, unknown>;
+}
 
 export interface Project {
   number: string;
@@ -21,7 +28,7 @@ export interface Project {
   detail?: {
     role: string;
     duration: string;
-    showBackAction: boolean;
+    showBackAction?: boolean;
     liveUrl?: string;
     sourceUrl?: string;
     features: Array<{
@@ -63,6 +70,9 @@ export interface Project {
       name: string;
       role: string;
     };
-    builder?: PageBuilderControl;
+    page?: {
+      template: 'fluid' | 'contained' | 'boxed' | 'sidebar' | 'centered';
+      sections: ProjectDetailPageSection[];
+    };
   };
 }
