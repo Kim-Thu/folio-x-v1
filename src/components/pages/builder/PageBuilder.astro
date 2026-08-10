@@ -30,6 +30,7 @@ import type { PPageHeaderProps } from "@/types/components/object/project/page-he
 import type { PSectionHeaderData } from "@/types/components/object/project/section-header/PSectionHeader.types";
 
 const props = Astro.props as PageBuilderProps;
+const context = "page" in props ? (props.context ?? {}) : {};
 
 type RecordValue = Record<string, unknown>;
 
@@ -49,7 +50,7 @@ const sectionFrame = (section: PageSectionData) => {
 	return {
 		id: section.id,
 		theme: asString(settings.theme, "light") as "light" | "dark" | "none",
-		spacing: asString(settings.spacing, "compact") as "lead" | "body" | "compact" | "none",
+		spacing: asString(settings.spacing, "compact") as "lead" | "body" | "compact" | "closing" | "none",
 		container: asString(settings.container, "site") as "site" | "content" | "none",
 	};
 };
@@ -189,6 +190,94 @@ const regionFromSection = async (section: PageSectionData): Promise<PageRegion> 
 					data: content as unknown as PCtaProps["data"],
 				},
 			};
+
+		case "archive": {
+			const source = asRecord(content.source);
+			const collection = asString(source.collection);
+			const toolbar = asRecord(content.toolbar);
+			const pagination = asRecord(content.pagination);
+			const cards = asRecord(content.cards);
+			const taxonomy = asRecord(content.taxonomy);
+
+			if (collection !== "projects") {
+				throw new Error(`Unsupported CMS archive source: ${collection}`);
+			}
+
+			const projects = await getProjects();
+			const visibleProjects = projects.filter((project) => {
+				if (context.categorySlug) return project.categorySlug === context.categorySlug;
+				if (context.tagSlug) return project.tags.some((tag) => tag.slug === context.tagSlug);
+				return true;
+			});
+			const categories = Array.from(
+				new Map(
+					projects.map((project) => [
+						project.category,
+						{ label: project.category, value: project.category },
+					]),
+				).values(),
+			);
+			const pageSize = typeof pagination.pageSize === "number" ? pagination.pageSize : 7;
+			const sortOptions = asArray(toolbar.sortOptions)
+				.map(asRecord)
+				.filter((option) => typeof option.label === "string" && typeof option.value === "string")
+				.map((option) => ({
+					label: asString(option.label),
+					value: asString(option.value) as "featured" | "newest" | "oldest",
+				}));
+
+			return {
+				key: section.id,
+				component: "archive",
+				section: frame,
+				props: {
+					mode: "taxonomy",
+					toolbar: {
+						data: {
+							filter: {
+								label: asString(toolbar.filterLabel),
+								activeValue: "all",
+								tabs: [
+									{ label: asString(toolbar.allLabel), value: "all" },
+									...categories,
+								],
+							},
+							sort: {
+								label: asString(toolbar.sortLabel),
+								options: sortOptions,
+							},
+							view: {
+								label: asString(toolbar.viewLabel),
+								gridLabel: asString(toolbar.gridViewLabel),
+								listLabel: asString(toolbar.listViewLabel),
+							},
+						},
+					},
+					cards: {
+						template: asString(cards.template, "overlay") as PCardProps["template"],
+						layout: asString(cards.layout, "mosaic") as PCardProps["layout"],
+						gap: asString(cards.gap, "sm") as PCardProps["gap"],
+						items: visibleProjects.map((project, index) =>
+							mapProjectToCard(
+								project,
+								asString(cards.actionLabel),
+								"/",
+								index % 4 === 0 || index % 4 === 3 ? "wide" : "standard",
+								asString(taxonomy.tagPrefix),
+							),
+						),
+					},
+					emptyLabel: asString(content.emptyLabel),
+					pagination: {
+						label: asString(pagination.label),
+						previousLabel: asString(pagination.previousLabel),
+						nextLabel: asString(pagination.nextLabel),
+						pageSize,
+						totalPages: Math.max(1, Math.ceil(visibleProjects.length / pageSize)),
+					},
+				},
+			};
+		}
 
 		case "collection": {
 			const items = await resolveCollectionItems(section);
