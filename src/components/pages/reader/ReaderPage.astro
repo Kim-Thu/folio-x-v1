@@ -10,20 +10,43 @@ const { entry, catalogSlug, chapter } = data;
 const configuredChapter = entry.detail?.reader?.find((item) => item.number === chapter);
 const readerPage = entry.detail?.readerPage;
 if (!readerPage) throw new Error(`Missing CMS reader page: ${catalogSlug}/${entry.slug}`);
+if (!configuredChapter) throw new Error(`Missing CMS reader chapter: ${catalogSlug}/${entry.slug}/${chapter}`);
 
 const config = readerPage.content;
-const chapterTitle = configuredChapter?.title ?? `${config.chapterLabel} ${chapter}: ${entry.title}`;
 const indexHref = `/${catalogSlug}/${entry.slug}#chapters`;
 const chapterHref = (number: number) => `/${catalogSlug}/${entry.slug}/chapter/${number}`;
-const previous = chapter > 1 ? chapter - 1 : undefined;
-const next = chapter < entry.chapters ? chapter + 1 : undefined;
-const content = configuredChapter?.kind === "sequential-media" && configuredChapter.images?.length
+const configuredChapters = [...(entry.detail?.reader ?? [])].sort((a, b) => a.number - b.number);
+const chapterIndex = configuredChapters.findIndex((item) => item.number === chapter);
+const previousChapter = chapterIndex > 0 ? configuredChapters[chapterIndex - 1] : undefined;
+const nextChapter = chapterIndex >= 0 && chapterIndex < configuredChapters.length - 1 ? configuredChapters[chapterIndex + 1] : undefined;
+
+const content = configuredChapter.kind === "sequential-media" && configuredChapter.images?.length
 	? { kind: "sequential-media" as const, images: configuredChapter.images }
-	: configuredChapter?.kind === "prose" && configuredChapter.prose?.length
+	: configuredChapter.kind === "prose" && configuredChapter.prose?.length
 		? { kind: "prose" as const, items: configuredChapter.prose }
-		: catalogSlug === "comics"
-			? { kind: "sequential-media" as const, images: [entry.cover] }
-			: { kind: "prose" as const, items: [{ text: entry.summary }] };
+		: undefined;
+
+if (!content) throw new Error(`Missing CMS reader content: ${catalogSlug}/${entry.slug}/${chapter}`);
+
+const metadataItems = [
+	configuredChapter.publishedLabel && configuredChapter.publishedAt
+		? {
+				type: "datetime" as const,
+				label: configuredChapter.publishedLabel,
+				datetime: configuredChapter.publishedAt,
+				icon: "calendar03",
+				display: "icon-text" as const,
+			}
+		: undefined,
+	configuredChapter.readTime
+		? {
+				type: "reading-time" as const,
+				label: configuredChapter.readTime,
+				icon: "clock01",
+				display: "icon-text" as const,
+			}
+		: undefined,
+].filter(Boolean);
 ---
 
 <LPage template={readerPage.template}>
@@ -43,30 +66,25 @@ const content = configuredChapter?.kind === "sequential-media" && configuredChap
 					current: `${config.chapterLabel} ${chapter}`,
 				},
 				badge: `${config.chapterLabel} ${chapter}`,
-				title: chapterTitle,
-				metadata: {
-					items: [
-						{ type: "datetime", label: configuredChapter?.publishedLabel ?? entry.updatedLabel, datetime: configuredChapter?.publishedAt ?? config.defaultPublishedAt, icon: "calendar03", display: "icon-text" },
-						{ type: "reading-time", label: configuredChapter?.readTime ?? config.defaultReadTime, icon: "clock01", display: "icon-text" },
-					],
-				},
-				views: `${configuredChapter?.views ?? entry.views} ${config.viewsSuffix}`,
+				title: configuredChapter.title,
+				metadata: { items: metadataItems },
+				views: configuredChapter.views ? `${configuredChapter.views} ${config.viewsSuffix}` : undefined,
 				content,
 				actions: {
 					label: config.actionsLabel,
 					index: { label: config.chapterListLabel, href: indexHref, icon: "listView", variant: "outline", size: "md" },
 					settingsLabel: config.settingsLabel,
 					themeLabel: config.themeLabel,
-					next: next ? { label: config.nextLabel, href: chapterHref(next), icon: "arrowRight", iconPosition: "end", variant: "primary", size: "md" } : undefined,
+					next: nextChapter ? { label: config.nextLabel, href: chapterHref(nextChapter.number), icon: "arrowRight", iconPosition: "end", variant: "primary", size: "md" } : undefined,
 				},
 				share: { label: config.shareLabel, links: [] },
 				reactions: { label: config.reactionsLabel, items: [] },
 				bookmarkLabel: config.bookmarkLabel,
 				navigation: {
 					label: config.navigationLabel,
-					previous: previous ? { label: config.previousLabel, href: chapterHref(previous), icon: "arrowLeft", variant: "outline", size: "md" } : undefined,
+					previous: previousChapter ? { label: config.previousLabel, href: chapterHref(previousChapter.number), icon: "arrowLeft", variant: "outline", size: "md" } : undefined,
 					index: { label: config.chapterListLabel, href: indexHref, icon: "listView", variant: "outline", size: "md" },
-					next: next ? { label: config.nextLabel, href: chapterHref(next), icon: "arrowRight", iconPosition: "end", variant: "primary", size: "md" } : undefined,
+					next: nextChapter ? { label: config.nextLabel, href: chapterHref(nextChapter.number), icon: "arrowRight", iconPosition: "end", variant: "primary", size: "md" } : undefined,
 				},
 			}}
 		/>
