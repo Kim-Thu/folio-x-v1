@@ -1,0 +1,17 @@
+{
+  "order": 7,
+  "slug": "midnight-after-rain",
+  "title": "Midnight After Rain",
+  "summary": "A quiet mystery unfolds through letters that arrive after every storm.",
+  "cover": { "src": "/uploads/cover-sunset-threads.webp", "alt": "A calm city after rain", "width": 1024, "height": 1536 },
+  "genres": [
+    { "label": "Mystery", "slug": "mystery" },
+    { "label": "Romance", "slug": "romance" }
+  ],
+  "status": "complete",
+  "rating": 4.8,
+  "views": "43K",
+  "chapters": 42,
+  "updatedLabel": "4 days ago",
+  "author": "Minh Ha"
+}
