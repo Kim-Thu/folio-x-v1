@@ -21,5 +21,54 @@
   "features": [{ "title": "Clear signals", "description": "Focus on decisions instead of vanity metrics.", "icon": "bolt" }],
   "gallery": [{ "src": "/uploads/placeholder.png", "alt": "Analytics overview", "width": 1672, "height": 941 }],
   "resources": [{ "title": "Source code", "description": "Review the repository.", "href": "https://github.com", "icon": "github" }],
-  "facts": [{ "label": "Category", "value": "Data & Analytics" }, { "label": "Status", "value": "Complete" }]
+  "facts": [{ "label": "Category", "value": "Data & Analytics" }, { "label": "Status", "value": "Complete" }],
+  "detail": {
+    "page": {
+      "template": "fluid",
+      "sections": [
+        {
+          "id": "lab-summary",
+          "type": "page-header",
+          "template": "media-aside",
+          "settings": { "theme": "canvas", "spacing": "compact", "container": "site" },
+          "content": {
+            "labels": {
+              "breadcrumb": "Breadcrumb",
+              "actions": "Open Analytics actions",
+              "live": "Live demo",
+              "source": "Source code",
+              "technology": "Open Analytics technology stack"
+            }
+          }
+        },
+        {
+          "id": "lab-content",
+          "type": "article",
+          "settings": { "theme": "canvas", "spacing": "body", "container": "site" },
+          "content": { "appearance": "compact" }
+        },
+        {
+          "id": "features",
+          "type": "collection",
+          "template": "cards",
+          "settings": { "theme": "canvas", "spacing": "compact", "container": "site" },
+          "content": {
+            "heading": { "title": "Features" },
+            "cards": { "template": "icon-summary", "layout": "grid", "columns": 2, "gap": "sm" }
+          }
+        },
+        {
+          "id": "gallery",
+          "type": "collection",
+          "template": "cards",
+          "settings": { "theme": "canvas", "spacing": "compact", "container": "site" },
+          "content": {
+            "heading": { "title": "Gallery" },
+            "cards": { "template": "media-only", "layout": "grid", "columns": 5, "gap": "sm" },
+            "labels": { "openImage": "Open gallery image", "imageTitle": "Gallery image" }
+          }
+        }
+      ]
+    }
+  }
 }
