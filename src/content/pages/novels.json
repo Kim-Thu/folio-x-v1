@@ -16,8 +16,26 @@
           "container": "none"
         },
         "content": {
-          "source": { "collection": "publications", "catalog": "novels" },
-          "actionsLabel": "Novels actions"
+          "source": { "collection": "novels" },
+          "id": "novels-hero",
+          "eyebrow": "Novels",
+          "title": "Stories beyond",
+          "accent": "imagination.",
+          "description": "Explore novels, light novels, and web fiction with vivid worlds and stories worth staying up late for.",
+          "actionsLabel": "Novels actions",
+          "actions": [
+            { "label": "Start reading", "href": "/novels#featured-title", "icon": "arrowRight", "iconPosition": "end", "variant": "primary", "tone": "light", "size": "md" },
+            { "label": "Reading guide", "href": "/novels#latest-title", "icon": "archiveBox", "iconPosition": "end", "variant": "outline", "tone": "light", "size": "md" }
+          ],
+          "image": { "src": "/uploads/library-hero-reading.webp", "alt": "A reader discovering a fantasy city through an open book", "width": 1672, "height": 941 },
+          "quote": "Some stories stay with us forever.",
+          "quoteCredit": "NKT Studio",
+          "metrics": [
+            { "label": "Works", "value": "186+", "icon": "archiveBox" },
+            { "label": "Chapters", "value": "12.5K+", "icon": "folder01" },
+            { "label": "Reads", "value": "2.1M+", "icon": "globeAlt" },
+            { "label": "Rating", "value": "4.9", "icon": "star" }
+          ]
         }
       },
       {
@@ -30,12 +48,10 @@
           "container": "site"
         },
         "content": {
-          "source": { "collection": "publications", "catalog": "novels" },
+          "source": { "collection": "novels" },
+          "asideLabel": "Novels discovery",
           "asidePosition": "end",
-          "search": {
-            "label": "Search novels",
-            "placeholder": "Search title or author..."
-          },
+          "search": { "label": "Search novels", "placeholder": "Search title or author..." },
           "filters": {
             "genreLabel": "Genre",
             "allGenresLabel": "All genres",
@@ -44,18 +60,8 @@
             "ongoingLabel": "Ongoing",
             "completeLabel": "Complete"
           },
-          "sort": {
-            "label": "Sort",
-            "options": [
-              { "label": "Newest", "value": "newest" },
-              { "label": "Oldest", "value": "oldest" }
-            ]
-          },
-          "view": {
-            "label": "View",
-            "gridLabel": "Grid view",
-            "listLabel": "List view"
-          },
+          "sort": { "label": "Sort", "options": [{ "label": "Newest", "value": "newest" }, { "label": "Oldest", "value": "oldest" }] },
+          "view": { "label": "View", "gridLabel": "Grid view", "listLabel": "List view" },
           "sections": {
             "featuredTitle": "Featured",
             "latestTitle": "Latest updates",
@@ -71,13 +77,19 @@
         "id": "novels-newsletter",
         "type": "cta",
         "template": "subscription",
-        "settings": {
-          "theme": "canvas",
-          "spacing": "closing",
-          "container": "site"
-        },
+        "settings": { "theme": "canvas", "spacing": "closing", "container": "site" },
         "content": {
-          "source": { "collection": "publications", "catalog": "novels", "field": "newsletter" }
+          "id": "novels-newsletter",
+          "title": "Never miss a new chapter",
+          "description": "Get notified whenever a story you follow receives a new chapter.",
+          "image": { "src": "/uploads/library-newsletter-book.webp", "alt": "An open storybook with floating pages", "width": 1448, "height": 1086 },
+          "form": {
+            "formName": "novels-newsletter",
+            "inputId": "novels-newsletter-email",
+            "inputLabel": "Email address",
+            "placeholder": "Your email address...",
+            "submitLabel": "Subscribe"
+          }
         }
       }
     ]
