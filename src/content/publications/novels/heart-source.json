@@ -1,0 +1,17 @@
+{
+  "order": 3,
+  "slug": "heart-source",
+  "title": "Heart Source",
+  "summary": "A developer discovers that an experimental program can rewrite human emotion.",
+  "cover": { "src": "/uploads/cover-neon-portal.webp", "alt": "Figure before a neon portal", "width": 1024, "height": 1536 },
+  "genres": [
+    { "label": "Science Fiction", "slug": "science-fiction" },
+    { "label": "Romance", "slug": "romance" }
+  ],
+  "status": "ongoing",
+  "rating": 4.9,
+  "views": "76K",
+  "chapters": 76,
+  "updatedLabel": "1 day ago",
+  "author": "Akira"
+}
