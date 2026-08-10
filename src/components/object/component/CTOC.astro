@@ -1,0 +1,60 @@
+---
+import CLink from "@/components/object/component/CLink.astro";
+import CText from "@/components/object/component/CText.astro";
+import type { CTOCProps } from "@/types/components/object/component/CTOC.types";
+import { cn } from "@/utils/cn";
+import {
+	tocAppearanceClasses,
+	tocBaseClasses,
+	tocLinkClasses,
+	tocLinkCurrentClasses,
+	tocListClasses,
+	tocStickyClasses,
+	tocTitleClasses,
+} from "@/variants/components/object/component/CTOC.variants";
+
+const {
+	appearance = "plain",
+	class: className,
+	label,
+	items,
+	sticky = false,
+	...attributes
+} = Astro.props as CTOCProps;
+---
+
+<aside
+	{...attributes}
+	class={cn(
+		tocBaseClasses,
+		tocAppearanceClasses[appearance],
+		sticky && tocStickyClasses,
+		className,
+	)}
+>
+	<nav aria-label={label} data-article-toc>
+		<CText
+			as="span"
+			variant="caption"
+			tone="subtle"
+			class={tocTitleClasses}
+		>
+			{label}
+		</CText>
+		<ul class={tocListClasses[appearance]}>
+			{items.map((item, index) => (
+				<li>
+					<CLink
+						href={item.href}
+						class={cn(tocLinkClasses[appearance], index === 0 && tocLinkCurrentClasses[appearance])}
+						aria-current={index === 0 ? "location" : undefined}
+						data-article-toc-link
+						data-toc-appearance={appearance}
+					>
+						{item.label}
+					</CLink>
+				</li>
+			))}
+		</ul>
+	</nav>
+</aside>

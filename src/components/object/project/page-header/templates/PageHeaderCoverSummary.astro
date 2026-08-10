@@ -1,0 +1,66 @@
+---
+import CBadge from "@/components/object/component/CBadge.astro";
+import CBox from "@/components/object/component/CBox.astro";
+import CBreadcrumb from "@/components/object/component/CBreadcrumb.astro";
+import CButton from "@/components/object/component/CButton.astro";
+import CColumns from "@/components/object/component/CColumns.astro";
+import CDescriptionList from "@/components/object/component/CDescriptionList.astro";
+import CHeading from "@/components/object/component/CHeading.astro";
+import CGridItem from "@/components/object/component/CGridItem.astro";
+import CImage from "@/components/object/component/CImage.astro";
+import CMetadata from "@/components/object/component/CMetadata.astro";
+import CRow from "@/components/object/component/CRow.astro";
+import CShareLinks from "@/components/object/component/CShareLinks.astro";
+import CTags from "@/components/object/component/CTags.astro";
+import CText from "@/components/object/component/CText.astro";
+import type { PPageHeaderCoverSummaryData } from "@/types/components/object/project/page-header/PPageHeader.types";
+
+type Props = { data: PPageHeaderCoverSummaryData };
+const { data } = Astro.props as Props;
+---
+
+<CColumns columns="one" gap="md">
+	<CBreadcrumb {...data.breadcrumb} />
+	<CBox as="section" surface="glass-dark" radius="md" spacing="md" overflow="hidden">
+		<CColumns columns="twelve" gap="lg">
+			<CGridItem lgSpan={3}>
+			<CBox position="relative" radius="md" overflow="hidden">
+				<CImage {...data.cover} variant="natural" />
+				{data.trailer && <CBox position="overlay-bottom"><CButton {...data.trailer} tone="dark" /></CBox>}
+			</CBox>
+			</CGridItem>
+
+			<CGridItem as="header" lgSpan={6}>
+			<CColumns columns="one" gap="md">
+				<CTags label={data.tagsLabel} items={data.tags} />
+				<CRow align="center" gap="sm" wrap>
+					<CHeading level={1} variant="h3">{data.title}</CHeading>
+					{data.badge && <CBadge tone="brand">{data.badge}</CBadge>}
+				</CRow>
+				<CMetadata
+					data={{ items: [{ type: "author", label: `${data.author.label}: ${data.author.name}`, href: data.author.href, display: "text" }] }}
+					tone="on-dark-subtle"
+					slots={{ category: false, datetime: false, index: false, readingTime: false, icons: false }}
+				/>
+				<CDescriptionList items={data.metrics} variant="metrics" tone="on-dark" />
+				<CRow gap="sm" wrap role="group" aria-label={data.actionsLabel}>
+					{data.actions.map((action) => <CButton {...action} tone="dark" />)}
+				</CRow>
+				<CColumns columns="one" gap="sm">
+					{data.description.map((paragraph) => <CText tone="on-dark-muted">{paragraph}</CText>)}
+				</CColumns>
+			</CColumns>
+			</CGridItem>
+
+			<CGridItem as="aside" lgSpan={3}>
+			<CBox surface="canvas" radius="md" spacing="sm">
+				<CColumns columns="one" gap="sm">
+					<CHeading level={2} variant="h5">{data.facts.title}</CHeading>
+					<CDescriptionList items={data.facts.items} variant="compact" />
+					{data.share && <CShareLinks {...data.share} />}
+				</CColumns>
+			</CBox>
+			</CGridItem>
+		</CColumns>
+	</CBox>
+</CColumns>

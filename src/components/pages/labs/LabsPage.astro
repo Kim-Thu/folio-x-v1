@@ -1,0 +1,8 @@
+---
+import PageBuilder from "@/components/pages/builder/PageBuilder.astro";
+import type { LabsPageProps } from "@/types/components/pages/labs/LabsPage.types";
+
+const { data } = Astro.props as LabsPageProps;
+---
+
+<PageBuilder config={data.builder} />

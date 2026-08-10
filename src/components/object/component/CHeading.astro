@@ -1,0 +1,53 @@
+---
+import type { CHeadingProps } from "@/types/components/object/component/CHeading.types";
+import { cn } from "@/utils/cn";
+import {
+	headingBaseClasses,
+	headingTransformClasses,
+	headingVariantClasses,
+} from "@/variants/components/object/component/CHeading.variants";
+
+type Props = CHeadingProps;
+
+const {
+	accent,
+	class: className,
+	level,
+	lines,
+	transform = "none",
+	variant = `h${level}`,
+	...attributes
+} = Astro.props;
+const headingTags = {
+	1: "h1",
+	2: "h2",
+	3: "h3",
+	4: "h4",
+	5: "h5",
+	6: "h6",
+} as const;
+const Heading = headingTags[level];
+---
+
+<Heading
+	{...attributes}
+	class={cn(
+		headingBaseClasses,
+		headingVariantClasses[variant],
+		headingTransformClasses[transform],
+		className,
+	)}
+>
+	{
+		lines
+			? lines.map((line, index) => (
+				<span class="block">
+					{line}
+					{accent && index === lines.length - 1 && (
+						<span class="text-blue-500">{accent}</span>
+					)}
+				</span>
+			))
+			: <slot />
+	}
+</Heading>

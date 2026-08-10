@@ -1,0 +1,67 @@
+---
+import CBox from "@/components/object/component/CBox.astro";
+import CButton from "@/components/object/component/CButton.astro";
+import CColumns from "@/components/object/component/CColumns.astro";
+import CHeading from "@/components/object/component/CHeading.astro";
+import CGridItem from "@/components/object/component/CGridItem.astro";
+import CImage from "@/components/object/component/CImage.astro";
+import CMedia from "@/components/object/component/CMedia.astro";
+import CText from "@/components/object/component/CText.astro";
+import CRow from "@/components/object/component/CRow.astro";
+
+import type { PCtaData } from "@/types/components/object/project/cta/PCta.types";
+
+type Props = { data: PCtaData };
+
+const { data } = Astro.props;
+const headingId = `${data.id}-title`;
+---
+
+<CBox surface="glass" radius="lg" overflow="hidden">
+<CColumns columns="twelve" gap="none">
+	<CGridItem as="header" lgSpan={5} align="center">
+	<CBox spacing="xl">
+	<CColumns columns="one" gap="md">
+		<CHeading id={headingId} level={2} variant="h2">
+			{data.title}
+		</CHeading>
+
+		{
+			data.description && (
+				<CText tone="muted">{data.description}</CText>
+			)
+		}
+
+		{
+			data.action && (
+				<CRow>
+				<CButton
+						href={data.action.href}
+						label={data.action.label}
+						icon="arrowUpRight"
+						variant="outline"
+				/>
+				</CRow>
+			)
+		}
+	</CColumns>
+	</CBox>
+	</CGridItem>
+
+	{
+		data.image && (
+			<CGridItem lgSpan={7}>
+			<CMedia ratio="natural">
+				<CImage
+					src={data.image.src}
+					alt={data.image.alt}
+					width={data.image.width}
+					height={data.image.height}
+					variant="fill"
+				/>
+			</CMedia>
+			</CGridItem>
+		)
+	}
+</CColumns>
+</CBox>

@@ -1,0 +1,20 @@
+{
+  "order": 5,
+  "slug": "code-companion",
+  "title": "Code Companion",
+  "category": { "label": "Developer Tools", "slug": "developer-tools" },
+  "status": "in-progress",
+  "statusLabel": "In progress",
+  "summary": "A lightweight coding assistant experiment focused on explainable suggestions and controlled context.",
+  "image": { "src": "/uploads/page-header-work.webp", "alt": "Code companion developer tool", "width": 1400, "height": 1050 },
+  "technologies": [{ "label": "TypeScript", "slug": "typescript" }, { "label": "OpenAI", "slug": "openai" }, { "label": "VS Code API", "slug": "vscode-api" }],
+  "stars": 314,
+  "forks": 56,
+  "updatedLabel": "4 days ago",
+  "sourceUrl": "https://github.com",
+  "sections": [{ "title": "Overview", "paragraphs": ["A developer-tool experiment built around explicit context, reversible changes, and useful explanations."] }],
+  "features": [{ "title": "Controlled context", "description": "Choose what the assistant can inspect and change.", "icon": "lightBulb" }],
+  "gallery": [{ "src": "/uploads/page-header-work.webp", "alt": "Developer tool interface", "width": 1400, "height": 1050 }],
+  "resources": [{ "title": "Source code", "description": "Review the repository.", "href": "https://github.com", "icon": "github" }],
+  "facts": [{ "label": "Category", "value": "Developer Tools" }, { "label": "Status", "value": "In progress" }]
+}

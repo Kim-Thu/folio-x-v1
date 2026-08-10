@@ -1,0 +1,12 @@
+---
+import type { HTMLAttributes } from "astro/types";
+
+const attributes = Astro.props as HTMLAttributes<"div">;
+---
+
+<div
+	{...attributes}
+	class="invisible fixed inset-0 z-40 flex -translate-y-3 flex-col justify-between bg-black px-6 pb-10 pt-28 opacity-0 transition-all duration-300 lg:hidden"
+>
+	<slot />
+</div>

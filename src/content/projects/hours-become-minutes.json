@@ -1,0 +1,57 @@
+{
+  "order": 3,
+  "slug": "hours-become-minutes",
+  "title": "Hours become minutes",
+  "client": "Promotion Engine",
+  "year": "2024",
+  "category": "Workflow automation",
+  "categorySlug": "workflow-automation",
+  "tags": [
+    {
+      "label": "Automation",
+      "slug": "automation"
+    },
+    {
+      "label": "Rule Engine",
+      "slug": "rule-engine"
+    },
+    {
+      "label": "Operations",
+      "slug": "operations"
+    }
+  ],
+  "summary": "Chuyển quy trình thiết lập khuyến mãi thủ công thành một hệ thống rule-based rõ ràng, có thể kiểm tra và vận hành độc lập.",
+  "outcome": "8h → 15m",
+  "image": "https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&w=1400&q=85",
+  "alt": "Bo mạch điện tử tượng trưng cho hệ thống tự động hóa",
+  "tone": "dark",
+  "sections": [
+    {
+      "title": "Quy trình cũ",
+      "paragraphs": [
+        "Mỗi chương trình khuyến mãi cần nhiều bước nhập liệu, kiểm tra và phối hợp thủ công, khiến một thay đổi nhỏ có thể mất gần một ngày làm việc."
+      ]
+    },
+    {
+      "title": "Thiết kế lại",
+      "paragraphs": [
+        "Các điều kiện được chuyển thành rule rõ ràng với validation, preview và lịch sử thay đổi để đội vận hành tự kiểm tra trước khi phát hành."
+      ]
+    },
+    {
+      "title": "Tác động",
+      "paragraphs": [
+        "Thời gian thiết lập giảm từ tám giờ xuống khoảng mười lăm phút, đồng thời giảm phụ thuộc vào developer trong công việc hằng ngày."
+      ]
+    }
+  ],
+  "detail": {
+    "role": "Systems design, automation engineering",
+    "duration": "2024",
+    "showBackAction": true,
+    "sourceUrl": "https://github.com/Kim-Thu/folio-x-v1",
+    "features": [],
+    "gallery": [],
+    "results": []
+  }
+}

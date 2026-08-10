@@ -1,0 +1,13 @@
+---
+import CLink from "@/components/object/component/CLink.astro";
+import type { CSkipLinkProps } from "@/types/components/object/component/CSkipLink.types";
+import { skipLinkClasses } from "@/variants/components/object/component/CSkipLink.variants";
+
+type Props = CSkipLinkProps;
+
+const { href, ...attributes } = Astro.props;
+---
+
+<CLink href={href} class={skipLinkClasses} {...attributes}>
+	<slot />
+</CLink>

@@ -1,24 +1,30 @@
 ---
-import BlogArchive from '@/components/features/blog/BlogArchive.astro';
-import { archiveContent } from '@/data/archive';
-import { insights } from '@/data/site';
-import type { Insight, TaxonomyTerm } from '@/types/content';
-import { getTags } from '@/utils/taxonomy';
+import InsightsPage from "@/components/pages/insights/InsightsPage.astro";
+import {
+	getInsightsPageData,
+	getInsightTagPaths,
+} from "@/data/pages/getInsightsPageData";
+import { getLayoutData } from "@/data/pages/getLayoutData";
+import BaseLayout from "@/layouts/BaseLayout.astro";
 
-export function getStaticPaths() {
-  return getTags(insights).map((tag) => ({
-    params: { tag: tag.slug },
-    props: { tag, posts: insights.filter((post) => post.tags.some((item) => item.slug === tag.slug)) },
-  }));
-}
+export const getStaticPaths = getInsightTagPaths;
 
 interface Props {
-  tag: TaxonomyTerm;
-  posts: Insight[];
+	tagSlug: string;
 }
 
-const { tag, posts } = Astro.props;
-const content = archiveContent.blog;
+const { tagSlug } = Astro.props as Props;
+const [layout, data] = await Promise.all([
+	getLayoutData(),
+	getInsightsPageData({ tag: tagSlug }),
+]);
 ---
 
-<BlogArchive eyebrow={content.tagPrefix} title={tag.label} description={content.description} posts={posts} emptyLabel={content.emptyLabel} />
+<BaseLayout
+	{...layout}
+	tone="light"
+	title={`${data.metadata.title} | ${layout.title}`}
+	description={data.metadata.description}
+>
+	<InsightsPage {data} />
+</BaseLayout>

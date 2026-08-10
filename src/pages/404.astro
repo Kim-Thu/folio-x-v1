@@ -1,6 +1,18 @@
 ---
-import SystemStatePage from '@/components/features/system/SystemStatePage.astro';
-import { notFoundContent } from '@/data/system-states';
+import SystemStatePage from "@/components/pages/system-state/SystemStatePage.astro";
+import { getLayoutData } from "@/data/pages/getLayoutData";
+import { getSystemStatePageData } from "@/data/pages/getSystemStatePageData";
+import { notFoundContent } from "@/data/system-states";
+import BaseLayout from "@/layouts/BaseLayout.astro";
+
+const layoutData = await getLayoutData();
+const data = getSystemStatePageData(notFoundContent);
 ---
 
-<SystemStatePage content={notFoundContent} />
+<BaseLayout
+	{...layoutData}
+	title={notFoundContent.metadataTitle}
+	description={notFoundContent.metadataDescription}
+>
+	<SystemStatePage {data} />
+</BaseLayout>

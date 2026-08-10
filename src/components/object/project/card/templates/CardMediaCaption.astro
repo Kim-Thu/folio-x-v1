@@ -1,0 +1,44 @@
+---
+import CBox from "@/components/object/component/CBox.astro";
+import CColumns from "@/components/object/component/CColumns.astro";
+import CHeading from "@/components/object/component/CHeading.astro";
+import CImage from "@/components/object/component/CImage.astro";
+import CLink from "@/components/object/component/CLink.astro";
+import CMedia from "@/components/object/component/CMedia.astro";
+import CMetadata from "@/components/object/component/CMetadata.astro";
+import CText from "@/components/object/component/CText.astro";
+import type { PCardItemProps } from "@/types/components/object/project/card/PCard.types";
+
+const {
+	data,
+	headingLevel = 3,
+	mediaRatio = "landscape",
+	slots,
+} = Astro.props as PCardItemProps;
+const inverse = data.appearance === "inverse";
+---
+
+<CBox as="article">
+	{slots.media && data.media && (
+		<CMedia ratio={mediaRatio} href={data.href} ariaLabel={data.ariaLabel} shape="none">
+			<CImage {...data.media} variant="fill" />
+		</CMedia>
+	)}
+	<CBox spacing="md">
+		<CColumns columns="one" gap="xs">
+			{slots.title && (
+				<CHeading level={headingLevel} variant="h5">
+					<CLink href={data.href}>{data.title.join(" ")}</CLink>
+				</CHeading>
+			)}
+			{slots.metadata && data.metadata && (
+				<CMetadata data={data.metadata} size="xs" tone={inverse ? "on-dark-subtle" : "subtle"} />
+			)}
+			{slots.excerpt && data.excerpt && (
+				<CText variant="body-sm" tone={inverse ? "on-dark-muted" : "muted"}>
+					{data.excerpt}
+				</CText>
+			)}
+		</CColumns>
+	</CBox>
+</CBox>

@@ -1,0 +1,31 @@
+---
+import CButton from "@/components/object/component/CButton.astro";
+import CColumns from "@/components/object/component/CColumns.astro";
+import CList from "@/components/object/component/CList.astro";
+import CNavigation from "@/components/object/component/CNavigation.astro";
+import CText from "@/components/object/component/CText.astro";
+import type { CShareLinksProps } from "@/types/components/object/component/CShareLinks.types";
+
+const { label, links } = Astro.props as CShareLinksProps;
+---
+
+<CNavigation {label}>
+	<CColumns columns="one" gap="xs">
+		<CText variant="body-sm">{label}</CText>
+		<CList gap="sm">
+			{links.map((link) => (
+				<li>
+					<CButton
+						href={link.href}
+						label={link.label}
+						icon={link.icon}
+						iconOnly
+						size="sm"
+						tone="light"
+						variant="view"
+					/>
+				</li>
+			))}
+		</CList>
+	</CColumns>
+</CNavigation>

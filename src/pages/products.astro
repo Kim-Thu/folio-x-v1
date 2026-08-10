@@ -1,0 +1,18 @@
+---
+import ProductsPage from "@/components/pages/products/ProductsPage.astro";
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import { getLayoutData } from "@/data/pages/getLayoutData";
+import { getProductsPageData } from "@/data/pages/getProductsPageData";
+
+const layout = await getLayoutData();
+const data = await getProductsPageData();
+---
+
+<BaseLayout
+	{...layout}
+	tone="light"
+	title={`${data.metadata.title} | ${layout.title}`}
+	description={data.metadata.description}
+>
+	<ProductsPage {data} />
+</BaseLayout>

@@ -1,0 +1,63 @@
+{
+  "order": 1,
+  "slug": "ai-image-generator",
+  "title": "AI Image Generator",
+  "category": { "label": "AI & Machine Learning", "slug": "ai-machine-learning" },
+  "status": "in-progress",
+  "statusLabel": "In progress",
+  "summary": "A focused image-generation workspace for turning clear prompts into production-ready visual directions.",
+  "image": { "src": "/uploads/lab-ai-image-generator.png", "alt": "AI image generator astronaut experiment", "width": 1672, "height": 941 },
+  "technologies": [
+    { "label": "Python", "slug": "python" },
+    { "label": "FastAPI", "slug": "fastapi" },
+    { "label": "React", "slug": "react" }
+  ],
+  "stars": 128,
+  "forks": 34,
+  "updatedLabel": "2 weeks ago",
+  "liveUrl": "https://example.com",
+  "sourceUrl": "https://github.com",
+  "sections": [
+    {
+      "title": "Overview",
+      "paragraphs": [
+        "This experiment explores a direct, dependable workflow for creating images from natural-language prompts.",
+        "The interface keeps prompt refinement, generation history, and reusable presets in one clear workspace."
+      ]
+    },
+    {
+      "title": "Technology",
+      "paragraphs": [
+        "The prototype combines a React client with a FastAPI orchestration layer and a swappable image-model adapter.",
+        "Shared tokens and reusable interaction patterns keep the experience consistent as new models are evaluated."
+      ]
+    }
+  ],
+  "features": [
+    { "title": "Prompt workspace", "description": "Turn ideas into structured prompts with reusable controls.", "icon": "lightBulb" },
+    { "title": "Fast iteration", "description": "Compare variations without losing the original direction.", "icon": "bolt" },
+    { "title": "Style presets", "description": "Reuse proven visual directions across experiments.", "icon": "arrowPath" },
+    { "title": "Shareable output", "description": "Prepare selected results for review and handoff.", "icon": "globeAlt" }
+  ],
+  "gallery": [
+    { "src": "/uploads/lab-ai-image-generator.png", "alt": "AI image generator astronaut experiment", "width": 1672, "height": 941 },
+    { "src": "/uploads/page-header-products.png", "alt": "Generated interface asset collection", "width": 1536, "height": 1024 },
+    { "src": "/uploads/page-header-projects.png", "alt": "Generated product system artwork", "width": 1372, "height": 1147 },
+    { "src": "/uploads/patten-2.png", "alt": "Generated orbital experiment artwork", "width": 1536, "height": 1024 },
+    { "src": "/uploads/cta-2.png", "alt": "Generated portrait experiment artwork", "width": 1403, "height": 1121 }
+  ],
+  "resources": [
+    { "title": "Usage guide", "description": "Setup and prompt-writing notes.", "href": "#overview", "icon": "folder01" },
+    { "title": "API documentation", "description": "Endpoints and example payloads.", "href": "#technology", "icon": "folder01" },
+    { "title": "Source code", "description": "Review the experiment repository.", "href": "https://github.com", "icon": "github" },
+    { "title": "Video demo", "description": "Watch the primary workflow.", "href": "https://example.com", "icon": "play" }
+  ],
+  "facts": [
+    { "label": "Category", "value": "AI & Machine Learning" },
+    { "label": "Status", "value": "In progress" },
+    { "label": "Languages", "value": "Python, TypeScript" },
+    { "label": "Framework", "value": "FastAPI, React" },
+    { "label": "Last updated", "value": "20 Apr, 2024" },
+    { "label": "License", "value": "MIT License" }
+  ]
+}

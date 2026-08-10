@@ -1,0 +1,63 @@
+---
+import CBox from "@/components/object/component/CBox.astro";
+import CButton from "@/components/object/component/CButton.astro";
+import CColumns from "@/components/object/component/CColumns.astro";
+import CHeading from "@/components/object/component/CHeading.astro";
+import CGridItem from "@/components/object/component/CGridItem.astro";
+import CIcon from "@/components/object/component/CIcon.astro";
+import CImage from "@/components/object/component/CImage.astro";
+import CRow from "@/components/object/component/CRow.astro";
+import CText from "@/components/object/component/CText.astro";
+import type { PCtaData } from "@/types/components/object/project/cta/PCta.types";
+
+type Props = { data: PCtaData };
+const { data } = Astro.props as Props;
+const headingId = `${data.id}-title`;
+---
+
+<CBox
+	as="section"
+	id={data.id}
+	surface="glass-dark"
+	radius="md"
+	spacing="md"
+	aria-labelledby={headingId}
+>
+	<CColumns columns="twelve" gap="md" align="center">
+		<CGridItem lgSpan={2} align="center">
+		<CBox radius="md" overflow="hidden" spacing={data.image ? "none" : "sm"}>
+			{data.image ? (
+				<CImage {...data.image} variant="background-contain" />
+			) : (
+				<CIcon name="questionMarkCircle" size="lg" />
+			)}
+		</CBox>
+		</CGridItem>
+
+		<CGridItem lgSpan={7} align="center">
+		<CColumns columns="one" gap="xs">
+			<CHeading id={headingId} level={2} variant="h5">
+				{data.title}
+			</CHeading>
+			{data.description && (
+				<CText tone="on-dark-subtle">{data.description}</CText>
+			)}
+		</CColumns>
+		</CGridItem>
+
+		{data.action && (
+			<CGridItem lgSpan={3} align="center">
+			<CRow justify="end">
+				<CButton
+					href={data.action.href}
+					label={data.action.label}
+					icon="arrowUpRight"
+					variant="outline"
+					tone="dark"
+					size="sm"
+				/>
+			</CRow>
+			</CGridItem>
+		)}
+	</CColumns>
+</CBox>

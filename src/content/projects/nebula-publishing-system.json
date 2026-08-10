@@ -1,0 +1,26 @@
+{
+  "order": 6,
+  "slug": "nebula-publishing-system",
+  "title": "Publishing that keeps its structure",
+  "client": "Nebula Editorial",
+  "year": "2024",
+  "category": "WordPress",
+  "categorySlug": "wordpress",
+  "tags": [
+    { "label": "WordPress", "slug": "wordpress" },
+    { "label": "Content model", "slug": "content-model" }
+  ],
+  "summary": "Một hệ thống xuất bản có cấu trúc, cho phép biên tập nội dung linh hoạt mà không phá vỡ giao diện và chuẩn SEO.",
+  "outcome": "3× tốc độ xuất bản",
+  "image": "https://images.unsplash.com/photo-1558655146-9f40138edfeb?auto=format&fit=crop&w=1800&q=85",
+  "alt": "Màn hình thiết kế hệ thống nội dung số",
+  "tone": "light",
+  "sections": [
+    {
+      "title": "Giải pháp",
+      "paragraphs": [
+        "Chuẩn hóa content model, template và quyền biên tập để nội dung có thể mở rộng mà vẫn giữ tính nhất quán."
+      ]
+    }
+  ]
+}

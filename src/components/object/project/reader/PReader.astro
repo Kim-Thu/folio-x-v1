@@ -1,0 +1,105 @@
+---
+import CBadge from "@/components/object/component/CBadge.astro";
+import CBox from "@/components/object/component/CBox.astro";
+import CBreadcrumb from "@/components/object/component/CBreadcrumb.astro";
+import CButton from "@/components/object/component/CButton.astro";
+import CColumns from "@/components/object/component/CColumns.astro";
+import CFeature from "@/components/object/component/CFeature.astro";
+import CHeading from "@/components/object/component/CHeading.astro";
+import CGridItem from "@/components/object/component/CGridItem.astro";
+import CImage from "@/components/object/component/CImage.astro";
+import CMetadata from "@/components/object/component/CMetadata.astro";
+import CReactions from "@/components/object/component/CReactions.astro";
+import CRow from "@/components/object/component/CRow.astro";
+import CShareLinks from "@/components/object/component/CShareLinks.astro";
+import CText from "@/components/object/component/CText.astro";
+import type { PReaderProps } from "@/types/components/object/project/reader/PReader.types";
+import {
+	readerTextToneByKind,
+	readerTextVariantByKind,
+} from "@/variants/components/object/project/reader/PReader.variants";
+
+const { data } = Astro.props as PReaderProps;
+---
+
+<CColumns columns="one" gap="md">
+	<CBreadcrumb {...data.breadcrumb} />
+	<CBox
+		as="article"
+		surface="glass"
+		radius="md"
+		overflow="hidden"
+		data-reader-root
+		data-reader-scale="default"
+		data-reader-theme="light"
+	>
+		<CColumns columns="one" gap="none" separator="light">
+			<CBox as="header" spacing="lg">
+				<CColumns columns="two" gap="lg">
+					<CColumns columns="one" gap="sm">
+						<CRow><CBadge tone="brand">{data.badge}</CBadge></CRow>
+						<CHeading level={1} variant="h3">{data.title}</CHeading>
+						<CRow align="center" gap="md" wrap data-reader-muted>
+							<CMetadata
+								data={data.metadata}
+								slots={{ author: false, category: false, index: false, icons: true }}
+							/>
+							<CFeature icon="eye" label={data.views} />
+						</CRow>
+					</CColumns>
+
+					<CRow align="center" justify="end" gap="sm" wrap role="group" aria-label={data.actions.label}>
+						<CButton {...data.actions.index} tone="light" />
+						<CButton label={data.actions.settingsLabel} icon="adjustmentsHorizontal" iconOnly size="sm" tone="light" variant="view" aria-pressed="false" data-reader-scale-toggle />
+						<CButton label={data.actions.themeLabel} icon="moon" iconOnly size="sm" tone="light" variant="view" aria-pressed="false" data-reader-theme-toggle />
+						{data.actions.next && <CButton {...data.actions.next} tone="light" />}
+					</CRow>
+				</CColumns>
+			</CBox>
+
+			<CBox spacing="lg" data-reader-content>
+				{data.content.kind === "prose" ? (
+					<CColumns columns="twelve" gap="none">
+						<CGridItem as="article" lgSpan={9}>
+						<CColumns columns="one" gap="md">
+							{data.content.items.map((item) => (
+								<CText
+									variant={readerTextVariantByKind[item.kind ?? "paragraph"]}
+									tone={readerTextToneByKind[item.kind ?? "paragraph"]}
+									data-reader-copy
+								>
+									{item.text}
+								</CText>
+							))}
+						</CColumns>
+						</CGridItem>
+					</CColumns>
+				) : (
+					<CColumns as="article" columns="one" gap="sm">
+						{data.content.images.map((image) => (
+							<CBox radius="md" overflow="hidden"><CImage {...image} variant="natural" /></CBox>
+						))}
+					</CColumns>
+				)}
+			</CBox>
+
+			<CBox spacing="md">
+				<CColumns columns="three" gap="md">
+					<CShareLinks {...data.share} />
+					<CReactions {...data.reactions} />
+					<CRow align="center" justify="end">
+						<CButton label={data.bookmarkLabel} icon="bookmark" iconPosition="start" tone="light" variant="outline" aria-pressed="false" data-reader-bookmark />
+					</CRow>
+				</CColumns>
+			</CBox>
+
+			<CBox as="footer" spacing="md">
+				<CColumns columns="three" gap="md" aria-label={data.navigation.label}>
+					<CRow>{data.navigation.previous && <CButton {...data.navigation.previous} tone="light" />}</CRow>
+					<CRow justify="center"><CButton {...data.navigation.index} tone="light" /></CRow>
+					<CRow justify="end">{data.navigation.next && <CButton {...data.navigation.next} tone="light" />}</CRow>
+				</CColumns>
+			</CBox>
+		</CColumns>
+	</CBox>
+</CColumns>

@@ -1,0 +1,44 @@
+---
+import type { CBoxProps } from "@/types/components/object/component/CBox.types";
+import { cn } from "@/utils/cn";
+import {
+	boxBaseClasses,
+	boxOverflowClasses,
+	boxPositionClasses,
+	boxRatioClasses,
+	boxRadiusClasses,
+	boxSpacingClasses,
+	boxSurfaceClasses,
+	boxVisibilityClasses,
+} from "@/variants/components/object/component/CBox.variants";
+
+const {
+	as: Element = "div",
+	class: className,
+	overflow = "visible",
+	position = "flow",
+	ratio = "natural",
+	radius = "none",
+	spacing = "none",
+	surface = "plain",
+	visibility = "all",
+	...attributes
+} = Astro.props as CBoxProps;
+---
+
+<Element
+	{...attributes}
+	class={cn(
+		boxBaseClasses,
+		boxSurfaceClasses[surface],
+		boxPositionClasses[position],
+		boxRatioClasses[ratio],
+		boxOverflowClasses[overflow],
+		boxVisibilityClasses[visibility],
+		boxRadiusClasses[radius],
+		boxSpacingClasses[spacing],
+		className,
+	)}
+>
+	<slot />
+</Element>

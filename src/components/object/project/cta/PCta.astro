@@ -1,0 +1,23 @@
+---
+import CtaCallout from "@/components/object/project/cta/templates/CtaCallout.astro";
+import CtaDefault from "@/components/object/project/cta/templates/CtaDefault.astro";
+import CtaMediaPricing from "@/components/object/project/cta/templates/CtaMediaPricing.astro";
+import CtaInline from "@/components/object/project/cta/templates/CtaInline.astro";
+import CtaSubscription from "@/components/object/project/cta/templates/CtaSubscription.astro";
+import type { PCtaProps } from "@/types/components/object/project/cta/PCta.types";
+
+type Props = PCtaProps;
+
+const { template = "default", ...props } = Astro.props;
+
+const templates = {
+	default: CtaDefault,
+	callout: CtaCallout,
+	"media-pricing": CtaMediaPricing,
+	inline: CtaInline,
+	subscription: CtaSubscription,
+} as const;
+const Template = templates[template];
+---
+
+<Template {...props} />

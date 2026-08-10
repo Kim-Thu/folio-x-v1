@@ -1,0 +1,87 @@
+---
+import CIcon from "@/components/object/component/CIcon.astro";
+import CFieldset from "@/components/object/component/CFieldset.astro";
+import CLink from "@/components/object/component/CLink.astro";
+import CText from "@/components/object/component/CText.astro";
+import type { CChoiceGroupProps } from "@/types/components/object/component/CChoiceGroup.types";
+import {
+	choiceControlClasses,
+	choiceControlIconClasses,
+	choiceControlWrapClasses,
+	choiceCountClasses,
+	choiceLabelClasses,
+	choiceNavigationClasses,
+	choiceNavigationTitleClasses,
+	choiceOptionCurrentClasses,
+	choiceOptionClasses,
+} from "@/variants/components/object/component/CChoiceGroup.variants";
+import { cn } from "@/utils/cn";
+
+const {
+	appearance = "controls",
+	class: className,
+	control,
+	legend,
+	name,
+	options,
+	type = "checkbox",
+	...attributes
+} = Astro.props as CChoiceGroupProps;
+---
+
+{appearance === "navigation" ? (
+	<nav
+		{...attributes}
+		class={className}
+		aria-label={legend}
+		data-choice-navigation
+	>
+		<CText as="span" variant="caption" class={choiceNavigationTitleClasses}>
+			{legend}
+		</CText>
+		<div class={choiceNavigationClasses}>
+			{options.map((option) => (
+				<CLink
+					href={option.href ?? "#"}
+					class={cn(choiceOptionClasses.navigation, option.checked && choiceOptionCurrentClasses)}
+					aria-current={option.checked ? "page" : undefined}
+				>
+					<span class={choiceLabelClasses}>{option.label}</span>
+					{typeof option.count === "number" && (
+						<small class={choiceCountClasses}>{option.count}</small>
+					)}
+				</CLink>
+			))}
+		</div>
+	</nav>
+) : (
+	<CFieldset {...attributes} class={className} {legend} gap="sm">
+		{options.map((option) => (
+			<label class={choiceOptionClasses.controls}>
+				<span class={choiceControlWrapClasses}>
+					<input
+						class={choiceControlClasses.controls}
+						type={type}
+						name={name}
+						value={option.value}
+						checked={option.checked}
+						data-category-filter={control === "category" ? "" : undefined}
+						data-license-filter={control === "license" ? "" : undefined}
+						data-platform-filter={control === "platform" ? "" : undefined}
+						data-facet-filter
+						data-facet-key={control}
+					/>
+					<CIcon
+						name="check"
+						size="sm"
+						class={choiceControlIconClasses}
+					/>
+				</span>
+				<span class={choiceLabelClasses}>{option.label}</span>
+				{typeof option.count === "number" && (
+					<small class={choiceCountClasses}>{option.count}</small>
+				)}
+			</label>
+		))}
+	</CFieldset>
+)}

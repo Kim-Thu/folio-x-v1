@@ -1,0 +1,32 @@
+---
+import CIcon from "@/components/object/component/CIcon.astro";
+import CLink from "@/components/object/component/CLink.astro";
+import type { CBreadcrumbProps } from "@/types/components/object/component/CBreadcrumb.types";
+import { cn } from "@/utils/cn";
+import {
+	breadcrumbClasses,
+	breadcrumbCurrentClasses,
+	breadcrumbLinkClasses,
+	breadcrumbListClasses,
+	breadcrumbSeparatorClasses,
+} from "@/variants/components/object/component/CBreadcrumb.variants";
+
+const { class: className, label, items, current, ...attributes } =
+	Astro.props as CBreadcrumbProps;
+---
+
+<nav {...attributes} class={cn(breadcrumbClasses, className)} aria-label={label}>
+	<ol class={breadcrumbListClasses}>
+		{items.map((item) => (
+			<>
+				<li>
+					<CLink href={item.href} class={breadcrumbLinkClasses}>{item.label}</CLink>
+				</li>
+				<li class={breadcrumbSeparatorClasses} aria-hidden="true">
+					<CIcon name="chevronRight" size="sm" />
+				</li>
+			</>
+		))}
+		<li class={breadcrumbCurrentClasses} aria-current="page">{current}</li>
+	</ol>
+</nav>

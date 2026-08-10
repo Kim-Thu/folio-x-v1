@@ -1,0 +1,29 @@
+---
+import type { LSectionProps } from "@/types/components/layout/LSection.types";
+import { cn } from "@/utils/cn";
+import {
+	sectionBaseClass,
+	sectionSpacingClasses,
+	sectionThemeClasses,
+} from "@/variants/components/layout/LSection.variants";
+
+type Props = LSectionProps;
+
+const {
+	class: className,
+	theme = "canvas",
+	spacing = "default",
+	...attributes
+} = Astro.props;
+
+const classes = cn(
+	sectionBaseClass,
+	sectionThemeClasses[theme],
+	sectionSpacingClasses[spacing],
+	className,
+);
+---
+
+<section {...attributes} class={classes}>
+	<slot />
+</section>

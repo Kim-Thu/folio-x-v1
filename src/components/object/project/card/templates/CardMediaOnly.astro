@@ -1,0 +1,20 @@
+---
+import CBox from "@/components/object/component/CBox.astro";
+import CImage from "@/components/object/component/CImage.astro";
+import CMedia from "@/components/object/component/CMedia.astro";
+import type { PCardItemProps } from "@/types/components/object/project/card/PCard.types";
+
+const { data, slots } = Astro.props as PCardItemProps;
+---
+
+<CBox as="article">
+	{slots.media && data.media && (
+		<CMedia
+			ratio="landscape"
+			href={data.href}
+			ariaLabel={data.ariaLabel}
+		>
+			<CImage {...data.media} variant="fill" />
+		</CMedia>
+	)}
+</CBox>

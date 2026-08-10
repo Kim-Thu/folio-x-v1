@@ -1,0 +1,20 @@
+---
+import CatalogPage from "@/components/pages/catalog/CatalogPage.astro";
+import { getPublicationCatalogPageData } from "@/data/pages/getPublicationCatalogPageData";
+import { getLayoutData } from "@/data/pages/getLayoutData";
+import BaseLayout from "@/layouts/BaseLayout.astro";
+
+const [layout, data] = await Promise.all([
+	getLayoutData(),
+	getPublicationCatalogPageData("comics"),
+]);
+---
+
+<BaseLayout
+	{...layout}
+	tone="light"
+	title={`${data.metadata.title} | ${layout.title}`}
+	description={data.metadata.description}
+>
+	<CatalogPage {data} />
+</BaseLayout>

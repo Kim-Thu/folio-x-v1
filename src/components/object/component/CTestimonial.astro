@@ -1,0 +1,49 @@
+---
+import CImage from "@/components/object/component/CImage.astro";
+import CRating from "@/components/object/component/CRating.astro";
+import CText from "@/components/object/component/CText.astro";
+import type { CTestimonialProps } from "@/types/components/object/component/CTestimonial.types";
+import { cn } from "@/utils/cn";
+import {
+	testimonialAuthorClasses,
+	testimonialAuthorCopyClasses,
+	testimonialAvatarClasses,
+	testimonialClasses,
+} from "@/variants/components/object/component/CTestimonial.variants";
+
+const {
+	avatar,
+	class: className,
+	date,
+	maximumRating,
+	name,
+	quote,
+	rating,
+	...attributes
+} = Astro.props as CTestimonialProps;
+
+const resolvedAvatar = {
+	src: avatar?.src?.trim() || "/uploads/avatar-placehoder.png",
+	alt: avatar?.alt?.trim() || `Ảnh đại diện của ${name}`,
+	width: avatar?.width || 160,
+	height: avatar?.height || 160,
+};
+---
+
+<figure {...attributes} class={cn(testimonialClasses, className)}>
+	<figcaption class={testimonialAuthorClasses}>
+		<span class={testimonialAvatarClasses}>
+			<CImage {...resolvedAvatar} variant="fill" />
+		</span>
+		<span class={testimonialAuthorCopyClasses}>
+			<CText as="span" variant="body-sm">{name}</CText>
+			<CText as="span" variant="caption" tone="muted">{date}</CText>
+		</span>
+	</figcaption>
+
+	<CRating style="stars" value={rating} maximum={maximumRating} />
+
+	<blockquote>
+		<CText variant="body-sm" tone="muted">{quote}</CText>
+	</blockquote>
+</figure>

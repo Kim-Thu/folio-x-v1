@@ -1,0 +1,84 @@
+---
+import CBadge from "@/components/object/component/CBadge.astro";
+import CBox from "@/components/object/component/CBox.astro";
+import CBreadcrumb from "@/components/object/component/CBreadcrumb.astro";
+import CButton from "@/components/object/component/CButton.astro";
+import CColumns from "@/components/object/component/CColumns.astro";
+import CFeature from "@/components/object/component/CFeature.astro";
+import CHeading from "@/components/object/component/CHeading.astro";
+import CGridItem from "@/components/object/component/CGridItem.astro";
+import CImage from "@/components/object/component/CImage.astro";
+import CMedia from "@/components/object/component/CMedia.astro";
+import CMetadata from "@/components/object/component/CMetadata.astro";
+import CRow from "@/components/object/component/CRow.astro";
+import CShareLinks from "@/components/object/component/CShareLinks.astro";
+import CTags from "@/components/object/component/CTags.astro";
+import CText from "@/components/object/component/CText.astro";
+import type { PPageHeaderMediaAsideData } from "@/types/components/object/project/page-header/PPageHeader.types";
+
+const { data } = Astro.props as { data: PPageHeaderMediaAsideData };
+---
+
+<CColumns columns="one" gap="md">
+	<CBreadcrumb {...data.breadcrumb} />
+	<CColumns columns="twelve" gap="md">
+		<CGridItem lgSpan={8}>
+			<CMedia ratio="video">
+				<CImage {...data.image} variant="fill" />
+			</CMedia>
+		</CGridItem>
+
+		<CGridItem as="header" lgSpan={4}>
+		<CBox surface="glass" radius="md" spacing="md">
+			<CColumns columns="one" gap="sm">
+				{data.badge && <CBadge>{data.badge}</CBadge>}
+
+				<CRow justify="between" gap="md">
+					{data.metrics.map((metric) => (
+						<CFeature {...metric} appearance="caption" />
+					))}
+				</CRow>
+
+				{data.category && (
+					<CMetadata
+						data={{
+							items: [{
+								type: "category",
+								label: data.category.label,
+								href: data.category.href,
+								display: "text",
+							}],
+						}}
+						tone="brand"
+					/>
+				)}
+
+				<CHeading level={1} variant="h3">{data.title}</CHeading>
+				<CText tone="muted">{data.description}</CText>
+
+				{data.tags && data.tags.length > 0 && (
+					<CTags
+						items={data.tags.map((tag) => ({ label: tag }))}
+						label={`${data.title} technologies`}
+					/>
+				)}
+
+				<CRow gap="sm" role="group" aria-label={data.actionsLabel}>
+					{data.actions.map((action) => (
+						<CButton
+							href={action.href}
+							label={action.label}
+							icon={action.icon}
+							variant={action.variant}
+							tone="light"
+							size="sm"
+						/>
+					))}
+				</CRow>
+
+				{data.share && <CShareLinks {...data.share} />}
+			</CColumns>
+		</CBox>
+		</CGridItem>
+	</CColumns>
+</CColumns>

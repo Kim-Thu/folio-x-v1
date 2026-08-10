@@ -1,0 +1,26 @@
+{
+  "order": 7,
+  "slug": "arch-commerce-platform",
+  "title": "A storefront built around decisions",
+  "client": "Arch Commerce",
+  "year": "2024",
+  "category": "E-commerce ecosystem",
+  "categorySlug": "e-commerce",
+  "tags": [
+    { "label": "Commerce", "slug": "commerce" },
+    { "label": "Performance", "slug": "performance" }
+  ],
+  "summary": "Tổ chức lại hành trình mua hàng quanh thông tin cần thiết, tốc độ phản hồi và các điểm quyết định thực sự của khách hàng.",
+  "outcome": "+28% hoàn tất checkout",
+  "image": "https://images.unsplash.com/photo-1497366811353-6870744d04b2?auto=format&fit=crop&w=1800&q=85",
+  "alt": "Không gian làm việc hiện đại dành cho đội sản phẩm",
+  "tone": "dark",
+  "sections": [
+    {
+      "title": "Kết quả",
+      "paragraphs": [
+        "Luồng mua hàng ngắn hơn, giao diện phản hồi nhanh hơn và đội vận hành kiểm soát nội dung tốt hơn."
+      ]
+    }
+  ]
+}

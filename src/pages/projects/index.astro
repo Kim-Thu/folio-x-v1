@@ -1,10 +1,19 @@
 ---
-import ProjectArchive from '@/components/features/projects/ProjectArchive.astro';
-import { archiveContent } from '@/data/archive';
-import { projects } from '@/data/site';
-import { getCategories } from '@/utils/taxonomy';
+import WorksPage from "@/components/pages/works/WorksPage.astro";
+import { getLayoutData } from "@/data/pages/getLayoutData";
+import { getWorksPageData } from "@/data/pages/getWorksPageData";
+import BaseLayout from "@/layouts/BaseLayout.astro";
 
-const content = archiveContent.projects;
+const [layoutData, data] = await Promise.all([
+	getLayoutData(),
+	getWorksPageData(),
+]);
 ---
 
-<ProjectArchive eyebrow={content.eyebrow} title={content.title} description={content.description} projects={projects} categories={getCategories(projects)} filterLabel={content.filterLabel} allLabel={content.allLabel} emptyLabel={content.emptyLabel} />
+<BaseLayout
+	{...layoutData}
+	title={`${data.metadata.title} | ${layoutData.title}`}
+	description={data.metadata.description}
+>
+	<WorksPage {data} />
+</BaseLayout>

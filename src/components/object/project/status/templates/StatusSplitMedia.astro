@@ -1,0 +1,58 @@
+---
+import CButton from "@/components/object/component/CButton.astro";
+import CColumns from "@/components/object/component/CColumns.astro";
+import CHeading from "@/components/object/component/CHeading.astro";
+import CGridItem from "@/components/object/component/CGridItem.astro";
+import CImage from "@/components/object/component/CImage.astro";
+import CMedia from "@/components/object/component/CMedia.astro";
+import CRow from "@/components/object/component/CRow.astro";
+import CText from "@/components/object/component/CText.astro";
+import type { PStatusProps } from "@/types/components/object/project/status/PStatus.types";
+
+const { data } = Astro.props as PStatusProps;
+---
+
+<CColumns columns="twelve" gap="lg">
+	<CGridItem as="article" lgSpan={5} align="center">
+	<CColumns columns="one" gap="md">
+		<CText as="span" variant="label" tone="subtle">
+			{data.eyebrow}
+		</CText>
+		<CHeading id={`${data.id}-heading`} level={1} variant="h1">
+			{data.title}
+		</CHeading>
+		<CText variant="body-responsive" tone="muted">
+			{data.description}
+		</CText>
+		<CRow as="nav" gap="sm" aria-label={data.eyebrow}>
+			<CButton
+				href={data.primaryAction.href}
+				label={data.primaryAction.label}
+				icon={data.primaryAction.icon}
+				iconPosition="start"
+				tone="light"
+			/>
+			{data.secondaryAction && (
+				<CButton
+					href={data.secondaryAction.href}
+					label={data.secondaryAction.label}
+					icon={data.secondaryAction.icon}
+					variant="outline"
+					tone="light"
+				/>
+			)}
+		</CRow>
+	</CColumns>
+	</CGridItem>
+
+	<CGridItem lgSpan={7} align="center">
+	<CMedia ratio="natural">
+		<CImage
+			{...data.image}
+			loading="eager"
+			fetchpriority="high"
+			variant="natural"
+		/>
+	</CMedia>
+	</CGridItem>
+</CColumns>

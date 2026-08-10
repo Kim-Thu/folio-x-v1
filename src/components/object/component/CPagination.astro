@@ -1,0 +1,55 @@
+---
+import CButton from "@/components/object/component/CButton.astro";
+import type { CPaginationProps } from "@/types/components/object/component/CPagination.types";
+import { cn } from "@/utils/cn";
+import {
+	paginationClasses,
+	paginationListClasses,
+} from "@/variants/components/object/component/CPagination.variants";
+
+const {
+	class: className,
+	label,
+	previousLabel,
+	nextLabel,
+	totalPages,
+	...attributes
+} = Astro.props as CPaginationProps;
+const pages = Array.from({ length: Math.max(totalPages, 1) }, (_, index) => index + 1);
+---
+
+<nav {...attributes} class={cn(paginationClasses, className)} aria-label={label} data-pagination>
+	<CButton
+		label={previousLabel}
+		icon="chevronLeft"
+		iconOnly
+		size="sm"
+		tone="light"
+		variant="pagination"
+		data-page-previous
+	/>
+	<ol class={paginationListClasses}>
+		{pages.map((page) => (
+			<li>
+				<CButton
+					label={String(page)}
+					variant="pagination"
+					size="sm"
+					tone="light"
+					aria-current={page === 1 ? "page" : undefined}
+					aria-label={`${label} ${page}`}
+					data-page={page}
+				/>
+			</li>
+		))}
+	</ol>
+	<CButton
+		label={nextLabel}
+		icon="chevronRight"
+		iconOnly
+		size="sm"
+		tone="light"
+		variant="pagination"
+		data-page-next
+	/>
+</nav>

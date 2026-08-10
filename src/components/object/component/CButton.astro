@@ -1,0 +1,61 @@
+---
+import CButtonContent from "@/components/object/component/CButtonContent.astro";
+import CLink from "@/components/object/component/CLink.astro";
+import type { CButtonProps } from "@/types/components/object/component/CButton.types";
+import { cn } from "@/utils/cn";
+import {
+	getCButtonClasses,
+	getCButtonCurrentClasses,
+} from "@/variants/components/object/component/CButton.variants";
+import type { HTMLAttributes } from "astro/types";
+
+type Props = CButtonProps;
+
+const {
+	class: className,
+	label,
+	icon,
+	iconOnly = false,
+	iconPosition = "end",
+	size = "lg",
+	tone = "dark",
+	variant = "primary",
+	wide = false,
+	href,
+	nofollow = false,
+	type = "button",
+	...attributes
+} = Astro.props;
+
+const classes = cn(
+	getCButtonClasses({ iconOnly, size, tone, variant, wide }),
+	Astro.props["aria-current"] && getCButtonCurrentClasses(),
+	className,
+);
+const ariaLabel = iconOnly ? label : Astro.props["aria-label"];
+const linkAttributes = attributes as HTMLAttributes<"a">;
+const buttonAttributes = attributes as HTMLAttributes<"button">;
+---
+
+{
+	typeof href === "string" ? (
+		<CLink
+			{...linkAttributes}
+			href={href}
+			nofollow={nofollow}
+			class={classes}
+			aria-label={ariaLabel}
+		>
+			<CButtonContent {label} {icon} {iconOnly} {iconPosition} />
+		</CLink>
+	) : (
+		<button
+			{...buttonAttributes}
+			type={type}
+			class={classes}
+			aria-label={ariaLabel}
+		>
+			<CButtonContent {label} {icon} {iconOnly} {iconPosition} />
+		</button>
+	)
+}

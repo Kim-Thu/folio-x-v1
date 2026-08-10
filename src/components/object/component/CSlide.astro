@@ -1,0 +1,9 @@
+---
+import type { HTMLAttributes } from "astro/types";
+
+const attributes = Astro.props as HTMLAttributes<"div">;
+---
+
+<div {...attributes} class="w-full shrink-0 snap-center" data-slide>
+	<slot />
+</div>

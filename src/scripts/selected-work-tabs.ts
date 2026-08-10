@@ -1,15 +1,15 @@
 export function initSelectedWorkTabs(): void {
-  document.querySelectorAll<HTMLElement>('[data-selected-work]').forEach((root) => {
-    const tabs = Array.from(root.querySelectorAll<HTMLButtonElement>('[data-work-tab]'));
-    const cards = Array.from(root.querySelectorAll<HTMLElement>('[data-work-card]'));
-    const panel = root.querySelector<HTMLElement>('[data-work-panel]');
+  document.querySelectorAll<HTMLElement>('[data-tabbed-collection]').forEach((root) => {
+    const tabs = Array.from(root.querySelectorAll<HTMLButtonElement>('[data-tab-value]'));
+    const cards = Array.from(root.querySelectorAll<HTMLElement>('[data-tab-card]'));
+    const panel = root.querySelector<HTMLElement>('[data-collection-panel]');
 
     if (!tabs.length || !cards.length || !panel) return;
 
     const selectTab = (selectedTab: HTMLButtonElement): void => {
-      const category = selectedTab.dataset.workTab ?? 'all';
+      const category = selectedTab.dataset.tabValue ?? 'all';
       cards.forEach((card) => {
-        const isVisible = category === 'all' || card.dataset.projectCategory === category;
+        const isVisible = category === 'all' || card.dataset.filterCategory === category;
         card.hidden = !isVisible;
       });
 

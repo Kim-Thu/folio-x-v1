@@ -1,0 +1,40 @@
+---
+import LPage from "@/components/layout/LPage.astro";
+import PageRegion from "@/components/pages/builder/PageRegion.astro";
+import type {
+	PageBuilderProps,
+	PageRegionPlacement,
+} from "@/types/components/pages/builder/PageBuilder.types";
+
+const { config } = Astro.props as PageBuilderProps;
+const enabledRegions = config.regions.filter((region) => region.enabled !== false);
+const regionsFor = (placement: PageRegionPlacement) =>
+	enabledRegions.filter((region) => (region.placement ?? "main") === placement);
+
+const headerRegions = regionsFor("header");
+const mainRegions = regionsFor("main");
+const asideRegions = regionsFor("aside");
+const ctaRegions = regionsFor("cta");
+---
+
+<LPage {...config.layout} id="main-content" tabindex="-1">
+	{headerRegions.length > 0 && (
+		<Fragment slot="header">
+			{headerRegions.map((region) => <PageRegion {region} />)}
+		</Fragment>
+	)}
+
+	{mainRegions.map((region) => <PageRegion {region} />)}
+
+	{asideRegions.length > 0 && (
+		<Fragment slot="aside">
+			{asideRegions.map((region) => <PageRegion {region} />)}
+		</Fragment>
+	)}
+
+	{ctaRegions.length > 0 && (
+		<Fragment slot="cta">
+			{ctaRegions.map((region) => <PageRegion {region} />)}
+		</Fragment>
+	)}
+</LPage>

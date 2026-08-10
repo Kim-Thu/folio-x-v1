@@ -1,0 +1,44 @@
+---
+import CIcon from "@/components/object/component/CIcon.astro";
+import CLink from "@/components/object/component/CLink.astro";
+import type { CSocialLinksProps } from "@/types/components/object/component/CSocialLinks.types";
+import { twJoin } from "@/utils/cn";
+import {
+	getSocialLinkClasses,
+	socialListClasses,
+	socialListGapClasses,
+} from "@/variants/components/object/component/CSocialLinks.variants";
+
+const {
+	links,
+	label,
+	display = "icon",
+	orientation = "horizontal",
+	shape = "default",
+	size = "md",
+	gap = "md",
+	...attributes
+} = Astro.props as CSocialLinksProps;
+---
+
+<nav {...attributes} aria-label={label}>
+	<ul class={twJoin(socialListClasses[orientation], socialListGapClasses[gap])}>
+		{links.map((link) => (
+			<li>
+				<CLink
+					href={link.href}
+					aria-label={display === "label" ? undefined : link.label}
+					class={getSocialLinkClasses(shape, size)}
+				>
+					{display === "icon" && link.icon ? (
+						<CIcon name={link.icon} {size} />
+					) : display === "shortLabel" ? (
+						link.shortLabel
+					) : (
+						link.label
+					)}
+				</CLink>
+			</li>
+		))}
+	</ul>
+</nav>

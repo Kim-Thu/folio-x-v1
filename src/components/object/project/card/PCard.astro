@@ -1,0 +1,182 @@
+---
+import CColumns from "@/components/object/component/CColumns.astro";
+import CGridItem from "@/components/object/component/CGridItem.astro";
+import CardBoxed from "@/components/object/project/card/templates/CardBoxed.astro";
+import CardCompactMedia from "@/components/object/project/card/templates/CardCompactMedia.astro";
+import CardCompactBordered from "@/components/object/project/card/templates/CardCompactBordered.astro";
+import CardEditorial from "@/components/object/project/card/templates/CardEditorial.astro";
+import CardFeatured from "@/components/object/project/card/templates/CardFeatured.astro";
+import CardHorizontal from "@/components/object/project/card/templates/CardHorizontal.astro";
+import CardIconPanel from "@/components/object/project/card/templates/CardIconPanel.astro";
+import CardIconSummary from "@/components/object/project/card/templates/CardIconSummary.astro";
+import CardMediaBanner from "@/components/object/project/card/templates/CardMediaBanner.astro";
+import CardMediaCaption from "@/components/object/project/card/templates/CardMediaCaption.astro";
+import CardMediaDetails from "@/components/object/project/card/templates/CardMediaDetails.astro";
+import CardMediaMetrics from "@/components/object/project/card/templates/CardMediaMetrics.astro";
+import CardMediaOnly from "@/components/object/project/card/templates/CardMediaOnly.astro";
+import CardMediaSummary from "@/components/object/project/card/templates/CardMediaSummary.astro";
+import CardOverlay from "@/components/object/project/card/templates/CardOverlay.astro";
+import CardStacked from "@/components/object/project/card/templates/CardStacked.astro";
+import type {
+	PCardColumns,
+	PCardLayout,
+	PCardProps,
+	PCardSlots,
+} from "@/types/components/object/project/card/PCard.types";
+import type { CColumnsTemplate } from "@/types/components/object/component/CColumns.types";
+
+const {
+	template = "stacked",
+	layout = "grid",
+	columns = 3,
+	gap = "lg",
+	mediaRatio,
+	items,
+	headingLevel = 3,
+	separator = "none",
+	slots,
+	...attributes
+} = Astro.props as PCardProps;
+
+const defaultSlots: PCardSlots = {
+	media: true,
+	icon: true,
+	metadata: true,
+	tags: true,
+	metrics: true,
+	title: true,
+	excerpt: true,
+	action: true,
+};
+
+const resolvedSlots = { ...defaultSlots, ...slots };
+
+const templates = {
+	stacked: CardStacked,
+	horizontal: CardHorizontal,
+	overlay: CardOverlay,
+	featured: CardFeatured,
+	boxed: CardBoxed,
+	"compact-media": CardCompactMedia,
+	"compact-bordered": CardCompactBordered,
+	editorial: CardEditorial,
+	"icon-panel": CardIconPanel,
+	"icon-summary": CardIconSummary,
+	"media-banner": CardMediaBanner,
+	"media-caption": CardMediaCaption,
+	"media-details": CardMediaDetails,
+	"media-only": CardMediaOnly,
+	"media-summary": CardMediaSummary,
+	"media-metrics": CardMediaMetrics,
+} as const;
+
+const columnTemplates: Record<PCardColumns, CColumnsTemplate> = {
+	1: "one",
+	2: "two",
+	3: "three",
+	4: "four",
+	5: "five",
+};
+
+const layoutTemplates: Record<Exclude<PCardLayout, "grid">, CColumnsTemplate> = {
+	list: "one",
+	"three-column": "three",
+	"twelve-column": "twelve",
+	"content-three-column": "twelve",
+	mosaic: "twelve",
+	asymmetric: "twelve",
+	showcase: "twelve",
+};
+
+const collectionColumns =
+	layout === "grid" ? columnTemplates[columns] : layoutTemplates[layout];
+const CardTemplate = templates[template] ?? CardStacked;
+const contentSpans = [3, 4, 5] as const;
+const mosaicSpans = [7, 5, 4, 4, 4, 7, 5, 12] as const;
+const asymmetricRows = [
+	{ start: 0, firstSpan: 7, secondSpan: 5, ratioItem: 0 },
+	{ start: 2, firstSpan: 8, secondSpan: 4, ratioItem: 0 },
+	{ start: 4, firstSpan: 5, secondSpan: 7, ratioItem: 1 },
+] as const;
+const getTwelveColumnSpan = (size: PCardProps["items"][number]["size"]) =>
+	size === "wide" ? 6 : 3;
+---
+
+<CColumns
+	{...attributes}
+	columns={collectionColumns}
+	{gap}
+	{separator}
+	data-card-collection
+	data-product-grid={template === "media-details" ? "" : undefined}
+	data-view="grid"
+>
+	{layout === "showcase" ? (
+		<>
+			{items[0] && (
+				<CGridItem lgSpan={5} align="stretch">
+					<CardTemplate data={items[0]} headingLevel={headingLevel} index={0} mediaRatio="natural" slots={resolvedSlots} />
+				</CGridItem>
+			)}
+			<CGridItem lgSpan={4} align="stretch">
+				<CColumns columns="one" gap={gap}>
+					{items.slice(1, 3).map((item, index) => (
+						<CardTemplate data={item} headingLevel={headingLevel} index={index + 1} {mediaRatio} slots={resolvedSlots} />
+					))}
+				</CColumns>
+			</CGridItem>
+			{items[3] && (
+				<CGridItem lgSpan={3} align="stretch">
+					<CardTemplate data={items[3]} headingLevel={headingLevel} index={3} mediaRatio="natural" slots={resolvedSlots} />
+				</CGridItem>
+			)}
+		</>
+	) : layout === "asymmetric" ? (
+		<>
+			{asymmetricRows.map((row) => (
+				<CGridItem lgSpan={12} align="stretch">
+					<CColumns columns="twelve" gap={gap}>
+						{items[row.start] && (
+							<CGridItem lgSpan={row.firstSpan} align="stretch">
+								<CardTemplate
+									data={items[row.start]}
+									headingLevel={headingLevel}
+									index={row.start}
+									mediaRatio={row.ratioItem === 0 ? mediaRatio : "natural"}
+									slots={resolvedSlots}
+								/>
+							</CGridItem>
+						)}
+						{items[row.start + 1] && (
+							<CGridItem lgSpan={row.secondSpan} align="stretch">
+								<CardTemplate
+									data={items[row.start + 1]}
+									headingLevel={headingLevel}
+									index={row.start + 1}
+									mediaRatio={row.ratioItem === 1 ? mediaRatio : "natural"}
+									slots={resolvedSlots}
+								/>
+							</CGridItem>
+						)}
+					</CColumns>
+				</CGridItem>
+			))}
+		</>
+	) : items.map((item, index) => (
+		layout === "content-three-column" ? (
+			<CGridItem lgSpan={contentSpans[index] ?? 5}>
+				<CardTemplate data={item} headingLevel={headingLevel} index={index} {mediaRatio} slots={resolvedSlots} />
+			</CGridItem>
+		) : layout === "mosaic" ? (
+			<CGridItem lgSpan={mosaicSpans[index] ?? 12}>
+				<CardTemplate data={item} headingLevel={headingLevel} index={index} {mediaRatio} slots={resolvedSlots} />
+			</CGridItem>
+		) : layout === "twelve-column" ? (
+			<CGridItem lgSpan={getTwelveColumnSpan(item.size)}>
+				<CardTemplate data={item} headingLevel={headingLevel} index={index} {mediaRatio} slots={resolvedSlots} />
+			</CGridItem>
+		) : (
+			<CardTemplate data={item} headingLevel={headingLevel} index={index} {mediaRatio} slots={resolvedSlots} />
+		)
+	))}
+</CColumns>

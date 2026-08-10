@@ -1,0 +1,50 @@
+---
+import CImage from "@/components/object/component/CImage.astro";
+import CMedia from "@/components/object/component/CMedia.astro";
+import type { CImageGalleryProps } from "@/types/components/object/component/CImageGallery.types";
+import { cn } from "@/utils/cn";
+import {
+	imageGalleryClasses,
+	imageGalleryMainClasses,
+	imageGalleryThumbnailClasses,
+	imageGalleryThumbnailsClasses,
+} from "@/variants/components/object/component/CImageGallery.variants";
+
+const {
+	class: className,
+	images,
+	label,
+	thumbnailLabel,
+	...attributes
+} = Astro.props as CImageGalleryProps;
+---
+
+<div
+	{...attributes}
+	class={cn(imageGalleryClasses, className)}
+	aria-label={label}
+	data-image-gallery
+>
+	<div class={imageGalleryMainClasses}>
+		{images.map((image, index) => (
+			<CMedia ratio="editorial" hidden={index > 0} data-gallery-panel>
+				<CImage {...image} variant="fill" />
+			</CMedia>
+		))}
+	</div>
+
+	<div class={imageGalleryThumbnailsClasses} role="group" aria-label={thumbnailLabel}>
+		{images.map((image, index) => (
+			<button
+				type="button"
+				class={imageGalleryThumbnailClasses}
+				aria-label={`${thumbnailLabel} ${index + 1}`}
+				aria-pressed={index === 0}
+				data-gallery-thumbnail
+				data-gallery-index={index}
+			>
+				<CImage {...image} alt="" variant="fill" />
+			</button>
+		))}
+	</div>
+</div>

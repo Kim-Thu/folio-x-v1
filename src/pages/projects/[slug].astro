@@ -1,17 +1,29 @@
 ---
-import ProjectDetailLayout from '@/components/features/projects/ProjectDetail.astro';
-import { projects } from '@/data/site';
-import type { Project } from '@/types/content';
+import WorkDetailPage from "@/components/pages/work-detail/WorkDetailPage.astro";
+import {
+	getWorkDetailPageData,
+	getWorkDetailPaths,
+} from "@/data/pages/getWorkDetailPageData";
+import { getLayoutData } from "@/data/pages/getLayoutData";
+import BaseLayout from "@/layouts/BaseLayout.astro";
 
-export function getStaticPaths() {
-  return projects.map((project) => ({ params: { slug: project.slug }, props: { project } }));
-}
+export const getStaticPaths = getWorkDetailPaths;
 
 interface Props {
-  project: Project;
+	slug: string;
 }
 
-const { project } = Astro.props;
+const { slug } = Astro.props;
+const [layoutData, data] = await Promise.all([
+	getLayoutData(),
+	getWorkDetailPageData(slug),
+]);
 ---
 
-<ProjectDetailLayout project={project} />
+<BaseLayout
+	{...layoutData}
+	title={`${data.project.title} | ${layoutData.title}`}
+	description={data.project.summary}
+>
+	<WorkDetailPage {data} />
+</BaseLayout>

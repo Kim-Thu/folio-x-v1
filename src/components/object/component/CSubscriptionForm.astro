@@ -1,0 +1,43 @@
+---
+import CButton from "@/components/object/component/CButton.astro";
+import CInput from "@/components/object/component/CInput.astro";
+import type { CSubscriptionFormProps } from "@/types/components/object/component/CSubscriptionForm.types";
+import { subscriptionFormClasses } from "@/variants/components/object/component/CSubscriptionForm.variants";
+
+const {
+	formName,
+	inputId,
+	inputLabel,
+	placeholder,
+	submitLabel,
+	tone = "dark",
+} = Astro.props as CSubscriptionFormProps;
+---
+
+<form
+	class={subscriptionFormClasses}
+	name={formName}
+	method="post"
+	data-netlify="true"
+>
+	<input type="hidden" name="form-name" value={formName} />
+	<label class="sr-only" for={inputId}>{inputLabel}</label>
+	<CInput
+		id={inputId}
+		name="email"
+		type="email"
+		autocomplete="email"
+		placeholder={placeholder}
+		{tone}
+		required
+	/>
+	<CButton
+		type="submit"
+		label={submitLabel}
+		icon="arrowUpRight"
+		iconOnly
+		variant="secondary"
+		size="sm"
+		{tone}
+	/>
+</form>

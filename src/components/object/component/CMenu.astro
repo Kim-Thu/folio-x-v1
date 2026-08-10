@@ -1,0 +1,38 @@
+---
+import CLink from "@/components/object/component/CLink.astro";
+import type { CMenuProps } from "@/types/components/object/component/CMenu.types";
+import {
+	menuClasses,
+	menuIndexClasses,
+	menuItemClasses,
+	menuLinkClasses,
+	menuToneClasses,
+} from "@/variants/components/object/component/CMenu.variants";
+import { cn } from "@/utils/cn";
+
+type Props = CMenuProps;
+
+const {
+	items,
+	tone = "dark",
+	variant = "desktop",
+	...attributes
+} = Astro.props;
+---
+
+<ul {...attributes} class={cn(menuClasses[variant], menuToneClasses[tone])}>
+	{
+		items.map((item, index) => (
+			<li class={menuItemClasses[variant]}>
+				<CLink href={item.href} class={menuLinkClasses[variant]}>
+					<span>{item.label}</span>
+					{variant === "mobile" && (
+						<span class={menuIndexClasses} aria-hidden="true">
+							{String(index + 1).padStart(2, "0")}
+						</span>
+					)}
+				</CLink>
+			</li>
+		))
+	}
+</ul>

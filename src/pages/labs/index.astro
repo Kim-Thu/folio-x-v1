@@ -1,0 +1,20 @@
+---
+import LabsPage from "@/components/pages/labs/LabsPage.astro";
+import { getLabsPageData } from "@/data/pages/getLabsPageData";
+import { getLayoutData } from "@/data/pages/getLayoutData";
+import BaseLayout from "@/layouts/BaseLayout.astro";
+
+const [layout, data] = await Promise.all([
+	getLayoutData(),
+	getLabsPageData(),
+]);
+---
+
+<BaseLayout
+	{...layout}
+	tone="light"
+	title={`${data.metadata.title} | ${layout.title}`}
+	description={data.metadata.description}
+>
+	<LabsPage {data} />
+</BaseLayout>

@@ -1,0 +1,19 @@
+export type PSectionHeaderTemplate = "default" | "split";
+export type PSectionHeaderAppearance = "default" | "compact";
+
+export interface PSectionHeaderData {
+	id?: string;
+	number?: string;
+	label?: string;
+	title?: string | readonly string[];
+	description?: string;
+}
+
+export interface PSectionHeaderProps {
+	appearance?: PSectionHeaderAppearance;
+	action?: CButtonLinkProps;
+	data: PSectionHeaderData;
+	template?: PSectionHeaderTemplate;
+	headingLevel?: 1 | 2 | 3 | 4 | 5 | 6;
+}
+import type { CButtonLinkProps } from "@/types/components/object/component/CButton.types";

@@ -1,0 +1,8 @@
+---
+import HeroSplitMedia from "@/components/object/project/hero/templates/HeroSplitMedia.astro";
+import type { PHeroProps } from "@/types/components/object/project/hero/PHero.types";
+
+const { data } = Astro.props as PHeroProps;
+---
+
+<HeroSplitMedia {data} />

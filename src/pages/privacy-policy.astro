@@ -1,6 +1,15 @@
 ---
-import PolicyPage from '@/components/features/policies/PolicyPage.astro';
-import { privacyPolicy } from '@/data/policies';
+import PolicyPage from "@/components/pages/policy/PolicyPage.astro";
+import { getPolicyPageData } from "@/data/pages/getPolicyPageData";
+import { getLayoutData } from "@/data/pages/getLayoutData";
+import BaseLayout from "@/layouts/BaseLayout.astro";
+
+const [layout, data] = await Promise.all([
+	getLayoutData(),
+	getPolicyPageData("privacy-policy"),
+]);
 ---
 
-<PolicyPage content={privacyPolicy} />
+<BaseLayout {...layout} tone="light" title={`${data.metadata.title} | ${layout.title}`} description={data.metadata.description}>
+	<PolicyPage {data} />
+</BaseLayout>

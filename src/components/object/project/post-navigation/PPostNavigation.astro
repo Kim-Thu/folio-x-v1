@@ -1,0 +1,14 @@
+---
+import PostNavigationSplit from "@/components/object/project/post-navigation/templates/PostNavigationSplit.astro";
+import type { PPostNavigationProps } from "@/types/components/object/project/post-navigation/PPostNavigation.types";
+
+const { template = "split", ...props } = Astro.props as PPostNavigationProps;
+
+const templates = {
+	split: PostNavigationSplit,
+} as const;
+
+const Template = templates[template];
+---
+
+<Template {...props} />

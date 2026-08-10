@@ -1,0 +1,15 @@
+---
+import LContainer from "@/components/layout/LContainer.astro";
+import type { LFooterProps } from "@/types/components/layout/LFooter.types";
+import { footerClasses } from "@/variants/components/layout/LFooter.variants";
+
+type Props = LFooterProps;
+
+const { id = "footer", ...attributes } = Astro.props;
+---
+
+<footer {...attributes} id={id} class={footerClasses}>
+	<LContainer>
+		<slot />
+	</LContainer>
+</footer>

@@ -1,0 +1,8 @@
+---
+import PageBuilder from "@/components/pages/builder/PageBuilder.astro";
+import type { ProductDetailPageProps } from "@/types/components/pages/product-detail/ProductDetailPage.types";
+
+const { data } = Astro.props as ProductDetailPageProps;
+---
+
+<PageBuilder config={data.builder} />

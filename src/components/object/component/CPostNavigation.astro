@@ -1,0 +1,57 @@
+---
+import CColumns from "@/components/object/component/CColumns.astro";
+import CIcon from "@/components/object/component/CIcon.astro";
+import CImage from "@/components/object/component/CImage.astro";
+import CLink from "@/components/object/component/CLink.astro";
+import CText from "@/components/object/component/CText.astro";
+import type { CPostNavigationProps } from "@/types/components/object/component/CPostNavigation.types";
+import { cn } from "@/utils/cn";
+import {
+	postNavigationCopyClasses,
+	postNavigationCopyNextClasses,
+	postNavigationDirectionClasses,
+	postNavigationItemClasses,
+	postNavigationMediaClasses,
+	postNavigationNextClasses,
+	postNavigationSummaryClasses,
+	postNavigationTitleClasses,
+} from "@/variants/components/object/component/CPostNavigation.variants";
+
+const { items, label } = Astro.props as CPostNavigationProps;
+---
+
+<nav aria-label={label} class="pt-8">
+	<div class="flex flex-col gap-8 sm:flex-row sm:justify-between">
+		{items.map((item) => (
+			<CLink
+				href={item.href}
+				class={cn(postNavigationItemClasses, item.icon === "arrowRight" && postNavigationNextClasses)}
+			>
+				<CImage
+					src={item.image}
+					alt={item.alt}
+					width={320}
+					height={320}
+					variant="fill"
+					class={postNavigationMediaClasses}
+				/>
+				<CColumns
+					as="span"
+					columns="one"
+					gap="xs"
+					class={cn(postNavigationCopyClasses, item.icon === "arrowRight" && postNavigationCopyNextClasses)}
+				>
+					<span class={postNavigationDirectionClasses[item.icon]}>
+						{item.icon === "arrowLeft" && <CIcon name="arrowLeft" size="sm" />}
+						<CText as="span" variant="caption" tone="subtle">{item.label}</CText>
+						{item.icon === "arrowRight" && <CIcon name="arrowRight" size="sm" />}
+					</span>
+					<CText as="span" class={postNavigationTitleClasses}>{item.title}</CText>
+					<CText as="span" variant="body-sm" tone="muted" class={postNavigationSummaryClasses}>
+						{item.summary}
+					</CText>
+				</CColumns>
+			</CLink>
+		))}
+	</div>
+</nav>

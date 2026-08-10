@@ -1,0 +1,65 @@
+---
+import CBadge from "@/components/object/component/CBadge.astro";
+import CBox from "@/components/object/component/CBox.astro";
+import CButton from "@/components/object/component/CButton.astro";
+import CColumns from "@/components/object/component/CColumns.astro";
+import CFeature from "@/components/object/component/CFeature.astro";
+import CHeading from "@/components/object/component/CHeading.astro";
+import CGridItem from "@/components/object/component/CGridItem.astro";
+import CIcon from "@/components/object/component/CIcon.astro";
+import CLink from "@/components/object/component/CLink.astro";
+import CMetadata from "@/components/object/component/CMetadata.astro";
+import CRow from "@/components/object/component/CRow.astro";
+import CSelect from "@/components/object/component/CSelect.astro";
+import CText from "@/components/object/component/CText.astro";
+import type { PEntryIndexProps } from "@/types/components/object/project/entry-index/PEntryIndex.types";
+
+const { id, label, title, sort, listViewLabel, items, visibleCount = items.length, footerAction } = Astro.props as PEntryIndexProps;
+---
+
+<CColumns columns="one" gap="md" id={id} aria-label={label} data-entry-index>
+	<CRow align="center" justify="between" gap="sm" wrap>
+		<CHeading level={2} variant="h4">{title}</CHeading>
+		<CRow align="center" gap="sm">
+			<CSelect {...sort} data-entry-sort />
+			<CButton label={listViewLabel} icon="listView" iconOnly variant="view" aria-pressed="true" />
+		</CRow>
+	</CRow>
+
+	<CBox surface="glass" radius="md" overflow="hidden">
+		<CColumns columns="one" gap="none" separator="light">
+			{items.map((item, index) => (
+				<CBox as="article" spacing="sm" data-entry-row data-order={item.order} hidden={index >= visibleCount}>
+					<CColumns columns="twelve" gap="sm">
+						<CGridItem mdSpan={1}><CText as="span" variant="label" tone="muted">{item.number}</CText></CGridItem>
+						<CGridItem mdSpan={5}>
+						<CRow align="center" gap="xs" wrap>
+							<CLink href={item.href} aria-label={`Read ${item.title}`}>
+								<CHeading level={3} variant="h6">{item.title}</CHeading>
+							</CLink>
+							{item.badge && <CBadge tone="brand">{item.badge}</CBadge>}
+						</CRow>
+						</CGridItem>
+						<CGridItem mdSpan={2}>
+						<CMetadata
+							data={{ items: [{ type: "datetime", label: item.publishedLabel, datetime: item.publishedAt, display: "text" }] }}
+							slots={{ author: false, category: false, index: false, readingTime: false, icons: false }}
+						/>
+						</CGridItem>
+						<CGridItem mdSpan={2}><CFeature icon="eye" label={item.views} appearance="caption" /></CGridItem>
+						<CGridItem mdSpan={2}>
+						{item.status === "available" ? (
+							<CButton href={item.href} label="Read now" icon="arrowUpRight" iconPosition="end" size="sm" variant="primary" />
+						) : item.status === "locked" ? (
+							<CIcon name="lockClosed" size="md" />
+						) : (
+							<CIcon name="check" size="md" />
+						)}
+						</CGridItem>
+					</CColumns>
+				</CBox>
+			))}
+			{footerAction && <CBox spacing="sm" data-entry-footer><CButton {...footerAction} tone="light" wide variant={footerAction.variant ?? "outline"} data-entry-show-all /></CBox>}
+		</CColumns>
+	</CBox>
+</CColumns>

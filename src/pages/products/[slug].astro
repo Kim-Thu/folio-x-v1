@@ -1,0 +1,30 @@
+---
+import ProductDetailPage from "@/components/pages/product-detail/ProductDetailPage.astro";
+import {
+	getProductDetailPageData,
+	getProductDetailPaths,
+} from "@/data/pages/getProductDetailPageData";
+import { getLayoutData } from "@/data/pages/getLayoutData";
+import BaseLayout from "@/layouts/BaseLayout.astro";
+
+export const getStaticPaths = getProductDetailPaths;
+
+interface Props {
+	slug: string;
+}
+
+const { slug } = Astro.props;
+const [layoutData, data] = await Promise.all([
+	getLayoutData(),
+	getProductDetailPageData(slug),
+]);
+---
+
+<BaseLayout
+	{...layoutData}
+	tone="light"
+	title={`${data.product.title} | ${layoutData.title}`}
+	description={data.product.description}
+>
+	<ProductDetailPage {data} />
+</BaseLayout>

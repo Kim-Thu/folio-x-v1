@@ -1,0 +1,44 @@
+---
+import CButton from "@/components/object/component/CButton.astro";
+import type { CTabListProps } from "@/types/components/object/component/CTabList.types";
+import { cn } from "@/utils/cn";
+import {
+	tabListAppearanceClasses,
+	tabListButtonClasses,
+	tabListClasses,
+} from "@/variants/components/object/component/CTabList.variants";
+
+const {
+	activeValue = Astro.props.tabs[0]?.value,
+	appearance = "default",
+	label = "Tabs",
+	tabs,
+	tone = "dark",
+} = Astro.props as CTabListProps;
+---
+
+<div class={cn(tabListClasses, tabListAppearanceClasses[appearance])} role="group" aria-label={label}>
+	{tabs.map((tab) => (
+		<CButton
+			variant={
+				appearance === "archive"
+					? "tab"
+					: appearance === "underline"
+						? "text"
+						: tab.value === activeValue
+							? "primary"
+							: "outline"
+			}
+			size="sm"
+			{tone}
+			class={tabListButtonClasses[appearance]}
+			data-tab-control={tab.value}
+			data-tab-value={tab.value}
+			data-filter-value={tab.value}
+			aria-selected={tab.value === activeValue ? "true" : "false"}
+			aria-pressed={tab.value === activeValue ? "true" : "false"}
+			label={tab.label}
+			href={tab.href}
+		/>
+	))}
+</div>

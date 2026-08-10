@@ -1,6 +1,15 @@
 ---
-import PolicyPage from '@/components/features/policies/PolicyPage.astro';
-import { termsOfUse } from '@/data/policies';
+import PolicyPage from "@/components/pages/policy/PolicyPage.astro";
+import { getPolicyPageData } from "@/data/pages/getPolicyPageData";
+import { getLayoutData } from "@/data/pages/getLayoutData";
+import BaseLayout from "@/layouts/BaseLayout.astro";
+
+const [layout, data] = await Promise.all([
+	getLayoutData(),
+	getPolicyPageData("terms-of-use"),
+]);
 ---
 
-<PolicyPage content={termsOfUse} />
+<BaseLayout {...layout} tone="light" title={`${data.metadata.title} | ${layout.title}`} description={data.metadata.description}>
+	<PolicyPage {data} />
+</BaseLayout>

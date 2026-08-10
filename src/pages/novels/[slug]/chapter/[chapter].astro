@@ -1,0 +1,19 @@
+---
+import ReaderPage from "@/components/pages/reader/ReaderPage.astro";
+import { getPublicationReaderPageData, getPublicationReaderPaths } from "@/data/pages/getPublicationReaderPageData";
+import { getLayoutData } from "@/data/pages/getLayoutData";
+import BaseLayout from "@/layouts/BaseLayout.astro";
+
+export function getStaticPaths() {
+	return getPublicationReaderPaths("novels");
+}
+
+const slug = Astro.params.slug ?? "";
+const chapter = Astro.params.chapter ?? "";
+const layout = await getLayoutData();
+const data = getPublicationReaderPageData("novels", slug, chapter);
+---
+
+<BaseLayout {...layout} tone="light" title={`${data.metadata.title} | ${layout.title}`} description={data.metadata.description}>
+	<ReaderPage {data} />
+</BaseLayout>

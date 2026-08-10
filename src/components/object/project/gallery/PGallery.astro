@@ -1,0 +1,28 @@
+---
+import GalleryGrid from "@/components/object/project/gallery/templates/GalleryGrid.astro";
+import GallerySlider from "@/components/object/project/gallery/templates/GallerySlider.astro";
+import type { PGalleryProps } from "@/types/components/object/project/gallery/PGallery.types";
+
+const {
+	items,
+	label,
+	previousLabel,
+	nextLabel,
+	sliderControls,
+	template = "grid",
+} = Astro.props as PGalleryProps;
+---
+
+{
+	template === "slider" ? (
+		<GallerySlider
+			{items}
+			{label}
+			{previousLabel}
+			{nextLabel}
+			{sliderControls}
+		/>
+	) : (
+		<GalleryGrid {items} {label} />
+	)
+}

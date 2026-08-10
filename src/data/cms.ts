@@ -1,82 +1,163 @@
-import { getCollection } from 'astro:content';
-import type { CollectionEntry, CollectionKey } from 'astro:content';
-import type { Insight, PolicyPageContent, Project } from '@/types/content';
+import type { Insight, Lab, PolicyPageContent, Product, Project, PublicationCatalog } from "@/types/content";
+import type { CollectionEntry, CollectionKey } from "astro:content";
+import { getCollection } from "astro:content";
 
-async function getSingleton<C extends CollectionKey>(collection: C): Promise<CollectionEntry<C>['data']> {
-  const entries = await getCollection(collection);
-  const entry = entries[0];
+async function getSingleton<C extends CollectionKey>(
+	collection: C,
+): Promise<CollectionEntry<C>["data"]> {
+	const entries = await getCollection(collection);
+	const entry = entries[0];
 
-  if (!entry) {
-    throw new Error(`Missing required CMS content collection: ${collection}`);
-  }
+	if (!entry) {
+		throw new Error(`Missing required CMS content collection: ${collection}`);
+	}
 
-  return entry.data;
+	return entry.data;
 }
 
-export const getSiteSettings = () => getSingleton('siteSettings');
-export const getNavigationSettings = () => getSingleton('navigationSettings');
-export const getHomepageSettings = () => getSingleton('homepageSettings');
-export const getClosingProfileSettings = () => getSingleton('closingProfileSettings');
-export const getInterfaceSettings = () => getSingleton('interfaceSettings');
-export const getArchiveSettings = () => getSingleton('archiveSettings');
-export const getFooterSettings = () => getSingleton('footerSettings');
-export const getSystemStatesSettings = () => getSingleton('systemStatesSettings');
+export const getSiteSettings = () => getSingleton("siteSettings");
+export const getNavigationSettings = () => getSingleton("navigationSettings");
+export const getClosingProfileSettings = () =>
+	getSingleton("closingProfileSettings");
+export const getInterfaceSettings = () => getSingleton("interfaceSettings");
+export const getArchiveSettings = () => getSingleton("archiveSettings");
+export const getFooterSettings = () => getSingleton("footerSettings");
+export const getSystemStatesSettings = () =>
+	getSingleton("systemStatesSettings");
+
+export async function getPage(slug: string): Promise<CollectionEntry<"pages">["data"]> {
+	const pages = await getCollection("pages");
+	const page = pages.find((entry) => {
+		const id = entry.id.replace(/\\/g, "/");
+		return entry.data.slug === slug || id === slug || id.endsWith(`/${slug}.json`) || id.endsWith(`/${slug}`) || id === `${slug}.json`;
+	});
+	if (!page) throw new Error(`Missing CMS page: ${slug}`);
+	return page.data;
+}
 
 export async function getProjects(): Promise<Project[]> {
-  const entries = await getCollection('projects');
-  assertUnique(entries.map((entry) => entry.data.order), 'project order');
-  entries.forEach((entry) => assertEntrySlug(entry.id, entry.data.slug, 'project'));
+	const entries = await getCollection("projects");
+	assertUnique(
+		entries.map((entry) => entry.data.order),
+		"project order",
+	);
+	entries.forEach((entry) =>
+		assertEntrySlug(entry.id, entry.data.slug, "project"),
+	);
 
-  return entries
-    .sort((a, b) => a.data.order - b.data.order)
-    .map(({ data }, index) => ({
-      ...data,
-      number: String(index + 1).padStart(2, '0'),
-      href: `/projects/${data.slug}`,
-    }));
+	return entries
+		.sort((a, b) => a.data.order - b.data.order)
+		.map(({ data }, index) => ({
+			...data,
+			number: String(index + 1).padStart(2, "0"),
+			href: `/projects/${data.slug}`,
+		}));
+}
+
+export async function getProducts(): Promise<Product[]> {
+  const entries = await getCollection("products");
+  const catalog = entries[0];
+  if (!catalog) throw new Error("Missing CMS product catalog");
+  assertUnique(catalog.data.items.map((item) => item.id), "product id");
+  assertUnique(catalog.data.items.map((item) => item.slug), "product slug");
+  return catalog.data.items;
+}
+
+export async function getProductCategories(): Promise<ReadonlyArray<{ value: string; label: string }>> {
+  const entries = await getCollection("products");
+  return entries[0]?.data.categories ?? [];
+}
+
+export async function getLabs(): Promise<Lab[]> {
+	const entries = await getCollection("labs");
+	assertUnique(
+		entries.map((entry) => entry.data.order),
+		"lab order",
+	);
+	entries.forEach((entry) =>
+		assertEntrySlug(entry.id, entry.data.slug, "lab"),
+	);
+
+	return entries
+		.sort((a, b) => a.data.order - b.data.order)
+		.map(({ data }) => ({
+			...data,
+			href: `/labs/${data.slug}`,
+		}));
 }
 
 export async function getInsights(): Promise<Insight[]> {
-  const [entries, interfaceSettings] = await Promise.all([
-    getCollection('blog'),
-    getInterfaceSettings(),
-  ]);
-  assertUnique(entries.map((entry) => entry.data.order), 'blog order');
-  entries.forEach((entry) => assertEntrySlug(entry.id, entry.data.slug, 'blog post'));
+	const [entries, interfaceSettings] = await Promise.all([
+		getCollection("blog"),
+		getInterfaceSettings(),
+	]);
+	assertUnique(
+		entries.map((entry) => entry.data.order),
+		"blog order",
+	);
+	entries.forEach((entry) =>
+		assertEntrySlug(entry.id, entry.data.slug, "blog post"),
+	);
 
-  const dateFormatter = new Intl.DateTimeFormat(interfaceSettings.contentFormatting.dateLocale, {
-    day: 'numeric',
-    month: 'long',
-    year: 'numeric',
-    timeZone: 'UTC',
-  });
+	const dateFormatter = new Intl.DateTimeFormat(
+		interfaceSettings.contentFormatting.dateLocale,
+		{
+			day: "numeric",
+			month: "long",
+			year: "numeric",
+			timeZone: "UTC",
+		},
+	);
 
-  return entries
-    .sort((a, b) => a.data.order - b.data.order)
-    .map(({ data }, index) => ({
-      ...data,
-      index: String(index + 1).padStart(2, '0'),
-      href: `/blog/${data.slug}`,
-      readTime: interfaceSettings.contentFormatting.readingTimeTemplate.replace('{minutes}', String(data.readingMinutes)),
-      duration: `PT${data.readingMinutes}M`,
-      publishedLabel: dateFormatter.format(new Date(`${data.publishedAt}T00:00:00Z`)),
-    }));
+	return entries
+		.sort((a, b) => a.data.order - b.data.order)
+		.map(({ data }, index) => ({
+			...data,
+			index: String(index + 1).padStart(2, "0"),
+			href: `/blog/${data.slug}`,
+			readTime: interfaceSettings.contentFormatting.readingTimeTemplate.replace(
+				"{minutes}",
+				String(data.readingMinutes),
+			),
+			duration: `PT${data.readingMinutes}M`,
+			publishedLabel: dateFormatter.format(
+				new Date(`${data.publishedAt}T00:00:00Z`),
+			),
+		}));
+}
+
+export async function getPublicationCatalogs(): Promise<PublicationCatalog[]> {
+	const entries = await getCollection("publicationCatalogs");
+	assertUnique(entries.map((entry) => entry.data.order), "publication catalog order");
+	entries.forEach((entry) =>
+		assertEntrySlug(entry.id, entry.data.slug, "publication catalog"),
+	);
+
+	return entries
+		.sort((a, b) => a.data.order - b.data.order)
+		.map(({ data }) => data);
 }
 
 function assertEntrySlug(id: string, slug: string, contentType: string): void {
-  const fileSlug = id.replace(/\.json$/, '');
-  if (fileSlug !== slug) {
-    throw new Error(`CMS ${contentType} slug "${slug}" must match its filename "${fileSlug}"`);
-  }
+	const fileSlug = id.replace(/\.json$/, "");
+	if (fileSlug !== slug) {
+		throw new Error(
+			`CMS ${contentType} slug "${slug}" must match its filename "${fileSlug}"`,
+		);
+	}
 }
 
 function assertUnique(values: Array<string | number>, label: string): void {
-  if (new Set(values).size !== values.length) {
-    throw new Error(`CMS content contains duplicate ${label} values`);
-  }
+	if (new Set(values).size !== values.length) {
+		throw new Error(`CMS content contains duplicate ${label} values`);
+	}
 }
 
-export async function getPolicies(): Promise<Record<string, PolicyPageContent>> {
-  const entries = await getCollection('policies');
-  return Object.fromEntries(entries.map((entry) => [entry.id.replace(/\.json$/, ''), entry.data]));
+export async function getPolicies(): Promise<
+	Record<string, PolicyPageContent>
+> {
+	const entries = await getCollection("policies");
+	return Object.fromEntries(
+		entries.map((entry) => [entry.id.replace(/\.json$/, ""), entry.data]),
+	);
 }

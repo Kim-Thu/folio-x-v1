@@ -1,0 +1,12 @@
+---
+import AdvertisementFormFirst from "@/components/object/project/advertisement/templates/AdvertisementFormFirst.astro";
+import AdvertisementMediaFirst from "@/components/object/project/advertisement/templates/AdvertisementMediaFirst.astro";
+import type { PAdvertisementProps } from "@/types/components/object/project/advertisement/PAdvertisement.types";
+
+const props = Astro.props as PAdvertisementProps;
+const Template = props.template === "form-first"
+	? AdvertisementFormFirst
+	: AdvertisementMediaFirst;
+---
+
+<Template data={props.data} />

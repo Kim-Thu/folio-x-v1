@@ -1,0 +1,27 @@
+---
+import CIcon from "@/components/object/component/CIcon.astro";
+import type { CIconTileProps } from "@/types/components/object/component/CIconTile.types";
+import { cn } from "@/utils/cn";
+import {
+	iconTileBaseClasses,
+	iconTileSizeClasses,
+	iconTileToneClasses,
+} from "@/variants/components/object/component/CIconTile.variants";
+
+const {
+	icon,
+	iconSize = "lg",
+	size = "sm",
+	tone = "brand",
+} = Astro.props as CIconTileProps;
+---
+
+<span
+	class={cn(
+		iconTileBaseClasses,
+		iconTileSizeClasses[size],
+		iconTileToneClasses[tone],
+	)}
+>
+	<CIcon name={icon} size={iconSize} />
+</span>

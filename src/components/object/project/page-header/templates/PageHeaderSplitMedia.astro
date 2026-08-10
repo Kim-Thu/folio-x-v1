@@ -1,0 +1,36 @@
+---
+import CBreadcrumb from "@/components/object/component/CBreadcrumb.astro";
+import CColumns from "@/components/object/component/CColumns.astro";
+import CHeading from "@/components/object/component/CHeading.astro";
+import CGridItem from "@/components/object/component/CGridItem.astro";
+import CImage from "@/components/object/component/CImage.astro";
+import CMedia from "@/components/object/component/CMedia.astro";
+import CText from "@/components/object/component/CText.astro";
+import type { PPageHeaderSplitMediaData } from "@/types/components/object/project/page-header/PPageHeader.types";
+
+type Props = { data: PPageHeaderSplitMediaData };
+const { data } = Astro.props as Props;
+---
+
+<CColumns columns="twelve" gap="lg">
+	<CGridItem as="header" mdSpan={5} align="center">
+	<CColumns columns="one" gap="md">
+		<CBreadcrumb {...data.breadcrumb} />
+		<CHeading level={1} variant="display-3" lines={data.title} />
+		<CText tone="muted">{data.description}</CText>
+	</CColumns>
+	</CGridItem>
+
+	{data.image && (
+		<CGridItem mdSpan={7} align="center">
+		<CMedia>
+			<CImage
+				{...data.image}
+				variant="natural"
+				loading="eager"
+				fetchpriority="high"
+			/>
+		</CMedia>
+		</CGridItem>
+	)}
+</CColumns>

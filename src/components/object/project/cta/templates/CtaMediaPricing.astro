@@ -1,0 +1,84 @@
+---
+import CBox from "@/components/object/component/CBox.astro";
+import CButton from "@/components/object/component/CButton.astro";
+import CColumns from "@/components/object/component/CColumns.astro";
+import CFeature from "@/components/object/component/CFeature.astro";
+import CHeading from "@/components/object/component/CHeading.astro";
+import CGridItem from "@/components/object/component/CGridItem.astro";
+import CImage from "@/components/object/component/CImage.astro";
+import CMedia from "@/components/object/component/CMedia.astro";
+import CRow from "@/components/object/component/CRow.astro";
+import CText from "@/components/object/component/CText.astro";
+import type { PCtaData } from "@/types/components/object/project/cta/PCta.types";
+
+type Props = { data: PCtaData };
+const { data } = Astro.props as Props;
+const headingId = `${data.id}-title`;
+---
+
+<CBox
+	surface="accent"
+	radius="md"
+	spacing="md"
+	aria-labelledby={headingId}
+>
+	<CColumns columns="twelve" gap="md" align="center">
+		{
+			data.image && (
+				<CGridItem lgSpan={2}><CMedia ratio="natural">
+					<CImage {...data.image} variant="natural" />
+				</CMedia></CGridItem>
+			)
+		}
+
+		<CGridItem lgSpan={7}>
+		<CColumns columns="one" gap="sm">
+			<CHeading id={headingId} level={2} variant="h4">{data.title}</CHeading>
+			{data.description && <CText tone="subtle">{data.description}</CText>}
+			{
+				data.features && (
+					<CRow align="center" gap="md">
+						{data.features.items.map((feature) => (
+							<CFeature {...feature} appearance="body" />
+						))}
+					</CRow>
+				)
+			}
+		</CColumns>
+		</CGridItem>
+
+		<CGridItem lgSpan={3}>
+		<CColumns columns="one" gap="sm" align="end">
+			{
+				data.action && (
+					<CButton
+						href={data.action.href}
+						label={data.action.label}
+						icon="arrowUpRight"
+						size="sm"
+						tone="light"
+						variant="secondary"
+					/>
+				)
+			}
+			{
+				data.price && (
+					<CRow align="baseline" justify="end" gap="xs">
+						<CText as="span" variant="price">{data.price.current}</CText>
+						<CText as="small" variant="caption" tone="subtle">
+							{data.price.period}
+						</CText>
+						{
+							data.price.previous && (
+								<CText as="small" variant="price-old" tone="subtle">
+									{data.price.previous}
+								</CText>
+							)
+						}
+					</CRow>
+				)
+			}
+		</CColumns>
+		</CGridItem>
+	</CColumns>
+</CBox>

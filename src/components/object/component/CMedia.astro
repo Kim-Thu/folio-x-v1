@@ -1,0 +1,46 @@
+---
+import type { CMediaProps } from "@/types/components/object/component/CMedia.types";
+import CLink from "@/components/object/component/CLink.astro";
+import { cn } from "@/utils/cn";
+import {
+	mediaBaseClasses,
+	mediaLinkClasses,
+	mediaPlacementClasses,
+	mediaRatioClasses,
+	mediaShapeClasses,
+	mediaSizeClasses,
+} from "@/variants/components/object/component/CMedia.variants";
+
+const {
+	ariaLabel,
+	class: className,
+	href,
+	placement = "flow",
+	ratio = "natural",
+	shape = "card",
+	size = "auto",
+	...attributes
+} = Astro.props as CMediaProps;
+---
+
+<figure
+	{...attributes}
+	class={cn(
+		mediaBaseClasses,
+		mediaRatioClasses[ratio],
+		mediaShapeClasses[shape],
+		mediaPlacementClasses[placement],
+		mediaSizeClasses[size],
+		className,
+	)}
+>
+	{
+		href ? (
+			<CLink href={href} aria-label={ariaLabel} class={mediaLinkClasses}>
+				<slot />
+			</CLink>
+		) : (
+			<slot />
+		)
+	}
+</figure>

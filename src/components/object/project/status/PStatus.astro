@@ -1,0 +1,12 @@
+---
+import StatusSplitMedia from "@/components/object/project/status/templates/StatusSplitMedia.astro";
+import type { PStatusProps } from "@/types/components/object/project/status/PStatus.types";
+
+const { template = "split-media", ...props } = Astro.props as PStatusProps;
+const templates = {
+	"split-media": StatusSplitMedia,
+} as const;
+const Template = templates[template];
+---
+
+<Template {...props} />

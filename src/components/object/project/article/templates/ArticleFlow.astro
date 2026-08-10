@@ -1,0 +1,8 @@
+---
+import CContentFlow from "@/components/object/component/CContentFlow.astro";
+import type { PArticleFlowProps } from "@/types/components/object/project/article/PArticle.types";
+
+const { content } = Astro.props as PArticleFlowProps;
+---
+
+<CContentFlow items={content} />

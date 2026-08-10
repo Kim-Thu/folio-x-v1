@@ -1,0 +1,93 @@
+---
+import CIcon from "@/components/object/component/CIcon.astro";
+import type { CSelectProps } from "@/types/components/object/component/CSelect.types";
+import { cn } from "@/utils/cn";
+import {
+	selectIconClasses,
+	selectMenuClasses,
+	selectOptionClasses,
+	selectRootClasses,
+	selectTriggerAppearanceClasses,
+	selectTriggerBaseClasses,
+} from "@/variants/components/object/component/CSelect.variants";
+
+type Props = CSelectProps;
+
+const {
+	class: className,
+	appearance = "pill",
+	id,
+	label,
+	options,
+	value,
+	...attributes
+} = Astro.props;
+const selectedOption =
+	options.find((option) => option.value === value) ?? options[0];
+const triggerId = `${id}-trigger`;
+const listboxId = `${id}-listbox`;
+---
+
+<span class={cn(selectRootClasses, className)} data-select>
+	<button
+		id={triggerId}
+		type="button"
+		class={cn(
+			"group/select",
+			selectTriggerBaseClasses,
+			selectTriggerAppearanceClasses[appearance],
+		)}
+		aria-label={label}
+		aria-haspopup="listbox"
+		aria-expanded="false"
+		aria-controls={listboxId}
+		data-select-trigger
+	>
+		<span data-select-label>{selectedOption?.label}</span>
+		<span class={selectIconClasses}>
+			<CIcon name="chevronDown" size="sm" />
+		</span>
+	</button>
+
+	<ul
+		id={listboxId}
+		class={selectMenuClasses}
+		role="listbox"
+		aria-labelledby={triggerId}
+		hidden
+		data-select-menu
+	>
+		{
+			options.map((option) => (
+				<li
+					class={selectOptionClasses}
+					role="option"
+					tabindex="-1"
+					aria-selected={option.value === selectedOption?.value}
+					data-select-option
+					data-value={option.value}
+				>
+					{option.label}
+				</li>
+			))
+		}
+	</ul>
+
+	<select
+		{...attributes}
+		id={id}
+		class="sr-only"
+		tabindex="-1"
+		aria-hidden="true"
+		data-select-native
+	>
+		{options.map((option) => (
+			<option
+				value={option.value}
+				selected={option.value === selectedOption?.value}
+			>
+				{option.label}
+			</option>
+		))}
+	</select>
+</span>

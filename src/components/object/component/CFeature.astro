@@ -1,0 +1,36 @@
+---
+import CIcon from "@/components/object/component/CIcon.astro";
+import CRow from "@/components/object/component/CRow.astro";
+import CText from "@/components/object/component/CText.astro";
+import type { CFeatureProps } from "@/types/components/object/component/CFeature.types";
+import { cn } from "@/utils/cn";
+import {
+	featureAppearanceClasses,
+	featureClasses,
+	featureToneClasses,
+} from "@/variants/components/object/component/CFeature.variants";
+
+const {
+	appearance = "body",
+	class: className,
+	icon,
+	label,
+	tone = "on-light",
+} = Astro.props as CFeatureProps;
+---
+
+<CRow
+	as="span"
+	align="center"
+	gap="xs"
+	wrap={false}
+	class={cn(
+		featureClasses,
+		featureAppearanceClasses[appearance],
+		featureToneClasses[tone],
+		className,
+	)}
+>
+	{icon && <CIcon name={icon} size="sm" />}
+	<CText as="span" variant="inherit" tone="inherit">{label}</CText>
+</CRow>

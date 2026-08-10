@@ -1,0 +1,41 @@
+---
+import CBox from "@/components/object/component/CBox.astro";
+import CColumns from "@/components/object/component/CColumns.astro";
+import CIcon from "@/components/object/component/CIcon.astro";
+import CImage from "@/components/object/component/CImage.astro";
+import CLogo from "@/components/object/component/CLogo.astro";
+import CProgress from "@/components/object/component/CProgress.astro";
+import CRow from "@/components/object/component/CRow.astro";
+import CText from "@/components/object/component/CText.astro";
+import type { CLoadingScreenProps } from "@/types/components/object/component/CLoadingScreen.types";
+import {
+	loadingScreenClasses,
+	loadingScreenContentClasses,
+	loadingScreenCounterClasses,
+	loadingScreenCounterUnitClasses,
+	loadingScreenCounterValueClasses,
+	loadingScreenFooterClasses,
+	loadingScreenMediaClasses,
+	loadingScreenMessageClasses,
+	loadingScreenTipClasses,
+	loadingScreenTipIconClasses,
+} from "@/variants/components/object/component/CLoadingScreen.variants";
+
+const { data, logo } = Astro.props as CLoadingScreenProps;
+const initialTip = data.tips?.[0];
+---
+
+<CBox position="viewport" surface="plain" overflow="hidden" class={loadingScreenClasses} data-loading-screen data-hold-open={String(data.holdOpen ?? false)} role="status" aria-label={data.label}>
+	<CColumns columns="twelve" gap="sm" class={loadingScreenContentClasses}>
+		{data.image && <CBox class={loadingScreenMediaClasses}><CImage {...data.image} variant="natural" loading="eager" fetchpriority="high" /></CBox>}
+		<CColumns columns="one" gap="xs" class={loadingScreenMessageClasses}>
+			<CLogo {...logo} tone="dark" size="lg" />
+			<CText tone="muted">{data.status}</CText>
+			{initialTip && <CRow gap="sm" class={loadingScreenTipClasses}><CIcon name="lightBulb" size="inline" class={loadingScreenTipIconClasses} /><CText variant="body-sm" tone="muted" data-loading-tip data-tips={JSON.stringify(data.tips)}>{initialTip}</CText></CRow>}
+		</CColumns>
+	</CColumns>
+	<CBox class={loadingScreenFooterClasses}>
+		<CRow align="baseline" class={loadingScreenCounterClasses}><CText as="span" class={loadingScreenCounterValueClasses} data-loading-progress-number>0</CText><CText as="span" class={loadingScreenCounterUnitClasses}>%</CText></CRow>
+		<CProgress label={data.progressLabel} value={0} radius="none" animated data-loading-progress />
+	</CBox>
+</CBox>

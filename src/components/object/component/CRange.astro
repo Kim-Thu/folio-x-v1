@@ -1,0 +1,42 @@
+---
+import CFieldset from "@/components/object/component/CFieldset.astro";
+import CRow from "@/components/object/component/CRow.astro";
+import CText from "@/components/object/component/CText.astro";
+import type { CRangeProps } from "@/types/components/object/component/CRange.types";
+import {
+	rangeControlClasses,
+} from "@/variants/components/object/component/CRange.variants";
+
+const {
+	class: className,
+	id,
+	label,
+	max,
+	maxSuffix = "",
+	min,
+	name,
+	prefix = "",
+	value,
+	...attributes
+} = Astro.props as CRangeProps;
+---
+
+<CFieldset class={className} legend={label} gap="xs">
+	<input
+		{...attributes}
+		id={id}
+		class={rangeControlClasses}
+		type="range"
+		name={name}
+		min={min}
+		max={max}
+		value={value}
+		data-price-filter
+	/>
+	<CRow justify="between" gap="sm">
+		<CText as="small" variant="caption" tone="subtle">{prefix}{min}</CText>
+		<CText as="small" variant="caption" tone="subtle">
+			<output for={id} data-price-output>{prefix}{value}{maxSuffix}</output>
+		</CText>
+	</CRow>
+</CFieldset>

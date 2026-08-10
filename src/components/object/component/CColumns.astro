@@ -1,0 +1,38 @@
+---
+import type { CColumnsProps } from "@/types/components/object/component/CColumns.types";
+import { cn } from "@/utils/cn";
+import {
+	columnsBaseClasses,
+	columnsAlignClasses,
+	columnsGapClasses,
+	columnsSeparatorClasses,
+	columnsTemplateClasses,
+	columnsScrollMarginClasses,
+} from "@/variants/components/object/component/CColumns.variants";
+
+const {
+	as: Element = "div",
+	columns = "twelve",
+	align = "stretch",
+	gap = "lg",
+	scrollMargin = "none",
+	separator = "none",
+	class: className,
+	...attributes
+} = Astro.props as CColumnsProps;
+---
+
+<Element
+	{...attributes}
+	class={cn(
+		columnsBaseClasses,
+		columnsAlignClasses[align],
+		columnsTemplateClasses[columns],
+		columnsGapClasses[gap],
+		columnsSeparatorClasses[separator],
+		columnsScrollMarginClasses[scrollMargin],
+		className,
+	)}
+>
+	<slot />
+</Element>

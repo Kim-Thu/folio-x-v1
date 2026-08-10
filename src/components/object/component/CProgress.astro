@@ -1,0 +1,55 @@
+---
+import type { CProgressProps } from "@/types/components/object/component/CProgress.types";
+import { cn } from "@/utils/cn";
+import {
+	progressClasses,
+	progressFillToneClasses,
+	progressRadiusClasses,
+	progressToneClasses,
+} from "@/variants/components/object/component/CProgress.variants";
+
+const {
+	class: className,
+	animated = false,
+	label,
+	max = 100,
+	radius = "full",
+	tone = "brand",
+	value,
+	...attributes
+} = Astro.props as CProgressProps;
+const boundedValue = Math.min(Math.max(value, 0), max);
+const progressWidth = max > 0 ? (boundedValue / max) * 100 : 0;
+---
+
+{animated ? (
+	<div
+		{...attributes}
+		class={cn(progressClasses, progressRadiusClasses[radius], className)}
+		role="progressbar"
+		aria-label={label}
+		aria-valuemin="0"
+		aria-valuemax={max}
+		aria-valuenow={value}
+	>
+		<span
+			class={cn("block size-full origin-left scale-x-0", progressFillToneClasses[tone])}
+			data-progress-value
+		></span>
+	</div>
+) : (
+	<svg
+		{...attributes}
+		class={cn(progressClasses, progressRadiusClasses[radius], className)}
+		viewBox="0 0 100 8"
+		preserveAspectRatio="none"
+		role="progressbar"
+		aria-label={label}
+		aria-valuemin="0"
+		aria-valuemax={max}
+		aria-valuenow={boundedValue}
+	>
+		<rect width="100" height="8" class="fill-gray-100" />
+		<rect width={progressWidth} height="8" class={progressToneClasses[tone]} />
+	</svg>
+)}

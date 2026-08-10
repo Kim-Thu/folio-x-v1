@@ -1,0 +1,73 @@
+---
+import CBreadcrumb from "@/components/object/component/CBreadcrumb.astro";
+import CColumns from "@/components/object/component/CColumns.astro";
+import CHeading from "@/components/object/component/CHeading.astro";
+import CImage from "@/components/object/component/CImage.astro";
+import CMedia from "@/components/object/component/CMedia.astro";
+import CMetadata from "@/components/object/component/CMetadata.astro";
+import CRow from "@/components/object/component/CRow.astro";
+import CShareLinks from "@/components/object/component/CShareLinks.astro";
+import CText from "@/components/object/component/CText.astro";
+import type { PPageHeaderEditorialData } from "@/types/components/object/project/page-header/PPageHeader.types";
+
+const { data } = Astro.props as { data: PPageHeaderEditorialData };
+---
+
+<CColumns columns="one" gap="md">
+	<CBreadcrumb {...data.breadcrumb} />
+	<CColumns as="header" columns="one" gap="lg">
+		<CColumns columns="one" gap="sm">
+			<CMetadata
+				data={{
+					items: [
+						{
+							type: "category",
+							label: data.category.label,
+							href: data.category.href,
+							display: "text",
+						},
+						{
+							type: "reading-time",
+							label: data.readTime,
+							display: "text",
+						},
+					],
+				}}
+				tone="brand"
+			/>
+			<CHeading level={1} variant="page-title">{data.title}</CHeading>
+			<CText variant="body-responsive" tone="subtle">{data.description}</CText>
+		</CColumns>
+		<CRow justify="between" align="center" gap="md">
+			<CRow align="center" gap="sm">
+				{data.authorImage && (
+					<CMedia ratio="square" size="thumbnail" shape="circle">
+						<CImage {...data.authorImage} variant="fill" />
+					</CMedia>
+				)}
+				<CMetadata
+			data={{
+				items: [
+					{ type: "author", label: data.author, display: "text" },
+					{
+						type: "datetime",
+						label: data.publishedLabel,
+						datetime: data.publishedAt,
+						display: "text",
+					},
+				],
+			}}
+				/>
+			</CRow>
+			{data.share && <CShareLinks {...data.share} />}
+		</CRow>
+	</CColumns>
+	<CMedia ratio="video">
+		<CImage
+			{...data.image}
+			variant="fill"
+			loading="eager"
+			fetchpriority="high"
+		/>
+	</CMedia>
+</CColumns>

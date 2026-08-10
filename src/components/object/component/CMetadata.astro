@@ -1,0 +1,75 @@
+---
+import CList from "@/components/object/component/CList.astro";
+import CMetadataItem from "@/components/object/component/CMetadataItem.astro";
+import type {
+	CMetadataProps,
+	CMetadataSlots,
+} from "@/types/components/object/component/CMetadata.types";
+import { cn } from "@/utils/cn";
+import {
+	metadataAlignClasses,
+	metadataBaseClasses,
+	metadataSeparatorClasses,
+	metadataSizeClasses,
+	metadataToneClasses,
+} from "@/variants/components/object/component/CMetadata.variants";
+
+const {
+	align = "start",
+	class: className,
+	data,
+	gap = "xs",
+	size = "caption",
+	slots: slotOptions,
+	template = "inline",
+	tone = "on-light",
+	...attributes
+} = Astro.props as CMetadataProps;
+
+const slots: CMetadataSlots = {
+	author: true,
+	category: true,
+	datetime: true,
+	icons: true,
+	index: true,
+	readingTime: true,
+	...slotOptions,
+};
+
+const slotByType = {
+	author: slots.author,
+	category: slots.category,
+	datetime: slots.datetime,
+	index: slots.index,
+	"reading-time": slots.readingTime,
+} as const;
+
+const items = data.items.filter((item) => slotByType[item.type]);
+---
+
+<CList
+	{...attributes}
+	as="ul"
+	direction={template === "stacked" ? "column" : "row"}
+	{gap}
+	class={cn(
+		metadataBaseClasses,
+		metadataSizeClasses[size],
+		metadataToneClasses[tone],
+		metadataAlignClasses[align],
+		className,
+	)}
+>
+	{
+		items.map((item, index) => (
+			<>
+				{template === "inline" && index > 0 && data.separator && (
+					<li class={metadataSeparatorClasses} aria-hidden="true">
+						{data.separator}
+					</li>
+				)}
+				<CMetadataItem item={item} icons={slots.icons} />
+			</>
+		))
+	}
+</CList>

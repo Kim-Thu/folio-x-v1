@@ -1,10 +1,20 @@
 ---
-import BlogArchive from '@/components/features/blog/BlogArchive.astro';
-import { archiveContent } from '@/data/archive';
-import { insights } from '@/data/site';
-import { getCategories } from '@/utils/taxonomy';
+import InsightsPage from "@/components/pages/insights/InsightsPage.astro";
+import { getInsightsPageData } from "@/data/pages/getInsightsPageData";
+import { getLayoutData } from "@/data/pages/getLayoutData";
+import BaseLayout from "@/layouts/BaseLayout.astro";
 
-const content = archiveContent.blog;
+const [layout, data] = await Promise.all([
+	getLayoutData(),
+	getInsightsPageData(),
+]);
 ---
 
-<BlogArchive eyebrow={content.eyebrow} title={content.title} description={content.description} posts={insights} categories={getCategories(insights)} filterLabel={content.filterLabel} allLabel={content.allLabel} emptyLabel={content.emptyLabel} />
+<BaseLayout
+	{...layout}
+	tone="light"
+	title={`${data.metadata.title} | ${layout.title}`}
+	description={data.metadata.description}
+>
+	<InsightsPage {data} />
+</BaseLayout>

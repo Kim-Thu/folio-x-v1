@@ -1,0 +1,65 @@
+---
+import LContainer from "@/components/layout/LContainer.astro";
+import LMain from "@/components/layout/LMain.astro";
+import LSidebar from "@/components/layout/LSidebar.astro";
+import type { LPageProps } from "@/types/components/layout/LPage.types";
+import { cn } from "@/utils/cn";
+import {
+	pageBoxClasses,
+	pageLayoutClasses,
+} from "@/variants/components/layout/LPage.variants";
+
+const {
+	class: className,
+	template = "fluid",
+	containerSize = "site",
+	asideLabel = "Related content",
+	asidePosition = "start",
+	...attributes
+} = Astro.props as LPageProps;
+
+const hasHeader = Astro.slots.has("header");
+const hasAside = Astro.slots.has("aside");
+const hasCta = Astro.slots.has("cta");
+---
+
+<LMain
+	{...attributes}
+	class={cn(pageLayoutClasses[template], className)}
+	data-page-layout={template}
+>
+	{hasHeader && <slot name="header" />}
+
+	{(template === "fluid" || template === "centered") && <slot />}
+
+	{template === "contained" && (
+		<LContainer size={containerSize}>
+			<slot />
+		</LContainer>
+	)}
+
+	{template === "boxed" && (
+		<LContainer size={containerSize}>
+			<div class={pageBoxClasses}>
+				<slot />
+			</div>
+		</LContainer>
+	)}
+
+	{template === "sidebar" && (
+		<LContainer size={containerSize}>
+			{hasAside ? (
+				<LSidebar label={asideLabel} position={asidePosition}>
+					<Fragment slot="sidebar">
+						<slot name="aside" />
+					</Fragment>
+					<slot />
+				</LSidebar>
+			) : (
+				<slot />
+			)}
+		</LContainer>
+	)}
+
+	{hasCta && <slot name="cta" />}
+</LMain>

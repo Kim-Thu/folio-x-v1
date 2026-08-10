@@ -1,0 +1,207 @@
+{
+  "order": 1,
+  "slug": "commerce-rebuilt-for-scale",
+  "title": "Commerce, rebuilt for scale",
+  "client": "Xedap.vn × Giant.vn",
+  "year": "2023—25",
+  "category": "E-commerce ecosystem",
+  "categorySlug": "e-commerce",
+  "tags": [
+    {
+      "label": "Next.js",
+      "slug": "nextjs"
+    },
+    {
+      "label": "NestJS",
+      "slug": "nestjs"
+    },
+    {
+      "label": "Odoo",
+      "slug": "odoo"
+    }
+  ],
+  "summary": "Tái kiến trúc hệ sinh thái bán lẻ từ WordPress sang Next.js và NestJS, kết nối tồn kho Odoo theo thời gian thực cho hơn 20 cửa hàng.",
+  "outcome": "−40% load time",
+  "image": "https://images.unsplash.com/photo-1558981806-ec527fa84c39?auto=format&fit=crop&w=1800&q=85",
+  "alt": "Xe đạp thể thao trong không gian tối giản",
+  "tone": "light",
+  "sections": [
+    {
+      "title": "Bối cảnh",
+      "paragraphs": [
+        "Hệ sinh thái bán lẻ phát triển qua nhiều giai đoạn, khiến nội dung, tồn kho và trải nghiệm mua hàng bị phân tán giữa các nền tảng.",
+        "Mỗi thay đổi nhỏ trên storefront đều kéo theo nhiều bước kiểm tra thủ công. Dữ liệu sản phẩm có thể đúng ở một hệ thống nhưng chậm cập nhật ở hệ thống còn lại, làm tăng áp lực cho đội vận hành.",
+        "Bài toán không chỉ là thay giao diện. Hệ thống cần một ranh giới rõ giữa nội dung, thương mại và vận hành để mỗi phần có thể thay đổi mà không kéo theo toàn bộ nền tảng."
+      ]
+    },
+    {
+      "title": "Hướng tiếp cận",
+      "paragraphs": [
+        "Tách storefront khỏi hệ quản trị cũ, xây API bằng NestJS và đồng bộ tồn kho Odoo theo các luồng có thể quan sát, kiểm thử và phục hồi độc lập.",
+        "Next.js chịu trách nhiệm cho trải nghiệm mua hàng và hiệu năng hiển thị. NestJS tổ chức các nghiệp vụ thương mại thành module rõ ràng, trong khi Odoo tiếp tục là nguồn dữ liệu vận hành chính.",
+        "Các luồng đồng bộ được thiết kế theo hướng có thể chạy lại an toàn, ghi nhận trạng thái và cô lập lỗi. Một kết nối gặp sự cố không còn khiến toàn bộ quy trình bán hàng bị dừng."
+      ]
+    },
+    {
+      "title": "Kết quả",
+      "paragraphs": [
+        "Thời gian tải giảm khoảng 40%, dữ liệu tồn kho nhất quán hơn và đội vận hành có thể mở rộng hơn 20 cửa hàng mà không nhân đôi quy trình thủ công.",
+        "Đội nội dung vẫn giữ được cách quản trị quen thuộc, nhưng storefront không còn phụ thuộc trực tiếp vào chu kỳ thay đổi của WordPress. Việc phát hành và phục hồi từng phần trở nên chủ động hơn.",
+        "Kết quả quan trọng nhất là hệ thống có thể tiếp tục phát triển mà không biến mỗi tính năng mới thành thêm một lớp thao tác thủ công."
+      ]
+    }
+  ],
+  "detail": {
+    "role": "System design, frontend development",
+    "duration": "2023—2025",
+    "liveUrl": "https://xedap.vn/",
+    "sourceUrl": "https://github.com/Kim-Thu/folio-x-v1",
+    "features": [
+      {
+        "title": "Dữ liệu thời gian thực",
+        "description": "Đồng bộ tồn kho và trạng thái sản phẩm giữa storefront với hệ thống vận hành.",
+        "icon": "folder01"
+      },
+      {
+        "title": "Kiến trúc có thể mở rộng",
+        "description": "Tách rõ các miền trách nhiệm để từng phần có thể thay đổi và triển khai độc lập.",
+        "icon": "lightBulb"
+      },
+      {
+        "title": "Quản trị linh hoạt",
+        "description": "Đội nội dung duy trì quyền chủ động mà không phụ thuộc vào chu kỳ phát hành code.",
+        "icon": "userCircle"
+      }
+    ],
+    "gallery": [
+      {
+        "src": "https://images.unsplash.com/photo-1558981806-ec527fa84c39?auto=format&fit=crop&w=1800&q=85",
+        "alt": "Ảnh placeholder cho gallery dự án thương mại điện tử",
+        "width": 1600,
+        "height": 1000
+      },
+      {
+        "src": "https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?auto=format&fit=crop&w=1800&q=85",
+        "alt": "Khách hàng thanh toán trên nền tảng thương mại điện tử",
+        "width": 1600,
+        "height": 1000
+      },
+      {
+        "src": "https://images.unsplash.com/photo-1556740758-90de374c12ad?auto=format&fit=crop&w=1800&q=85",
+        "alt": "Đội ngũ vận hành theo dõi hệ thống bán lẻ",
+        "width": 1600,
+        "height": 1000
+      }
+    ],
+    "results": [
+      { "value": "−40%", "label": "Thời gian tải trang" },
+      { "value": "20+", "label": "Cửa hàng được kết nối" },
+      { "value": "Realtime", "label": "Đồng bộ tồn kho" },
+      { "value": "1", "label": "Luồng vận hành thống nhất" }
+    ],
+    "reviews": {
+      "eyebrow": "Đánh giá từ khách hàng",
+      "title": "Khách hàng nói gì về sản phẩm",
+      "summary": {
+        "score": 4.9,
+        "maximum": 5,
+        "totalLabel": "Dựa trên 128 đánh giá",
+        "distribution": [
+          { "label": "5 sao", "value": 92 },
+          { "label": "4 sao", "value": 6 },
+          { "label": "3 sao", "value": 1 },
+          { "label": "2 sao", "value": 0.5 },
+          { "label": "1 sao", "value": 0.5 }
+        ]
+      },
+      "items": [
+        {
+          "name": "Huy Nguyễn",
+          "date": "2 tuần trước",
+          "quote": "Theme đẹp, dễ tuỳ biến và tốc độ rất ấn tượng. Hỗ trợ khách hàng cũng rất nhanh chóng.",
+          "rating": 5,
+          "avatar": {
+            "src": "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=160&q=80",
+            "alt": "Chân dung khách hàng Huy Nguyễn",
+            "width": 160,
+            "height": 160
+          }
+        },
+        {
+          "name": "Lan Anh",
+          "date": "1 tháng trước",
+          "quote": "Mình đã thử nhiều giải pháp nhưng đây là hệ thống tốt nhất từ trước đến giờ. Highly recommended!",
+          "rating": 5,
+          "avatar": {
+            "src": "https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=160&q=80",
+            "alt": "Chân dung khách hàng Lan Anh",
+            "width": 160,
+            "height": 160
+          }
+        },
+        {
+          "name": "Minh Trí",
+          "date": "1 tháng trước",
+          "quote": "Giao diện hiện đại, nhiều demo chất lượng và luồng vận hành rõ ràng. Kết quả vượt mong đợi.",
+          "rating": 5,
+          "avatar": {
+            "src": "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=160&q=80",
+            "alt": "Chân dung khách hàng Minh Trí",
+            "width": 160,
+            "height": 160
+          }
+        }
+      ]
+    },
+    "testimonial": {
+      "quote": "Hệ thống mới giúp đội ngũ nhìn rõ dữ liệu và vận hành nhất quán hơn giữa các cửa hàng.",
+      "name": "Project stakeholder",
+      "role": "Retail operations"
+    },
+    "builder": {
+      "layout": {
+        "template": "fluid"
+      },
+      "regions": [
+        {
+          "key": "summary",
+          "enabled": true,
+          "component": "page-header",
+          "placement": "header",
+          "template": "slider-aside",
+          "theme": "light",
+          "spacing": "compact",
+          "container": "site"
+        },
+        {
+          "key": "content",
+          "enabled": true,
+          "component": "article",
+          "placement": "main",
+          "theme": "light",
+          "spacing": "compact",
+          "container": "site"
+        },
+        {
+          "key": "reviews",
+          "enabled": true,
+          "component": "reviews",
+          "placement": "main",
+          "theme": "light",
+          "spacing": "compact",
+          "container": "site"
+        },
+        {
+          "key": "navigation",
+          "enabled": true,
+          "component": "post-navigation",
+          "placement": "main",
+          "template": "split",
+          "theme": "light",
+          "spacing": "compact",
+          "container": "site"
+        }
+      ]
+    }
+  }
+}

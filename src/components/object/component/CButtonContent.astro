@@ -1,0 +1,26 @@
+---
+import CIcon from "@/components/object/component/CIcon.astro";
+import type { CButtonContentProps } from "@/types/components/object/component/CButtonContent.types";
+import { getCButtonIconClasses } from "@/variants/components/object/component/CButton.variants";
+
+type Props = CButtonContentProps;
+
+const { label, icon, iconOnly, iconPosition } = Astro.props;
+const iconClasses = icon ? getCButtonIconClasses(icon) : "";
+---
+
+{
+	icon && iconPosition === "start" && (
+		<span class={iconClasses}>
+			<CIcon name={icon} size="inline" />
+		</span>
+	)
+}
+<span class:list={{ "sr-only": iconOnly }}>{label}</span>
+{
+	icon && iconPosition === "end" && (
+		<span class={iconClasses}>
+			<CIcon name={icon} size="inline" />
+		</span>
+	)
+}

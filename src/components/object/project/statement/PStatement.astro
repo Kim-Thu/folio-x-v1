@@ -1,0 +1,12 @@
+---
+import StatementSplit from "@/components/object/project/statement/templates/StatementSplit.astro";
+import type { PStatementProps } from "@/types/components/object/project/statement/PStatement.types";
+
+const { template = "split", ...props } = Astro.props as PStatementProps;
+const templates = {
+	split: StatementSplit,
+} as const;
+const Template = templates[template];
+---
+
+<Template {...props} />

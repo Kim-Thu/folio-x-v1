@@ -1,0 +1,40 @@
+﻿---
+import type { LFooterRevealProps } from "@/types/components/layout/LFooterReveal.types";
+import { cn } from "@/utils/cn";
+import {
+	footerRevealContentClasses,
+	footerRevealPanelClasses,
+	footerRevealRootClasses,
+	footerRevealSpaceClasses,
+} from "@/variants/components/layout/LFooterReveal.variants";
+
+const {
+	class: className,
+	tone = "dark",
+	...attributes
+} = Astro.props as LFooterRevealProps;
+---
+
+<div
+	{...attributes}
+	class={cn(footerRevealRootClasses, className)}
+	data-footer-reveal
+>
+	<div
+		class={cn(
+			footerRevealContentClasses,
+			tone === "light" ? "bg-white" : "bg-black",
+		)}
+	>
+		<slot />
+	</div>
+	<div
+		class={footerRevealSpaceClasses}
+		data-footer-reveal-space
+		aria-hidden="true"
+	>
+	</div>
+	<div class={footerRevealPanelClasses} data-footer-reveal-panel>
+		<slot name="reveal" />
+	</div>
+</div>

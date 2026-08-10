@@ -1,0 +1,22 @@
+---
+import CBadge from "@/components/object/component/CBadge.astro";
+import CLink from "@/components/object/component/CLink.astro";
+import CList from "@/components/object/component/CList.astro";
+import type { CTagsProps } from "@/types/components/object/component/CTags.types";
+
+const { items, label } = Astro.props as CTagsProps;
+---
+
+<CList aria-label={label} gap="xs">
+	{items.map((item) => (
+		<li>
+			{item.href ? (
+				<CLink href={item.href}>
+					<CBadge tone="neutral">{item.label}</CBadge>
+				</CLink>
+			) : (
+				<CBadge tone="neutral">{item.label}</CBadge>
+			)}
+		</li>
+	))}
+</CList>

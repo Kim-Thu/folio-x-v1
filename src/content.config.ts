@@ -5,39 +5,48 @@ import {
   blogEntrySchema,
   closingProfileSettingsSchema,
   footerSettingsSchema,
-  homepageSettingsSchema,
+  pageSchema,
   interfaceSettingsSchema,
   navigationSettingsSchema,
   policyEntrySchema,
   projectEntrySchema,
+  productCatalogSchema,
+  labEntrySchema,
+  publicationCatalogSchema,
   siteSettingsSchema,
   systemStatesSettingsSchema,
 } from '@/content/schemas';
 
-const settingsBase = './src/content/cms/settings';
+const settingsBase = './src/content/globals';
 
 const siteSettings = defineCollection({ loader: glob({ base: settingsBase, pattern: 'site.json' }), schema: siteSettingsSchema });
 const navigationSettings = defineCollection({ loader: glob({ base: settingsBase, pattern: 'navigation.json' }), schema: navigationSettingsSchema });
-const homepageSettings = defineCollection({ loader: glob({ base: settingsBase, pattern: 'homepage.json' }), schema: homepageSettingsSchema });
 const closingProfileSettings = defineCollection({ loader: glob({ base: settingsBase, pattern: 'closing-profile.json' }), schema: closingProfileSettingsSchema });
 const interfaceSettings = defineCollection({ loader: glob({ base: settingsBase, pattern: 'interface.json' }), schema: interfaceSettingsSchema });
 const archiveSettings = defineCollection({ loader: glob({ base: settingsBase, pattern: 'archive.json' }), schema: archiveSettingsSchema });
 const footerSettings = defineCollection({ loader: glob({ base: settingsBase, pattern: 'footer.json' }), schema: footerSettingsSchema });
 const systemStatesSettings = defineCollection({ loader: glob({ base: settingsBase, pattern: 'system-states.json' }), schema: systemStatesSettingsSchema });
-const projects = defineCollection({ loader: glob({ base: './src/content/cms/projects', pattern: '*.json' }), schema: projectEntrySchema });
-const blog = defineCollection({ loader: glob({ base: './src/content/cms/blog', pattern: '*.json' }), schema: blogEntrySchema });
+const projects = defineCollection({ loader: glob({ base: './src/content/projects', pattern: '*.json' }), schema: projectEntrySchema });
+const products = defineCollection({ loader: glob({ base: './src/content/products', pattern: '*.json' }), schema: productCatalogSchema });
+const labs = defineCollection({ loader: glob({ base: './src/content/labs', pattern: '*.json' }), schema: labEntrySchema });
+const blog = defineCollection({ loader: glob({ base: './src/content/blog', pattern: '*.json' }), schema: blogEntrySchema });
+const publicationCatalogs = defineCollection({ loader: glob({ base: './src/content/publications', pattern: '*.json' }), schema: publicationCatalogSchema });
 const policies = defineCollection({ loader: glob({ base: './src/content/cms/policies', pattern: '*.json' }), schema: policyEntrySchema });
+const pages = defineCollection({ loader: glob({ base: './src/content/pages', pattern: '*.json' }), schema: pageSchema });
 
 export const collections = {
   siteSettings,
   navigationSettings,
-  homepageSettings,
   closingProfileSettings,
   interfaceSettings,
   archiveSettings,
   footerSettings,
   systemStatesSettings,
   projects,
+  products,
+  labs,
   blog,
+  publicationCatalogs,
   policies,
+  pages,
 };

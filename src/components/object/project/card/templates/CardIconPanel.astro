@@ -1,0 +1,40 @@
+---
+import CBox from "@/components/object/component/CBox.astro";
+import CButton from "@/components/object/component/CButton.astro";
+import CColumns from "@/components/object/component/CColumns.astro";
+import CHeading from "@/components/object/component/CHeading.astro";
+import CIconTile from "@/components/object/component/CIconTile.astro";
+import CLink from "@/components/object/component/CLink.astro";
+import CRow from "@/components/object/component/CRow.astro";
+import CText from "@/components/object/component/CText.astro";
+import type { PCardItemProps } from "@/types/components/object/project/card/PCard.types";
+
+const { data, headingLevel = 3, slots } = Astro.props as PCardItemProps;
+---
+
+<CBox as="article" surface="glass" radius="md" spacing="sm">
+	<CRow align="start" gap="sm" wrap={false}>
+		{slots.icon && data.icon && <CIconTile icon={data.icon} />}
+		<CColumns columns="one" gap="xs">
+			{slots.title && (
+				<CHeading level={headingLevel} variant="h5">
+					<CLink href={data.href}>{data.title.join(" ")}</CLink>
+				</CHeading>
+			)}
+			{slots.excerpt && data.excerpt && (
+				<CText variant="body-sm" tone="subtle">{data.excerpt}</CText>
+			)}
+			{slots.action && data.action && (
+				<CButton
+					href={data.action.href}
+					label={data.action.label}
+					icon={data.action.icon}
+					iconPosition={data.action.iconPosition}
+					variant="outline"
+					tone="light"
+					size="xs"
+				/>
+			)}
+		</CColumns>
+	</CRow>
+</CBox>

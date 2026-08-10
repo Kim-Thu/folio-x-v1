@@ -1,0 +1,26 @@
+{
+  "order": 5,
+  "slug": "orbit-field-service",
+  "title": "Field work without the paperwork",
+  "client": "Orbit Service",
+  "year": "2025",
+  "category": "UI/UX design",
+  "categorySlug": "ui-ux-design",
+  "tags": [
+    { "label": "Product design", "slug": "product-design" },
+    { "label": "Mobile", "slug": "mobile" }
+  ],
+  "summary": "Thiết kế luồng mobile giúp kỹ thuật viên nhận việc, ghi nhận hiện trường và hoàn tất bàn giao ngay tại điểm phục vụ.",
+  "outcome": "−55% thao tác nhập liệu",
+  "image": "https://images.unsplash.com/photo-1512941937669-90a1b58e7e9c?auto=format&fit=crop&w=1800&q=85",
+  "alt": "Điện thoại thông minh hiển thị giao diện ứng dụng",
+  "tone": "light",
+  "sections": [
+    {
+      "title": "Hướng tiếp cận",
+      "paragraphs": [
+        "Rút gọn quy trình thành các quyết định theo ngữ cảnh và ưu tiên khả năng thao tác nhanh trong điều kiện hiện trường."
+      ]
+    }
+  ]
+}

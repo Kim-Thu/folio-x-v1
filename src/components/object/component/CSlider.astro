@@ -1,0 +1,86 @@
+---
+import CButton from "@/components/object/component/CButton.astro";
+import type { CSliderProps } from "@/types/components/object/component/CSlider.types";
+import { cn } from "@/utils/cn";
+import {
+	sliderBaseClasses,
+	sliderButtonsClasses,
+	sliderControlsClasses,
+	sliderDotClasses,
+	sliderDotCurrentClasses,
+	sliderDotsClasses,
+	sliderStatusClasses,
+	sliderTrackClasses,
+	sliderViewportClasses,
+	sliderViewportShapeClasses,
+} from "@/variants/components/object/component/CSlider.variants";
+
+const {
+	class: className,
+	controls = "overlay",
+	shape = "card",
+	itemCount,
+	label,
+	previousLabel,
+	nextLabel,
+	...attributes
+} = Astro.props as CSliderProps;
+---
+
+<div {...attributes} class={cn(sliderBaseClasses, className)} data-slider>
+	<div
+	class={cn(sliderViewportClasses, sliderViewportShapeClasses[shape])}
+		aria-label={label}
+		tabindex="0"
+		data-slider-viewport
+	>
+		<slot />
+	</div>
+
+	{
+		itemCount > 1 && (
+			<div class={sliderControlsClasses[controls]}>
+				{controls === "dots" && (
+					<div class={sliderDotsClasses} role="group" aria-label={label}>
+						{Array.from({ length: itemCount }, (_, index) => (
+							<button
+								type="button"
+								class={cn(sliderDotClasses, index === 0 && sliderDotCurrentClasses)}
+								aria-label={`${label} ${index + 1}`}
+								aria-current={index === 0 ? "true" : "false"}
+								data-slider-go={index}
+							/>
+						))}
+					</div>
+				)}
+				{controls === "below" && (
+					<p class={sliderStatusClasses} aria-live="polite">
+						<span data-slider-current>01</span>
+						<span class={sliderTrackClasses} aria-hidden="true" />
+						<span>{String(itemCount).padStart(2, "0")}</span>
+					</p>
+				)}
+				{controls !== "dots" && <div class={sliderButtonsClasses} role="group" aria-label={label}>
+					<CButton
+						label={previousLabel}
+						icon="chevronLeft"
+						iconOnly
+						size="sm"
+						variant="secondary"
+						tone="light"
+						data-slider-previous
+					/>
+					<CButton
+						label={nextLabel}
+						icon="chevronRight"
+						iconOnly
+						size="sm"
+						variant="secondary"
+						tone="light"
+						data-slider-next
+					/>
+				</div>}
+			</div>
+		)
+	}
+</div>

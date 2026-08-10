@@ -1,0 +1,55 @@
+{
+  "order": 1,
+  "readingMinutes": 6,
+  "slug": "dung-tu-dong-hoa-quy-trinh-chua-hieu",
+  "category": "Systems thinking",
+  "categorySlug": "systems-thinking",
+  "tags": [
+    {
+      "label": "Automation",
+      "slug": "automation"
+    },
+    {
+      "label": "Process",
+      "slug": "process"
+    }
+  ],
+  "title": "Đừng tự động hóa một quy trình mà bạn chưa hiểu",
+  "excerpt": "Automation tốt bắt đầu bằng việc loại bỏ, không phải thêm công cụ.",
+  "publishedAt": "2026-06-18",
+  "author": "Nguyễn Kim Thu",
+  "image": "https://images.unsplash.com/photo-1558655146-d09347e92766?auto=format&fit=crop&w=1200&q=80",
+  "imageAlt": "Bàn làm việc thiết kế với các bản phác thảo quy trình",
+  "content": [
+    {
+      "type": "heading",
+      "id": "section-1",
+      "level": 2,
+      "text": "Tự động hóa không sửa được một quy trình mơ hồ"
+    },
+    {
+      "type": "paragraph",
+      "text": "Khi đầu vào, trách nhiệm và tiêu chí hoàn thành chưa rõ, automation chỉ giúp sai sót di chuyển nhanh hơn. Bước đầu tiên luôn là quan sát cách công việc thực sự diễn ra."
+    },
+    {
+      "type": "heading",
+      "id": "section-2",
+      "level": 2,
+      "text": "Loại bỏ trước khi xây công cụ"
+    },
+    {
+      "type": "paragraph",
+      "text": "Mỗi bước cần được hỏi lại: nó tạo ra quyết định, kiểm soát rủi ro hay chỉ tồn tại vì thói quen? Những bước không còn giá trị nên được loại bỏ trước khi viết code."
+    },
+    {
+      "type": "heading",
+      "id": "section-3",
+      "level": 2,
+      "text": "Chỉ tự động hóa phần có quy luật"
+    },
+    {
+      "type": "paragraph",
+      "text": "Hệ thống nên xử lý phần lặp lại và có thể kiểm chứng; con người giữ quyền quyết định ở những điểm cần bối cảnh, phán đoán hoặc chịu trách nhiệm."
+    }
+  ]
+}

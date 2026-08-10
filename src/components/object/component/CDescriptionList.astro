@@ -1,0 +1,63 @@
+---
+import CIcon from "@/components/object/component/CIcon.astro";
+import CLink from "@/components/object/component/CLink.astro";
+import CText from "@/components/object/component/CText.astro";
+import type { CDescriptionListProps } from "@/types/components/object/component/CDescriptionList.types";
+import { cn } from "@/utils/cn";
+import {
+	descriptionListBaseClasses,
+	descriptionListContentClasses,
+	descriptionListIconClasses,
+	descriptionListItemClasses,
+	descriptionListVariantClasses,
+} from "@/variants/components/object/component/CDescriptionList.variants";
+
+const {
+	class: className,
+	items,
+	tone = "on-light",
+	variant = "default",
+	...attributes
+} = Astro.props as CDescriptionListProps;
+---
+
+<dl
+	{...attributes}
+	class={cn(
+		descriptionListBaseClasses,
+		descriptionListVariantClasses[variant],
+		className,
+	)}
+>
+	{
+		items.map((item) => (
+			<div class={descriptionListItemClasses[variant]}>
+				{item.icon && (
+					<span class={descriptionListIconClasses}>
+						<CIcon name={item.icon} size="md" />
+					</span>
+				)}
+				<div class={descriptionListContentClasses}>
+					<dt>
+						<CText as="span" variant="caption" tone={tone === "on-dark" ? "on-dark-subtle" : "subtle"}>
+							{item.label}
+						</CText>
+					</dt>
+					<dd>
+						{item.href ? (
+							<CLink href={item.href}>{item.value}</CLink>
+						) : (
+							<CText
+								as="span"
+								variant={variant === "metrics" ? "price" : "body-sm"}
+								tone={tone === "on-dark" ? "on-dark" : "inherit"}
+							>
+								{item.value}
+							</CText>
+						)}
+					</dd>
+				</div>
+			</div>
+		))
+	}
+</dl>

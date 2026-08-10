@@ -1,0 +1,42 @@
+---
+import CBox from "@/components/object/component/CBox.astro";
+import CColumns from "@/components/object/component/CColumns.astro";
+import CGridItem from "@/components/object/component/CGridItem.astro";
+import CHeading from "@/components/object/component/CHeading.astro";
+import CText from "@/components/object/component/CText.astro";
+import type { PSectionHeaderProps } from "@/types/components/object/project/section-header/PSectionHeader.types";
+
+const {
+	data,
+	appearance = "default",
+	headingLevel = 2,
+} = Astro.props as PSectionHeaderProps;
+const headingId = data.id ? `${data.id}-title` : undefined;
+---
+
+<CBox as="header">
+	<CColumns columns="twelve" gap="lg">
+		{(data.number || data.label) && (
+			<CGridItem lgSpan={3}>
+				<CText variant="caption" tone="subtle">
+					{[data.number, data.label].filter(Boolean).join("/")}
+				</CText>
+			</CGridItem>
+		)}
+		<CGridItem lgSpan={data.number || data.label ? 9 : "full"}>
+			<CColumns columns="one" gap="sm">
+				{data.title && (
+					<CHeading
+						id={headingId}
+						level={headingLevel}
+						variant={appearance === "compact" ? "h4" : "h2"}
+						lines={Array.isArray(data.title) ? data.title : undefined}
+					>
+						{Array.isArray(data.title) ? undefined : data.title}
+					</CHeading>
+				)}
+				{data.description && <CText tone="subtle">{data.description}</CText>}
+			</CColumns>
+		</CGridItem>
+	</CColumns>
+</CBox>

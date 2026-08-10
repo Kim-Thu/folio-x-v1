@@ -1,0 +1,20 @@
+{
+  "order": 3,
+  "slug": "smart-automation",
+  "title": "Smart Automation",
+  "category": { "label": "Automation", "slug": "automation" },
+  "status": "in-progress",
+  "statusLabel": "In progress",
+  "summary": "A visual workflow builder for connecting repeatable tasks into dependable automated routines.",
+  "image": { "src": "/uploads/page-header-projects.png", "alt": "Smart automation workflow experiment", "width": 1372, "height": 1147 },
+  "technologies": [{ "label": "Node.js", "slug": "nodejs" }, { "label": "n8n", "slug": "n8n" }, { "label": "Docker", "slug": "docker" }],
+  "stars": 96,
+  "forks": 21,
+  "updatedLabel": "3 weeks ago",
+  "sourceUrl": "https://github.com",
+  "sections": [{ "title": "Overview", "paragraphs": ["This prototype tests a clearer way to build, inspect, and maintain small business automations."] }],
+  "features": [{ "title": "Composable flows", "description": "Connect reusable steps with visible dependencies.", "icon": "arrowPath" }],
+  "gallery": [{ "src": "/uploads/page-header-projects.png", "alt": "Automation workflow", "width": 1372, "height": 1147 }],
+  "resources": [{ "title": "Source code", "description": "Review the repository.", "href": "https://github.com", "icon": "github" }],
+  "facts": [{ "label": "Category", "value": "Automation" }, { "label": "Status", "value": "In progress" }]
+}

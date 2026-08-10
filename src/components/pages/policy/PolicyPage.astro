@@ -1,0 +1,8 @@
+---
+import PageBuilder from "@/components/pages/builder/PageBuilder.astro";
+import type { PolicyPageProps } from "@/types/components/pages/policy/PolicyPage.types";
+
+const { data } = Astro.props as PolicyPageProps;
+---
+
+<PageBuilder config={data.builder} />

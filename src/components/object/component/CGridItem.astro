@@ -1,0 +1,33 @@
+---
+import type { CGridItemProps } from "@/types/components/object/component/CGridItem.types";
+import { cn } from "@/utils/cn";
+import {
+	gridItemBaseClasses,
+	gridItemAlignClasses,
+	gridItemLgSpanClasses,
+	gridItemMdSpanClasses,
+	gridItemSpanClasses,
+} from "@/variants/components/object/component/CGridItem.variants";
+
+const {
+	as: Element = "div",
+	span = "full",
+	mdSpan,
+	lgSpan,
+	align = "auto",
+	...attributes
+} = Astro.props as CGridItemProps;
+---
+
+<Element
+	{...attributes}
+	class={cn(
+		gridItemBaseClasses,
+		gridItemAlignClasses[align],
+		gridItemSpanClasses[span],
+		mdSpan && gridItemMdSpanClasses[mdSpan],
+		lgSpan && gridItemLgSpanClasses[lgSpan],
+	)}
+>
+	<slot />
+</Element>

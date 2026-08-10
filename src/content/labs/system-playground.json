@@ -1,0 +1,20 @@
+{
+  "order": 6,
+  "slug": "system-playground",
+  "title": "System Playground",
+  "category": { "label": "Design & Interaction", "slug": "design-interaction" },
+  "status": "experiment",
+  "statusLabel": "Experiment",
+  "summary": "A living playground for testing tokens, components, interaction states, and new system conventions.",
+  "image": { "src": "/uploads/page-header-products.png", "alt": "Design system playground", "width": 1536, "height": 1024 },
+  "technologies": [{ "label": "React", "slug": "react" }, { "label": "Tailwind CSS", "slug": "tailwind-css" }, { "label": "Storybook", "slug": "storybook" }],
+  "stars": 75,
+  "forks": 12,
+  "updatedLabel": "5 days ago",
+  "liveUrl": "https://example.com",
+  "sections": [{ "title": "Overview", "paragraphs": ["A shared environment for testing system decisions before they reach production interfaces."] }],
+  "features": [{ "title": "Token experiments", "description": "Validate foundations across real component states.", "icon": "arrowPath" }],
+  "gallery": [{ "src": "/uploads/page-header-products.png", "alt": "Design system components", "width": 1536, "height": 1024 }],
+  "resources": [{ "title": "Usage guide", "description": "Explore the system rules.", "href": "#overview", "icon": "folder01" }],
+  "facts": [{ "label": "Category", "value": "Design & Interaction" }, { "label": "Status", "value": "Experiment" }]
+}

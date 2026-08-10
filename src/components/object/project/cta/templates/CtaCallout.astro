@@ -1,0 +1,66 @@
+---
+import CBox from "@/components/object/component/CBox.astro";
+import CButton from "@/components/object/component/CButton.astro";
+import CColumns from "@/components/object/component/CColumns.astro";
+import CHeading from "@/components/object/component/CHeading.astro";
+import CGridItem from "@/components/object/component/CGridItem.astro";
+import CImage from "@/components/object/component/CImage.astro";
+import CMedia from "@/components/object/component/CMedia.astro";
+import CSubscriptionForm from "@/components/object/component/CSubscriptionForm.astro";
+import CText from "@/components/object/component/CText.astro";
+import CRow from "@/components/object/component/CRow.astro";
+import type { PCtaData } from "@/types/components/object/project/cta/PCta.types";
+
+const { data } = Astro.props as { data: PCtaData };
+const headingId = `${data.id}-title`;
+---
+
+<CBox surface="dark" radius="lg" overflow="hidden">
+	<CColumns columns="twelve" gap="none">
+		{data.form && data.image && (
+			<CGridItem lgSpan={2}>
+			<CMedia ratio="square">
+				<CImage {...data.image} variant="background-contain" />
+			</CMedia>
+			</CGridItem>
+		)}
+		<CGridItem as="header" lgSpan={5} align="center">
+		<CBox spacing="xl">
+			<CColumns columns="one" gap="md">
+				<CHeading id={headingId} level={2} variant="h2">
+					{data.title}
+				</CHeading>
+				{data.description && (
+					<CText variant="body-sm" tone="on-dark-muted">{data.description}</CText>
+				)}
+				{data.action && !data.form && (
+					<CRow>
+					<CButton
+							href={data.action.href}
+							label={data.action.label}
+							icon="arrowUpRight"
+							variant="outline"
+							tone="dark"
+							size="lg"
+					/>
+					</CRow>
+				)}
+			</CColumns>
+		</CBox>
+		</CGridItem>
+		{data.form && (
+			<CGridItem lgSpan={data.image ? 5 : 7} align="center">
+			<CBox spacing="lg">
+				<CSubscriptionForm {...data.form} />
+			</CBox>
+			</CGridItem>
+		)}
+		{data.image && !data.form && (
+			<CGridItem lgSpan={7}>
+			<CMedia ratio="natural" shape="none">
+				<CImage {...data.image} variant="fill" />
+			</CMedia>
+			</CGridItem>
+		)}
+	</CColumns>
+</CBox>

@@ -1,0 +1,34 @@
+---
+import CIcon from "@/components/object/component/CIcon.astro";
+import CInput from "@/components/object/component/CInput.astro";
+import type { CSearchFieldProps } from "@/types/components/object/component/CSearchField.types";
+import { cn } from "@/utils/cn";
+import {
+	searchFieldClasses,
+	searchFieldIconClasses,
+} from "@/variants/components/object/component/CSearchField.variants";
+
+const {
+	class: className,
+	id,
+	label,
+	name,
+	placeholder,
+	...attributes
+} = Astro.props as CSearchFieldProps;
+---
+
+<label class={cn(searchFieldClasses, className)} for={id}>
+	<span class="sr-only">{label}</span>
+	<span class={searchFieldIconClasses}>
+		<CIcon name="search" size="sm" />
+	</span>
+	<CInput
+		{...attributes}
+		id={id}
+		name={name}
+		type="search"
+		tone="light"
+		placeholder={placeholder}
+	/>
+</label>

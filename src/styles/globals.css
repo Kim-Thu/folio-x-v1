@@ -1,0 +1,49 @@
+@import "tailwindcss";
+@import "./fonts.css";
+@import "./tokens.css";
+
+:root {
+    color-scheme:light;
+}
+
+html {
+    scroll-behavior:smooth;
+}
+
+body {
+    font-family:"Google Sans Flex Variable", ui-sans-serif, system-ui, sans-serif;
+    -webkit-font-smoothing:antialiased;
+    margin:0;
+    overflow-x:hidden;
+}
+
+a,
+button,
+summary {
+    -webkit-tap-highlight-color:transparent;
+}
+
+:focus-visible {
+    outline:2px solid currentColor;
+    outline-offset:2px;
+}
+
+#progress-ring {
+    background:conic-gradient(currentColor calc(var(--progress-value) * 1turn), transparent 0);
+    mask:radial-gradient(farthest-side, transparent calc(100% - 1px), currentColor 0);
+    --progress-value:0;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    html {
+        scroll-behavior:auto;
+    }
+
+    *,
+    *::before,
+    *::after {
+        animation-duration:0.01ms !important;
+        animation-iteration-count:1 !important;
+        transition-duration:0.01ms !important;
+    }
+}

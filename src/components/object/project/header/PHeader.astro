@@ -1,0 +1,72 @@
+---
+import CBox from "@/components/object/component/CBox.astro";
+import CButton from "@/components/object/component/CButton.astro";
+import CLogo from "@/components/object/component/CLogo.astro";
+import CMenu from "@/components/object/component/CMenu.astro";
+import CMenuToggle from "@/components/object/component/CMenuToggle.astro";
+import CMenuPanel from "@/components/object/component/CMenuPanel.astro";
+import CNavigation from "@/components/object/component/CNavigation.astro";
+import type { PHeaderProps } from "@/types/components/object/project/header/PHeader.types";
+
+type Props = PHeaderProps;
+
+const {
+	logo,
+	navigation,
+	action,
+	menuControl,
+	tone = "dark",
+} = Astro.props;
+
+const mobileMenuId = "header-mobile-menu";
+---
+
+<Fragment>
+	<CBox>
+		<CLogo {...logo} tone={tone === "light" ? "dark" : "light"} />
+	</CBox>
+
+	<CBox visibility="desktop">
+		<CNavigation label={navigation.desktopLabel}>
+			<CMenu items={navigation.items} {tone} variant="desktop" />
+		</CNavigation>
+	</CBox>
+
+	<CBox visibility="desktop">
+		<CButton
+			href={action.href}
+			label={action.label}
+			icon="arrowUpRight"
+			size="xs"
+			tone={tone === "light" ? "light" : "dark"}
+			variant="text"
+		/>
+	</CBox>
+
+	<CBox visibility="mobile">
+		<CMenuToggle
+			controls={mobileMenuId}
+			openLabel={menuControl.openLabel}
+			closeLabel={menuControl.closeLabel}
+			tone={tone}
+		/>
+	</CBox>
+
+	<CMenuPanel
+		id={mobileMenuId}
+		aria-hidden="true"
+		data-menu-state="closed"
+		inert
+	>
+		<CNavigation label={navigation.mobileLabel}>
+			<CMenu items={navigation.items} variant="mobile" tone="dark" />
+		</CNavigation>
+
+		<CButton
+			href={action.href}
+			label={action.mobileLabel ?? action.label}
+			icon="arrowUpRight"
+			variant="text"
+		/>
+	</CMenuPanel>
+</Fragment>

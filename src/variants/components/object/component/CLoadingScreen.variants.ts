@@ -1,0 +1,10 @@
+export const loadingScreenClasses = "flex flex-col bg-white text-black opacity-100 transition-opacity duration-500";
+export const loadingScreenContentClasses = "flex-1 content-center items-center overflow-hidden px-4 py-4 md:px-8 md:py-6";
+export const loadingScreenMediaClasses = "col-span-12 w-3/4 justify-self-center sm:w-1/2 lg:w-1/3";
+export const loadingScreenMessageClasses = "col-span-12 justify-items-center md:text-center";
+export const loadingScreenTipClasses = "mt-4 items-center text-gray-600 lg:mt-8";
+export const loadingScreenTipIconClasses = "size-10 rounded-full p-2 ring-1 ring-inset ring-gray-100";
+export const loadingScreenFooterClasses = "absolute inset-x-0 bottom-0 w-full shrink-0";
+export const loadingScreenCounterClasses = "justify-end px-4 pb-4 md:px-8";
+export const loadingScreenCounterValueClasses = "font-mono text-6xl leading-none tabular-nums md:text-8xl";
+export const loadingScreenCounterUnitClasses = "font-mono text-3xl leading-none";

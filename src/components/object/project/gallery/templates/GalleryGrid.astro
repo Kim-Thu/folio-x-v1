@@ -1,0 +1,20 @@
+---
+import CBox from "@/components/object/component/CBox.astro";
+import CColumns from "@/components/object/component/CColumns.astro";
+import CImage from "@/components/object/component/CImage.astro";
+import CMedia from "@/components/object/component/CMedia.astro";
+import type { PGalleryProps } from "@/types/components/object/project/gallery/PGallery.types";
+
+type Props = Pick<PGalleryProps, "items" | "label">;
+const { items, label } = Astro.props as Props;
+---
+
+<CColumns columns="two" gap="sm" aria-label={label}>
+	{
+		items.map((item) => (
+			<CBox radius="md" overflow="hidden">
+				<CMedia ratio="video"><CImage {...item} variant="fill" /></CMedia>
+			</CBox>
+		))
+	}
+</CColumns>

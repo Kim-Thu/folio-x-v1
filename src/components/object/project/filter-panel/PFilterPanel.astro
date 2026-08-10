@@ -1,0 +1,43 @@
+---
+import CBox from "@/components/object/component/CBox.astro";
+import CChoiceGroup from "@/components/object/component/CChoiceGroup.astro";
+import CColumns from "@/components/object/component/CColumns.astro";
+import CFieldset from "@/components/object/component/CFieldset.astro";
+import CRange from "@/components/object/component/CRange.astro";
+import CRating from "@/components/object/component/CRating.astro";
+import CText from "@/components/object/component/CText.astro";
+import type { PFilterPanelProps } from "@/types/components/object/project/filter-panel/PFilterPanel.types";
+
+const { data } = Astro.props as PFilterPanelProps;
+const groups = data.groups ?? [
+	data.category,
+	data.platform,
+	data.license,
+].filter((group): group is NonNullable<typeof group> => Boolean(group));
+---
+
+<CBox surface="glass" radius="md" spacing="md" data-filter-panel>
+	<CColumns columns="one" gap="sm">
+		{groups.map((group, index) => (
+			<>
+				{index === 1 && data.filterLabel && (
+					<CText variant="caption" tone="inherit">{data.filterLabel}</CText>
+				)}
+				<CChoiceGroup {...group} />
+			</>
+		))}
+		{data.range && <CRange {...data.range} />}
+		{data.ratings && (
+			<CFieldset legend={data.ratings.legend} gap="xs">
+				{data.ratings.options.map((rating) => (
+					<CRating
+						{...rating}
+						style="filter"
+						maximum={5}
+						name={data.ratings?.name ?? "rating"}
+					/>
+				))}
+			</CFieldset>
+		)}
+	</CColumns>
+</CBox>

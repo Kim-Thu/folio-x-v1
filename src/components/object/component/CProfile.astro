@@ -1,0 +1,41 @@
+---
+import CBox from "@/components/object/component/CBox.astro";
+import CButton from "@/components/object/component/CButton.astro";
+import CColumns from "@/components/object/component/CColumns.astro";
+import CHeading from "@/components/object/component/CHeading.astro";
+import CImage from "@/components/object/component/CImage.astro";
+import CMedia from "@/components/object/component/CMedia.astro";
+import CRow from "@/components/object/component/CRow.astro";
+import CText from "@/components/object/component/CText.astro";
+import type { CProfileProps } from "@/types/components/object/component/CProfile.types";
+
+const { action, bio, image, label, name, role } = Astro.props as CProfileProps;
+---
+
+<CBox as="aside" surface="glass" radius="md" spacing="md" aria-label={label}>
+	<CColumns columns="one" gap="sm">
+		<CHeading level={2} variant="h5">{label}</CHeading>
+		<CRow align="center" gap="sm">
+			{image && (
+				<CMedia ratio="square" size="thumbnail" shape="circle">
+					<CImage {...image} variant="fill" />
+				</CMedia>
+			)}
+			<CColumns columns="one" gap="xs">
+				<CText variant="body-sm">{name}</CText>
+				{role && <CText variant="caption" tone="subtle">{role}</CText>}
+			</CColumns>
+		</CRow>
+		{bio && <CText variant="body-sm" tone="muted">{bio}</CText>}
+		{action && (
+			<CButton
+				href={action.href}
+				label={action.label}
+				icon="arrowRight"
+				variant="outline"
+				tone="light"
+				size="sm"
+			/>
+		)}
+	</CColumns>
+</CBox>

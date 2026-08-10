@@ -1,0 +1,11 @@
+---
+import type { LMainProps } from "@/types/components/layout/LMain.types";
+import { cn } from "@/utils/cn";
+import { mainClasses } from "@/variants/components/layout/LMain.variants";
+
+const { class: className, ...attributes } = Astro.props as LMainProps;
+---
+
+<main {...attributes} class={cn(mainClasses, className)}>
+	<slot />
+</main>

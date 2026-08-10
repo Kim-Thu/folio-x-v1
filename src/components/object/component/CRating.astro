@@ -1,0 +1,83 @@
+---
+import CIcon from "@/components/object/component/CIcon.astro";
+import type {
+	CRatingProps,
+	CRatingSlots,
+} from "@/types/components/object/component/CRating.types";
+import { cn } from "@/utils/cn";
+import {
+	ratingClasses,
+	ratingControlClasses,
+	ratingCountClasses,
+	ratingMaximumClasses,
+	ratingSlotDefaults,
+	ratingStarsClasses,
+	ratingValueClasses,
+} from "@/variants/components/object/component/CRating.variants";
+
+const {
+	checked,
+	class: className,
+	count,
+	label,
+	maximum = 5,
+	name,
+	slots: slotOptions,
+	style = "stars",
+	value,
+} = Astro.props as CRatingProps;
+
+const slots: CRatingSlots = {
+	...ratingSlotDefaults[style],
+	...slotOptions,
+};
+const Element = slots.control ? "label" : "span";
+const visibleStars = style === "compact" ? 1 : maximum;
+const activeStars = Math.round(value);
+const accessibleLabel = label ?? `${value} / ${maximum}`;
+---
+
+<Element class={cn(ratingClasses[style], className)} aria-label={accessibleLabel}>
+	{
+		slots.control && (
+			<input
+				class={ratingControlClasses}
+				type="checkbox"
+				name={name}
+				value={value}
+				checked={checked}
+				data-rating-filter
+			/>
+		)
+	}
+	{
+		slots.value && (
+			<span class={ratingValueClasses[style]}>{value}</span>
+		)
+	}
+	{
+		slots.maximum && (
+			<span class={ratingMaximumClasses}>/ {maximum}</span>
+		)
+	}
+	{
+		slots.stars && (
+			<span class={ratingStarsClasses[style]} aria-hidden="true">
+				{Array.from({ length: visibleStars }, (_, index) => (
+					<CIcon
+						name="star"
+						size="sm"
+						class={style !== "compact" && index >= activeStars ? "opacity-20" : undefined}
+					/>
+				))}
+			</span>
+		)
+	}
+	{
+		slots.count && typeof count === "number" && (
+			<small class={ratingCountClasses}>
+				{style === "compact" ? `(${count})` : count}
+			</small>
+		)
+	}
+</Element>

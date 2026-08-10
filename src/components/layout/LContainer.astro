@@ -1,0 +1,19 @@
+---
+import type { LContainerProps } from "@/types/components/layout/LContainer.types";
+import { cn } from "@/utils/cn";
+import { containerSizeClasses } from "@/variants/components/layout/LContainer.variants";
+
+type Props = LContainerProps;
+
+const {
+	class: className,
+	size = "site",
+	...attributes
+} = Astro.props;
+
+const classes = cn("mx-auto w-full px-4", containerSizeClasses[size], className);
+---
+
+<div {...attributes} class={classes}>
+	<slot />
+</div>

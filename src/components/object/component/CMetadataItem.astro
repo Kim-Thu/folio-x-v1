@@ -1,0 +1,36 @@
+---
+import CIcon from "@/components/object/component/CIcon.astro";
+import CLink from "@/components/object/component/CLink.astro";
+import type { CMetadataItem } from "@/types/components/object/component/CMetadata.types";
+import { metadataItemContentClasses } from "@/variants/components/object/component/CMetadata.variants";
+
+type Props = {
+	icons: boolean;
+	item: CMetadataItem;
+};
+
+const { icons, item } = Astro.props as Props;
+const showIcon = icons && item.icon && item.display !== "text";
+const showLabel = item.display !== "icon";
+---
+
+<li>
+	{
+		item.href ? (
+			<CLink href={item.href} class={metadataItemContentClasses}>
+				{showIcon && <CIcon name={item.icon!} size="sm" />}
+				{showLabel && <span>{item.label}</span>}
+			</CLink>
+		) : item.type === "datetime" && item.datetime ? (
+			<time datetime={item.datetime} class={metadataItemContentClasses}>
+				{showIcon && <CIcon name={item.icon!} size="sm" />}
+				{showLabel && <span>{item.label}</span>}
+			</time>
+		) : (
+			<span class={metadataItemContentClasses}>
+				{showIcon && <CIcon name={item.icon!} size="sm" />}
+				{showLabel && <span>{item.label}</span>}
+			</span>
+		)
+	}
+</li>

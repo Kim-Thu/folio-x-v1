@@ -1,0 +1,14 @@
+---
+import CColumns from "@/components/object/component/CColumns.astro";
+import CGridItem from "@/components/object/component/CGridItem.astro";
+import CText from "@/components/object/component/CText.astro";
+import type { PStatementProps } from "@/types/components/object/project/statement/PStatement.types";
+
+const { data, ...attributes } = Astro.props as PStatementProps;
+---
+
+<CColumns {...attributes} columns="twelve" gap="md">
+	<CGridItem lgSpan={3}><CText as="span" variant="label" tone="subtle">{data.label}</CText></CGridItem>
+	<CGridItem lgSpan={4}><CText>{data.primary}</CText></CGridItem>
+	<CGridItem lgSpan={5}><CText>{data.secondary}</CText></CGridItem>
+</CColumns>

@@ -1,0 +1,26 @@
+---
+import type { CTextProps } from "@/types/components/object/component/CText.types";
+import { cn } from "@/utils/cn";
+import {
+	textToneClasses,
+	textVariantClasses,
+} from "@/variants/components/object/component/CText.variants";
+
+type Props = CTextProps;
+
+const props = Astro.props as Props;
+const {
+	as: Element = "p",
+	class: className,
+	variant = "body",
+	tone = "inherit",
+	...attributes
+} = props;
+---
+
+<Element
+	{...attributes}
+	class={cn(textVariantClasses[variant], textToneClasses[tone], className)}
+>
+	<slot />
+</Element>

@@ -1,9 +1,9 @@
-import type { IconName } from '@/types/ui/IconName';
+import type { CIconName } from "@/types/components/object/component/CIcon.types";
 
 export interface SystemStateAction {
   href: string;
   label: string;
-  icon?: IconName;
+  icon?: CIconName;
 }
 
 export interface SystemStateImage {

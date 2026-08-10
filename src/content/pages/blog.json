@@ -1,0 +1,16 @@
+{
+  "slug": "/blog",
+  "meta": {"title": "Insights", "description": "Ideas, insights, and practical notes about design, engineering, and product systems."},
+  "content": {"sections": [{
+    "id": "blog-archive",
+    "type": "archive",
+    "template": "faceted",
+    "settings": {"theme":"canvas","spacing":"body","container":"site"},
+    "content": {
+      "hero": {"eyebrow":"Stories & Insights","title":"Ideas. Insights. Inspiration","accent":".","image":{"src":"/uploads/page-header-insight.png","alt":"Editorial interface and modular content blocks","width":1536,"height":1024}},
+      "labels": {"search":"Search articles","placeholder":"Search articles...","allTopics":"All topics","newest":"Newest","featured":"Featured articles","allArticles":"All articles","empty":"No articles match your filters.","newsletterTitle":"Never miss a new article","newsletterDescription":"Join the newsletter for practical ideas and behind-the-scenes notes.","subscribe":"Subscribe","email":"Email address","emailPlaceholder":"Your email..."},
+      "newsletter": {"image":{"src":"/uploads/ads-1.png","alt":"","width":1402,"height":1122},"href":"mailto:thunk.work.91@gmail.com"},
+      "cards": {"template":"editorial","layout":"grid","columns":3,"gap":"sm","pageSize":9,"slots":{"tags":false,"action":false}}
+    }
+  }]}
+}

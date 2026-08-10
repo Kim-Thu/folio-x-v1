@@ -1,0 +1,413 @@
+{
+  "slug": "/",
+  "meta": {
+    "title": "NKT Studio",
+    "description": "Products, projects, experiments and stories by NKT Studio.",
+    "author": "NKT Studio"
+  },
+  "seo": null,
+  "content": {
+    "sections": [
+      {
+        "id": "hero",
+        "type": "hero",
+        "template": "split-media",
+        "settings": {
+          "theme": "light",
+          "spacing": "lead",
+          "container": "site"
+        },
+        "content": {
+          "id": "top",
+          "eyebrow": "Xin chào, mình là NKT",
+          "title": [
+            "Builder.",
+            "Designer.",
+            "Storyteller"
+          ],
+          "accent": ".",
+          "description": "Tôi xây dựng sản phẩm số, kể chuyện bằng code và sáng tạo nên những thế giới.",
+          "image": {
+            "src": "/uploads/hero-image.webp",
+            "width": 1440,
+            "height": 1080,
+            "alt": "Không gian làm việc số trên một hành tinh 3D"
+          },
+          "actions": [
+            {
+              "href": "#universe",
+              "label": "Explore my universe",
+              "icon": "arrowUpRight",
+              "iconPosition": "end",
+              "variant": "secondary",
+              "tone": "light",
+              "size": "md"
+            },
+            {
+              "href": "#selected-works",
+              "label": "Xem video giới thiệu",
+              "icon": "play",
+              "iconPosition": "end",
+              "variant": "text",
+              "tone": "light",
+              "size": "sm"
+            }
+          ],
+          "actionsLabel": "Hero actions",
+          "socialLinks": [],
+          "scrollLabel": "Scroll to explore"
+        }
+      },
+      {
+        "id": "universe",
+        "type": "collection",
+        "template": "sidebar",
+        "settings": {
+          "theme": "light",
+          "spacing": "compact",
+          "container": "site",
+          "layout": "asymmetric",
+          "columns": 2,
+          "gap": "sm",
+          "mediaRatio": "panoramic"
+        },
+        "content": {
+          "heading": {
+            "number": "01",
+            "title": [
+              "Explore",
+              "My Universe"
+            ],
+            "description": "Chọn một hành tinh để khám phá thế giới của mình.",
+            "action": {
+              "href": "#featured-products",
+              "label": "Xem tất cả",
+              "icon": "arrowRight"
+            }
+          },
+          "items": [
+            {
+              "href": "/products",
+              "ariaLabel": "View Products",
+              "title": [
+                "Products"
+              ],
+              "excerpt": "Cửa hàng sản phẩm số",
+              "media": {
+                "src": "/uploads/page-header-products.png",
+                "alt": "Digital products",
+                "width": 1536,
+                "height": 1024
+              },
+              "appearance": "inverse"
+            },
+            {
+              "href": "/comics",
+              "ariaLabel": "View Comics",
+              "title": [
+                "Comics"
+              ],
+              "excerpt": "Truyện tranh nghề lập trình",
+              "media": {
+                "src": "/uploads/library-hero-drawing.webp",
+                "alt": "Comics",
+                "width": 1536,
+                "height": 1024
+              },
+              "appearance": "inverse"
+            },
+            {
+              "href": "/projects",
+              "ariaLabel": "View Portfolio",
+              "title": [
+                "Portfolio"
+              ],
+              "excerpt": "Dự án nổi bật & case study",
+              "media": {
+                "src": "/uploads/page-header-projects.png",
+                "alt": "Portfolio projects",
+                "width": 1372,
+                "height": 1147
+              },
+              "appearance": "inverse"
+            },
+            {
+              "href": "/blog",
+              "ariaLabel": "View Blog",
+              "title": [
+                "Blog"
+              ],
+              "excerpt": "Chia sẻ kiến thức công nghệ",
+              "media": {
+                "src": "/uploads/page-header-insight.png",
+                "alt": "Stories and insights",
+                "width": 1717,
+                "height": 916
+              },
+              "appearance": "inverse"
+            },
+            {
+              "href": "/labs",
+              "ariaLabel": "View Tech Lab",
+              "title": [
+                "Tech Lab"
+              ],
+              "excerpt": "Thí nghiệm & dự án công nghệ",
+              "media": {
+                "src": "/uploads/labs-hero.png",
+                "alt": "Technology laboratory",
+                "width": 1536,
+                "height": 1024
+              },
+              "appearance": "inverse"
+            },
+            {
+              "href": "/novels",
+              "ariaLabel": "View Novel World",
+              "title": [
+                "Novel World"
+              ],
+              "excerpt": "Thế giới tiểu thuyết của riêng tôi",
+              "media": {
+                "src": "/uploads/library-hero-reading.webp",
+                "alt": "Novel World",
+                "width": 1536,
+                "height": 1024
+              },
+              "appearance": "inverse"
+            }
+          ],
+          "cards": {
+            "template": "overlay",
+            "layout": "asymmetric",
+            "columns": 2,
+            "gap": "sm",
+            "mediaRatio": "panoramic",
+            "headingLevel": 3,
+            "slots": {
+              "metadata": false,
+              "tags": false,
+              "metrics": false,
+              "action": false
+            }
+          }
+        }
+      },
+      {
+        "id": "featured-products",
+        "type": "collection",
+        "template": "sidebar",
+        "settings": {
+          "theme": "light",
+          "spacing": "compact",
+          "container": "site"
+        },
+        "content": {
+          "heading": {
+            "number": "02",
+            "title": [
+              "Featured",
+              "Products"
+            ],
+            "description": "Những sản phẩm được yêu thích nhất.",
+            "action": {
+              "href": "/products",
+              "label": "View all products",
+              "icon": "arrowRight"
+            }
+          },
+          "source": {
+            "collection": "products",
+            "limit": 4
+          },
+          "cards": {
+            "template": "media-details",
+            "columns": 4,
+            "gap": "sm",
+            "headingLevel": 3,
+            "slots": {
+              "excerpt": false,
+              "action": false
+            }
+          }
+        }
+      },
+      {
+        "id": "selected-works",
+        "type": "collection",
+        "template": "sidebar",
+        "settings": {
+          "theme": "light",
+          "spacing": "compact",
+          "container": "site",
+          "layout": "showcase",
+          "columns": 2,
+          "gap": "sm",
+          "mediaRatio": "video"
+        },
+        "content": {
+          "heading": {
+            "number": "03",
+            "title": [
+              "Selected",
+              "Works"
+            ],
+            "description": "Một số dự án nổi bật đã thực hiện.",
+            "action": {
+              "href": "/projects",
+              "label": "Xem tất cả dự án",
+              "icon": "arrowRight"
+            }
+          },
+          "source": {
+            "collection": "projects",
+            "limit": 4
+          },
+          "cards": {
+            "template": "overlay",
+            "layout": "showcase",
+            "columns": 2,
+            "gap": "sm",
+            "mediaRatio": "video",
+            "headingLevel": 3,
+            "slots": {
+              "metadata": false,
+              "tags": false,
+              "metrics": false,
+              "action": false
+            }
+          }
+        }
+      },
+      {
+        "id": "labs",
+        "type": "collection",
+        "template": "sidebar",
+        "settings": {
+          "theme": "dark",
+          "spacing": "compact",
+          "container": "site",
+          "columns": 4,
+          "gap": "none",
+          "mediaRatio": "landscape",
+          "separator": "dark"
+        },
+        "content": {
+          "heading": {
+            "number": "04",
+            "title": [
+              "Tech Lab."
+            ],
+            "description": "Nơi tôi thử nghiệm những ý tưởng táo bạo và công nghệ mới.",
+            "action": {
+              "href": "/labs",
+              "label": "Khám phá phòng thí nghiệm",
+              "icon": "arrowRight"
+            }
+          },
+          "source": {
+            "collection": "labs",
+            "limit": 4
+          },
+          "cards": {
+            "template": "media-caption",
+            "columns": 4,
+            "gap": "none",
+            "mediaRatio": "landscape",
+            "headingLevel": 3,
+            "slots": {
+              "excerpt": false,
+              "tags": false,
+              "metrics": false,
+              "action": false
+            }
+          }
+        }
+      },
+      {
+        "id": "stories",
+        "type": "collection",
+        "template": "cards",
+        "settings": {
+          "theme": "light",
+          "spacing": "none",
+          "container": "none",
+          "columns": 2,
+          "gap": "none",
+          "mediaRatio": "panoramic"
+        },
+        "content": {
+          "source": {
+            "collection": "publications",
+            "limit": 2
+          },
+          "cards": {
+            "template": "media-banner",
+            "columns": 2,
+            "gap": "none",
+            "mediaRatio": "panoramic",
+            "headingLevel": 2,
+            "slots": {
+              "metadata": false,
+              "tags": false,
+              "metrics": false,
+              "action": false
+            }
+          }
+        }
+      },
+      {
+        "id": "insights",
+        "type": "collection",
+        "template": "split",
+        "settings": {
+          "theme": "light",
+          "spacing": "compact",
+          "container": "site"
+        },
+        "content": {
+          "heading": {
+            "number": "07",
+            "label": "Insights",
+            "title": [
+              "Ghi chú từ việc xây, phá và sửa hệ thống."
+            ],
+            "action": {
+              "href": "/blog",
+              "label": "View all insights",
+              "icon": "arrowRight"
+            }
+          },
+          "source": {
+            "collection": "blog",
+            "limit": 4
+          }
+        }
+      },
+      {
+        "id": "contact",
+        "type": "cta",
+        "template": "callout",
+        "settings": {
+          "theme": "light",
+          "spacing": "compact",
+          "container": "site"
+        },
+        "content": {
+          "title": "Bạn có ý tưởng dự án?",
+          "description": "Hãy cùng tạo ra một sản phẩm rõ ràng, hữu ích và đáng nhớ.",
+          "action": {
+            "href": "mailto:hello@nvt.studio",
+            "label": "Liên hệ tôi"
+          },
+          "image": {
+            "src": "/uploads/cta-banner.webp",
+            "alt": "Nhân vật 3D đang làm việc tại bàn máy tính",
+            "width": 1536,
+            "height": 720
+          }
+        }
+      }
+    ]
+  }
+}

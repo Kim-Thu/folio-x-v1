@@ -1,0 +1,45 @@
+---
+import CHeading from "@/components/object/component/CHeading.astro";
+import CImage from "@/components/object/component/CImage.astro";
+import CMedia from "@/components/object/component/CMedia.astro";
+import CText from "@/components/object/component/CText.astro";
+import type { CContentFlowProps } from "@/types/components/object/component/CContentFlow.types";
+import { cn } from "@/utils/cn";
+import {
+	contentFlowClasses,
+	contentFlowSpacingClasses,
+} from "@/variants/components/object/component/CContentFlow.variants";
+
+const { class: className, items, ...attributes } =
+	Astro.props as CContentFlowProps;
+---
+
+<article {...attributes} class={cn(contentFlowClasses, className)}>
+	{items.map((item) => (
+		item.type === "heading" ? (
+			<CHeading
+				id={item.id}
+				level={item.level}
+				variant={item.level === 2 ? "h4" : "h5"}
+				class={contentFlowSpacingClasses.heading}
+				data-article-heading
+			>
+				{item.text}
+			</CHeading>
+		) : item.type === "paragraph" ? (
+			<CText
+				tone="subtle"
+				class={contentFlowSpacingClasses.paragraph}
+			>
+				{item.text}
+			</CText>
+		) : (
+			<CMedia
+				ratio="video"
+				class={contentFlowSpacingClasses.image}
+			>
+				<CImage {...item.image} variant="fill" />
+			</CMedia>
+		)
+	))}
+</article>

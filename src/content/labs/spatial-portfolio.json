@@ -1,0 +1,21 @@
+{
+  "order": 4,
+  "slug": "spatial-portfolio",
+  "title": "Spatial Portfolio",
+  "category": { "label": "Web & Frontend", "slug": "web-frontend" },
+  "status": "complete",
+  "statusLabel": "Complete",
+  "summary": "A three-dimensional portfolio system that explores depth, motion, and accessible content navigation.",
+  "image": { "src": "/uploads/hero-image.webp", "alt": "Spatial portfolio experiment", "width": 1440, "height": 1080 },
+  "technologies": [{ "label": "Three.js", "slug": "threejs" }, { "label": "React", "slug": "react" }, { "label": "GSAP", "slug": "gsap" }],
+  "stars": 193,
+  "forks": 27,
+  "updatedLabel": "2 months ago",
+  "liveUrl": "https://example.com",
+  "sourceUrl": "https://github.com",
+  "sections": [{ "title": "Overview", "paragraphs": ["An experiment in combining spatial storytelling with a robust semantic document structure."] }],
+  "features": [{ "title": "Spatial navigation", "description": "Move through work without losing content clarity.", "icon": "globeAlt" }],
+  "gallery": [{ "src": "/uploads/hero-image.webp", "alt": "Spatial interface", "width": 1440, "height": 1080 }],
+  "resources": [{ "title": "Source code", "description": "Review the repository.", "href": "https://github.com", "icon": "github" }],
+  "facts": [{ "label": "Category", "value": "Web & Frontend" }, { "label": "Status", "value": "Complete" }]
+}

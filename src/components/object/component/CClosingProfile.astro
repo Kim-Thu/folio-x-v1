@@ -1,0 +1,45 @@
+---
+import CBox from "@/components/object/component/CBox.astro";
+import CButton from "@/components/object/component/CButton.astro";
+import CColumns from "@/components/object/component/CColumns.astro";
+import CHeading from "@/components/object/component/CHeading.astro";
+import CImage from "@/components/object/component/CImage.astro";
+import CRow from "@/components/object/component/CRow.astro";
+import CText from "@/components/object/component/CText.astro";
+import type { CClosingProfileProps } from "@/types/components/object/component/CClosingProfile.types";
+import {
+	closingProfileContactClasses,
+	closingProfileHeaderClasses,
+	closingProfileHeadingClasses,
+	closingProfileInnerClasses,
+	closingProfileLayoutClasses,
+	closingProfileLineClasses,
+	closingProfileLocationClasses,
+	closingProfilePortraitClasses,
+	closingProfileRoleClasses,
+	closingProfileSecondLineClasses,
+	closingProfileStageClasses,
+	closingProfileTitleClasses,
+} from "@/variants/components/object/component/CClosingProfile.variants";
+
+const { data } = Astro.props as CClosingProfileProps;
+---
+
+<CBox surface="plain" class={closingProfileInnerClasses}>
+	<CBox class={closingProfileLayoutClasses}>
+		<CRow gap="md" wrap class={closingProfileHeaderClasses}><CText variant="caption" tone="on-dark-muted">{data.eyebrow}</CText><CButton {...data.followAction} tone="dark" /></CRow>
+		<CColumns columns="twelve" gap="none" class={closingProfileStageClasses} data-closing-profile-stage>
+			<CBox class={closingProfileTitleClasses} data-closing-profile-track>
+				<CHeading id={`${data.id}-title`} level={2} variant="h3" class={closingProfileHeadingClasses}>
+					<CText as="span" variant="inherit" class={closingProfileLineClasses} data-closing-profile-motion="left">{data.nameLines[0]}</CText>
+					<CText as="span" variant="inherit" class={closingProfileLineClasses} data-closing-profile-motion="right"><CText as="span" variant="inherit" class={closingProfileSecondLineClasses}>{data.nameLines[1]}</CText><CText as="span" variant="body-sm" class={closingProfileRoleClasses}>{data.roleLabel}</CText></CText>
+				</CHeading>
+			</CBox>
+			{data.portrait && <CBox class={closingProfilePortraitClasses} data-closing-profile-portrait><CImage {...data.portrait} variant="natural" /></CBox>}
+			<CColumns columns="two" gap="xl" class={closingProfileContactClasses}>
+				<CRow><CButton {...data.emailAction} tone="dark" /></CRow>
+				<CColumns columns="one" gap="xs" class={closingProfileLocationClasses}><CText variant="caption" tone="on-dark-subtle">{data.locationLabel}</CText><CText tone="on-dark-muted">{data.location}</CText></CColumns>
+			</CColumns>
+		</CColumns>
+	</CBox>
+</CBox>

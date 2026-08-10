@@ -1,0 +1,43 @@
+---
+import CBox from "@/components/object/component/CBox.astro";
+import CColumns from "@/components/object/component/CColumns.astro";
+import CHeading from "@/components/object/component/CHeading.astro";
+import CGridItem from "@/components/object/component/CGridItem.astro";
+import CImage from "@/components/object/component/CImage.astro";
+import CMedia from "@/components/object/component/CMedia.astro";
+import CSubscriptionForm from "@/components/object/component/CSubscriptionForm.astro";
+import CText from "@/components/object/component/CText.astro";
+import type { PCtaData } from "@/types/components/object/project/cta/PCta.types";
+
+const { data } = Astro.props as { data: PCtaData };
+const headingId = `${data.id}-title`;
+---
+
+<CBox surface="glass" radius="md" overflow="hidden">
+	<CColumns columns="twelve" gap="none">
+		{data.image && (
+			<CGridItem mdSpan={2}>
+				<CMedia ratio="landscape">
+					<CImage {...data.image} variant="fill" />
+				</CMedia>
+			</CGridItem>
+		)}
+		<CGridItem as="header" mdSpan={data.image ? 5 : 7}>
+		<CBox spacing="md">
+			<CColumns columns="one" gap="xs">
+				<CHeading id={headingId} level={2} variant="h4">
+					{data.title}
+				</CHeading>
+				{data.description && <CText tone="subtle">{data.description}</CText>}
+			</CColumns>
+		</CBox>
+		</CGridItem>
+		{data.form && (
+			<CGridItem mdSpan={5}>
+			<CBox spacing="md">
+				<CSubscriptionForm {...data.form} tone="light" />
+			</CBox>
+			</CGridItem>
+		)}
+	</CColumns>
+</CBox>

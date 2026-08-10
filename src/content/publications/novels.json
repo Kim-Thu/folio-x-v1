@@ -1,0 +1,331 @@
+{
+  "order": 1,
+  "slug": "novels",
+  "label": "Novels",
+  "title": "Stories beyond",
+  "accent": "imagination.",
+  "description": "Explore novels, light novels, and web fiction with vivid worlds and stories worth staying up late for.",
+  "hero": {
+    "src": "/uploads/library-hero-reading.webp",
+    "alt": "A reader discovering a fantasy city through an open book",
+    "width": 1672,
+    "height": 941
+  },
+  "primaryAction": {
+    "label": "Start reading",
+    "href": "/novels#featured-title"
+  },
+  "secondaryAction": {
+    "label": "Reading guide",
+    "href": "/novels#latest-title"
+  },
+  "quote": "Some stories stay with us forever.",
+  "quoteCredit": "NKT Studio",
+  "stats": [
+    { "label": "Works", "value": "186+", "icon": "archiveBox" },
+    { "label": "Chapters", "value": "12.5K+", "icon": "folder01" },
+    { "label": "Reads", "value": "2.1M+", "icon": "globeAlt" },
+    { "label": "Rating", "value": "4.9", "icon": "star" }
+  ],
+  "genres": [
+    { "label": "Fantasy", "slug": "fantasy", "count": 48, "icon": "lightBulb" },
+    { "label": "Romance", "slug": "romance", "count": 36, "icon": "star" },
+    {
+      "label": "Science Fiction",
+      "slug": "science-fiction",
+      "count": 22,
+      "icon": "globeAlt"
+    },
+    { "label": "Action", "slug": "action", "count": 28, "icon": "bolt" },
+    { "label": "Drama", "slug": "drama", "count": 31, "icon": "userCircle" },
+    { "label": "Horror", "slug": "horror", "count": 12, "icon": "archiveBox" },
+    {
+      "label": "Slice of Life",
+      "slug": "slice-of-life",
+      "count": 25,
+      "icon": "folder01"
+    },
+    { "label": "Mystery", "slug": "mystery", "count": 18, "icon": "star" }
+  ],
+  "authors": [
+    {
+      "name": "NKT Studio",
+      "works": 12,
+      "image": {
+        "src": "/uploads/avatar.webp",
+        "alt": "NKT Studio",
+        "width": 600,
+        "height": 600
+      }
+    },
+    {
+      "name": "Minh Ha",
+      "works": 8,
+      "image": {
+        "src": "/uploads/avatar-2.webp",
+        "alt": "Minh Ha",
+        "width": 600,
+        "height": 600
+      }
+    },
+    {
+      "name": "Akira",
+      "works": 6,
+      "image": {
+        "src": "/uploads/avatar-placehoder.png",
+        "alt": "Akira",
+        "width": 1024,
+        "height": 1024
+      }
+    },
+    {
+      "name": "Lac Vu",
+      "works": 5,
+      "image": {
+        "src": "/uploads/avatar.webp",
+        "alt": "Lac Vu",
+        "width": 600,
+        "height": 600
+      }
+    }
+  ],
+  "entries": [
+    {
+      "order": 1,
+      "slug": "violet-citadel",
+      "title": "The Violet Citadel",
+      "summary": "A lone mage searches a ruined city for the memory that can change two worlds.",
+      "cover": {
+        "src": "/uploads/cover-violet-citadel.webp",
+        "alt": "Mage beneath a violet citadel",
+        "width": 1024,
+        "height": 1536
+      },
+      "genres": [
+        { "label": "Fantasy", "slug": "fantasy" },
+        { "label": "Action", "slug": "action" }
+      ],
+      "status": "ongoing",
+      "rating": 4.9,
+      "views": "128K",
+      "chapters": 128,
+      "updatedLabel": "2 hours ago",
+      "author": "NKT Studio",
+      "detail": {
+        "language": "English",
+        "followers": "12.6K",
+        "description": [
+          "Beyond the violet walls, every star keeps a memory that can alter the fate of two worlds.",
+          "A story about hope, impossible choices, and people brave enough to dream beyond the last light."
+        ],
+        "tags": [
+          { "label": "Magic academy", "slug": "magic-academy" },
+          { "label": "Future", "slug": "future" },
+          { "label": "Adventure", "slug": "adventure" },
+          { "label": "Mystery", "slug": "mystery" }
+        ],
+        "chapterTitles": [
+          "The light at the gate",
+          "The final choice",
+          "Elysia's memory",
+          "The second wing",
+          "Source of the shadow",
+          "Fragments of memory",
+          "The turning point",
+          "The watcher"
+        ],
+        "reader": [
+          {
+            "number": 18,
+            "title": "Fragments of Memory",
+            "publishedAt": "2024-04-30",
+            "publishedLabel": "30 Apr, 2024",
+            "readTime": "12 min read",
+            "views": "18.7K",
+            "kind": "prose",
+            "prose": [
+              { "text": "The neon lights of Elysia flickered through the cold rain." },
+              { "text": "Rin walked between narrow alleys where steam rose from the drains and mixed with the metallic scent of the city." },
+              { "text": "In her hand, a small device sent out a faint signal, but it was enough to guide her forward." },
+              { "kind": "emphasis", "text": "If this map is right, the place is at the end of this alley." },
+              { "text": "She tightened her coat and moved on. Then a sound rose from the darkness behind her." },
+              { "kind": "separator", "text": "* * *" },
+              { "text": "When Rin woke, she was lying in a dark room surrounded by old screens." },
+              { "text": "A voice came from the shadows and a silver-haired man stepped into the dim light." },
+              { "kind": "emphasis", "text": "At last, you are awake." },
+              { "text": "Rin blinked, trying to remember what had happened and why she had been brought here." },
+              { "text": "The man watched her quietly. The answers she wanted were closer than she knew." }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "order": 2,
+      "slug": "memories-of-the-wind",
+      "title": "Memories of the Wind",
+      "summary": "Two strangers meet where the sea remembers every promise.",
+      "cover": {
+        "src": "/uploads/cover-sunset-threads.webp",
+        "alt": "Two readers under a bright sunset sky",
+        "width": 1024,
+        "height": 1536
+      },
+      "genres": [
+        { "label": "Romance", "slug": "romance" },
+        { "label": "Drama", "slug": "drama" }
+      ],
+      "status": "complete",
+      "rating": 4.8,
+      "views": "98K",
+      "chapters": 89,
+      "updatedLabel": "5 hours ago",
+      "author": "Minh Ha"
+    },
+    {
+      "order": 3,
+      "slug": "heart-source",
+      "title": "Heart Source",
+      "summary": "A developer discovers that an experimental program can rewrite human emotion.",
+      "cover": {
+        "src": "/uploads/cover-neon-portal.webp",
+        "alt": "Figure before a neon portal",
+        "width": 1024,
+        "height": 1536
+      },
+      "genres": [
+        { "label": "Science Fiction", "slug": "science-fiction" },
+        { "label": "Romance", "slug": "romance" }
+      ],
+      "status": "ongoing",
+      "rating": 4.9,
+      "views": "76K",
+      "chapters": 76,
+      "updatedLabel": "1 day ago",
+      "author": "Akira"
+    },
+    {
+      "order": 4,
+      "slug": "last-light-on-the-road",
+      "title": "Last Light on the Road",
+      "summary": "At the edge of night, one traveler carries the final map home.",
+      "cover": {
+        "src": "/uploads/cover-moon-warrior.webp",
+        "alt": "Warrior traveling beneath a full moon",
+        "width": 1024,
+        "height": 1536
+      },
+      "genres": [
+        { "label": "Slice of Life", "slug": "slice-of-life" },
+        { "label": "Drama", "slug": "drama" }
+      ],
+      "status": "complete",
+      "rating": 4.7,
+      "views": "64K",
+      "chapters": 64,
+      "updatedLabel": "2 days ago",
+      "author": "Lac Vu"
+    },
+    {
+      "order": 5,
+      "slug": "immortal-soldier",
+      "title": "The Immortal Soldier",
+      "summary": "An oath-bound guardian faces the cost of a life without an ending.",
+      "cover": {
+        "src": "/uploads/cover-violet-citadel.webp",
+        "alt": "Fantasy guardian in violet light",
+        "width": 1024,
+        "height": 1536
+      },
+      "genres": [
+        { "label": "Action", "slug": "action" },
+        { "label": "Fantasy", "slug": "fantasy" }
+      ],
+      "status": "ongoing",
+      "rating": 4.7,
+      "views": "65K",
+      "chapters": 94,
+      "updatedLabel": "2 days ago",
+      "author": "NKT Studio"
+    },
+    {
+      "order": 6,
+      "slug": "parallel-worlds",
+      "title": "Parallel Worlds",
+      "summary": "A student wakes in a city that exists only between seconds.",
+      "cover": {
+        "src": "/uploads/cover-neon-portal.webp",
+        "alt": "Parallel worlds linked by a neon portal",
+        "width": 1024,
+        "height": 1536
+      },
+      "genres": [
+        { "label": "Science Fiction", "slug": "science-fiction" },
+        { "label": "Mystery", "slug": "mystery" }
+      ],
+      "status": "ongoing",
+      "rating": 4.6,
+      "views": "54K",
+      "chapters": 56,
+      "updatedLabel": "3 days ago",
+      "author": "Akira"
+    },
+    {
+      "order": 7,
+      "slug": "midnight-after-rain",
+      "title": "Midnight After Rain",
+      "summary": "A quiet mystery unfolds through letters that arrive after every storm.",
+      "cover": {
+        "src": "/uploads/cover-sunset-threads.webp",
+        "alt": "A calm city after rain",
+        "width": 1024,
+        "height": 1536
+      },
+      "genres": [
+        { "label": "Mystery", "slug": "mystery" },
+        { "label": "Romance", "slug": "romance" }
+      ],
+      "status": "complete",
+      "rating": 4.8,
+      "views": "43K",
+      "chapters": 42,
+      "updatedLabel": "4 days ago",
+      "author": "Minh Ha"
+    },
+    {
+      "order": 8,
+      "slug": "spirit-hunter",
+      "title": "Spirit Hunter",
+      "summary": "A reluctant hunter follows a trail of stars into the forbidden forest.",
+      "cover": {
+        "src": "/uploads/cover-moon-warrior.webp",
+        "alt": "Spirit hunter in a moonlit forest",
+        "width": 1024,
+        "height": 1536
+      },
+      "genres": [
+        { "label": "Fantasy", "slug": "fantasy" },
+        { "label": "Horror", "slug": "horror" }
+      ],
+      "status": "ongoing",
+      "rating": 4.7,
+      "views": "38K",
+      "chapters": 37,
+      "updatedLabel": "5 days ago",
+      "author": "Lac Vu"
+    }
+  ],
+  "newsletter": {
+    "title": "Never miss a new chapter",
+    "description": "Get notified whenever a story you follow receives a new chapter.",
+    "inputLabel": "Email address",
+    "placeholder": "Your email address...",
+    "submitLabel": "Subscribe",
+    "image": {
+      "src": "/uploads/library-newsletter-book.webp",
+      "alt": "An open storybook with floating pages",
+      "width": 1448,
+      "height": 1086
+    }
+  }
+}

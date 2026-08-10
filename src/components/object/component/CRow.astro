@@ -1,0 +1,35 @@
+---
+import type { CRowProps } from "@/types/components/object/component/CRow.types";
+import { cn } from "@/utils/cn";
+import {
+	rowAlignClasses,
+	rowBaseClasses,
+	rowGapClasses,
+	rowJustifyClasses,
+	rowWrapClasses,
+} from "@/variants/components/object/component/CRow.variants";
+
+const {
+	as: Element = "div",
+	align = "center",
+	justify = "start",
+	gap = "md",
+	wrap = true,
+	class: className,
+	...attributes
+} = Astro.props as CRowProps;
+---
+
+<Element
+	{...attributes}
+	class={cn(
+		rowBaseClasses,
+		rowAlignClasses[align],
+		rowJustifyClasses[justify],
+		rowGapClasses[gap],
+		rowWrapClasses[`${wrap}`],
+		className,
+	)}
+>
+	<slot />
+</Element>

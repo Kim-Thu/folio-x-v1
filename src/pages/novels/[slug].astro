@@ -1,0 +1,20 @@
+---
+import PublicationDetailPage from "@/components/pages/publication-detail/PublicationDetailPage.astro";
+import { getPublicationDetailPageData, getPublicationDetailPaths } from "@/data/pages/getPublicationDetailPageData";
+import { getLayoutData } from "@/data/pages/getLayoutData";
+import BaseLayout from "@/layouts/BaseLayout.astro";
+
+export async function getStaticPaths() {
+	return getPublicationDetailPaths("novels");
+}
+
+const slug = Astro.params.slug ?? "";
+const [layout, data] = await Promise.all([
+	getLayoutData(),
+	getPublicationDetailPageData("novels", slug),
+]);
+---
+
+<BaseLayout {...layout} tone="light" title={`${data.metadata.title} | ${layout.title}`} description={data.metadata.description}>
+	<PublicationDetailPage {data} />
+</BaseLayout>

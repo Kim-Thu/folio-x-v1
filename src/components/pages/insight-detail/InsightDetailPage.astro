@@ -1,0 +1,8 @@
+---
+import PageBuilder from "@/components/pages/builder/PageBuilder.astro";
+import type { InsightDetailPageProps } from "@/types/components/pages/insight-detail/InsightDetailPage.types";
+
+const { data } = Astro.props as InsightDetailPageProps;
+---
+
+<PageBuilder config={data.builder} />

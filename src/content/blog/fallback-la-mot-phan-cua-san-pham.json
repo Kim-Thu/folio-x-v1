@@ -1,0 +1,55 @@
+{
+  "order": 2,
+  "readingMinutes": 8,
+  "slug": "fallback-la-mot-phan-cua-san-pham",
+  "category": "Engineering",
+  "categorySlug": "engineering",
+  "tags": [
+    {
+      "label": "Fallback",
+      "slug": "fallback"
+    },
+    {
+      "label": "Reliability",
+      "slug": "reliability"
+    }
+  ],
+  "title": "Fallback là một phần của sản phẩm, không chỉ là xử lý lỗi",
+  "excerpt": "Thiết kế cho lúc hệ thống không hoạt động giúp trải nghiệm đáng tin cậy hơn.",
+  "publishedAt": "2026-05-24",
+  "author": "Nguyễn Kim Thu",
+  "image": "https://images.unsplash.com/photo-1558494949-ef010cbdcc31?auto=format&fit=crop&w=1400&q=82",
+  "imageAlt": "Hệ thống máy chủ trong trung tâm dữ liệu",
+  "content": [
+    {
+      "type": "heading",
+      "id": "section-1",
+      "level": 2,
+      "text": "Lỗi là một trạng thái sản phẩm"
+    },
+    {
+      "type": "paragraph",
+      "text": "Người dùng không quan tâm lỗi đến từ API, mạng hay nhà cung cấp. Họ chỉ cần biết điều gì đang xảy ra, dữ liệu có an toàn không và có thể làm gì tiếp theo."
+    },
+    {
+      "type": "heading",
+      "id": "section-2",
+      "level": 2,
+      "text": "Fallback cần được thiết kế từ đầu"
+    },
+    {
+      "type": "paragraph",
+      "text": "Một fallback tốt có dữ liệu thay thế, thông điệp rõ ràng và đường quay lại trạng thái bình thường. Nó không phải màn hình lỗi được thêm vào trước ngày phát hành."
+    },
+    {
+      "type": "heading",
+      "id": "section-3",
+      "level": 2,
+      "text": "Độ tin cậy đến từ khả năng phục hồi"
+    },
+    {
+      "type": "paragraph",
+      "text": "Hệ thống đáng tin không phải hệ thống không bao giờ lỗi, mà là hệ thống giới hạn tác động, quan sát được và phục hồi theo cách người dùng có thể hiểu."
+    }
+  ]
+}

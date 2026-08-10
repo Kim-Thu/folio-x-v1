@@ -1,0 +1,88 @@
+{
+  "navItems": [
+    {
+			"href": "/",
+			"label": "Home"
+    },
+    {
+			"href": "/products",
+			"label": "Products"
+    },
+    {
+			"href": "/projects",
+			"label": "Works"
+    },
+    {
+			"href": "/labs",
+			"label": "Lab"
+		},
+		{
+			"href": "/blog",
+			"label": "Stories"
+		},
+		{
+			"href": "/#about",
+			"label": "About"
+    }
+  ],
+  "footerNavItems": [
+    {
+      "href": "/",
+      "label": "Home"
+    },
+    {
+      "href": "/#about",
+      "label": "About"
+    },
+    {
+      "href": "/projects",
+      "label": "Projects"
+    },
+    {
+      "href": "/blog",
+      "label": "Blog & Insights"
+    },
+    {
+      "href": "/#qa",
+      "label": "Q&A"
+    }
+  ],
+  "resourceLinks": [
+    {
+      "href": "/projects",
+      "label": "Projects"
+    },
+    {
+      "href": "/blog",
+      "label": "Blog & Insights"
+    },
+    {
+      "href": "/#qa",
+      "label": "Q&A"
+    }
+  ],
+  "legalLinks": [
+    {
+      "href": "/privacy-policy",
+      "label": "Privacy Policy"
+    },
+    {
+      "href": "/terms-of-use",
+      "label": "Terms of Use"
+    }
+  ],
+  "socialLinks": [
+    {
+      "href": "https://www.linkedin.com",
+      "label": "LinkedIn",
+      "shortLabel": "LI",
+      "icon": "linkedin"
+    },
+    {
+      "href": "https://github.com",
+      "label": "GitHub",
+      "shortLabel": "GH",
+      "icon": "github"
+    }
+  ]
+}

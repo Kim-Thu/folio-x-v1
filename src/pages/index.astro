@@ -1,27 +1,11 @@
 ---
-import BaseLayout from '@/layouts/BaseLayout.astro';
-import PageProgressRail from '@/components/layouts/PageProgressRail.astro';
-import HeroSection from '@/components/features/home/HeroSection.astro';
-import AboutSection from '@/components/features/home/AboutSection.astro';
-import ProjectsSection from '@/components/features/home/ProjectsSection.astro';
-import InsightsSection from '@/components/features/home/InsightsSection.astro';
-import FaqSection from '@/components/features/home/FaqSection.astro';
-import ContactSection from '@/components/features/home/ContactSection.astro';
-import { interfaceContent } from '@/data/content';
-import Link from '@/components/primitives/Link/Link.astro';
+import HomePage from "@/components/pages/home/HomePage.astro";
+import { getLayoutData } from "@/data/pages/getLayoutData";
+import BaseLayout from "@/layouts/BaseLayout.astro";
+
+const layoutData = await getLayoutData();
 ---
 
-<BaseLayout>
-  <Link href="#main-content" class="fixed left-4 top-4 z-skip-link -translate-y-24 bg-brand-soft px-4 py-3 text-sm font-semibold text-on-brand transition-transform focus:translate-y-0">
-    {interfaceContent.skipToContent}
-  </Link>
-  <PageProgressRail />
-  <main id="main-content" tabindex="-1">
-    <HeroSection />
-    <AboutSection />
-    <ProjectsSection />
-    <InsightsSection />
-    <FaqSection />
-    <ContactSection />
-  </main>
+<BaseLayout {...layoutData} hasOverlayHeader tone="light">
+	<HomePage />
 </BaseLayout>

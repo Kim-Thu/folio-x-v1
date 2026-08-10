@@ -1,17 +1,30 @@
 ---
-import BlogDetailLayout from '@/components/features/blog/BlogDetail.astro';
-import { insights } from '@/data/site';
-import type { Insight } from '@/types/content';
+import InsightDetailPage from "@/components/pages/insight-detail/InsightDetailPage.astro";
+import {
+	getInsightDetailPageData,
+	getInsightDetailPaths,
+} from "@/data/pages/getInsightDetailPageData";
+import { getLayoutData } from "@/data/pages/getLayoutData";
+import BaseLayout from "@/layouts/BaseLayout.astro";
 
-export function getStaticPaths() {
-  return insights.map((post) => ({ params: { slug: post.slug }, props: { post } }));
-}
+export const getStaticPaths = getInsightDetailPaths;
 
 interface Props {
-  post: Insight;
+	slug: string;
 }
 
-const { post } = Astro.props;
+const { slug } = Astro.props as Props;
+const [layout, data] = await Promise.all([
+	getLayoutData(),
+	getInsightDetailPageData(slug),
+]);
 ---
 
-<BlogDetailLayout post={post} />
+<BaseLayout
+	{...layout}
+	tone="light"
+	title={`${data.post.title} | ${layout.title}`}
+	description={data.post.excerpt}
+>
+	<InsightDetailPage {data} />
+</BaseLayout>

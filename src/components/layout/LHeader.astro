@@ -1,0 +1,36 @@
+---
+import LContainer from "@/components/layout/LContainer.astro";
+import type { LHeaderProps } from "@/types/components/layout/LHeader.types";
+import { cn } from "@/utils/cn";
+import {
+	headerClasses,
+	headerContentClasses,
+	headerSolidClasses,
+	headerToneClasses,
+} from "@/variants/components/layout/LHeader.variants";
+
+type Props = LHeaderProps;
+
+const {
+	id = "header",
+	solid = false,
+	tone = "dark",
+	...attributes
+} = Astro.props;
+---
+
+<header
+	{...attributes}
+	id={id}
+	class={cn(headerClasses, headerToneClasses[tone], solid && headerSolidClasses)}
+	data-header-tone={tone}
+	data-solid-header={String(solid)}
+	data-scroll-state="visible"
+	data-scroll-surface={solid ? "solid" : "transparent"}
+>
+	<LContainer>
+		<div class={headerContentClasses}>
+			<slot />
+		</div>
+	</LContainer>
+</header>

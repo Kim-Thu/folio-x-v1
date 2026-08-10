@@ -1,0 +1,28 @@
+---
+import CBox from "@/components/object/component/CBox.astro";
+import CColumns from "@/components/object/component/CColumns.astro";
+import CHeading from "@/components/object/component/CHeading.astro";
+import CIconTile from "@/components/object/component/CIconTile.astro";
+import CLink from "@/components/object/component/CLink.astro";
+import CRow from "@/components/object/component/CRow.astro";
+import CText from "@/components/object/component/CText.astro";
+import type { PCardItemProps } from "@/types/components/object/project/card/PCard.types";
+
+const { data, headingLevel = 3, slots } = Astro.props as PCardItemProps;
+---
+
+<CBox as="article">
+	<CRow align="start" gap="md" wrap={false}>
+		{slots.icon && data.icon && <CIconTile icon={data.icon} size="md" />}
+		<CColumns columns="one" gap="xs">
+			{slots.title && (
+				<CHeading level={headingLevel} variant="h5">
+					<CLink href={data.href}>{data.title.join(" ")}</CLink>
+				</CHeading>
+			)}
+			{slots.excerpt && data.excerpt && (
+				<CText variant="body-sm" tone="subtle">{data.excerpt}</CText>
+			)}
+		</CColumns>
+	</CRow>
+</CBox>

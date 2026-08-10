@@ -1,0 +1,42 @@
+---
+import CIcon from "@/components/object/component/CIcon.astro";
+import type { CMenuToggleProps } from "@/types/components/object/component/CMenuToggle.types";
+import {
+	menuToggleClasses,
+	menuToggleCloseIconClasses,
+	menuToggleOpenIconClasses,
+	menuToggleToneClasses,
+} from "@/variants/components/object/component/CMenuToggle.variants";
+import { cn } from "@/utils/cn";
+
+type Props = CMenuToggleProps;
+
+const {
+	controls,
+	openLabel,
+	closeLabel,
+	id = "menu-button",
+	tone = "dark",
+	...attributes
+} = Astro.props;
+---
+
+<button
+	{...attributes}
+	id={id}
+	type="button"
+	class={cn(menuToggleClasses, menuToggleToneClasses[tone])}
+	aria-label={openLabel}
+	aria-controls={controls}
+	aria-expanded="false"
+	data-open-label={openLabel}
+	data-close-label={closeLabel}
+	data-menu-toggle
+>
+	<span class={menuToggleOpenIconClasses}>
+		<CIcon name="bars3" size="lg" />
+	</span>
+	<span class={menuToggleCloseIconClasses}>
+		<CIcon name="xMark" size="lg" />
+	</span>
+</button>

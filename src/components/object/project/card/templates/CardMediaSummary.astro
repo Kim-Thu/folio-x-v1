@@ -1,0 +1,59 @@
+---
+import CBox from "@/components/object/component/CBox.astro";
+import CColumns from "@/components/object/component/CColumns.astro";
+import CHeading from "@/components/object/component/CHeading.astro";
+import CImage from "@/components/object/component/CImage.astro";
+import CLink from "@/components/object/component/CLink.astro";
+import CMedia from "@/components/object/component/CMedia.astro";
+import CMetadata from "@/components/object/component/CMetadata.astro";
+import CRating from "@/components/object/component/CRating.astro";
+import CRow from "@/components/object/component/CRow.astro";
+import CText from "@/components/object/component/CText.astro";
+import type { PCardItemProps } from "@/types/components/object/project/card/PCard.types";
+
+const { data, headingLevel = 3, slots } = Astro.props as PCardItemProps;
+const product = data.product;
+---
+
+{
+	product && (
+		<CBox as="article" surface="plain">
+			{slots.media && data.media && (
+				<CMedia
+					ratio="editorial"
+					href={data.href}
+					ariaLabel={data.ariaLabel}
+				>
+					<CImage {...data.media} variant="fill" />
+				</CMedia>
+			)}
+			<CBox spacing="sm">
+				<CColumns columns="one" gap="xs">
+					{slots.metadata && data.metadata && (
+						<CMetadata
+							data={data.metadata}
+							slots={{ icons: false }}
+							tone="brand"
+						/>
+					)}
+					{slots.title && (
+						<CHeading level={headingLevel} variant="h4">
+							<CLink href={data.href}>{data.title.join(" ")}</CLink>
+						</CHeading>
+					)}
+					<CRow align="center" gap="sm">
+						<CText as="span" variant="price">
+							${product.price}
+						</CText>
+						<CRating
+							style="compact"
+							value={product.rating}
+							maximum={5}
+							count={product.reviews}
+						/>
+					</CRow>
+				</CColumns>
+			</CBox>
+		</CBox>
+	)
+}

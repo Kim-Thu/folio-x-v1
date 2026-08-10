@@ -1,0 +1,109 @@
+{
+  "projects": {
+    "eyebrow": "Work archive",
+    "title": "Projects",
+    "description": "Các hệ thống được tổ chức theo bài toán, lĩnh vực và năng lực kỹ thuật.",
+    "filterLabel": "Lọc project theo category",
+    "allLabel": "Tất cả",
+    "emptyLabel": "Không có project phù hợp với bộ lọc này.",
+    "backLabel": "Tất cả project",
+    "categoryPrefix": "Project category",
+    "tagPrefix": "Project tag",
+    "headingLines": ["Works", "that build value."],
+    "breadcrumbLabel": "Breadcrumb",
+    "breadcrumbHomeLabel": "Home",
+    "breadcrumbProjectsLabel": "Projects",
+    "actionLabel": "Xem case study",
+    "sortLabel": "Sắp xếp dự án",
+    "sortOptions": [
+      { "label": "Nổi bật", "value": "featured" },
+      { "label": "Mới nhất", "value": "newest" },
+      { "label": "Cũ nhất", "value": "oldest" }
+    ],
+    "heroImage": {
+      "src": "/uploads/page-header-work.webp",
+      "alt": "Khối lập phương mô-đun đại diện cho các dự án được xây dựng thành hệ thống",
+      "width": 1400,
+      "height": 1050
+    },
+    "viewLabel": "Kiểu hiển thị",
+    "gridViewLabel": "Hiển thị dạng lưới",
+    "listViewLabel": "Hiển thị dạng danh sách",
+    "paginationLabel": "Phân trang dự án",
+    "previousPageLabel": "Trang trước",
+    "nextPageLabel": "Trang sau",
+    "pageSize": 7
+  },
+  "blog": {
+    "eyebrow": "Writing archive",
+    "title": "Blog & Insights",
+    "description": "Ghi chú thực hành về systems thinking, engineering, performance và vận hành sản phẩm.",
+    "filterLabel": "Lọc bài viết theo category",
+    "allLabel": "Tất cả",
+    "emptyLabel": "Không có bài viết phù hợp với bộ lọc này.",
+    "backLabel": "Tất cả bài viết",
+    "categoryPrefix": "Blog category",
+    "tagPrefix": "Blog tag"
+  },
+  "detail": {
+    "projectOverviewLabel": "Project overview",
+    "featuresLabel": "Tính năng nổi bật",
+    "galleryLabel": "Giao diện & trải nghiệm",
+    "techStackLabel": "Công nghệ sử dụng",
+    "testimonialLabel": "Khách hàng nói gì",
+    "clientLabel": "Client",
+    "roleLabel": "Role",
+    "durationLabel": "Duration",
+    "onThisPageLabel": "Trong trang này",
+    "liveActionLabel": "Xem live site",
+    "sourceActionLabel": "Xem source",
+    "previousLabel": "Dự án trước",
+    "nextLabel": "Dự án tiếp theo",
+    "projectResultLabel": "Kết quả",
+    "articleByLabel": "Viết bởi",
+    "articlePublishedLabel": "Xuất bản",
+    "tagsLabel": "Tags",
+    "pageHeaderPattern": {
+      "src": "/uploads/pattern-1.png",
+			"alt": "Khối lập phương trang trí cho phần thông tin dự án",
+      "width": 1254,
+      "height": 1254
+    },
+    "defaultReviews": {
+      "eyebrow": "Đánh giá từ khách hàng",
+      "title": "Khách hàng nói gì về dự án",
+      "summary": {
+        "score": 4.9,
+        "maximum": 5,
+        "totalLabel": "Dựa trên 128 đánh giá",
+        "distribution": [
+          { "label": "5 sao", "value": 92 },
+          { "label": "4 sao", "value": 6 },
+          { "label": "3 sao", "value": 1 },
+          { "label": "2 sao", "value": 0.5 },
+          { "label": "1 sao", "value": 0.5 }
+        ]
+      },
+      "items": [
+        {
+          "name": "Huy Nguyễn",
+          "date": "2 tuần trước",
+          "quote": "Giải pháp rõ ràng, ổn định và giúp đội ngũ vận hành chủ động hơn.",
+          "rating": 5
+        },
+        {
+          "name": "Lan Anh",
+          "date": "1 tháng trước",
+          "quote": "Trải nghiệm nhất quán, tốc độ tốt và cách tổ chức hệ thống rất dễ tiếp tục mở rộng.",
+          "rating": 5
+        },
+        {
+          "name": "Minh Trí",
+          "date": "1 tháng trước",
+          "quote": "Kết quả vượt mong đợi và các quyết định kỹ thuật đều được giải thích rõ ràng.",
+          "rating": 5
+        }
+      ]
+    }
+  }
+}

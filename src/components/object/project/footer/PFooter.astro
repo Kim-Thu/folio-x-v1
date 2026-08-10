@@ -1,0 +1,90 @@
+---
+import CBox from "@/components/object/component/CBox.astro";
+import CColumns from "@/components/object/component/CColumns.astro";
+import CGridItem from "@/components/object/component/CGridItem.astro";
+import CHeading from "@/components/object/component/CHeading.astro";
+import CLogo from "@/components/object/component/CLogo.astro";
+import CMenu from "@/components/object/component/CMenu.astro";
+import CNavigation from "@/components/object/component/CNavigation.astro";
+import CSocialLinks from "@/components/object/component/CSocialLinks.astro";
+import CSubscriptionForm from "@/components/object/component/CSubscriptionForm.astro";
+import CText from "@/components/object/component/CText.astro";
+import type { PFooterProps } from "@/types/components/object/project/footer/PFooter.types";
+
+type Props = PFooterProps;
+
+const { brand, columns, newsletter, socialLabel, copyright } = Astro.props;
+---
+
+<Fragment>
+	<CBox spacing="lg">
+		<CColumns columns="twelve">
+			<CGridItem lgSpan={3}>
+				<CColumns columns="one" gap="sm">
+					<CLogo {...brand.logo} tone="light" size="lg" />
+					<CText variant="body-sm" tone="on-dark-muted"
+						>{brand.description}</CText
+					>
+					<CSocialLinks
+						links={brand.socialLinks}
+						label={socialLabel}
+						display={brand.socialDisplay}
+						size="lg"
+						gap="lg"
+					/>
+				</CColumns>
+			</CGridItem>
+
+			<CGridItem mdSpan={1} lgSpan={5}>
+				<CColumns columns="compact-three">
+					{
+						columns.map((column) => (
+							<CColumns
+								columns="one"
+								gap="sm"
+								aria-labelledby={`${column.id || column.label}-title`}
+							>
+								<CHeading
+									level={2}
+									variant="footer"
+									id={`${column.id || column.label}-title`}
+								>
+									{column.label}
+								</CHeading>
+								<CNavigation label={column.label}>
+									<CMenu items={column.items} variant="footer" tone="dark" />
+								</CNavigation>
+							</CColumns>
+						))
+					}
+				</CColumns>
+			</CGridItem>
+
+			{
+				newsletter && (
+					<CGridItem mdSpan={2} lgSpan={4}>
+						<CColumns columns="one" gap="sm">
+							<CHeading level={2} variant="footer">
+								{newsletter.label}
+							</CHeading>
+							<CText variant="body-sm" tone="on-dark-muted">
+								{newsletter.description}
+							</CText>
+							<CSubscriptionForm
+								formName="newsletter"
+								inputId="footer-newsletter-email"
+								inputLabel={newsletter.inputLabel}
+								placeholder={newsletter.placeholder}
+								submitLabel={newsletter.submitLabel}
+							/>
+						</CColumns>
+					</CGridItem>
+				)
+			}
+		</CColumns>
+	</CBox>
+
+	<CBox spacing="md">
+		<CText variant="label" tone="on-dark-subtle">{copyright}</CText>
+	</CBox>
+</Fragment>

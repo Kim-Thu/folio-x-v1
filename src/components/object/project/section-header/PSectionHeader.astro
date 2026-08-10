@@ -1,0 +1,33 @@
+---
+import SectionHeaderDefault from "@/components/object/project/section-header/templates/SectionHeaderDefault.astro";
+import SectionHeaderSplit from "@/components/object/project/section-header/templates/SectionHeaderSplit.astro";
+import CButton from "@/components/object/component/CButton.astro";
+import CColumns from "@/components/object/component/CColumns.astro";
+import CRow from "@/components/object/component/CRow.astro";
+
+import type {
+	PSectionHeaderProps,
+	PSectionHeaderTemplate,
+} from "@/types/components/object/project/section-header/PSectionHeader.types";
+
+type Props = PSectionHeaderProps;
+
+const {
+	template = "default",
+	headingLevel = 2,
+	action,
+	...props
+} = Astro.props as Props;
+
+const templates = {
+	default: SectionHeaderDefault,
+	split: SectionHeaderSplit,
+} satisfies Record<PSectionHeaderTemplate, typeof SectionHeaderDefault>;
+
+const Template = templates[template];
+---
+
+<CColumns columns="one" gap="sm">
+	<Template {...props} headingLevel={headingLevel} />
+	{action && <CRow><CButton {...action} /></CRow>}
+</CColumns>

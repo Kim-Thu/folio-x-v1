@@ -1,0 +1,29 @@
+---
+import LContainer from "@/components/layout/LContainer.astro";
+import LSection from "@/components/layout/LSection.astro";
+import PageRegionContent from "@/components/pages/builder/PageRegionContent.astro";
+import type { PageRegionProps } from "@/types/components/pages/builder/PageBuilder.types";
+
+const { region } = Astro.props as PageRegionProps;
+const section = region.section;
+const {
+	id,
+	theme = "none",
+	spacing = "none",
+	container = "none",
+} = section || {};
+---
+
+{section === false ? (
+	<PageRegionContent {region} />
+) : (
+	<LSection {id} {theme} {spacing} data-page-region={region.key}>
+		{container === "none" ? (
+			<PageRegionContent {region} />
+		) : (
+			<LContainer size={container}>
+				<PageRegionContent {region} />
+			</LContainer>
+		)}
+	</LSection>
+)}

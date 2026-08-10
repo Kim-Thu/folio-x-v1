@@ -1,0 +1,57 @@
+{
+  "order": 2,
+  "slug": "stories-with-a-memory",
+  "title": "Stories with a memory",
+  "client": "AINovelFlow",
+  "year": "2025",
+  "category": "AI product",
+  "categorySlug": "ai-product",
+  "tags": [
+    {
+      "label": "AI",
+      "slug": "ai"
+    },
+    {
+      "label": "Product Design",
+      "slug": "product-design"
+    },
+    {
+      "label": "Fallback",
+      "slug": "fallback"
+    }
+  ],
+  "summary": "Một writing engine có khả năng xây thế giới, duy trì hồ sơ nhân vật và tự chuyển model khi dịch vụ AI gặp giới hạn.",
+  "outcome": "3-model fallback",
+  "image": "https://images.unsplash.com/photo-1634017839464-5c339ebe3cb4?auto=format&fit=crop&w=1400&q=85",
+  "alt": "Khối 3D xanh trừu tượng trên nền tối",
+  "tone": "dark",
+  "sections": [
+    {
+      "title": "Bài toán",
+      "paragraphs": [
+        "Một writing engine dài hạn cần nhớ thế giới, nhân vật và quan hệ mà không làm trải nghiệm phụ thuộc vào một model duy nhất."
+      ]
+    },
+    {
+      "title": "Hệ thống",
+      "paragraphs": [
+        "Thông tin truyện được tổ chức thành hồ sơ có cấu trúc; lớp orchestration lựa chọn model và chuyển fallback dựa trên giới hạn, lỗi và loại tác vụ."
+      ]
+    },
+    {
+      "title": "Kết quả",
+      "paragraphs": [
+        "Ba model có thể thay thế nhau trong cùng một luồng, giảm gián đoạn và giữ ngữ cảnh nhất quán cho người viết."
+      ]
+    }
+  ],
+  "detail": {
+    "role": "Product architecture, AI orchestration",
+    "duration": "2025",
+    "showBackAction": true,
+    "liveUrl": "https://example.com/ai-novel-flow",
+    "features": [],
+    "gallery": [],
+    "results": []
+  }
+}

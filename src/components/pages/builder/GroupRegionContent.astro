@@ -1,0 +1,51 @@
+---
+import LSidebar from "@/components/layout/LSidebar.astro";
+import CBox from "@/components/object/component/CBox.astro";
+import CColumns from "@/components/object/component/CColumns.astro";
+import PageRegion from "@/components/pages/builder/PageRegion.astro";
+import PArchiveToolbar from "@/components/object/project/archive-toolbar/PArchiveToolbar.astro";
+import type { GroupRegion } from "@/types/components/pages/builder/PageBuilder.types";
+
+type Props = { region: GroupRegion };
+const { region } = Astro.props as Props;
+const {
+	asideGap = "md",
+	asideLabel,
+	asidePosition = "end",
+	gap = "lg",
+	panel = false,
+	regions,
+	stickyAside,
+	toolbar,
+} = region.props;
+const enabledRegions = regions.filter((item) => item.enabled !== false);
+const mainRegions = enabledRegions.filter(
+	(item) => (item.placement ?? "main") === "main",
+);
+const asideRegions = enabledRegions.filter(
+	(item) => item.placement === "aside",
+);
+---
+
+<CBox
+	surface={panel ? "glass" : "plain"}
+	radius={panel ? "md" : "none"}
+	spacing={panel ? "sm" : "none"}
+>
+	<CColumns columns="one" gap="md">
+		{toolbar && <PArchiveToolbar {...toolbar} />}
+		<LSidebar label={asideLabel} position={asidePosition} sticky={stickyAside}>
+			<CColumns
+				slot="sidebar"
+				columns="one"
+				gap={asideGap}
+			>
+				{asideRegions.map((item) => <PageRegion region={item} />)}
+			</CColumns>
+
+			<CColumns columns="one" {gap}>
+				{mainRegions.map((item) => <PageRegion region={item} />)}
+			</CColumns>
+		</LSidebar>
+	</CColumns>
+</CBox>

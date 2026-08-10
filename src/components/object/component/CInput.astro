@@ -1,0 +1,18 @@
+---
+import type { CInputProps } from "@/types/components/object/component/CInput.types";
+import { cn } from "@/utils/cn";
+import {
+	inputBaseClasses,
+	inputToneClasses,
+} from "@/variants/components/object/component/CInput.variants";
+
+type Props = CInputProps;
+
+const {
+	type = "text",
+	tone = "dark",
+	...attributes
+} = Astro.props;
+---
+
+<input {...attributes} {type} class={cn(inputBaseClasses, inputToneClasses[tone])} />

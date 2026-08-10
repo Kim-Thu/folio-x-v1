@@ -1,0 +1,68 @@
+﻿---
+import CLink from "@/components/object/component/CLink.astro";
+import type {
+	CLogoAsset,
+	CLogoProps,
+} from "@/types/components/object/component/CLogo.types";
+import { twJoin } from "@/utils/cn";
+import {
+	logoFallbackSizeClasses,
+	logoFallbackToneClasses,
+	logoImageSizeClasses,
+} from "@/variants/components/object/component/CLogo.variants";
+
+type Props = CLogoProps;
+
+const {
+	siteName,
+	href = "/",
+	image,
+	lightImage,
+	darkImage,
+	tagline,
+	showTagline = false,
+	size = "md",
+	tone = "default",
+} = Astro.props;
+
+const toneImages: Record<typeof tone, CLogoAsset | undefined> = {
+	default: image,
+	light: lightImage,
+	dark: darkImage,
+};
+const logoImage = toneImages[tone] ?? image;
+const usesFallbackImage = tone !== "default" && !toneImages[tone];
+---
+
+<div class="inline-flex flex-col gap-2">
+	<CLink
+		href={href}
+		aria-label={siteName}
+		class="inline-flex w-fit items-center font-semibold"
+	>
+		{
+			logoImage ? (
+				<img
+					src={logoImage.src}
+					alt={siteName}
+					width={logoImage.width}
+					height={logoImage.height}
+					loading="eager"
+					decoding="async"
+					class={twJoin(
+						logoImageSizeClasses[size],
+						usesFallbackImage && logoFallbackToneClasses[tone],
+					)}
+				/>
+			) : (
+				<span class={logoFallbackSizeClasses[size]}>{siteName}</span>
+			)
+		}
+	</CLink>
+
+	{
+		showTagline && tagline && (
+			<span class="text-sm text-gray-300">{tagline}</span>
+		)
+	}
+</div>

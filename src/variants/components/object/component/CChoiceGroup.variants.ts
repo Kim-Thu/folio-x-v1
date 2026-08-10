@@ -1,0 +1,27 @@
+﻿import type { CChoiceGroupAppearance } from "@/types/components/object/component/CChoiceGroup.types";
+
+export const choiceOptionClasses: Record<CChoiceGroupAppearance, string> = {
+	controls:
+		"group/choice flex cursor-pointer items-center gap-2 text-sm text-gray-500",
+	navigation:
+		"group/choice relative -mx-4 flex items-center gap-2 px-4 py-2 text-sm text-gray-500 before:absolute before:inset-y-0 before:left-0 before:w-0.5 before:bg-transparent hover:text-black",
+};
+
+export const choiceOptionCurrentClasses =
+	"bg-gray-50 font-semibold text-black before:bg-blue-500";
+
+export const choiceControlClasses: Record<CChoiceGroupAppearance, string> = {
+	controls:
+		"peer size-4 cursor-pointer appearance-none rounded-sm bg-white ring-1 ring-inset ring-gray-100 checked:bg-blue-500 checked:ring-gray-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gray-100",
+	navigation: "sr-only",
+};
+
+export const choiceControlWrapClasses = "relative inline-flex size-4 shrink-0";
+export const choiceControlIconClasses =
+	"pointer-events-none absolute inset-0 text-black opacity-0 transition-opacity duration-300 peer-checked:opacity-100";
+
+export const choiceLabelClasses = "flex-1";
+export const choiceCountClasses = "font-mono text-xs text-gray-500";
+export const choiceNavigationClasses = "grid gap-1";
+export const choiceNavigationTitleClasses =
+	"mb-2 font-mono text-xs uppercase tracking-widest text-black";

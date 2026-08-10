@@ -1,0 +1,8 @@
+---
+import CLoadingScreen from "@/components/object/component/CLoadingScreen.astro";
+import type { PLoadingScreenProps } from "@/types/components/object/project/loading-screen/PLoadingScreen.types";
+
+const props = Astro.props as PLoadingScreenProps;
+---
+
+<CLoadingScreen {...props} />

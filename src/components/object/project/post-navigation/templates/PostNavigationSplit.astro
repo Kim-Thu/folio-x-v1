@@ -1,0 +1,8 @@
+---
+import CPostNavigation from "@/components/object/component/CPostNavigation.astro";
+import type { PPostNavigationProps } from "@/types/components/object/project/post-navigation/PPostNavigation.types";
+
+const props = Astro.props as PPostNavigationProps;
+---
+
+<CPostNavigation {...props} />

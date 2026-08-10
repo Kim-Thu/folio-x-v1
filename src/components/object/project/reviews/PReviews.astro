@@ -1,0 +1,61 @@
+---
+import CColumns from "@/components/object/component/CColumns.astro";
+import CHeading from "@/components/object/component/CHeading.astro";
+import CGridItem from "@/components/object/component/CGridItem.astro";
+import CProgress from "@/components/object/component/CProgress.astro";
+import CRating from "@/components/object/component/CRating.astro";
+import CTestimonial from "@/components/object/component/CTestimonial.astro";
+import CText from "@/components/object/component/CText.astro";
+import type { PReviewsProps } from "@/types/components/object/project/reviews/PReviews.types";
+
+const { id, eyebrow, title, summary, items } = Astro.props as PReviewsProps;
+---
+
+<CColumns
+	as="section"
+	columns="one"
+	id={id}
+	scrollMargin="header"
+	aria-labelledby={`${id}-title`}
+	gap="md"
+>
+	<CColumns as="header" columns="one" gap="xs">
+		<CText as="span" variant="caption" tone="brand">{eyebrow}</CText>
+		<CHeading id={`${id}-title`} level={2} variant="h4">{title}</CHeading>
+	</CColumns>
+
+	<CColumns columns="twelve" gap="md">
+		<CGridItem lgSpan={3}>
+		<CColumns columns="one" gap="sm">
+			<CRating
+				style="score"
+				value={summary.score}
+				maximum={summary.maximum}
+			/>
+			<CText variant="body-sm" tone="muted">{summary.totalLabel}</CText>
+
+			<CColumns columns="one" gap="xs">
+				{summary.distribution.map((item) => (
+					<CColumns
+						columns="twelve"
+						align="center"
+						gap="sm"
+					>
+						<CGridItem span={2}><CText as="span" variant="body-sm">{item.label}</CText></CGridItem>
+						<CGridItem span={8}><CProgress value={item.value} label={item.label} tone="rating" /></CGridItem>
+						<CGridItem span={2}><CText as="span" variant="body-sm" tone="muted">{item.value}%</CText></CGridItem>
+					</CColumns>
+				))}
+			</CColumns>
+		</CColumns>
+		</CGridItem>
+
+		<CGridItem lgSpan={9}>
+		<CColumns columns="three" gap="sm">
+			{items.map((item) => (
+				<CTestimonial {...item} maximumRating={summary.maximum} />
+			))}
+		</CColumns>
+		</CGridItem>
+	</CColumns>
+</CColumns>

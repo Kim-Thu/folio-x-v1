@@ -1,0 +1,8 @@
+---
+import PageBuilder from "@/components/pages/builder/PageBuilder.astro";
+import type { SystemStatePageProps } from "@/types/components/pages/system-state/SystemStatePage.types";
+
+const { data } = Astro.props as SystemStatePageProps;
+---
+
+<PageBuilder config={data.builder} />

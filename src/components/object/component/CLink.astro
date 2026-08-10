@@ -1,0 +1,35 @@
+---
+import type { CLinkProps } from "@/types/components/object/component/CLink.types";
+import { cn } from "@/utils/cn";
+import { isExternalUrl } from "@/utils/url/isExternalUrl";
+
+type Props = CLinkProps;
+
+const {
+	href,
+	class: className,
+	nofollow = false,
+	rel: requestedRel,
+	target: requestedTarget,
+	...attributes
+} = Astro.props;
+
+const external = isExternalUrl(href, Astro.site ?? Astro.url);
+const target = requestedTarget ?? (external ? "_blank" : undefined);
+const relValues = new Set(requestedRel?.split(/\s+/).filter(Boolean));
+
+if (target === "_blank") {
+	relValues.add("noopener");
+	relValues.add("noreferrer");
+}
+
+if (nofollow) {
+	relValues.add("nofollow");
+}
+
+const rel = relValues.size > 0 ? [...relValues].join(" ") : undefined;
+---
+
+<a {...attributes} href={href} class={cn(className)} target={target} rel={rel}>
+	<slot />
+</a>

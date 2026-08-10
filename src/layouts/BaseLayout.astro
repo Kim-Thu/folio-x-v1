@@ -1,43 +1,83 @@
 ---
-import '@/styles/global.css';
-import googleSansLatinUrl from '@fontsource-variable/google-sans-flex/files/google-sans-flex-latin-wght-normal.woff2?url';
-import googleSansVietnameseUrl from '@fontsource-variable/google-sans-flex/files/google-sans-flex-vietnamese-wght-normal.woff2?url';
-import { interfaceContent, metadata } from '@/data/content';
-import type { BaseLayoutProps } from '@/types/layout';
-import LoadingScreen from '@/components/patterns/Feedback/LoadingScreen.astro';
-import FooterReveal from '@/components/layouts/FooterReveal/FooterReveal.astro';
-import Header from '@/components/layouts/Header/Header.astro';
-
+import CSkipLink from "@/components/object/component/CSkipLink.astro";
+import LContainer from "@/components/layout/LContainer.astro";
+import LFooter from "@/components/layout/LFooter.astro";
+import LFooterReveal from "@/components/layout/LFooterReveal.astro";
+import LHeader from "@/components/layout/LHeader.astro";
+import LSection from "@/components/layout/LSection.astro";
+import PClosingProfile from "@/components/object/project/closing-profile/PClosingProfile.astro";
+import PFooter from "@/components/object/project/footer/PFooter.astro";
+import PHeader from "@/components/object/project/header/PHeader.astro";
+import PLoadingScreen from "@/components/object/project/loading-screen/PLoadingScreen.astro";
+import "@/styles/globals.css";
+import type { BaseLayoutProps } from "@/types/layouts/BaseLayout.types";
+import { cn } from "@/utils/cn";
+import {
+	baseLayoutBodyClasses,
+	baseLayoutClosingClasses,
+	baseLayoutClosingContainerClasses,
+	baseLayoutToneClasses,
+} from "@/variants/layouts/BaseLayout.variants";
 type Props = BaseLayoutProps;
-
 const {
-  title = metadata.title,
-  description = metadata.description,
+	title,
+	description,
+	language = "en",
+	hasOverlayHeader = false,
+	tone = "light",
+	header,
+	footer,
+	closingProfile,
+	loadingScreen,
+	skipToContent,
 } = Astro.props;
-const hasOverlayHeader = Astro.url.pathname === '/';
+
+const bodyClass = cn(
+	hasOverlayHeader
+		? baseLayoutBodyClasses.overlayHeader
+		: baseLayoutBodyClasses.solidHeader,
+	baseLayoutToneClasses[tone],
+);
 ---
 
 <!doctype html>
-<html lang={metadata.language}>
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width" />
-    <link rel="icon" href="/favicon.ico" sizes="any" />
-    <link rel="preload" href={googleSansLatinUrl} as="font" type="font/woff2" crossorigin />
-    <link rel="preload" href={googleSansVietnameseUrl} as="font" type="font/woff2" crossorigin />
-    <meta name="description" content={description} />
-    <meta property="og:title" content={title} />
-    <meta property="og:description" content={description} />
-    <meta property="og:type" content="website" />
-    <link rel="preconnect" href="https://images.unsplash.com" />
-    <title>{title}</title>
-  </head>
-  <body>
-    <LoadingScreen {...interfaceContent.loadingScreen} />
-    <FooterReveal>
-      <Header solid={!hasOverlayHeader} />
-      <slot />
-    </FooterReveal>
-    <script src="@/scripts/main.ts"></script>
-  </body>
+<html lang={language}>
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width" />
+		<link rel="icon" href="/favicon.ico" sizes="any" />
+		<meta name="description" content={description} />
+		<meta property="og:title" content={title} />
+		<meta property="og:description" content={description} />
+		<meta property="og:type" content="website" />
+		<link rel="preconnect" href="https://images.unsplash.com" />
+		<title>{title}</title>
+	</head>
+	<body class={bodyClass} data-page-tone={tone}>
+		<CSkipLink href="#main-content">{skipToContent}</CSkipLink>
+		<PLoadingScreen {...loadingScreen} />
+		<LHeader solid={!hasOverlayHeader} tone={tone}>
+			<PHeader tone={tone} {...header} />
+		</LHeader>
+		<LFooterReveal {tone}>
+			<slot />
+			<LFooter>
+				<PFooter {...footer} />
+			</LFooter>
+			<Fragment slot="reveal">
+				<LSection
+					id={closingProfile.data.id}
+					theme="dark"
+					spacing="none"
+					class={baseLayoutClosingClasses}
+					data-closing-profile
+				>
+					<LContainer class={baseLayoutClosingContainerClasses}>
+						<PClosingProfile {...closingProfile} />
+					</LContainer>
+				</LSection>
+			</Fragment>
+		</LFooterReveal>
+		<script src="@/scripts/main.ts"></script>
+	</body>
 </html>

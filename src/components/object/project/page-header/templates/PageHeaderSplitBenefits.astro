@@ -1,0 +1,46 @@
+---
+import CColumns from "@/components/object/component/CColumns.astro";
+import CFeature from "@/components/object/component/CFeature.astro";
+import CGridItem from "@/components/object/component/CGridItem.astro";
+import CHeading from "@/components/object/component/CHeading.astro";
+import CImage from "@/components/object/component/CImage.astro";
+import CMedia from "@/components/object/component/CMedia.astro";
+import CRow from "@/components/object/component/CRow.astro";
+import CText from "@/components/object/component/CText.astro";
+import type { PPageHeaderSplitBenefitsData } from "@/types/components/object/project/page-header/PPageHeader.types";
+
+const { data } = Astro.props as { data: PPageHeaderSplitBenefitsData };
+const titleId = `${data.id}-title`;
+---
+
+<CColumns columns="twelve" gap="lg">
+	<CGridItem as="header" lgSpan={6}>
+		<CColumns columns="one" gap="md">
+			<CText variant="label" tone="brand">{data.eyebrow}</CText>
+			<CHeading id={titleId} level={1} variant="display-3">
+				{data.title}<CText as="span" variant="inherit" tone="brand">
+					{data.accent}
+				</CText>
+			</CHeading>
+			<CText variant="body-responsive" tone="subtle">
+				{data.description}
+			</CText>
+			<CRow align="center" gap="lg">
+				{data.benefits.items.map((benefit) => (
+					<CFeature {...benefit} appearance="caption" />
+				))}
+			</CRow>
+		</CColumns>
+	</CGridItem>
+	<CGridItem lgSpan={6}>
+		<CMedia ratio="natural">
+			<CImage
+				{...data.image}
+				variant="natural"
+				loading="eager"
+				decoding="sync"
+				fetchpriority="high"
+			/>
+		</CMedia>
+	</CGridItem>
+</CColumns>

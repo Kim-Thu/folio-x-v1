@@ -1,0 +1,8 @@
+---
+import PageBuilder from "@/components/pages/builder/PageBuilder.astro";
+import type { ReaderPageProps } from "@/types/components/pages/reader/ReaderPage.types";
+
+const { data } = Astro.props as ReaderPageProps;
+---
+
+<PageBuilder config={data.builder} />

@@ -1,0 +1,30 @@
+---
+import LabsPage from "@/components/pages/labs/LabsPage.astro";
+import {
+	getLabCategoryPaths,
+	getLabsPageData,
+} from "@/data/pages/getLabsPageData";
+import { getLayoutData } from "@/data/pages/getLayoutData";
+import BaseLayout from "@/layouts/BaseLayout.astro";
+
+export const getStaticPaths = getLabCategoryPaths;
+
+interface Props {
+	category: string;
+}
+
+const { category } = Astro.props as Props;
+const [layout, data] = await Promise.all([
+	getLayoutData(),
+	getLabsPageData({ category }),
+]);
+---
+
+<BaseLayout
+	{...layout}
+	tone="light"
+	title={`${data.metadata.title} | ${layout.title}`}
+	description={data.metadata.description}
+>
+	<LabsPage {data} />
+</BaseLayout>

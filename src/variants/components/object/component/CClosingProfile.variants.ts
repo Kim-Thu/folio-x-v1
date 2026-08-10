@@ -1,0 +1,12 @@
+export const closingProfileInnerClasses = "relative z-10 h-full";
+export const closingProfileLayoutClasses = "flex h-full flex-col";
+export const closingProfileHeaderClasses = "items-start justify-between md:items-center";
+export const closingProfileStageClasses = "relative min-h-0 flex-1";
+export const closingProfileTitleClasses = "absolute inset-0 z-0 flex items-center justify-center text-center";
+export const closingProfileHeadingClasses = "text-7xl leading-none lg:text-8xl";
+export const closingProfileLineClasses = "mx-auto block w-fit whitespace-nowrap will-change-transform";
+export const closingProfileSecondLineClasses = "block whitespace-nowrap";
+export const closingProfileRoleClasses = "relative z-30 mt-2 block w-full whitespace-nowrap text-right font-medium leading-none text-blue-400";
+export const closingProfilePortraitClasses = "pointer-events-none absolute bottom-0 left-1/2 z-20 w-1/2 -translate-x-1/2 md:w-5/12";
+export const closingProfileContactClasses = "absolute inset-x-0 bottom-0 z-10 items-end border-t border-white/10 py-8";
+export const closingProfileLocationClasses = "text-left md:text-right";

@@ -1,0 +1,45 @@
+---
+import CBox from "@/components/object/component/CBox.astro";
+import CButton from "@/components/object/component/CButton.astro";
+import CColumns from "@/components/object/component/CColumns.astro";
+import CHeading from "@/components/object/component/CHeading.astro";
+import CImage from "@/components/object/component/CImage.astro";
+import CMedia from "@/components/object/component/CMedia.astro";
+import CSubscriptionForm from "@/components/object/component/CSubscriptionForm.astro";
+import CText from "@/components/object/component/CText.astro";
+import type { PAdvertisementData } from "@/types/components/object/project/advertisement/PAdvertisement.types";
+
+const { data } = Astro.props as { data: PAdvertisementData };
+const form = data.form ? { ...data.form, tone: "light" as const } : undefined;
+---
+
+<CBox
+	as="aside"
+	surface="accent"
+	radius="md"
+	overflow="hidden"
+>
+	<CColumns columns="one" gap="none">
+		<CBox spacing="md">
+			<CColumns columns="one" gap="sm">
+				<CHeading level={3} variant="h4">{data.title}</CHeading>
+				<CText variant="body-sm" tone="muted">{data.description}</CText>
+				{form ? (
+					<CSubscriptionForm {...form} />
+				) : (
+					<CButton
+						href={data.action.href}
+						label={data.action.label}
+						icon={data.action.icon ?? "arrowRight"}
+						size="xs"
+						tone="light"
+						variant="outline"
+					/>
+				)}
+			</CColumns>
+		</CBox>
+		<CMedia ratio="editorial">
+			<CImage {...data.image} variant="background-contain" />
+		</CMedia>
+	</CColumns>
+</CBox>

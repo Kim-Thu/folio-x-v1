@@ -34,10 +34,6 @@ export function initFooterReveal(): void {
 		return Math.min(maximum, Math.max(minimum, value));
 	};
 
-	const syncRevealSpace = (): void => {
-		space.style.height = `${panel.getBoundingClientRect().height}px`;
-	};
-
 	const resetMotion = (): void => {
 		motionElements.forEach((element) => {
 			motionAnimations.get(element)?.cancel();
@@ -127,7 +123,6 @@ export function initFooterReveal(): void {
 		}
 
 		layoutFrame = window.requestAnimationFrame(() => {
-			syncRevealSpace();
 			syncMotionBounds();
 			updateProfilePosition();
 
@@ -139,7 +134,6 @@ export function initFooterReveal(): void {
 		syncLayout();
 	});
 
-	resizeObserver.observe(panel);
 	resizeObserver.observe(stage);
 
 	motionElements.forEach((element) => {

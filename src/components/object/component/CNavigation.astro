@@ -1,0 +1,11 @@
+---
+import { cn } from "@/utils/cn";
+import type { CNavigationProps } from "@/types/components/object/component/CNavigation.types";
+
+const { class: className, label, ...attributes } =
+	Astro.props as CNavigationProps;
+---
+
+<nav {...attributes} class={cn(className)} aria-label={label}>
+	<slot />
+</nav>

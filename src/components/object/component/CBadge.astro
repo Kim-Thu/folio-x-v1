@@ -1,0 +1,29 @@
+---
+import type { CBadgeProps } from "@/types/components/object/component/CBadge.types";
+import { cn } from "@/utils/cn";
+import {
+	badgeBaseClasses,
+	badgePlacementClasses,
+	badgeToneClasses,
+} from "@/variants/components/object/component/CBadge.variants";
+
+const {
+	as: Element = "span",
+	class: className,
+	placement = "flow",
+	tone = "brand",
+	...attributes
+} = Astro.props as CBadgeProps;
+---
+
+<Element
+	{...attributes}
+	class={cn(
+		badgeBaseClasses,
+		badgeToneClasses[tone],
+		badgePlacementClasses[placement],
+		className,
+	)}
+>
+	<slot />
+</Element>

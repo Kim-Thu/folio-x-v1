@@ -1,0 +1,24 @@
+---
+import type { CFieldsetProps } from "@/types/components/object/component/CFieldset.types";
+import { cn } from "@/utils/cn";
+import {
+	fieldsetClasses,
+	fieldsetContentClasses,
+	fieldsetGapClasses,
+	fieldsetLegendClasses,
+} from "@/variants/components/object/component/CFieldset.variants";
+
+const {
+	class: className,
+	gap = "sm",
+	legend,
+	...attributes
+} = Astro.props as CFieldsetProps;
+---
+
+<fieldset {...attributes} class={cn(fieldsetClasses, className)}>
+	<legend class={fieldsetLegendClasses}>{legend}</legend>
+	<div class={cn(fieldsetContentClasses, fieldsetGapClasses[gap])}>
+		<slot />
+	</div>
+</fieldset>

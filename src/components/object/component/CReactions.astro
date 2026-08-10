@@ -1,0 +1,28 @@
+---
+import CButton from "@/components/object/component/CButton.astro";
+import CColumns from "@/components/object/component/CColumns.astro";
+import CRow from "@/components/object/component/CRow.astro";
+import CText from "@/components/object/component/CText.astro";
+import type { CReactionsProps } from "@/types/components/object/component/CReactions.types";
+
+const { label, items } = Astro.props as CReactionsProps;
+---
+
+<CColumns columns="one" gap="xs" aria-label={label}>
+	<CText variant="body-sm">{label}</CText>
+	<CRow gap="sm" wrap>
+		{items.map((item) => (
+			<CButton
+				label={item.count}
+				aria-label={`${item.label}: ${item.count}`}
+				icon={item.icon}
+				iconPosition="start"
+				size="sm"
+				tone="light"
+				variant="text"
+				aria-pressed="false"
+				data-reader-reaction
+			/>
+		))}
+	</CRow>
+</CColumns>

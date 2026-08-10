@@ -1,0 +1,11 @@
+---
+import CBox from "@/components/object/component/CBox.astro";
+import PageBuilder from "@/components/pages/builder/PageBuilder.astro";
+import type { CatalogPageProps } from "@/types/components/pages/catalog/CatalogPage.types";
+
+const { data } = Astro.props as CatalogPageProps;
+---
+
+<CBox data-collection-filter-root>
+	<PageBuilder config={data.builder} />
+</CBox>

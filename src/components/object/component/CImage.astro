@@ -1,0 +1,25 @@
+---
+import type { CImageProps } from "@/types/components/object/component/CImage.types";
+import { cn } from "@/utils/cn";
+import {
+	imageBaseClasses,
+	imageVariantClasses,
+} from "@/variants/components/object/component/CImage.variants";
+
+type Props = CImageProps;
+
+const {
+	variant = "natural",
+	loading = "lazy",
+	decoding = "async",
+	class: className,
+	...attributes
+} = Astro.props;
+---
+
+<img
+	{...attributes}
+	loading={loading}
+	decoding={decoding}
+	class={cn(imageBaseClasses, imageVariantClasses[variant], className)}
+/>

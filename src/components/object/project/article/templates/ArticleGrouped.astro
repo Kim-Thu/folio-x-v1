@@ -1,0 +1,44 @@
+---
+import CColumns from "@/components/object/component/CColumns.astro";
+import CFeature from "@/components/object/component/CFeature.astro";
+import CHeading from "@/components/object/component/CHeading.astro";
+import CImage from "@/components/object/component/CImage.astro";
+import CMedia from "@/components/object/component/CMedia.astro";
+import CRow from "@/components/object/component/CRow.astro";
+import CText from "@/components/object/component/CText.astro";
+import type { PArticleGroupedProps } from "@/types/components/object/project/article/PArticle.types";
+
+const { appearance = "default", blocks } =
+	Astro.props as PArticleGroupedProps;
+const headingVariant = appearance === "compact" ? "h4" : "h3";
+---
+
+<CColumns as="article" columns="one" gap="xl">
+	{blocks.map((block) => (
+		<CColumns as="section" columns="one" gap="md">
+			<CHeading
+				id={block.id}
+				level={2}
+				variant={headingVariant}
+				data-article-heading
+			>
+				{block.title}
+			</CHeading>
+			<CColumns columns="one" gap="md">
+				{block.paragraphs.map((paragraph) => (
+					<CText tone="muted">{paragraph}</CText>
+				))}
+			</CColumns>
+			{block.features && (
+				<CRow gap="lg">
+					{block.features.map((feature) => <CFeature {...feature} />)}
+				</CRow>
+			)}
+			{block.image && (
+				<CMedia ratio="video">
+					<CImage {...block.image} variant="fill" />
+				</CMedia>
+			)}
+		</CColumns>
+	))}
+</CColumns>

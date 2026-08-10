@@ -1,0 +1,155 @@
+---
+import type {
+	CIconName,
+	CIconProps,
+} from "@/types/components/object/component/CIcon.types";
+import { cn } from "@/utils/cn";
+import { iconSizeClasses } from "@/variants/components/object/component/CIcon.variants";
+import {
+	Calendar03Icon,
+	Clock01Icon,
+	Facebook01Icon,
+	Folder01Icon,
+	GithubIcon,
+	Link01Icon,
+	Linkedin01Icon,
+	TwitterIcon,
+	UserCircleIcon,
+} from "@hugeicons/core-free-icons";
+
+import arrowLeft from "heroicons/24/outline/arrow-left.svg?raw";
+import arrowRight from "heroicons/24/outline/arrow-right.svg?raw";
+import arrowUpRight from "heroicons/24/outline/arrow-up-right.svg?raw";
+import arrowUp from "heroicons/24/outline/arrow-up.svg?raw";
+import arrowPath from "heroicons/24/outline/arrow-path.svg?raw";
+import archiveBox from "heroicons/24/outline/archive-box.svg?raw";
+import bars3 from "heroicons/24/outline/bars-3.svg?raw";
+import bolt from "heroicons/24/outline/bolt.svg?raw";
+import chevronLeft from "heroicons/24/outline/chevron-left.svg?raw";
+import chevronDown from "heroicons/24/outline/chevron-down.svg?raw";
+import chevronRight from "heroicons/24/outline/chevron-right.svg?raw";
+import check from "heroicons/24/outline/check.svg?raw";
+import lightBulb from "heroicons/24/outline/light-bulb.svg?raw";
+import squares2x2 from "heroicons/24/outline/squares-2x2.svg?raw";
+import listBullet from "heroicons/24/outline/list-bullet.svg?raw";
+import magnifyingGlass from "heroicons/24/outline/magnifying-glass.svg?raw";
+import play from "heroicons/24/outline/play.svg?raw";
+import questionMarkCircle from "heroicons/24/outline/question-mark-circle.svg?raw";
+import globeAlt from "heroicons/24/outline/globe-alt.svg?raw";
+import shoppingBag from "heroicons/24/outline/shopping-bag.svg?raw";
+import star from "heroicons/24/solid/star.svg?raw";
+import xMark from "heroicons/24/outline/x-mark.svg?raw";
+import bookOpen from "heroicons/24/outline/book-open.svg?raw";
+import bookmark from "heroicons/24/outline/bookmark.svg?raw";
+import eye from "heroicons/24/outline/eye.svg?raw";
+import lockClosed from "heroicons/24/outline/lock-closed.svg?raw";
+import adjustmentsHorizontal from "heroicons/24/outline/adjustments-horizontal.svg?raw";
+import moon from "heroicons/24/outline/moon.svg?raw";
+import handThumbUp from "heroicons/24/outline/hand-thumb-up.svg?raw";
+import heart from "heroicons/24/outline/heart.svg?raw";
+import faceSmile from "heroicons/24/outline/face-smile.svg?raw";
+import faceFrown from "heroicons/24/outline/face-frown.svg?raw";
+
+type Props = CIconProps;
+
+const { class: className, name, size = "md" } = Astro.props;
+
+const outlineIcons = {
+	arrowLeft,
+	arrowRight,
+	arrowUp,
+	arrowUpRight,
+	arrowPath,
+	archiveBox,
+	bars3,
+	bolt,
+	chevronLeft,
+	chevronDown,
+	chevronRight,
+	check,
+	lightBulb,
+	gridView: squares2x2,
+	globeAlt,
+	listView: listBullet,
+	play,
+	search: magnifyingGlass,
+	shoppingBag,
+	questionMarkCircle,
+	star,
+	xMark,
+	bookOpen,
+	bookmark,
+	eye,
+	lockClosed,
+	adjustmentsHorizontal,
+	moon,
+	handThumbUp,
+	heart,
+	faceSmile,
+	faceFrown,
+} satisfies Partial<Record<CIconName, string>>;
+
+type IconNode = readonly [string, Readonly<Record<string, string | number>>];
+
+const hugeIcons = {
+	github: GithubIcon,
+	facebook: Facebook01Icon,
+	link: Link01Icon,
+	linkedin: Linkedin01Icon,
+	twitter: TwitterIcon,
+	folder01: Folder01Icon,
+	userCircle: UserCircleIcon,
+	calendar03: Calendar03Icon,
+	clock01: Clock01Icon,
+} satisfies Partial<Record<CIconName, readonly IconNode[]>>;
+
+const normalizeAttributes = (
+	attributes: Readonly<Record<string, string | number>>,
+) =>
+	Object.fromEntries(
+		Object.entries(attributes)
+			.filter(([attribute]) => attribute !== "key")
+			.map(([attribute, value]) => [
+				attribute.replace(/[A-Z]/g, (letter) => `-${letter.toLowerCase()}`),
+				value,
+			]),
+	);
+
+const outlineIcon = outlineIcons[name as keyof typeof outlineIcons];
+
+const iconMarkup = outlineIcon
+	? outlineIcon.replace(
+		"<svg ",
+		size === "inline"
+			? '<svg width="1em" height="1em" '
+			: '<svg class="size-full" ',
+	)
+	: undefined;
+
+const hugeIcon = hugeIcons[name as keyof typeof hugeIcons];
+---
+
+<span
+	class={cn("inline-flex shrink-0", iconSizeClasses[size], className)}
+	aria-hidden="true"
+>
+	{
+		iconMarkup ? (
+			<Fragment set:html={iconMarkup} />
+		) : hugeIcon ? (
+			<svg
+				class={size === "inline" ? undefined : "size-full"}
+				width={size === "inline" ? "1em" : undefined}
+				height={size === "inline" ? "1em" : undefined}
+				viewBox="0 0 24 24"
+				fill="none"
+			>
+				{hugeIcon.map(([element, attributes]) => {
+					const Element = element;
+
+					return <Element {...normalizeAttributes(attributes)} />;
+				})}
+			</svg>
+		) : null
+	}
+</span>

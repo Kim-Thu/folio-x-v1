@@ -1,0 +1,8 @@
+---
+import PageBuilder from "@/components/pages/builder/PageBuilder.astro";
+import type { WorksPageProps } from "@/types/components/pages/works/WorksPage.types";
+
+const { data } = Astro.props as WorksPageProps;
+---
+
+<PageBuilder config={data.builder} />
