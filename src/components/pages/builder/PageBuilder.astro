@@ -395,21 +395,33 @@ const buildProductsArchive = async (
 	const advertisement = asRecord(sidebar.advertisement);
 	const cards = asRecord(content.cards);
 	const result = asRecord(content.result);
+	const routes = asRecord(content.routes);
 	const { pagination, pageSize, emptyLabel } = archiveBase(content);
-	const [products, categoryFilters] = await Promise.all([getProducts(), getProductCategories()]);
+	const [products, categories] = await Promise.all([getProducts(), getProductCategories()]);
 	const visibleProducts = context.categorySlug
 		? products.filter((product) => product.categorySlug === context.categorySlug)
 		: products;
-	const platformValues = asArray(platformControl.options).filter(
-		(option): option is RecordValue => Boolean(option) && typeof option === "object" && !Array.isArray(option),
-	);
-	const platformFilters = platformValues.map((option) => ({
-		label: asString(option.label),
-		value: asString(option.value),
-		href: option.href ? asString(option.href) : undefined,
-		count: typeof option.count === "number" ? option.count : undefined,
-		checked: Boolean(option.checked),
-	}));
+	const categoryFilters = [
+		{
+			label: asString(categoryControl.allLabel),
+			value: asString(categoryControl.allValue),
+			href: asString(routes.base),
+			checked: !context.categorySlug,
+		},
+		...categories.map((category) => ({
+			...category,
+			href: `${asString(routes.categoryBase)}${category.value}`,
+			checked: context.categorySlug === category.value,
+		})),
+	];
+	const platformFilters = asArray(platformControl.options)
+		.map(asRecord)
+		.filter((option) => typeof option.label === "string" && typeof option.value === "string")
+		.map((option) => ({
+			label: asString(option.label),
+			value: asString(option.value),
+			checked: asString(option.value) === asString(platformControl.value),
+		}));
 
 	return {
 		key: section.id,
@@ -430,7 +442,7 @@ const buildProductsArchive = async (
 							control: asString(categoryControl.control),
 							id: asString(categoryControl.id),
 							label: asString(categoryControl.label),
-							value: asString(categoryControl.value),
+							value: context.categorySlug ?? asString(categoryControl.value),
 							options: categoryFilters,
 						},
 						{
