@@ -1,12 +1,281 @@
 ---
 import LPage from "@/components/layout/LPage.astro";
 import PageRegion from "@/components/pages/builder/PageRegion.astro";
+import {
+	getInsights,
+	getLabs,
+	getProducts,
+	getProjects,
+	getPublicationCatalogs,
+} from "@/data/cms";
+import {
+	mapInsightToCard,
+	mapLabToCard,
+	mapProductToCard,
+	mapProjectToCard,
+	mapPublicationToCard,
+} from "@/data/mappers/card";
 import type {
+	PageBuilderConfig,
 	PageBuilderProps,
+	PageRegion,
 	PageRegionPlacement,
+	PageSectionData,
 } from "@/types/components/pages/builder/PageBuilder.types";
+import type { PArticleProps } from "@/types/components/object/project/article/PArticle.types";
+import type { PCardData, PCardProps } from "@/types/components/object/project/card/PCard.types";
+import type { PCtaProps } from "@/types/components/object/project/cta/PCta.types";
+import type { PHeroProps } from "@/types/components/object/project/hero/PHero.types";
+import type { PPageHeaderProps } from "@/types/components/object/project/page-header/PPageHeader.types";
+import type { PSectionHeaderData } from "@/types/components/object/project/section-header/PSectionHeader.types";
 
-const { config } = Astro.props as PageBuilderProps;
+const props = Astro.props as PageBuilderProps;
+
+type RecordValue = Record<string, unknown>;
+
+const asRecord = (value: unknown): RecordValue =>
+	value && typeof value === "object" && !Array.isArray(value)
+		? (value as RecordValue)
+		: {};
+
+const asString = (value: unknown, fallback = ""): string =>
+	typeof value === "string" ? value : fallback;
+
+const asArray = (value: unknown): unknown[] =>
+	Array.isArray(value) ? value : [];
+
+const sectionFrame = (section: PageSectionData) => {
+	const settings = asRecord(section.settings);
+	return {
+		id: section.id,
+		theme: asString(settings.theme, "light") as "light" | "dark" | "none",
+		spacing: asString(settings.spacing, "compact") as "lead" | "body" | "compact" | "none",
+		container: asString(settings.container, "site") as "site" | "content" | "none",
+	};
+};
+
+const sectionHeader = (section: PageSectionData): PSectionHeaderData => {
+	const heading = asRecord(asRecord(section.content).heading);
+	const action = asRecord(heading.action);
+
+	return {
+		number: asString(heading.number),
+		label: asString(heading.label),
+		title: asArray(heading.title).filter(
+			(value): value is string => typeof value === "string",
+		),
+		description: asString(heading.description),
+		action: action.href
+			? {
+					href: asString(action.href),
+					label: asString(action.label),
+					icon: asString(action.icon, "arrowRight") as "arrowRight",
+					iconPosition: "end",
+					variant: "text",
+					tone: "light",
+					size: "sm",
+			  }
+			: undefined,
+	};
+};
+
+const cardConfig = (
+	section: PageSectionData,
+	items: PCardData[],
+	overrides: Partial<PCardProps> = {},
+): PCardProps => {
+	const content = asRecord(section.content);
+	const cards = asRecord(content.cards);
+	const settings = asRecord(section.settings);
+
+	return {
+		template: asString(cards.template, asString(section.template, "overlay")) as PCardProps["template"],
+		layout: asString(cards.layout, asString(settings.layout, "grid")) as PCardProps["layout"],
+		columns: (cards.columns ?? settings.columns ?? 1) as PCardProps["columns"],
+		gap: asString(cards.gap, asString(settings.gap, "sm")) as PCardProps["gap"],
+		mediaRatio: (cards.mediaRatio ?? settings.mediaRatio) as PCardProps["mediaRatio"],
+		separator: (cards.separator ?? settings.separator) as PCardProps["separator"],
+		headingLevel: (cards.headingLevel ?? 3) as PCardProps["headingLevel"],
+		slots: asRecord(cards.slots) as PCardProps["slots"],
+		items,
+		...overrides,
+	};
+};
+
+const resolveCollectionItems = async (
+	section: PageSectionData,
+): Promise<PCardData[]> => {
+	const content = asRecord(section.content);
+	const staticItems = asArray(content.items);
+
+	if (staticItems.length > 0) {
+		return staticItems as PCardData[];
+	}
+
+	const source = asRecord(content.source);
+	const collection = asString(source.collection);
+	const limit = typeof source.limit === "number" && source.limit > 0 ? source.limit : 4;
+
+	switch (collection) {
+		case "products":
+			return (await getProducts()).slice(0, limit).map(mapProductToCard);
+		case "projects":
+			return (await getProjects())
+				.slice(0, limit)
+				.map((item) => mapProjectToCard(item, "View case direction", "·"));
+		case "labs":
+			return (await getLabs()).slice(0, limit).map(mapLabToCard);
+		case "blog":
+			return (await getInsights())
+				.slice(0, limit)
+				.map((item) => mapInsightToCard(item, "·"));
+		case "publications": {
+			const catalogs = await getPublicationCatalogs();
+			return catalogs
+				.flatMap((catalog) =>
+					catalog.entries.map((item) => mapPublicationToCard(item, catalog.slug)),
+				)
+				.slice(0, limit);
+		}
+		default:
+			return [];
+	}
+};
+
+const regionFromSection = async (section: PageSectionData): Promise<PageRegion> => {
+	const content = asRecord(section.content);
+	const frame = sectionFrame(section);
+
+	switch (section.type) {
+		case "hero":
+			return {
+				key: section.id,
+				component: "hero",
+				section: frame,
+				props: {
+					template: asString(section.template, "split-media") as PHeroProps["template"],
+					data: content as unknown as PHeroProps["data"],
+				},
+			};
+
+		case "page-header":
+			return {
+				key: section.id,
+				component: "page-header",
+				placement: "header",
+				section: frame,
+				props: {
+					template: asString(section.template, "split-media") as PPageHeaderProps["template"],
+					data: content as unknown as PPageHeaderProps["data"],
+				},
+			};
+
+		case "article":
+			return {
+				key: section.id,
+				component: "article",
+				section: frame,
+				props: content as unknown as PArticleProps,
+			};
+
+		case "cta":
+			return {
+				key: section.id,
+				component: "cta",
+				placement: "cta",
+				section: frame,
+				props: {
+					template: asString(section.template, "callout") as PCtaProps["template"],
+					data: content as unknown as PCtaProps["data"],
+				},
+			};
+
+		case "collection": {
+			const items = await resolveCollectionItems(section);
+
+			if (section.template === "cards") {
+				return {
+					key: section.id,
+					component: "cards",
+					section: frame,
+					props: { cards: cardConfig(section, items) },
+				};
+			}
+
+			if (section.template === "split") {
+				return {
+					key: section.id,
+					component: "collection",
+					section: frame,
+					props: {
+						template: "split",
+						header: { template: "split", data: sectionHeader(section) },
+						cardGroups: [
+							cardConfig(section, items.slice(0, 1)),
+							cardConfig(section, items.slice(1), {
+								template: "stacked",
+								layout: "list",
+								separator: "light",
+								slots: {
+									media: false,
+									icon: false,
+									metadata: true,
+									tags: false,
+									metrics: false,
+									title: true,
+									excerpt: true,
+									action: false,
+								},
+							}),
+						],
+					},
+				};
+			}
+
+			const header = sectionHeader(section);
+			return {
+				key: section.id,
+				component: "group",
+				section: frame,
+				props: {
+					template: "sidebar",
+					asideLabel: header.title.join(" ") || section.id,
+					asidePosition: "start",
+					regions: [
+						{
+							key: `${section.id}-heading`,
+							component: "section-header",
+							section: false,
+							placement: "aside",
+							props: { data: header },
+						},
+						{
+							key: `${section.id}-cards`,
+							component: "cards",
+							section: false,
+							props: { cards: cardConfig(section, items) },
+						},
+					],
+				},
+			};
+		}
+
+		default:
+			throw new Error(`Unsupported CMS page section type: ${section.type}`);
+	}
+};
+
+let config: PageBuilderConfig;
+
+if ("page" in props && props.page) {
+	config = {
+		layout: { template: "fluid", containerSize: "site" },
+		regions: await Promise.all(props.page.content.sections.map(regionFromSection)),
+	};
+} else {
+	config = props.config;
+}
+
 const enabledRegions = config.regions.filter((region) => region.enabled !== false);
 const regionsFor = (placement: PageRegionPlacement) =>
 	enabledRegions.filter((region) => (region.placement ?? "main") === placement);
