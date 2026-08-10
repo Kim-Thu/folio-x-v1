@@ -10,5 +10,55 @@
   "rating": 4.9,
   "reviews": 44,
   "badge": "NEXT.JS",
-  "image": "https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?auto=format&fit=crop&w=900&q=88"
+  "image": "https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?auto=format&fit=crop&w=900&q=88",
+  "detail": {
+    "page": {
+      "template": "fluid",
+      "sections": [
+        {
+          "id": "product-summary",
+          "type": "page-header",
+          "template": "gallery-summary",
+          "settings": {
+            "theme": "canvas",
+            "spacing": "compact",
+            "container": "site"
+          },
+          "content": {
+            "breadcrumbLabel": "Breadcrumb",
+            "collectionLabel": "Products",
+            "galleryLabel": "Product gallery",
+            "previewLabel": "Select preview",
+            "ratingMaximum": 5,
+            "reviewsLabel": "reviews",
+            "platformLabel": "Platform",
+            "categoryLabel": "Category",
+            "purchaseLabel": "Contact to purchase",
+            "purchaseHref": "mailto:hello@example.com",
+            "previewActionLabel": "View preview",
+            "paymentMethodsLabel": "Payment methods"
+          }
+        },
+        {
+          "id": "product-overview",
+          "type": "article",
+          "template": "flow",
+          "settings": {
+            "theme": "canvas",
+            "spacing": "body",
+            "container": "content"
+          },
+          "content": {
+            "title": "Overview",
+            "blocks": [
+              {
+                "type": "paragraph",
+                "text": "A fast storefront starter built for modern teams."
+              }
+            ]
+          }
+        }
+      ]
+    }
+  }
 }
