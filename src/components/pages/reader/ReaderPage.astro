@@ -1,8 +1,65 @@
 ---
-import PageBuilder from "@/components/pages/builder/PageBuilder.astro";
+import LPage from "@/components/layout/LPage.astro";
+import LSection from "@/components/layout/LSection.astro";
+import PReader from "@/components/object/project/reader/PReader.astro";
 import type { ReaderPageProps } from "@/types/components/pages/reader/ReaderPage.types";
 
 const { data } = Astro.props as ReaderPageProps;
+const { entry, catalogSlug, chapter } = data;
+const configuredChapter = entry.detail?.reader?.find((item) => item.number === chapter);
+const chapterTitle = configuredChapter?.title ?? `Chapter ${chapter}: ${entry.title}`;
+const indexHref = `/${catalogSlug}/${entry.slug}#chapters`;
+const chapterHref = (number: number) => `/${catalogSlug}/${entry.slug}/chapter/${number}`;
+const previous = chapter > 1 ? chapter - 1 : undefined;
+const next = chapter < entry.chapters ? chapter + 1 : undefined;
+const content = configuredChapter?.kind === "sequential-media" && configuredChapter.images?.length
+	? { kind: "sequential-media" as const, images: configuredChapter.images }
+	: configuredChapter?.kind === "prose" && configuredChapter.prose?.length
+		? { kind: "prose" as const, items: configuredChapter.prose }
+		: catalogSlug === "comics"
+			? { kind: "sequential-media" as const, images: [entry.cover] }
+			: { kind: "prose" as const, items: [{ text: entry.summary }] };
 ---
 
-<PageBuilder config={data.builder} />
+<LPage template="fluid">
+	<LSection theme="canvas" spacing="compact">
+		<PReader
+			data={{
+				breadcrumb: {
+					label: "Breadcrumb",
+					items: [
+						{ label: catalogSlug === "novels" ? "Novels" : "Comics", href: `/${catalogSlug}` },
+						{ label: entry.title, href: `/${catalogSlug}/${entry.slug}` },
+					],
+					current: `Chapter ${chapter}`,
+				},
+				badge: `Chapter ${chapter}`,
+				title: chapterTitle,
+				metadata: {
+					items: [
+						{ type: "datetime", label: configuredChapter?.publishedLabel ?? entry.updatedLabel, datetime: configuredChapter?.publishedAt ?? "2024-04-30", icon: "calendar03", display: "icon-text" },
+						{ type: "reading-time", label: configuredChapter?.readTime ?? (catalogSlug === "novels" ? "Read" : "Panels"), icon: "clock01", display: "icon-text" },
+					],
+				},
+				views: `${configuredChapter?.views ?? entry.views} views`,
+				content,
+				actions: {
+					label: "Reading controls",
+					index: { label: "Chapter list", href: indexHref, icon: "listView", variant: "outline", size: "md" },
+					settingsLabel: "Change text size",
+					themeLabel: "Toggle reading theme",
+					next: next ? { label: "Next chapter", href: chapterHref(next), icon: "arrowRight", iconPosition: "end", variant: "primary", size: "md" } : undefined,
+				},
+				share: { label: "Share this chapter", links: [] },
+				reactions: { label: "Rate this chapter", items: [] },
+				bookmarkLabel: "Bookmark chapter",
+				navigation: {
+					label: "Chapter navigation",
+					previous: previous ? { label: "Previous chapter", href: chapterHref(previous), icon: "arrowLeft", variant: "outline", size: "md" } : undefined,
+					index: { label: "Chapter list", href: indexHref, icon: "listView", variant: "outline", size: "md" },
+					next: next ? { label: "Next chapter", href: chapterHref(next), icon: "arrowRight", iconPosition: "end", variant: "primary", size: "md" } : undefined,
+				},
+			}}
+		/>
+	</LSection>
+</LPage>
