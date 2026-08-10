@@ -29,6 +29,50 @@
     "showBackAction": false,
     "features": [],
     "gallery": [],
-    "results": []
+    "results": [],
+    "page": {
+      "template": "fluid",
+      "sections": [
+        {
+          "id": "project-summary",
+          "type": "page-header",
+          "template": "slider-aside",
+          "settings": { "theme": "dark", "spacing": "compact", "container": "site" },
+          "content": {
+            "backAction": { "label": "Back to projects", "href": "/projects" },
+            "galleryLabel": "Project gallery",
+            "previousImageLabel": "Previous image",
+            "nextImageLabel": "Next image",
+            "tagsLabel": "Technology stack",
+            "actionsLabel": "Project actions",
+            "liveActionLabel": "Live site",
+            "sourceActionLabel": "Source code",
+            "asideDecoration": { "src": "/uploads/pattern-1.png", "alt": "", "width": 1536, "height": 1536 },
+            "facts": {
+              "clientLabel": "Client",
+              "roleLabel": "Role",
+              "durationLabel": "Duration"
+            }
+          }
+        },
+        {
+          "id": "project-content",
+          "type": "article",
+          "settings": { "theme": "dark", "spacing": "body", "container": "site" },
+          "content": { "source": "sections" }
+        },
+        {
+          "id": "project-navigation",
+          "type": "post-navigation",
+          "template": "split",
+          "settings": { "theme": "dark", "spacing": "closing", "container": "site" },
+          "content": {
+            "label": "Previous / Next",
+            "previousLabel": "Previous",
+            "nextLabel": "Next"
+          }
+        }
+      ]
+    }
   }
 }
