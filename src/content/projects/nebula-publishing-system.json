@@ -22,5 +22,51 @@
         "Chuẩn hóa content model, template và quyền biên tập để nội dung có thể mở rộng mà vẫn giữ tính nhất quán."
       ]
     }
-  ]
+  ],
+  "detail": {
+    "page": {
+      "template": "fluid",
+      "sections": [
+        {
+          "id": "project-summary",
+          "type": "page-header",
+          "template": "slider-aside",
+          "settings": { "theme": "light", "spacing": "compact", "container": "site" },
+          "content": {
+            "backAction": { "label": "Back to projects", "href": "/projects" },
+            "galleryLabel": "Project gallery",
+            "previousImageLabel": "Previous image",
+            "nextImageLabel": "Next image",
+            "tagsLabel": "Technology stack",
+            "actionsLabel": "Project actions",
+            "liveActionLabel": "Live site",
+            "sourceActionLabel": "Source code",
+            "asideDecoration": { "src": "/uploads/pattern-1.png", "alt": "", "width": 1536, "height": 1536 },
+            "facts": {
+              "clientLabel": "Client",
+              "roleLabel": "Role",
+              "durationLabel": "Duration"
+            }
+          }
+        },
+        {
+          "id": "project-content",
+          "type": "article",
+          "settings": { "theme": "light", "spacing": "body", "container": "site" },
+          "content": { "source": "sections" }
+        },
+        {
+          "id": "project-navigation",
+          "type": "post-navigation",
+          "template": "split",
+          "settings": { "theme": "light", "spacing": "closing", "container": "site" },
+          "content": {
+            "label": "Previous / Next",
+            "previousLabel": "Previous",
+            "nextLabel": "Next"
+          }
+        }
+      ]
+    }
+  }
 }
