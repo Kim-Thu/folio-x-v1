@@ -11,5 +11,55 @@
   "rating": 4.6,
   "reviews": 35,
   "badge": "v1.2.3",
-  "image": "/uploads/page-header-insight.png"
+  "image": "/uploads/page-header-insight.png",
+  "detail": {
+    "page": {
+      "template": "fluid",
+      "sections": [
+        {
+          "id": "product-summary",
+          "type": "page-header",
+          "template": "gallery-summary",
+          "settings": {
+            "theme": "canvas",
+            "spacing": "compact",
+            "container": "site"
+          },
+          "content": {
+            "breadcrumbLabel": "Breadcrumb",
+            "productsLabel": "Products",
+            "galleryLabel": "Image Optimizer gallery",
+            "thumbnailLabel": "Select preview",
+            "reviewsLabel": "reviews",
+            "platformLabel": "Platform",
+            "categoryLabel": "Category",
+            "actionsLabel": "Image Optimizer actions",
+            "purchaseLabel": "Contact to purchase",
+            "previewLabel": "View preview",
+            "paymentLabel": "Payment methods"
+          }
+        },
+        {
+          "id": "product-overview",
+          "type": "article",
+          "settings": {
+            "theme": "canvas",
+            "spacing": "body",
+            "container": "content"
+          },
+          "content": {
+            "blocks": [
+              {
+                "id": "product-overview",
+                "title": "Overview",
+                "paragraphs": [
+                  "Optimize and compress images automatically."
+                ]
+              }
+            ]
+          }
+        }
+      ]
+    }
+  }
 }
