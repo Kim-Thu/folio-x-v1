@@ -1,11 +1,7 @@
-import type { PageBuilderConfig } from "@/types/components/pages/builder/PageBuilder.types";
+import type { CollectionEntry } from "astro:content";
 
 export interface CatalogPageData {
-	metadata: {
-		title: string;
-		description: string;
-	};
-	builder: PageBuilderConfig;
+	page: CollectionEntry<"pages">["data"];
 }
 
 export interface CatalogPageProps {
