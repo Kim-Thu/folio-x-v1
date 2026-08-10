@@ -4,6 +4,7 @@ import PageRegionView from "@/components/pages/builder/PageRegion.astro";
 import {
 	getInsights,
 	getLabs,
+	getProductCategories,
 	getProducts,
 	getProjects,
 	getPublications,
@@ -16,12 +17,14 @@ import {
 	mapPublicationToCard,
 } from "@/data/mappers/card";
 import type {
+	ArchiveRegion,
 	PageBuilderConfig,
 	PageBuilderProps,
 	PageRegion,
 	PageRegionPlacement,
 	PageSectionData,
 } from "@/types/components/pages/builder/PageBuilder.types";
+import type { LSectionSpacing, LSectionTheme } from "@/types/components/layout/LSection.types";
 import type { PArticleProps } from "@/types/components/object/project/article/PArticle.types";
 import type { PCardData, PCardProps } from "@/types/components/object/project/card/PCard.types";
 import type { PCtaProps } from "@/types/components/object/project/cta/PCta.types";
@@ -42,15 +45,27 @@ const asRecord = (value: unknown): RecordValue =>
 const asString = (value: unknown, fallback = ""): string =>
 	typeof value === "string" ? value : fallback;
 
+const asNumber = (value: unknown, fallback: number): number =>
+	typeof value === "number" ? value : fallback;
+
 const asArray = (value: unknown): unknown[] =>
 	Array.isArray(value) ? value : [];
+
+const optionList = (value: unknown) =>
+	asArray(value)
+		.map(asRecord)
+		.filter((option) => typeof option.label === "string" && typeof option.value === "string")
+		.map((option) => ({
+			label: asString(option.label),
+			value: asString(option.value),
+		}));
 
 const sectionFrame = (section: PageSectionData) => {
 	const settings = asRecord(section.settings);
 	return {
 		id: section.id,
-		theme: asString(settings.theme, "light") as "light" | "dark" | "none",
-		spacing: asString(settings.spacing, "compact") as "lead" | "body" | "compact" | "closing" | "none",
+		theme: asString(settings.theme, "light") as LSectionTheme,
+		spacing: asString(settings.spacing, "compact") as LSectionSpacing,
 		container: asString(settings.container, "site") as "site" | "content" | "none",
 	};
 };
@@ -58,21 +73,25 @@ const sectionFrame = (section: PageSectionData) => {
 const sectionHeader = (section: PageSectionData): PSectionHeaderProps => {
 	const heading = asRecord(asRecord(section.content).heading);
 	const action = asRecord(heading.action);
+	const rawTitle = heading.title;
 
 	return {
 		data: {
 			number: asString(heading.number),
 			label: asString(heading.label),
-			title: asArray(heading.title).filter(
-				(value): value is string => typeof value === "string",
-			),
+			title:
+				typeof rawTitle === "string"
+					? rawTitle
+					: asArray(rawTitle).filter(
+							(value): value is string => typeof value === "string",
+						),
 			description: asString(heading.description),
 		},
 		action: action.href
 			? {
 					href: asString(action.href),
 					label: asString(action.label),
-					icon: asString(action.icon, "arrowRight") as "arrowRight",
+					icon: "arrowRight",
 					iconPosition: "end",
 					variant: "text",
 					tone: "light",
@@ -111,13 +130,11 @@ const resolveCollectionItems = async (
 	const content = asRecord(section.content);
 	const staticItems = asArray(content.items);
 
-	if (staticItems.length > 0) {
-		return staticItems as PCardData[];
-	}
+	if (staticItems.length > 0) return staticItems as PCardData[];
 
 	const source = asRecord(content.source);
 	const collection = asString(source.collection);
-	const limit = typeof source.limit === "number" && source.limit > 0 ? source.limit : 4;
+	const limit = asNumber(source.limit, 4);
 
 	switch (collection) {
 		case "products":
@@ -152,6 +169,561 @@ const resolveCollectionItems = async (
 		}
 		default:
 			return [];
+	}
+};
+
+const archiveBase = (content: RecordValue) => {
+	const pagination = asRecord(content.pagination);
+	return {
+		pagination,
+		pageSize: asNumber(pagination.pageSize, 9),
+		emptyLabel: asString(content.emptyLabel),
+	};
+};
+
+const buildProjectsArchive = async (
+	section: PageSectionData,
+	content: RecordValue,
+): Promise<ArchiveRegion> => {
+	const toolbar = asRecord(content.toolbar);
+	const sort = asRecord(toolbar.sort);
+	const view = asRecord(toolbar.view);
+	const cards = asRecord(content.cards);
+	const taxonomy = asRecord(content.taxonomy);
+	const { pagination, pageSize, emptyLabel } = archiveBase(content);
+	const projects = await getProjects();
+	const visibleProjects = projects.filter((project) => {
+		if (context.categorySlug) return project.categorySlug === context.categorySlug;
+		if (context.tagSlug) return project.tags.some((tag) => tag.slug === context.tagSlug);
+		return true;
+	});
+	const categories = Array.from(
+		new Map(
+			projects.map((project) => [
+				project.categorySlug,
+				{ label: project.category, value: project.categorySlug },
+			]),
+		).values(),
+	);
+
+	return {
+		key: section.id,
+		component: "archive",
+		section: sectionFrame(section),
+		props: {
+			mode: "taxonomy",
+			toolbar: {
+				data: {
+					filter: {
+						label: asString(toolbar.filterLabel),
+						activeValue: context.categorySlug ?? "all",
+						tabs: [
+							{ label: asString(toolbar.allLabel, "All"), value: "all" },
+							...categories,
+						],
+					},
+					sort: {
+						label: asString(sort.label, asString(toolbar.sortLabel, "Sort")),
+						value: asString(sort.value, "newest"),
+						options: optionList(sort.options ?? toolbar.sortOptions),
+					},
+					view: {
+						label: asString(view.label, asString(toolbar.viewLabel, "View")),
+						gridLabel: asString(view.gridLabel, asString(toolbar.gridViewLabel, "Grid view")),
+						listLabel: asString(view.listLabel, asString(toolbar.listViewLabel, "List view")),
+					},
+				},
+			},
+			cards: {
+				template: asString(cards.template, "overlay") as PCardProps["template"],
+				layout: asString(cards.layout, "mosaic") as PCardProps["layout"],
+				gap: asString(cards.gap, "sm") as PCardProps["gap"],
+				items: visibleProjects.map((project, index) =>
+					mapProjectToCard(
+						project,
+						asString(cards.actionLabel, "View project"),
+						"·",
+						index % 4 === 0 || index % 4 === 3 ? "wide" : "standard",
+						asString(taxonomy.tagPrefix),
+					),
+				),
+			},
+			emptyLabel,
+			pagination: {
+				label: asString(pagination.label),
+				previousLabel: asString(pagination.previousLabel),
+				nextLabel: asString(pagination.nextLabel),
+				pageSize,
+				totalPages: Math.max(1, Math.ceil(visibleProjects.length / pageSize)),
+			},
+		},
+	};
+};
+
+const buildLabsArchive = async (
+	section: PageSectionData,
+	content: RecordValue,
+): Promise<ArchiveRegion> => {
+	const toolbar = asRecord(content.toolbar);
+	const search = asRecord(toolbar.search);
+	const sort = asRecord(toolbar.sort);
+	const view = asRecord(toolbar.view);
+	const sidebar = asRecord(content.sidebar);
+	const categoryCopy = asRecord(sidebar.category);
+	const technologyCopy = asRecord(sidebar.technology);
+	const cards = asRecord(content.cards);
+	const { pagination, pageSize, emptyLabel } = archiveBase(content);
+	const labs = await getLabs();
+	const visibleLabs = labs.filter((lab) =>
+		(!context.categorySlug || lab.category.slug === context.categorySlug) &&
+		(!context.technologySlug || lab.technologies.some((technology) => technology.slug === context.technologySlug)),
+	);
+	const categories = Array.from(
+		new Map(labs.map((lab) => [lab.category.slug, lab.category])).values(),
+	);
+	const technologies = Array.from(
+		new Map(
+			labs.flatMap((lab) => lab.technologies.map((technology) => [technology.slug, technology] as const)),
+		).values(),
+	);
+
+	return {
+		key: section.id,
+		component: "archive",
+		section: sectionFrame(section),
+		props: {
+			mode: "faceted",
+			toolbar: {
+				data: {
+					search: {
+						id: asString(search.id, "labs-search"),
+						label: asString(search.label),
+						name: asString(search.name, "search"),
+						placeholder: asString(search.placeholder),
+					},
+					selects: asArray(toolbar.selects).map(asRecord).map((select) => ({
+						control: asString(select.control),
+						id: asString(select.id),
+						label: asString(select.label),
+						value: asString(select.value, "all"),
+						options: optionList(select.options),
+					})),
+					sort: {
+						label: asString(sort.label),
+						value: asString(sort.value, "newest"),
+						options: optionList(sort.options),
+					},
+					view: {
+						label: asString(view.label),
+						gridLabel: asString(view.gridLabel),
+						listLabel: asString(view.listLabel),
+					},
+				},
+			},
+			sidebar: {
+				label: asString(sidebar.label),
+				filter: {
+					data: {
+						filterLabel: asString(sidebar.filterLabel),
+						category: {
+							appearance: "navigation",
+							control: "category",
+							legend: asString(categoryCopy.legend),
+							name: asString(categoryCopy.name, "labs-category"),
+							type: "radio",
+							options: [
+								{
+									label: asString(categoryCopy.allLabel, "All"),
+									value: "all",
+									href: "/labs",
+									count: labs.length,
+									checked: !context.categorySlug,
+								},
+								...categories.map((category) => ({
+									label: category.label,
+									value: category.slug,
+									href: `/labs/category/${category.slug}`,
+									count: labs.filter((lab) => lab.category.slug === category.slug).length,
+									checked: context.categorySlug === category.slug,
+								})),
+							],
+						},
+						groups: [
+							{
+								appearance: "navigation",
+								control: "technology",
+								legend: asString(technologyCopy.legend),
+								name: asString(technologyCopy.name, "labs-technology"),
+								type: "checkbox",
+								options: technologies.map((technology) => ({
+									label: technology.label,
+									value: technology.slug,
+									href: `/labs/technology/${technology.slug}`,
+									count: labs.filter((lab) => lab.technologies.some((item) => item.slug === technology.slug)).length,
+									checked: context.technologySlug === technology.slug,
+								})),
+							},
+						],
+					},
+				},
+			},
+			result: {
+				count: visibleLabs.length,
+				label: asString(content.resultLabel),
+			},
+			cards: {
+				template: asString(cards.template, "media-metrics") as PCardProps["template"],
+				layout: asString(cards.layout, "grid") as PCardProps["layout"],
+				columns: (cards.columns ?? 3) as PCardProps["columns"],
+				gap: asString(cards.gap, "md") as PCardProps["gap"],
+				items: visibleLabs.map(mapLabToCard),
+			},
+			emptyLabel,
+			pagination: {
+				label: asString(pagination.label),
+				previousLabel: asString(pagination.previousLabel),
+				nextLabel: asString(pagination.nextLabel),
+				pageSize,
+				totalPages: Math.max(1, Math.ceil(visibleLabs.length / pageSize)),
+			},
+		},
+	};
+};
+
+const buildProductsArchive = async (
+	section: PageSectionData,
+	content: RecordValue,
+): Promise<ArchiveRegion> => {
+	const toolbar = asRecord(content.toolbar);
+	const search = asRecord(toolbar.search);
+	const categoryControl = asRecord(toolbar.category);
+	const platformControl = asRecord(toolbar.platform);
+	const sort = asRecord(toolbar.sort);
+	const view = asRecord(toolbar.view);
+	const sidebar = asRecord(content.sidebar);
+	const categoryCopy = asRecord(sidebar.category);
+	const platformCopy = asRecord(sidebar.platform);
+	const price = asRecord(sidebar.price);
+	const license = asRecord(sidebar.license);
+	const ratings = asRecord(sidebar.ratings);
+	const advertisement = asRecord(sidebar.advertisement);
+	const cards = asRecord(content.cards);
+	const result = asRecord(content.result);
+	const { pagination, pageSize, emptyLabel } = archiveBase(content);
+	const [products, categoryFilters] = await Promise.all([
+		getProducts(),
+		getProductCategories(),
+	]);
+	const visibleProducts = context.categorySlug
+		? products.filter((product) => product.categorySlug === context.categorySlug)
+		: products;
+	const platformValues = asArray(platformControl.options).filter(
+		(value): value is string => typeof value === "string",
+	);
+
+	return {
+		key: section.id,
+		component: "archive",
+		section: sectionFrame(section),
+		props: {
+			mode: "faceted",
+			toolbar: {
+				data: {
+					search: {
+						id: asString(search.id, "product-search"),
+						label: asString(search.label),
+						name: asString(search.name, "search"),
+						placeholder: asString(search.placeholder),
+					},
+					selects: [
+						{
+							control: asString(categoryControl.control, "category"),
+							id: asString(categoryControl.id, "product-category"),
+							label: asString(categoryControl.label),
+							value: context.categorySlug ?? "all",
+							options: categoryFilters.map((option) => ({
+								label: option.value === "all" ? asString(categoryControl.allLabel, option.label) : option.label,
+								value: option.value,
+							})),
+						},
+						{
+							control: asString(platformControl.control, "platform"),
+							id: asString(platformControl.id, "product-platform"),
+							label: asString(platformControl.label),
+							value: "all",
+							options: [
+								{ label: asString(platformControl.allLabel, "All platforms"), value: "all" },
+								...platformValues.map((value) => ({ label: value, value })),
+							],
+						},
+					],
+					sort: {
+						label: asString(sort.label),
+						value: asString(sort.value, "newest"),
+						options: optionList(sort.options),
+					},
+					view: {
+						label: asString(view.label),
+						gridLabel: asString(view.gridLabel),
+						listLabel: asString(view.listLabel),
+					},
+				},
+			},
+			sidebar: {
+				label: asString(sidebar.label),
+				filter: {
+					data: {
+						category: {
+							appearance: "navigation",
+							control: "category",
+							legend: asString(categoryCopy.legend),
+							name: "product-category",
+							type: "radio",
+							options: categoryFilters.map((option) => ({
+								label: option.label,
+								value: option.value,
+								href: option.value === "all" ? "/products" : `/products/category/${option.value}`,
+								count: option.value === "all" ? products.length : products.filter((product) => product.categorySlug === option.value).length,
+								checked: context.categorySlug ? context.categorySlug === option.value : option.value === "all",
+							})),
+						},
+						platform: {
+							appearance: "controls",
+							control: "platform",
+							legend: asString(platformCopy.legend),
+							name: "product-platforms",
+							type: "checkbox",
+							options: platformValues.map((value) => ({
+								label: value,
+								value,
+								count: products.filter((product) => product.platform === value).length,
+							})),
+						},
+						range: {
+							id: asString(price.id, "product-price"),
+							label: asString(price.label),
+							name: asString(price.name, "price"),
+							min: asNumber(price.min, 0),
+							max: asNumber(price.max, 99),
+							value: asNumber(price.value, 99),
+							maxSuffix: asString(price.maxSuffix),
+							prefix: asString(price.prefix),
+						},
+						license: {
+							appearance: "controls",
+							control: "license",
+							legend: asString(license.legend),
+							name: "product-license",
+							type: "checkbox",
+							options: [
+								{ label: asString(license.freeLabel), value: "free", count: 0 },
+								{ label: asString(license.proLabel), value: "pro", count: products.length },
+							],
+						},
+						ratings: {
+							legend: asString(ratings.legend),
+							name: "product-ratings",
+							options: [5, 4, 3, 2, 1].map((value) => ({
+								value,
+								count: products.filter((product) => product.rating >= value).length,
+							})),
+						},
+					},
+				},
+				advertisement: Object.keys(advertisement).length
+					? { data: advertisement as unknown as ArchiveRegion["props"]["sidebar"] extends infer S ? S extends { advertisement?: infer A } ? A extends { data: infer D } ? D : never : never : never }
+					: undefined,
+			},
+			result: {
+				count: visibleProducts.length,
+				label: asString(result.label),
+			},
+			cards: {
+				template: asString(cards.template, "media-details") as PCardProps["template"],
+				layout: asString(cards.layout, "grid") as PCardProps["layout"],
+				columns: (cards.columns ?? 3) as PCardProps["columns"],
+				gap: asString(cards.gap, "md") as PCardProps["gap"],
+				items: visibleProducts.map(mapProductToCard),
+			},
+			emptyLabel,
+			pagination: {
+				label: asString(pagination.label),
+				previousLabel: asString(pagination.previousLabel),
+				nextLabel: asString(pagination.nextLabel),
+				pageSize,
+				totalPages: Math.max(1, Math.ceil(visibleProducts.length / pageSize)),
+			},
+		},
+	};
+};
+
+const buildBlogArchive = async (
+	section: PageSectionData,
+	content: RecordValue,
+): Promise<ArchiveRegion> => {
+	const toolbar = asRecord(content.toolbar);
+	const search = asRecord(toolbar.search);
+	const categoryControl = asRecord(toolbar.category);
+	const sort = asRecord(toolbar.sort);
+	const view = asRecord(toolbar.view);
+	const sidebar = asRecord(content.sidebar);
+	const filter = asRecord(sidebar.filter);
+	const featured = asRecord(sidebar.featured);
+	const featuredCards = asRecord(featured.cards);
+	const newsletter = asRecord(sidebar.newsletter);
+	const result = asRecord(content.result);
+	const cards = asRecord(content.cards);
+	const taxonomy = asRecord(content.taxonomy);
+	const { pagination, pageSize, emptyLabel } = archiveBase(content);
+	const insights = await getInsights();
+	const visibleInsights = insights.filter((insight) =>
+		(!context.categorySlug || insight.categorySlug === context.categorySlug) &&
+		(!context.tagSlug || insight.tags.some((tag) => tag.slug === context.tagSlug)),
+	);
+	const categories = Array.from(
+		new Map(insights.map((insight) => [insight.categorySlug, { label: insight.category, slug: insight.categorySlug }])).values(),
+	);
+	const separator = asString(taxonomy.separator, "·");
+	const featuredLimit = asNumber(featured.limit, 4);
+
+	return {
+		key: section.id,
+		component: "archive",
+		section: sectionFrame(section),
+		props: {
+			mode: "faceted",
+			toolbar: {
+				data: {
+					search: {
+						id: asString(search.id, "insights-search"),
+						label: asString(search.label),
+						name: asString(search.name, "search"),
+						placeholder: asString(search.placeholder),
+					},
+					selects: [
+						{
+							control: asString(categoryControl.control, "category"),
+							id: asString(categoryControl.id, "insights-category"),
+							label: asString(categoryControl.label),
+							value: context.categorySlug ?? "all",
+							options: [
+								{ label: asString(categoryControl.allLabel), value: "all" },
+								...categories.map((category) => ({ label: category.label, value: category.slug })),
+							],
+						},
+					],
+					sort: {
+						label: asString(sort.label),
+						value: asString(sort.value, "newest"),
+						options: optionList(sort.options),
+					},
+					view: {
+						label: asString(view.label),
+						gridLabel: asString(view.gridLabel),
+						listLabel: asString(view.listLabel),
+					},
+				},
+			},
+			sidebar: {
+				label: asString(sidebar.label),
+				filter: {
+					data: {
+						groups: [
+							{
+								appearance: "navigation",
+								control: "category",
+								legend: asString(filter.legend),
+								name: "insight-category",
+								type: "radio",
+								options: [
+									{
+										label: asString(filter.allLabel, "All"),
+										value: "all",
+										href: "/blog",
+										count: insights.length,
+										checked: !context.categorySlug,
+									},
+									...categories.map((category) => ({
+										label: category.label,
+										value: category.slug,
+										href: `/blog/category/${category.slug}`,
+										count: insights.filter((insight) => insight.categorySlug === category.slug).length,
+										checked: context.categorySlug === category.slug,
+									})),
+								],
+							},
+						],
+					},
+				},
+				cardsHeader: {
+					data: { title: asString(featured.title) },
+					appearance: "compact",
+					headingLevel: 2,
+				},
+				cards: {
+					template: asString(featuredCards.template, "compact-media") as PCardProps["template"],
+					layout: asString(featuredCards.layout, "list") as PCardProps["layout"],
+					columns: (featuredCards.columns ?? 1) as PCardProps["columns"],
+					gap: asString(featuredCards.gap, "sm") as PCardProps["gap"],
+					items: insights.slice(0, featuredLimit).map((insight) => mapInsightToCard(insight, separator)),
+					slots: asRecord(featuredCards.slots) as PCardProps["slots"],
+				},
+				advertisement: Object.keys(newsletter).length
+					? {
+						template: asString(newsletter.template, "form-first") as "form-first" | "media-first",
+						data: {
+							title: asString(newsletter.title),
+							description: asString(newsletter.description),
+							image: asRecord(newsletter.image) as unknown as { src: string; alt: string; width: number; height: number },
+							action: asRecord(newsletter.action) as unknown as { href: string; label: string },
+							form: asRecord(newsletter.form) as unknown as { formName: string; inputId: string; inputLabel: string; placeholder: string; submitLabel: string },
+						},
+					  }
+					: undefined,
+			},
+			result: {
+				header: {
+					data: { title: asString(result.title) },
+					appearance: "compact",
+					headingLevel: 2,
+				},
+			},
+			cards: {
+				template: asString(cards.template, "editorial") as PCardProps["template"],
+				layout: asString(cards.layout, "grid") as PCardProps["layout"],
+				columns: (cards.columns ?? 3) as PCardProps["columns"],
+				gap: asString(cards.gap, "sm") as PCardProps["gap"],
+				items: visibleInsights.map((insight) => mapInsightToCard(insight, separator)),
+				slots: asRecord(cards.slots) as PCardProps["slots"],
+			},
+			emptyLabel,
+			pagination: {
+				label: asString(pagination.label),
+				previousLabel: asString(pagination.previousLabel),
+				nextLabel: asString(pagination.nextLabel),
+				pageSize,
+				totalPages: Math.max(1, Math.ceil(visibleInsights.length / pageSize)),
+			},
+		},
+	};
+};
+
+const buildArchive = async (
+	section: PageSectionData,
+	content: RecordValue,
+): Promise<ArchiveRegion> => {
+	const collection = asString(asRecord(content.source).collection);
+	switch (collection) {
+		case "projects":
+			return buildProjectsArchive(section, content);
+		case "labs":
+			return buildLabsArchive(section, content);
+		case "products":
+			return buildProductsArchive(section, content);
+		case "blog":
+			return buildBlogArchive(section, content);
+		default:
+			throw new Error(`Unsupported CMS archive source: ${collection}`);
 	}
 };
 
@@ -203,93 +775,8 @@ const regionFromSection = async (section: PageSectionData): Promise<PageRegion> 
 				},
 			};
 
-		case "archive": {
-			const source = asRecord(content.source);
-			const collection = asString(source.collection);
-			const toolbar = asRecord(content.toolbar);
-			const pagination = asRecord(content.pagination);
-			const cards = asRecord(content.cards);
-			const taxonomy = asRecord(content.taxonomy);
-
-			if (collection !== "projects") {
-				throw new Error(`Unsupported CMS archive source: ${collection}`);
-			}
-
-			const projects = await getProjects();
-			const visibleProjects = projects.filter((project) => {
-				if (context.categorySlug) return project.categorySlug === context.categorySlug;
-				if (context.tagSlug) return project.tags.some((tag) => tag.slug === context.tagSlug);
-				return true;
-			});
-			const categories = Array.from(
-				new Map(
-					projects.map((project) => [
-						project.category,
-						{ label: project.category, value: project.category },
-					]),
-				).values(),
-			);
-			const pageSize = typeof pagination.pageSize === "number" ? pagination.pageSize : 7;
-			const sortOptions = asArray(toolbar.sortOptions)
-				.map(asRecord)
-				.filter((option) => typeof option.label === "string" && typeof option.value === "string")
-				.map((option) => ({
-					label: asString(option.label),
-					value: asString(option.value) as "featured" | "newest" | "oldest",
-				}));
-
-			return {
-				key: section.id,
-				component: "archive",
-				section: frame,
-				props: {
-					mode: "taxonomy",
-					toolbar: {
-						data: {
-							filter: {
-								label: asString(toolbar.filterLabel),
-								activeValue: "all",
-								tabs: [
-									{ label: asString(toolbar.allLabel), value: "all" },
-									...categories,
-								],
-							},
-							sort: {
-								label: asString(toolbar.sortLabel),
-								options: sortOptions,
-							},
-							view: {
-								label: asString(toolbar.viewLabel),
-								gridLabel: asString(toolbar.gridViewLabel),
-								listLabel: asString(toolbar.listViewLabel),
-							},
-						},
-					},
-					cards: {
-						template: asString(cards.template, "overlay") as PCardProps["template"],
-						layout: asString(cards.layout, "mosaic") as PCardProps["layout"],
-						gap: asString(cards.gap, "sm") as PCardProps["gap"],
-						items: visibleProjects.map((project, index) =>
-							mapProjectToCard(
-								project,
-								asString(cards.actionLabel),
-								"/",
-								index % 4 === 0 || index % 4 === 3 ? "wide" : "standard",
-								asString(taxonomy.tagPrefix),
-							),
-						),
-					},
-					emptyLabel: asString(content.emptyLabel),
-					pagination: {
-						label: asString(pagination.label),
-						previousLabel: asString(pagination.previousLabel),
-						nextLabel: asString(pagination.nextLabel),
-						pageSize,
-						totalPages: Math.max(1, Math.ceil(visibleProjects.length / pageSize)),
-					},
-				},
-			};
-		}
+		case "archive":
+			return buildArchive(section, content);
 
 		case "collection": {
 			const items = await resolveCollectionItems(section);
