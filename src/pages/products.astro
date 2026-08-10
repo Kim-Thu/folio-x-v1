@@ -11,8 +11,8 @@ const data = await getProductsPageData();
 <BaseLayout
 	{...layout}
 	tone="light"
-	title={`${data.metadata.title} | ${layout.title}`}
-	description={data.metadata.description}
+	title={`${data.page.meta.title} | ${layout.title}`}
+	description={data.page.meta.description ?? ""}
 >
 	<ProductsPage {data} />
 </BaseLayout>
