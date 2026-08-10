@@ -1,0 +1,17 @@
+{
+  "order": 2,
+  "slug": "memories-of-the-wind",
+  "title": "Memories of the Wind",
+  "summary": "Two strangers meet where the sea remembers every promise.",
+  "cover": { "src": "/uploads/cover-sunset-threads.webp", "alt": "Two readers under a bright sunset sky", "width": 1024, "height": 1536 },
+  "genres": [
+    { "label": "Romance", "slug": "romance" },
+    { "label": "Drama", "slug": "drama" }
+  ],
+  "status": "complete",
+  "rating": 4.8,
+  "views": "98K",
+  "chapters": 89,
+  "updatedLabel": "5 hours ago",
+  "author": "Minh Ha"
+}
