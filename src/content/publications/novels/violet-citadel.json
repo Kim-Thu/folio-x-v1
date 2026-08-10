@@ -60,6 +60,105 @@
           { "text": "The man watched her quietly. The answers she wanted were closer than she knew." }
         ]
       }
-    ]
+    ],
+    "page": {
+      "template": "fluid",
+      "sections": [
+        {
+          "id": "publication-summary",
+          "type": "page-header",
+          "template": "cover-summary",
+          "settings": { "theme": "canvas", "spacing": "compact", "container": "site" },
+          "content": {
+            "breadcrumbLabel": "Breadcrumb",
+            "collectionLabel": "Novels",
+            "tagsLabel": "Genres",
+            "authorLabel": "Author",
+            "metrics": {
+              "ratingLabel": "Rating",
+              "readsLabel": "Reads",
+              "chaptersLabel": "Chapters",
+              "followersLabel": "Followers"
+            },
+            "actionsLabel": "Publication actions",
+            "primaryActionLabel": "Read from start",
+            "factsTitle": "Information",
+            "facts": {
+              "authorLabel": "Author",
+              "genresLabel": "Genres",
+              "languageLabel": "Language",
+              "statusLabel": "Status",
+              "updatedLabel": "Updated",
+              "viewsLabel": "Views",
+              "ongoingLabel": "Ongoing",
+              "completeLabel": "Complete"
+            }
+          }
+        },
+        {
+          "id": "publication-navigation",
+          "type": "tabs",
+          "settings": { "theme": "canvas", "spacing": "none", "container": "site" },
+          "content": {
+            "label": "Publication sections",
+            "appearance": "underline",
+            "tone": "light",
+            "activeValue": "chapters",
+            "tabs": [
+              { "label": "Chapters", "value": "chapters", "href": "#chapters" },
+              { "label": "Introduction", "value": "overview", "href": "#overview" }
+            ]
+          }
+        },
+        {
+          "id": "chapters",
+          "type": "entry-index",
+          "settings": { "theme": "canvas", "spacing": "body", "container": "site" },
+          "content": {
+            "asideLabel": "Supporting information",
+            "introductionLabel": "Introduction",
+            "tagsLabel": "Tags",
+            "chapterIndexLabel": "Chapter index",
+            "title": "Chapter list",
+            "sort": {
+              "id": "chapter-sort",
+              "label": "Sort chapters",
+              "value": "newest",
+              "options": [
+                { "label": "Newest", "value": "newest" },
+                { "label": "Oldest", "value": "oldest" }
+              ]
+            },
+            "listViewLabel": "List view",
+            "numberPrefix": "#",
+            "chapterLabel": "Chapter",
+            "defaultPublishedAt": "2024-04-30",
+            "defaultPublishedLabel": "30 Apr, 2024"
+          }
+        }
+      ]
+    },
+    "readerPage": {
+      "template": "fluid",
+      "settings": { "theme": "canvas", "spacing": "compact", "container": "site" },
+      "content": {
+        "breadcrumbLabel": "Breadcrumb",
+        "collectionLabel": "Novels",
+        "chapterLabel": "Chapter",
+        "viewsSuffix": "views",
+        "defaultPublishedAt": "2024-04-30",
+        "defaultReadTime": "Read",
+        "actionsLabel": "Reading controls",
+        "chapterListLabel": "Chapter list",
+        "settingsLabel": "Change text size",
+        "themeLabel": "Toggle reading theme",
+        "nextLabel": "Next chapter",
+        "previousLabel": "Previous chapter",
+        "shareLabel": "Share this chapter",
+        "reactionsLabel": "Rate this chapter",
+        "bookmarkLabel": "Bookmark chapter",
+        "navigationLabel": "Chapter navigation"
+      }
+    }
   }
 }
