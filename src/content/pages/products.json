@@ -49,6 +49,10 @@
           "source": {
             "collection": "products"
           },
+          "routes": {
+            "base": "/products",
+            "categoryBase": "/products/category/"
+          },
           "toolbar": {
             "search": {
               "id": "product-search",
@@ -60,14 +64,25 @@
               "control": "category",
               "id": "product-category",
               "label": "Category",
-              "allLabel": "Category"
+              "value": "all",
+              "allLabel": "Category",
+              "allValue": "all"
             },
             "platform": {
               "control": "platform",
               "id": "product-platform",
               "label": "Platform",
+              "value": "all",
               "allLabel": "All platforms",
-              "options": ["WordPress", "Figma", "HTML / Tailwind", "React / Next.js", "Other"]
+              "allValue": "all",
+              "options": [
+                { "label": "All platforms", "value": "all" },
+                { "label": "WordPress", "value": "WordPress" },
+                { "label": "Figma", "value": "Figma" },
+                { "label": "HTML / Tailwind", "value": "HTML / Tailwind" },
+                { "label": "React / Next.js", "value": "React / Next.js" },
+                { "label": "Other", "value": "Other" }
+              ]
             },
             "sort": {
               "label": "Sort products",
@@ -87,11 +102,20 @@
           },
           "sidebar": {
             "label": "Product filters",
+            "filterLabel": "Product filters",
             "category": {
-              "legend": "Category"
+              "appearance": "navigation",
+              "control": "category",
+              "legend": "Category",
+              "name": "product-category",
+              "type": "radio"
             },
             "platform": {
-              "legend": "Platform"
+              "appearance": "navigation",
+              "control": "platform",
+              "legend": "Platform",
+              "name": "product-platform",
+              "type": "checkbox"
             },
             "price": {
               "id": "product-price",
