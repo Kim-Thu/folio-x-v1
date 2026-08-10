@@ -10,30 +10,32 @@ import CDescriptionList from "@/components/object/component/CDescriptionList.ast
 import CTags from "@/components/object/component/CTags.astro";
 import type { PublicationDetailPageProps } from "@/types/components/pages/publication-detail/PublicationDetailPage.types";
 import type { LSectionSpacing, LSectionTheme } from "@/types/components/layout/LSection.types";
+import type { CButtonProps } from "@/types/components/object/component/CButton.types";
 
 const { data } = Astro.props as PublicationDetailPageProps;
 const { entry, collection } = data;
 const detail = entry.detail;
 const page = detail?.page;
-if (!page) throw new Error(`Missing CMS publication detail page: ${collection}/${entry.slug}`);
+if (!detail || !page) throw new Error(`Missing CMS publication detail page: ${collection}/${entry.slug}`);
 
 type RecordValue = Record<string, unknown>;
 const asRecord = (value: unknown): RecordValue => value && typeof value === "object" && !Array.isArray(value) ? value as RecordValue : {};
-const asString = (value: unknown, fallback = "") => typeof value === "string" ? value : fallback;
+const asString = (value: unknown) => typeof value === "string" ? value : "";
 const asArray = (value: unknown) => Array.isArray(value) ? value : [];
 const frame = (section: (typeof page.sections)[number]) => {
 	const settings = asRecord(section.settings);
 	return {
 		id: section.id,
-		theme: asString(settings.theme, "canvas") as LSectionTheme,
-		spacing: asString(settings.spacing, "compact") as LSectionSpacing,
-		container: asString(settings.container, "site") as "site" | "content" | "none",
+		theme: asString(settings.theme) as LSectionTheme,
+		spacing: asString(settings.spacing) as LSectionSpacing,
+		container: asString(settings.container) as "site" | "content" | "none",
 	};
 };
 
 const chapterSection = page.sections.find((section) => section.type === "entry-index");
 const chapterConfig = asRecord(chapterSection?.content);
-const configuredChapters = [...(detail?.reader ?? [])].sort((a, b) => b.number - a.number);
+const itemAction = asRecord(chapterConfig.itemAction) as CButtonProps;
+const configuredChapters = [...(detail.reader ?? [])].sort((a, b) => b.number - a.number);
 const chapterItems = configuredChapters.map((chapter) => ({
 	order: chapter.number,
 	number: `${asString(chapterConfig.numberPrefix)}${chapter.number}`,
@@ -42,7 +44,7 @@ const chapterItems = configuredChapters.map((chapter) => ({
 	publishedLabel: chapter.publishedLabel,
 	views: chapter.views,
 	href: `/${collection}/${entry.slug}/chapter/${chapter.number}`,
-	status: "available" as const,
+	action: Object.keys(itemAction).length ? itemAction : undefined,
 }));
 ---
 
@@ -71,17 +73,17 @@ const chapterItems = configuredChapters.map((chapter) => ({
 								{ label: asString(metrics.ratingLabel), value: String(entry.rating), icon: "star" },
 								{ label: asString(metrics.readsLabel), value: entry.views, icon: "eye" },
 								{ label: asString(metrics.chaptersLabel), value: String(entry.chapters), icon: "bookOpen" },
-								...(detail ? [{ label: asString(metrics.followersLabel), value: detail.followers, icon: "bookmark" as const }] : []),
+								{ label: asString(metrics.followersLabel), value: detail.followers, icon: "bookmark" },
 							],
 							actionsLabel: asString(content.actionsLabel),
 							actions: [{ label: asString(content.primaryActionLabel), href: "#chapters", icon: "bookOpen", variant: "primary", size: "md" }],
-							description: detail?.description ?? [entry.summary],
+							description: detail.description,
 							facts: {
 								title: asString(content.factsTitle),
 								items: [
 									{ label: asString(facts.authorLabel), value: entry.author },
 									{ label: asString(facts.genresLabel), value: entry.genres.map((genre) => genre.label).join(", ") },
-									{ label: asString(facts.languageLabel), value: detail?.language ?? "" },
+									{ label: asString(facts.languageLabel), value: detail.language },
 									{ label: asString(facts.statusLabel), value: entry.status === "ongoing" ? asString(facts.ongoingLabel) : asString(facts.completeLabel) },
 									{ label: asString(facts.updatedLabel), value: entry.updatedLabel },
 									{ label: asString(facts.viewsLabel), value: entry.views },
@@ -98,8 +100,8 @@ const chapterItems = configuredChapters.map((chapter) => ({
 				<LSection {...frame(section)}>
 					<CTabList
 						label={asString(content.label)}
-						appearance={asString(content.appearance, "underline") as "underline"}
-						tone={asString(content.tone, "light") as "light"}
+						appearance={asString(content.appearance) as "underline"}
+						tone={asString(content.tone) as "light"}
 						activeValue={asString(content.activeValue)}
 						tabs={asArray(content.tabs) as Array<{ label: string; value: string; href: string }>}
 					/>
@@ -113,8 +115,8 @@ const chapterItems = configuredChapters.map((chapter) => ({
 				<LSection {...frame(section)}>
 					<LSidebar label={asString(content.asideLabel)}>
 						<CColumns slot="sidebar" columns="one" gap="md">
-							<CDescriptionList items={[{ label: asString(content.introductionLabel), value: detail?.description[0] ?? entry.summary }]} />
-							{detail?.tags?.length ? (
+							<CDescriptionList items={[{ label: asString(content.introductionLabel), value: detail.description[0] }]} />
+							{detail.tags.length ? (
 								<CTags label={asString(content.tagsLabel)} items={detail.tags.map((tag) => ({ label: tag.label, href: `/${collection}/tag/${tag.slug}` }))} />
 							) : null}
 						</CColumns>
