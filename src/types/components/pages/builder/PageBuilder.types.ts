@@ -32,6 +32,11 @@ import type { PHeroProps } from "@/types/components/object/project/hero/PHero.ty
 export type PageEntryData = CollectionEntry<"pages">["data"];
 export type PageSectionData = PageEntryData["content"]["sections"][number];
 
+export interface PageBuilderContext {
+	categorySlug?: string;
+	tagSlug?: string;
+}
+
 export type PageRegionPlacement = "header" | "main" | "aside" | "cta";
 export type PageRegionContainer = LContainerSize | "none";
 
@@ -241,8 +246,16 @@ export interface PageBuilderConfig {
 }
 
 export type PageBuilderProps =
-	| { page: PageEntryData; config?: never }
-	| { config: PageBuilderConfig; page?: never };
+	| {
+			page: PageEntryData;
+			context?: PageBuilderContext;
+			config?: never;
+	  }
+	| {
+			config: PageBuilderConfig;
+			page?: never;
+			context?: never;
+	  };
 
 export interface PageRegionProps {
 	region: PageRegion;
