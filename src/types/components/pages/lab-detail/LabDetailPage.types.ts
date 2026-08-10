@@ -1,11 +1,7 @@
-import type { PageBuilderConfig } from "@/types/components/pages/builder/PageBuilder.types";
+import type { Lab } from "@/types/content";
 
 export interface LabDetailPageData {
-	lab: {
-		title: string;
-		summary: string;
-	};
-	builder: PageBuilderConfig;
+	lab: Lab;
 }
 
 export interface LabDetailPageProps {
