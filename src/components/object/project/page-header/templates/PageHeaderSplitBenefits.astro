@@ -11,6 +11,7 @@ import type { PPageHeaderSplitBenefitsData } from "@/types/components/object/pro
 
 const { data } = Astro.props as { data: PPageHeaderSplitBenefitsData };
 const titleId = `${data.id}-title`;
+const benefits = data.benefits?.items ?? [];
 ---
 
 <CColumns columns="twelve" gap="lg">
@@ -25,11 +26,13 @@ const titleId = `${data.id}-title`;
 			<CText variant="body-responsive" tone="subtle">
 				{data.description}
 			</CText>
-			<CRow align="center" gap="lg">
-				{data.benefits.items.map((benefit) => (
-					<CFeature {...benefit} appearance="caption" />
-				))}
-			</CRow>
+			{benefits.length > 0 && (
+				<CRow align="center" gap="lg">
+					{benefits.map((benefit) => (
+						<CFeature {...benefit} appearance="caption" />
+					))}
+				</CRow>
+			)}
 		</CColumns>
 	</CGridItem>
 	<CGridItem lgSpan={6}>
