@@ -1,0 +1,17 @@
+{
+  "order": 7,
+  "slug": "after-the-rain",
+  "title": "After the Rain",
+  "summary": "Short illustrated stories about small choices and second chances.",
+  "cover": { "src": "/uploads/cover-sunset-threads.webp", "alt": "After the Rain comic cover", "width": 1024, "height": 1536 },
+  "genres": [
+    { "label": "Slice of Life", "slug": "slice-of-life" },
+    { "label": "Drama", "slug": "drama" }
+  ],
+  "status": "complete",
+  "rating": 4.8,
+  "views": "46K",
+  "chapters": 38,
+  "updatedLabel": "4 days ago",
+  "author": "Minh Ha"
+}
