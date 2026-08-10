@@ -1,0 +1,17 @@
+{
+  "order": 4,
+  "slug": "moonbound",
+  "title": "Moonbound",
+  "summary": "A sword bearer protects a village from creatures made of moonlight.",
+  "cover": { "src": "/uploads/cover-moon-warrior.webp", "alt": "Moonbound action comic cover", "width": 1024, "height": 1536 },
+  "genres": [
+    { "label": "Action", "slug": "action" },
+    { "label": "Fantasy", "slug": "fantasy" }
+  ],
+  "status": "ongoing",
+  "rating": 4.7,
+  "views": "69K",
+  "chapters": 58,
+  "updatedLabel": "2 days ago",
+  "author": "Lac Vu"
+}
