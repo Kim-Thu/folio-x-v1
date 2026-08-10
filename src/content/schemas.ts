@@ -258,60 +258,6 @@ export const archiveSettingsSchema = z.object({
   }),
 });
 
-export const footerSettingsSchema = z.object({
-  brandDescription: z.string().min(1),
-  socialDisplay: z.enum(["label", "shortLabel", "icon"]).default("icon"),
-  menuLabel: z.string().min(1),
-  resourcesLabel: z.string().min(1),
-  legalLabel: z.string().min(1),
-  locationLabel: z.string().min(1),
-  copyrightSymbol: z.string().min(1),
-  buildLabel: z.string().min(1),
-  newsletter: z.object({
-    label: z.string().min(1),
-    description: z.string().min(1),
-    inputLabel: z.string().min(1),
-    placeholder: z.string().min(1),
-    submitLabel: z.string().min(1),
-  }),
-});
-
-export const systemStatesSettingsSchema = z.object({ notFound: systemStateSchema, empty: systemStateSchema });
-
-export const projectEntrySchema = z.object({
-  order: z.number().int().positive(),
-  slug: z.string().regex(/^[a-z0-9]+(?:-[a-z0-9]+)*$/),
-  title: z.string().min(1),
-  client: z.string().min(1),
-  year: z.string().min(1),
-  category: z.string().min(1),
-  categorySlug: z.string().regex(/^[a-z0-9]+(?:-[a-z0-9]+)*$/),
-  tags: z.array(taxonomyTermSchema).min(1),
-  summary: z.string().min(1),
-  outcome: z.string().min(1),
-  image: z.string().min(1),
-  alt: z.string().min(1),
-  tone: z.enum(["light", "dark"]),
-  sections: z.array(contentSectionSchema).min(1),
-  detail: z.object({
-    role: z.string().min(1),
-    duration: z.string().min(1),
-    showBackAction: z.boolean().default(true),
-    liveUrl: z.string().min(1).optional(),
-    sourceUrl: z.string().min(1).optional(),
-    features: z.array(z.object({
-      title: z.string().min(1),
-      description: z.string().min(1),
-      icon: z.enum(["folder01", "userCircle", "calendar03", "lightBulb"]),
-    })).default([]),
-    gallery: z.array(imageSchema).default([]),
-    results: z.array(z.object({ value: z.string().min(1), label: z.string().min(1) })).default([]),
-    reviews: reviewsSchema.optional(),
-    testimonial: z.object({ quote: z.string().min(1), name: z.string().min(1), role: z.string().min(1) }).optional(),
-    builder: pageBuilderSchema.optional(),
-  }).optional(),
-});
-
 export const blogEntrySchema = z.object({
   order: z.number().int().positive(),
   readingMinutes: z.number().int().positive(),
@@ -374,6 +320,7 @@ export const labEntrySchema = z.object({
     icon: z.enum(["folder01", "github", "play"]),
   })).default([]),
   facts: z.array(z.object({ label: z.string().min(1), value: z.string().min(1) })).default([]),
+  detail: z.object({ page: entryDetailPageSchema }).optional(),
 });
 
 export const publicationEntrySchema = z.object({
