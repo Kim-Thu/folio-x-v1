@@ -101,6 +101,57 @@ export const pageSectionSchema = z.object({
   id: z.string(), type: z.string(), template: z.string().optional(), settings: pageSectionSettingsSchema.default({}), content: pageSectionContentSchema.default({}),
 });
 
+const detailSectionSettingsSchema = z.object({
+  theme: z.enum(["dark", "light", "canvas", "accent", "none"]),
+  spacing: z.enum(["compact", "default", "none", "lead", "body", "closing"]),
+  container: z.enum(["site", "content", "none"]),
+});
+
+const productActionSchema = z.object({
+  label: z.string().min(1),
+  href: z.string().min(1),
+  icon: z.string().optional(),
+  variant: z.string().optional(),
+});
+
+const productDetailPageSchema = z.object({
+  template: z.enum(["fluid", "contained", "boxed", "sidebar", "centered"]),
+  sections: z.array(z.discriminatedUnion("type", [
+    z.object({
+      id: z.string().min(1),
+      type: z.literal("page-header"),
+      template: z.literal("gallery-summary"),
+      settings: detailSectionSettingsSchema,
+      content: z.object({
+        breadcrumbLabel: z.string().min(1),
+        productsLabel: z.string().min(1),
+        galleryLabel: z.string().min(1),
+        thumbnailLabel: z.string().min(1),
+        salesLabel: z.string().min(1),
+        features: z.array(z.record(z.string(), z.unknown())),
+        facts: z.array(z.object({ label: z.string().min(1), value: z.string().min(1) })),
+        actionsLabel: z.string().min(1),
+        actions: z.array(productActionSchema),
+        paymentLabel: z.string().min(1),
+        paymentMethods: z.array(z.unknown()),
+      }),
+    }),
+    z.object({
+      id: z.string().min(1),
+      type: z.literal("article"),
+      template: z.string().optional(),
+      settings: detailSectionSettingsSchema,
+      content: z.object({
+        blocks: z.array(z.object({
+          id: z.string().min(1),
+          title: z.string().min(1),
+          paragraphs: z.array(z.string().min(1)).min(1),
+        })).min(1),
+      }),
+    }),
+  ])),
+});
+
 export const pageSchema = z.object({
   slug: z.string(),
   meta: z.object({ title: z.string(), description: z.string().optional(), author: z.string().optional(), publishedAt: z.string().optional(), updatedAt: z.string().optional() }),
@@ -181,7 +232,7 @@ export const blogEntrySchema = z.object({
 });
 
 export const productEntrySchema = z.object({
-  id: z.number().int().positive(), slug: z.string().regex(/^[a-z0-9]+(?:-[a-z0-9]+)*$/), title: z.string().min(1), category: z.string().min(1), categorySlug: z.string().min(1), platform: z.string().min(1), description: z.string().min(1), price: z.number().nonnegative(), oldPrice: z.number().nonnegative().optional(), rating: z.number().min(0).max(5), reviews: z.number().int().nonnegative(), badge: z.string().optional(), image: z.string().min(1), detail: z.object({ page: entryDetailPageSchema }).optional(),
+  id: z.number().int().positive(), slug: z.string().regex(/^[a-z0-9]+(?:-[a-z0-9]+)*$/), title: z.string().min(1), category: z.string().min(1), categorySlug: z.string().min(1), platform: z.string().min(1), description: z.string().min(1), price: z.number().nonnegative(), oldPrice: z.number().nonnegative().optional(), rating: z.number().min(0).max(5), reviews: z.number().int().nonnegative(), badge: z.string().optional(), image: z.string().min(1), detail: z.object({ page: productDetailPageSchema }),
 });
 
 export const labEntrySchema = z.object({
