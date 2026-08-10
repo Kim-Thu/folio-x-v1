@@ -1,8 +1,117 @@
 ---
-import PageBuilder from "@/components/pages/builder/PageBuilder.astro";
+import LPage from "@/components/layout/LPage.astro";
+import LSection from "@/components/layout/LSection.astro";
+import PPageHeader from "@/components/object/project/page-header/PPageHeader.astro";
+import CTabList from "@/components/object/component/CTabList.astro";
+import LSidebar from "@/components/layout/LSidebar.astro";
+import CColumns from "@/components/object/component/CColumns.astro";
+import PEntryIndex from "@/components/object/project/entry-index/PEntryIndex.astro";
+import CDescriptionList from "@/components/object/component/CDescriptionList.astro";
+import CTags from "@/components/object/component/CTags.astro";
 import type { PublicationDetailPageProps } from "@/types/components/pages/publication-detail/PublicationDetailPage.types";
 
 const { data } = Astro.props as PublicationDetailPageProps;
+const { entry, collection } = data;
+const detail = entry.detail;
+const collectionLabel = collection === "novels" ? "Novels" : "Comics";
+const chapterItems = Array.from({ length: Math.min(entry.chapters, detail?.chapterTitles.length ?? 0) }, (_, index) => {
+	const number = entry.chapters - index;
+	return {
+		order: number,
+		number: `#${number}`,
+		title: detail?.chapterTitles[index] ?? `Chapter ${number}`,
+		publishedAt: "2024-04-30",
+		publishedLabel: "30 Apr, 2024",
+		views: entry.views,
+		href: `/${collection}/${entry.slug}/chapter/${number}`,
+		status: "available" as const,
+	};
+});
 ---
 
-<PageBuilder config={data.builder} />
+<LPage template="fluid">
+	<LSection theme="canvas" spacing="compact">
+		<PPageHeader
+			template="cover-summary"
+			data={{
+				breadcrumb: {
+					label: "Breadcrumb",
+					items: [{ label: collectionLabel, href: `/${collection}` }],
+					current: entry.title,
+				},
+				cover: entry.cover,
+				tagsLabel: `${entry.title} genres`,
+				tags: entry.genres.map((genre) => ({
+					label: genre.label,
+					href: `/${collection}/category/${genre.slug}`,
+				})),
+				title: entry.title,
+				author: { label: "Author", name: entry.author },
+				metrics: [
+					{ label: "Rating", value: String(entry.rating), icon: "star" },
+					{ label: "Reads", value: entry.views, icon: "eye" },
+					{ label: "Chapters", value: String(entry.chapters), icon: "bookOpen" },
+					...(detail ? [{ label: "Followers", value: detail.followers, icon: "bookmark" as const }] : []),
+				],
+				actionsLabel: `${entry.title} actions`,
+				actions: [
+					{ label: "Read from start", href: "#chapters", icon: "bookOpen", variant: "primary", size: "md" },
+				],
+				description: detail?.description ?? [entry.summary],
+				facts: {
+					title: "Information",
+					items: [
+						{ label: "Author", value: entry.author },
+						{ label: "Genres", value: entry.genres.map((genre) => genre.label).join(", ") },
+						{ label: "Language", value: detail?.language ?? "English" },
+						{ label: "Status", value: entry.status === "ongoing" ? "Ongoing" : "Complete" },
+						{ label: "Updated", value: entry.updatedLabel },
+						{ label: "Views", value: entry.views },
+					],
+				},
+			}}
+		/>
+	</LSection>
+
+	<LSection theme="canvas" spacing="none">
+		<CTabList
+			label={`${entry.title} sections`}
+			appearance="underline"
+			tone="light"
+			activeValue="chapters"
+			tabs={[
+				{ label: "Chapters", value: "chapters", href: "#chapters" },
+				{ label: "Introduction", value: "overview", href: "#overview" },
+			]}
+		/>
+	</LSection>
+
+	<LSection id="chapters" theme="canvas" spacing="body">
+		<LSidebar label={`${entry.title} supporting information`}>
+			<CColumns slot="sidebar" columns="one" gap="md">
+				<CDescriptionList
+					items={[{ label: "Introduction", value: detail?.description[0] ?? entry.summary }]}
+				/>
+				{detail?.tags?.length ? (
+					<CTags
+						label={`${entry.title} tags`}
+						items={detail.tags.map((tag) => ({
+							label: tag.label,
+							href: `/${collection}/tag/${tag.slug}`,
+						}))}
+					/>
+				) : null}
+			</CColumns>
+
+			<PEntryIndex
+				id="chapters"
+				label={`${entry.title} chapter index`}
+				title="Chapter list"
+				sort={{ id: "chapter-sort", label: "Sort chapters", value: "newest", options: [{ label: "Newest", value: "newest" }, { label: "Oldest", value: "oldest" }] }}
+				listViewLabel="List view"
+				items={chapterItems}
+				visibleCount={chapterItems.length}
+			/>
+		</LSidebar>
+	</LSection>
+</LPage>
