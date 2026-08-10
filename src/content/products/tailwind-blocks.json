@@ -10,5 +10,46 @@
   "rating": 4.6,
   "reviews": 58,
   "badge": "HTML",
-  "image": "https://images.unsplash.com/photo-1517292987719-0369a794ec0f?auto=format&fit=crop&w=900&q=88"
+  "image": "https://images.unsplash.com/photo-1517292987719-0369a794ec0f?auto=format&fit=crop&w=900&q=88",
+  "detail": {
+    "page": {
+      "template": "fluid",
+      "sections": [
+        {
+          "id": "product-summary",
+          "type": "page-header",
+          "template": "gallery-summary",
+          "settings": { "theme": "canvas", "spacing": "lead", "container": "site" },
+          "content": {
+            "breadcrumbLabel": "Breadcrumb",
+            "productsLabel": "Products",
+            "galleryLabel": "Tailwind Blocks gallery",
+            "previewLabel": "Select preview",
+            "reviewsLabel": "reviews",
+            "platformLabel": "Platform",
+            "categoryLabel": "Category",
+            "purchaseLabel": "Contact to purchase",
+            "purchaseHref": "mailto:thunk.work.91@gmail.com",
+            "previewActionLabel": "View preview",
+            "paymentMethodsLabel": "Payment methods"
+          }
+        },
+        {
+          "id": "product-overview",
+          "type": "article",
+          "template": "flow",
+          "settings": { "theme": "canvas", "spacing": "body", "container": "content" },
+          "content": {
+            "blocks": [
+              {
+                "id": "overview",
+                "title": "Overview",
+                "paragraphs": ["Ready-to-use sections and blocks for Tailwind CSS."]
+              }
+            ]
+          }
+        }
+      ]
+    }
+  }
 }
