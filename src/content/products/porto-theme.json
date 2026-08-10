@@ -11,5 +11,48 @@
   "rating": 4.7,
   "reviews": 85,
   "badge": "v1.0.2",
-  "image": "https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&w=900&q=88"
+  "image": "https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&w=900&q=88",
+  "detail": {
+    "page": {
+      "template": "fluid",
+      "sections": [
+        {
+          "id": "product-summary",
+          "type": "page-header",
+          "template": "gallery-summary",
+          "settings": { "theme": "canvas", "spacing": "lead", "container": "site" },
+          "content": {
+            "breadcrumbLabel": "Breadcrumb",
+            "collectionLabel": "Products",
+            "galleryLabel": "Product gallery",
+            "previewLabel": "Select preview",
+            "ratingMaximum": 5,
+            "salesLabel": "reviews",
+            "platformLabel": "Platform",
+            "categoryLabel": "Category",
+            "primaryActionLabel": "Contact to purchase",
+            "primaryActionHref": "mailto:thunk.work.91@gmail.com",
+            "secondaryActionLabel": "View preview",
+            "paymentLabel": "Payment methods"
+          }
+        },
+        {
+          "id": "product-overview",
+          "type": "article",
+          "template": "flow",
+          "settings": { "theme": "canvas", "spacing": "body", "container": "content" },
+          "content": {
+            "title": "Overview",
+            "blocks": [
+              {
+                "id": "product-overview-content",
+                "title": "Overview",
+                "paragraphs": ["Multipurpose WordPress theme for any business."]
+              }
+            ]
+          }
+        }
+      ]
+    }
+  }
 }
