@@ -11,7 +11,7 @@ export type CBoxElement =
 	| "section";
 export type CBoxSurface = "plain" | "accent" | "bordered" | "canvas" | "dark" | "glass" | "glass-dark" | "soft";
 export type CBoxRadius = "none" | "md" | "lg";
-export type CBoxSpacing = "none" | "sm" | "md" | "lg" | "xl";
+export type CBoxSpacing = "none" | "xs" | "sm" | "md" | "lg" | "xl";
 export type CBoxPosition =
 	| "flow"
 	| "relative"
