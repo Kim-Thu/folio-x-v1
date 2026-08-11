@@ -1,65 +1,14 @@
+import type { publicationEntrySchema } from "@/content/schemas";
 import type { CImageData } from "@/types/components/object/component/CImage.types";
+import type { z } from "astro/zod";
 
-export type PublicationIcon =
-	| "archiveBox"
-	| "bolt"
-	| "folder01"
-	| "globeAlt"
-	| "lightBulb"
-	| "star"
-	| "userCircle";
+export type PublicationEntry = z.infer<typeof publicationEntrySchema>;
+export type PublicationChapterContent = NonNullable<NonNullable<PublicationEntry["detail"]>["reader"]>[number];
 
+export type PublicationIcon = "archiveBox" | "bolt" | "folder01" | "globeAlt" | "lightBulb" | "star" | "userCircle";
 export interface PublicationImage extends CImageData {}
-
-export interface PublicationGenre {
-	label: string;
-	slug: string;
-	count: number;
-	icon: PublicationIcon;
-}
-
-export interface PublicationChapterContent {
-	number: number;
-	title: string;
-	publishedAt: string;
-	publishedLabel: string;
-	readTime: string;
-	views: string;
-	kind: "prose" | "sequential-media";
-	prose?: Array<{
-		kind?: "paragraph" | "emphasis" | "separator";
-		text: string;
-	}>;
-	images?: PublicationImage[];
-}
-
-export interface PublicationEntry {
-	order: number;
-	slug: string;
-	title: string;
-	summary: string;
-	cover: PublicationImage;
-	genres: Array<{ label: string; slug: string }>;
-	status: "complete" | "ongoing";
-	rating: number;
-	views: string;
-	chapters: number;
-	updatedLabel: string;
-	author: string;
-	detail?: {
-		language?: string;
-		followers?: string;
-		description?: string[];
-		tags?: Array<{ label: string; slug: string }>;
-		reader?: PublicationChapterContent[];
-	};
-}
-
-export interface PublicationAuthor {
-	name: string;
-	works: number;
-	image: PublicationImage;
-}
+export interface PublicationGenre { label: string; slug: string; count: number; icon: PublicationIcon; }
+export interface PublicationAuthor { name: string; works: number; image: PublicationImage; }
 
 export interface PublicationCatalog {
 	order: number;
@@ -69,21 +18,11 @@ export interface PublicationCatalog {
 	accent: string;
 	description: string;
 	hero: PublicationImage;
-	primaryAction: {
-		label: string;
-		href: string;
-	};
-	secondaryAction: {
-		label: string;
-		href: string;
-	};
+	primaryAction: { label: string; href: string };
+	secondaryAction: { label: string; href: string };
 	quote: string;
 	quoteCredit: string;
-	stats: Array<{
-		label: string;
-		value: string;
-		icon: PublicationIcon;
-	}>;
+	stats: Array<{ label: string; value: string; icon: PublicationIcon }>;
 	genres: PublicationGenre[];
 	authors: PublicationAuthor[];
 	entries: PublicationEntry[];
