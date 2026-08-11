@@ -1,7 +1,6 @@
 import { defineCollection } from "astro:content";
 import { glob } from "astro/loaders";
 import {
-  archiveSettingsSchema,
   blogEntrySchema,
   closingProfileSettingsSchema,
   footerSettingsSchema,
@@ -22,7 +21,6 @@ const siteSettings = defineCollection({ loader: glob({ base: settingsBase, patte
 const navigationSettings = defineCollection({ loader: glob({ base: settingsBase, pattern: "navigation.json" }), schema: navigationSettingsSchema });
 const closingProfileSettings = defineCollection({ loader: glob({ base: settingsBase, pattern: "closing-profile.json" }), schema: closingProfileSettingsSchema });
 const interfaceSettings = defineCollection({ loader: glob({ base: settingsBase, pattern: "interface.json" }), schema: interfaceSettingsSchema });
-const archiveSettings = defineCollection({ loader: glob({ base: settingsBase, pattern: "archive.json" }), schema: archiveSettingsSchema });
 const footerSettings = defineCollection({ loader: glob({ base: settingsBase, pattern: "footer.json" }), schema: footerSettingsSchema });
 const systemStatesSettings = defineCollection({ loader: glob({ base: settingsBase, pattern: "system-states.json" }), schema: systemStatesSettingsSchema });
 const projects = defineCollection({ loader: glob({ base: "./src/content/projects", pattern: "*.json" }), schema: projectEntrySchema });
@@ -38,7 +36,6 @@ export const collections = {
   navigationSettings,
   closingProfileSettings,
   interfaceSettings,
-  archiveSettings,
   footerSettings,
   systemStatesSettings,
   projects,
