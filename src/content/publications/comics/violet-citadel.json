@@ -32,16 +32,6 @@
       { "label": "Action", "slug": "action" },
       { "label": "Mystery", "slug": "mystery" }
     ],
-    "chapterTitles": [
-      "The broken panel",
-      "Last defender",
-      "A city in the clouds",
-      "Violet signal",
-      "The hidden bridge",
-      "Memory shards",
-      "Falling upward",
-      "At the citadel gate"
-    ],
     "reader": [
       {
         "number": 18,
