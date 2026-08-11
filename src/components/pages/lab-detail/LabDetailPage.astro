@@ -9,7 +9,6 @@ import CColumns from "@/components/object/component/CColumns.astro";
 import CDescriptionList from "@/components/object/component/CDescriptionList.astro";
 import CTags from "@/components/object/component/CTags.astro";
 import type { LabDetailPageProps } from "@/types/components/pages/lab-detail/LabDetailPage.types";
-import type { PCardProps } from "@/types/components/object/project/card/PCard.types";
 
 const { data } = Astro.props as LabDetailPageProps;
 const { lab } = data;
@@ -93,10 +92,10 @@ const actions = summaryLabels
 			<CColumns columns="one" gap="md">
 				<PSectionHeader data={{ title: featuresSection.content.heading.title }} headingLevel={2} appearance="compact" />
 				<PCard
-					template={featuresSection.content.cards.template as PCardProps["template"]}
-					layout={featuresSection.content.cards.layout as PCardProps["layout"]}
-					columns={featuresSection.content.cards.columns as PCardProps["columns"]}
-					gap={featuresSection.content.cards.gap as PCardProps["gap"]}
+					template={featuresSection.content.cards.template}
+					layout={featuresSection.content.cards.layout}
+					columns={featuresSection.content.cards.columns}
+					gap={featuresSection.content.cards.gap}
 					items={lab.features.map((feature) => ({
 						href: `#${featuresSection.id}`,
 						ariaLabel: feature.title,
@@ -114,10 +113,10 @@ const actions = summaryLabels
 			<CColumns columns="one" gap="md">
 				<PSectionHeader data={{ title: gallerySection.content.heading.title }} headingLevel={2} appearance="compact" />
 				<PCard
-					template={gallerySection.content.cards.template as PCardProps["template"]}
-					layout={gallerySection.content.cards.layout as PCardProps["layout"]}
-					columns={gallerySection.content.cards.columns as PCardProps["columns"]}
-					gap={gallerySection.content.cards.gap as PCardProps["gap"]}
+					template={gallerySection.content.cards.template}
+					layout={gallerySection.content.cards.layout}
+					columns={gallerySection.content.cards.columns}
+					gap={gallerySection.content.cards.gap}
 					items={lab.gallery.map((image, index) => ({
 						href: image.src,
 						ariaLabel: `${gallerySection.content.labels?.openImage} ${index + 1}`,
