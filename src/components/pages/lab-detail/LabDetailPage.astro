@@ -15,7 +15,7 @@ import type { LabDetailPageProps } from "@/types/components/pages/lab-detail/Lab
 import type { PCardData } from "@/types/components/object/project/card/PCard.types";
 
 const { data } = Astro.props as LabDetailPageProps;
-const { lab, relatedLabs } = data;
+const { lab, relatedLabs, presentation } = data;
 const page = lab.detail?.page;
 if (!page) throw new Error(`Missing CMS lab detail: ${lab.slug}`);
 
@@ -24,9 +24,12 @@ const articleSection = page.sections.find((section) => section.type === "article
 const featureSection = page.sections.find((section) => section.type === "collection" && !section.content.labels);
 const gallerySection = page.sections.find((section) => section.type === "collection" && Boolean(section.content.labels));
 if (!summarySection || !articleSection) throw new Error(`Incomplete CMS lab detail: ${lab.slug}`);
+if (lab.features.length > 0 && !featureSection) throw new Error(`Missing CMS lab feature presentation: ${lab.slug}`);
+if (lab.gallery.length > 0 && !gallerySection?.content.labels) throw new Error(`Missing CMS lab gallery presentation: ${lab.slug}`);
 
 const metricValue = (source: "stars" | "forks" | "updatedLabel") =>
 	source === "updatedLabel" ? lab.updatedLabel : String(lab[source]);
+const formatLabel = (template: string) => template.replace("{title}", lab.title);
 
 const actions = [
 	...(lab.liveUrl ? [{ label: summarySection.content.labels.live, href: lab.liveUrl, ...summarySection.content.actions.live }] : []),
@@ -37,21 +40,22 @@ const tabs = [
 	...lab.sections.map((section) => ({ label: section.title, value: section.id, href: `#${section.id}` })),
 	...(lab.features.length > 0 && featureSection ? [{ label: featureSection.content.heading.title, value: featureSection.id, href: `#${featureSection.id}` }] : []),
 	...(lab.gallery.length > 0 && gallerySection ? [{ label: gallerySection.content.heading.title, value: gallerySection.id, href: `#${gallerySection.id}` }] : []),
-	...(lab.resources.length > 0 ? [{ label: "Resources", value: "resources", href: "#resources" }] : []),
+	...(lab.resources.length > 0 ? [{ label: presentation.resources.title, value: presentation.resources.id, href: `#${presentation.resources.id}` }] : []),
 ];
 
 const featureCards: PCardData[] = lab.features.map((feature) => ({
-	href: `#${featureSection?.id ?? "overview"}`,
+	href: `#${featureSection?.id}`,
 	ariaLabel: feature.title,
 	title: [feature.title],
 	excerpt: feature.description,
 	icon: feature.icon,
 }));
 
+const galleryLabels = gallerySection?.content.labels;
 const galleryCards: PCardData[] = lab.gallery.map((image, index) => ({
 	href: image.src,
-	ariaLabel: `${gallerySection?.content.labels?.openImage ?? "Open image"} ${index + 1}`,
-	title: [`${gallerySection?.content.labels?.imageTitle ?? "Gallery image"} ${index + 1}`],
+	ariaLabel: `${galleryLabels?.openImage} ${index + 1}`,
+	title: [`${galleryLabels?.imageTitle} ${index + 1}`],
 	media: image,
 }));
 
@@ -64,7 +68,7 @@ const resourceCards: PCardData[] = lab.resources.map((resource) => ({
 	action: {
 		label: resource.title,
 		href: resource.href,
-		icon: "arrowUpRight",
+		icon: presentation.resources.actionIcon,
 	},
 }));
 
@@ -75,9 +79,9 @@ const relatedCards: PCardData[] = relatedLabs.map((item) => ({
 	excerpt: item.summary,
 	media: item.image,
 	metadata: {
-		items: [{ type: "category", label: item.category.label, href: `/labs/category/${item.category.slug}`, display: "text" }],
+		items: [{ type: "category", label: item.category.label, href: `${summarySection.content.routes.categoryBase}/${item.category.slug}`, display: "text" }],
 	},
-	metrics: [{ icon: "star", label: String(item.stars) }],
+	metrics: [{ icon: presentation.related.metricIcon, label: String(item.stars) }],
 }));
 ---
 
@@ -108,7 +112,7 @@ const relatedCards: PCardData[] = relatedLabs.map((item) => ({
 
 	<LSection theme="canvas" spacing="none" container="site">
 		<CTabList
-			label={`${lab.title} navigation`}
+			label={formatLabel(presentation.navigation.labelTemplate)}
 			appearance="underline"
 			activeValue={tabs[0]?.value}
 			tone="light"
@@ -117,11 +121,11 @@ const relatedCards: PCardData[] = relatedLabs.map((item) => ({
 	</LSection>
 
 	<LSection id={articleSection.id} {...articleSection.settings}>
-		<LSidebar label={`${lab.title} project information`} position="end" sticky>
+		<LSidebar label={formatLabel(presentation.sidebar.labelTemplate)} position="end" sticky>
 			<CColumns slot="sidebar" columns="one" gap="md">
 				<CBox surface="glass" radius="md" spacing="md">
 					<CColumns columns="one" gap="md">
-						<PSectionHeader data={{ title: "Project information" }} appearance="compact" headingLevel={2} />
+						<PSectionHeader data={{ title: presentation.sidebar.projectInformationTitle }} appearance="compact" headingLevel={2} />
 						<CDescriptionList items={lab.facts} />
 						<CTags
 							label={summarySection.content.labels.technology}
@@ -173,26 +177,26 @@ const relatedCards: PCardData[] = relatedLabs.map((item) => ({
 	)}
 
 	{resourceCards.length > 0 && (
-		<LSection id="resources" theme="canvas" spacing="compact" container="site">
+		<LSection id={presentation.resources.id} {...presentation.resources.settings}>
 			<CColumns columns="one" gap="md">
-				<PSectionHeader data={{ title: "Resources" }} appearance="compact" headingLevel={2} />
-				<PCard template="icon-summary" layout="grid" columns={4} gap="sm" items={resourceCards} />
+				<PSectionHeader data={{ title: presentation.resources.title }} appearance="compact" headingLevel={2} />
+				<PCard {...presentation.resources.cards} items={resourceCards} />
 			</CColumns>
 		</LSection>
 	)}
 
 	{relatedCards.length > 0 && (
-		<LSection id="related-labs" theme="canvas" spacing="compact" container="site">
+		<LSection id={presentation.related.id} {...presentation.related.settings}>
 			<CColumns columns="one" gap="md">
 				<PSectionHeader
 					data={{
-						title: "Related labs",
-						action: { label: "View all Labs", href: summarySection.content.routes.base, icon: "arrowRight" },
+						title: presentation.related.title,
+						action: { label: presentation.related.actionLabel, href: summarySection.content.routes.base, icon: "arrowRight" },
 					}}
 					appearance="compact"
 					headingLevel={2}
 				/>
-				<PCard template="compact-media" layout="grid" columns={4} gap="sm" items={relatedCards} slots={{ excerpt: true, tags: false, action: false }} />
+				<PCard {...presentation.related.cards} items={relatedCards} slots={presentation.related.slots} />
 			</CColumns>
 		</LSection>
 	)}
