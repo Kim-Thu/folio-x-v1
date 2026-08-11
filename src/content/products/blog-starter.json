@@ -26,13 +26,19 @@
             "productsLabel": "Products",
             "galleryLabel": "Blog Starter gallery",
             "thumbnailLabel": "Select preview",
-            "reviewsLabel": "reviews",
-            "platformLabel": "Platform",
-            "categoryLabel": "Category",
+            "salesLabel": "61 reviews",
+            "features": [],
+            "facts": [
+              { "label": "Platform", "value": "WordPress" },
+              { "label": "Category", "value": "WordPress Theme" }
+            ],
             "actionsLabel": "Blog Starter actions",
-            "primaryActionLabel": "Contact to purchase",
-            "secondaryActionLabel": "View preview",
-            "paymentLabel": "Payment methods"
+            "actions": [
+              { "label": "Contact to purchase", "href": "mailto:hello@nkt.studio?subject=Blog%20Starter", "icon": "shoppingBag", "variant": "primary" },
+              { "label": "View preview", "href": "https://images.unsplash.com/photo-1499951360447-b19be8fe80f5?auto=format&fit=crop&w=900&q=88", "icon": "arrowUpRight", "variant": "outline" }
+            ],
+            "paymentLabel": "Payment methods",
+            "paymentMethods": []
           }
         },
         {
