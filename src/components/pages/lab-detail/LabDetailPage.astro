@@ -9,6 +9,7 @@ import CColumns from "@/components/object/component/CColumns.astro";
 import CDescriptionList from "@/components/object/component/CDescriptionList.astro";
 import CTags from "@/components/object/component/CTags.astro";
 import type { LabDetailPageProps } from "@/types/components/pages/lab-detail/LabDetailPage.types";
+import type { PSectionHeaderProps } from "@/types/components/object/project/section-header/PSectionHeader.types";
 
 const { data } = Astro.props as LabDetailPageProps;
 const { lab } = data;
@@ -128,7 +129,7 @@ const columnSpanClass = (span: number) =>
 					<CColumns columns={section.content.layout.columns} gap={section.content.layout.gap}>
 						<PSectionHeader
 							data={{ title: section.content.heading.title }}
-							headingLevel={section.content.heading.level}
+							headingLevel={section.content.heading.level as PSectionHeaderProps["headingLevel"]}
 							appearance={section.content.heading.appearance}
 						/>
 						<PCard
