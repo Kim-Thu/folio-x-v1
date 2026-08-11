@@ -409,6 +409,66 @@ collections:
         widget: object
         required: false
         fields:
+          - { label: Role, name: role, widget: string, required: false }
+          - { label: Duration, name: duration, widget: string, required: false }
+          - { label: Live URL, name: liveUrl, widget: string, required: false }
+          - { label: Source URL, name: sourceUrl, widget: string, required: false }
+          - label: Features
+            name: features
+            widget: list
+            required: false
+            fields:
+              - { label: Title, name: title, widget: string }
+              - { label: Description, name: description, widget: text }
+              - { label: Icon, name: icon, widget: string }
+          - label: Gallery
+            name: gallery
+            widget: list
+            required: false
+            fields: *image_fields
+          - label: Results
+            name: results
+            widget: list
+            required: false
+            fields:
+              - { label: Value, name: value, widget: string }
+              - { label: Label, name: label, widget: string }
+          - label: Testimonial
+            name: testimonial
+            widget: object
+            required: false
+            fields:
+              - { label: Quote, name: quote, widget: text }
+              - { label: Name, name: name, widget: string }
+              - { label: Role, name: role, widget: string }
+          - label: Reviews
+            name: reviews
+            widget: object
+            required: false
+            fields:
+              - { label: Eyebrow, name: eyebrow, widget: string }
+              - { label: Title, name: title, widget: string }
+              - label: Summary
+                name: summary
+                widget: object
+                fields:
+                  - { label: Score, name: score, widget: number, value_type: float }
+                  - { label: Maximum, name: maximum, widget: number, value_type: float }
+                  - { label: Total label, name: totalLabel, widget: string }
+                  - label: Distribution
+                    name: distribution
+                    widget: list
+                    fields:
+                      - { label: Label, name: label, widget: string }
+                      - { label: Value, name: value, widget: number, value_type: float }
+              - label: Items
+                name: items
+                widget: list
+                fields:
+                  - { label: Name, name: name, widget: string }
+                  - { label: Date, name: date, widget: string }
+                  - { label: Quote, name: quote, widget: text }
+                  - { label: Rating, name: rating, widget: number, value_type: float }
           - label: Page
             name: page
             widget: object
@@ -417,4 +477,95 @@ collections:
               - label: Sections
                 name: sections
                 widget: list
-                fields: []
+                summary: "{{fields.id}} — {{fields.type}}"
+                types:
+                  - label: Project header
+                    name: project_header
+                    widget: object
+                    fields:
+                      - { label: ID, name: id, widget: string }
+                      - { label: Type, name: type, widget: hidden, default: page-header }
+                      - { label: Template, name: template, widget: string }
+                      - label: Settings
+                        name: settings
+                        widget: object
+                        fields: *section_settings
+                      - label: Content
+                        name: content
+                        widget: object
+                        fields:
+                          - label: Back action
+                            name: backAction
+                            widget: object
+                            fields:
+                              - { label: Label, name: label, widget: string }
+                              - { label: Href, name: href, widget: string }
+                          - { label: Gallery label, name: galleryLabel, widget: string }
+                          - { label: Previous image label, name: previousImageLabel, widget: string }
+                          - { label: Next image label, name: nextImageLabel, widget: string }
+                          - { label: Tags label, name: tagsLabel, widget: string }
+                          - { label: Actions label, name: actionsLabel, widget: string }
+                          - { label: Live action label, name: liveActionLabel, widget: string }
+                          - { label: Source action label, name: sourceActionLabel, widget: string }
+                          - label: Aside decoration
+                            name: asideDecoration
+                            widget: object
+                            required: false
+                            fields: *image_fields
+                          - label: Facts
+                            name: facts
+                            widget: object
+                            fields:
+                              - { label: Client label, name: clientLabel, widget: string }
+                              - { label: Role label, name: roleLabel, widget: string }
+                              - { label: Duration label, name: durationLabel, widget: string }
+                  - label: Article
+                    name: article
+                    widget: object
+                    fields:
+                      - { label: ID, name: id, widget: string }
+                      - { label: Type, name: type, widget: hidden, default: article }
+                      - { label: Template, name: template, widget: string, required: false }
+                      - label: Settings
+                        name: settings
+                        widget: object
+                        fields: *section_settings
+                      - label: Content
+                        name: content
+                        widget: object
+                        fields:
+                          - { label: Source, name: source, widget: string }
+                  - label: Reviews
+                    name: reviews
+                    widget: object
+                    fields:
+                      - { label: ID, name: id, widget: string }
+                      - { label: Type, name: type, widget: hidden, default: reviews }
+                      - { label: Template, name: template, widget: string, required: false }
+                      - label: Settings
+                        name: settings
+                        widget: object
+                        fields: *section_settings
+                      - label: Content
+                        name: content
+                        widget: object
+                        fields:
+                          - { label: Source, name: source, widget: string }
+                  - label: Post navigation
+                    name: post_navigation
+                    widget: object
+                    fields:
+                      - { label: ID, name: id, widget: string }
+                      - { label: Type, name: type, widget: hidden, default: post-navigation }
+                      - { label: Template, name: template, widget: string, required: false }
+                      - label: Settings
+                        name: settings
+                        widget: object
+                        fields: *section_settings
+                      - label: Content
+                        name: content
+                        widget: object
+                        fields:
+                          - { label: Label, name: label, widget: string }
+                          - { label: Previous label, name: previousLabel, widget: string }
+                          - { label: Next label, name: nextLabel, widget: string }
