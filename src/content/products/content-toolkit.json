@@ -18,41 +18,37 @@
           "id": "product-summary",
           "type": "page-header",
           "template": "gallery-summary",
-          "settings": {
-            "theme": "canvas",
-            "spacing": "compact",
-            "container": "site"
-          },
+          "settings": { "theme": "canvas", "spacing": "compact", "container": "site" },
           "content": {
             "breadcrumbLabel": "Breadcrumb",
             "productsLabel": "Products",
             "galleryLabel": "Content Toolkit gallery",
             "thumbnailLabel": "Select preview",
-            "reviewsLabel": "reviews",
-            "platformLabel": "Platform",
-            "categoryLabel": "Category",
+            "salesLabel": "47 reviews",
+            "features": [],
+            "facts": [
+              { "label": "Platform", "value": "WordPress" },
+              { "label": "Category", "value": "WordPress Plugin" }
+            ],
             "actionsLabel": "Content Toolkit actions",
-            "primaryActionLabel": "Contact to purchase",
-            "secondaryActionLabel": "View preview",
-            "paymentLabel": "Payment methods"
+            "actions": [
+              { "label": "Contact to purchase", "href": "mailto:hello@nkt.studio?subject=Content%20Toolkit", "icon": "shoppingBag", "variant": "primary" },
+              { "label": "View preview", "href": "https://images.unsplash.com/photo-1552664730-d307ca884978?auto=format&fit=crop&w=900&q=88", "icon": "arrowUpRight", "variant": "outline" }
+            ],
+            "paymentLabel": "Payment methods",
+            "paymentMethods": []
           }
         },
         {
           "id": "product-overview",
           "type": "article",
-          "settings": {
-            "theme": "canvas",
-            "spacing": "body",
-            "container": "content"
-          },
+          "settings": { "theme": "canvas", "spacing": "body", "container": "content" },
           "content": {
             "blocks": [
               {
                 "id": "product-overview",
                 "title": "Overview",
-                "paragraphs": [
-                  "Workflow utilities for growing editorial teams."
-                ]
+                "paragraphs": ["Workflow utilities for growing editorial teams."]
               }
             ]
           }
