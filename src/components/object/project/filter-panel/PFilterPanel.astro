@@ -9,11 +9,12 @@ import CText from "@/components/object/component/CText.astro";
 import type { PFilterPanelProps } from "@/types/components/object/project/filter-panel/PFilterPanel.types";
 
 const { data } = Astro.props as PFilterPanelProps;
-const groups = data.groups ?? [
+const primaryGroups = [
 	data.category,
 	data.platform,
 	data.license,
 ].filter((group): group is NonNullable<typeof group> => Boolean(group));
+const groups = [...primaryGroups, ...(data.groups ?? [])];
 ---
 
 <CBox surface="glass" radius="md" spacing="md" data-filter-panel>
