@@ -17,6 +17,13 @@ import {
 	mapPublicationToCard,
 } from "@/data/mappers/card";
 import type {
+	InsightCardPresentation,
+	LabCardPresentation,
+	ProductCardPresentation,
+	ProjectCardPresentation,
+	PublicationCardPresentation,
+} from "@/data/mappers/card";
+import type {
 	ArchiveRegion,
 	PageBuilderProps,
 	PageRegion,
@@ -33,6 +40,11 @@ type ArchiveSection = Extract<PageSectionData, { type: "archive" }>;
 type ProjectsArchiveSection = Extract<ArchiveSection, { content: { source: { collection: "projects" } } }>;
 type LabsArchiveSection = Extract<ArchiveSection, { content: { source: { collection: "labs" } } }>;
 type ProductsArchiveSection = Extract<ArchiveSection, { content: { source: { collection: "products" } } }>;
+
+type HeroRegionProps = Extract<PageRegion, { component: "hero" }>["props"];
+type PageHeaderRegionProps = Extract<PageRegion, { component: "page-header" }>["props"];
+type ArticleRegionProps = Extract<PageRegion, { component: "article" }>["props"];
+type CtaRegionProps = Extract<PageRegion, { component: "cta" }>["props"];
 
 const sectionFrame = (section: PageSectionData) => ({
 	id: section.id,
@@ -52,49 +64,91 @@ const sectionHeader = (section: CollectionSection): PSectionHeaderProps | undefi
 			title: heading.title,
 			description: heading.description,
 		},
-		action: heading.action,
+		action: heading.action as PSectionHeaderProps["action"],
 	};
 };
 
 const cardConfig = (section: CollectionSection, items: PCardData[]): PCardProps => {
 	const cards = section.content.cards;
 	return {
-		template: cards?.template ?? section.template,
-		layout: cards?.layout ?? section.settings.layout,
-		columns: cards?.columns ?? section.settings.columns,
-		gap: cards?.gap ?? section.settings.gap,
-		mediaRatio: cards?.mediaRatio ?? section.settings.mediaRatio,
-		separator: cards?.separator ?? section.settings.separator,
-		headingLevel: cards?.headingLevel,
-		slots: cards?.slots,
+		template: (cards?.template ?? section.template) as PCardProps["template"],
+		layout: (cards?.layout ?? section.settings.layout) as PCardProps["layout"],
+		columns: (cards?.columns ?? section.settings.columns) as PCardProps["columns"],
+		gap: (cards?.gap ?? section.settings.gap) as PCardProps["gap"],
+		mediaRatio: (cards?.mediaRatio ?? section.settings.mediaRatio) as PCardProps["mediaRatio"],
+		separator: (cards?.separator ?? section.settings.separator) as PCardProps["separator"],
+		headingLevel: cards?.headingLevel as PCardProps["headingLevel"],
+		slots: cards?.slots as PCardProps["slots"],
 		items,
 	};
 };
 
 const resolveCollectionItems = async (section: CollectionSection): Promise<PCardData[]> => {
-	if ("items" in section.content) return section.content.items as PCardData[];
+	if ("items" in section.content) {
+		return section.content.items as unknown as PCardData[];
+	}
 
-	const { source, itemPresentation } = section.content;
-	const take = <T,>(items: T[]) => source.limit === undefined ? items : items.slice(0, source.limit);
+	const take = <T,>(items: T[]) =>
+		section.content.source.limit === undefined
+			? items
+			: items.slice(0, section.content.source.limit);
 
-	switch (source.collection) {
+	// Keep the discriminant attached to section.content. Destructuring source and
+	// itemPresentation separately loses their correlation and widens the presentation
+	// type to the union of every collection presentation schema.
+	switch (section.content.source.collection) {
 		case "products":
-			return take(await getProducts()).map((item) => mapProductToCard(item, itemPresentation));
+			return take(await getProducts()).map((item) =>
+				mapProductToCard(item, section.content.itemPresentation as ProductCardPresentation),
+			);
 		case "projects":
-			return take(await getProjects()).map((item) => mapProjectToCard(item, itemPresentation));
+			return take(await getProjects()).map((item) =>
+				mapProjectToCard(item, section.content.itemPresentation as ProjectCardPresentation),
+			);
 		case "labs":
-			return take(await getLabs()).map((item) => mapLabToCard(item, itemPresentation));
+			return take(await getLabs()).map((item) =>
+				mapLabToCard(item, section.content.itemPresentation as LabCardPresentation),
+			);
 		case "blog":
-			return take(await getInsights()).map((item) => mapInsightToCard(item, itemPresentation));
+			return take(await getInsights()).map((item) =>
+				mapInsightToCard(item, section.content.itemPresentation as InsightCardPresentation),
+			);
 		case "comics":
-			return take(await getPublications("comics")).map((item) => mapPublicationToCard(item, "comics", itemPresentation));
+			return take(await getPublications("comics")).map((item) =>
+				mapPublicationToCard(
+					item,
+					"comics",
+					section.content.itemPresentation as PublicationCardPresentation,
+				),
+			);
 		case "novels":
-			return take(await getPublications("novels")).map((item) => mapPublicationToCard(item, "novels", itemPresentation));
+			return take(await getPublications("novels")).map((item) =>
+				mapPublicationToCard(
+					item,
+					"novels",
+					section.content.itemPresentation as PublicationCardPresentation,
+				),
+			);
 		case "publications": {
-			const [novels, comics] = await Promise.all([getPublications("novels"), getPublications("comics")]);
+			const [novels, comics] = await Promise.all([
+				getPublications("novels"),
+				getPublications("comics"),
+			]);
 			return take([
-				...novels.map((item) => mapPublicationToCard(item, "novels", itemPresentation.novels)),
-				...comics.map((item) => mapPublicationToCard(item, "comics", itemPresentation.comics)),
+				...novels.map((item) =>
+					mapPublicationToCard(
+						item,
+						"novels",
+						section.content.itemPresentation.novels as PublicationCardPresentation,
+					),
+				),
+				...comics.map((item) =>
+					mapPublicationToCard(
+						item,
+						"comics",
+						section.content.itemPresentation.comics as PublicationCardPresentation,
+					),
+				),
 			]);
 		}
 	}
@@ -125,7 +179,15 @@ const buildProjectsArchive = async (section: ProjectsArchiveSection): Promise<Ar
 				sort: { label: toolbar.sortLabel, value: toolbar.sortValue, options: toolbar.sortOptions },
 				view: { label: toolbar.viewLabel, gridLabel: toolbar.gridViewLabel, listLabel: toolbar.listViewLabel },
 			} },
-			cards: { template: cards.template, layout: cards.layout, columns: cards.columns, gap: cards.gap, items: visibleProjects.map((project) => mapProjectToCard(project, itemPresentation)) },
+			cards: {
+				template: cards.template as PCardProps["template"],
+				layout: cards.layout as PCardProps["layout"],
+				columns: cards.columns as PCardProps["columns"],
+				gap: cards.gap as PCardProps["gap"],
+				items: visibleProjects.map((project) =>
+					mapProjectToCard(project, itemPresentation as ProjectCardPresentation),
+				),
+			},
 			emptyLabel,
 			pagination: { ...pagination, totalPages: Math.max(1, Math.ceil(visibleProjects.length / pagination.pageSize)) },
 		},
@@ -149,7 +211,7 @@ const buildLabsArchive = async (section: LabsArchiveSection): Promise<ArchiveReg
 			sidebar: { label: sidebar.label, filter: { data: {
 				filterLabel: sidebar.filterLabel,
 				category: {
-					appearance: sidebar.category.appearance,
+					appearance: sidebar.category.appearance as "navigation",
 					control: sidebar.category.control,
 					legend: sidebar.category.legend,
 					name: sidebar.category.name,
@@ -157,7 +219,7 @@ const buildLabsArchive = async (section: LabsArchiveSection): Promise<ArchiveReg
 					options: [{ label: sidebar.category.allLabel, value: sidebar.category.allValue, href: sidebar.category.allHref, count: labs.length, checked: !context.categorySlug }, ...categories.map((category) => ({ label: category.label, value: category.slug, href: `${routes.categoryBase}${category.slug}`, count: labs.filter((lab) => lab.category.slug === category.slug).length, checked: context.categorySlug === category.slug }))],
 				},
 				groups: [{
-					appearance: sidebar.technology.appearance,
+					appearance: sidebar.technology.appearance as "navigation",
 					control: sidebar.technology.control,
 					legend: sidebar.technology.legend,
 					name: sidebar.technology.name,
@@ -166,7 +228,13 @@ const buildLabsArchive = async (section: LabsArchiveSection): Promise<ArchiveReg
 				}],
 			} } },
 			result: { count: visibleLabs.length, label: resultLabel },
-			cards: { template: cards.template, layout: cards.layout, columns: cards.columns, gap: cards.gap, items: visibleLabs.map((lab) => mapLabToCard(lab, itemPresentation)) },
+			cards: {
+				template: cards.template as PCardProps["template"],
+				layout: cards.layout as PCardProps["layout"],
+				columns: cards.columns as PCardProps["columns"],
+				gap: cards.gap as PCardProps["gap"],
+				items: visibleLabs.map((lab) => mapLabToCard(lab, itemPresentation as LabCardPresentation)),
+			},
 			emptyLabel,
 			pagination: { ...pagination, totalPages: Math.max(1, Math.ceil(visibleLabs.length / pagination.pageSize)) },
 		},
@@ -197,11 +265,19 @@ const buildProductsArchive = async (section: ProductsArchiveSection): Promise<Ar
 			} },
 			sidebar: {
 				label: sidebar.label,
-				filter: { data: { filterLabel: sidebar.filterLabel, category: { ...sidebar.category, options: categoryFilters }, groups: [{ ...sidebar.platform, options: platformFilters }] } },
+				filter: { data: { filterLabel: sidebar.filterLabel, category: { ...sidebar.category, appearance: sidebar.category.appearance as "navigation", options: categoryFilters }, groups: [{ ...sidebar.platform, appearance: sidebar.platform.appearance as "navigation", options: platformFilters }] } },
 				advertisement: { data: sidebar.advertisement },
 			},
 			result: { count: visibleProducts.length, label: result.label },
-			cards: { template: cards.template, layout: cards.layout, columns: cards.columns, gap: cards.gap, items: visibleProducts.map((product) => mapProductToCard(product, itemPresentation)) },
+			cards: {
+				template: cards.template as PCardProps["template"],
+				layout: cards.layout as PCardProps["layout"],
+				columns: cards.columns as PCardProps["columns"],
+				gap: cards.gap as PCardProps["gap"],
+				items: visibleProducts.map((product) =>
+					mapProductToCard(product, itemPresentation as ProductCardPresentation),
+				),
+			},
 			emptyLabel,
 			pagination: { ...pagination, totalPages: Math.max(1, Math.ceil(visibleProducts.length / pagination.pageSize)) },
 		},
@@ -212,16 +288,16 @@ const regions: PageRegion[] = await Promise.all(props.page.content.sections.map(
 	const frame = sectionFrame(section);
 	switch (section.type) {
 		case "hero":
-			return { key: section.id, component: "hero", section: frame, props: { template: section.template, data: section.content } };
+			return { key: section.id, component: "hero", section: frame, props: { template: section.template, data: section.content } as HeroRegionProps };
 		case "page-header":
-			return { key: section.id, component: "page-header", section: frame, props: { template: section.template, data: section.content } };
+			return { key: section.id, component: "page-header", section: frame, props: { template: section.template, data: section.content } as PageHeaderRegionProps };
 		case "article":
-			return { key: section.id, component: "article", section: frame, props: { blocks: section.content.blocks } };
+			return { key: section.id, component: "article", section: frame, props: { blocks: section.content.blocks } as ArticleRegionProps };
 		case "cta":
-			return { key: section.id, component: "cta", section: frame, props: { template: section.template, data: section.content } };
+			return { key: section.id, component: "cta", section: frame, props: { template: section.template, data: section.content } as CtaRegionProps };
 		case "collection": {
 			const items = await resolveCollectionItems(section);
-			return { key: section.id, component: "collection", section: frame, props: { template: section.template, header: sectionHeader(section), cardGroups: [cardConfig(section, items)] } };
+			return { key: section.id, component: "collection", section: frame, props: { template: section.template as "stack" | "split" | undefined, header: sectionHeader(section), cardGroups: [cardConfig(section, items)] } };
 		}
 		case "archive":
 			switch (section.content.source.collection) {
