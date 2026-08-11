@@ -16,6 +16,6 @@ const [layout, data] = await Promise.all([
 ]);
 ---
 
-<BaseLayout {...layout} tone="light" title={`${data.metadata.title} | ${layout.title}`} description={data.metadata.description}>
+<BaseLayout {...layout} tone="light" title={`${data.entry.title} | ${layout.title}`} description={data.entry.summary}>
 	<ReaderPage {data} />
 </BaseLayout>
