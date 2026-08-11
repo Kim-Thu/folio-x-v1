@@ -15,122 +15,116 @@ const { lab } = data;
 const page = lab.detail?.page;
 if (!page) throw new Error(`Missing CMS lab detail: ${lab.slug}`);
 
-const summarySection = page.sections.find((section) => section.type === "page-header");
-const contentSection = page.sections.find((section) => section.type === "article");
-const featuresSection = page.sections.find((section) => section.type === "collection" && section.id === "features");
-const gallerySection = page.sections.find((section) => section.type === "collection" && section.id === "gallery");
 const articleBlocks = lab.sections.map((section, index) => ({
 	id: index === 0 ? "overview" : section.title.toLowerCase().replace(/\s+/g, "-"),
 	title: section.title,
 	paragraphs: section.paragraphs,
 }));
-
-const summaryContent = summarySection?.content;
-const summaryLabels = summaryContent?.labels;
 const metricValue = (source: "stars" | "forks" | "updatedLabel") => source === "updatedLabel" ? lab.updatedLabel : String(lab[source]);
-const actions = summaryContent && summaryLabels
-	? [
-			...(lab.liveUrl ? [{ label: summaryLabels.live, href: lab.liveUrl, ...summaryContent.actions.live }] : []),
-			...(lab.sourceUrl ? [{ label: summaryLabels.source, href: lab.sourceUrl, ...summaryContent.actions.source }] : []),
-		]
-	: [];
 ---
 
 <LPage template={page.template}>
-	{summarySection && summaryContent && summaryLabels && (
-		<LSection id={summarySection.id} {...summarySection.settings}>
-			<PPageHeader
-				template={summarySection.template}
-				data={{
-					breadcrumb: {
-						label: summaryLabels.breadcrumb,
-						items: [
-							{ label: summaryLabels.collection, href: summaryContent.routes.base },
-							{ label: lab.category.label, href: `${summaryContent.routes.categoryBase}/${lab.category.slug}` },
-						],
-						current: lab.title,
-					},
-					image: lab.image,
-					category: { label: lab.category.label, href: `${summaryContent.routes.categoryBase}/${lab.category.slug}` },
-					badge: lab.statusLabel,
-					title: lab.title,
-					description: lab.summary,
-					metrics: summaryContent.metrics.map((metric) => ({ icon: metric.icon, label: metricValue(metric.source) })),
-					actionsLabel: summaryLabels.actions,
-					actions,
-				}}
-			/>
-		</LSection>
-	)}
+	{page.sections.map((section) => {
+		if (section.type === "page-header") {
+			const { content } = section;
+			const actions = [
+				...(lab.liveUrl ? [{ label: content.labels.live, href: lab.liveUrl, ...content.actions.live }] : []),
+				...(lab.sourceUrl ? [{ label: content.labels.source, href: lab.sourceUrl, ...content.actions.source }] : []),
+			];
 
-	{contentSection && summaryContent && summaryLabels && (
-		<LSection id={contentSection.id} {...contentSection.settings}>
-			<CColumns columns={contentSection.content.layout.columns} gap={contentSection.content.layout.gap}>
-				<div class={`lg:col-span-${contentSection.content.layout.articleSpan}`}>
-					<PArticle appearance={contentSection.content.appearance} blocks={articleBlocks} />
-				</div>
-				<aside class={`lg:col-span-${contentSection.content.layout.asideSpan}`}>
-					<CColumns columns={contentSection.content.layout.asideColumns} gap={contentSection.content.layout.asideGap}>
-						<CDescriptionList items={lab.facts} />
-						<CTags
-							label={summaryLabels.technology}
-							items={lab.technologies.map((technology) => ({
-								label: technology.label,
-								href: `${summaryContent.routes.technologyBase}/${technology.slug}`,
-							}))}
-						/>
+			return (
+				<LSection id={section.id} {...section.settings}>
+					<PPageHeader
+						template={section.template}
+						data={{
+							breadcrumb: {
+								label: content.labels.breadcrumb,
+								items: [
+									{ label: content.labels.collection, href: content.routes.base },
+									{ label: lab.category.label, href: `${content.routes.categoryBase}/${lab.category.slug}` },
+								],
+								current: lab.title,
+							},
+							image: lab.image,
+							category: { label: lab.category.label, href: `${content.routes.categoryBase}/${lab.category.slug}` },
+							badge: lab.statusLabel,
+							title: lab.title,
+							description: lab.summary,
+							metrics: content.metrics.map((metric) => ({ icon: metric.icon, label: metricValue(metric.source) })),
+							actionsLabel: content.labels.actions,
+							actions,
+						}}
+					/>
+				</LSection>
+			);
+		}
+
+		if (section.type === "article") {
+			const summarySection = page.sections.find((item) => item.type === "page-header");
+			if (!summarySection) return null;
+
+			return (
+				<LSection id={section.id} {...section.settings}>
+					<CColumns columns={section.content.layout.columns} gap={section.content.layout.gap}>
+						<div class={`lg:col-span-${section.content.layout.articleSpan}`}>
+							<PArticle appearance={section.content.appearance} blocks={articleBlocks} />
+						</div>
+						<aside class={`lg:col-span-${section.content.layout.asideSpan}`}>
+							<CColumns columns={section.content.layout.asideColumns} gap={section.content.layout.asideGap}>
+								<CDescriptionList items={lab.facts} />
+								<CTags
+									label={summarySection.content.labels.technology}
+									items={lab.technologies.map((technology) => ({
+										label: technology.label,
+										href: `${summarySection.content.routes.technologyBase}/${technology.slug}`,
+									}))}
+								/>
+							</CColumns>
+						</aside>
 					</CColumns>
-				</aside>
-			</CColumns>
-		</LSection>
-	)}
+				</LSection>
+			);
+		}
 
-	{featuresSection && lab.features.length > 0 && (
-		<LSection id={featuresSection.id} {...featuresSection.settings}>
-			<CColumns columns={featuresSection.content.layout.columns} gap={featuresSection.content.layout.gap}>
-				<PSectionHeader
-					data={{ title: featuresSection.content.heading.title }}
-					headingLevel={featuresSection.content.heading.level}
-					appearance={featuresSection.content.heading.appearance}
-				/>
-				<PCard
-					template={featuresSection.content.cards.template}
-					layout={featuresSection.content.cards.layout}
-					columns={featuresSection.content.cards.columns}
-					gap={featuresSection.content.cards.gap}
-					items={lab.features.map((feature) => ({
-						href: `#${featuresSection.id}`,
+		if (section.type === "collection") {
+			const isGallery = Boolean(section.content.labels);
+			const items = isGallery
+				? lab.gallery.map((image, index) => ({
+						href: image.src,
+						ariaLabel: `${section.content.labels?.openImage} ${index + 1}`,
+						title: [`${section.content.labels?.imageTitle} ${index + 1}`],
+						media: image,
+					}))
+				: lab.features.map((feature) => ({
+						href: `#${section.id}`,
 						ariaLabel: feature.title,
 						title: [feature.title],
 						excerpt: feature.description,
 						icon: feature.icon,
-					}))}
-				/>
-			</CColumns>
-		</LSection>
-	)}
+					}));
 
-	{gallerySection && gallerySection.content.labels && lab.gallery.length > 0 && (
-		<LSection id={gallerySection.id} {...gallerySection.settings}>
-			<CColumns columns={gallerySection.content.layout.columns} gap={gallerySection.content.layout.gap}>
-				<PSectionHeader
-					data={{ title: gallerySection.content.heading.title }}
-					headingLevel={gallerySection.content.heading.level}
-					appearance={gallerySection.content.heading.appearance}
-				/>
-				<PCard
-					template={gallerySection.content.cards.template}
-					layout={gallerySection.content.cards.layout}
-					columns={gallerySection.content.cards.columns}
-					gap={gallerySection.content.cards.gap}
-					items={lab.gallery.map((image, index) => ({
-						href: image.src,
-						ariaLabel: `${gallerySection.content.labels?.openImage} ${index + 1}`,
-						title: [`${gallerySection.content.labels?.imageTitle} ${index + 1}`],
-						media: image,
-					}))}
-				/>
-			</CColumns>
-		</LSection>
-	)}
+			if (items.length === 0) return null;
+
+			return (
+				<LSection id={section.id} {...section.settings}>
+					<CColumns columns={section.content.layout.columns} gap={section.content.layout.gap}>
+						<PSectionHeader
+							data={{ title: section.content.heading.title }}
+							headingLevel={section.content.heading.level}
+							appearance={section.content.heading.appearance}
+						/>
+						<PCard
+							template={section.content.cards.template}
+							layout={section.content.cards.layout}
+							columns={section.content.cards.columns}
+							gap={section.content.cards.gap}
+							items={items}
+						/>
+					</CColumns>
+				</LSection>
+			);
+		}
+
+		return null;
+	})}
 </LPage>
