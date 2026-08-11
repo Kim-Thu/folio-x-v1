@@ -1,6 +1,5 @@
 import type { CollectionEntry } from "astro:content";
 import type { LContainerSize } from "@/types/components/layout/LContainer.types";
-import type { LPageProps } from "@/types/components/layout/LPage.types";
 import type {
 	LSectionSpacing,
 	LSectionTheme,
@@ -38,13 +37,11 @@ export interface PageBuilderContext {
 	technologySlug?: string;
 }
 
-export type PageRegionPlacement = "header" | "main" | "aside" | "cta";
 export type PageRegionContainer = LContainerSize | "none";
 
 interface PageRegionBase {
 	key: string;
 	enabled?: boolean;
-	placement?: PageRegionPlacement;
 	section?:
 		| {
 				id?: string;
@@ -222,41 +219,10 @@ export type PageRegion =
 	| GroupRegion
 	| StatusRegion;
 
-export interface PageRegionControl {
-	key: string;
-	enabled: boolean;
-	component: PageRegion["component"];
-	placement: PageRegionPlacement;
-	template?: string;
-	theme: LSectionTheme;
-	spacing: LSectionSpacing;
-	container: PageRegionContainer;
+export interface PageBuilderProps {
+	page: PageEntryData;
+	context?: PageBuilderContext;
 }
-
-export interface PageBuilderControl {
-	layout: NonNullable<PageBuilderConfig["layout"]>;
-	regions: PageRegionControl[];
-}
-
-export interface PageBuilderConfig {
-	layout: Pick<
-		LPageProps,
-		"template" | "containerSize" | "asideLabel" | "asidePosition"
-	>;
-	regions: PageRegion[];
-}
-
-export type PageBuilderProps =
-	| {
-			page: PageEntryData;
-			context?: PageBuilderContext;
-			config?: never;
-	  }
-	| {
-			config: PageBuilderConfig;
-			page?: never;
-			context?: never;
-	  };
 
 export interface PageRegionProps {
 	region: PageRegion;
