@@ -375,3 +375,46 @@ collections:
                 name: expanded
                 widget: object
                 fields: *image_fields
+
+  - name: projects
+    label: Projects
+    label_singular: Project
+    folder: src/content/projects
+    create: true
+    extension: json
+    format: json
+    slug: "{{slug}}"
+    identifier_field: slug
+    summary: "{{title}} — {{year}}"
+    fields:
+      - { label: Order, name: order, widget: number, value_type: int, min: 1 }
+      - { label: Slug, name: slug, widget: string }
+      - { label: Title, name: title, widget: string }
+      - { label: Category, name: category, widget: string }
+      - { label: Category slug, name: categorySlug, widget: string }
+      - { label: Year, name: year, widget: string }
+      - { label: Tone, name: tone, widget: select, options: [light, dark] }
+      - { label: Outcome, name: outcome, widget: string }
+      - { label: Summary, name: summary, widget: text }
+      - { label: Image, name: image, widget: image, required: false }
+      - { label: Image alt, name: alt, widget: string, required: false }
+      - label: Tags
+        name: tags
+        widget: list
+        fields: &taxonomy_term_fields
+          - { label: Label, name: label, widget: string }
+          - { label: Slug, name: slug, widget: string }
+      - label: Detail
+        name: detail
+        widget: object
+        required: false
+        fields:
+          - label: Page
+            name: page
+            widget: object
+            fields:
+              - { label: Template, name: template, widget: select, options: [fluid, contained, boxed, sidebar, centered] }
+              - label: Sections
+                name: sections
+                widget: list
+                fields: []
