@@ -1,4 +1,5 @@
 ---
+import LContainer from "@/components/layout/LContainer.astro";
 import type { LSectionProps } from "@/types/components/layout/LSection.types";
 import { cn } from "@/utils/cn";
 import {
@@ -13,6 +14,7 @@ const {
 	class: className,
 	theme = "canvas",
 	spacing = "default",
+	container = "none",
 	...attributes
 } = Astro.props;
 
@@ -25,5 +27,11 @@ const classes = cn(
 ---
 
 <section {...attributes} class={classes}>
-	<slot />
+	{container === "none" ? (
+		<slot />
+	) : (
+		<LContainer size={container}>
+			<slot />
+		</LContainer>
+	)}
 </section>
