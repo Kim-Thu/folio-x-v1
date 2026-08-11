@@ -230,6 +230,121 @@ collections:
                                 required: false
                                 fields: *image_fields
 
+      - name: interface
+        label: Giao diện hệ thống
+        file: src/content/globals/interface.json
+        format: json
+        fields:
+          - { label: Skip to content, name: skipToContent, widget: string }
+          - { label: Back to top, name: backToTop, widget: string }
+          - { label: Open menu, name: openMenu, widget: string }
+          - { label: Close menu, name: closeMenu, widget: string }
+          - label: Loading screen
+            name: loadingScreen
+            widget: object
+            fields:
+              - { label: Label, name: label, widget: string }
+              - { label: Status, name: status, widget: string }
+              - { label: Tips, name: tips, widget: list, field: { label: Tip, name: tip, widget: string } }
+              - { label: Hold open, name: holdOpen, widget: boolean }
+              - { label: Progress label, name: progressLabel, widget: string }
+              - label: Image
+                name: image
+                widget: object
+                fields: *image_fields
+          - label: Navigation labels
+            name: navigation
+            widget: object
+            fields:
+              - { label: Primary label, name: primaryLabel, widget: string }
+              - { label: Mobile label, name: mobileLabel, widget: string }
+              - { label: Social label, name: socialLabel, widget: string }
+              - { label: Footer social label, name: footerSocialLabel, widget: string }
+              - { label: Rail social display, name: railSocialDisplay, widget: select, options: [label, shortLabel, icon] }
+          - label: Progress
+            name: progress
+            widget: object
+            fields:
+              - { label: Rail label, name: railLabel, widget: string }
+              - { label: Reading label, name: readingLabel, widget: string }
+              - { label: Initial section, name: initialSection, widget: string }
+              - { label: Initial value, name: initialValue, widget: string }
+          - label: Separators
+            name: separators
+            widget: object
+            fields:
+              - { label: Slash, name: slash, widget: string }
+              - { label: Dot, name: dot, widget: string }
+          - label: Content formatting
+            name: contentFormatting
+            widget: object
+            fields:
+              - { label: Reading time template, name: readingTimeTemplate, widget: string }
+              - { label: Date locale, name: dateLocale, widget: string }
+
+      - name: footer
+        label: Chân trang
+        file: src/content/globals/footer.json
+        format: json
+        fields:
+          - { label: Brand description, name: brandDescription, widget: text }
+          - { label: Social display, name: socialDisplay, widget: select, options: [label, shortLabel, icon] }
+          - { label: Menu label, name: menuLabel, widget: string }
+          - { label: Resources label, name: resourcesLabel, widget: string }
+          - { label: Legal label, name: legalLabel, widget: string }
+          - { label: Location label, name: locationLabel, widget: string }
+          - { label: Copyright symbol, name: copyrightSymbol, widget: string }
+          - { label: Build label, name: buildLabel, widget: string }
+          - label: Newsletter
+            name: newsletter
+            widget: object
+            fields:
+              - { label: Label, name: label, widget: string }
+              - { label: Description, name: description, widget: text }
+              - { label: Input label, name: inputLabel, widget: string }
+              - { label: Placeholder, name: placeholder, widget: string }
+              - { label: Submit label, name: submitLabel, widget: string }
+
+      - name: system_states
+        label: Trạng thái hệ thống
+        file: src/content/globals/system-states.json
+        format: json
+        fields:
+          - label: Not found
+            name: notFound
+            widget: object
+            fields: &system_state_fields
+              - { label: ID, name: id, widget: string }
+              - { label: Display code, name: displayCode, widget: string, required: false }
+              - { label: Eyebrow, name: eyebrow, widget: string }
+              - { label: Title, name: title, widget: string }
+              - { label: Description, name: description, widget: text }
+              - label: Primary action
+                name: primaryAction
+                widget: object
+                fields:
+                  - { label: Href, name: href, widget: string }
+                  - { label: Label, name: label, widget: string }
+                  - { label: Icon, name: icon, widget: string, required: false }
+              - label: Secondary action
+                name: secondaryAction
+                widget: object
+                required: false
+                fields:
+                  - { label: Href, name: href, widget: string }
+                  - { label: Label, name: label, widget: string }
+                  - { label: Icon, name: icon, widget: string, required: false }
+              - label: Image
+                name: image
+                widget: object
+                fields: *image_fields
+              - { label: Metadata title, name: metadataTitle, widget: string }
+              - { label: Metadata description, name: metadataDescription, widget: text }
+          - label: Empty state
+            name: empty
+            widget: object
+            fields: *system_state_fields
+
       - name: closing_profile
         label: Kết trang cá nhân
         file: src/content/globals/closing-profile.json
