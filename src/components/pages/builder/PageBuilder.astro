@@ -15,11 +15,6 @@ import {
 	mapProductToCard,
 	mapProjectToCard,
 	mapPublicationToCard,
-	type InsightCardPresentation,
-	type LabCardPresentation,
-	type ProductCardPresentation,
-	type ProjectCardPresentation,
-	type PublicationCardPresentation,
 } from "@/data/mappers/card";
 import type {
 	ArchiveRegion,
@@ -88,36 +83,29 @@ const cardConfig = (
 };
 
 const resolveCollectionItems = async (section: CollectionSection): Promise<PCardData[]> => {
-	if (section.content.items?.length) return section.content.items as PCardData[];
+	if ("items" in section.content) return section.content.items as PCardData[];
 
 	const source = section.content.source;
-	if (!source) return [];
-
 	const take = <T,>(items: T[]) => source.limit === undefined ? items : items.slice(0, source.limit);
-	const presentation = section.content.itemPresentation;
 
 	switch (source.collection) {
 		case "products":
-			return take(await getProducts()).map((item) => mapProductToCard(item, presentation as ProductCardPresentation));
+			return take(await getProducts()).map((item) => mapProductToCard(item, section.content.itemPresentation));
 		case "projects":
-			return take(await getProjects()).map((item) => mapProjectToCard(item, presentation as ProjectCardPresentation));
+			return take(await getProjects()).map((item) => mapProjectToCard(item, section.content.itemPresentation));
 		case "labs":
-			return take(await getLabs()).map((item) => mapLabToCard(item, presentation as LabCardPresentation));
+			return take(await getLabs()).map((item) => mapLabToCard(item, section.content.itemPresentation));
 		case "blog":
-			return take(await getInsights()).map((item) => mapInsightToCard(item, presentation as InsightCardPresentation));
+			return take(await getInsights()).map((item) => mapInsightToCard(item, section.content.itemPresentation));
 		case "comics":
-			return take(await getPublications("comics")).map((item) => mapPublicationToCard(item, "comics", presentation as PublicationCardPresentation));
+			return take(await getPublications("comics")).map((item) => mapPublicationToCard(item, "comics", section.content.itemPresentation));
 		case "novels":
-			return take(await getPublications("novels")).map((item) => mapPublicationToCard(item, "novels", presentation as PublicationCardPresentation));
+			return take(await getPublications("novels")).map((item) => mapPublicationToCard(item, "novels", section.content.itemPresentation));
 		case "publications": {
 			const [novels, comics] = await Promise.all([getPublications("novels"), getPublications("comics")]);
-			const groupedPresentation = presentation as {
-				novels: PublicationCardPresentation;
-				comics: PublicationCardPresentation;
-			};
 			return take([
-				...novels.map((item) => mapPublicationToCard(item, "novels", groupedPresentation.novels)),
-				...comics.map((item) => mapPublicationToCard(item, "comics", groupedPresentation.comics)),
+				...novels.map((item) => mapPublicationToCard(item, "novels", section.content.itemPresentation.novels)),
+				...comics.map((item) => mapPublicationToCard(item, "comics", section.content.itemPresentation.comics)),
 			]);
 		}
 	}
