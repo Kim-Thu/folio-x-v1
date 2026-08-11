@@ -17,7 +17,7 @@
   "updatedLabel": "1 month ago",
   "liveUrl": "https://example.com",
   "sourceUrl": "https://github.com",
-  "sections": [{ "title": "Overview", "paragraphs": ["A compact analytics experiment centered on understandable product signals and responsible data collection."] }],
+  "sections": [{ "id": "overview", "title": "Overview", "paragraphs": ["A compact analytics experiment centered on understandable product signals and responsible data collection."] }],
   "features": [{ "title": "Clear signals", "description": "Focus on decisions instead of vanity metrics.", "icon": "bolt" }],
   "gallery": [{ "src": "/uploads/placeholder.png", "alt": "Analytics overview", "width": 1672, "height": 941 }],
   "resources": [{ "title": "Source code", "description": "Review the repository.", "href": "https://github.com", "icon": "github" }],
