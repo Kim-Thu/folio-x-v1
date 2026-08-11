@@ -1,4 +1,3 @@
-import type { PageBuilderControl } from "@/types/components/pages/builder/PageBuilder.types";
 import type { CImageData } from "@/types/components/object/component/CImage.types";
 
 export type PublicationIcon =
@@ -48,11 +47,10 @@ export interface PublicationEntry {
 	updatedLabel: string;
 	author: string;
 	detail?: {
-		language: string;
-		followers: string;
-		description: string[];
-		tags: Array<{ label: string; slug: string }>;
-		chapterTitles: string[];
+		language?: string;
+		followers?: string;
+		description?: string[];
+		tags?: Array<{ label: string; slug: string }>;
 		reader?: PublicationChapterContent[];
 	};
 }
@@ -97,5 +95,4 @@ export interface PublicationCatalog {
 		submitLabel: string;
 		image: PublicationImage;
 	};
-	builder?: PageBuilderControl;
 }
