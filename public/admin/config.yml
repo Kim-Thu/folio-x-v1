@@ -569,3 +569,165 @@ collections:
                           - { label: Label, name: label, widget: string }
                           - { label: Previous label, name: previousLabel, widget: string }
                           - { label: Next label, name: nextLabel, widget: string }
+
+  - name: labs
+    label: Labs
+    label_singular: Lab
+    folder: src/content/labs
+    create: true
+    extension: json
+    format: json
+    slug: "{{slug}}"
+    identifier_field: slug
+    summary: "{{title}} — {{statusLabel}}"
+    fields:
+      - { label: Order, name: order, widget: number, value_type: int, min: 1 }
+      - { label: Slug, name: slug, widget: string }
+      - { label: Title, name: title, widget: string }
+      - label: Category
+        name: category
+        widget: object
+        fields: *taxonomy_term_fields
+      - { label: Status, name: status, widget: select, options: [experiment, in-progress, complete] }
+      - { label: Status label, name: statusLabel, widget: string }
+      - { label: Summary, name: summary, widget: text }
+      - label: Image
+        name: image
+        widget: object
+        fields: *image_fields
+      - label: Technologies
+        name: technologies
+        widget: list
+        fields: *taxonomy_term_fields
+      - { label: Stars, name: stars, widget: number, value_type: int, min: 0 }
+      - { label: Forks, name: forks, widget: number, value_type: int, min: 0 }
+      - { label: Updated label, name: updatedLabel, widget: string }
+      - { label: Live URL, name: liveUrl, widget: string, required: false }
+      - { label: Source URL, name: sourceUrl, widget: string, required: false }
+      - label: Sections
+        name: sections
+        widget: list
+        fields:
+          - { label: Title, name: title, widget: string }
+          - { label: Paragraphs, name: paragraphs, widget: list, field: { label: Paragraph, name: paragraph, widget: text } }
+      - label: Features
+        name: features
+        widget: list
+        required: false
+        fields:
+          - { label: Title, name: title, widget: string }
+          - { label: Description, name: description, widget: text }
+          - { label: Icon, name: icon, widget: select, options: [lightBulb, bolt, globeAlt, arrowPath] }
+      - label: Gallery
+        name: gallery
+        widget: list
+        required: false
+        fields: *image_fields
+      - label: Resources
+        name: resources
+        widget: list
+        required: false
+        fields:
+          - { label: Title, name: title, widget: string }
+          - { label: Description, name: description, widget: text }
+          - { label: Href, name: href, widget: string }
+          - { label: Icon, name: icon, widget: select, options: [folder01, github, play] }
+      - label: Facts
+        name: facts
+        widget: list
+        required: false
+        fields:
+          - { label: Label, name: label, widget: string }
+          - { label: Value, name: value, widget: string }
+      - label: Detail
+        name: detail
+        widget: object
+        required: false
+        fields:
+          - label: Page
+            name: page
+            widget: object
+            fields:
+              - { label: Template, name: template, widget: select, options: [fluid, contained, boxed, sidebar, centered] }
+              - label: Sections
+                name: sections
+                widget: list
+                summary: "{{fields.id}} — {{fields.type}}"
+                types:
+                  - label: Lab header
+                    name: lab_header
+                    widget: object
+                    fields:
+                      - { label: ID, name: id, widget: string }
+                      - { label: Type, name: type, widget: hidden, default: page-header }
+                      - { label: Template, name: template, widget: string }
+                      - label: Settings
+                        name: settings
+                        widget: object
+                        fields: *section_settings
+                      - label: Content
+                        name: content
+                        widget: object
+                        fields:
+                          - label: Labels
+                            name: labels
+                            widget: object
+                            fields:
+                              - { label: Breadcrumb, name: breadcrumb, widget: string }
+                              - { label: Actions, name: actions, widget: string }
+                              - { label: Live, name: live, widget: string }
+                              - { label: Source, name: source, widget: string }
+                              - { label: Technology, name: technology, widget: string }
+                  - label: Article
+                    name: article
+                    widget: object
+                    fields:
+                      - { label: ID, name: id, widget: string }
+                      - { label: Type, name: type, widget: hidden, default: article }
+                      - { label: Template, name: template, widget: string, required: false }
+                      - label: Settings
+                        name: settings
+                        widget: object
+                        fields: *section_settings
+                      - label: Content
+                        name: content
+                        widget: object
+                        fields:
+                          - { label: Appearance, name: appearance, widget: string, required: false }
+                  - label: Collection
+                    name: collection
+                    widget: object
+                    fields:
+                      - { label: ID, name: id, widget: string }
+                      - { label: Type, name: type, widget: hidden, default: collection }
+                      - { label: Template, name: template, widget: string, required: false }
+                      - label: Settings
+                        name: settings
+                        widget: object
+                        fields: *section_settings
+                      - label: Content
+                        name: content
+                        widget: object
+                        fields:
+                          - label: Heading
+                            name: heading
+                            widget: object
+                            required: false
+                            fields:
+                              - { label: Title, name: title, widget: string }
+                          - label: Cards
+                            name: cards
+                            widget: object
+                            required: false
+                            fields:
+                              - { label: Template, name: template, widget: string, required: false }
+                              - { label: Layout, name: layout, widget: string, required: false }
+                              - { label: Columns, name: columns, widget: number, value_type: int, min: 1, required: false }
+                              - { label: Gap, name: gap, widget: string, required: false }
+                          - label: Labels
+                            name: labels
+                            widget: object
+                            required: false
+                            fields:
+                              - { label: Open image, name: openImage, widget: string, required: false }
+                              - { label: Image title, name: imageTitle, widget: string, required: false }
