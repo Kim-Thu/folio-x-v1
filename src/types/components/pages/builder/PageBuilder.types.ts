@@ -42,6 +42,7 @@ export type PageRegionContainer = LContainerSize | "none";
 interface PageRegionBase {
 	key: string;
 	enabled?: boolean;
+	placement?: "main" | "aside";
 	section?:
 		| {
 				id?: string;
