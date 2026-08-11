@@ -11,6 +11,8 @@ import CTags from "@/components/object/component/CTags.astro";
 import type { PublicationDetailPageProps } from "@/types/components/pages/publication-detail/PublicationDetailPage.types";
 import type { CIconName } from "@/types/components/object/component/CIcon.types";
 
+type PublicationMetric = { label: string; value: string; icon: CIconName };
+
 const { data } = Astro.props as PublicationDetailPageProps;
 const { entry, collection } = data;
 const detail = entry.detail;
@@ -37,11 +39,11 @@ const chapterItems = chapterSection
 	{page.sections.map((section) => {
 		if (section.type === "page-header") {
 			const { content } = section;
-			const metrics: Array<{ label: string; value: string; icon: CIconName }> = [
+			const metrics = [
 				{ label: content.metrics.ratingLabel, value: String(entry.rating), icon: "star" },
 				{ label: content.metrics.readsLabel, value: entry.views, icon: "eye" },
 				{ label: content.metrics.chaptersLabel, value: String(entry.chapters), icon: "bookOpen" },
-			];
+			] as PublicationMetric[];
 			if (content.metrics.followersLabel && detail.followers) {
 				metrics.push({ label: content.metrics.followersLabel, value: detail.followers, icon: "bookmark" });
 			}
