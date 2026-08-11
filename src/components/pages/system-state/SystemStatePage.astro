@@ -1,8 +1,14 @@
 ---
-import PageBuilder from "@/components/pages/builder/PageBuilder.astro";
+import LPage from "@/components/layout/LPage.astro";
+import LSection from "@/components/layout/LSection.astro";
+import PStatus from "@/components/object/project/status/PStatus.astro";
 import type { SystemStatePageProps } from "@/types/components/pages/system-state/SystemStatePage.types";
 
 const { data } = Astro.props as SystemStatePageProps;
 ---
 
-<PageBuilder config={data.builder} />
+<LPage template="centered">
+	<LSection id={data.content.id} container="site">
+		<PStatus template="split-media" data={data.content} />
+	</LSection>
+</LPage>
