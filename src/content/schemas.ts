@@ -94,12 +94,103 @@ export const navigationSettingsSchema = z.object({
   navItems: z.array(navigationItemSchema), footerNavItems: z.array(navigationItemSchema), resourceLinks: z.array(navigationItemSchema).default([]), legalLinks: z.array(navigationItemSchema), socialLinks: z.array(socialLinkSchema),
 });
 
-const pageSectionSettingsSchema = z.record(z.string(), z.unknown());
-const pageSectionContentSchema = z.record(z.string(), z.unknown());
-
-export const pageSectionSchema = z.object({
-  id: z.string(), type: z.string(), template: z.string().optional(), settings: pageSectionSettingsSchema.default({}), content: pageSectionContentSchema.default({}),
+const pageSectionSettingsSchema = z.object({
+  theme: z.enum(["dark", "light", "canvas", "accent", "none"]),
+  spacing: z.enum(["compact", "default", "none", "lead", "body", "closing"]),
+  container: z.enum(["site", "content", "none"]),
+  layout: z.string().optional(),
+  columns: z.number().int().positive().optional(),
+  gap: z.string().optional(),
+  mediaRatio: z.string().optional(),
+  separator: z.string().optional(),
 });
+
+const pageActionSchema = z.object({
+  href: z.string().min(1),
+  label: z.string().min(1),
+  icon: z.string().optional(),
+  iconPosition: z.enum(["start", "end"]).optional(),
+  variant: z.string().optional(),
+  tone: z.string().optional(),
+  size: z.string().optional(),
+});
+
+const pageHeadingSchema = z.object({
+  number: z.string().optional(),
+  label: z.string().optional(),
+  title: z.union([z.string().min(1), z.array(z.string().min(1)).min(1)]),
+  description: z.string().optional(),
+  action: pageActionSchema.optional(),
+});
+
+const pageCardConfigSchema = z.object({
+  template: z.string().optional(),
+  layout: z.string().optional(),
+  columns: z.number().int().positive().optional(),
+  gap: z.string().optional(),
+  mediaRatio: z.string().optional(),
+  separator: z.string().optional(),
+  headingLevel: z.number().int().min(1).max(6).optional(),
+  slots: z.record(z.string(), z.boolean()).optional(),
+  actionLabel: z.string().optional(),
+  itemPresentation: z.record(z.string(), z.unknown()).optional(),
+});
+
+const collectionSectionSchema = z.object({
+  id: z.string().min(1),
+  type: z.literal("collection"),
+  template: z.string().optional(),
+  settings: pageSectionSettingsSchema,
+  content: z.object({
+    heading: pageHeadingSchema.optional(),
+    items: z.array(z.record(z.string(), z.unknown())).optional(),
+    source: z.object({
+      collection: z.enum(["products", "projects", "labs", "blog", "comics", "novels", "publications"]),
+      limit: z.number().int().positive().optional(),
+    }).optional(),
+    cards: pageCardConfigSchema.optional(),
+    itemPresentation: z.record(z.string(), z.unknown()).optional(),
+  }),
+});
+
+const archiveSectionSchema = z.object({
+  id: z.string().min(1),
+  type: z.literal("archive"),
+  template: z.enum(["taxonomy", "faceted"]),
+  settings: pageSectionSettingsSchema,
+  content: z.object({
+    source: z.object({ collection: z.enum(["projects", "labs", "products"]) }),
+    routes: z.record(z.string(), z.string()).optional(),
+    taxonomy: z.record(z.string(), z.unknown()).optional(),
+    toolbar: z.record(z.string(), z.unknown()),
+    sidebar: z.record(z.string(), z.unknown()).optional(),
+    result: z.record(z.string(), z.unknown()).optional(),
+    resultLabel: z.string().optional(),
+    cards: pageCardConfigSchema,
+    itemPresentation: z.record(z.string(), z.unknown()).optional(),
+    emptyLabel: z.string().min(1),
+    pagination: z.object({
+      label: z.string().min(1),
+      previousLabel: z.string().min(1),
+      nextLabel: z.string().min(1),
+      pageSize: z.number().int().positive(),
+    }),
+  }),
+});
+
+const genericPageSectionSchema = z.object({
+  id: z.string().min(1),
+  type: z.enum(["hero", "page-header", "article", "cta"]),
+  template: z.string().optional(),
+  settings: pageSectionSettingsSchema,
+  content: z.record(z.string(), z.unknown()),
+});
+
+export const pageSectionSchema = z.union([
+  collectionSectionSchema,
+  archiveSectionSchema,
+  genericPageSectionSchema,
+]);
 
 const pageLayoutSchema = z.object({
   template: z.enum(["fluid", "contained", "boxed", "sidebar", "centered"]),
