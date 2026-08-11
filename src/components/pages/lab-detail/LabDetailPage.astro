@@ -9,58 +9,40 @@ import CColumns from "@/components/object/component/CColumns.astro";
 import CDescriptionList from "@/components/object/component/CDescriptionList.astro";
 import CTags from "@/components/object/component/CTags.astro";
 import type { LabDetailPageProps } from "@/types/components/pages/lab-detail/LabDetailPage.types";
-import type { LSectionSpacing, LSectionTheme } from "@/types/components/layout/LSection.types";
 import type { PCardProps } from "@/types/components/object/project/card/PCard.types";
 
 const { data } = Astro.props as LabDetailPageProps;
 const { lab } = data;
 const page = lab.detail?.page;
-const sections = page?.sections ?? [];
-const byId = (id: string) => sections.find((section) => section.id === id);
-const record = (value: unknown) => value && typeof value === "object" && !Array.isArray(value) ? value as Record<string, unknown> : {};
-const stringValue = (value: unknown, fallback = "") => typeof value === "string" ? value : fallback;
-const numberValue = (value: unknown, fallback: number) => typeof value === "number" ? value : fallback;
-const frame = (section: NonNullable<typeof sections>[number]) => {
-	const settings = record(section.settings);
-	return {
-		theme: stringValue(settings.theme, "canvas") as LSectionTheme,
-		spacing: stringValue(settings.spacing, "compact") as LSectionSpacing,
-		container: stringValue(settings.container, "site") as "site" | "content" | "none",
-	};
-};
+if (!page) throw new Error(`Missing CMS lab detail: ${lab.slug}`);
+
+const summarySection = page.sections.find((section) => section.type === "page-header");
+const contentSection = page.sections.find((section) => section.type === "article");
+const featuresSection = page.sections.find((section) => section.type === "collection" && section.id === "features");
+const gallerySection = page.sections.find((section) => section.type === "collection" && section.id === "gallery");
 const articleBlocks = lab.sections.map((section, index) => ({
 	id: index === 0 ? "overview" : section.title.toLowerCase().replace(/\s+/g, "-"),
 	title: section.title,
 	paragraphs: section.paragraphs,
 }));
-const summarySection = byId("lab-summary");
-const summaryContent = record(summarySection?.content);
-const summaryLabels = record(summaryContent.labels);
-const actions = [
-	...(lab.liveUrl ? [{ label: stringValue(summaryLabels.live), href: lab.liveUrl, icon: "arrowUpRight" as const, variant: "primary" as const }] : []),
-	...(lab.sourceUrl ? [{ label: stringValue(summaryLabels.source), href: lab.sourceUrl, icon: "github" as const, variant: "outline" as const }] : []),
-];
-const contentSection = byId("lab-content");
-const contentConfig = record(contentSection?.content);
-const featuresSection = byId("features");
-const featuresContent = record(featuresSection?.content);
-const featuresHeading = record(featuresContent.heading);
-const featuresCards = record(featuresContent.cards);
-const gallerySection = byId("gallery");
-const galleryContent = record(gallerySection?.content);
-const galleryHeading = record(galleryContent.heading);
-const galleryCards = record(galleryContent.cards);
-const galleryLabels = record(galleryContent.labels);
+
+const summaryLabels = summarySection?.content.labels;
+const actions = summaryLabels
+	? [
+			...(lab.liveUrl ? [{ label: summaryLabels.live, href: lab.liveUrl, icon: "arrowUpRight" as const, variant: "primary" as const }] : []),
+			...(lab.sourceUrl ? [{ label: summaryLabels.source, href: lab.sourceUrl, icon: "github" as const, variant: "outline" as const }] : []),
+		]
+	: [];
 ---
 
-<LPage template={page?.template ?? "fluid"}>
-	{summarySection && (
-		<LSection {...frame(summarySection)}>
+<LPage template={page.template}>
+	{summarySection && summaryLabels && (
+		<LSection id={summarySection.id} {...summarySection.settings}>
 			<PPageHeader
-				template={summarySection.template as "media-aside"}
+				template={summarySection.template}
 				data={{
 					breadcrumb: {
-						label: stringValue(summaryLabels.breadcrumb),
+						label: summaryLabels.breadcrumb,
 						items: [
 							{ label: "Labs", href: "/labs" },
 							{ label: lab.category.label, href: `/labs/category/${lab.category.slug}` },
@@ -77,24 +59,24 @@ const galleryLabels = record(galleryContent.labels);
 						{ icon: "github", label: String(lab.forks) },
 						{ icon: "clock01", label: lab.updatedLabel },
 					],
-					actionsLabel: stringValue(summaryLabels.actions),
+					actionsLabel: summaryLabels.actions,
 					actions,
 				}}
 			/>
 		</LSection>
 	)}
 
-	{contentSection && (
-		<LSection {...frame(contentSection)}>
+	{contentSection && summaryLabels && (
+		<LSection id={contentSection.id} {...contentSection.settings}>
 			<CColumns columns="twelve" gap="lg">
 				<div class="lg:col-span-8">
-					<PArticle appearance={stringValue(contentConfig.appearance, "compact") as "compact"} blocks={articleBlocks} />
+					<PArticle appearance={contentSection.content.appearance} blocks={articleBlocks} />
 				</div>
 				<aside class="lg:col-span-4">
 					<CColumns columns="one" gap="md">
 						<CDescriptionList items={lab.facts} />
 						<CTags
-							label={stringValue(summaryLabels.technology)}
+							label={summaryLabels.technology}
 							items={lab.technologies.map((technology) => ({
 								label: technology.label,
 								href: `/labs/technology/${technology.slug}`,
@@ -107,14 +89,14 @@ const galleryLabels = record(galleryContent.labels);
 	)}
 
 	{featuresSection && lab.features.length > 0 && (
-		<LSection id={featuresSection.id} {...frame(featuresSection)}>
+		<LSection id={featuresSection.id} {...featuresSection.settings}>
 			<CColumns columns="one" gap="md">
-				<PSectionHeader data={{ title: stringValue(featuresHeading.title) }} headingLevel={2} appearance="compact" />
+				<PSectionHeader data={{ title: featuresSection.content.heading.title }} headingLevel={2} appearance="compact" />
 				<PCard
-					template={stringValue(featuresCards.template, "icon-summary") as PCardProps["template"]}
-					layout={stringValue(featuresCards.layout, "grid") as PCardProps["layout"]}
-					columns={numberValue(featuresCards.columns, 2) as PCardProps["columns"]}
-					gap={stringValue(featuresCards.gap, "sm") as PCardProps["gap"]}
+					template={featuresSection.content.cards.template as PCardProps["template"]}
+					layout={featuresSection.content.cards.layout as PCardProps["layout"]}
+					columns={featuresSection.content.cards.columns as PCardProps["columns"]}
+					gap={featuresSection.content.cards.gap as PCardProps["gap"]}
 					items={lab.features.map((feature) => ({
 						href: `#${featuresSection.id}`,
 						ariaLabel: feature.title,
@@ -127,19 +109,19 @@ const galleryLabels = record(galleryContent.labels);
 		</LSection>
 	)}
 
-	{gallerySection && lab.gallery.length > 0 && (
-		<LSection id={gallerySection.id} {...frame(gallerySection)}>
+	{gallerySection && gallerySection.content.labels && lab.gallery.length > 0 && (
+		<LSection id={gallerySection.id} {...gallerySection.settings}>
 			<CColumns columns="one" gap="md">
-				<PSectionHeader data={{ title: stringValue(galleryHeading.title) }} headingLevel={2} appearance="compact" />
+				<PSectionHeader data={{ title: gallerySection.content.heading.title }} headingLevel={2} appearance="compact" />
 				<PCard
-					template={stringValue(galleryCards.template, "media-only") as PCardProps["template"]}
-					layout={stringValue(galleryCards.layout, "grid") as PCardProps["layout"]}
-					columns={numberValue(galleryCards.columns, 5) as PCardProps["columns"]}
-					gap={stringValue(galleryCards.gap, "sm") as PCardProps["gap"]}
+					template={gallerySection.content.cards.template as PCardProps["template"]}
+					layout={gallerySection.content.cards.layout as PCardProps["layout"]}
+					columns={gallerySection.content.cards.columns as PCardProps["columns"]}
+					gap={gallerySection.content.cards.gap as PCardProps["gap"]}
 					items={lab.gallery.map((image, index) => ({
 						href: image.src,
-						ariaLabel: `${stringValue(galleryLabels.openImage)} ${index + 1}`,
-						title: [`${stringValue(galleryLabels.imageTitle)} ${index + 1}`],
+						ariaLabel: `${gallerySection.content.labels?.openImage} ${index + 1}`,
+						title: [`${gallerySection.content.labels?.imageTitle} ${index + 1}`],
 						media: image,
 					}))}
 				/>
