@@ -5,6 +5,7 @@
     "description": "Illustrated series and graphic stories."
   },
   "content": {
+    "layout": { "template": "fluid" },
     "sections": [
       {
         "id": "comics-hero",
@@ -46,6 +47,13 @@
             "action": { "label": "View all", "href": "/comics", "icon": "arrowRight" }
           },
           "source": { "collection": "comics", "limit": 24 },
+          "itemPresentation": {
+            "routes": { "base": "/comics/", "categoryBase": "/comics/category/" },
+            "ariaLabelPrefix": "Read ",
+            "categoryDisplay": "text",
+            "tagsLabelSuffix": " genres",
+            "viewsIcon": "globeAlt"
+          },
           "cards": {
             "template": "media-metrics",
             "layout": "grid",
