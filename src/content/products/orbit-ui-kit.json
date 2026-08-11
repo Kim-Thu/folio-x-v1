@@ -27,16 +27,22 @@
           },
           "content": {
             "breadcrumbLabel": "Breadcrumb",
-            "collectionLabel": "Products",
+            "productsLabel": "Products",
             "galleryLabel": "Orbit UI Kit gallery",
-            "previewLabel": "Select preview",
-            "reviewLabel": "reviews",
-            "platformLabel": "Platform",
-            "categoryLabel": "Category",
-            "primaryActionLabel": "Contact to purchase",
-            "primaryActionHref": "mailto:thunk.work.91@gmail.com",
-            "secondaryActionLabel": "View preview",
-            "paymentLabel": "Payment methods"
+            "thumbnailLabel": "Select preview",
+            "salesLabel": "154 reviews",
+            "features": [],
+            "facts": [
+              { "label": "Platform", "value": "Figma" },
+              { "label": "Category", "value": "Figma UI Kit" }
+            ],
+            "actionsLabel": "Orbit UI Kit actions",
+            "actions": [
+              { "label": "Contact to purchase", "href": "mailto:thunk.work.91@gmail.com", "icon": "shoppingBag", "variant": "primary" },
+              { "label": "View preview", "href": "/uploads/page-header-insight.png", "icon": "arrowUpRight", "variant": "outline" }
+            ],
+            "paymentLabel": "Payment methods",
+            "paymentMethods": []
           }
         },
         {
@@ -49,11 +55,13 @@
             "container": "content"
           },
           "content": {
-            "title": "Overview",
             "blocks": [
               {
-                "type": "paragraph",
-                "text": "Modern UI kit with 300+ components and elegant system."
+                "id": "product-overview",
+                "title": "Overview",
+                "paragraphs": [
+                  "Modern UI kit with 300+ components and elegant system."
+                ]
               }
             ]
           }
