@@ -25,17 +25,19 @@ const articleBlocks = lab.sections.map((section, index) => ({
 	paragraphs: section.paragraphs,
 }));
 
-const summaryLabels = summarySection?.content.labels;
-const actions = summaryLabels
+const summaryContent = summarySection?.content;
+const summaryLabels = summaryContent?.labels;
+const metricValue = (source: "stars" | "forks" | "updatedLabel") => source === "updatedLabel" ? lab.updatedLabel : String(lab[source]);
+const actions = summaryContent && summaryLabels
 	? [
-			...(lab.liveUrl ? [{ label: summaryLabels.live, href: lab.liveUrl, icon: "arrowUpRight" as const, variant: "primary" as const }] : []),
-			...(lab.sourceUrl ? [{ label: summaryLabels.source, href: lab.sourceUrl, icon: "github" as const, variant: "outline" as const }] : []),
+			...(lab.liveUrl ? [{ label: summaryLabels.live, href: lab.liveUrl, ...summaryContent.actions.live }] : []),
+			...(lab.sourceUrl ? [{ label: summaryLabels.source, href: lab.sourceUrl, ...summaryContent.actions.source }] : []),
 		]
 	: [];
 ---
 
 <LPage template={page.template}>
-	{summarySection && summaryLabels && (
+	{summarySection && summaryContent && summaryLabels && (
 		<LSection id={summarySection.id} {...summarySection.settings}>
 			<PPageHeader
 				template={summarySection.template}
@@ -43,21 +45,17 @@ const actions = summaryLabels
 					breadcrumb: {
 						label: summaryLabels.breadcrumb,
 						items: [
-							{ label: "Labs", href: "/labs" },
-							{ label: lab.category.label, href: `/labs/category/${lab.category.slug}` },
+							{ label: summaryLabels.collection, href: summaryContent.routes.base },
+							{ label: lab.category.label, href: `${summaryContent.routes.categoryBase}/${lab.category.slug}` },
 						],
 						current: lab.title,
 					},
 					image: lab.image,
-					category: { label: lab.category.label, href: `/labs/category/${lab.category.slug}` },
+					category: { label: lab.category.label, href: `${summaryContent.routes.categoryBase}/${lab.category.slug}` },
 					badge: lab.statusLabel,
 					title: lab.title,
 					description: lab.summary,
-					metrics: [
-						{ icon: "star", label: String(lab.stars) },
-						{ icon: "github", label: String(lab.forks) },
-						{ icon: "clock01", label: lab.updatedLabel },
-					],
+					metrics: summaryContent.metrics.map((metric) => ({ icon: metric.icon, label: metricValue(metric.source) })),
 					actionsLabel: summaryLabels.actions,
 					actions,
 				}}
@@ -65,20 +63,20 @@ const actions = summaryLabels
 		</LSection>
 	)}
 
-	{contentSection && summaryLabels && (
+	{contentSection && summaryContent && summaryLabels && (
 		<LSection id={contentSection.id} {...contentSection.settings}>
-			<CColumns columns="twelve" gap="lg">
-				<div class="lg:col-span-8">
+			<CColumns columns={contentSection.content.layout.columns} gap={contentSection.content.layout.gap}>
+				<div class={`lg:col-span-${contentSection.content.layout.articleSpan}`}>
 					<PArticle appearance={contentSection.content.appearance} blocks={articleBlocks} />
 				</div>
-				<aside class="lg:col-span-4">
-					<CColumns columns="one" gap="md">
+				<aside class={`lg:col-span-${contentSection.content.layout.asideSpan}`}>
+					<CColumns columns={contentSection.content.layout.asideColumns} gap={contentSection.content.layout.asideGap}>
 						<CDescriptionList items={lab.facts} />
 						<CTags
 							label={summaryLabels.technology}
 							items={lab.technologies.map((technology) => ({
 								label: technology.label,
-								href: `/labs/technology/${technology.slug}`,
+								href: `${summaryContent.routes.technologyBase}/${technology.slug}`,
 							}))}
 						/>
 					</CColumns>
@@ -89,8 +87,12 @@ const actions = summaryLabels
 
 	{featuresSection && lab.features.length > 0 && (
 		<LSection id={featuresSection.id} {...featuresSection.settings}>
-			<CColumns columns="one" gap="md">
-				<PSectionHeader data={{ title: featuresSection.content.heading.title }} headingLevel={2} appearance="compact" />
+			<CColumns columns={featuresSection.content.layout.columns} gap={featuresSection.content.layout.gap}>
+				<PSectionHeader
+					data={{ title: featuresSection.content.heading.title }}
+					headingLevel={featuresSection.content.heading.level}
+					appearance={featuresSection.content.heading.appearance}
+				/>
 				<PCard
 					template={featuresSection.content.cards.template}
 					layout={featuresSection.content.cards.layout}
@@ -110,8 +112,12 @@ const actions = summaryLabels
 
 	{gallerySection && gallerySection.content.labels && lab.gallery.length > 0 && (
 		<LSection id={gallerySection.id} {...gallerySection.settings}>
-			<CColumns columns="one" gap="md">
-				<PSectionHeader data={{ title: gallerySection.content.heading.title }} headingLevel={2} appearance="compact" />
+			<CColumns columns={gallerySection.content.layout.columns} gap={gallerySection.content.layout.gap}>
+				<PSectionHeader
+					data={{ title: gallerySection.content.heading.title }}
+					headingLevel={gallerySection.content.heading.level}
+					appearance={gallerySection.content.heading.appearance}
+				/>
 				<PCard
 					template={gallerySection.content.cards.template}
 					layout={gallerySection.content.cards.layout}
