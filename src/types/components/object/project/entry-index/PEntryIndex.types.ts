@@ -1,4 +1,4 @@
-import type { CButtonProps } from "@/types/components/object/component/CButton.types";
+import type { CButtonLinkProps, CButtonProps } from "@/types/components/object/component/CButton.types";
 import type { CSelectOption } from "@/types/components/object/component/CSelect.types";
 
 export interface PEntryIndexItem {
@@ -10,7 +10,7 @@ export interface PEntryIndexItem {
 	views: string;
 	href: string;
 	badge?: string;
-	action?: CButtonProps;
+	action?: Omit<CButtonLinkProps, "href">;
 }
 
 export interface PEntryIndexProps {
