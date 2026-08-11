@@ -28,13 +28,19 @@
             "productsLabel": "Products",
             "galleryLabel": "Design System Pro gallery",
             "thumbnailLabel": "Select preview",
-            "reviewsLabel": "reviews",
-            "platformLabel": "Platform",
-            "categoryLabel": "Category",
+            "salesLabel": "82 reviews",
+            "features": [],
+            "facts": [
+              { "label": "Platform", "value": "Figma" },
+              { "label": "Category", "value": "Figma UI Kit" }
+            ],
             "actionsLabel": "Design System Pro actions",
-            "primaryActionLabel": "Contact to purchase",
-            "secondaryActionLabel": "View preview",
-            "paymentLabel": "Payment methods"
+            "actions": [
+              { "label": "Contact to purchase", "href": "mailto:hello@nkt.studio?subject=Design%20System%20Pro", "icon": "shoppingBag", "variant": "primary" },
+              { "label": "View preview", "href": "https://images.unsplash.com/photo-1559028012-481c04fa702d?auto=format&fit=crop&w=900&q=88", "icon": "arrowUpRight", "variant": "outline" }
+            ],
+            "paymentLabel": "Payment methods",
+            "paymentMethods": []
           }
         },
         {
