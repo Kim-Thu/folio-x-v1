@@ -36,6 +36,14 @@ const props = Astro.props as PageBuilderProps;
 const context = props.context ?? {};
 
 type CollectionSection = Extract<PageSectionData, { type: "collection" }>;
+type ProductsCollectionSection = Extract<CollectionSection, { content: { source: { collection: "products" } } }>;
+type ProjectsCollectionSection = Extract<CollectionSection, { content: { source: { collection: "projects" } } }>;
+type LabsCollectionSection = Extract<CollectionSection, { content: { source: { collection: "labs" } } }>;
+type BlogCollectionSection = Extract<CollectionSection, { content: { source: { collection: "blog" } } }>;
+type ComicsCollectionSection = Extract<CollectionSection, { content: { source: { collection: "comics" } } }>;
+type NovelsCollectionSection = Extract<CollectionSection, { content: { source: { collection: "novels" } } }>;
+type PublicationsCollectionSection = Extract<CollectionSection, { content: { source: { collection: "publications" } } }>;
+
 type ArchiveSection = Extract<PageSectionData, { type: "archive" }>;
 type ProjectsArchiveSection = Extract<ArchiveSection, { content: { source: { collection: "projects" } } }>;
 type LabsArchiveSection = Extract<ArchiveSection, { content: { source: { collection: "labs" } } }>;
@@ -45,6 +53,18 @@ type HeroRegionProps = Extract<PageRegion, { component: "hero" }>["props"];
 type PageHeaderRegionProps = Extract<PageRegion, { component: "page-header" }>["props"];
 type ArticleRegionProps = Extract<PageRegion, { component: "article" }>["props"];
 type CtaRegionProps = Extract<PageRegion, { component: "cta" }>["props"];
+
+const isCollectionSource = <T extends "products" | "projects" | "labs" | "blog" | "comics" | "novels" | "publications">(
+	section: CollectionSection,
+	collection: T,
+): section is Extract<CollectionSection, { content: { source: { collection: T } } }> =>
+	"source" in section.content && section.content.source.collection === collection;
+
+const isArchiveSource = <T extends "projects" | "labs" | "products">(
+	section: ArchiveSection,
+	collection: T,
+): section is Extract<ArchiveSection, { content: { source: { collection: T } } }> =>
+	section.content.source.collection === collection;
 
 const sectionFrame = (section: PageSectionData) => ({
 	id: section.id,
@@ -83,75 +103,81 @@ const cardConfig = (section: CollectionSection, items: PCardData[]): PCardProps 
 	};
 };
 
+const take = <T,>(items: T[], limit?: number): T[] =>
+	limit === undefined ? items : items.slice(0, limit);
+
 const resolveCollectionItems = async (section: CollectionSection): Promise<PCardData[]> => {
 	if ("items" in section.content) {
 		return section.content.items as unknown as PCardData[];
 	}
 
-	const take = <T,>(items: T[]) =>
-		section.content.source.limit === undefined
-			? items
-			: items.slice(0, section.content.source.limit);
+	if (isCollectionSource(section, "products")) {
+		const content: ProductsCollectionSection["content"] = section.content;
+		return take(await getProducts(), content.source.limit).map((item) =>
+			mapProductToCard(item, content.itemPresentation as ProductCardPresentation),
+		);
+	}
 
-	// Keep the discriminant attached to section.content. Destructuring source and
-	// itemPresentation separately loses their correlation and widens the presentation
-	// type to the union of every collection presentation schema.
-	switch (section.content.source.collection) {
-		case "products":
-			return take(await getProducts()).map((item) =>
-				mapProductToCard(item, section.content.itemPresentation as ProductCardPresentation),
-			);
-		case "projects":
-			return take(await getProjects()).map((item) =>
-				mapProjectToCard(item, section.content.itemPresentation as ProjectCardPresentation),
-			);
-		case "labs":
-			return take(await getLabs()).map((item) =>
-				mapLabToCard(item, section.content.itemPresentation as LabCardPresentation),
-			);
-		case "blog":
-			return take(await getInsights()).map((item) =>
-				mapInsightToCard(item, section.content.itemPresentation as InsightCardPresentation),
-			);
-		case "comics":
-			return take(await getPublications("comics")).map((item) =>
-				mapPublicationToCard(
-					item,
-					"comics",
-					section.content.itemPresentation as PublicationCardPresentation,
-				),
-			);
-		case "novels":
-			return take(await getPublications("novels")).map((item) =>
+	if (isCollectionSource(section, "projects")) {
+		const content: ProjectsCollectionSection["content"] = section.content;
+		return take(await getProjects(), content.source.limit).map((item) =>
+			mapProjectToCard(item, content.itemPresentation as ProjectCardPresentation),
+		);
+	}
+
+	if (isCollectionSource(section, "labs")) {
+		const content: LabsCollectionSection["content"] = section.content;
+		return take(await getLabs(), content.source.limit).map((item) =>
+			mapLabToCard(item, content.itemPresentation as LabCardPresentation),
+		);
+	}
+
+	if (isCollectionSource(section, "blog")) {
+		const content: BlogCollectionSection["content"] = section.content;
+		return take(await getInsights(), content.source.limit).map((item) =>
+			mapInsightToCard(item, content.itemPresentation as InsightCardPresentation),
+		);
+	}
+
+	if (isCollectionSource(section, "comics")) {
+		const content: ComicsCollectionSection["content"] = section.content;
+		return take(await getPublications("comics"), content.source.limit).map((item) =>
+			mapPublicationToCard(item, "comics", content.itemPresentation as PublicationCardPresentation),
+		);
+	}
+
+	if (isCollectionSource(section, "novels")) {
+		const content: NovelsCollectionSection["content"] = section.content;
+		return take(await getPublications("novels"), content.source.limit).map((item) =>
+			mapPublicationToCard(item, "novels", content.itemPresentation as PublicationCardPresentation),
+		);
+	}
+
+	if (isCollectionSource(section, "publications")) {
+		const content: PublicationsCollectionSection["content"] = section.content;
+		const [novels, comics] = await Promise.all([
+			getPublications("novels"),
+			getPublications("comics"),
+		]);
+		return take([
+			...novels.map((item) =>
 				mapPublicationToCard(
 					item,
 					"novels",
-					section.content.itemPresentation as PublicationCardPresentation,
+					content.itemPresentation.novels as PublicationCardPresentation,
 				),
-			);
-		case "publications": {
-			const [novels, comics] = await Promise.all([
-				getPublications("novels"),
-				getPublications("comics"),
-			]);
-			return take([
-				...novels.map((item) =>
-					mapPublicationToCard(
-						item,
-						"novels",
-						section.content.itemPresentation.novels as PublicationCardPresentation,
-					),
+			),
+			...comics.map((item) =>
+				mapPublicationToCard(
+					item,
+					"comics",
+					content.itemPresentation.comics as PublicationCardPresentation,
 				),
-				...comics.map((item) =>
-					mapPublicationToCard(
-						item,
-						"comics",
-						section.content.itemPresentation.comics as PublicationCardPresentation,
-					),
-				),
-			]);
-		}
+			),
+		], content.source.limit);
 	}
+
+	return [];
 };
 
 const buildProjectsArchive = async (section: ProjectsArchiveSection): Promise<ArchiveRegion> => {
@@ -300,11 +326,9 @@ const regions: PageRegion[] = await Promise.all(props.page.content.sections.map(
 			return { key: section.id, component: "collection", section: frame, props: { template: section.template as "stack" | "split" | undefined, header: sectionHeader(section), cardGroups: [cardConfig(section, items)] } };
 		}
 		case "archive":
-			switch (section.content.source.collection) {
-				case "projects": return buildProjectsArchive(section);
-				case "labs": return buildLabsArchive(section);
-				case "products": return buildProductsArchive(section);
-			}
+			if (isArchiveSource(section, "projects")) return buildProjectsArchive(section);
+			if (isArchiveSource(section, "labs")) return buildLabsArchive(section);
+			if (isArchiveSource(section, "products")) return buildProductsArchive(section);
 	}
 }));
 ---
