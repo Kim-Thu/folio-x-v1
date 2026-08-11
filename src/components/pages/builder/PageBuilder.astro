@@ -39,18 +39,24 @@ const props = Astro.props as PageBuilderProps;
 const context = props.context ?? {};
 
 type CollectionSection = Extract<PageSectionData, { type: "collection" }>;
-type ArchiveSection = Extract<PageSectionData, { type: "archive" }>;
-type ProjectsArchiveSection = Extract<ArchiveSection, { content: { source: { collection: "projects" } } }>;
-type LabsArchiveSection = Extract<ArchiveSection, { content: { source: { collection: "labs" } } }>;
-type ProductsArchiveSection = Extract<ArchiveSection, { content: { source: { collection: "products" } } }>;
+type CollectionContent = CollectionSection["content"];
+type SourcedCollectionContent = Extract<CollectionContent, { source: unknown }>;
+type ProductsCollectionContent = Extract<SourcedCollectionContent, { source: { collection: "products" } }>;
+type ProjectsCollectionContent = Extract<SourcedCollectionContent, { source: { collection: "projects" } }>;
+type LabsCollectionContent = Extract<SourcedCollectionContent, { source: { collection: "labs" } }>;
+type BlogCollectionContent = Extract<SourcedCollectionContent, { source: { collection: "blog" } }>;
+type ComicsCollectionContent = Extract<SourcedCollectionContent, { source: { collection: "comics" } }>;
+type NovelsCollectionContent = Extract<SourcedCollectionContent, { source: { collection: "novels" } }>;
+type PublicationsCollectionContent = Extract<SourcedCollectionContent, { source: { collection: "publications" } }>;
 
-type ProductsCollectionSection = Extract<CollectionSection, { content: { source: { collection: "products" } } }>;
-type ProjectsCollectionSection = Extract<CollectionSection, { content: { source: { collection: "projects" } } }>;
-type LabsCollectionSection = Extract<CollectionSection, { content: { source: { collection: "labs" } } }>;
-type BlogCollectionSection = Extract<CollectionSection, { content: { source: { collection: "blog" } } }>;
-type ComicsCollectionSection = Extract<CollectionSection, { content: { source: { collection: "comics" } } }>;
-type NovelsCollectionSection = Extract<CollectionSection, { content: { source: { collection: "novels" } } }>;
-type PublicationsCollectionSection = Extract<CollectionSection, { content: { source: { collection: "publications" } } }>;
+type ArchiveSection = Extract<PageSectionData, { type: "archive" }>;
+type ArchiveContent = ArchiveSection["content"];
+type ProjectsArchiveContent = Extract<ArchiveContent, { source: { collection: "projects" } }>;
+type LabsArchiveContent = Extract<ArchiveContent, { source: { collection: "labs" } }>;
+type ProductsArchiveContent = Extract<ArchiveContent, { source: { collection: "products" } }>;
+type ProjectsArchiveSection = Omit<ArchiveSection, "content"> & { content: ProjectsArchiveContent };
+type LabsArchiveSection = Omit<ArchiveSection, "content"> & { content: LabsArchiveContent };
+type ProductsArchiveSection = Omit<ArchiveSection, "content"> & { content: ProductsArchiveContent };
 
 type HeroRegionProps = Extract<PageRegion, { component: "hero" }>["props"];
 type PageHeaderRegionProps = Extract<PageRegion, { component: "page-header" }>["props"];
@@ -97,64 +103,60 @@ const cardConfig = (section: CollectionSection, items: PCardData[]): PCardProps 
 const take = <T,>(items: T[], limit?: number) =>
 	limit === undefined ? items : items.slice(0, limit);
 
-const isCollectionSource = <T extends CollectionSection["content"]["source"]["collection"]>(
-	section: CollectionSection,
-	collection: T,
-): section is Extract<CollectionSection, { content: { source: { collection: T } } }> =>
-	"source" in section.content && section.content.source.collection === collection;
-
 const resolveCollectionItems = async (section: CollectionSection): Promise<PCardData[]> => {
-	if ("items" in section.content) return section.content.items as unknown as PCardData[];
+	const content = section.content;
+	if ("items" in content) return content.items as unknown as PCardData[];
+	if (!("source" in content)) return [];
 
-	if (isCollectionSource(section, "products")) {
-		const typed = section as ProductsCollectionSection;
-		return take(await getProducts(), typed.content.source.limit).map((item) =>
-			mapProductToCard(item, typed.content.itemPresentation as ProductCardPresentation),
-		);
+	switch (content.source.collection) {
+		case "products": {
+			const typed = content as ProductsCollectionContent;
+			return take(await getProducts(), typed.source.limit).map((item) =>
+				mapProductToCard(item, typed.itemPresentation as ProductCardPresentation),
+			);
+		}
+		case "projects": {
+			const typed = content as ProjectsCollectionContent;
+			return take(await getProjects(), typed.source.limit).map((item) =>
+				mapProjectToCard(item, typed.itemPresentation as ProjectCardPresentation),
+			);
+		}
+		case "labs": {
+			const typed = content as LabsCollectionContent;
+			return take(await getLabs(), typed.source.limit).map((item) =>
+				mapLabToCard(item, typed.itemPresentation as LabCardPresentation),
+			);
+		}
+		case "blog": {
+			const typed = content as BlogCollectionContent;
+			return take(await getInsights(), typed.source.limit).map((item) =>
+				mapInsightToCard(item, typed.itemPresentation as InsightCardPresentation),
+			);
+		}
+		case "comics": {
+			const typed = content as ComicsCollectionContent;
+			return take(await getPublications("comics"), typed.source.limit).map((item) =>
+				mapPublicationToCard(item, "comics", typed.itemPresentation as PublicationCardPresentation),
+			);
+		}
+		case "novels": {
+			const typed = content as NovelsCollectionContent;
+			return take(await getPublications("novels"), typed.source.limit).map((item) =>
+				mapPublicationToCard(item, "novels", typed.itemPresentation as PublicationCardPresentation),
+			);
+		}
+		case "publications": {
+			const typed = content as PublicationsCollectionContent;
+			const [novels, comics] = await Promise.all([
+				getPublications("novels"),
+				getPublications("comics"),
+			]);
+			return take([
+				...novels.map((item) => mapPublicationToCard(item, "novels", typed.itemPresentation.novels as PublicationCardPresentation)),
+				...comics.map((item) => mapPublicationToCard(item, "comics", typed.itemPresentation.comics as PublicationCardPresentation)),
+			], typed.source.limit);
+		}
 	}
-	if (isCollectionSource(section, "projects")) {
-		const typed = section as ProjectsCollectionSection;
-		return take(await getProjects(), typed.content.source.limit).map((item) =>
-			mapProjectToCard(item, typed.content.itemPresentation as ProjectCardPresentation),
-		);
-	}
-	if (isCollectionSource(section, "labs")) {
-		const typed = section as LabsCollectionSection;
-		return take(await getLabs(), typed.content.source.limit).map((item) =>
-			mapLabToCard(item, typed.content.itemPresentation as LabCardPresentation),
-		);
-	}
-	if (isCollectionSource(section, "blog")) {
-		const typed = section as BlogCollectionSection;
-		return take(await getInsights(), typed.content.source.limit).map((item) =>
-			mapInsightToCard(item, typed.content.itemPresentation as InsightCardPresentation),
-		);
-	}
-	if (isCollectionSource(section, "comics")) {
-		const typed = section as ComicsCollectionSection;
-		return take(await getPublications("comics"), typed.content.source.limit).map((item) =>
-			mapPublicationToCard(item, "comics", typed.content.itemPresentation as PublicationCardPresentation),
-		);
-	}
-	if (isCollectionSource(section, "novels")) {
-		const typed = section as NovelsCollectionSection;
-		return take(await getPublications("novels"), typed.content.source.limit).map((item) =>
-			mapPublicationToCard(item, "novels", typed.content.itemPresentation as PublicationCardPresentation),
-		);
-	}
-	if (isCollectionSource(section, "publications")) {
-		const typed = section as PublicationsCollectionSection;
-		const [novels, comics] = await Promise.all([
-			getPublications("novels"),
-			getPublications("comics"),
-		]);
-		return take([
-			...novels.map((item) => mapPublicationToCard(item, "novels", typed.content.itemPresentation.novels as PublicationCardPresentation)),
-			...comics.map((item) => mapPublicationToCard(item, "comics", typed.content.itemPresentation.comics as PublicationCardPresentation)),
-		], typed.content.source.limit);
-	}
-
-	return [];
 };
 
 const buildProjectsArchive = async (section: ProjectsArchiveSection): Promise<ArchiveRegion> => {
@@ -174,7 +176,7 @@ const buildProjectsArchive = async (section: ProjectsArchiveSection): Promise<Ar
 	return {
 		key: section.id,
 		component: "archive",
-		section: sectionFrame(section),
+		section: sectionFrame(section as PageSectionData),
 		props: {
 			mode: "taxonomy",
 			toolbar: { data: {
@@ -223,7 +225,7 @@ const buildLabsArchive = async (section: LabsArchiveSection): Promise<ArchiveReg
 	return {
 		key: section.id,
 		component: "archive",
-		section: sectionFrame(section),
+		section: sectionFrame(section as PageSectionData),
 		props: {
 			mode: "faceted",
 			toolbar: { data: { search: toolbar.search, selects: toolbar.selects, sort: toolbar.sort, view: toolbar.view } },
@@ -278,7 +280,7 @@ const buildProductsArchive = async (section: ProductsArchiveSection): Promise<Ar
 	return {
 		key: section.id,
 		component: "archive",
-		section: sectionFrame(section),
+		section: sectionFrame(section as PageSectionData),
 		props: {
 			mode: "faceted",
 			toolbar: { data: {
@@ -311,12 +313,6 @@ const buildProductsArchive = async (section: ProductsArchiveSection): Promise<Ar
 	};
 };
 
-const isArchiveSource = <T extends ArchiveSection["content"]["source"]["collection"]>(
-	section: ArchiveSection,
-	collection: T,
-): section is Extract<ArchiveSection, { content: { source: { collection: T } } }> =>
-	section.content.source.collection === collection;
-
 const regions: PageRegion[] = await Promise.all(props.page.content.sections.map(async (section): Promise<PageRegion> => {
 	const frame = sectionFrame(section);
 	switch (section.type) {
@@ -333,11 +329,15 @@ const regions: PageRegion[] = await Promise.all(props.page.content.sections.map(
 			return { key: section.id, component: "collection", section: frame, props: { template: section.template as "stack" | "split" | undefined, header: sectionHeader(section), cardGroups: [cardConfig(section, items)] } };
 		}
 		case "archive": {
-			const archive = section as ArchiveSection;
-			if (isArchiveSource(archive, "projects")) return buildProjectsArchive(archive);
-			if (isArchiveSource(archive, "labs")) return buildLabsArchive(archive);
-			if (isArchiveSource(archive, "products")) return buildProductsArchive(archive);
-			throw new Error(`Unsupported archive collection: ${archive.content.source.collection}`);
+			const archiveContent = section.content;
+			switch (archiveContent.source.collection) {
+				case "projects":
+					return buildProjectsArchive({ ...section, content: archiveContent as ProjectsArchiveContent });
+				case "labs":
+					return buildLabsArchive({ ...section, content: archiveContent as LabsArchiveContent });
+				case "products":
+					return buildProductsArchive({ ...section, content: archiveContent as ProductsArchiveContent });
+			}
 		}
 	}
 }));
