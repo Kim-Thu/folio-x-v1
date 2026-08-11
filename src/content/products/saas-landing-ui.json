@@ -26,17 +26,22 @@
           },
           "content": {
             "breadcrumbLabel": "Breadcrumb",
-            "collectionLabel": "Products",
+            "productsLabel": "Products",
             "galleryLabel": "SaaS Landing UI gallery",
-            "previewLabel": "Select preview",
-            "ratingMaximum": 5,
-            "reviewsLabel": "reviews",
-            "platformLabel": "Platform",
-            "categoryLabel": "Category",
-            "purchaseLabel": "Contact to purchase",
-            "purchaseHref": "mailto:hello@kimthu.dev",
-            "previewActionLabel": "View preview",
-            "paymentLabel": "Payment methods"
+            "thumbnailLabel": "Select preview",
+            "salesLabel": "72 reviews",
+            "features": [],
+            "facts": [
+              { "label": "Platform", "value": "Figma" },
+              { "label": "Category", "value": "Figma Template" }
+            ],
+            "actionsLabel": "SaaS Landing UI actions",
+            "actions": [
+              { "label": "Contact to purchase", "href": "mailto:hello@kimthu.dev", "icon": "shoppingBag", "variant": "primary" },
+              { "label": "View preview", "href": "https://images.unsplash.com/photo-1559028012-d74eadee55f3?auto=format&fit=crop&w=900&q=88", "icon": "arrowUpRight", "variant": "outline" }
+            ],
+            "paymentLabel": "Payment methods",
+            "paymentMethods": []
           }
         },
         {
