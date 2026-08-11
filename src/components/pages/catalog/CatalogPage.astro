@@ -1,11 +1,73 @@
 ---
-import CBox from "@/components/object/component/CBox.astro";
-import PageBuilder from "@/components/pages/builder/PageBuilder.astro";
+import LContainer from "@/components/layout/LContainer.astro";
+import LPage from "@/components/layout/LPage.astro";
+import LSection from "@/components/layout/LSection.astro";
+import PCta from "@/components/object/project/cta/PCta.astro";
+import PPageHeader from "@/components/object/project/page-header/PPageHeader.astro";
+import PublicationCatalogContent from "@/components/pages/catalog/PublicationCatalogContent.astro";
+import { getPublications } from "@/data/cms";
 import type { CatalogPageProps } from "@/types/components/pages/catalog/CatalogPage.types";
+import type { PCtaProps } from "@/types/components/object/project/cta/PCta.types";
+import type { PPageHeaderProps } from "@/types/components/object/project/page-header/PPageHeader.types";
 
 const { data } = Astro.props as CatalogPageProps;
+const catalog = data.page.slug === "/comics" ? "comics" : "novels";
+const entries = await getPublications(catalog);
+const hero = data.page.content.sections.find((section) => section.type === "page-header");
+const catalogSection = data.page.content.sections.find((section) => section.id === "catalog");
+const newsletter = data.page.content.sections.find((section) => section.type === "cta");
 ---
 
-<CBox data-collection-filter-root>
-	<PageBuilder page={data.page} />
-</CBox>
+<LPage {...data.page.content.layout} id="main-content" tabindex="-1">
+	{hero && (
+		<LSection
+			id={hero.id}
+			theme={hero.settings.theme}
+			spacing={hero.settings.spacing}
+		>
+			{hero.settings.container === "none" ? (
+				<PPageHeader
+					{...({ template: hero.template, data: hero.content } as unknown as PPageHeaderProps)}
+				/>
+			) : (
+				<LContainer size={hero.settings.container}>
+					<PPageHeader
+						{...({ template: hero.template, data: hero.content } as unknown as PPageHeaderProps)}
+					/>
+				</LContainer>
+			)}
+		</LSection>
+	)}
+
+	{catalogSection && (
+		<LSection
+			id={catalogSection.id}
+			theme={catalogSection.settings.theme}
+			spacing={catalogSection.settings.spacing}
+		>
+			<LContainer size={catalogSection.settings.container === "none" ? "site" : catalogSection.settings.container}>
+				<PublicationCatalogContent {catalog} {entries} />
+			</LContainer>
+		</LSection>
+	)}
+
+	{newsletter && (
+		<LSection
+			id={newsletter.id}
+			theme={newsletter.settings.theme}
+			spacing={newsletter.settings.spacing}
+		>
+			{newsletter.settings.container === "none" ? (
+				<PCta
+					{...({ template: newsletter.template, data: newsletter.content } as unknown as PCtaProps)}
+				/>
+			) : (
+				<LContainer size={newsletter.settings.container}>
+					<PCta
+						{...({ template: newsletter.template, data: newsletter.content } as unknown as PCtaProps)}
+					/>
+				</LContainer>
+			)}
+		</LSection>
+	)}
+</LPage>
