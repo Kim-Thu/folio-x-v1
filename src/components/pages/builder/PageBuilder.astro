@@ -198,7 +198,7 @@ const buildProductsArchive = async (section: ProductsArchiveSection): Promise<Ar
 			sidebar: {
 				label: sidebar.label,
 				filter: { data: { filterLabel: sidebar.filterLabel, category: { ...sidebar.category, options: categoryFilters }, groups: [{ ...sidebar.platform, options: platformFilters }] } },
-				advertisement: sidebar.advertisement,
+				advertisement: { data: sidebar.advertisement },
 			},
 			result: { count: visibleProducts.length, label: result.label },
 			cards: { template: cards.template, layout: cards.layout, columns: cards.columns, gap: cards.gap, items: visibleProducts.map((product) => mapProductToCard(product, itemPresentation)) },
