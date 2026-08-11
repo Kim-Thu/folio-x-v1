@@ -29,10 +29,25 @@
           "content": {
             "labels": {
               "breadcrumb": "Breadcrumb",
+              "collection": "Labs",
               "actions": "Smart Automation actions",
               "live": "Live demo",
               "source": "Source code",
               "technology": "Smart Automation technology stack"
+            },
+            "routes": {
+              "base": "/labs",
+              "categoryBase": "/labs/category",
+              "technologyBase": "/labs/technology"
+            },
+            "metrics": [
+              { "icon": "star", "source": "stars" },
+              { "icon": "github", "source": "forks" },
+              { "icon": "clock01", "source": "updatedLabel" }
+            ],
+            "actions": {
+              "live": { "icon": "arrowUpRight", "variant": "primary" },
+              "source": { "icon": "github", "variant": "outline" }
             }
           }
         },
@@ -40,7 +55,10 @@
           "id": "lab-content",
           "type": "article",
           "settings": { "theme": "canvas", "spacing": "body", "container": "site" },
-          "content": { "appearance": "compact" }
+          "content": {
+            "appearance": "compact",
+            "layout": { "columns": "twelve", "gap": "lg", "articleSpan": 8, "asideSpan": 4, "asideColumns": "one", "asideGap": "md" }
+          }
         },
         {
           "id": "features",
@@ -48,7 +66,8 @@
           "template": "cards",
           "settings": { "theme": "canvas", "spacing": "compact", "container": "site" },
           "content": {
-            "heading": { "title": "Features" },
+            "heading": { "title": "Features", "level": 2, "appearance": "compact" },
+            "layout": { "columns": "one", "gap": "md" },
             "cards": { "template": "icon-summary", "layout": "grid", "columns": 2, "gap": "sm" }
           }
         },
@@ -58,7 +77,8 @@
           "template": "cards",
           "settings": { "theme": "canvas", "spacing": "compact", "container": "site" },
           "content": {
-            "heading": { "title": "Gallery" },
+            "heading": { "title": "Gallery", "level": 2, "appearance": "compact" },
+            "layout": { "columns": "one", "gap": "md" },
             "cards": { "template": "media-only", "layout": "grid", "columns": 5, "gap": "sm" },
             "labels": { "openImage": "Open gallery image", "imageTitle": "Gallery image" }
           }
