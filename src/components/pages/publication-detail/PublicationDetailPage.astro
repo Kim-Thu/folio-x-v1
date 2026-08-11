@@ -36,6 +36,28 @@ const chapterItems = chapterSection
 	{page.sections.map((section) => {
 		if (section.type === "page-header") {
 			const { content } = section;
+			const metrics = [
+				{ label: content.metrics.ratingLabel, value: String(entry.rating), icon: "star" as const },
+				{ label: content.metrics.readsLabel, value: entry.views, icon: "eye" as const },
+				{ label: content.metrics.chaptersLabel, value: String(entry.chapters), icon: "bookOpen" as const },
+			];
+			if (content.metrics.followersLabel && detail.followers) {
+				metrics.push({ label: content.metrics.followersLabel, value: detail.followers, icon: "bookmark" as const });
+			}
+
+			const facts = [
+				{ label: content.facts.authorLabel, value: entry.author },
+				{ label: content.facts.genresLabel, value: entry.genres.map((genre) => genre.label).join(", ") },
+			];
+			if (content.facts.languageLabel && detail.language) {
+				facts.push({ label: content.facts.languageLabel, value: detail.language });
+			}
+			facts.push(
+				{ label: content.facts.statusLabel, value: entry.status === "ongoing" ? content.facts.ongoingLabel : content.facts.completeLabel },
+				{ label: content.facts.updatedLabel, value: entry.updatedLabel },
+				{ label: content.facts.viewsLabel, value: entry.views },
+			);
+
 			return (
 				<LSection id={section.id} {...section.settings}>
 					<PPageHeader
@@ -51,25 +73,13 @@ const chapterItems = chapterSection
 							tags: entry.genres.map((genre) => ({ label: genre.label, href: `/${collection}/category/${genre.slug}` })),
 							title: entry.title,
 							author: { label: content.authorLabel, name: entry.author },
-							metrics: [
-								{ label: content.metrics.ratingLabel, value: String(entry.rating), icon: "star" },
-								{ label: content.metrics.readsLabel, value: entry.views, icon: "eye" },
-								{ label: content.metrics.chaptersLabel, value: String(entry.chapters), icon: "bookOpen" },
-								{ label: content.metrics.followersLabel, value: detail.followers, icon: "bookmark" },
-							],
+							metrics,
 							actionsLabel: content.actionsLabel,
 							actions: [{ label: content.primaryActionLabel, href: "#chapters", icon: "bookOpen", variant: "primary", size: "md" }],
 							description: detail.description,
 							facts: {
 								title: content.factsTitle,
-								items: [
-									{ label: content.facts.authorLabel, value: entry.author },
-									{ label: content.facts.genresLabel, value: entry.genres.map((genre) => genre.label).join(", ") },
-									{ label: content.facts.languageLabel, value: detail.language },
-									{ label: content.facts.statusLabel, value: entry.status === "ongoing" ? content.facts.ongoingLabel : content.facts.completeLabel },
-									{ label: content.facts.updatedLabel, value: entry.updatedLabel },
-									{ label: content.facts.viewsLabel, value: entry.views },
-								],
+								items: facts,
 							},
 						}}
 					/>
@@ -87,15 +97,20 @@ const chapterItems = chapterSection
 
 		if (section.type === "entry-index") {
 			const { content } = section;
+			const hasSupportingContent = Boolean(detail.description?.[0] || (content.tagsLabel && detail.tags?.length));
 			return (
 				<LSection id={section.id} {...section.settings}>
 					<LSidebar label={content.asideLabel}>
-						<CColumns slot="sidebar" columns="one" gap="md">
-							<CDescriptionList items={[{ label: content.introductionLabel, value: detail.description[0] }]} />
-							{detail.tags.length ? (
-								<CTags label={content.tagsLabel} items={detail.tags.map((tag) => ({ label: tag.label, href: `/${collection}/tag/${tag.slug}` }))} />
-							) : null}
-						</CColumns>
+						{hasSupportingContent ? (
+							<CColumns slot="sidebar" columns="one" gap="md">
+								{detail.description?.[0] ? (
+									<CDescriptionList items={[{ label: content.introductionLabel, value: detail.description[0] }]} />
+								) : null}
+								{content.tagsLabel && detail.tags?.length ? (
+									<CTags label={content.tagsLabel} items={detail.tags.map((tag) => ({ label: tag.label, href: `/${collection}/tag/${tag.slug}` }))} />
+								) : null}
+							</CColumns>
+						) : null}
 						<PEntryIndex
 							id={section.id}
 							label={content.chapterIndexLabel}
