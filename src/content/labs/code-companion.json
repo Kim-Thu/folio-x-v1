@@ -18,6 +18,7 @@
   "sourceUrl": "https://github.com",
   "sections": [
     {
+      "id": "overview",
       "title": "Overview",
       "paragraphs": [
         "A developer-tool experiment built around explicit context, reversible changes, and useful explanations."
