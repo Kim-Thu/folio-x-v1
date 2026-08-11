@@ -16,5 +16,14 @@ export async function getInsightDetailPageData(
 	const post = insights.find((insight) => insight.slug === slug);
 	if (!post) throw new Error(`Unknown insight slug: ${slug}`);
 
-	return { post };
+	const relatedPosts = insights
+		.filter((insight) => insight.slug !== slug)
+		.sort((a, b) => {
+			const aScore = Number(a.categorySlug === post.categorySlug) * 2 + a.tags.filter((tag) => post.tags.some((postTag) => postTag.slug === tag.slug)).length;
+			const bScore = Number(b.categorySlug === post.categorySlug) * 2 + b.tags.filter((tag) => post.tags.some((postTag) => postTag.slug === tag.slug)).length;
+			return bScore - aScore || b.publishedAt.localeCompare(a.publishedAt);
+		})
+		.slice(0, 4);
+
+	return { post, relatedPosts };
 }
