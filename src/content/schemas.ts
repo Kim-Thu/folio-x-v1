@@ -58,6 +58,10 @@ const pageLayoutSchema = z.object({ template: z.enum(["fluid", "contained", "box
 const detailSectionSettingsSchema = z.object({ theme: z.enum(["dark", "light", "canvas", "accent", "none"]), spacing: z.enum(["compact", "default", "none", "lead", "body", "closing"]), container: z.enum(["site", "content", "none"]) });
 const buttonActionSchema = z.object({ label: z.string().min(1), href: z.string().min(1).optional(), icon: z.string().optional(), iconPosition: z.enum(["start", "end"]).optional(), variant: z.string().optional(), tone: z.string().optional(), size: z.string().optional() });
 const productActionSchema = z.object({ label: z.string().min(1), href: z.string().min(1), icon: z.string().optional(), variant: z.string().optional() });
+const cardTemplateSchema = z.enum(["stacked", "horizontal", "overlay", "featured", "boxed", "compact-media", "compact-bordered", "editorial", "icon-panel", "icon-summary", "media-banner", "media-caption", "media-details", "media-only", "media-summary", "media-metrics"]);
+const cardLayoutSchema = z.enum(["grid", "list", "three-column", "twelve-column", "content-three-column", "mosaic", "asymmetric", "showcase"]);
+const cardColumnsSchema = z.union([z.literal(1), z.literal(2), z.literal(3), z.literal(4), z.literal(5)]);
+const cardGapSchema = z.enum(["none", "sm", "md", "lg", "xl"]);
 
 const productDetailPageSchema = z.object({ template: z.enum(["fluid", "contained", "boxed", "sidebar", "centered"]), sections: z.array(z.discriminatedUnion("type", [
   z.object({ id: z.string().min(1), type: z.literal("page-header"), template: z.literal("gallery-summary"), settings: detailSectionSettingsSchema, content: z.object({ breadcrumbLabel: z.string().min(1), productsLabel: z.string().min(1), galleryLabel: z.string().min(1), thumbnailLabel: z.string().min(1), salesLabel: z.string().min(1), features: z.array(z.record(z.string(), z.unknown())), facts: z.array(z.object({ label: z.string().min(1), value: z.string().min(1) })), actionsLabel: z.string().min(1), actions: z.array(productActionSchema), paymentLabel: z.string().min(1), paymentMethods: z.array(z.unknown()) }) }),
@@ -67,7 +71,7 @@ const productDetailPageSchema = z.object({ template: z.enum(["fluid", "contained
 const labDetailPageSchema = z.object({ template: z.enum(["fluid", "contained", "boxed", "sidebar", "centered"]), sections: z.array(z.discriminatedUnion("type", [
   z.object({ id: z.string().min(1), type: z.literal("page-header"), template: z.literal("media-aside"), settings: detailSectionSettingsSchema, content: z.object({ labels: z.object({ breadcrumb: z.string().min(1), actions: z.string().min(1), live: z.string().min(1), source: z.string().min(1), technology: z.string().min(1) }) }) }),
   z.object({ id: z.string().min(1), type: z.literal("article"), template: z.string().optional(), settings: detailSectionSettingsSchema, content: z.object({ appearance: z.literal("compact") }) }),
-  z.object({ id: z.string().min(1), type: z.literal("collection"), template: z.literal("cards"), settings: detailSectionSettingsSchema, content: z.object({ heading: z.object({ title: z.string().min(1) }), cards: z.object({ template: z.string().min(1), layout: z.string().min(1), columns: z.number().int().positive(), gap: z.string().min(1) }), labels: z.object({ openImage: z.string().min(1), imageTitle: z.string().min(1) }).optional() }) }),
+  z.object({ id: z.string().min(1), type: z.literal("collection"), template: z.literal("cards"), settings: detailSectionSettingsSchema, content: z.object({ heading: z.object({ title: z.string().min(1) }), cards: z.object({ template: cardTemplateSchema, layout: cardLayoutSchema, columns: cardColumnsSchema, gap: cardGapSchema }), labels: z.object({ openImage: z.string().min(1), imageTitle: z.string().min(1) }).optional() }) }),
 ])) });
 
 const publicationDetailPageSchema = z.object({ template: z.enum(["fluid", "contained", "boxed", "sidebar", "centered"]), sections: z.array(z.discriminatedUnion("type", [
