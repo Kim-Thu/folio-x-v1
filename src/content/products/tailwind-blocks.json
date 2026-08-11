@@ -24,14 +24,20 @@
             "breadcrumbLabel": "Breadcrumb",
             "productsLabel": "Products",
             "galleryLabel": "Tailwind Blocks gallery",
-            "previewLabel": "Select preview",
-            "reviewsLabel": "reviews",
-            "platformLabel": "Platform",
-            "categoryLabel": "Category",
-            "purchaseLabel": "Contact to purchase",
-            "purchaseHref": "mailto:thunk.work.91@gmail.com",
-            "previewActionLabel": "View preview",
-            "paymentMethodsLabel": "Payment methods"
+            "thumbnailLabel": "Select preview",
+            "salesLabel": "58 reviews",
+            "features": [],
+            "facts": [
+              { "label": "Platform", "value": "HTML / Tailwind" },
+              { "label": "Category", "value": "HTML Template" }
+            ],
+            "actionsLabel": "Tailwind Blocks actions",
+            "actions": [
+              { "label": "Contact to purchase", "href": "mailto:thunk.work.91@gmail.com", "icon": "shoppingBag", "variant": "primary" },
+              { "label": "View preview", "href": "https://images.unsplash.com/photo-1517292987719-0369a794ec0f?auto=format&fit=crop&w=900&q=88", "icon": "arrowUpRight", "variant": "outline" }
+            ],
+            "paymentLabel": "Payment methods",
+            "paymentMethods": []
           }
         },
         {
