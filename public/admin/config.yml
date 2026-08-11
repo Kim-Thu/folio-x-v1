@@ -32,29 +32,15 @@ collections:
               - { label: Địa điểm, name: location, widget: string }
               - { label: Email, name: email, widget: string }
               - { label: Logo, name: logo, widget: image, required: false }
-              - {
-                  label: Logo sáng,
-                  name: logoLight,
-                  widget: image,
-                  required: false,
-                }
-              - {
-                  label: Logo tối,
-                  name: logoDark,
-                  widget: image,
-                  required: false,
-                }
-              - {
-                  label: Favicon,
-                  name: favicon,
-                  widget: image,
-                  required: false,
-                }
+              - { label: Logo sáng, name: logoLight, widget: image, required: false }
+              - { label: Logo tối, name: logoDark, widget: image, required: false }
+              - { label: Favicon, name: favicon, widget: image, required: false }
+              - { label: Nhãn liên hệ, name: contactLabel, widget: string }
           - label: Metadata mặc định
             name: metadata
             widget: object
             fields:
-              - { label: Ngôn ngữ, name: language, widget: string, default: vi }
+              - { label: Ngôn ngữ, name: language, widget: string }
               - { label: Tiêu đề SEO, name: title, widget: string }
               - { label: Mô tả SEO, name: description, widget: text }
 
@@ -87,13 +73,7 @@ collections:
             fields:
               - { label: Tên mạng xã hội, name: label, widget: string }
               - { label: Nhãn viết tắt, name: shortLabel, widget: string }
-              - {
-                  label: Icon,
-                  name: icon,
-                  widget: select,
-                  required: false,
-                  options: [linkedin, github],
-                }
+              - { label: Icon, name: icon, widget: select, required: false, options: [linkedin, github] }
               - { label: Đường dẫn, name: href, widget: string }
 
       - name: pages
@@ -114,294 +94,141 @@ collections:
                   - { label: Author, name: author, widget: string, required: false }
                   - { label: Published at, name: publishedAt, widget: string, required: false }
                   - { label: Updated at, name: updatedAt, widget: string, required: false }
-              - label: Content sections
+              - { label: SEO override, name: seo, widget: object, required: false, fields: [] }
+              - label: Content
                 name: content
                 widget: object
                 fields:
+                  - label: Layout
+                    name: layout
+                    widget: object
+                    fields:
+                      - { label: Template, name: template, widget: select, options: [fluid, contained, boxed, sidebar, centered] }
+                      - { label: Container size, name: containerSize, widget: select, required: false, options: [site, content] }
+                      - { label: Aside label, name: asideLabel, widget: string, required: false }
+                      - { label: Aside position, name: asidePosition, widget: select, required: false, options: [start, end] }
                   - label: Sections
                     name: sections
                     widget: list
                     summary: "{{fields.id}} — {{fields.type}}"
-                    fields:
-                      - { label: ID, name: id, widget: string }
-                      - { label: Type, name: type, widget: select, options: [hero, collection, cards, cta] }
-                      - { label: Template, name: template, widget: string, required: false }
-                      - { label: Settings, name: settings, widget: object, required: false, fields: [] }
-                      - { label: Content, name: content, widget: object, required: false, fields: [] }
-      - name: homepage_legacy
-        label: Trang chủ
-        file: src/content/pages/home.json
-        format: json
-        fields:
-          - label: Header
-            name: header
-            widget: object
-            fields:
-              - { label: Tên thương hiệu, name: brand, widget: string }
-              - { label: Nhãn liên hệ, name: contactLabel, widget: string }
-          - label: Hero
-            name: hero
-            widget: object
-            fields:
-              - { label: ID section, name: id, widget: string }
-              - {
-                  label: Template,
-                  name: template,
-                  widget: select,
-                  options: [full-banner, split-image-right],
-                  default: full-banner,
-                }
-              - label: Ảnh hero
-                name: image
-                widget: object
-                fields: &image_fields
-                  - { label: Ảnh, name: src, widget: image }
-                  - { label: Mô tả ảnh, name: alt, widget: string }
-                  - {
-                      label: Chiều rộng,
-                      name: width,
-                      widget: number,
-                      value_type: int,
-                      min: 1,
-                    }
-                  - {
-                      label: Chiều cao,
-                      name: height,
-                      widget: number,
-                      value_type: int,
-                      min: 1,
-                    }
-              - {
-                  label: Dòng nhận diện,
-                  name: identityLines,
-                  widget: list,
-                  field: { label: Dòng, name: line, widget: string },
-                }
-              - {
-                  label: Nhãn breadcrumb,
-                  name: breadcrumbLabel,
-                  widget: string,
-                }
-              - {
-                  label: Liên kết breadcrumb,
-                  name: breadcrumbHomeLabel,
-                  widget: string,
-                }
-              - {
-                  label: Dòng địa điểm,
-                  name: locationLines,
-                  widget: list,
-                  field: { label: Dòng, name: line, widget: string },
-                }
-              - {
-                  label: Ký hiệu trạng thái,
-                  name: statusSymbol,
-                  widget: string,
-                }
-              - { label: Nội dung giới thiệu, name: summary, widget: text }
-              - {
-                  label: Tiêu đề,
-                  name: titleLines,
-                  widget: list,
-                  field: { label: Dòng, name: line, widget: string },
-                }
-              - { label: Nhãn cuộn trang, name: scrollLabel, widget: string }
-              - { label: Nhãn liên hệ, name: contactLabel, widget: string }
-          - label: Giới thiệu
-            name: about
-            widget: object
-            fields:
-              - &section_heading
-                label: Tiêu đề section
-                name: heading
-                widget: object
-                fields:
-                  - { label: ID section, name: id, widget: string }
-                  - { label: Số thứ tự, name: number, widget: string }
-                  - { label: Nhãn, name: label, widget: string }
-                  - { label: Tiêu đề, name: title, widget: text }
-                  - {
-                      label: Mô tả,
-                      name: description,
-                      widget: text,
-                      required: false,
-                    }
-              - {
-                  label: Layout grid,
-                  name: gridLayout,
-                  widget: select,
-                  options:
-                    ["three-column", "twelve-column", "content-three-column"],
-                  default: "content-three-column",
-                }
-              - {
-                  label: Khoảng cách gap,
-                  name: gridGap,
-                  widget: select,
-                  options: [none, sm, md, lg],
-                  default: md,
-                }
-              - {
-                  label: Template card,
-                  name: cardTemplate,
-                  widget: select,
-                  options: [stacked, horizontal, overlay, featured],
-                  default: overlay,
-                }
-              - {
-                  label: Số cột,
-                  name: gridColumns,
-                  widget: number,
-                  value_type: int,
-                  min: 1,
-                  max: 4,
-                  default: 3,
-                }
-              - label: Vùng nội dung card
-                name: cardSlots
-                widget: object
-                fields:
-                  - {
-                      label: Hiển thị ảnh,
-                      name: media,
-                      widget: boolean,
-                      default: true,
-                    }
-                  - {
-                      label: Hiển thị metadata,
-                      name: meta,
-                      widget: boolean,
-                      default: true,
-                    }
-                  - {
-                      label: Hiển thị tiêu đề,
-                      name: title,
-                      widget: boolean,
-                      default: true,
-                    }
-                  - {
-                      label: Hiển thị mô tả,
-                      name: excerpt,
-                      widget: boolean,
-                      default: false,
-                    }
-                  - {
-                      label: Hiển thị hành động trên card,
-                      name: action,
-                      widget: boolean,
-                      default: true,
-                    }
-              - label: Nguyên tắc
-                name: principles
-                widget: list
-                fields:
-                  - { label: Số thứ tự, name: index, widget: string }
-                  - { label: Đường dẫn, name: href, widget: string }
-                  - {
-                      label: Đường dẫn category,
-                      name: categoryHref,
-                      widget: string,
-                    }
-                  - { label: Nhãn, name: label, widget: string }
-                  - {
-                      label: Tiêu đề,
-                      name: title,
-                      widget: list,
-                      field: { label: Dòng, name: line, widget: string },
-                    }
-                  - {
-                      label: Mô tả,
-                      name: description,
-                      widget: text,
-                      required: false,
-                    }
-                  - { label: Ảnh, name: image, widget: image }
-                  - { label: Mô tả ảnh, name: imageAlt, widget: string }
-                  - {
-                      label: Chiều rộng ảnh,
-                      name: imageWidth,
-                      widget: number,
-                      value_type: int,
-                      min: 1,
-                      default: 1200,
-                    }
-                  - {
-                      label: Chiều cao ảnh,
-                      name: imageHeight,
-                      widget: number,
-                      value_type: int,
-                      min: 1,
-                      default: 800,
-                    }
-              - label: Năng lực
-                name: capability
-                widget: object
-                fields:
-                  - { label: Nhãn, name: label, widget: string }
-                  - { label: Nội dung chính, name: primary, widget: text }
-                  - { label: Nội dung bổ sung, name: secondary, widget: text }
-              - label: Nút xem thêm
-                name: action
-                widget: object
-                fields:
-                  - { label: Nhãn, name: label, widget: string }
-          - label: Dự án nổi bật
-            name: works
-            widget: object
-            fields:
-              - *section_heading
-              - { label: Nhãn kết quả, name: outcomeLabel, widget: string }
-              - { label: Nhãn mở dự án, name: linkLabel, widget: string }
-              - { label: Nhãn xem tất cả, name: archiveLabel, widget: string }
-              - {
-                  label: Số dự án xem trước,
-                  name: previewLimit,
-                  widget: number,
-                  value_type: int,
-                  min: 1,
-                }
-          - label: Bài viết nổi bật
-            name: insights
-            widget: object
-            fields:
-              - *section_heading
-          - label: Hỏi đáp
-            name: qa
-            widget: object
-            fields:
-              - *section_heading
-          - label: Danh sách câu hỏi
-            name: faqs
-            widget: list
-            fields:
-              - { label: Câu hỏi, name: question, widget: string }
-              - { label: Câu trả lời, name: answer, widget: text }
-          - label: Kêu gọi hành động
-            name: cta
-            widget: object
-            fields:
-              - { label: ID section, name: id, widget: string }
-              - { label: Tiêu đề, name: title, widget: text }
-              - { label: Mô tả, name: description, widget: text }
-              - { label: Nhãn hành động, name: actionLabel, widget: string }
-              - label: Hình ảnh
-                name: image
-                widget: object
-                fields:
-                  - { label: Tệp ảnh, name: src, widget: image }
-                  - { label: Mô tả ảnh, name: alt, widget: string }
-                  - {
-                      label: Chiều rộng,
-                      name: width,
-                      widget: number,
-                      value_type: int,
-                    }
-                  - {
-                      label: Chiều cao,
-                      name: height,
-                      widget: number,
-                      value_type: int,
-                    }
+                    types:
+                      - label: Hero
+                        name: hero
+                        widget: object
+                        fields:
+                          - { label: ID, name: id, widget: string }
+                          - { label: Type, name: type, widget: hidden, default: hero }
+                          - { label: Template, name: template, widget: string }
+                          - label: Settings
+                            name: settings
+                            widget: object
+                            fields: &section_settings
+                              - { label: Theme, name: theme, widget: select, options: [dark, light, canvas, accent, none] }
+                              - { label: Spacing, name: spacing, widget: select, options: [compact, default, none, lead, body, closing] }
+                              - { label: Container, name: container, widget: select, options: [site, content, none] }
+                              - { label: Layout, name: layout, widget: string, required: false }
+                              - { label: Columns, name: columns, widget: number, required: false, value_type: int, min: 1 }
+                              - { label: Gap, name: gap, widget: string, required: false }
+                              - { label: Media ratio, name: mediaRatio, widget: string, required: false }
+                              - { label: Separator, name: separator, widget: string, required: false }
+                          - label: Content
+                            name: content
+                            widget: object
+                            fields:
+                              - { label: Content ID, name: id, widget: string, required: false }
+                              - { label: Eyebrow, name: eyebrow, widget: string, required: false }
+                              - { label: Title, name: title, widget: list, field: { label: Dòng, name: line, widget: string } }
+                              - { label: Accent, name: accent, widget: string, required: false }
+                              - { label: Description, name: description, widget: text, required: false }
+                              - label: Image
+                                name: image
+                                widget: object
+                                required: false
+                                fields: &image_fields
+                                  - { label: Ảnh, name: src, widget: image }
+                                  - { label: Alt, name: alt, widget: string }
+                                  - { label: Width, name: width, widget: number, value_type: int, min: 1 }
+                                  - { label: Height, name: height, widget: number, value_type: int, min: 1 }
+                              - label: Actions
+                                name: actions
+                                widget: list
+                                required: false
+                                fields: &action_fields
+                                  - { label: Href, name: href, widget: string }
+                                  - { label: Label, name: label, widget: string }
+                                  - { label: Icon, name: icon, widget: string, required: false }
+                                  - { label: Icon position, name: iconPosition, widget: select, required: false, options: [start, end] }
+                                  - { label: Variant, name: variant, widget: string, required: false }
+                                  - { label: Tone, name: tone, widget: string, required: false }
+                                  - { label: Size, name: size, widget: string, required: false }
+                              - { label: Actions label, name: actionsLabel, widget: string, required: false }
+                              - { label: Scroll label, name: scrollLabel, widget: string, required: false }
+                      - label: Collection
+                        name: collection
+                        widget: object
+                        fields:
+                          - { label: ID, name: id, widget: string }
+                          - { label: Type, name: type, widget: hidden, default: collection }
+                          - { label: Template, name: template, widget: string, required: false }
+                          - label: Settings
+                            name: settings
+                            widget: object
+                            fields: *section_settings
+                          - label: Content
+                            name: content
+                            widget: object
+                            fields:
+                              - label: Heading
+                                name: heading
+                                widget: object
+                                required: false
+                                fields:
+                                  - { label: Number, name: number, widget: string, required: false }
+                                  - { label: Label, name: label, widget: string, required: false }
+                                  - { label: Title, name: title, widget: list, field: { label: Dòng, name: line, widget: string } }
+                                  - { label: Description, name: description, widget: text, required: false }
+                                  - label: Action
+                                    name: action
+                                    widget: object
+                                    required: false
+                                    fields: *action_fields
+                              - label: Source
+                                name: source
+                                widget: object
+                                required: false
+                                fields:
+                                  - { label: Collection, name: collection, widget: select, options: [products, projects, labs, blog, comics, novels, publications] }
+                                  - { label: Limit, name: limit, widget: number, required: false, value_type: int, min: 1 }
+                              - { label: Static items, name: items, widget: list, required: false, fields: [] }
+                              - { label: Item presentation, name: itemPresentation, widget: object, required: false, fields: [] }
+                              - { label: Cards, name: cards, widget: object, required: false, fields: [] }
+                      - label: CTA
+                        name: cta
+                        widget: object
+                        fields:
+                          - { label: ID, name: id, widget: string }
+                          - { label: Type, name: type, widget: hidden, default: cta }
+                          - { label: Template, name: template, widget: string }
+                          - label: Settings
+                            name: settings
+                            widget: object
+                            fields: *section_settings
+                          - label: Content
+                            name: content
+                            widget: object
+                            fields:
+                              - { label: Title, name: title, widget: string }
+                              - { label: Description, name: description, widget: text, required: false }
+                              - label: Action
+                                name: action
+                                widget: object
+                                required: false
+                                fields: *action_fields
+                              - label: Image
+                                name: image
+                                widget: object
+                                required: false
+                                fields: *image_fields
 
       - name: closing_profile
         label: Kết trang cá nhân
@@ -410,12 +237,7 @@ collections:
         fields:
           - { label: ID section, name: id, widget: string }
           - { label: Nhãn mở đầu, name: eyebrow, widget: string }
-          - {
-              label: Các dòng tên,
-              name: nameLines,
-              widget: list,
-              field: { label: Dòng, name: line, widget: string },
-            }
+          - { label: Các dòng tên, name: nameLines, widget: list, field: { label: Dòng, name: line, widget: string } }
           - { label: Vai trò, name: roleLabel, widget: string }
           - label: Liên kết kết nối
             name: followAction
@@ -433,1012 +255,8 @@ collections:
               - label: Trạng thái thu
                 name: collapsed
                 widget: object
-                fields:
-                  - { label: Ảnh, name: src, widget: image }
-                  - { label: Mô tả ảnh, name: alt, widget: string }
-                  - {
-                      label: Chiều rộng gốc,
-                      name: width,
-                      widget: number,
-                      value_type: int,
-                      min: 1,
-                    }
-                  - {
-                      label: Chiều cao gốc,
-                      name: height,
-                      widget: number,
-                      value_type: int,
-                      min: 1,
-                    }
+                fields: *image_fields
               - label: Trạng thái mở
                 name: expanded
                 widget: object
-                fields:
-                  - { label: Ảnh, name: src, widget: image }
-                  - { label: Mô tả ảnh, name: alt, widget: string }
-                  - {
-                      label: Chiều rộng gốc,
-                      name: width,
-                      widget: number,
-                      value_type: int,
-                      min: 1,
-                    }
-                  - {
-                      label: Chiều cao gốc,
-                      name: height,
-                      widget: number,
-                      value_type: int,
-                      min: 1,
-                    }
-
-      - name: interface
-        label: Nội dung giao diện
-        file: src/content/globals/interface.json
-        format: json
-        fields:
-          - { label: Bỏ qua tới nội dung, name: skipToContent, widget: string }
-          - { label: Về đầu trang, name: backToTop, widget: string }
-          - { label: Mở menu, name: openMenu, widget: string }
-          - label: Màn hình tải
-            name: loadingScreen
-            widget: object
-            fields:
-              - { label: Nhãn, name: label, widget: string }
-              - { label: Trạng thái, name: status, widget: string }
-              - label: Danh sách mẹo nhỏ
-                name: tips
-                widget: list
-                field: { label: Mẹo, name: tip, widget: string }
-              - {
-                  label: Giữ màn hình để duyệt,
-                  name: holdOpen,
-                  widget: boolean,
-                  default: false,
-                }
-              - { label: Nhãn tiến độ, name: progressLabel, widget: string }
-              - label: Hình ảnh
-                name: image
-                widget: object
-                fields:
-                  - { label: Tệp ảnh, name: src, widget: image }
-                  - { label: Mô tả ảnh, name: alt, widget: string }
-                  - {
-                      label: Chiều rộng,
-                      name: width,
-                      widget: number,
-                      value_type: int,
-                      min: 1,
-                    }
-                  - {
-                      label: Chiều cao,
-                      name: height,
-                      widget: number,
-                      value_type: int,
-                      min: 1,
-                    }
-          - label: Nhãn điều hướng
-            name: navigation
-            widget: object
-            fields:
-              - { label: Menu chính, name: primaryLabel, widget: string }
-              - { label: Menu mobile, name: mobileLabel, widget: string }
-              - { label: Mạng xã hội, name: socialLabel, widget: string }
-              - {
-                  label: Mạng xã hội ở chân trang,
-                  name: footerSocialLabel,
-                  widget: string,
-                }
-              - {
-                  label: Kiểu hiển thị social trên rail,
-                  name: railSocialDisplay,
-                  widget: select,
-                  options: [label, shortLabel, icon],
-                  default: shortLabel,
-                }
-          - label: Nhãn tiến trình
-            name: progress
-            widget: object
-            fields:
-              - { label: Thanh tiến trình, name: railLabel, widget: string }
-              - { label: Tiến độ đọc, name: readingLabel, widget: string }
-              - { label: Section ban đầu, name: initialSection, widget: string }
-              - { label: Giá trị ban đầu, name: initialValue, widget: string }
-          - label: Ký tự phân cách
-            name: separators
-            widget: object
-            fields:
-              - { label: Dấu gạch chéo, name: slash, widget: string }
-              - { label: Dấu chấm giữa, name: dot, widget: string }
-          - label: Định dạng nội dung
-            name: contentFormatting
-            widget: object
-            fields:
-              - {
-                  label: Mẫu thời gian đọc,
-                  name: readingTimeTemplate,
-                  widget: string,
-                  hint: "Dùng {minutes} tại vị trí cần chèn số phút.",
-                }
-              - {
-                  label: Locale định dạng ngày,
-                  name: dateLocale,
-                  widget: string,
-                  hint: "Ví dụ: vi-VN",
-                }
-      - name: archive
-        label: Trang danh sách và chi tiết
-        file: src/content/globals/archive.json
-        format: json
-        fields:
-          - label: Danh sách dự án
-            name: projects
-            widget: object
-            fields:
-              - { label: Nhãn đầu mục, name: eyebrow, widget: string }
-              - { label: Tiêu đề, name: title, widget: string }
-              - {
-                  label: Nhãn breadcrumb,
-                  name: breadcrumbLabel,
-                  widget: string,
-                }
-              - {
-                  label: Nhãn trang chủ,
-                  name: breadcrumbHomeLabel,
-                  widget: string,
-                }
-              - {
-                  label: Nhãn trang dự án,
-                  name: breadcrumbProjectsLabel,
-                  widget: string,
-                }
-              - {
-                  label: Các dòng tiêu đề,
-                  name: headingLines,
-                  widget: list,
-                  field: { label: Dòng, name: line, widget: string },
-                }
-              - { label: Mô tả, name: description, widget: text }
-              - { label: Nhãn bộ lọc, name: filterLabel, widget: string }
-              - { label: Nhãn tất cả, name: allLabel, widget: string }
-              - {
-                  label: Thông báo không có kết quả,
-                  name: emptyLabel,
-                  widget: text,
-                }
-              - { label: Nhãn quay lại, name: backLabel, widget: string }
-              - {
-                  label: Tiền tố danh mục,
-                  name: categoryPrefix,
-                  widget: string,
-                }
-              - { label: Tiền tố thẻ, name: tagPrefix, widget: string }
-              - { label: Nhãn mở dự án, name: actionLabel, widget: string }
-              - { label: Nhãn sắp xếp, name: sortLabel, widget: string }
-              - label: Tùy chọn sắp xếp
-                name: sortOptions
-                widget: list
-                fields:
-                  - { label: Nhãn, name: label, widget: string }
-                  - {
-                      label: Giá trị,
-                      name: value,
-                      widget: select,
-                      options: [featured, newest, oldest],
-                    }
-              - label: Ảnh hero
-                name: heroImage
-                widget: object
-                required: false
                 fields: *image_fields
-              - { label: Nhãn kiểu hiển thị, name: viewLabel, widget: string }
-              - { label: Nhãn lưới, name: gridViewLabel, widget: string }
-              - { label: Nhãn danh sách, name: listViewLabel, widget: string }
-              - {
-                  label: Nhãn phân trang,
-                  name: paginationLabel,
-                  widget: string,
-                }
-              - {
-                  label: Nhãn trang trước,
-                  name: previousPageLabel,
-                  widget: string,
-                }
-              - { label: Nhãn trang sau, name: nextPageLabel, widget: string }
-              - {
-                  label: Số project mỗi trang,
-                  name: pageSize,
-                  widget: number,
-                  value_type: int,
-                  min: 1,
-                }
-          - label: Danh sách bài viết
-            name: blog
-            widget: object
-            fields:
-              - { label: Nhãn đầu mục, name: eyebrow, widget: string }
-              - { label: Tiêu đề, name: title, widget: string }
-              - { label: Mô tả, name: description, widget: text }
-              - { label: Nhãn bộ lọc, name: filterLabel, widget: string }
-              - { label: Nhãn tất cả, name: allLabel, widget: string }
-              - {
-                  label: Thông báo không có kết quả,
-                  name: emptyLabel,
-                  widget: text,
-                }
-              - { label: Nhãn quay lại, name: backLabel, widget: string }
-              - {
-                  label: Tiền tố danh mục,
-                  name: categoryPrefix,
-                  widget: string,
-                }
-              - { label: Tiền tố thẻ, name: tagPrefix, widget: string }
-          - label: Trang chi tiết
-            name: detail
-            widget: object
-            fields:
-              - {
-                  label: Tổng quan dự án,
-                  name: projectOverviewLabel,
-                  widget: string,
-                }
-              - {
-                  label: Kết quả dự án,
-                  name: projectResultLabel,
-                  widget: string,
-                }
-              - { label: Nhãn tác giả, name: articleByLabel, widget: string }
-              - {
-                  label: Nhãn ngày xuất bản,
-                  name: articlePublishedLabel,
-                  widget: string,
-                }
-              - { label: Nhãn thẻ, name: tagsLabel, widget: string }
-              - label: Họa tiết Page Header
-                name: pageHeaderPattern
-                widget: object
-                fields: *image_fields
-              - { label: Tính năng, name: featuresLabel, widget: string }
-              - { label: Thư viện ảnh, name: galleryLabel, widget: string }
-              - { label: Công nghệ, name: techStackLabel, widget: string }
-              - {
-                  label: Đánh giá khách hàng,
-                  name: testimonialLabel,
-                  widget: string,
-                }
-              - { label: Khách hàng, name: clientLabel, widget: string }
-              - { label: Vai trò, name: roleLabel, widget: string }
-              - { label: Thời gian, name: durationLabel, widget: string }
-              - { label: Mục lục, name: onThisPageLabel, widget: string }
-              - { label: Xem website, name: liveActionLabel, widget: string }
-              - { label: Xem mã nguồn, name: sourceActionLabel, widget: string }
-              - { label: Dự án trước, name: previousLabel, widget: string }
-              - { label: Dự án tiếp theo, name: nextLabel, widget: string }
-
-      - name: footer
-        label: Chân trang
-        file: src/content/globals/footer.json
-        format: json
-        fields:
-          - { label: Brand description, name: brandDescription, widget: text }
-          - {
-              label: Social display,
-              name: socialDisplay,
-              widget: select,
-              options: [label, shortLabel, icon],
-              default: icon,
-            }
-          - { label: Resources heading, name: resourcesLabel, widget: string }
-          - label: Newsletter
-            name: newsletter
-            widget: object
-            fields:
-              - { label: Heading, name: label, widget: string }
-              - { label: Description, name: description, widget: text }
-              - { label: Email label, name: inputLabel, widget: string }
-              - { label: Placeholder, name: placeholder, widget: string }
-              - { label: Submit label, name: submitLabel, widget: string }
-          - { label: Tiêu đề menu, name: menuLabel, widget: string }
-          - { label: Tiêu đề pháp lý, name: legalLabel, widget: string }
-          - { label: Tiêu đề địa điểm, name: locationLabel, widget: string }
-          - { label: Ký hiệu bản quyền, name: copyrightSymbol, widget: string }
-          - { label: Nhãn công nghệ, name: buildLabel, widget: string }
-
-      - name: system_states
-        label: Trang trạng thái hệ thống
-        file: src/content/globals/system-states.json
-        format: json
-        fields:
-          - &system_state
-            label: Trang 404
-            name: notFound
-            widget: object
-            fields: &system_state_fields
-              - { label: ID tiêu đề, name: id, widget: string }
-              - {
-                  label: Mã hiển thị,
-                  name: displayCode,
-                  widget: string,
-                  required: false,
-                }
-              - { label: Nhãn đầu mục, name: eyebrow, widget: string }
-              - { label: Tiêu đề, name: title, widget: text }
-              - { label: Mô tả, name: description, widget: text }
-              - label: Hành động chính
-                name: primaryAction
-                widget: object
-                fields: &action_fields
-                  - { label: Nhãn, name: label, widget: string }
-                  - { label: Đường dẫn, name: href, widget: string }
-                  - {
-                      label: Icon,
-                      name: icon,
-                      widget: select,
-                      options:
-                        [
-                          arrowLeft,
-                          arrowRight,
-                          arrowUpRight,
-                          chevronLeft,
-                          chevronRight,
-                        ],
-                    }
-              - label: Hành động phụ
-                name: secondaryAction
-                widget: object
-                fields: *action_fields
-              - label: Hình ảnh
-                name: image
-                widget: object
-                fields:
-                  - { label: Tệp ảnh, name: src, widget: image }
-                  - { label: Mô tả ảnh, name: alt, widget: string }
-                  - {
-                      label: Chiều rộng,
-                      name: width,
-                      widget: number,
-                      value_type: int,
-                    }
-                  - {
-                      label: Chiều cao,
-                      name: height,
-                      widget: number,
-                      value_type: int,
-                    }
-              - { label: Tiêu đề SEO, name: metadataTitle, widget: string }
-              - { label: Mô tả SEO, name: metadataDescription, widget: text }
-          - label: Trang chưa có nội dung
-            name: empty
-            widget: object
-            fields: *system_state_fields
-
-  - name: products
-    label: Products
-    folder: src/content/products
-    create: false
-    format: json
-    extension: json
-    editor:
-      preview: false
-    files:
-      - name: catalog
-        label: Product catalog
-        file: src/content/products/catalog.json
-        fields:
-          - label: Products
-            name: items
-            widget: list
-            fields:
-              - { label: ID, name: id, widget: number, value_type: int }
-              - { label: Slug, name: slug, widget: string }
-              - { label: Title, name: title, widget: string }
-              - { label: Category, name: category, widget: string }
-              - { label: Category slug, name: categorySlug, widget: string }
-              - { label: Platform, name: platform, widget: string }
-              - { label: Description, name: description, widget: text }
-              - { label: Price, name: price, widget: number, value_type: float }
-              - { label: Old price, name: oldPrice, widget: number, value_type: float, required: false }
-              - { label: Rating, name: rating, widget: number, value_type: float }
-              - { label: Reviews, name: reviews, widget: number, value_type: int }
-              - { label: Badge, name: badge, widget: string, required: false }
-              - { label: Image, name: image, widget: image }
-          - label: Categories
-            name: categories
-            widget: list
-            fields:
-              - { label: Value, name: value, widget: string }
-              - { label: Label, name: label, widget: string }
-
-  - name: projects
-    label: Dự án
-    label_singular: Dự án
-    folder: src/content/projects
-    create: true
-    format: json
-    extension: json
-    identifier_field: title
-    slug: "{{fields.slug}}"
-    summary: "{{title}} — {{client}}"
-    editor:
-      preview: false
-    fields:
-      - {
-          label: Thứ tự hiển thị,
-          name: order,
-          widget: number,
-          value_type: int,
-          min: 1,
-        }
-      - {
-          label: Slug,
-          name: slug,
-          widget: string,
-          pattern:
-            [
-              "^[a-z0-9]+(?:-[a-z0-9]+)*$",
-              "Chỉ dùng chữ thường, số và dấu gạch nối",
-            ],
-        }
-      - { label: Tiêu đề, name: title, widget: string }
-      - { label: Khách hàng, name: client, widget: string }
-      - { label: Năm thực hiện, name: year, widget: string }
-      - { label: Lĩnh vực, name: category, widget: string }
-      - { label: Slug lĩnh vực, name: categorySlug, widget: string }
-      - label: Thẻ
-        name: tags
-        widget: list
-        fields: &tag_fields
-          - { label: Tên thẻ, name: label, widget: string }
-          - { label: Slug thẻ, name: slug, widget: string }
-      - { label: Tóm tắt, name: summary, widget: text }
-      - { label: Kết quả nổi bật, name: outcome, widget: string }
-      - { label: Ảnh đại diện, name: image, widget: image }
-      - { label: Mô tả ảnh, name: alt, widget: string }
-      - { label: Tông màu, name: tone, widget: select, options: [light, dark] }
-      - label: Nội dung case study
-        name: sections
-        widget: list
-        fields: &content_section_fields
-          - { label: Tiêu đề, name: title, widget: string }
-          - {
-              label: Đoạn văn,
-              name: paragraphs,
-              widget: list,
-              field: { label: Đoạn văn, name: paragraph, widget: text },
-            }
-      - label: Chi tiết dự án
-        name: detail
-        widget: object
-        required: false
-        fields:
-          - { label: Vai trò, name: role, widget: string, required: false }
-          - {
-              label: Thời gian,
-              name: duration,
-              widget: string,
-              required: false,
-            }
-          - {
-              label: Hiển thị nút quay lại,
-              name: showBackAction,
-              widget: boolean,
-              default: true,
-              required: false,
-            }
-          - { label: Website, name: liveUrl, widget: string, required: false }
-          - {
-              label: Mã nguồn,
-              name: sourceUrl,
-              widget: string,
-              required: false,
-            }
-          - label: Page builder
-            name: builder
-            widget: object
-            required: false
-            fields:
-              - label: Layout
-                name: layout
-                widget: object
-                fields:
-                  - {
-                      label: Layout template,
-                      name: template,
-                      widget: select,
-                      options: [fluid, contained, boxed, sidebar, centered],
-                    }
-                  - {
-                      label: Container size,
-                      name: containerSize,
-                      widget: select,
-                      options: [site, content],
-                      required: false,
-                    }
-                  - {
-                      label: Aside label,
-                      name: asideLabel,
-                      widget: string,
-                      required: false,
-                    }
-                  - {
-                      label: Aside position,
-                      name: asidePosition,
-                      widget: select,
-                      options: [start, end],
-                      required: false,
-                    }
-              - label: Regions
-                name: regions
-                widget: list
-                fields:
-                  - { label: Key, name: key, widget: string }
-                  - {
-                      label: Enabled,
-                      name: enabled,
-                      widget: boolean,
-                      default: true,
-                    }
-                  - {
-                      label: Pattern,
-                      name: component,
-                      widget: select,
-                      options:
-                        [
-                          page-header,
-                          article,
-                          reviews,
-                          cards,
-                          cta,
-                          post-navigation,
-                          hero,
-                          collection,
-                          archive,
-                          advertisement,
-                          details,
-                          group,
-                          profile,
-                          status,
-                          tabs,
-                          toc,
-                          entry-index,
-                          reader,
-                        ],
-                    }
-                  - {
-                      label: Placement,
-                      name: placement,
-                      widget: select,
-                      options: [header, main, aside, cta],
-                      default: main,
-                    }
-                  - {
-                      label: Template,
-                      name: template,
-                      widget: select,
-                      options:
-                        [
-                          split-media,
-                          slider-aside,
-                          split-benefits,
-                          gallery-summary,
-                          cover-summary,
-                          media-aside,
-                          stacked,
-                          horizontal,
-                          overlay,
-                          featured,
-                          boxed,
-                          compact-media,
-                          compact-bordered,
-                          media-details,
-                          media-summary,
-                          media-metrics,
-                          icon-panel,
-                          icon-summary,
-                          media-only,
-                          default,
-                          callout,
-                          media-pricing,
-                          subscription,
-                          inline,
-                          split,
-                          sidebar,
-                          full-banner,
-                          split-image-right,
-                          stack,
-                          taxonomy,
-                          faceted,
-                        ],
-                      required: false,
-                    }
-                  - {
-                      label: Theme,
-                      name: theme,
-                      widget: select,
-                      options: [dark, light, canvas, accent, none],
-                      default: none,
-                    }
-                  - {
-                      label: Spacing,
-                      name: spacing,
-                      widget: select,
-                      options: [compact, default, none, lead, body, closing],
-                      default: none,
-                    }
-                  - {
-                      label: Container,
-                      name: container,
-                      widget: select,
-                      options: [site, content, none],
-                      default: none,
-                    }
-          - label: Tính năng
-            name: features
-            widget: list
-            required: false
-            fields:
-              - { label: Tiêu đề, name: title, widget: string }
-              - { label: Mô tả, name: description, widget: text }
-              - { label: Icon, name: icon, widget: string }
-          - label: Thư viện ảnh
-            name: gallery
-            widget: list
-            required: false
-            fields: *image_fields
-          - label: Kết quả
-            name: results
-            widget: list
-            required: false
-            fields:
-              - { label: Giá trị, name: value, widget: string }
-              - { label: Nhãn, name: label, widget: string }
-          - label: Đánh giá khách hàng
-            name: testimonial
-            widget: object
-            required: false
-            fields:
-              - { label: Nội dung, name: quote, widget: text }
-              - { label: Họ tên, name: name, widget: string }
-              - { label: Vai trò, name: role, widget: string }
-
-  - name: blog
-    label: Bài viết
-    label_singular: Bài viết
-    folder: src/content/blog
-    create: true
-    format: json
-    extension: json
-    identifier_field: title
-    slug: "{{fields.slug}}"
-    summary: "{{title}} — {{publishedAt}}"
-    editor:
-      preview: false
-    fields:
-      - {
-          label: Thứ tự hiển thị,
-          name: order,
-          widget: number,
-          value_type: int,
-          min: 1,
-        }
-      - {
-          label: Số phút đọc,
-          name: readingMinutes,
-          widget: number,
-          value_type: int,
-          min: 1,
-        }
-      - {
-          label: Slug,
-          name: slug,
-          widget: string,
-          pattern:
-            [
-              "^[a-z0-9]+(?:-[a-z0-9]+)*$",
-              "Chỉ dùng chữ thường, số và dấu gạch nối",
-            ],
-        }
-      - { label: Tiêu đề, name: title, widget: string }
-      - { label: Chuyên mục, name: category, widget: string }
-      - { label: Slug chuyên mục, name: categorySlug, widget: string }
-      - label: Thẻ
-        name: tags
-        widget: list
-        fields: *tag_fields
-      - { label: Mô tả ngắn, name: excerpt, widget: text }
-      - {
-          label: Ngày xuất bản,
-          name: publishedAt,
-          widget: datetime,
-          date_format: YYYY-MM-DD,
-          time_format: false,
-          format: YYYY-MM-DD,
-        }
-      - { label: Tác giả, name: author, widget: string }
-      - { label: Ảnh đại diện, name: image, widget: image }
-      - { label: Mô tả ảnh, name: imageAlt, widget: string }
-      - label: Nội dung bài viết
-        name: content
-        widget: list
-        types:
-          - label: Tiêu đề
-            name: heading
-            widget: object
-            fields:
-              - { label: ID, name: id, widget: string }
-              - {
-                  label: Cấp,
-                  name: level,
-                  widget: select,
-                  options: [2, 3],
-                  default: 2,
-                  value_type: int,
-                }
-              - { label: Nội dung, name: text, widget: string }
-          - label: Đoạn văn
-            name: paragraph
-            widget: object
-            fields:
-              - { label: Nội dung, name: text, widget: text }
-          - label: Hình ảnh
-            name: image
-            widget: object
-            fields:
-              - label: Hồ sơ ảnh
-                name: image
-                widget: object
-                fields:
-                  - { label: Ảnh, name: src, widget: image }
-                  - { label: Mô tả ảnh, name: alt, widget: string }
-                  - {
-                      label: Chiều rộng,
-                      name: width,
-                      widget: number,
-                      value_type: int,
-                      min: 1,
-                    }
-                  - {
-                      label: Chiều cao,
-                      name: height,
-                      widget: number,
-                      value_type: int,
-                      min: 1,
-                    }
-
-  - name: publication_catalogs
-    label: Publication catalogs
-    label_singular: Publication catalog
-    folder: src/content/publications
-    create: false
-    format: json
-    extension: json
-    identifier_field: slug
-    summary: "{{label}}"
-    editor:
-      preview: false
-    fields:
-      - { label: Order, name: order, widget: number, value_type: int, min: 1 }
-      - { label: Slug, name: slug, widget: select, options: [novels, comics] }
-      - { label: Label, name: label, widget: string }
-      - { label: Title, name: title, widget: string }
-      - { label: Accent, name: accent, widget: string }
-      - { label: Description, name: description, widget: text }
-      - label: Hero image
-        name: hero
-        widget: object
-        fields: *image_fields
-      - label: Primary action
-        name: primaryAction
-        widget: object
-        fields: *navigation_fields
-      - label: Secondary action
-        name: secondaryAction
-        widget: object
-        fields: *navigation_fields
-      - { label: Quote, name: quote, widget: text }
-      - { label: Quote credit, name: quoteCredit, widget: string }
-      - label: Statistics
-        name: stats
-        widget: list
-        min: 4
-        max: 4
-        fields:
-          - { label: Label, name: label, widget: string }
-          - { label: Value, name: value, widget: string }
-          - { label: Icon, name: icon, widget: string }
-      - label: Genres
-        name: genres
-        widget: list
-        fields:
-          - { label: Label, name: label, widget: string }
-          - { label: Slug, name: slug, widget: string }
-          - {
-              label: Count,
-              name: count,
-              widget: number,
-              value_type: int,
-              min: 0,
-            }
-          - { label: Icon, name: icon, widget: string }
-      - label: Authors
-        name: authors
-        widget: list
-        fields:
-          - { label: Name, name: name, widget: string }
-          - {
-              label: Works,
-              name: works,
-              widget: number,
-              value_type: int,
-              min: 0,
-            }
-          - label: Portrait
-            name: image
-            widget: object
-            fields: *image_fields
-      - label: Entries
-        name: entries
-        widget: list
-        fields:
-          - {
-              label: Order,
-              name: order,
-              widget: number,
-              value_type: int,
-              min: 1,
-            }
-          - { label: Slug, name: slug, widget: string }
-          - { label: Title, name: title, widget: string }
-          - { label: Summary, name: summary, widget: text }
-          - label: Cover
-            name: cover
-            widget: object
-            fields: *image_fields
-          - label: Genres
-            name: genres
-            widget: list
-            fields: *tag_fields
-          - {
-              label: Status,
-              name: status,
-              widget: select,
-              options: [ongoing, complete],
-            }
-          - {
-              label: Rating,
-              name: rating,
-              widget: number,
-              value_type: float,
-              min: 0,
-              max: 5,
-            }
-          - { label: Views, name: views, widget: string }
-          - {
-              label: Chapters,
-              name: chapters,
-              widget: number,
-              value_type: int,
-              min: 0,
-            }
-          - { label: Updated label, name: updatedLabel, widget: string }
-          - { label: Author, name: author, widget: string }
-          - label: Detail content
-            name: detail
-            widget: object
-            required: false
-            fields:
-              - { label: Language, name: language, widget: string }
-              - { label: Followers, name: followers, widget: string }
-              - {
-                  label: Description,
-                  name: description,
-                  widget: list,
-                  field: { label: Paragraph, name: paragraph, widget: text },
-                }
-              - label: Tags
-                name: tags
-                widget: list
-                fields: *tag_fields
-              - {
-                  label: Chapter titles,
-                  name: chapterTitles,
-                  widget: list,
-                  field: { label: Chapter title, name: title, widget: string },
-                }
-              - label: Reader chapters
-                name: reader
-                widget: list
-                required: false
-                fields:
-                  - {
-                      label: Chapter number,
-                      name: number,
-                      widget: number,
-                      value_type: int,
-                      min: 1,
-                    }
-                  - { label: Title, name: title, widget: string }
-                  - {
-                      label: Published date,
-                      name: publishedAt,
-                      widget: datetime,
-                      time_format: false,
-                    }
-                  - {
-                      label: Published label,
-                      name: publishedLabel,
-                      widget: string,
-                    }
-                  - {
-                      label: Reading time or panel count,
-                      name: readTime,
-                      widget: string,
-                    }
-                  - { label: Views, name: views, widget: string }
-                  - {
-                      label: Content type,
-                      name: kind,
-                      widget: select,
-                      options: [prose, sequential-media],
-                    }
-                  - label: Prose
-                    name: prose
-                    widget: list
-                    required: false
-                    fields:
-                      - {
-                          label: Style,
-                          name: kind,
-                          widget: select,
-                          required: false,
-                          options: [paragraph, emphasis, separator],
-                        }
-                      - { label: Text, name: text, widget: text }
-                  - label: Sequential images
-                    name: images
-                    widget: list
-                    required: false
-                    fields: *image_fields
-      - label: Newsletter
-        name: newsletter
-        widget: object
-        fields:
-          - { label: Title, name: title, widget: string }
-          - { label: Description, name: description, widget: text }
-          - { label: Input label, name: inputLabel, widget: string }
-          - { label: Placeholder, name: placeholder, widget: string }
-          - { label: Submit label, name: submitLabel, widget: string }
-          - label: Image
-            name: image
-            widget: object
-            fields: *image_fields
-
-  - name: policies
-    label: Trang chính sách
-    label_singular: Trang chính sách
-    delete: false
-    editor:
-      preview: false
-    files:
-      - name: privacy_policy
-        label: Privacy Policy
-        file: src/content/cms/policies/privacy-policy.json
-        format: json
-        fields: &policy_fields
-          - { label: Nhãn đầu mục, name: eyebrow, widget: string }
-          - { label: Tiêu đề, name: title, widget: string }
-          - { label: Mô tả, name: description, widget: text }
-          - {
-              label: Nhãn ngày cập nhật,
-              name: lastUpdatedLabel,
-              widget: string,
-            }
-          - { label: Ngày cập nhật, name: lastUpdated, widget: string }
-          - label: Nội dung chính sách
-            name: sections
-            widget: list
-            fields: *content_section_fields
-      - name: terms_of_use
-        label: Terms of Use
-        file: src/content/cms/policies/terms-of-use.json
-        format: json
-        fields: *policy_fields
