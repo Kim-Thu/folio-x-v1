@@ -6,9 +6,9 @@ import CBox from "@/components/object/component/CBox.astro";
 import CColumns from "@/components/object/component/CColumns.astro";
 import CProfile from "@/components/object/component/CProfile.astro";
 import CTOC from "@/components/object/component/CTOC.astro";
+import PAdvertisement from "@/components/object/project/advertisement/PAdvertisement.astro";
 import PArticle from "@/components/object/project/article/PArticle.astro";
 import PCard from "@/components/object/project/card/PCard.astro";
-import PCta from "@/components/object/project/cta/PCta.astro";
 import PPageHeader from "@/components/object/project/page-header/PPageHeader.astro";
 import PSectionHeader from "@/components/object/project/section-header/PSectionHeader.astro";
 import { mapInsightToCard } from "@/data/mappers/card";
@@ -98,10 +98,9 @@ const relatedCards = relatedPosts.map((insight) =>
 					</CBox>
 				)}
 
-				<PCta
-					template="subscription"
+				<PAdvertisement
+					template="form-first"
 					data={{
-						id: "article-newsletter",
 						title: "Get new articles by email",
 						description: "Receive new writing about design, engineering, and product thinking.",
 						image: {
@@ -109,6 +108,11 @@ const relatedCards = relatedPosts.map((insight) =>
 							alt: "Newsletter envelope and reading illustration",
 							width: 1448,
 							height: 1086,
+						},
+						action: {
+							href: "/blog",
+							label: "Subscribe",
+							icon: "arrowRight",
 						},
 						form: {
 							formName: "article-newsletter",
