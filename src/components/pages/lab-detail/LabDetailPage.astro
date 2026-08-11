@@ -15,11 +15,6 @@ const { lab } = data;
 const page = lab.detail?.page;
 if (!page) throw new Error(`Missing CMS lab detail: ${lab.slug}`);
 
-const articleBlocks = lab.sections.map((section, index) => ({
-	id: index === 0 ? "overview" : section.title.toLowerCase().replace(/\s+/g, "-"),
-	title: section.title,
-	paragraphs: section.paragraphs,
-}));
 const metricValue = (source: "stars" | "forks" | "updatedLabel") => source === "updatedLabel" ? lab.updatedLabel : String(lab[source]);
 ---
 
@@ -67,7 +62,7 @@ const metricValue = (source: "stars" | "forks" | "updatedLabel") => source === "
 				<LSection id={section.id} {...section.settings}>
 					<CColumns columns={section.content.layout.columns} gap={section.content.layout.gap}>
 						<div class={`lg:col-span-${section.content.layout.articleSpan}`}>
-							<PArticle appearance={section.content.appearance} blocks={articleBlocks} />
+							<PArticle appearance={section.content.appearance} blocks={lab.sections} />
 						</div>
 						<aside class={`lg:col-span-${section.content.layout.asideSpan}`}>
 							<CColumns columns={section.content.layout.asideColumns} gap={section.content.layout.asideGap}>
