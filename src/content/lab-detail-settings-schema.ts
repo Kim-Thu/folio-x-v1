@@ -13,6 +13,11 @@ const cardColumnsSchema = z.union([
   z.literal(1), z.literal(2), z.literal(3), z.literal(4), z.literal(5),
 ]);
 const cardGapSchema = z.enum(["none", "sm", "md", "lg", "xl"]);
+const sectionSettingsSchema = z.object({
+  theme: z.enum(["dark", "light", "canvas", "accent", "none"]),
+  spacing: z.enum(["compact", "default", "none", "lead", "body", "closing"]),
+  container: z.enum(["site", "content", "none"]),
+});
 
 const cardPresentationSchema = z.object({
   template: cardTemplateSchema,
@@ -33,6 +38,7 @@ export const labDetailSettingsSchema = z.object({
     id: z.string().min(1),
     title: z.string().min(1),
     actionIcon: z.literal("arrowUpRight"),
+    settings: sectionSettingsSchema,
     cards: cardPresentationSchema,
   }),
   related: z.object({
@@ -40,6 +46,7 @@ export const labDetailSettingsSchema = z.object({
     title: z.string().min(1),
     actionLabel: z.string().min(1),
     metricIcon: z.literal("star"),
+    settings: sectionSettingsSchema,
     cards: cardPresentationSchema,
     slots: z.object({
       excerpt: z.boolean(),
