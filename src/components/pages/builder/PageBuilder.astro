@@ -29,13 +29,21 @@ import type {
 	PageRegion,
 	PageSectionData,
 } from "@/types/components/pages/builder/PageBuilder.types";
+import type { CIconName } from "@/types/components/object/component/CIcon.types";
+import type { PAdvertisementData } from "@/types/components/object/project/advertisement/PAdvertisement.types";
 import type { PCardData, PCardProps } from "@/types/components/object/project/card/PCard.types";
+import type { PFilterChoiceGroupData } from "@/types/components/object/project/filter-panel/PFilterPanel.types";
 import type { PSectionHeaderProps } from "@/types/components/object/project/section-header/PSectionHeader.types";
 
 const props = Astro.props as PageBuilderProps;
 const context = props.context ?? {};
 
 type CollectionSection = Extract<PageSectionData, { type: "collection" }>;
+type ArchiveSection = Extract<PageSectionData, { type: "archive" }>;
+type ProjectsArchiveSection = Extract<ArchiveSection, { content: { source: { collection: "projects" } } }>;
+type LabsArchiveSection = Extract<ArchiveSection, { content: { source: { collection: "labs" } } }>;
+type ProductsArchiveSection = Extract<ArchiveSection, { content: { source: { collection: "products" } } }>;
+
 type ProductsCollectionSection = Extract<CollectionSection, { content: { source: { collection: "products" } } }>;
 type ProjectsCollectionSection = Extract<CollectionSection, { content: { source: { collection: "projects" } } }>;
 type LabsCollectionSection = Extract<CollectionSection, { content: { source: { collection: "labs" } } }>;
@@ -44,27 +52,10 @@ type ComicsCollectionSection = Extract<CollectionSection, { content: { source: {
 type NovelsCollectionSection = Extract<CollectionSection, { content: { source: { collection: "novels" } } }>;
 type PublicationsCollectionSection = Extract<CollectionSection, { content: { source: { collection: "publications" } } }>;
 
-type ArchiveSection = Extract<PageSectionData, { type: "archive" }>;
-type ProjectsArchiveSection = Extract<ArchiveSection, { content: { source: { collection: "projects" } } }>;
-type LabsArchiveSection = Extract<ArchiveSection, { content: { source: { collection: "labs" } } }>;
-type ProductsArchiveSection = Extract<ArchiveSection, { content: { source: { collection: "products" } } }>;
-
 type HeroRegionProps = Extract<PageRegion, { component: "hero" }>["props"];
 type PageHeaderRegionProps = Extract<PageRegion, { component: "page-header" }>["props"];
 type ArticleRegionProps = Extract<PageRegion, { component: "article" }>["props"];
 type CtaRegionProps = Extract<PageRegion, { component: "cta" }>["props"];
-
-const isCollectionSource = <T extends "products" | "projects" | "labs" | "blog" | "comics" | "novels" | "publications">(
-	section: CollectionSection,
-	collection: T,
-): section is Extract<CollectionSection, { content: { source: { collection: T } } }> =>
-	"source" in section.content && section.content.source.collection === collection;
-
-const isArchiveSource = <T extends "projects" | "labs" | "products">(
-	section: ArchiveSection,
-	collection: T,
-): section is Extract<ArchiveSection, { content: { source: { collection: T } } }> =>
-	section.content.source.collection === collection;
 
 const sectionFrame = (section: PageSectionData) => ({
 	id: section.id,
@@ -103,78 +94,64 @@ const cardConfig = (section: CollectionSection, items: PCardData[]): PCardProps 
 	};
 };
 
-const take = <T,>(items: T[], limit?: number): T[] =>
+const take = <T,>(items: T[], limit?: number) =>
 	limit === undefined ? items : items.slice(0, limit);
 
+const isCollectionSource = <T extends CollectionSection["content"]["source"]["collection"]>(
+	section: CollectionSection,
+	collection: T,
+): section is Extract<CollectionSection, { content: { source: { collection: T } } }> =>
+	"source" in section.content && section.content.source.collection === collection;
+
 const resolveCollectionItems = async (section: CollectionSection): Promise<PCardData[]> => {
-	if ("items" in section.content) {
-		return section.content.items as unknown as PCardData[];
-	}
+	if ("items" in section.content) return section.content.items as unknown as PCardData[];
 
 	if (isCollectionSource(section, "products")) {
-		const content: ProductsCollectionSection["content"] = section.content;
-		return take(await getProducts(), content.source.limit).map((item) =>
-			mapProductToCard(item, content.itemPresentation as ProductCardPresentation),
+		const typed = section as ProductsCollectionSection;
+		return take(await getProducts(), typed.content.source.limit).map((item) =>
+			mapProductToCard(item, typed.content.itemPresentation as ProductCardPresentation),
 		);
 	}
-
 	if (isCollectionSource(section, "projects")) {
-		const content: ProjectsCollectionSection["content"] = section.content;
-		return take(await getProjects(), content.source.limit).map((item) =>
-			mapProjectToCard(item, content.itemPresentation as ProjectCardPresentation),
+		const typed = section as ProjectsCollectionSection;
+		return take(await getProjects(), typed.content.source.limit).map((item) =>
+			mapProjectToCard(item, typed.content.itemPresentation as ProjectCardPresentation),
 		);
 	}
-
 	if (isCollectionSource(section, "labs")) {
-		const content: LabsCollectionSection["content"] = section.content;
-		return take(await getLabs(), content.source.limit).map((item) =>
-			mapLabToCard(item, content.itemPresentation as LabCardPresentation),
+		const typed = section as LabsCollectionSection;
+		return take(await getLabs(), typed.content.source.limit).map((item) =>
+			mapLabToCard(item, typed.content.itemPresentation as LabCardPresentation),
 		);
 	}
-
 	if (isCollectionSource(section, "blog")) {
-		const content: BlogCollectionSection["content"] = section.content;
-		return take(await getInsights(), content.source.limit).map((item) =>
-			mapInsightToCard(item, content.itemPresentation as InsightCardPresentation),
+		const typed = section as BlogCollectionSection;
+		return take(await getInsights(), typed.content.source.limit).map((item) =>
+			mapInsightToCard(item, typed.content.itemPresentation as InsightCardPresentation),
 		);
 	}
-
 	if (isCollectionSource(section, "comics")) {
-		const content: ComicsCollectionSection["content"] = section.content;
-		return take(await getPublications("comics"), content.source.limit).map((item) =>
-			mapPublicationToCard(item, "comics", content.itemPresentation as PublicationCardPresentation),
+		const typed = section as ComicsCollectionSection;
+		return take(await getPublications("comics"), typed.content.source.limit).map((item) =>
+			mapPublicationToCard(item, "comics", typed.content.itemPresentation as PublicationCardPresentation),
 		);
 	}
-
 	if (isCollectionSource(section, "novels")) {
-		const content: NovelsCollectionSection["content"] = section.content;
-		return take(await getPublications("novels"), content.source.limit).map((item) =>
-			mapPublicationToCard(item, "novels", content.itemPresentation as PublicationCardPresentation),
+		const typed = section as NovelsCollectionSection;
+		return take(await getPublications("novels"), typed.content.source.limit).map((item) =>
+			mapPublicationToCard(item, "novels", typed.content.itemPresentation as PublicationCardPresentation),
 		);
 	}
-
 	if (isCollectionSource(section, "publications")) {
-		const content: PublicationsCollectionSection["content"] = section.content;
+		const typed = section as PublicationsCollectionSection;
 		const [novels, comics] = await Promise.all([
 			getPublications("novels"),
 			getPublications("comics"),
 		]);
 		return take([
-			...novels.map((item) =>
-				mapPublicationToCard(
-					item,
-					"novels",
-					content.itemPresentation.novels as PublicationCardPresentation,
-				),
-			),
-			...comics.map((item) =>
-				mapPublicationToCard(
-					item,
-					"comics",
-					content.itemPresentation.comics as PublicationCardPresentation,
-				),
-			),
-		], content.source.limit);
+			...novels.map((item) => mapPublicationToCard(item, "novels", typed.content.itemPresentation.novels as PublicationCardPresentation)),
+			...comics.map((item) => mapPublicationToCard(item, "comics", typed.content.itemPresentation.comics as PublicationCardPresentation)),
+		], typed.content.source.limit);
 	}
 
 	return [];
@@ -226,6 +203,22 @@ const buildLabsArchive = async (section: LabsArchiveSection): Promise<ArchiveReg
 	const visibleLabs = labs.filter((lab) => (!context.categorySlug || lab.category.slug === context.categorySlug) && (!context.technologySlug || lab.technologies.some((technology) => technology.slug === context.technologySlug)));
 	const categories = Array.from(new Map(labs.map((lab) => [lab.category.slug, lab.category])).values());
 	const technologies = Array.from(new Map(labs.flatMap((lab) => lab.technologies.map((technology) => [technology.slug, technology] as const))).values());
+	const categoryFilter: PFilterChoiceGroupData = {
+		appearance: sidebar.category.appearance as PFilterChoiceGroupData["appearance"],
+		control: sidebar.category.control as PFilterChoiceGroupData["control"],
+		legend: sidebar.category.legend,
+		name: sidebar.category.name,
+		type: sidebar.category.type,
+		options: [{ label: sidebar.category.allLabel, value: sidebar.category.allValue, href: sidebar.category.allHref, count: labs.length, checked: !context.categorySlug }, ...categories.map((category) => ({ label: category.label, value: category.slug, href: `${routes.categoryBase}${category.slug}`, count: labs.filter((lab) => lab.category.slug === category.slug).length, checked: context.categorySlug === category.slug }))],
+	};
+	const technologyFilter: PFilterChoiceGroupData = {
+		appearance: sidebar.technology.appearance as PFilterChoiceGroupData["appearance"],
+		control: sidebar.technology.control as PFilterChoiceGroupData["control"],
+		legend: sidebar.technology.legend,
+		name: sidebar.technology.name,
+		type: sidebar.technology.type,
+		options: technologies.map((technology) => ({ label: technology.label, value: technology.slug, href: `${routes.technologyBase}${technology.slug}`, count: labs.filter((lab) => lab.technologies.some((item) => item.slug === technology.slug)).length, checked: context.technologySlug === technology.slug })),
+	};
 
 	return {
 		key: section.id,
@@ -236,22 +229,8 @@ const buildLabsArchive = async (section: LabsArchiveSection): Promise<ArchiveReg
 			toolbar: { data: { search: toolbar.search, selects: toolbar.selects, sort: toolbar.sort, view: toolbar.view } },
 			sidebar: { label: sidebar.label, filter: { data: {
 				filterLabel: sidebar.filterLabel,
-				category: {
-					appearance: sidebar.category.appearance as "navigation",
-					control: sidebar.category.control,
-					legend: sidebar.category.legend,
-					name: sidebar.category.name,
-					type: sidebar.category.type,
-					options: [{ label: sidebar.category.allLabel, value: sidebar.category.allValue, href: sidebar.category.allHref, count: labs.length, checked: !context.categorySlug }, ...categories.map((category) => ({ label: category.label, value: category.slug, href: `${routes.categoryBase}${category.slug}`, count: labs.filter((lab) => lab.category.slug === category.slug).length, checked: context.categorySlug === category.slug }))],
-				},
-				groups: [{
-					appearance: sidebar.technology.appearance as "navigation",
-					control: sidebar.technology.control,
-					legend: sidebar.technology.legend,
-					name: sidebar.technology.name,
-					type: sidebar.technology.type,
-					options: technologies.map((technology) => ({ label: technology.label, value: technology.slug, href: `${routes.technologyBase}${technology.slug}`, count: labs.filter((lab) => lab.technologies.some((item) => item.slug === technology.slug)).length, checked: context.technologySlug === technology.slug })),
-				}],
+				category: categoryFilter,
+				groups: [technologyFilter],
 			} } },
 			result: { count: visibleLabs.length, label: resultLabel },
 			cards: {
@@ -273,6 +252,28 @@ const buildProductsArchive = async (section: ProductsArchiveSection): Promise<Ar
 	const visibleProducts = context.categorySlug ? products.filter((product) => product.categorySlug === context.categorySlug) : products;
 	const categoryFilters = [{ label: toolbar.category.allLabel, value: toolbar.category.allValue, href: routes.base, checked: !context.categorySlug }, ...categories.map((category) => ({ ...category, href: `${routes.categoryBase}${category.value}`, checked: context.categorySlug === category.value }))];
 	const platformFilters = toolbar.platform.options.map((option) => ({ ...option, checked: option.value === toolbar.platform.value }));
+	const categoryFilter: PFilterChoiceGroupData = {
+		...sidebar.category,
+		appearance: sidebar.category.appearance as PFilterChoiceGroupData["appearance"],
+		control: sidebar.category.control as PFilterChoiceGroupData["control"],
+		options: categoryFilters,
+	};
+	const platformFilter: PFilterChoiceGroupData = {
+		...sidebar.platform,
+		appearance: sidebar.platform.appearance as PFilterChoiceGroupData["appearance"],
+		control: sidebar.platform.control as PFilterChoiceGroupData["control"],
+		options: platformFilters,
+	};
+	const advertisement: PAdvertisementData = {
+		title: sidebar.advertisement.title,
+		description: sidebar.advertisement.description,
+		image: sidebar.advertisement.image,
+		action: {
+			href: sidebar.advertisement.action.href,
+			label: sidebar.advertisement.action.label,
+			icon: sidebar.advertisement.action.icon as CIconName | undefined,
+		},
+	};
 
 	return {
 		key: section.id,
@@ -291,8 +292,8 @@ const buildProductsArchive = async (section: ProductsArchiveSection): Promise<Ar
 			} },
 			sidebar: {
 				label: sidebar.label,
-				filter: { data: { filterLabel: sidebar.filterLabel, category: { ...sidebar.category, appearance: sidebar.category.appearance as "navigation", options: categoryFilters }, groups: [{ ...sidebar.platform, appearance: sidebar.platform.appearance as "navigation", options: platformFilters }] } },
-				advertisement: { data: sidebar.advertisement },
+				filter: { data: { filterLabel: sidebar.filterLabel, category: categoryFilter, groups: [platformFilter] } },
+				advertisement: { data: advertisement },
 			},
 			result: { count: visibleProducts.length, label: result.label },
 			cards: {
@@ -310,25 +311,34 @@ const buildProductsArchive = async (section: ProductsArchiveSection): Promise<Ar
 	};
 };
 
+const isArchiveSource = <T extends ArchiveSection["content"]["source"]["collection"]>(
+	section: ArchiveSection,
+	collection: T,
+): section is Extract<ArchiveSection, { content: { source: { collection: T } } }> =>
+	section.content.source.collection === collection;
+
 const regions: PageRegion[] = await Promise.all(props.page.content.sections.map(async (section): Promise<PageRegion> => {
 	const frame = sectionFrame(section);
 	switch (section.type) {
 		case "hero":
-			return { key: section.id, component: "hero", section: frame, props: { template: section.template, data: section.content } as HeroRegionProps };
+			return { key: section.id, component: "hero", section: frame, props: { template: section.template, data: section.content } as unknown as HeroRegionProps };
 		case "page-header":
-			return { key: section.id, component: "page-header", section: frame, props: { template: section.template, data: section.content } as PageHeaderRegionProps };
+			return { key: section.id, component: "page-header", section: frame, props: { template: section.template, data: section.content } as unknown as PageHeaderRegionProps };
 		case "article":
-			return { key: section.id, component: "article", section: frame, props: { blocks: section.content.blocks } as ArticleRegionProps };
+			return { key: section.id, component: "article", section: frame, props: { blocks: section.content.blocks } as unknown as ArticleRegionProps };
 		case "cta":
-			return { key: section.id, component: "cta", section: frame, props: { template: section.template, data: section.content } as CtaRegionProps };
+			return { key: section.id, component: "cta", section: frame, props: { template: section.template, data: section.content } as unknown as CtaRegionProps };
 		case "collection": {
 			const items = await resolveCollectionItems(section);
 			return { key: section.id, component: "collection", section: frame, props: { template: section.template as "stack" | "split" | undefined, header: sectionHeader(section), cardGroups: [cardConfig(section, items)] } };
 		}
-		case "archive":
-			if (isArchiveSource(section, "projects")) return buildProjectsArchive(section);
-			if (isArchiveSource(section, "labs")) return buildLabsArchive(section);
-			if (isArchiveSource(section, "products")) return buildProductsArchive(section);
+		case "archive": {
+			const archive = section as ArchiveSection;
+			if (isArchiveSource(archive, "projects")) return buildProjectsArchive(archive);
+			if (isArchiveSource(archive, "labs")) return buildLabsArchive(archive);
+			if (isArchiveSource(archive, "products")) return buildProductsArchive(archive);
+			throw new Error(`Unsupported archive collection: ${archive.content.source.collection}`);
+		}
 	}
 }));
 ---
