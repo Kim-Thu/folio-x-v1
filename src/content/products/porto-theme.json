@@ -23,17 +23,22 @@
           "settings": { "theme": "canvas", "spacing": "lead", "container": "site" },
           "content": {
             "breadcrumbLabel": "Breadcrumb",
-            "collectionLabel": "Products",
+            "productsLabel": "Products",
             "galleryLabel": "Product gallery",
-            "previewLabel": "Select preview",
-            "ratingMaximum": 5,
-            "salesLabel": "reviews",
-            "platformLabel": "Platform",
-            "categoryLabel": "Category",
-            "primaryActionLabel": "Contact to purchase",
-            "primaryActionHref": "mailto:thunk.work.91@gmail.com",
-            "secondaryActionLabel": "View preview",
-            "paymentLabel": "Payment methods"
+            "thumbnailLabel": "Select preview",
+            "salesLabel": "85 reviews",
+            "features": [],
+            "facts": [
+              { "label": "Platform", "value": "WordPress" },
+              { "label": "Category", "value": "WordPress Theme" }
+            ],
+            "actionsLabel": "Porto Theme actions",
+            "actions": [
+              { "label": "Contact to purchase", "href": "mailto:thunk.work.91@gmail.com", "icon": "shoppingBag", "variant": "primary" },
+              { "label": "View preview", "href": "https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&w=900&q=88", "icon": "arrowUpRight", "variant": "outline" }
+            ],
+            "paymentLabel": "Payment methods",
+            "paymentMethods": []
           }
         },
         {
@@ -42,7 +47,6 @@
           "template": "flow",
           "settings": { "theme": "canvas", "spacing": "body", "container": "content" },
           "content": {
-            "title": "Overview",
             "blocks": [
               {
                 "id": "product-overview-content",
