@@ -12,7 +12,7 @@
   "forks": 21,
   "updatedLabel": "3 weeks ago",
   "sourceUrl": "https://github.com",
-  "sections": [{ "title": "Overview", "paragraphs": ["This prototype tests a clearer way to build, inspect, and maintain small business automations."] }],
+  "sections": [{ "id": "overview", "title": "Overview", "paragraphs": ["This prototype tests a clearer way to build, inspect, and maintain small business automations."] }],
   "features": [{ "title": "Composable flows", "description": "Connect reusable steps with visible dependencies.", "icon": "arrowPath" }],
   "gallery": [{ "src": "/uploads/page-header-projects.png", "alt": "Automation workflow", "width": 1372, "height": 1147 }],
   "resources": [{ "title": "Source code", "description": "Review the repository.", "href": "https://github.com", "icon": "github" }],
