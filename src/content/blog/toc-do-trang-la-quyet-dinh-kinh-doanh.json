@@ -58,7 +58,16 @@
           "type": "article",
           "template": "flow",
           "settings": { "theme": "canvas", "spacing": "body", "container": "content" },
-          "content": { "source": "content" }
+          "content": {
+            "blocks": [
+              { "type": "heading", "id": "section-1", "level": 2, "text": "Tốc độ phải gắn với hành vi" },
+              { "type": "paragraph", "text": "Một chỉ số kỹ thuật chỉ hữu ích khi giải thích được người dùng rời đi ở đâu, chuyển đổi thay đổi thế nào hoặc đội vận hành mất bao lâu để hoàn thành công việc." },
+              { "type": "heading", "id": "section-2", "level": 2, "text": "Đo trải nghiệm thực tế" },
+              { "type": "paragraph", "text": "Lab data giúp tái hiện vấn đề; field data cho biết vấn đề có thật với người dùng hay không. Cả hai cần được đọc cùng bối cảnh thiết bị, mạng và luồng chính." },
+              { "type": "heading", "id": "section-3", "level": 2, "text": "Ưu tiên theo tác động" },
+              { "type": "paragraph", "text": "Tối ưu phần tử lớn nhất không phải lúc nào cũng là việc quan trọng nhất. Hãy bắt đầu ở nơi hiệu suất đang cản trở một hành động kinh doanh có giá trị." }
+            ]
+          }
         }
       ]
     }
