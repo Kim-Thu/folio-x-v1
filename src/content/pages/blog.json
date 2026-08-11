@@ -38,24 +38,100 @@
       },
       {
         "id": "insights",
-        "type": "collection",
-        "template": "cards",
+        "type": "archive",
+        "template": "faceted",
         "settings": {
           "theme": "canvas",
           "spacing": "body",
           "container": "site"
         },
         "content": {
-          "heading": { "title": ["All articles"] },
           "source": { "collection": "blog" },
+          "toolbar": {
+            "search": {
+              "id": "insights-search",
+              "label": "Search articles",
+              "name": "search",
+              "placeholder": "Search articles..."
+            },
+            "category": {
+              "control": "category",
+              "id": "insights-category",
+              "label": "All topics",
+              "allLabel": "All topics",
+              "allValue": "all"
+            },
+            "sort": {
+              "label": "Newest",
+              "value": "newest",
+              "options": [
+                { "label": "Newest", "value": "newest" },
+                { "label": "Oldest", "value": "oldest" }
+              ]
+            },
+            "view": {
+              "label": "Article view",
+              "gridLabel": "Grid view",
+              "listLabel": "List view"
+            }
+          },
+          "sidebar": {
+            "label": "Insight navigation",
+            "filter": {
+              "legend": "Topics",
+              "allLabel": "All"
+            },
+            "featured": {
+              "title": "Featured articles",
+              "limit": 4,
+              "cards": {
+                "template": "compact-media",
+                "layout": "list",
+                "columns": 1,
+                "gap": "sm",
+                "slots": {
+                  "excerpt": false,
+                  "tags": false
+                }
+              }
+            },
+            "newsletter": {
+              "template": "form-first",
+              "title": "Never miss a new article",
+              "description": "Join the newsletter for practical ideas and behind-the-scenes notes.",
+              "image": {
+                "src": "/uploads/ads-1.png",
+                "alt": "",
+                "width": 1402,
+                "height": 1122
+              },
+              "action": {
+                "label": "Subscribe",
+                "href": "mailto:thunk.work.91@gmail.com"
+              },
+              "form": {
+                "formName": "insights-sidebar-newsletter",
+                "inputId": "insights-sidebar-email",
+                "inputLabel": "Email address",
+                "placeholder": "Your email...",
+                "submitLabel": "Subscribe",
+                "tone": "dark"
+              }
+            }
+          },
           "itemPresentation": {
-            "routes": { "base": "/blog/", "categoryBase": "/blog/category/", "tagBase": "/blog/tag/" },
-            "separator": "",
+            "routes": {
+              "base": "/blog",
+              "categoryBase": "/blog/category/",
+              "tagBase": "/blog/tag/"
+            },
+            "separator": "·",
             "metadataDisplay": "text",
             "tagsLabelSuffix": " tags",
             "imageWidth": 1536,
             "imageHeight": 1536
           },
+          "result": { "title": "All articles" },
           "cards": {
             "template": "editorial",
             "layout": "grid",
@@ -65,6 +141,13 @@
               "tags": false,
               "action": false
             }
+          },
+          "emptyLabel": "No articles match your filters.",
+          "pagination": {
+            "label": "Article pages",
+            "previousLabel": "Previous page",
+            "nextLabel": "Next page",
+            "pageSize": 9
           }
         }
       },
