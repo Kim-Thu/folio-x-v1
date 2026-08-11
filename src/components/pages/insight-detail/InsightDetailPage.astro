@@ -29,6 +29,7 @@ if (!page) throw new Error(`Missing insight detail page config: ${post.slug}`);
 		}
 
 		if (section.type === "article") {
+			if (!section.content) return null;
 			const flowContent = section.content.blocks as unknown as PArticleFlowProps["content"];
 			return (
 				<LSection id={section.id} {...section.settings}>
