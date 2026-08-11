@@ -54,9 +54,11 @@ type ArchiveContent = ArchiveSection["content"];
 type ProjectsArchiveContent = Extract<ArchiveContent, { source: { collection: "projects" } }>;
 type LabsArchiveContent = Extract<ArchiveContent, { source: { collection: "labs" } }>;
 type ProductsArchiveContent = Extract<ArchiveContent, { source: { collection: "products" } }>;
+type BlogArchiveContent = Extract<ArchiveContent, { source: { collection: "blog" } }>;
 type ProjectsArchiveSection = Omit<ArchiveSection, "content"> & { content: ProjectsArchiveContent };
 type LabsArchiveSection = Omit<ArchiveSection, "content"> & { content: LabsArchiveContent };
 type ProductsArchiveSection = Omit<ArchiveSection, "content"> & { content: ProductsArchiveContent };
+type BlogArchiveSection = Omit<ArchiveSection, "content"> & { content: BlogArchiveContent };
 
 type HeroRegionProps = Extract<PageRegion, { component: "hero" }>["props"];
 type PageHeaderRegionProps = Extract<PageRegion, { component: "page-header" }>["props"];
@@ -313,6 +315,115 @@ const buildProductsArchive = async (section: ProductsArchiveSection): Promise<Ar
 	};
 };
 
+const buildBlogArchive = async (section: BlogArchiveSection): Promise<ArchiveRegion> => {
+	const { toolbar, sidebar, itemPresentation, result, cards, pagination, emptyLabel } = section.content;
+	const insights = await getInsights();
+	const visibleInsights = insights.filter((insight) =>
+		(!context.categorySlug || insight.categorySlug === context.categorySlug) &&
+		(!context.tagSlug || insight.tags.some((tag) => tag.slug === context.tagSlug)),
+	);
+	const categories = Array.from(new Map(insights.map((insight) => [insight.categorySlug, {
+		label: insight.category,
+		slug: insight.categorySlug,
+	}])).values());
+	const presentation = itemPresentation as InsightCardPresentation;
+	const categoryFilter: PFilterChoiceGroupData = {
+		appearance: "navigation",
+		control: "category",
+		legend: sidebar.filter.legend,
+		name: "insight-category",
+		type: "radio",
+		options: [
+			{
+				label: sidebar.filter.allLabel,
+				value: toolbar.category.allValue,
+				href: presentation.routes.base,
+				count: insights.length,
+				checked: !context.categorySlug,
+			},
+			...categories.map((category) => ({
+				label: category.label,
+				value: category.slug,
+				href: `${presentation.routes.categoryBase}${category.slug}`,
+				count: insights.filter((insight) => insight.categorySlug === category.slug).length,
+				checked: context.categorySlug === category.slug,
+			})),
+		],
+	};
+	const newsletter: PAdvertisementData = {
+		title: sidebar.newsletter.title,
+		description: sidebar.newsletter.description,
+		image: sidebar.newsletter.image,
+		action: {
+			href: sidebar.newsletter.action.href,
+			label: sidebar.newsletter.action.label,
+			icon: sidebar.newsletter.action.icon as CIconName | undefined,
+		},
+		form: sidebar.newsletter.form,
+	};
+
+	return {
+		key: section.id,
+		component: "archive",
+		section: sectionFrame(section as PageSectionData),
+		props: {
+			mode: "faceted",
+			toolbar: { data: {
+				search: toolbar.search,
+				selects: [{
+					control: toolbar.category.control,
+					id: toolbar.category.id,
+					label: toolbar.category.label,
+					value: context.categorySlug ?? toolbar.category.allValue,
+					options: [
+						{ label: toolbar.category.allLabel, value: toolbar.category.allValue },
+						...categories.map((category) => ({ label: category.label, value: category.slug })),
+					],
+				}],
+				sort: toolbar.sort,
+				view: toolbar.view,
+			} },
+			sidebar: {
+				label: sidebar.label,
+				filter: { data: { groups: [categoryFilter] } },
+				cardsHeader: {
+					data: { title: sidebar.featured.title },
+					appearance: "compact",
+					headingLevel: 2,
+				},
+				cards: {
+					template: sidebar.featured.cards.template as PCardProps["template"],
+					layout: sidebar.featured.cards.layout as PCardProps["layout"],
+					columns: sidebar.featured.cards.columns as PCardProps["columns"],
+					gap: sidebar.featured.cards.gap as PCardProps["gap"],
+					slots: sidebar.featured.cards.slots as PCardProps["slots"],
+					items: insights.slice(0, sidebar.featured.limit).map((insight) =>
+						mapInsightToCard(insight, presentation),
+					),
+				},
+				advertisement: { template: sidebar.newsletter.template, data: newsletter },
+			},
+			result: {
+				header: {
+					data: { title: result.title },
+					appearance: "compact",
+					headingLevel: 2,
+				},
+			},
+			cards: {
+				template: cards.template as PCardProps["template"],
+				layout: cards.layout as PCardProps["layout"],
+				columns: cards.columns as PCardProps["columns"],
+				gap: cards.gap as PCardProps["gap"],
+				slots: cards.slots as PCardProps["slots"],
+				items: visibleInsights.map((insight) => mapInsightToCard(insight, presentation)),
+			},
+			emptyLabel,
+			pagination: { ...pagination, totalPages: Math.max(1, Math.ceil(visibleInsights.length / pagination.pageSize)) },
+		},
+	};
+};
+
 const regions: PageRegion[] = await Promise.all(props.page.content.sections.map(async (section): Promise<PageRegion> => {
 	const frame = sectionFrame(section);
 	switch (section.type) {
@@ -337,6 +448,8 @@ const regions: PageRegion[] = await Promise.all(props.page.content.sections.map(
 					return buildLabsArchive({ ...section, content: archiveContent as LabsArchiveContent });
 				case "products":
 					return buildProductsArchive({ ...section, content: archiveContent as ProductsArchiveContent });
+				case "blog":
+					return buildBlogArchive({ ...section, content: archiveContent as BlogArchiveContent });
 			}
 		}
 	}
