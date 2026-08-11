@@ -1,0 +1,37 @@
+{
+  "navigation": {
+    "labelTemplate": "{title} navigation"
+  },
+  "sidebar": {
+    "labelTemplate": "{title} project information",
+    "projectInformationTitle": "Project information"
+  },
+  "resources": {
+    "id": "resources",
+    "title": "Resources",
+    "actionIcon": "arrowUpRight",
+    "cards": {
+      "template": "icon-summary",
+      "layout": "grid",
+      "columns": 4,
+      "gap": "sm"
+    }
+  },
+  "related": {
+    "id": "related-labs",
+    "title": "Related labs",
+    "actionLabel": "View all Labs",
+    "metricIcon": "star",
+    "cards": {
+      "template": "compact-media",
+      "layout": "grid",
+      "columns": 4,
+      "gap": "sm"
+    },
+    "slots": {
+      "excerpt": true,
+      "tags": false,
+      "action": false
+    }
+  }
+}
