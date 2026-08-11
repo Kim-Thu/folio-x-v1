@@ -67,16 +67,14 @@ const relatedCards = relatedPosts.map((insight) =>
 	<LSection id="article-detail" theme="canvas" spacing="lead" container="site">
 		<LSidebar label="Article supporting information" position="end" sticky>
 			<CColumns slot="sidebar" columns="one" gap="md">
-				<CBox surface="glass" radius="md" spacing="md">
-					<CProfile
-						label="Author"
-						name={post.author}
-						role="Writer at NKT Studio"
-						bio="Writing about product thinking, engineering, and practical systems."
-						image={{ src: "/uploads/avatar.webp", alt: post.author, width: 512, height: 512 }}
-						action={{ href: "/blog", label: "View all articles" }}
-					/>
-				</CBox>
+				<CProfile
+					label="Author"
+					name={post.author}
+					role="Writer at NKT Studio"
+					bio="Writing about product thinking, engineering, and practical systems."
+					image={{ src: "/uploads/avatar.webp", alt: post.author, width: 512, height: 512 }}
+					action={{ href: "/blog", label: "View all articles" }}
+				/>
 
 				{tocItems.length > 0 && (
 					<CTOC appearance="panel" label="Article contents" items={tocItems} />
