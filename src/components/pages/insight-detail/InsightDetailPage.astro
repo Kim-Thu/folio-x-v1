@@ -5,47 +5,34 @@ import PPageHeader from "@/components/object/project/page-header/PPageHeader.ast
 import PArticle from "@/components/object/project/article/PArticle.astro";
 import type { InsightDetailPageProps } from "@/types/components/pages/insight-detail/InsightDetailPage.types";
 import type { PPageHeaderProps } from "@/types/components/object/project/page-header/PPageHeader.types";
-import type { LSectionSpacing, LSectionTheme } from "@/types/components/layout/LSection.types";
+import type { PArticleFlowProps } from "@/types/components/object/project/article/PArticle.types";
 
 const { data } = Astro.props as InsightDetailPageProps;
 const { post } = data;
 const page = post.detail?.page;
 if (!page) throw new Error(`Missing insight detail page config: ${post.slug}`);
-
-const articleContent = post.content.map((item) =>
-	item.type === "image" ? { type: "image" as const, image: item.image } : { ...item },
-);
-
-const asRecord = (value: unknown): Record<string, unknown> =>
-	value && typeof value === "object" && !Array.isArray(value) ? value as Record<string, unknown> : {};
-const asString = (value: unknown, fallback = "") => typeof value === "string" ? value : fallback;
 ---
 
 <LPage template={page.template}>
 	{page.sections.map((section) => {
-		const settings = asRecord(section.settings);
-		const content = asRecord(section.content);
-		const theme = asString(settings.theme, "canvas") as LSectionTheme;
-		const spacing = asString(settings.spacing, "body") as LSectionSpacing;
-		const container = asString(settings.container, "site") as "site" | "content" | "none";
-
 		if (section.type === "page-header") {
 			const headerData = {
-				...content,
+				...section.content,
 				publishedLabel: post.publishedLabel,
 				readTime: post.readTime,
 			} as unknown as PPageHeaderProps["data"];
 			return (
-				<LSection id={section.id} theme={theme} spacing={spacing} container={container}>
+				<LSection id={section.id} {...section.settings}>
 					<PPageHeader template={section.template as PPageHeaderProps["template"]} data={headerData} />
 				</LSection>
 			);
 		}
 
 		if (section.type === "article") {
+			const flowContent = section.content.blocks as unknown as PArticleFlowProps["content"];
 			return (
-				<LSection id={section.id} theme={theme} spacing={spacing} container={container}>
-					<PArticle template={section.template as "flow" | undefined} content={articleContent} />
+				<LSection id={section.id} {...section.settings}>
+					<PArticle template="flow" content={flowContent} />
 				</LSection>
 			);
 		}
