@@ -19,6 +19,7 @@
   "sourceUrl": "https://github.com",
   "sections": [
     {
+      "id": "overview",
       "title": "Overview",
       "paragraphs": [
         "This experiment explores a direct, dependable workflow for creating images from natural-language prompts.",
@@ -26,6 +27,7 @@
       ]
     },
     {
+      "id": "technology",
       "title": "Technology",
       "paragraphs": [
         "The prototype combines a React client with a FastAPI orchestration layer and a swappable image-model adapter.",
