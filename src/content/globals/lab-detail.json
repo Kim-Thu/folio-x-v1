@@ -10,6 +10,11 @@
     "id": "resources",
     "title": "Resources",
     "actionIcon": "arrowUpRight",
+    "settings": {
+      "theme": "canvas",
+      "spacing": "compact",
+      "container": "site"
+    },
     "cards": {
       "template": "icon-summary",
       "layout": "grid",
@@ -22,6 +27,11 @@
     "title": "Related labs",
     "actionLabel": "View all Labs",
     "metricIcon": "star",
+    "settings": {
+      "theme": "canvas",
+      "spacing": "compact",
+      "container": "site"
+    },
     "cards": {
       "template": "compact-media",
       "layout": "grid",
