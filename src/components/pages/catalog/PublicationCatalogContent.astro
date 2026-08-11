@@ -1,0 +1,258 @@
+---
+import LSidebar from "@/components/layout/LSidebar.astro";
+import CBox from "@/components/object/component/CBox.astro";
+import CColumns from "@/components/object/component/CColumns.astro";
+import PArchiveToolbar from "@/components/object/project/archive-toolbar/PArchiveToolbar.astro";
+import PCard from "@/components/object/project/card/PCard.astro";
+import PFilterPanel from "@/components/object/project/filter-panel/PFilterPanel.astro";
+import PSectionHeader from "@/components/object/project/section-header/PSectionHeader.astro";
+import { mapPublicationToCard } from "@/data/mappers/card";
+import type { PublicationCardPresentation } from "@/data/mappers/card";
+import type { PublicationEntry } from "@/types/content";
+import type { PCardData } from "@/types/components/object/project/card/PCard.types";
+import type { CIconName } from "@/types/components/object/component/CIcon.types";
+
+type Props = {
+	catalog: "novels" | "comics";
+	entries: PublicationEntry[];
+};
+
+const { catalog, entries } = Astro.props as Props;
+const base = `/${catalog}/`;
+const categoryBase = `/${catalog}/category/`;
+
+const presentation: PublicationCardPresentation = {
+	routes: { base, categoryBase },
+	ariaLabelPrefix: "Read ",
+	categoryDisplay: "text",
+	tagsLabelSuffix: " genres",
+	viewsIcon: "globeAlt",
+};
+
+const cards = entries.map((entry) =>
+	mapPublicationToCard(entry, catalog, presentation),
+);
+const featuredCards = cards.slice(0, 5);
+const latestCards = cards.slice(0, 6);
+const trendingCards = cards.slice(0, 5);
+
+const genreMap = new Map<string, { label: string; slug: string; count: number }>();
+for (const entry of entries) {
+	for (const genre of entry.genres) {
+		const existing = genreMap.get(genre.slug);
+		genreMap.set(genre.slug, {
+			label: genre.label,
+			slug: genre.slug,
+			count: (existing?.count ?? 0) + 1,
+		});
+	}
+}
+const genres = [...genreMap.values()].sort((a, b) => b.count - a.count);
+
+const genreIcons: CIconName[] = [
+	"star",
+	"userCircle",
+	"globeAlt",
+	"bolt",
+	"lightBulb",
+	"archiveBox",
+	"folder01",
+];
+const popularGenreCards: PCardData[] = genres.slice(0, 8).map((genre, index) => ({
+	href: `#catalog`,
+	ariaLabel: genre.label,
+	title: [genre.label],
+	excerpt: `${genre.count} works`,
+	icon: genreIcons[index % genreIcons.length],
+}));
+
+const authorCounts = new Map<string, number>();
+for (const entry of entries) {
+	authorCounts.set(entry.author, (authorCounts.get(entry.author) ?? 0) + 1);
+}
+const authorCards: PCardData[] = [...authorCounts.entries()]
+	.sort((a, b) => b[1] - a[1])
+	.slice(0, 5)
+	.map(([name, works]) => ({
+		href: "#catalog",
+		ariaLabel: name,
+		title: [name],
+		excerpt: `${works} works`,
+		media: {
+			src: "/uploads/avatar-placehoder.png",
+			alt: name,
+			width: 512,
+			height: 512,
+		},
+	}));
+
+const toolbar = {
+	data: {
+		search: {
+			id: `${catalog}-search`,
+			label: "Search stories",
+			name: "search",
+			placeholder: "Search stories, authors...",
+		},
+		selects: [
+			{
+				control: "genre",
+				id: `${catalog}-genre`,
+				label: "Genre",
+				value: "all",
+				options: [
+					{ label: "All genres", value: "all" },
+					...genres.map((genre) => ({ label: genre.label, value: genre.slug })),
+				],
+			},
+			{
+				control: "status",
+				id: `${catalog}-status`,
+				label: "Status",
+				value: "all",
+				options: [
+					{ label: "All status", value: "all" },
+					{ label: "Ongoing", value: "ongoing" },
+					{ label: "Complete", value: "complete" },
+				],
+			},
+		],
+		sort: {
+			label: "Sort",
+			value: "newest",
+			options: [
+				{ label: "Newest", value: "newest" },
+				{ label: "Oldest", value: "oldest" },
+			],
+		},
+		view: {
+			label: "View",
+			gridLabel: "Grid view",
+			listLabel: "List view",
+		},
+	},
+};
+---
+
+<CBox data-collection-filter-root>
+	<CColumns columns="one" gap="md">
+		<PArchiveToolbar {...toolbar} />
+
+		<LSidebar label={`${catalog} navigation`} position="end" sticky>
+			<CColumns slot="sidebar" columns="one" gap="md">
+				<CBox surface="glass" radius="md" spacing="sm">
+					<PFilterPanel
+						data={{
+							groups: [
+								{
+									appearance: "navigation",
+									control: "genre",
+									legend: "Genres",
+									name: `${catalog}-genres`,
+									type: "radio",
+									options: [
+										{ label: "All", value: "all", count: entries.length, checked: true },
+										...genres.map((genre) => ({
+											label: genre.label,
+											value: genre.slug,
+											count: genre.count,
+										})),
+									],
+								},
+							],
+						}}
+					/>
+				</CBox>
+
+				<CBox surface="glass" radius="md" spacing="sm">
+					<CColumns columns="one" gap="sm">
+						<PSectionHeader
+							data={{ title: "Trending" }}
+							appearance="compact"
+							headingLevel={2}
+						/>
+						<PCard
+							template="compact-media"
+							layout="list"
+							columns={1}
+							gap="sm"
+							items={trendingCards}
+							slots={{ excerpt: false, tags: false, action: false }}
+						/>
+					</CColumns>
+				</CBox>
+
+				<CBox surface="glass" radius="md" spacing="sm">
+					<CColumns columns="one" gap="sm">
+						<PSectionHeader
+							data={{ title: "Popular authors" }}
+							appearance="compact"
+							headingLevel={2}
+						/>
+						<PCard
+							template="compact-media"
+							layout="list"
+							columns={1}
+							gap="sm"
+							items={authorCards}
+							slots={{ metadata: false, tags: false, metrics: false, action: false }}
+						/>
+					</CColumns>
+				</CBox>
+			</CColumns>
+
+			<CColumns columns="one" gap="lg">
+				<CColumns columns="one" gap="sm">
+					<PSectionHeader
+						data={{ title: "Featured" }}
+						appearance="compact"
+						headingLevel={2}
+					/>
+					<PCard
+						template="media-metrics"
+						layout="grid"
+						columns={5}
+						gap="sm"
+						mediaRatio="portrait"
+						items={featuredCards}
+						slots={{ excerpt: false, action: false }}
+					/>
+				</CColumns>
+
+				<CColumns columns="one" gap="sm">
+					<PSectionHeader
+						data={{ title: "Latest updates" }}
+						appearance="compact"
+						headingLevel={2}
+					/>
+					<PCard
+						template="compact-media"
+						layout="grid"
+						columns={3}
+						gap="sm"
+						items={latestCards}
+						slots={{ excerpt: true, tags: false, action: false }}
+					/>
+				</CColumns>
+
+				<CBox surface="glass" radius="md" spacing="sm">
+					<CColumns columns="one" gap="sm">
+						<PSectionHeader
+							data={{ title: "Popular genres" }}
+							appearance="compact"
+							headingLevel={2}
+						/>
+						<PCard
+							template="icon-summary"
+							layout="grid"
+							columns={4}
+							gap="sm"
+							items={popularGenreCards}
+							slots={{ media: false, metadata: false, tags: false, metrics: false, action: false }}
+						/>
+					</CColumns>
+				</CBox>
+			</CColumns>
+		</LSidebar>
+	</CColumns>
+</CBox>
