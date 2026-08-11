@@ -27,16 +27,6 @@
       { "label": "Adventure", "slug": "adventure" },
       { "label": "Mystery", "slug": "mystery" }
     ],
-    "chapterTitles": [
-      "The light at the gate",
-      "The final choice",
-      "Elysia's memory",
-      "The second wing",
-      "Source of the shadow",
-      "Fragments of memory",
-      "The turning point",
-      "The watcher"
-    ],
     "reader": [
       {
         "number": 18,
