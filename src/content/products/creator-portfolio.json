@@ -28,13 +28,19 @@
             "productsLabel": "Products",
             "galleryLabel": "Creator Portfolio gallery",
             "thumbnailLabel": "Select preview",
-            "reviewsLabel": "reviews",
-            "platformLabel": "Platform",
-            "categoryLabel": "Category",
+            "salesLabel": "38 reviews",
+            "features": [],
+            "facts": [
+              { "label": "Platform", "value": "HTML / Tailwind" },
+              { "label": "Category", "value": "Template" }
+            ],
             "actionsLabel": "Creator Portfolio actions",
-            "purchaseLabel": "Contact to purchase",
-            "previewLabel": "View preview",
-            "paymentLabel": "Payment methods"
+            "actions": [
+              { "label": "Contact to purchase", "href": "mailto:hello@nkt.studio?subject=Creator%20Portfolio", "icon": "shoppingBag", "variant": "primary" },
+              { "label": "View preview", "href": "https://images.unsplash.com/photo-1545235617-9465d2a55698?auto=format&fit=crop&w=900&q=88", "icon": "arrowUpRight", "variant": "outline" }
+            ],
+            "paymentLabel": "Payment methods",
+            "paymentMethods": []
           }
         },
         {
