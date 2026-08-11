@@ -30,13 +30,19 @@
             "productsLabel": "Products",
             "galleryLabel": "Image Optimizer gallery",
             "thumbnailLabel": "Select preview",
-            "reviewsLabel": "reviews",
-            "platformLabel": "Platform",
-            "categoryLabel": "Category",
+            "salesLabel": "35 reviews",
+            "features": [],
+            "facts": [
+              { "label": "Platform", "value": "WordPress" },
+              { "label": "Category", "value": "WordPress Plugin" }
+            ],
             "actionsLabel": "Image Optimizer actions",
-            "purchaseLabel": "Contact to purchase",
-            "previewLabel": "View preview",
-            "paymentLabel": "Payment methods"
+            "actions": [
+              { "label": "Contact to purchase", "href": "mailto:hello@nkt.studio?subject=Image%20Optimizer", "icon": "shoppingBag", "variant": "primary" },
+              { "label": "View preview", "href": "/uploads/page-header-insight.png", "icon": "arrowUpRight", "variant": "outline" }
+            ],
+            "paymentLabel": "Payment methods",
+            "paymentMethods": []
           }
         },
         {
