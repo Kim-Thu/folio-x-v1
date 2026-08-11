@@ -58,7 +58,16 @@
           "type": "article",
           "template": "flow",
           "settings": { "theme": "canvas", "spacing": "body", "container": "content" },
-          "content": { "source": "content" }
+          "content": {
+            "blocks": [
+              { "type": "heading", "id": "section-1", "level": 2, "text": "Lỗi là một trạng thái sản phẩm" },
+              { "type": "paragraph", "text": "Người dùng không quan tâm lỗi đến từ API, mạng hay nhà cung cấp. Họ chỉ cần biết điều gì đang xảy ra, dữ liệu có an toàn không và có thể làm gì tiếp theo." },
+              { "type": "heading", "id": "section-2", "level": 2, "text": "Fallback cần được thiết kế từ đầu" },
+              { "type": "paragraph", "text": "Một fallback tốt có dữ liệu thay thế, thông điệp rõ ràng và đường quay lại trạng thái bình thường. Nó không phải màn hình lỗi được thêm vào trước ngày phát hành." },
+              { "type": "heading", "id": "section-3", "level": 2, "text": "Độ tin cậy đến từ khả năng phục hồi" },
+              { "type": "paragraph", "text": "Hệ thống đáng tin không phải hệ thống không bao giờ lỗi, mà là hệ thống giới hạn tác động, quan sát được và phục hồi theo cách người dùng có thể hiểu." }
+            ]
+          }
         }
       ]
     }
