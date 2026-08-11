@@ -123,8 +123,8 @@ export const projectEntrySchema = z.object({
 	sections: z.array(contentSectionSchema).min(1),
 	detail: z
 		.object({
-			role: z.string().min(1),
-			duration: z.string().min(1),
+			role: z.string().min(1).optional(),
+			duration: z.string().min(1).optional(),
 			showBackAction: z.boolean().optional(),
 			liveUrl: z.string().min(1).optional(),
 			sourceUrl: z.string().min(1).optional(),
@@ -134,9 +134,9 @@ export const projectEntrySchema = z.object({
 					description: z.string().min(1),
 					icon: z.enum(["folder01", "userCircle", "calendar03", "lightBulb"]),
 				}),
-			),
-			gallery: z.array(imageSchema),
-			results: z.array(z.object({ value: z.string().min(1), label: z.string().min(1) })),
+			).default([]),
+			gallery: z.array(imageSchema).default([]),
+			results: z.array(z.object({ value: z.string().min(1), label: z.string().min(1) })).default([]),
 			reviews: projectReviewsSchema.optional(),
 			testimonial: z
 				.object({ quote: z.string().min(1), name: z.string().min(1), role: z.string().min(1) })
