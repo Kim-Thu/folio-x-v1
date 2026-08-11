@@ -17,18 +17,22 @@ export interface ProductCardPresentation {
 	categoryDisplay: "text";
 	actionHref: string;
 	actionLabelPrefix: string;
-	actionIcon: string;
-	license: string;
+	actionIcon: NonNullable<NonNullable<PCardData["action"]>["icon"]>;
+	license: NonNullable<NonNullable<PCardData["product"]>["license"]>;
 }
 
 export interface LabCardPresentation {
 	routes: CardRouteConfig;
 	ariaLabelPrefix: string;
 	categoryDisplay: "text";
-	completeBadgeTone: string;
-	activeBadgeTone: string;
+	completeBadgeTone: NonNullable<NonNullable<PCardData["badge"]>["tone"]>;
+	activeBadgeTone: NonNullable<NonNullable<PCardData["badge"]>["tone"]>;
 	tagsLabelSuffix: string;
-	metricIcons: [string, string, string];
+	metricIcons: [
+		NonNullable<NonNullable<PCardData["metrics"]>[number]["icon"]>,
+		NonNullable<NonNullable<PCardData["metrics"]>[number]["icon"]>,
+		NonNullable<NonNullable<PCardData["metrics"]>[number]["icon"]>,
+	];
 }
 
 export interface PublicationCardPresentation {
@@ -36,21 +40,21 @@ export interface PublicationCardPresentation {
 	ariaLabelPrefix: string;
 	categoryDisplay: "text";
 	tagsLabelSuffix: string;
-	viewsIcon: string;
+	viewsIcon: NonNullable<NonNullable<PCardData["metrics"]>[number]["icon"]>;
 }
 
 export interface ProjectCardPresentation {
 	routes: CardRouteConfig;
 	actionLabel?: string;
-	actionIcon?: string;
+	actionIcon?: NonNullable<NonNullable<PCardData["action"]>["icon"]>;
 	separator?: string;
 	size?: PCardData["size"];
 	tagsLabel?: string;
-	lightAppearance?: string;
-	darkAppearance?: string;
+	lightAppearance?: PCardData["appearance"];
+	darkAppearance?: PCardData["appearance"];
 	metadataDisplay?: "text";
-	imageWidth?: number;
-	imageHeight?: number;
+	imageWidth: number;
+	imageHeight: number;
 }
 
 export interface InsightCardPresentation {
@@ -58,8 +62,8 @@ export interface InsightCardPresentation {
 	separator?: string;
 	metadataDisplay?: "text";
 	tagsLabelSuffix?: string;
-	imageWidth?: number;
-	imageHeight?: number;
+	imageWidth: number;
+	imageHeight: number;
 }
 
 export function mapProductToCard(product: Product, presentation: ProductCardPresentation): PCardData {
@@ -145,7 +149,7 @@ export function mapLabToCard(lab: Lab, presentation: LabCardPresentation): PCard
 
 export function mapPublicationToCard(
 	entry: PublicationEntry,
-	catalogSlug: "comics" | "novels",
+	_catalogSlug: "comics" | "novels",
 	presentation: PublicationCardPresentation,
 ): PCardData {
 	const href = `${presentation.routes.base}${entry.slug}`;
