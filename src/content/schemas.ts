@@ -3,7 +3,7 @@ import { z } from "astro/zod";
 const navigationItemSchema = z.object({ href: z.string().min(1), label: z.string().min(1) });
 const socialLinkSchema = navigationItemSchema.extend({ shortLabel: z.string().min(1), icon: z.enum(["github", "linkedin"]).optional() });
 const taxonomyTermSchema = z.object({ label: z.string().min(1), slug: z.string().regex(/^[a-z0-9]+(?:-[a-z0-9]+)*$/) });
-const contentSectionSchema = z.object({ title: z.string().min(1), paragraphs: z.array(z.string().min(1)).min(1) });
+const contentSectionSchema = z.object({ id: z.string().regex(/^[a-z0-9]+(?:-[a-z0-9]+)*$/), title: z.string().min(1), paragraphs: z.array(z.string().min(1)).min(1) });
 const systemStateActionSchema = z.object({ href: z.string().min(1), label: z.string().min(1), icon: z.enum(["arrowLeft", "arrowRight", "arrowUp", "arrowUpRight", "chevronLeft", "chevronRight"]).optional() });
 const imageSchema = z.object({ src: z.string().min(1), alt: z.string(), width: z.number().int().positive(), height: z.number().int().positive() });
 const systemStateSchema = z.object({ id: z.string().min(1), displayCode: z.string().min(1).optional(), eyebrow: z.string().min(1), title: z.string().min(1), description: z.string().min(1), primaryAction: systemStateActionSchema, secondaryAction: systemStateActionSchema.optional(), image: imageSchema, metadataTitle: z.string().min(1), metadataDescription: z.string().min(1) });
