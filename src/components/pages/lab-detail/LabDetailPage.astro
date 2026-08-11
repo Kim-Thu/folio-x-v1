@@ -16,6 +16,24 @@ const page = lab.detail?.page;
 if (!page) throw new Error(`Missing CMS lab detail: ${lab.slug}`);
 
 const metricValue = (source: "stars" | "forks" | "updatedLabel") => source === "updatedLabel" ? lab.updatedLabel : String(lab[source]);
+
+const columnSpanClasses = {
+	1: "lg:col-span-1",
+	2: "lg:col-span-2",
+	3: "lg:col-span-3",
+	4: "lg:col-span-4",
+	5: "lg:col-span-5",
+	6: "lg:col-span-6",
+	7: "lg:col-span-7",
+	8: "lg:col-span-8",
+	9: "lg:col-span-9",
+	10: "lg:col-span-10",
+	11: "lg:col-span-11",
+	12: "lg:col-span-12",
+} as const;
+
+const columnSpanClass = (span: number) =>
+	columnSpanClasses[span as keyof typeof columnSpanClasses];
 ---
 
 <LPage template={page.template}>
@@ -57,14 +75,19 @@ const metricValue = (source: "stars" | "forks" | "updatedLabel") => source === "
 		if (section.type === "article") {
 			const summarySection = page.sections.find((item) => item.type === "page-header");
 			if (!summarySection) return null;
+			const articleSpanClass = columnSpanClass(section.content.layout.articleSpan);
+			const asideSpanClass = columnSpanClass(section.content.layout.asideSpan);
+			if (!articleSpanClass || !asideSpanClass) {
+				throw new Error(`Invalid CMS lab column span: ${lab.slug}`);
+			}
 
 			return (
 				<LSection id={section.id} {...section.settings}>
 					<CColumns columns={section.content.layout.columns} gap={section.content.layout.gap}>
-						<div class={`lg:col-span-${section.content.layout.articleSpan}`}>
+						<div class={articleSpanClass}>
 							<PArticle appearance={section.content.appearance} blocks={lab.sections} />
 						</div>
-						<aside class={`lg:col-span-${section.content.layout.asideSpan}`}>
+						<aside class={asideSpanClass}>
 							<CColumns columns={section.content.layout.asideColumns} gap={section.content.layout.asideGap}>
 								<CDescriptionList items={lab.facts} />
 								<CTags
