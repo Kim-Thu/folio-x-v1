@@ -1,7 +1,7 @@
-import type { PageBuilderConfig } from "@/types/components/pages/builder/PageBuilder.types";
+import type { SystemStateContent } from "@/types/content/SystemStateContent";
 
 export interface SystemStatePageData {
-	builder: PageBuilderConfig;
+	content: SystemStateContent;
 }
 
 export interface SystemStatePageProps {
