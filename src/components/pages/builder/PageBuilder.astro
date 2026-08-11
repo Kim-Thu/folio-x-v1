@@ -41,6 +41,9 @@ const context = "page" in props ? (props.context ?? {}) : {};
 
 type CollectionSection = Extract<PageSectionData, { type: "collection" }>;
 type ArchiveSection = Extract<PageSectionData, { type: "archive" }>;
+type ProjectsArchiveSection = ArchiveSection & { content: { source: { collection: "projects" } } };
+type LabsArchiveSection = ArchiveSection & { content: { source: { collection: "labs" } } };
+type ProductsArchiveSection = ArchiveSection & { content: { source: { collection: "products" } } };
 
 const sectionFrame = (section: PageSectionData) => ({
 	id: section.id,
@@ -120,29 +123,9 @@ const resolveCollectionItems = async (section: CollectionSection): Promise<PCard
 	}
 };
 
-const archiveBase = (section: ArchiveSection) => ({
-	pagination: section.content.pagination,
-	pageSize: section.content.pagination.pageSize,
-	emptyLabel: section.content.emptyLabel,
-});
-
-const buildProjectsArchive = async (section: ArchiveSection): Promise<ArchiveRegion> => {
-	const content = section.content;
-	const toolbar = content.toolbar as {
-		filterLabel: string;
-		allLabel: string;
-		allValue: string;
-		sortLabel: string;
-		sortValue: string;
-		sortOptions: Array<{ label: string; value: string }>;
-		viewLabel: string;
-		gridViewLabel: string;
-		listViewLabel: string;
-	};
-	const cards = content.cards;
-	const routes = content.routes as { base: string; categoryBase: string; tagBase?: string };
-	const itemPresentation = content.itemPresentation as ProjectCardPresentation;
-	const { pagination, pageSize, emptyLabel } = archiveBase(section);
+const buildProjectsArchive = async (section: ProjectsArchiveSection): Promise<ArchiveRegion> => {
+	const { content } = section;
+	const { toolbar, cards, routes, itemPresentation, pagination, emptyLabel } = content;
 	const projects = await getProjects();
 	const visibleProjects = projects.filter((project) => {
 		if (context.categorySlug) return project.categorySlug === context.categorySlug;
@@ -167,36 +150,21 @@ const buildProjectsArchive = async (section: ArchiveSection): Promise<ArchiveReg
 				view: { label: toolbar.viewLabel, gridLabel: toolbar.gridViewLabel, listLabel: toolbar.listViewLabel },
 			} },
 			cards: {
-				template: cards?.template,
-				layout: cards?.layout,
-				columns: cards?.columns,
-				gap: cards?.gap,
+				template: cards.template,
+				layout: cards.layout,
+				columns: cards.columns,
+				gap: cards.gap,
 				items: visibleProjects.map((project) => mapProjectToCard(project, itemPresentation)),
 			},
 			emptyLabel,
-			pagination: { ...pagination, pageSize, totalPages: Math.max(1, Math.ceil(visibleProjects.length / pageSize)) },
+			pagination: { ...pagination, totalPages: Math.max(1, Math.ceil(visibleProjects.length / pagination.pageSize)) },
 		},
 	};
 };
 
-const buildLabsArchive = async (section: ArchiveSection): Promise<ArchiveRegion> => {
-	const content = section.content;
-	const toolbar = content.toolbar as {
-		search: { id: string; label: string; name: string; placeholder: string };
-		selects: Array<{ control: string; id: string; label: string; value: string; options: Array<{ label: string; value: string }> }>;
-		sort: { label: string; value: string; options: Array<{ label: string; value: string }> };
-		view: { label: string; gridLabel: string; listLabel: string };
-	};
-	const sidebar = content.sidebar as {
-		label: string;
-		filterLabel: string;
-		category: { appearance: "navigation" | "filter"; control: string; legend: string; name: string; type: "radio" | "checkbox"; allLabel: string; allValue: string; allHref: string };
-		technology: { appearance: "navigation" | "filter"; control: string; legend: string; name: string; type: "radio" | "checkbox" };
-	};
-	const routes = content.routes as { categoryBase: string; technologyBase: string };
-	const cards = content.cards;
-	const itemPresentation = content.itemPresentation as LabCardPresentation;
-	const { pagination, pageSize, emptyLabel } = archiveBase(section);
+const buildLabsArchive = async (section: LabsArchiveSection): Promise<ArchiveRegion> => {
+	const { content } = section;
+	const { toolbar, sidebar, routes, cards, itemPresentation, pagination, emptyLabel } = content;
 	const labs = await getLabs();
 	const visibleLabs = labs.filter((lab) => (!context.categorySlug || lab.category.slug === context.categorySlug) && (!context.technologySlug || lab.technologies.some((technology) => technology.slug === context.technologySlug)));
 	const categories = Array.from(new Map(labs.map((lab) => [lab.category.slug, lab.category])).values());
@@ -234,33 +202,16 @@ const buildLabsArchive = async (section: ArchiveSection): Promise<ArchiveRegion>
 				}],
 			} } },
 			result: { count: visibleLabs.length, label: content.resultLabel },
-			cards: { template: cards?.template, layout: cards?.layout, columns: cards?.columns, gap: cards?.gap, items: visibleLabs.map((lab) => mapLabToCard(lab, itemPresentation)) },
+			cards: { template: cards.template, layout: cards.layout, columns: cards.columns, gap: cards.gap, items: visibleLabs.map((lab) => mapLabToCard(lab, itemPresentation)) },
 			emptyLabel,
-			pagination: { ...pagination, pageSize, totalPages: Math.max(1, Math.ceil(visibleLabs.length / pageSize)) },
+			pagination: { ...pagination, totalPages: Math.max(1, Math.ceil(visibleLabs.length / pagination.pageSize)) },
 		},
 	};
 };
 
-const buildProductsArchive = async (section: ArchiveSection): Promise<ArchiveRegion> => {
-	const content = section.content;
-	const toolbar = content.toolbar as {
-		search: { id: string; label: string; name: string; placeholder: string };
-		category: { control: string; id: string; label: string; value: string; allLabel: string; allValue: string };
-		platform: { control: string; id: string; label: string; value: string; options: Array<{ label: string; value: string }> };
-		sort: { label: string; value: string; options: Array<{ label: string; value: string }> };
-		view: { label: string; gridLabel: string; listLabel: string };
-	};
-	const sidebar = content.sidebar as {
-		label: string;
-		filterLabel: string;
-		category: { appearance: "navigation" | "filter"; control: string; legend: string; name: string; type: "radio" | "checkbox" };
-		platform: { appearance: "navigation" | "filter"; control: string; legend: string; name: string; type: "radio" | "checkbox" };
-		advertisement?: { title: string; description: string; action: PAdvertisementProps["action"]; image: PAdvertisementProps["image"] };
-	};
-	const routes = content.routes as { base: string; categoryBase: string };
-	const cards = content.cards;
-	const itemPresentation = content.itemPresentation as ProductCardPresentation;
-	const { pagination, pageSize, emptyLabel } = archiveBase(section);
+const buildProductsArchive = async (section: ProductsArchiveSection): Promise<ArchiveRegion> => {
+	const { content } = section;
+	const { toolbar, sidebar, routes, cards, itemPresentation, pagination, emptyLabel } = content;
 	const [products, categories] = await Promise.all([getProducts(), getProductCategories()]);
 	const visibleProducts = context.categorySlug ? products.filter((product) => product.categorySlug === context.categorySlug) : products;
 	const categoryFilters = [{ label: toolbar.category.allLabel, value: toolbar.category.allValue, href: routes.base, checked: !context.categorySlug }, ...categories.map((category) => ({ ...category, href: `${routes.categoryBase}${category.value}`, checked: context.categorySlug === category.value }))];
@@ -290,10 +241,10 @@ const buildProductsArchive = async (section: ArchiveSection): Promise<ArchiveReg
 				} },
 				advertisement: sidebar.advertisement,
 			},
-			result: { count: visibleProducts.length, label: (content.result as { label: string }).label },
-			cards: { template: cards?.template, layout: cards?.layout, columns: cards?.columns, gap: cards?.gap, items: visibleProducts.map((product) => mapProductToCard(product, itemPresentation)) },
+			result: { count: visibleProducts.length, label: content.result.label },
+			cards: { template: cards.template, layout: cards.layout, columns: cards.columns, gap: cards.gap, items: visibleProducts.map((product) => mapProductToCard(product, itemPresentation)) },
 			emptyLabel,
-			pagination: { ...pagination, pageSize, totalPages: Math.max(1, Math.ceil(visibleProducts.length / pageSize)) },
+			pagination: { ...pagination, totalPages: Math.max(1, Math.ceil(visibleProducts.length / pagination.pageSize)) },
 		},
 	};
 };
@@ -315,13 +266,13 @@ const regions: PageRegion[] = "config" in props
 				const items = await resolveCollectionItems(section);
 				return { key: section.id, component: "collection", section: frame, props: { template: section.template as "stack" | "split", header: sectionHeader(section), cardGroups: [cardConfig(section, items)] } };
 			}
-			case "archive":
-				switch (section.content.source.collection) {
-					case "projects": return buildProjectsArchive(section);
-					case "labs": return buildLabsArchive(section);
-					case "products": return buildProductsArchive(section);
-					default: throw new Error(`Unsupported archive collection: ${section.content.source.collection}`);
-				}
+			case "archive": {
+				const collection = section.content.source.collection;
+				if (collection === "projects") return buildProjectsArchive(section as ProjectsArchiveSection);
+				if (collection === "labs") return buildLabsArchive(section as LabsArchiveSection);
+				if (collection === "products") return buildProductsArchive(section as ProductsArchiveSection);
+				throw new Error(`Unsupported archive collection: ${collection}`);
+			}
 		}
 	}));
 
