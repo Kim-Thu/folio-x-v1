@@ -15,14 +15,6 @@
   "updatedLabel": "2 days ago",
   "author": "Lac Vu",
   "detail": {
-    "language": "English",
-    "followers": "",
-    "description": ["At the edge of night, one traveler carries the final map home."],
-    "tags": [
-      { "label": "Slice of Life", "slug": "slice-of-life" },
-      { "label": "Drama", "slug": "drama" }
-    ],
-    "chapterTitles": [],
     "page": {
       "template": "fluid",
       "sections": [
@@ -39,8 +31,7 @@
             "metrics": {
               "ratingLabel": "Rating",
               "readsLabel": "Reads",
-              "chaptersLabel": "Chapters",
-              "followersLabel": "Followers"
+              "chaptersLabel": "Chapters"
             },
             "actionsLabel": "Publication actions",
             "primaryActionLabel": "Read from start",
@@ -48,7 +39,6 @@
             "facts": {
               "authorLabel": "Author",
               "genresLabel": "Genres",
-              "languageLabel": "Language",
               "statusLabel": "Status",
               "updatedLabel": "Updated",
               "viewsLabel": "Views",
@@ -79,7 +69,6 @@
           "content": {
             "asideLabel": "Supporting information",
             "introductionLabel": "Introduction",
-            "tagsLabel": "Tags",
             "chapterIndexLabel": "Chapter index",
             "title": "Chapter list",
             "sort": {
