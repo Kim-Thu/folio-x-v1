@@ -26,17 +26,22 @@
           },
           "content": {
             "breadcrumbLabel": "Breadcrumb",
-            "collectionLabel": "Products",
+            "productsLabel": "Products",
             "galleryLabel": "Product gallery",
-            "previewLabel": "Select preview",
-            "ratingMaximum": 5,
-            "reviewsLabel": "reviews",
-            "platformLabel": "Platform",
-            "categoryLabel": "Category",
-            "purchaseLabel": "Contact to purchase",
-            "purchaseHref": "mailto:hello@example.com",
-            "previewActionLabel": "View preview",
-            "paymentMethodsLabel": "Payment methods"
+            "thumbnailLabel": "Select preview",
+            "salesLabel": "44 reviews",
+            "features": [],
+            "facts": [
+              { "label": "Platform", "value": "React / Next.js" },
+              { "label": "Category", "value": "Template" }
+            ],
+            "actionsLabel": "React Commerce actions",
+            "actions": [
+              { "label": "Contact to purchase", "href": "mailto:hello@example.com", "icon": "shoppingBag", "variant": "primary" },
+              { "label": "View preview", "href": "https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?auto=format&fit=crop&w=900&q=88", "icon": "arrowUpRight", "variant": "outline" }
+            ],
+            "paymentLabel": "Payment methods",
+            "paymentMethods": []
           }
         },
         {
@@ -49,11 +54,11 @@
             "container": "content"
           },
           "content": {
-            "title": "Overview",
             "blocks": [
               {
-                "type": "paragraph",
-                "text": "A fast storefront starter built for modern teams."
+                "id": "product-overview",
+                "title": "Overview",
+                "paragraphs": ["A fast storefront starter built for modern teams."]
               }
             ]
           }
