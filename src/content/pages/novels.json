@@ -5,6 +5,7 @@
     "description": "Original novels and illustrated stories."
   },
   "content": {
+    "layout": { "template": "fluid" },
     "sections": [
       {
         "id": "novels-hero",
@@ -46,6 +47,13 @@
             "action": { "label": "View all", "href": "/novels", "icon": "arrowRight" }
           },
           "source": { "collection": "novels", "limit": 24 },
+          "itemPresentation": {
+            "routes": { "base": "/novels/", "categoryBase": "/novels/category/" },
+            "ariaLabelPrefix": "Read ",
+            "categoryDisplay": "text",
+            "tagsLabelSuffix": " genres",
+            "viewsIcon": "globeAlt"
+          },
           "cards": {
             "template": "media-metrics",
             "layout": "grid",
