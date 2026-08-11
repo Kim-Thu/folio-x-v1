@@ -9,6 +9,7 @@ import PEntryIndex from "@/components/object/project/entry-index/PEntryIndex.ast
 import CDescriptionList from "@/components/object/component/CDescriptionList.astro";
 import CTags from "@/components/object/component/CTags.astro";
 import type { PublicationDetailPageProps } from "@/types/components/pages/publication-detail/PublicationDetailPage.types";
+import type { CIconName } from "@/types/components/object/component/CIcon.types";
 
 const { data } = Astro.props as PublicationDetailPageProps;
 const { entry, collection } = data;
@@ -36,13 +37,13 @@ const chapterItems = chapterSection
 	{page.sections.map((section) => {
 		if (section.type === "page-header") {
 			const { content } = section;
-			const metrics = [
-				{ label: content.metrics.ratingLabel, value: String(entry.rating), icon: "star" as const },
-				{ label: content.metrics.readsLabel, value: entry.views, icon: "eye" as const },
-				{ label: content.metrics.chaptersLabel, value: String(entry.chapters), icon: "bookOpen" as const },
+			const metrics: Array<{ label: string; value: string; icon: CIconName }> = [
+				{ label: content.metrics.ratingLabel, value: String(entry.rating), icon: "star" },
+				{ label: content.metrics.readsLabel, value: entry.views, icon: "eye" },
+				{ label: content.metrics.chaptersLabel, value: String(entry.chapters), icon: "bookOpen" },
 			];
 			if (content.metrics.followersLabel && detail.followers) {
-				metrics.push({ label: content.metrics.followersLabel, value: detail.followers, icon: "bookmark" as const });
+				metrics.push({ label: content.metrics.followersLabel, value: detail.followers, icon: "bookmark" });
 			}
 
 			const facts = [
