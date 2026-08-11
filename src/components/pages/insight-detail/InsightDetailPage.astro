@@ -1,43 +1,133 @@
 ---
 import LPage from "@/components/layout/LPage.astro";
 import LSection from "@/components/layout/LSection.astro";
-import PPageHeader from "@/components/object/project/page-header/PPageHeader.astro";
+import LSidebar from "@/components/layout/LSidebar.astro";
+import CBox from "@/components/object/component/CBox.astro";
+import CColumns from "@/components/object/component/CColumns.astro";
+import CProfile from "@/components/object/component/CProfile.astro";
+import CTOC from "@/components/object/component/CTOC.astro";
 import PArticle from "@/components/object/project/article/PArticle.astro";
+import PCard from "@/components/object/project/card/PCard.astro";
+import PCta from "@/components/object/project/cta/PCta.astro";
+import PPageHeader from "@/components/object/project/page-header/PPageHeader.astro";
+import PSectionHeader from "@/components/object/project/section-header/PSectionHeader.astro";
+import { mapInsightToCard } from "@/data/mappers/card";
 import type { InsightDetailPageProps } from "@/types/components/pages/insight-detail/InsightDetailPage.types";
 import type { PPageHeaderProps } from "@/types/components/object/project/page-header/PPageHeader.types";
 import type { PArticleFlowProps } from "@/types/components/object/project/article/PArticle.types";
 
 const { data } = Astro.props as InsightDetailPageProps;
-const { post } = data;
+const { post, relatedPosts } = data;
 const page = post.detail?.page;
 if (!page) throw new Error(`Missing insight detail page config: ${post.slug}`);
+
+const headerSection = page.sections.find((section) => section.type === "page-header");
+const articleSection = page.sections.find((section) => section.type === "article");
+if (!headerSection || !articleSection?.content) {
+	throw new Error(`Incomplete insight detail layout: ${post.slug}`);
+}
+
+const headerData = {
+	...headerSection.content,
+	publishedLabel: post.publishedLabel,
+	readTime: post.readTime,
+	authorImage: {
+		src: "/uploads/avatar.webp",
+		alt: post.author,
+		width: 512,
+		height: 512,
+	},
+	share: {
+		label: "Share article",
+		links: [
+			{ label: "Share on Twitter", href: `https://twitter.com/intent/tweet?url=${encodeURIComponent(post.href)}`, icon: "twitter" },
+			{ label: "Share on LinkedIn", href: `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(post.href)}`, icon: "linkedin" },
+			{ label: "Copy article link", href: post.href, icon: "link" },
+		],
+	},
+} as unknown as PPageHeaderProps["data"];
+
+const flowContent = articleSection.content.blocks as unknown as PArticleFlowProps["content"];
+const tocItems = post.content
+	.filter((node) => node.type === "heading")
+	.map((node) => ({ label: node.text, href: `#${node.id}` }));
+
+const relatedCards = relatedPosts.map((insight) =>
+	mapInsightToCard(insight, {
+		routes: { base: "/blog/", categoryBase: "/blog/category/", tagBase: "/blog/tag/" },
+		separator: "dot",
+		metadataDisplay: "text",
+		imageWidth: 640,
+		imageHeight: 420,
+	}),
+);
 ---
 
 <LPage template={page.template}>
-	{page.sections.map((section) => {
-		if (section.type === "page-header") {
-			const headerData = {
-				...section.content,
-				publishedLabel: post.publishedLabel,
-				readTime: post.readTime,
-			} as unknown as PPageHeaderProps["data"];
-			return (
-				<LSection id={section.id} {...section.settings}>
-					<PPageHeader template={section.template as PPageHeaderProps["template"]} data={headerData} />
-				</LSection>
-			);
-		}
+	<LSection id="article-detail" theme="canvas" spacing="lead" container="site">
+		<LSidebar label="Article supporting information" position="end" sticky>
+			<CColumns slot="sidebar" columns="one" gap="md">
+				<CBox surface="glass" radius="md" spacing="md">
+					<CProfile
+						label="Author"
+						name={post.author}
+						role="Writer at NKT Studio"
+						bio="Writing about product thinking, engineering, and practical systems."
+						image={{ src: "/uploads/avatar.webp", alt: post.author, width: 512, height: 512 }}
+						action={{ href: "/blog", label: "View all articles" }}
+					/>
+				</CBox>
 
-		if (section.type === "article") {
-			if (!section.content) return null;
-			const flowContent = section.content.blocks as unknown as PArticleFlowProps["content"];
-			return (
-				<LSection id={section.id} {...section.settings}>
-					<PArticle template="flow" content={flowContent} />
-				</LSection>
-			);
-		}
+				{tocItems.length > 0 && (
+					<CTOC appearance="panel" label="Article contents" items={tocItems} />
+				)}
 
-		return null;
-	})}
+				{relatedCards.length > 0 && (
+					<CBox surface="glass" radius="md" spacing="md">
+						<CColumns columns="one" gap="sm">
+							<PSectionHeader data={{ title: "Related articles" }} appearance="compact" headingLevel={2} />
+							<PCard
+								template="compact-media"
+								layout="list"
+								columns={1}
+								gap="sm"
+								items={relatedCards}
+								slots={{ excerpt: false, tags: false, metrics: false, action: false }}
+							/>
+						</CColumns>
+					</CBox>
+				)}
+
+				<PCta
+					template="subscription"
+					data={{
+						id: "article-newsletter",
+						title: "Get new articles by email",
+						description: "Receive new writing about design, engineering, and product thinking.",
+						image: {
+							src: "/uploads/library-newsletter-book.webp",
+							alt: "Newsletter envelope and reading illustration",
+							width: 1448,
+							height: 1086,
+						},
+						form: {
+							formName: "article-newsletter",
+							inputId: "article-newsletter-email",
+							inputLabel: "Email address",
+							placeholder: "Your email address...",
+							submitLabel: "Subscribe",
+						},
+					}}
+				/>
+			</CColumns>
+
+			<CColumns columns="one" gap="lg">
+				<PPageHeader
+					template={headerSection.template as PPageHeaderProps["template"]}
+					data={headerData}
+				/>
+				<PArticle template="flow" content={flowContent} />
+			</CColumns>
+		</LSidebar>
+	</LSection>
 </LPage>
