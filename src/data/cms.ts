@@ -22,6 +22,7 @@ export const getInterfaceSettings = () => getSingleton("interfaceSettings");
 export const getFooterSettings = () => getSingleton("footerSettings");
 export const getSystemStatesSettings = () => getSingleton("systemStatesSettings");
 export const getLabDetailSettings = () => getSingleton("labDetailSettings");
+export const getBlogDetailSettings = () => getSingleton("blogDetailSettings");
 export const getPublicationDetailSettings = () => getSingleton("publicationDetailSettings");
 
 export async function getPage(slug: string): Promise<CollectionEntry<"pages">["data"]> {
