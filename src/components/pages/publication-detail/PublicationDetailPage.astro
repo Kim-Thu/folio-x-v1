@@ -18,6 +18,7 @@ const { entry, collection } = data;
 const detail = entry.detail;
 if (!detail) throw new Error(`Missing CMS publication detail: ${collection}/${entry.slug}`);
 const page = detail.page;
+const description = detail.description?.length ? detail.description : [entry.summary];
 
 const chapterSection = page.sections.find((section) => section.type === "entry-index");
 const configuredChapters = [...(detail.reader ?? [])].sort((a, b) => b.number - a.number);
@@ -79,7 +80,7 @@ const chapterItems = chapterSection
 							metrics,
 							actionsLabel: content.actionsLabel,
 							actions: [{ label: content.primaryActionLabel, href: "#chapters", icon: "bookOpen", variant: "primary", size: "md" }],
-							description: detail.description,
+							description,
 							facts: {
 								title: content.factsTitle,
 								items: facts,
@@ -100,14 +101,14 @@ const chapterItems = chapterSection
 
 		if (section.type === "entry-index") {
 			const { content } = section;
-			const hasSupportingContent = Boolean(detail.description?.[0] || (content.tagsLabel && detail.tags?.length));
+			const hasSupportingContent = Boolean(description[0] || (content.tagsLabel && detail.tags?.length));
 			return (
 				<LSection id={section.id} {...section.settings}>
 					<LSidebar label={content.asideLabel}>
 						{hasSupportingContent ? (
 							<CColumns slot="sidebar" columns="one" gap="md">
-								{detail.description?.[0] ? (
-									<CDescriptionList items={[{ label: content.introductionLabel, value: detail.description[0] }]} />
+								{description[0] ? (
+									<CDescriptionList items={[{ label: content.introductionLabel, value: description[0] }]} />
 								) : null}
 								{content.tagsLabel && detail.tags?.length ? (
 									<CTags label={content.tagsLabel} items={detail.tags.map((tag) => ({ label: tag.label, href: `/${collection}/tag/${tag.slug}` }))} />
