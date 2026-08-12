@@ -604,130 +604,172 @@ collections:
       - { label: Updated label, name: updatedLabel, widget: string }
       - { label: Live URL, name: liveUrl, widget: string, required: false }
       - { label: Source URL, name: sourceUrl, widget: string, required: false }
-      - label: Sections
-        name: sections
+      - label: Content
+        name: content
         widget: list
-        fields:
-          - { label: Title, name: title, widget: string }
-          - { label: Paragraphs, name: paragraphs, widget: list, field: { label: Paragraph, name: paragraph, widget: text } }
-      - label: Features
-        name: features
-        widget: list
-        required: false
-        fields:
-          - { label: Title, name: title, widget: string }
-          - { label: Description, name: description, widget: text }
-          - { label: Icon, name: icon, widget: select, options: [lightBulb, bolt, globeAlt, arrowPath] }
+        summary: "{{fields.type}} — {{fields.text}}{{fields.title}}"
+        types:
+          - label: Heading
+            name: heading
+            widget: object
+            fields:
+              - { label: Type, name: type, widget: hidden, default: heading }
+              - { label: ID, name: id, widget: string }
+              - { label: Level, name: level, widget: select, options: [2, 3] }
+              - { label: Text, name: text, widget: string }
+              - { label: Navigation label, name: navigationLabel, widget: string, required: false }
+          - label: Paragraph
+            name: paragraph
+            widget: object
+            fields:
+              - { label: Type, name: type, widget: hidden, default: paragraph }
+              - { label: Text, name: text, widget: text }
+          - label: Image
+            name: image
+            widget: object
+            fields:
+              - { label: Type, name: type, widget: hidden, default: image }
+              - label: Image
+                name: image
+                widget: object
+                fields: *image_fields
+              - { label: Caption, name: caption, widget: text, required: false }
+          - label: Feature grid
+            name: feature_grid
+            widget: object
+            fields:
+              - { label: Type, name: type, widget: hidden, default: feature-grid }
+              - { label: ID, name: id, widget: string }
+              - { label: Title, name: title, widget: string }
+              - { label: Navigation label, name: navigationLabel, widget: string, required: false }
+              - label: Items
+                name: items
+                widget: list
+                fields:
+                  - { label: Title, name: title, widget: string }
+                  - { label: Description, name: description, widget: text }
+                  - { label: Icon, name: icon, widget: select, options: [arrowLeft, arrowRight, arrowUp, arrowUpRight, arrowPath, archiveBox, bars3, bolt, chevronLeft, chevronDown, chevronRight, github, globeAlt, lightBulb, linkedin, xMark, folder01, facebook, link, twitter, userCircle, calendar03, check, clock01, gridView, listView, play, search, shoppingBag, star, questionMarkCircle, bookOpen, bookmark, eye, lockClosed, adjustmentsHorizontal, moon, handThumbUp, heart, faceSmile, faceFrown] }
+          - label: List
+            name: list
+            widget: object
+            fields:
+              - { label: Type, name: type, widget: hidden, default: list }
+              - { label: Style, name: style, widget: select, options: [bullet, ordered] }
+              - { label: Items, name: items, widget: list, field: { label: Item, name: item, widget: string } }
+          - label: Table
+            name: table
+            widget: object
+            fields:
+              - { label: Type, name: type, widget: hidden, default: table }
+              - { label: ID, name: id, widget: string, required: false }
+              - { label: Caption, name: caption, widget: string, required: false }
+              - label: Columns
+                name: columns
+                widget: list
+                fields:
+                  - { label: Key, name: key, widget: string }
+                  - { label: Label, name: label, widget: string }
+              - label: Rows
+                name: rows
+                widget: list
+                field: { label: Row JSON, name: row, widget: object, fields: [] }
+          - label: Quote
+            name: quote
+            widget: object
+            fields:
+              - { label: Type, name: type, widget: hidden, default: quote }
+              - { label: Text, name: text, widget: text }
+              - { label: Attribution, name: attribution, widget: string, required: false }
+              - { label: Source, name: source, widget: string, required: false }
+              - { label: Source URL, name: sourceUrl, widget: string, required: false }
+          - label: Callout
+            name: callout
+            widget: object
+            fields:
+              - { label: Type, name: type, widget: hidden, default: callout }
+              - { label: Tone, name: tone, widget: select, options: [neutral, info, success, warning, danger] }
+              - { label: Title, name: title, widget: string, required: false }
+              - { label: Text, name: text, widget: text }
+              - { label: Icon, name: icon, widget: select, required: false, options: [arrowLeft, arrowRight, arrowUp, arrowUpRight, arrowPath, archiveBox, bars3, bolt, chevronLeft, chevronDown, chevronRight, github, globeAlt, lightBulb, linkedin, xMark, folder01, facebook, link, twitter, userCircle, calendar03, check, clock01, gridView, listView, play, search, shoppingBag, star, questionMarkCircle, bookOpen, bookmark, eye, lockClosed, adjustmentsHorizontal, moon, handThumbUp, heart, faceSmile, faceFrown] }
+          - label: Code
+            name: code
+            widget: object
+            fields:
+              - { label: Type, name: type, widget: hidden, default: code }
+              - { label: Code, name: code, widget: code, output_code_only: true }
+              - { label: Language, name: language, widget: string, required: false }
+              - { label: Filename, name: filename, widget: string, required: false }
+              - { label: Caption, name: caption, widget: string, required: false }
+          - label: Divider
+            name: divider
+            widget: object
+            fields:
+              - { label: Type, name: type, widget: hidden, default: divider }
+              - { label: Style, name: style, widget: select, options: [subtle, solid, dashed], default: subtle }
+          - label: Media
+            name: media
+            widget: object
+            fields:
+              - { label: Type, name: type, widget: hidden, default: media }
+              - { label: Media type, name: mediaType, widget: select, options: [video, embed] }
+              - { label: Source, name: src, widget: string }
+              - { label: Title, name: title, widget: string }
+              - { label: Caption, name: caption, widget: text, required: false }
+              - label: Poster
+                name: poster
+                widget: object
+                required: false
+                fields: *image_fields
+              - { label: Aspect ratio, name: aspectRatio, widget: select, required: false, options: [square, portrait, landscape, video, editorial] }
+              - { label: Controls, name: controls, widget: boolean, default: true }
+              - { label: Autoplay, name: autoplay, widget: boolean, default: false }
+          - label: Metric grid
+            name: metric_grid
+            widget: object
+            fields:
+              - { label: Type, name: type, widget: hidden, default: metric-grid }
+              - { label: ID, name: id, widget: string, required: false }
+              - { label: Title, name: title, widget: string, required: false }
+              - { label: Navigation label, name: navigationLabel, widget: string, required: false }
+              - label: Items
+                name: items
+                widget: list
+                fields:
+                  - { label: Label, name: label, widget: string }
+                  - { label: Value, name: value, widget: string }
+                  - { label: Description, name: description, widget: text, required: false }
+                  - { label: Icon, name: icon, widget: select, required: false, options: [arrowLeft, arrowRight, arrowUp, arrowUpRight, arrowPath, archiveBox, bars3, bolt, chevronLeft, chevronDown, chevronRight, github, globeAlt, lightBulb, linkedin, xMark, folder01, facebook, link, twitter, userCircle, calendar03, check, clock01, gridView, listView, play, search, shoppingBag, star, questionMarkCircle, bookOpen, bookmark, eye, lockClosed, adjustmentsHorizontal, moon, handThumbUp, heart, faceSmile, faceFrown] }
       - label: Gallery
         name: gallery
         widget: list
-        required: false
-        fields: *image_fields
+        fields:
+          - { label: Image, name: src, widget: image }
+          - { label: Alt, name: alt, widget: string }
+          - { label: Width, name: width, widget: number, value_type: int, min: 1 }
+          - { label: Height, name: height, widget: number, value_type: int, min: 1 }
+          - { label: Caption, name: caption, widget: text, required: false }
       - label: Resources
         name: resources
         widget: list
-        required: false
         fields:
           - { label: Title, name: title, widget: string }
           - { label: Description, name: description, widget: text }
           - { label: Href, name: href, widget: string }
-          - { label: Icon, name: icon, widget: select, options: [folder01, github, play] }
+          - { label: Icon, name: icon, widget: select, options: [arrowLeft, arrowRight, arrowUp, arrowUpRight, arrowPath, archiveBox, bars3, bolt, chevronLeft, chevronDown, chevronRight, github, globeAlt, lightBulb, linkedin, xMark, folder01, facebook, link, twitter, userCircle, calendar03, check, clock01, gridView, listView, play, search, shoppingBag, star, questionMarkCircle, bookOpen, bookmark, eye, lockClosed, adjustmentsHorizontal, moon, handThumbUp, heart, faceSmile, faceFrown] }
+          - { label: Action label, name: actionLabel, widget: string }
       - label: Facts
         name: facts
         widget: list
-        required: false
         fields:
+          - { label: Key, name: key, widget: string }
           - { label: Label, name: label, widget: string }
           - { label: Value, name: value, widget: string }
-      - label: Detail
-        name: detail
+      - label: Related Labs
+        name: related
         widget: object
-        required: false
         fields:
-          - label: Page
-            name: page
-            widget: object
-            fields:
-              - { label: Template, name: template, widget: select, options: [fluid, contained, boxed, sidebar, centered] }
-              - label: Sections
-                name: sections
-                widget: list
-                summary: "{{fields.id}} — {{fields.type}}"
-                types:
-                  - label: Lab header
-                    name: lab_header
-                    widget: object
-                    fields:
-                      - { label: ID, name: id, widget: string }
-                      - { label: Type, name: type, widget: hidden, default: page-header }
-                      - { label: Template, name: template, widget: string }
-                      - label: Settings
-                        name: settings
-                        widget: object
-                        fields: *section_settings
-                      - label: Content
-                        name: content
-                        widget: object
-                        fields:
-                          - label: Labels
-                            name: labels
-                            widget: object
-                            fields:
-                              - { label: Breadcrumb, name: breadcrumb, widget: string }
-                              - { label: Actions, name: actions, widget: string }
-                              - { label: Live, name: live, widget: string }
-                              - { label: Source, name: source, widget: string }
-                              - { label: Technology, name: technology, widget: string }
-                  - label: Article
-                    name: article
-                    widget: object
-                    fields:
-                      - { label: ID, name: id, widget: string }
-                      - { label: Type, name: type, widget: hidden, default: article }
-                      - { label: Template, name: template, widget: string, required: false }
-                      - label: Settings
-                        name: settings
-                        widget: object
-                        fields: *section_settings
-                      - label: Content
-                        name: content
-                        widget: object
-                        fields:
-                          - { label: Appearance, name: appearance, widget: string, required: false }
-                  - label: Collection
-                    name: collection
-                    widget: object
-                    fields:
-                      - { label: ID, name: id, widget: string }
-                      - { label: Type, name: type, widget: hidden, default: collection }
-                      - { label: Template, name: template, widget: string, required: false }
-                      - label: Settings
-                        name: settings
-                        widget: object
-                        fields: *section_settings
-                      - label: Content
-                        name: content
-                        widget: object
-                        fields:
-                          - label: Heading
-                            name: heading
-                            widget: object
-                            required: false
-                            fields:
-                              - { label: Title, name: title, widget: string }
-                          - label: Cards
-                            name: cards
-                            widget: object
-                            required: false
-                            fields:
-                              - { label: Template, name: template, widget: string, required: false }
-                              - { label: Layout, name: layout, widget: string, required: false }
-                              - { label: Columns, name: columns, widget: number, value_type: int, min: 1, required: false }
-                              - { label: Gap, name: gap, widget: string, required: false }
-                          - label: Labels
-                            name: labels
-                            widget: object
-                            required: false
-                            fields:
-                              - { label: Open image, name: openImage, widget: string, required: false }
-                              - { label: Image title, name: imageTitle, widget: string, required: false }
+          - label: Slugs
+            name: slugs
+            widget: list
+            max: 4
+            field: { label: Lab slug, name: slug, widget: string }
