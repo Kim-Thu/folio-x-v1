@@ -18,21 +18,9 @@
   "liveUrl": "https://example.com",
   "sourceUrl": "https://github.com",
   "content": [
-    {
-      "type": "heading",
-      "id": "overview",
-      "level": 2,
-      "text": "Overview",
-      "navigationLabel": "Overview"
-    },
-    {
-      "type": "paragraph",
-      "text": "This experiment explores a direct, dependable workflow for creating images from natural-language prompts."
-    },
-    {
-      "type": "paragraph",
-      "text": "The interface keeps prompt refinement, generation history, and reusable presets in one clear workspace."
-    },
+    { "type": "heading", "id": "overview", "level": 2, "text": "Overview", "navigationLabel": "Overview" },
+    { "type": "paragraph", "text": "This experiment explores a direct, dependable workflow for creating images from natural-language prompts." },
+    { "type": "paragraph", "text": "The interface keeps prompt refinement, generation history, and reusable presets in one clear workspace." },
     {
       "type": "feature-grid",
       "id": "features",
@@ -45,21 +33,9 @@
         { "title": "Shareable output", "description": "Prepare selected results for review and handoff.", "icon": "globeAlt" }
       ]
     },
-    {
-      "type": "heading",
-      "id": "technology",
-      "level": 2,
-      "text": "Technology",
-      "navigationLabel": "Technology"
-    },
-    {
-      "type": "paragraph",
-      "text": "The prototype combines a React client with a FastAPI orchestration layer and a swappable image-model adapter."
-    },
-    {
-      "type": "paragraph",
-      "text": "Shared tokens and reusable interaction patterns keep the experience consistent as new models are evaluated."
-    }
+    { "type": "heading", "id": "technology", "level": 2, "text": "Technology", "navigationLabel": "Technology" },
+    { "type": "paragraph", "text": "The prototype combines a React client with a FastAPI orchestration layer and a swappable image-model adapter." },
+    { "type": "paragraph", "text": "Shared tokens and reusable interaction patterns keep the experience consistent as new models are evaluated." }
   ],
   "gallery": [
     { "src": "/uploads/lab-ai-image-generator.png", "alt": "AI image generator astronaut experiment", "width": 1672, "height": 941 },
@@ -69,17 +45,20 @@
     { "src": "/uploads/cta-2.png", "alt": "Generated portrait experiment artwork", "width": 1403, "height": 1121 }
   ],
   "resources": [
-    { "title": "Usage guide", "description": "Setup and prompt-writing notes.", "href": "#overview", "icon": "folder01" },
-    { "title": "API documentation", "description": "Endpoints and example payloads.", "href": "#technology", "icon": "folder01" },
-    { "title": "Source code", "description": "Review the experiment repository.", "href": "https://github.com", "icon": "github" },
-    { "title": "Video demo", "description": "Watch the primary workflow.", "href": "https://example.com", "icon": "play" }
+    { "title": "Usage guide", "description": "Setup and prompt-writing notes.", "href": "#overview", "icon": "folder01", "actionLabel": "Read guide" },
+    { "title": "API documentation", "description": "Endpoints and example payloads.", "href": "#technology", "icon": "folder01", "actionLabel": "Read docs" },
+    { "title": "Source code", "description": "Review the experiment repository.", "href": "https://github.com", "icon": "github", "actionLabel": "Browse source" },
+    { "title": "Video demo", "description": "Watch the primary workflow.", "href": "https://example.com", "icon": "play", "actionLabel": "Watch demo" }
   ],
   "facts": [
-    { "label": "Category", "value": "AI & Machine Learning" },
-    { "label": "Status", "value": "In progress" },
-    { "label": "Languages", "value": "Python, TypeScript" },
-    { "label": "Framework", "value": "FastAPI, React" },
-    { "label": "Last updated", "value": "20 Apr, 2024" },
-    { "label": "License", "value": "MIT License" }
-  ]
+    { "key": "category", "label": "Category", "value": "AI & Machine Learning" },
+    { "key": "status", "label": "Status", "value": "In progress" },
+    { "key": "languages", "label": "Languages", "value": "Python, TypeScript" },
+    { "key": "framework", "label": "Framework", "value": "FastAPI, React" },
+    { "key": "last-updated", "label": "Last updated", "value": "20 Apr, 2024" },
+    { "key": "license", "label": "License", "value": "MIT License" }
+  ],
+  "related": {
+    "slugs": ["open-analytics", "smart-automation", "spatial-portfolio", "code-companion"]
+  }
 }
