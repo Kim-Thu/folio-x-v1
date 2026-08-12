@@ -21,55 +21,5 @@
     { "type": "paragraph", "text": "Tên gọi, cấu trúc log, quy trình release và cách xử lý lỗi cần đủ nhất quán để người mới có thể dự đoán hệ thống hoạt động ra sao." },
     { "type": "heading", "id": "section-3", "level": 2, "text": "Observability tạo quyền chủ động" },
     { "type": "paragraph", "text": "Dashboard và cảnh báo chỉ hữu ích khi chúng dẫn tới hành động cụ thể. Mỗi tín hiệu nên có chủ sở hữu, ngưỡng và một bước xử lý tiếp theo." }
-  ],
-  "detail": {
-    "page": {
-      "template": "fluid",
-      "sections": [
-        {
-          "id": "article-summary",
-          "type": "page-header",
-          "template": "editorial",
-          "settings": { "theme": "canvas", "spacing": "lead", "container": "site" },
-          "content": {
-            "breadcrumb": {
-              "label": "Breadcrumb",
-              "items": [
-                { "label": "Stories", "href": "/blog" },
-                { "label": "Process", "href": "/blog/category/process" }
-              ],
-              "current": "Code không cần người trông nom"
-            },
-            "category": { "label": "Process", "href": "/blog/category/process" },
-            "title": "Code không cần người trông nom",
-            "description": "Từ convention đến observability: xây hệ thống để team vận hành tự tin.",
-            "author": "Nguyễn Kim Thu",
-            "publishedAt": "2026-03-12",
-            "image": {
-              "src": "https://images.unsplash.com/photo-1516321318423-f06f85e504b3?auto=format&fit=crop&w=1400&q=82",
-              "alt": "Nhóm kỹ thuật cộng tác trước màn hình máy tính",
-              "width": 1400,
-              "height": 900
-            }
-          }
-        },
-        {
-          "id": "article-content",
-          "type": "article",
-          "template": "flow",
-          "settings": { "theme": "canvas", "spacing": "body", "container": "content" },
-          "content": {
-            "blocks": [
-              { "type": "heading", "id": "section-1", "level": 2, "text": "Khả năng vận hành là một tính năng" },
-              { "type": "paragraph", "text": "Code hoàn thành chưa có nghĩa sản phẩm đã sẵn sàng. Team cần biết cách phát hiện lỗi, truy vết thay đổi và khôi phục mà không phụ thuộc vào trí nhớ của một người." },
-              { "type": "heading", "id": "section-2", "level": 2, "text": "Convention giảm quyết định lặp lại" },
-              { "type": "paragraph", "text": "Tên gọi, cấu trúc log, quy trình release và cách xử lý lỗi cần đủ nhất quán để người mới có thể dự đoán hệ thống hoạt động ra sao." },
-              { "type": "heading", "id": "section-3", "level": 2, "text": "Observability tạo quyền chủ động" },
-              { "type": "paragraph", "text": "Dashboard và cảnh báo chỉ hữu ích khi chúng dẫn tới hành động cụ thể. Mỗi tín hiệu nên có chủ sở hữu, ngưỡng và một bước xử lý tiếp theo." }
-            ]
-          }
-        }
-      ]
-    }
-  }
+  ]
 }
