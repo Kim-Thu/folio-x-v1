@@ -14,121 +14,113 @@ import type { CIconName } from "@/types/components/object/component/CIcon.types"
 type PublicationMetric = { label: string; value: string; icon: CIconName };
 
 const { data } = Astro.props as PublicationDetailPageProps;
-const { entry, collection } = data;
+const { entry, collection, presentation } = data;
 const detail = entry.detail;
 if (!detail) throw new Error(`Missing CMS publication detail: ${collection}/${entry.slug}`);
-const page = detail.page;
-const description = detail.description?.length ? detail.description : [entry.summary];
 
-const chapterSection = page.sections.find((section) => section.type === "entry-index");
+const collectionLabels = presentation.collections[collection];
+const description = detail.description?.length ? detail.description : [entry.summary];
 const configuredChapters = [...(detail.reader ?? [])].sort((a, b) => b.number - a.number);
-const chapterItems = chapterSection
-	? configuredChapters.map((chapter) => ({
-		order: chapter.number,
-		number: `${chapterSection.content.numberPrefix}${chapter.number}`,
-		title: chapter.title,
-		publishedAt: chapter.publishedAt,
-		publishedLabel: chapter.publishedLabel,
-		views: chapter.views,
-		href: `/${collection}/${entry.slug}/chapter/${chapter.number}`,
-		action: chapterSection.content.itemAction,
-	}))
-	: [];
+const chapterItems = configuredChapters.map((chapter) => ({
+	order: chapter.number,
+	number: `${presentation.chapters.labels.numberPrefix}${chapter.number}`,
+	title: chapter.title,
+	publishedAt: chapter.publishedAt,
+	publishedLabel: chapter.publishedLabel,
+	views: chapter.views,
+	href: `/${collection}/${entry.slug}/chapter/${chapter.number}`,
+	action: presentation.chapters.itemAction,
+}));
+
+const metrics = [
+	{ label: presentation.header.labels.rating, value: String(entry.rating), icon: "star" },
+	{ label: presentation.header.labels.reads, value: entry.views, icon: "eye" },
+	{ label: presentation.header.labels.chapters, value: String(entry.chapters), icon: "bookOpen" },
+] as PublicationMetric[];
+if (detail.followers) {
+	metrics.push({ label: presentation.header.labels.followers, value: detail.followers, icon: "bookmark" });
+}
+
+const facts = [
+	{ label: presentation.header.labels.author, value: entry.author },
+	{ label: presentation.header.labels.tags, value: entry.genres.map((genre) => genre.label).join(", ") },
+	...(detail.language ? [{ label: presentation.header.labels.language, value: detail.language }] : []),
+	{ label: presentation.header.labels.status, value: entry.status === "ongoing" ? presentation.header.labels.ongoing : presentation.header.labels.complete },
+	{ label: presentation.header.labels.updated, value: entry.updatedLabel },
+	{ label: presentation.header.labels.views, value: entry.views },
+];
+
+const tabs = [
+	...(configuredChapters.length > 0 ? [presentation.navigation.tabs.chapters] : []),
+	presentation.navigation.tabs.overview,
+];
+const activeValue = configuredChapters.length > 0
+	? presentation.navigation.tabs.chapters.value
+	: presentation.navigation.tabs.overview.value;
 ---
 
-<LPage template={page.template}>
-	{page.sections.map((section) => {
-		if (section.type === "page-header") {
-			const { content } = section;
-			const metrics = [
-				{ label: content.metrics.ratingLabel, value: String(entry.rating), icon: "star" },
-				{ label: content.metrics.readsLabel, value: entry.views, icon: "eye" },
-				{ label: content.metrics.chaptersLabel, value: String(entry.chapters), icon: "bookOpen" },
-			] as PublicationMetric[];
-			if (content.metrics.followersLabel && detail.followers) {
-				metrics.push({ label: content.metrics.followersLabel, value: detail.followers, icon: "bookmark" });
-			}
+<LPage template={presentation.page.template}>
+	<LSection id={presentation.header.id} {...presentation.header.settings}>
+		<PPageHeader
+			template={presentation.header.template}
+			data={{
+				breadcrumb: {
+					label: presentation.header.labels.breadcrumb,
+					items: [{ label: collectionLabels.collectionLabel, href: `/${collection}` }],
+					current: entry.title,
+				},
+				cover: entry.cover,
+				tagsLabel: presentation.header.labels.tags,
+				tags: entry.genres.map((genre) => ({ label: genre.label, href: `/${collection}/category/${genre.slug}` })),
+				title: entry.title,
+				author: { label: presentation.header.labels.author, name: entry.author },
+				metrics,
+				actionsLabel: presentation.header.labels.actions,
+				actions: configuredChapters.length > 0
+					? [{ label: presentation.header.labels.primaryAction, href: `#${presentation.chapters.id}`, icon: "bookOpen", variant: "primary", size: "md" }]
+					: [],
+				description,
+				facts: {
+					title: presentation.header.labels.factsTitle,
+					items: facts,
+				},
+			}}
+		/>
+	</LSection>
 
-			const facts = [
-				{ label: content.facts.authorLabel, value: entry.author },
-				{ label: content.facts.genresLabel, value: entry.genres.map((genre) => genre.label).join(", ") },
-			];
-			if (content.facts.languageLabel && detail.language) {
-				facts.push({ label: content.facts.languageLabel, value: detail.language });
-			}
-			facts.push(
-				{ label: content.facts.statusLabel, value: entry.status === "ongoing" ? content.facts.ongoingLabel : content.facts.completeLabel },
-				{ label: content.facts.updatedLabel, value: entry.updatedLabel },
-				{ label: content.facts.viewsLabel, value: entry.views },
-			);
+	<LSection id={presentation.navigation.id} {...presentation.navigation.settings}>
+		<CTabList
+			label={presentation.navigation.label}
+			appearance={presentation.navigation.appearance}
+			tone={presentation.navigation.tone}
+			activeValue={activeValue}
+			{tabs}
+		/>
+	</LSection>
 
-			return (
-				<LSection id={section.id} {...section.settings}>
-					<PPageHeader
-						template={section.template}
-						data={{
-							breadcrumb: {
-								label: content.breadcrumbLabel,
-								items: [{ label: content.collectionLabel, href: `/${collection}` }],
-								current: entry.title,
-							},
-							cover: entry.cover,
-							tagsLabel: content.tagsLabel,
-							tags: entry.genres.map((genre) => ({ label: genre.label, href: `/${collection}/category/${genre.slug}` })),
-							title: entry.title,
-							author: { label: content.authorLabel, name: entry.author },
-							metrics,
-							actionsLabel: content.actionsLabel,
-							actions: [{ label: content.primaryActionLabel, href: "#chapters", icon: "bookOpen", variant: "primary", size: "md" }],
-							description,
-							facts: {
-								title: content.factsTitle,
-								items: facts,
-							},
-						}}
+	<LSection id={presentation.chapters.id} {...presentation.chapters.settings}>
+		<LSidebar label={presentation.chapters.labels.aside}>
+			<CColumns slot="sidebar" columns="one" gap="md" id={presentation.navigation.tabs.overview.value}>
+				<CDescriptionList items={[{ label: presentation.chapters.labels.introduction, value: description[0] }]} />
+				{detail.tags?.length ? (
+					<CTags
+						label={presentation.chapters.labels.tags}
+						items={detail.tags.map((tag) => ({ label: tag.label, href: `/${collection}/tag/${tag.slug}` }))}
 					/>
-				</LSection>
-			);
-		}
+				) : null}
+			</CColumns>
 
-		if (section.type === "tabs") {
-			return (
-				<LSection id={section.id} {...section.settings}>
-					<CTabList {...section.content} />
-				</LSection>
-			);
-		}
-
-		if (section.type === "entry-index") {
-			const { content } = section;
-			const hasSupportingContent = Boolean(description[0] || (content.tagsLabel && detail.tags?.length));
-			return (
-				<LSection id={section.id} {...section.settings}>
-					<LSidebar label={content.asideLabel}>
-						{hasSupportingContent ? (
-							<CColumns slot="sidebar" columns="one" gap="md">
-								{description[0] ? (
-									<CDescriptionList items={[{ label: content.introductionLabel, value: description[0] }]} />
-								) : null}
-								{content.tagsLabel && detail.tags?.length ? (
-									<CTags label={content.tagsLabel} items={detail.tags.map((tag) => ({ label: tag.label, href: `/${collection}/tag/${tag.slug}` }))} />
-								) : null}
-							</CColumns>
-						) : null}
-						<PEntryIndex
-							id={section.id}
-							label={content.chapterIndexLabel}
-							title={content.title}
-							sort={content.sort}
-							listViewLabel={content.listViewLabel}
-							items={chapterItems}
-							visibleCount={chapterItems.length}
-						/>
-					</LSidebar>
-				</LSection>
-			);
-		}
-
-		return null;
-	})}
+			{chapterItems.length > 0 ? (
+				<PEntryIndex
+					id={presentation.chapters.id}
+					label={presentation.chapters.labels.index}
+					title={presentation.chapters.labels.title}
+					sort={presentation.chapters.sort}
+					listViewLabel={presentation.chapters.labels.listView}
+					items={chapterItems}
+					visibleCount={chapterItems.length}
+				/>
+			) : null}
+		</LSidebar>
+	</LSection>
 </LPage>
