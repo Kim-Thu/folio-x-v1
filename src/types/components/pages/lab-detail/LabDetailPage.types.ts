@@ -1,27 +1,12 @@
 import type { Lab } from "@/types/content";
 import type { PCardData } from "@/types/components/object/project/card/PCard.types";
+import type { PPageHeaderMediaAsideData } from "@/types/components/object/project/page-header/PPageHeader.types";
 import type { CollectionEntry } from "astro:content";
 
 export interface LabDetailTabData {
 	label: string;
 	value: string;
 	href: string;
-}
-
-export interface LabDetailHeaderData {
-	breadcrumb: {
-		label: string;
-		items: Array<{ label: string; href: string }>;
-		current: string;
-	};
-	image: Lab["image"];
-	category: { label: string; href: string };
-	badge: string;
-	title: string;
-	description: string;
-	metrics: Array<{ icon: string; label: string }>;
-	actionsLabel: string;
-	actions: Array<Record<string, string>>;
 }
 
 export interface LabDetailSidebarData {
@@ -34,7 +19,7 @@ export interface LabDetailSidebarData {
 export interface LabDetailPageData {
 	lab: Lab;
 	presentation: CollectionEntry<"labDetailSettings">["data"];
-	header: LabDetailHeaderData;
+	header: PPageHeaderMediaAsideData;
 	tabs: LabDetailTabData[];
 	sidebar: LabDetailSidebarData;
 	galleryCards: PCardData[];
