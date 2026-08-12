@@ -1,0 +1,90 @@
+{
+  "page": { "template": "fluid" },
+  "collections": {
+    "comics": { "collectionLabel": "Comics" },
+    "novels": { "collectionLabel": "Novels" }
+  },
+  "header": {
+    "id": "publication-summary",
+    "template": "cover-summary",
+    "settings": { "theme": "canvas", "spacing": "compact", "container": "site" },
+    "labels": {
+      "breadcrumb": "Breadcrumb",
+      "tags": "Genres",
+      "author": "Author",
+      "rating": "Rating",
+      "reads": "Reads",
+      "chapters": "Chapters",
+      "followers": "Followers",
+      "actions": "Publication actions",
+      "primaryAction": "Read from start",
+      "factsTitle": "Information",
+      "language": "Language",
+      "status": "Status",
+      "updated": "Updated",
+      "views": "Views",
+      "ongoing": "Ongoing",
+      "complete": "Complete"
+    }
+  },
+  "navigation": {
+    "id": "publication-navigation",
+    "settings": { "theme": "canvas", "spacing": "none", "container": "site" },
+    "label": "Publication sections",
+    "appearance": "underline",
+    "tone": "light",
+    "tabs": {
+      "chapters": { "label": "Chapters", "value": "chapters", "href": "#chapters" },
+      "overview": { "label": "Introduction", "value": "overview", "href": "#overview" }
+    }
+  },
+  "chapters": {
+    "id": "chapters",
+    "settings": { "theme": "canvas", "spacing": "body", "container": "site" },
+    "labels": {
+      "aside": "Supporting information",
+      "introduction": "Introduction",
+      "tags": "Tags",
+      "index": "Chapter index",
+      "title": "Chapter list",
+      "listView": "List view",
+      "numberPrefix": "#",
+      "chapter": "Chapter"
+    },
+    "sort": {
+      "id": "chapter-sort",
+      "label": "Sort chapters",
+      "value": "newest",
+      "options": [
+        { "label": "Newest", "value": "newest" },
+        { "label": "Oldest", "value": "oldest" }
+      ]
+    },
+    "itemAction": {
+      "label": "Read now",
+      "icon": "arrowUpRight",
+      "iconPosition": "end",
+      "size": "sm",
+      "variant": "primary"
+    }
+  },
+  "reader": {
+    "template": "fluid",
+    "settings": { "theme": "canvas", "spacing": "compact", "container": "site" },
+    "labels": {
+      "breadcrumb": "Breadcrumb",
+      "chapter": "Chapter",
+      "viewsSuffix": "views",
+      "actions": "Reading controls",
+      "chapterList": "Chapter list",
+      "settings": "Change text size",
+      "theme": "Toggle reading theme",
+      "next": "Next chapter",
+      "previous": "Previous chapter",
+      "share": "Share this chapter",
+      "reactions": "Rate this chapter",
+      "bookmark": "Bookmark chapter",
+      "navigation": "Chapter navigation"
+    }
+  }
+}
