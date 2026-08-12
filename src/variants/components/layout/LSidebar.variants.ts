@@ -5,12 +5,12 @@ export const sidebarLayoutClasses =
 
 export const sidebarAsideClasses = "min-w-0 lg:col-span-3";
 export const sidebarAsidePositionClasses: Record<LSidebarPosition, string> = {
-	start: "lg:order-1",
-	end: "lg:order-2",
+	start: "order-1 lg:order-1",
+	end: "order-2 lg:order-2",
 };
-export const sidebarStickyClasses = "sticky top-28";
+export const sidebarStickyClasses = "lg:sticky lg:top-28";
 export const sidebarContentClasses = "min-w-0 lg:col-span-9";
 export const sidebarContentPositionClasses: Record<LSidebarPosition, string> = {
-	start: "lg:order-2",
-	end: "lg:order-1",
+	start: "order-2 lg:order-2",
+	end: "order-1 lg:order-1",
 };
