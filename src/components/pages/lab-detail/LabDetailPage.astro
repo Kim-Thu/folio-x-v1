@@ -16,7 +16,8 @@ import type { PCardData } from "@/types/components/object/project/card/PCard.typ
 
 const { data } = Astro.props as LabDetailPageProps;
 const { lab, relatedLabs, presentation } = data;
-const formatLabel = (template: string) => template.replace("{title}", lab.title);
+const formatTitleLabel = (template: string) => template.replace("{title}", lab.title);
+const formatIndexLabel = (template: string, index: number) => template.replace("{index}", String(index));
 const metricValue = (source: "stars" | "forks" | "updatedLabel") =>
 	source === "updatedLabel" ? lab.updatedLabel : String(lab[source]);
 
@@ -40,12 +41,15 @@ const tabs = [
 	...(lab.resources.length > 0 ? [{ label: presentation.resources.title, value: presentation.resources.id, href: `#${presentation.resources.id}` }] : []),
 ];
 
-const galleryCards: PCardData[] = lab.gallery.map((image, index) => ({
-	href: image.src,
-	ariaLabel: `${presentation.gallery.openImageLabel} ${index + 1}`,
-	title: [image.caption ?? `${presentation.gallery.imageTitleLabel} ${index + 1}`],
-	media: image,
-}));
+const galleryCards: PCardData[] = lab.gallery.map((image, index) => {
+	const displayIndex = index + 1;
+	return {
+		href: image.src,
+		ariaLabel: formatIndexLabel(presentation.gallery.openImageLabelTemplate, displayIndex),
+		title: [image.caption ?? formatIndexLabel(presentation.gallery.imageTitleLabelTemplate, displayIndex)],
+		media: image,
+	};
+});
 
 const resourceCards: PCardData[] = lab.resources.map((resource) => ({
 	href: resource.href,
@@ -54,7 +58,7 @@ const resourceCards: PCardData[] = lab.resources.map((resource) => ({
 	excerpt: resource.description,
 	icon: resource.icon,
 	action: {
-		label: resource.actionLabel ?? resource.title,
+		label: resource.actionLabel,
 		href: resource.href,
 		icon: presentation.resources.actionIcon,
 	},
@@ -67,7 +71,12 @@ const relatedCards: PCardData[] = relatedLabs.map((item) => ({
 	excerpt: item.summary,
 	media: item.image,
 	metadata: {
-		items: [{ type: "category", label: item.category.label, href: `${presentation.header.routes.categoryBase}/${item.category.slug}`, display: "text" }],
+		items: [{
+			type: "category",
+			label: item.category.label,
+			href: `${presentation.header.routes.categoryBase}/${item.category.slug}`,
+			display: presentation.related.categoryDisplay,
+		}],
 	},
 	metrics: [{ icon: presentation.related.metricIcon, label: String(item.stars) }],
 }));
@@ -92,7 +101,7 @@ const relatedCards: PCardData[] = relatedLabs.map((item) => ({
 				title: lab.title,
 				description: lab.summary,
 				metrics: presentation.header.metrics.map((metric) => ({ icon: metric.icon, label: metricValue(metric.source) })),
-				actionsLabel: formatLabel(presentation.header.labels.actionsTemplate),
+				actionsLabel: formatTitleLabel(presentation.header.labels.actionsTemplate),
 				actions,
 			}}
 		/>
@@ -101,7 +110,7 @@ const relatedCards: PCardData[] = relatedLabs.map((item) => ({
 	{tabs.length > 0 && (
 		<LSection {...presentation.navigation.settings}>
 			<CTabList
-				label={formatLabel(presentation.navigation.labelTemplate)}
+				label={formatTitleLabel(presentation.navigation.labelTemplate)}
 				appearance={presentation.navigation.appearance}
 				activeValue={tabs[0]?.value}
 				tone={presentation.navigation.tone}
@@ -111,14 +120,26 @@ const relatedCards: PCardData[] = relatedLabs.map((item) => ({
 	)}
 
 	<LSection id={presentation.content.id} {...presentation.content.settings}>
-		<LSidebar label={formatLabel(presentation.sidebar.labelTemplate)} position="end" sticky>
-			<CColumns slot="sidebar" columns="one" gap="md">
-				<CBox surface="glass" radius="md" spacing="md">
-					<CColumns columns="one" gap="md">
-						<PSectionHeader data={{ title: presentation.sidebar.projectInformationTitle }} appearance="compact" headingLevel={2} />
+		<LSidebar
+			label={formatTitleLabel(presentation.sidebar.labelTemplate)}
+			position={presentation.sidebar.position}
+			sticky={presentation.sidebar.sticky}
+		>
+			<CColumns slot="sidebar" {...presentation.sidebar.stack}>
+				<CBox
+					surface={presentation.sidebar.panel.surface}
+					radius={presentation.sidebar.panel.radius}
+					spacing={presentation.sidebar.panel.spacing}
+				>
+					<CColumns {...presentation.sidebar.panel.stack}>
+						<PSectionHeader
+							data={{ title: presentation.sidebar.labels.projectInformation }}
+							appearance={presentation.sidebar.header.appearance}
+							headingLevel={presentation.sidebar.header.headingLevel}
+						/>
 						<CDescriptionList items={lab.facts} />
 						<CTags
-							label={formatLabel(presentation.header.labels.technologyTemplate)}
+							label={formatTitleLabel(presentation.sidebar.labels.technologyTemplate)}
 							items={lab.technologies.map((technology) => ({
 								label: technology.label,
 								href: `${presentation.header.routes.technologyBase}/${technology.slug}`,
@@ -128,14 +149,18 @@ const relatedCards: PCardData[] = relatedLabs.map((item) => ({
 				</CBox>
 			</CColumns>
 
-			<PArticle template="flow" content={lab.content} />
+			<PArticle template={presentation.content.article.template} content={lab.content} />
 		</LSidebar>
 	</LSection>
 
 	{galleryCards.length > 0 && (
 		<LSection id={presentation.gallery.id} {...presentation.gallery.settings}>
-			<CColumns columns="one" gap="md">
-				<PSectionHeader data={{ title: presentation.gallery.title }} appearance="compact" headingLevel={2} />
+			<CColumns {...presentation.gallery.stack}>
+				<PSectionHeader
+					data={{ title: presentation.gallery.title }}
+					appearance={presentation.gallery.header.appearance}
+					headingLevel={presentation.gallery.header.headingLevel}
+				/>
 				<PCard {...presentation.gallery.cards} items={galleryCards} />
 			</CColumns>
 		</LSection>
@@ -143,8 +168,12 @@ const relatedCards: PCardData[] = relatedLabs.map((item) => ({
 
 	{resourceCards.length > 0 && (
 		<LSection id={presentation.resources.id} {...presentation.resources.settings}>
-			<CColumns columns="one" gap="md">
-				<PSectionHeader data={{ title: presentation.resources.title }} appearance="compact" headingLevel={2} />
+			<CColumns {...presentation.resources.stack}>
+				<PSectionHeader
+					data={{ title: presentation.resources.title }}
+					appearance={presentation.resources.header.appearance}
+					headingLevel={presentation.resources.header.headingLevel}
+				/>
 				<PCard {...presentation.resources.cards} items={resourceCards} />
 			</CColumns>
 		</LSection>
@@ -152,7 +181,7 @@ const relatedCards: PCardData[] = relatedLabs.map((item) => ({
 
 	{relatedCards.length > 0 && (
 		<LSection id={presentation.related.id} {...presentation.related.settings}>
-			<CColumns columns="one" gap="md">
+			<CColumns {...presentation.related.stack}>
 				<PSectionHeader
 					data={{ title: presentation.related.title }}
 					action={{
@@ -160,8 +189,8 @@ const relatedCards: PCardData[] = relatedLabs.map((item) => ({
 						href: presentation.header.routes.base,
 						icon: presentation.related.actionIcon,
 					}}
-					appearance="compact"
-					headingLevel={2}
+					appearance={presentation.related.header.appearance}
+					headingLevel={presentation.related.header.headingLevel}
 				/>
 				<PCard {...presentation.related.cards} items={relatedCards} slots={presentation.related.slots} />
 			</CColumns>
