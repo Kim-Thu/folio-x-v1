@@ -45,7 +45,12 @@ for (const block of lab.content) {
 	}
 
 	if (block.type === "feature-grid") {
-		articleBlocks.push({ id: block.id, title: block.title, paragraphs: [], features: block.items });
+		articleBlocks.push({
+			id: block.id,
+			title: block.title,
+			paragraphs: [],
+			features: block.items.map((item) => ({ icon: item.icon, label: `${item.title} — ${item.description}` })),
+		});
 		continue;
 	}
 
@@ -169,13 +174,11 @@ const relatedCards: PCardData[] = relatedLabs.map((item) => ({
 		<LSection id={presentation.related.id} {...presentation.related.settings}>
 			<CColumns columns="one" gap="md">
 				<PSectionHeader
-					data={{
-						title: presentation.related.title,
-						action: {
-							label: presentation.related.actionLabel,
-							href: presentation.header.routes.base,
-							icon: presentation.related.actionIcon,
-						},
+					data={{ title: presentation.related.title }}
+					action={{
+						label: presentation.related.actionLabel,
+						href: presentation.header.routes.base,
+						icon: presentation.related.actionIcon,
 					}}
 					appearance="compact"
 					headingLevel={2}
