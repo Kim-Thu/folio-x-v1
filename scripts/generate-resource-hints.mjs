@@ -1,4 +1,3 @@
-import { createHash } from 'node:crypto';
 import { readdir, readFile, writeFile } from 'node:fs/promises';
 import { extname, resolve } from 'node:path';
 
@@ -26,10 +25,17 @@ if (htmlFiles.length === 0) {
 
 const stylesheetUrls = new Set();
 const fontUrls = new Set();
-const styleHashes = new Set();
+const inlineStyleViolations = [];
 
 for (const htmlFile of htmlFiles) {
   const document = await readFile(htmlFile, 'utf8');
+
+  if (/<style(?:\s[^>]*)?>/i.test(document)) {
+    inlineStyleViolations.push(`${htmlFile}: generated <style> block`);
+  }
+  if (/\sstyle=(?:"[^"]*"|'[^']*')/i.test(document)) {
+    inlineStyleViolations.push(`${htmlFile}: inline style attribute`);
+  }
 
   for (const match of document.matchAll(/<link\b[^>]*>/gi)) {
     const tag = match[0];
@@ -45,29 +51,28 @@ for (const htmlFile of htmlFiles) {
       fontUrls.add(href);
     }
   }
+}
 
-  for (const match of document.matchAll(/<style(?:\s[^>]*)?>([\s\S]*?)<\/style>/gi)) {
-    const hash = createHash('sha256').update(match[1], 'utf8').digest('base64');
-    styleHashes.add(`'sha256-${hash}'`);
-  }
+if (inlineStyleViolations.length > 0) {
+  throw new Error(`Inline/internal CSS is not allowed in generated HTML:\n${inlineStyleViolations.join('\n')}`);
+}
+
+if (stylesheetUrls.size === 0) {
+  throw new Error('No external stylesheet links were found in the generated site.');
 }
 
 const resourceHints = [
-  ...stylesheetUrls].map((url) => `<${url}>; rel=preload; as=style`)
-  .concat([...fontUrls].map((url) => `<${url}>; rel=preload; as=font; type="font/woff2"; crossorigin`));
+  ...[...stylesheetUrls].map((url) => `<${url}>; rel=preload; as=style`),
+  ...[...fontUrls].map((url) => `<${url}>; rel=preload; as=font; type="font/woff2"; crossorigin`),
+];
 
-if (resourceHints.length === 0) {
-  throw new Error('No critical stylesheet or font resources were found in the generated site.');
-}
-
-const styleSources = ["'self'", ...styleHashes];
 const contentSecurityPolicy = [
   "default-src 'self'",
   "base-uri 'self'",
   "object-src 'none'",
   "frame-ancestors 'none'",
   "script-src 'self'",
-  `style-src ${styleSources.join(' ')}`,
+  "style-src 'self'",
   "font-src 'self'",
   "img-src 'self' data: https://images.unsplash.com",
   "connect-src 'self'",
@@ -75,10 +80,8 @@ const contentSecurityPolicy = [
   'upgrade-insecure-requests',
 ].join('; ');
 
-// Netlify reads this file at deploy time. Response-level hints start critical
-// stylesheet/font fetches early. Inline style hashes are added only when the
-// generated HTML actually contains inline styles; an external-only build needs
-// no style hashes and remains covered by style-src 'self'.
+// Netlify reads this file at deploy time. Stylesheets stay external by policy;
+// response-level preload hints start them early without relaxing CSP for inline CSS.
 const headers = [
   '/*',
   `  Link: ${resourceHints.join(', ')}`,
