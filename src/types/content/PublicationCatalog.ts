@@ -1,9 +1,9 @@
-import type { publicationEntrySchema } from "@/content/schemas";
+import type { publicationEntrySchema } from "@/content/publication-schema";
 import type { CImageData } from "@/types/components/object/component/CImage.types";
 import type { z } from "astro/zod";
 
 export type PublicationEntry = z.infer<typeof publicationEntrySchema>;
-export type PublicationChapterContent = NonNullable<NonNullable<PublicationEntry["detail"]>["reader"]>[number];
+export type PublicationChapterContent = PublicationEntry["detail"]["reader"] extends Array<infer Chapter> ? Chapter : never;
 
 export type PublicationIcon = "archiveBox" | "bolt" | "folder01" | "globeAlt" | "lightBulb" | "star" | "userCircle";
 export interface PublicationImage extends CImageData {}
