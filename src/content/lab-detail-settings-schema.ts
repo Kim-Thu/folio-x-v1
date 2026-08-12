@@ -10,18 +10,6 @@ const iconSchema = z.enum([
   "eye", "lockClosed", "adjustmentsHorizontal", "moon", "handThumbUp",
   "heart", "faceSmile", "faceFrown",
 ]);
-const cardTemplateSchema = z.enum([
-  "stacked", "horizontal", "overlay", "featured", "boxed", "compact-media",
-  "compact-bordered", "editorial", "icon-panel", "icon-summary", "media-banner",
-  "media-caption", "media-details", "media-only", "media-summary", "media-metrics",
-]);
-const cardLayoutSchema = z.enum([
-  "grid", "list", "three-column", "twelve-column", "content-three-column",
-  "mosaic", "asymmetric", "showcase",
-]);
-const cardColumnsSchema = z.union([
-  z.literal(1), z.literal(2), z.literal(3), z.literal(4), z.literal(5),
-]);
 const gapSchema = z.enum(["none", "xs", "sm", "md", "lg", "xl"]);
 const sectionSettingsSchema = z.object({
   theme: z.enum(["dark", "light", "canvas", "accent", "none"]),
@@ -37,12 +25,6 @@ const sectionHeaderSchema = z.object({
   headingLevel: z.union([
     z.literal(1), z.literal(2), z.literal(3), z.literal(4), z.literal(5), z.literal(6),
   ]),
-});
-const cardPresentationSchema = z.object({
-  template: cardTemplateSchema,
-  layout: cardLayoutSchema,
-  columns: cardColumnsSchema,
-  gap: z.enum(["none", "sm", "md", "lg", "xl"]),
 });
 
 export const labDetailSettingsSchema = z.object({
@@ -83,9 +65,7 @@ export const labDetailSettingsSchema = z.object({
   content: z.object({
     id: z.string().min(1),
     settings: sectionSettingsSchema,
-    article: z.object({
-      template: z.literal("flow"),
-    }),
+    article: z.object({ template: z.literal("flow") }),
   }),
   sidebar: z.object({
     labelTemplate: z.string().includes("{title}"),
@@ -112,7 +92,6 @@ export const labDetailSettingsSchema = z.object({
     settings: sectionSettingsSchema,
     stack: stackSchema,
     header: sectionHeaderSchema,
-    cards: cardPresentationSchema,
   }),
   resources: z.object({
     id: z.string().min(1),
@@ -121,7 +100,6 @@ export const labDetailSettingsSchema = z.object({
     settings: sectionSettingsSchema,
     stack: stackSchema,
     header: sectionHeaderSchema,
-    cards: cardPresentationSchema,
   }),
   related: z.object({
     id: z.string().min(1),
@@ -129,15 +107,8 @@ export const labDetailSettingsSchema = z.object({
     actionLabel: z.string().min(1),
     actionIcon: iconSchema,
     metricIcon: iconSchema,
-    categoryDisplay: z.literal("text"),
     settings: sectionSettingsSchema,
     stack: stackSchema,
     header: sectionHeaderSchema,
-    cards: cardPresentationSchema,
-    slots: z.object({
-      excerpt: z.boolean(),
-      tags: z.boolean(),
-      action: z.boolean(),
-    }),
   }),
 });
