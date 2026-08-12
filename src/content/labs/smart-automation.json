@@ -17,17 +17,8 @@
   "updatedLabel": "3 weeks ago",
   "sourceUrl": "https://github.com",
   "content": [
-    {
-      "type": "heading",
-      "id": "overview",
-      "level": 2,
-      "text": "Overview",
-      "navigationLabel": "Overview"
-    },
-    {
-      "type": "paragraph",
-      "text": "This prototype tests a clearer way to build, inspect, and maintain small business automations."
-    },
+    { "type": "heading", "id": "overview", "level": 2, "text": "Overview", "navigationLabel": "Overview" },
+    { "type": "paragraph", "text": "This prototype tests a clearer way to build, inspect, and maintain small business automations." },
     {
       "type": "feature-grid",
       "id": "features",
@@ -42,10 +33,13 @@
     { "src": "/uploads/page-header-projects.png", "alt": "Automation workflow", "width": 1372, "height": 1147 }
   ],
   "resources": [
-    { "title": "Source code", "description": "Review the repository.", "href": "https://github.com", "icon": "github" }
+    { "title": "Source code", "description": "Review the repository.", "href": "https://github.com", "icon": "github", "actionLabel": "Browse source" }
   ],
   "facts": [
-    { "label": "Category", "value": "Automation" },
-    { "label": "Status", "value": "In progress" }
-  ]
+    { "key": "category", "label": "Category", "value": "Automation" },
+    { "key": "status", "label": "Status", "value": "In progress" }
+  ],
+  "related": {
+    "slugs": ["ai-image-generator", "open-analytics", "code-companion", "system-playground"]
+  }
 }
