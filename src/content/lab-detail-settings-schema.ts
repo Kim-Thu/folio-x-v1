@@ -18,7 +18,6 @@ const sectionSettingsSchema = z.object({
   spacing: z.enum(["compact", "default", "none", "lead", "body", "closing"]),
   container: z.enum(["site", "content", "none"]),
 });
-
 const cardPresentationSchema = z.object({
   template: cardTemplateSchema,
   layout: cardLayoutSchema,
@@ -27,12 +26,58 @@ const cardPresentationSchema = z.object({
 });
 
 export const labDetailSettingsSchema = z.object({
+  page: z.object({
+    template: z.enum(["fluid", "contained", "boxed", "sidebar", "centered"]),
+  }),
+  header: z.object({
+    id: z.string().min(1),
+    template: z.literal("media-aside"),
+    settings: sectionSettingsSchema,
+    labels: z.object({
+      breadcrumb: z.string().min(1),
+      collection: z.string().min(1),
+      actionsTemplate: z.string().includes("{title}"),
+      live: z.string().min(1),
+      source: z.string().min(1),
+      technologyTemplate: z.string().includes("{title}"),
+    }),
+    routes: z.object({
+      base: z.string().min(1),
+      categoryBase: z.string().min(1),
+      technologyBase: z.string().min(1),
+    }),
+    metrics: z.array(z.object({
+      icon: z.string().min(1),
+      source: z.enum(["stars", "forks", "updatedLabel"]),
+    })).min(1),
+    actions: z.object({
+      live: z.object({ icon: z.string().min(1), variant: z.enum(["primary", "outline"]) }),
+      source: z.object({ icon: z.string().min(1), variant: z.enum(["primary", "outline"]) }),
+    }),
+  }),
   navigation: z.object({
     labelTemplate: z.string().includes("{title}"),
+    settings: sectionSettingsSchema,
+    appearance: z.literal("underline"),
+    tone: z.literal("light"),
+  }),
+  content: z.object({
+    id: z.string().min(1),
+    settings: sectionSettingsSchema,
+    appearance: z.literal("compact"),
+    featureCards: cardPresentationSchema,
   }),
   sidebar: z.object({
     labelTemplate: z.string().includes("{title}"),
     projectInformationTitle: z.string().min(1),
+  }),
+  gallery: z.object({
+    id: z.string().min(1),
+    title: z.string().min(1),
+    openImageLabel: z.string().min(1),
+    imageTitleLabel: z.string().min(1),
+    settings: sectionSettingsSchema,
+    cards: cardPresentationSchema,
   }),
   resources: z.object({
     id: z.string().min(1),
@@ -45,6 +90,7 @@ export const labDetailSettingsSchema = z.object({
     id: z.string().min(1),
     title: z.string().min(1),
     actionLabel: z.string().min(1),
+    actionIcon: z.literal("arrowRight"),
     metricIcon: z.literal("star"),
     settings: sectionSettingsSchema,
     cards: cardPresentationSchema,
