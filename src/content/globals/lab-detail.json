@@ -1,10 +1,83 @@
 {
+  "page": {
+    "template": "fluid"
+  },
+  "header": {
+    "id": "lab-summary",
+    "template": "media-aside",
+    "settings": {
+      "theme": "canvas",
+      "spacing": "compact",
+      "container": "site"
+    },
+    "labels": {
+      "breadcrumb": "Breadcrumb",
+      "collection": "Labs",
+      "actionsTemplate": "{title} actions",
+      "live": "Live demo",
+      "source": "Source code",
+      "technologyTemplate": "{title} technology stack"
+    },
+    "routes": {
+      "base": "/labs",
+      "categoryBase": "/labs/category",
+      "technologyBase": "/labs/technology"
+    },
+    "metrics": [
+      { "icon": "star", "source": "stars" },
+      { "icon": "github", "source": "forks" },
+      { "icon": "clock01", "source": "updatedLabel" }
+    ],
+    "actions": {
+      "live": { "icon": "arrowUpRight", "variant": "primary" },
+      "source": { "icon": "github", "variant": "outline" }
+    }
+  },
   "navigation": {
-    "labelTemplate": "{title} navigation"
+    "labelTemplate": "{title} navigation",
+    "settings": {
+      "theme": "canvas",
+      "spacing": "none",
+      "container": "site"
+    },
+    "appearance": "underline",
+    "tone": "light"
+  },
+  "content": {
+    "id": "lab-content",
+    "settings": {
+      "theme": "canvas",
+      "spacing": "body",
+      "container": "site"
+    },
+    "appearance": "compact",
+    "featureCards": {
+      "template": "icon-summary",
+      "layout": "grid",
+      "columns": 2,
+      "gap": "sm"
+    }
   },
   "sidebar": {
     "labelTemplate": "{title} project information",
     "projectInformationTitle": "Project information"
+  },
+  "gallery": {
+    "id": "gallery",
+    "title": "Gallery",
+    "openImageLabel": "Open gallery image",
+    "imageTitleLabel": "Gallery image",
+    "settings": {
+      "theme": "canvas",
+      "spacing": "compact",
+      "container": "site"
+    },
+    "cards": {
+      "template": "media-only",
+      "layout": "grid",
+      "columns": 5,
+      "gap": "sm"
+    }
   },
   "resources": {
     "id": "resources",
@@ -26,6 +99,7 @@
     "id": "related-labs",
     "title": "Related labs",
     "actionLabel": "View all Labs",
+    "actionIcon": "arrowRight",
     "metricIcon": "star",
     "settings": {
       "theme": "canvas",
