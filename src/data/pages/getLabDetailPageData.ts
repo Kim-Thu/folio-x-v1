@@ -19,13 +19,17 @@ export async function getLabDetailPageData(
 	const lab = labs.find((item) => item.slug === slug);
 	if (!lab) throw new Error(`Unknown lab slug: ${slug}`);
 
-	const relatedLabs = labs
-		.filter((item) => item.slug !== slug)
-		.sort((a, b) => {
-			const categoryScore = Number(b.category.slug === lab.category.slug) - Number(a.category.slug === lab.category.slug);
-			return categoryScore || a.order - b.order;
-		})
-		.slice(0, 4);
+	const labsBySlug = new Map(labs.map((item) => [item.slug, item]));
+	const relatedLabs = lab.related.slugs.map((relatedSlug) => {
+		const relatedLab = labsBySlug.get(relatedSlug);
+		if (!relatedLab) {
+			throw new Error(`Unknown related lab slug "${relatedSlug}" configured for lab "${slug}"`);
+		}
+		if (relatedLab.slug === lab.slug) {
+			throw new Error(`Lab "${slug}" cannot relate to itself`);
+		}
+		return relatedLab;
+	});
 
 	return { lab, relatedLabs, presentation };
 }
