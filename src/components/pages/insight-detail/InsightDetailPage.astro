@@ -17,73 +17,85 @@ import type { PPageHeaderProps } from "@/types/components/object/project/page-he
 import type { PArticleFlowProps } from "@/types/components/object/project/article/PArticle.types";
 
 const { data } = Astro.props as InsightDetailPageProps;
-const { post, relatedPosts } = data;
-const page = post.detail?.page;
-if (!page) throw new Error(`Missing insight detail page config: ${post.slug}`);
-
-const headerSection = page.sections.find((section) => section.type === "page-header");
-const articleSection = page.sections.find((section) => section.type === "article");
-if (!headerSection || !articleSection?.content) {
-	throw new Error(`Incomplete insight detail layout: ${post.slug}`);
-}
+const { post, relatedPosts, presentation } = data;
+const header = presentation.header;
+const sidebar = presentation.sidebar;
 
 const headerData = {
-	...headerSection.content,
+	breadcrumb: {
+		label: header.breadcrumbLabel,
+		items: [
+			{ label: header.collectionLabel, href: header.routes.base },
+			{ label: post.category, href: `${header.routes.categoryBase}${post.categorySlug}` },
+		],
+		current: post.title,
+	},
+	category: { label: post.category, href: `${header.routes.categoryBase}${post.categorySlug}` },
+	title: post.title,
+	description: post.excerpt,
+	author: post.author,
+	publishedAt: post.publishedAt,
 	publishedLabel: post.publishedLabel,
 	readTime: post.readTime,
+	image: {
+		src: post.image,
+		alt: post.imageAlt,
+		width: header.imageWidth,
+		height: header.imageHeight,
+	},
 	authorImage: {
-		src: "/uploads/avatar.webp",
+		src: header.authorImage.src,
 		alt: post.author,
-		width: 512,
-		height: 512,
+		width: header.authorImage.width,
+		height: header.authorImage.height,
 	},
 	share: {
-		label: "Share article",
+		label: header.share.label,
 		links: [
-			{ label: "Share on Twitter", href: `https://twitter.com/intent/tweet?url=${encodeURIComponent(post.href)}`, icon: "twitter" },
-			{ label: "Share on LinkedIn", href: `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(post.href)}`, icon: "linkedin" },
-			{ label: "Copy article link", href: post.href, icon: "link" },
+			{ label: header.share.twitterLabel, href: `https://twitter.com/intent/tweet?url=${encodeURIComponent(post.href)}`, icon: "twitter" },
+			{ label: header.share.linkedinLabel, href: `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(post.href)}`, icon: "linkedin" },
+			{ label: header.share.copyLabel, href: post.href, icon: "link" },
 		],
 	},
 } as unknown as PPageHeaderProps["data"];
 
-const flowContent = articleSection.content.blocks as unknown as PArticleFlowProps["content"];
+const flowContent = post.content as PArticleFlowProps["content"];
 const tocItems = post.content
 	.filter((node) => node.type === "heading")
 	.map((node) => ({ label: node.text, href: `#${node.id}` }));
 
 const relatedCards = relatedPosts.map((insight) =>
 	mapInsightToCard(insight, {
-		routes: { base: "/blog/", categoryBase: "/blog/category/", tagBase: "/blog/tag/" },
-		separator: "dot",
-		metadataDisplay: "text",
-		imageWidth: 640,
-		imageHeight: 420,
+		routes: header.routes,
+		separator: sidebar.relatedCards.separator,
+		metadataDisplay: sidebar.relatedCards.metadataDisplay,
+		imageWidth: sidebar.relatedCards.imageWidth,
+		imageHeight: sidebar.relatedCards.imageHeight,
 	}),
 );
 ---
 
-<LPage template={page.template}>
-	<LSection id="article-detail" theme="canvas" spacing="lead" container="site">
-		<LSidebar label="Article supporting information" position="end" sticky>
+<LPage template={presentation.page.template}>
+	<LSection id={presentation.section.id} {...presentation.section.settings}>
+		<LSidebar label={sidebar.label} position="end" sticky>
 			<CColumns slot="sidebar" columns="one" gap="md">
 				<CProfile
-					label="Author"
+					label={sidebar.author.label}
 					name={post.author}
-					role="Writer at NKT Studio"
-					bio="Writing about product thinking, engineering, and practical systems."
-					image={{ src: "/uploads/avatar.webp", alt: post.author, width: 512, height: 512 }}
-					action={{ href: "/blog", label: "View all articles" }}
+					role={sidebar.author.role}
+					bio={sidebar.author.bio}
+					image={{ src: header.authorImage.src, alt: post.author, width: header.authorImage.width, height: header.authorImage.height }}
+					action={{ href: header.routes.base, label: sidebar.author.actionLabel }}
 				/>
 
 				{tocItems.length > 0 && (
-					<CTOC appearance="panel" label="Article contents" items={tocItems} />
+					<CTOC appearance="panel" label={sidebar.tocLabel} items={tocItems} />
 				)}
 
 				{relatedCards.length > 0 && (
 					<CBox surface="glass" radius="md" spacing="md">
 						<CColumns columns="one" gap="sm">
-							<PSectionHeader data={{ title: "Related articles" }} appearance="compact" headingLevel={2} />
+							<PSectionHeader data={{ title: sidebar.relatedTitle }} appearance="compact" headingLevel={2} />
 							<PCard
 								template="compact-media"
 								layout="list"
@@ -96,39 +108,12 @@ const relatedCards = relatedPosts.map((insight) =>
 					</CBox>
 				)}
 
-				<PAdvertisement
-					template="form-first"
-					data={{
-						title: "Get new articles by email",
-						description: "Receive new writing about design, engineering, and product thinking.",
-						image: {
-							src: "/uploads/library-newsletter-book.webp",
-							alt: "Newsletter envelope and reading illustration",
-							width: 1448,
-							height: 1086,
-						},
-						action: {
-							href: "/blog",
-							label: "Subscribe",
-							icon: "arrowRight",
-						},
-						form: {
-							formName: "article-newsletter",
-							inputId: "article-newsletter-email",
-							inputLabel: "Email address",
-							placeholder: "Your email address...",
-							submitLabel: "Subscribe",
-						},
-					}}
-				/>
+				<PAdvertisement template={sidebar.newsletter.template} data={sidebar.newsletter} />
 			</CColumns>
 
 			<CColumns columns="one" gap="lg">
-				<PPageHeader
-					template={headerSection.template as PPageHeaderProps["template"]}
-					data={headerData}
-				/>
-				<PArticle template="flow" content={flowContent} />
+				<PPageHeader template={header.template as PPageHeaderProps["template"]} data={headerData} />
+				<PArticle template={presentation.content.template} content={flowContent} />
 			</CColumns>
 		</LSidebar>
 	</LSection>
