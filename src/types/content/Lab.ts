@@ -1,4 +1,4 @@
-import type { labEntrySchema } from "@/content/schemas";
+import type { labEntrySchema } from "@/content/lab-schema";
 import type { z } from "astro/zod";
 
 type LabEntry = z.infer<typeof labEntrySchema>;
@@ -8,3 +8,4 @@ export type Lab = LabEntry & {
 };
 
 export type LabImage = LabEntry["image"];
+export type LabContentBlock = LabEntry["content"][number];
