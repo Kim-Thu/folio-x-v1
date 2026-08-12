@@ -17,17 +17,8 @@
   "updatedLabel": "5 days ago",
   "liveUrl": "https://example.com",
   "content": [
-    {
-      "type": "heading",
-      "id": "overview",
-      "level": 2,
-      "text": "Overview",
-      "navigationLabel": "Overview"
-    },
-    {
-      "type": "paragraph",
-      "text": "A shared environment for testing system decisions before they reach production interfaces."
-    },
+    { "type": "heading", "id": "overview", "level": 2, "text": "Overview", "navigationLabel": "Overview" },
+    { "type": "paragraph", "text": "A shared environment for testing system decisions before they reach production interfaces." },
     {
       "type": "feature-grid",
       "id": "features",
@@ -42,10 +33,13 @@
     { "src": "/uploads/page-header-products.png", "alt": "Design system components", "width": 1536, "height": 1024 }
   ],
   "resources": [
-    { "title": "Usage guide", "description": "Explore the system rules.", "href": "#overview", "icon": "folder01" }
+    { "title": "Usage guide", "description": "Explore the system rules.", "href": "#overview", "icon": "folder01", "actionLabel": "Read guide" }
   ],
   "facts": [
-    { "label": "Category", "value": "Design & Interaction" },
-    { "label": "Status", "value": "Experiment" }
-  ]
+    { "key": "category", "label": "Category", "value": "Design & Interaction" },
+    { "key": "status", "label": "Status", "value": "Experiment" }
+  ],
+  "related": {
+    "slugs": ["ai-image-generator", "open-analytics", "smart-automation", "code-companion"]
+  }
 }
