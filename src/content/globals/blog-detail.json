@@ -1,0 +1,72 @@
+{
+  "page": { "template": "fluid" },
+  "section": {
+    "id": "article-detail",
+    "settings": { "theme": "canvas", "spacing": "lead", "container": "site" }
+  },
+  "header": {
+    "template": "editorial",
+    "breadcrumbLabel": "Breadcrumb",
+    "collectionLabel": "Stories",
+    "routes": {
+      "base": "/blog",
+      "categoryBase": "/blog/category/",
+      "tagBase": "/blog/tag/"
+    },
+    "imageWidth": 1400,
+    "imageHeight": 900,
+    "authorImage": {
+      "src": "/uploads/avatar.webp",
+      "width": 512,
+      "height": 512
+    },
+    "share": {
+      "label": "Share article",
+      "twitterLabel": "Share on Twitter",
+      "linkedinLabel": "Share on LinkedIn",
+      "copyLabel": "Copy article link"
+    }
+  },
+  "sidebar": {
+    "label": "Article supporting information",
+    "author": {
+      "label": "Author",
+      "role": "Writer at NKT Studio",
+      "bio": "Writing about product thinking, engineering, and practical systems.",
+      "actionLabel": "View all articles"
+    },
+    "tocLabel": "Article contents",
+    "relatedTitle": "Related articles",
+    "relatedLimit": 4,
+    "relatedCards": {
+      "separator": "dot",
+      "metadataDisplay": "text",
+      "imageWidth": 640,
+      "imageHeight": 420
+    },
+    "newsletter": {
+      "template": "form-first",
+      "title": "Get new articles by email",
+      "description": "Receive new writing about design, engineering, and product thinking.",
+      "image": {
+        "src": "/uploads/library-newsletter-book.webp",
+        "alt": "Newsletter envelope and reading illustration",
+        "width": 1448,
+        "height": 1086
+      },
+      "action": {
+        "href": "/blog",
+        "label": "Subscribe",
+        "icon": "arrowRight"
+      },
+      "form": {
+        "formName": "article-newsletter",
+        "inputId": "article-newsletter-email",
+        "inputLabel": "Email address",
+        "placeholder": "Your email address...",
+        "submitLabel": "Subscribe"
+      }
+    }
+  },
+  "content": { "template": "flow" }
+}
