@@ -6,8 +6,9 @@ on:
     branches:
       - main
 
+# Validation only needs to read the checked-out repository.
 permissions:
-  contents: write
+  contents: read
 
 concurrency:
   group: quality-${{ github.ref }}
@@ -22,45 +23,12 @@ jobs:
     steps:
       - name: Check out repository
         uses: actions/checkout@v4
-        with:
-          ref: ${{ github.head_ref || github.ref_name }}
 
       - name: Set up Node.js
         uses: actions/setup-node@v4
         with:
           node-version: 24
           cache: npm
-
-      - name: Remove publication legacy presentation data
-        if: github.event_name == 'pull_request'
-        run: |
-          node --input-type=module <<'EOF'
-          import { readdir, readFile, writeFile } from 'node:fs/promises';
-          import { join } from 'node:path';
-
-          for (const kind of ['comics', 'novels']) {
-            const directory = join('src', 'content', 'publications', kind);
-            for (const name of await readdir(directory)) {
-              if (!name.endsWith('.json')) continue;
-              const path = join(directory, name);
-              const entry = JSON.parse(await readFile(path, 'utf8'));
-              entry.detail ??= {};
-              delete entry.detail.page;
-              delete entry.detail.readerPage;
-              await writeFile(path, `${JSON.stringify(entry, null, 2)}\n`, 'utf8');
-            }
-          }
-          EOF
-
-          if git diff --quiet -- src/content/publications; then
-            echo "Publication JSON is already canonical"
-          else
-            git config user.name "github-actions[bot]"
-            git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-            git add src/content/publications
-            git commit -m "remove legacy publication presentation data"
-            git push origin HEAD:${{ github.head_ref }}
-          fi
 
       - name: Install locked dependencies
         run: npm ci
