@@ -3,10 +3,21 @@
   "slug": "immortal-soldier",
   "title": "The Immortal Soldier",
   "summary": "An oath-bound guardian faces the cost of a life without an ending.",
-  "cover": { "src": "/uploads/cover-violet-citadel.webp", "alt": "Fantasy guardian in violet light", "width": 1024, "height": 1536 },
+  "cover": {
+    "src": "/uploads/cover-violet-citadel.webp",
+    "alt": "Fantasy guardian in violet light",
+    "width": 1024,
+    "height": 1536
+  },
   "genres": [
-    { "label": "Action", "slug": "action" },
-    { "label": "Fantasy", "slug": "fantasy" }
+    {
+      "label": "Action",
+      "slug": "action"
+    },
+    {
+      "label": "Fantasy",
+      "slug": "fantasy"
+    }
   ],
   "status": "ongoing",
   "rating": 4.7,
@@ -14,78 +25,5 @@
   "chapters": 94,
   "updatedLabel": "2 days ago",
   "author": "NKT Studio",
-  "detail": {
-    "page": {
-      "template": "fluid",
-      "sections": [
-        {
-          "id": "publication-summary",
-          "type": "page-header",
-          "template": "cover-summary",
-          "settings": { "theme": "canvas", "spacing": "compact", "container": "site" },
-          "content": {
-            "breadcrumbLabel": "Breadcrumb",
-            "collectionLabel": "Novels",
-            "tagsLabel": "Genres",
-            "authorLabel": "Author",
-            "metrics": {
-              "ratingLabel": "Rating",
-              "readsLabel": "Reads",
-              "chaptersLabel": "Chapters"
-            },
-            "actionsLabel": "Publication actions",
-            "primaryActionLabel": "Read from start",
-            "factsTitle": "Information",
-            "facts": {
-              "authorLabel": "Author",
-              "genresLabel": "Genres",
-              "statusLabel": "Status",
-              "updatedLabel": "Updated",
-              "viewsLabel": "Views",
-              "ongoingLabel": "Ongoing",
-              "completeLabel": "Complete"
-            }
-          }
-        },
-        {
-          "id": "publication-navigation",
-          "type": "tabs",
-          "settings": { "theme": "canvas", "spacing": "none", "container": "site" },
-          "content": {
-            "label": "Publication sections",
-            "appearance": "underline",
-            "tone": "light",
-            "activeValue": "chapters",
-            "tabs": [
-              { "label": "Chapters", "value": "chapters", "href": "#chapters" },
-              { "label": "Introduction", "value": "overview", "href": "#overview" }
-            ]
-          }
-        },
-        {
-          "id": "chapters",
-          "type": "entry-index",
-          "settings": { "theme": "canvas", "spacing": "body", "container": "site" },
-          "content": {
-            "asideLabel": "Supporting information",
-            "introductionLabel": "Introduction",
-            "chapterIndexLabel": "Chapter index",
-            "title": "Chapter list",
-            "sort": {
-              "id": "chapter-sort",
-              "label": "Sort chapters",
-              "value": "newest",
-              "options": [
-                { "label": "Newest", "value": "newest" },
-                { "label": "Oldest", "value": "oldest" }
-              ]
-            },
-            "listViewLabel": "List view",
-            "numberPrefix": "#",
-            "chapterLabel": "Chapter"
-          }
-        }
-      ]
-    }
-  }
+  "detail": {}
 }

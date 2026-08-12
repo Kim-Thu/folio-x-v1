@@ -10,8 +10,14 @@
     "height": 1536
   },
   "genres": [
-    { "label": "Fantasy", "slug": "fantasy" },
-    { "label": "Action", "slug": "action" }
+    {
+      "label": "Fantasy",
+      "slug": "fantasy"
+    },
+    {
+      "label": "Action",
+      "slug": "action"
+    }
   ],
   "status": "ongoing",
   "rating": 4.9,
@@ -27,10 +33,22 @@
       "A cinematic fantasy about courage, memory, and the cost of protecting a home in the sky."
     ],
     "tags": [
-      { "label": "Floating city", "slug": "floating-city" },
-      { "label": "Adventure", "slug": "adventure" },
-      { "label": "Action", "slug": "action" },
-      { "label": "Mystery", "slug": "mystery" }
+      {
+        "label": "Floating city",
+        "slug": "floating-city"
+      },
+      {
+        "label": "Adventure",
+        "slug": "adventure"
+      },
+      {
+        "label": "Action",
+        "slug": "action"
+      },
+      {
+        "label": "Mystery",
+        "slug": "mystery"
+      }
     ],
     "reader": [
       {
@@ -42,113 +60,26 @@
         "views": "18.7K",
         "kind": "sequential-media",
         "images": [
-          { "src": "/uploads/cover-violet-citadel.webp", "alt": "The Violet Citadel appears through a storm", "width": 1024, "height": 1536 },
-          { "src": "/uploads/library-hero-drawing.webp", "alt": "An illustrated chapter scene", "width": 1672, "height": 941 },
-          { "src": "/uploads/cover-moon-warrior.webp", "alt": "A warrior crosses the moonlit ruins", "width": 1024, "height": 1536 }
+          {
+            "src": "/uploads/cover-violet-citadel.webp",
+            "alt": "The Violet Citadel appears through a storm",
+            "width": 1024,
+            "height": 1536
+          },
+          {
+            "src": "/uploads/library-hero-drawing.webp",
+            "alt": "An illustrated chapter scene",
+            "width": 1672,
+            "height": 941
+          },
+          {
+            "src": "/uploads/cover-moon-warrior.webp",
+            "alt": "A warrior crosses the moonlit ruins",
+            "width": 1024,
+            "height": 1536
+          }
         ]
       }
-    ],
-    "page": {
-      "template": "fluid",
-      "sections": [
-        {
-          "id": "publication-summary",
-          "type": "page-header",
-          "template": "cover-summary",
-          "settings": { "theme": "canvas", "spacing": "compact", "container": "site" },
-          "content": {
-            "breadcrumbLabel": "Breadcrumb",
-            "collectionLabel": "Comics",
-            "tagsLabel": "Genres",
-            "authorLabel": "Author",
-            "metrics": {
-              "ratingLabel": "Rating",
-              "readsLabel": "Reads",
-              "chaptersLabel": "Chapters",
-              "followersLabel": "Followers"
-            },
-            "actionsLabel": "Publication actions",
-            "primaryActionLabel": "Read from start",
-            "factsTitle": "Information",
-            "facts": {
-              "authorLabel": "Author",
-              "genresLabel": "Genres",
-              "languageLabel": "Language",
-              "statusLabel": "Status",
-              "updatedLabel": "Updated",
-              "viewsLabel": "Views",
-              "ongoingLabel": "Ongoing",
-              "completeLabel": "Complete"
-            }
-          }
-        },
-        {
-          "id": "publication-navigation",
-          "type": "tabs",
-          "settings": { "theme": "canvas", "spacing": "none", "container": "site" },
-          "content": {
-            "label": "Publication sections",
-            "appearance": "underline",
-            "tone": "light",
-            "activeValue": "chapters",
-            "tabs": [
-              { "label": "Chapters", "value": "chapters", "href": "#chapters" },
-              { "label": "Introduction", "value": "overview", "href": "#overview" }
-            ]
-          }
-        },
-        {
-          "id": "chapters",
-          "type": "entry-index",
-          "settings": { "theme": "canvas", "spacing": "body", "container": "site" },
-          "content": {
-            "asideLabel": "Supporting information",
-            "introductionLabel": "Introduction",
-            "tagsLabel": "Tags",
-            "chapterIndexLabel": "Chapter index",
-            "title": "Chapter list",
-            "sort": {
-              "id": "chapter-sort",
-              "label": "Sort chapters",
-              "value": "newest",
-              "options": [
-                { "label": "Newest", "value": "newest" },
-                { "label": "Oldest", "value": "oldest" }
-              ]
-            },
-            "listViewLabel": "List view",
-            "numberPrefix": "#",
-            "chapterLabel": "Chapter",
-            "itemAction": {
-              "label": "Read now",
-              "icon": "arrowUpRight",
-              "iconPosition": "end",
-              "size": "sm",
-              "variant": "primary"
-            }
-          }
-        }
-      ]
-    },
-    "readerPage": {
-      "template": "fluid",
-      "settings": { "theme": "canvas", "spacing": "compact", "container": "site" },
-      "content": {
-        "breadcrumbLabel": "Breadcrumb",
-        "collectionLabel": "Comics",
-        "chapterLabel": "Chapter",
-        "viewsSuffix": "views",
-        "actionsLabel": "Reading controls",
-        "chapterListLabel": "Chapter list",
-        "settingsLabel": "Change text size",
-        "themeLabel": "Toggle reading theme",
-        "nextLabel": "Next chapter",
-        "previousLabel": "Previous chapter",
-        "shareLabel": "Share this chapter",
-        "reactionsLabel": "Rate this chapter",
-        "bookmarkLabel": "Bookmark chapter",
-        "navigationLabel": "Chapter navigation"
-      }
-    }
+    ]
   }
 }

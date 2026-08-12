@@ -3,10 +3,21 @@
   "slug": "violet-citadel",
   "title": "The Violet Citadel",
   "summary": "A lone mage searches a ruined city for the memory that can change two worlds.",
-  "cover": { "src": "/uploads/cover-violet-citadel.webp", "alt": "Mage beneath a violet citadel", "width": 1024, "height": 1536 },
+  "cover": {
+    "src": "/uploads/cover-violet-citadel.webp",
+    "alt": "Mage beneath a violet citadel",
+    "width": 1024,
+    "height": 1536
+  },
   "genres": [
-    { "label": "Fantasy", "slug": "fantasy" },
-    { "label": "Action", "slug": "action" }
+    {
+      "label": "Fantasy",
+      "slug": "fantasy"
+    },
+    {
+      "label": "Action",
+      "slug": "action"
+    }
   ],
   "status": "ongoing",
   "rating": 4.9,
@@ -22,10 +33,22 @@
       "A story about hope, impossible choices, and people brave enough to dream beyond the last light."
     ],
     "tags": [
-      { "label": "Magic academy", "slug": "magic-academy" },
-      { "label": "Future", "slug": "future" },
-      { "label": "Adventure", "slug": "adventure" },
-      { "label": "Mystery", "slug": "mystery" }
+      {
+        "label": "Magic academy",
+        "slug": "magic-academy"
+      },
+      {
+        "label": "Future",
+        "slug": "future"
+      },
+      {
+        "label": "Adventure",
+        "slug": "adventure"
+      },
+      {
+        "label": "Mystery",
+        "slug": "mystery"
+      }
     ],
     "reader": [
       {
@@ -37,121 +60,44 @@
         "views": "18.7K",
         "kind": "prose",
         "prose": [
-          { "text": "The neon lights of Elysia flickered through the cold rain." },
-          { "text": "Rin walked between narrow alleys where steam rose from the drains and mixed with the metallic scent of the city." },
-          { "text": "In her hand, a small device sent out a faint signal, but it was enough to guide her forward." },
-          { "kind": "emphasis", "text": "If this map is right, the place is at the end of this alley." },
-          { "text": "She tightened her coat and moved on. Then a sound rose from the darkness behind her." },
-          { "kind": "separator", "text": "* * *" },
-          { "text": "When Rin woke, she was lying in a dark room surrounded by old screens." },
-          { "text": "A voice came from the shadows and a silver-haired man stepped into the dim light." },
-          { "kind": "emphasis", "text": "At last, you are awake." },
-          { "text": "Rin blinked, trying to remember what had happened and why she had been brought here." },
-          { "text": "The man watched her quietly. The answers she wanted were closer than she knew." }
+          {
+            "text": "The neon lights of Elysia flickered through the cold rain."
+          },
+          {
+            "text": "Rin walked between narrow alleys where steam rose from the drains and mixed with the metallic scent of the city."
+          },
+          {
+            "text": "In her hand, a small device sent out a faint signal, but it was enough to guide her forward."
+          },
+          {
+            "kind": "emphasis",
+            "text": "If this map is right, the place is at the end of this alley."
+          },
+          {
+            "text": "She tightened her coat and moved on. Then a sound rose from the darkness behind her."
+          },
+          {
+            "kind": "separator",
+            "text": "* * *"
+          },
+          {
+            "text": "When Rin woke, she was lying in a dark room surrounded by old screens."
+          },
+          {
+            "text": "A voice came from the shadows and a silver-haired man stepped into the dim light."
+          },
+          {
+            "kind": "emphasis",
+            "text": "At last, you are awake."
+          },
+          {
+            "text": "Rin blinked, trying to remember what had happened and why she had been brought here."
+          },
+          {
+            "text": "The man watched her quietly. The answers she wanted were closer than she knew."
+          }
         ]
       }
-    ],
-    "page": {
-      "template": "fluid",
-      "sections": [
-        {
-          "id": "publication-summary",
-          "type": "page-header",
-          "template": "cover-summary",
-          "settings": { "theme": "canvas", "spacing": "compact", "container": "site" },
-          "content": {
-            "breadcrumbLabel": "Breadcrumb",
-            "collectionLabel": "Novels",
-            "tagsLabel": "Genres",
-            "authorLabel": "Author",
-            "metrics": {
-              "ratingLabel": "Rating",
-              "readsLabel": "Reads",
-              "chaptersLabel": "Chapters",
-              "followersLabel": "Followers"
-            },
-            "actionsLabel": "Publication actions",
-            "primaryActionLabel": "Read from start",
-            "factsTitle": "Information",
-            "facts": {
-              "authorLabel": "Author",
-              "genresLabel": "Genres",
-              "languageLabel": "Language",
-              "statusLabel": "Status",
-              "updatedLabel": "Updated",
-              "viewsLabel": "Views",
-              "ongoingLabel": "Ongoing",
-              "completeLabel": "Complete"
-            }
-          }
-        },
-        {
-          "id": "publication-navigation",
-          "type": "tabs",
-          "settings": { "theme": "canvas", "spacing": "none", "container": "site" },
-          "content": {
-            "label": "Publication sections",
-            "appearance": "underline",
-            "tone": "light",
-            "activeValue": "chapters",
-            "tabs": [
-              { "label": "Chapters", "value": "chapters", "href": "#chapters" },
-              { "label": "Introduction", "value": "overview", "href": "#overview" }
-            ]
-          }
-        },
-        {
-          "id": "chapters",
-          "type": "entry-index",
-          "settings": { "theme": "canvas", "spacing": "body", "container": "site" },
-          "content": {
-            "asideLabel": "Supporting information",
-            "introductionLabel": "Introduction",
-            "tagsLabel": "Tags",
-            "chapterIndexLabel": "Chapter index",
-            "title": "Chapter list",
-            "sort": {
-              "id": "chapter-sort",
-              "label": "Sort chapters",
-              "value": "newest",
-              "options": [
-                { "label": "Newest", "value": "newest" },
-                { "label": "Oldest", "value": "oldest" }
-              ]
-            },
-            "listViewLabel": "List view",
-            "numberPrefix": "#",
-            "chapterLabel": "Chapter",
-            "itemAction": {
-              "label": "Read now",
-              "icon": "arrowUpRight",
-              "iconPosition": "end",
-              "size": "sm",
-              "variant": "primary"
-            }
-          }
-        }
-      ]
-    },
-    "readerPage": {
-      "template": "fluid",
-      "settings": { "theme": "canvas", "spacing": "compact", "container": "site" },
-      "content": {
-        "breadcrumbLabel": "Breadcrumb",
-        "collectionLabel": "Novels",
-        "chapterLabel": "Chapter",
-        "viewsSuffix": "views",
-        "actionsLabel": "Reading controls",
-        "chapterListLabel": "Chapter list",
-        "settingsLabel": "Change text size",
-        "themeLabel": "Toggle reading theme",
-        "nextLabel": "Next chapter",
-        "previousLabel": "Previous chapter",
-        "shareLabel": "Share this chapter",
-        "reactionsLabel": "Rate this chapter",
-        "bookmarkLabel": "Bookmark chapter",
-        "navigationLabel": "Chapter navigation"
-      }
-    }
+    ]
   }
 }
