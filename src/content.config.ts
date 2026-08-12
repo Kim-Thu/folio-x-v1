@@ -1,6 +1,7 @@
 import { defineCollection } from "astro:content";
 import { glob } from "astro/loaders";
 import { projectEntrySchema } from "@/content/project-schema";
+import { labEntrySchema } from "@/content/lab-schema";
 import { labDetailSettingsSchema } from "@/content/lab-detail-settings-schema";
 import {
   blogEntrySchema,
@@ -10,7 +11,6 @@ import {
   interfaceSettingsSchema,
   navigationSettingsSchema,
   productEntrySchema,
-  labEntrySchema,
   publicationEntrySchema,
   siteSettingsSchema,
   systemStatesSettingsSchema,
