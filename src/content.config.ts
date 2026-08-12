@@ -3,6 +3,7 @@ import { glob } from "astro/loaders";
 import { projectEntrySchema } from "@/content/project-schema";
 import { labEntrySchema } from "@/content/lab-schema";
 import { labDetailSettingsSchema } from "@/content/lab-detail-settings-schema";
+import { publicationDetailSettingsSchema } from "@/content/publication-detail-settings-schema";
 import {
   blogEntrySchema,
   closingProfileSettingsSchema,
@@ -25,6 +26,7 @@ const interfaceSettings = defineCollection({ loader: glob({ base: settingsBase, 
 const footerSettings = defineCollection({ loader: glob({ base: settingsBase, pattern: "footer.json" }), schema: footerSettingsSchema });
 const systemStatesSettings = defineCollection({ loader: glob({ base: settingsBase, pattern: "system-states.json" }), schema: systemStatesSettingsSchema });
 const labDetailSettings = defineCollection({ loader: glob({ base: settingsBase, pattern: "lab-detail.json" }), schema: labDetailSettingsSchema });
+const publicationDetailSettings = defineCollection({ loader: glob({ base: settingsBase, pattern: "publication-detail.json" }), schema: publicationDetailSettingsSchema });
 const projects = defineCollection({ loader: glob({ base: "./src/content/projects", pattern: "*.json" }), schema: projectEntrySchema });
 const products = defineCollection({ loader: glob({ base: "./src/content/products", pattern: "*.json" }), schema: productEntrySchema });
 const labs = defineCollection({ loader: glob({ base: "./src/content/labs", pattern: "*.json" }), schema: labEntrySchema });
@@ -41,6 +43,7 @@ export const collections = {
   footerSettings,
   systemStatesSettings,
   labDetailSettings,
+  publicationDetailSettings,
   projects,
   products,
   labs,
