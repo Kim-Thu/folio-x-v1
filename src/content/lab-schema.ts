@@ -61,6 +61,28 @@ export const labContentBlockSchema = z.discriminatedUnion("type", [
   tableBlockSchema,
 ]);
 
+const labGalleryItemSchema = imageSchema.extend({
+  caption: z.string().min(1).optional(),
+});
+
+const labResourceSchema = z.object({
+  title: z.string().min(1),
+  description: z.string().min(1),
+  href: z.string().min(1),
+  icon: z.enum(["folder01", "github", "play"]),
+  actionLabel: z.string().min(1).optional(),
+});
+
+const labFactSchema = z.object({
+  key: slugSchema,
+  label: z.string().min(1),
+  value: z.string().min(1),
+});
+
+const labRelatedSchema = z.object({
+  slugs: z.array(slugSchema).max(4).default([]),
+});
+
 export const labEntrySchema = z.object({
   order: z.number().int().positive(),
   slug: slugSchema,
@@ -77,15 +99,8 @@ export const labEntrySchema = z.object({
   liveUrl: z.string().min(1).optional(),
   sourceUrl: z.string().min(1).optional(),
   content: z.array(labContentBlockSchema).min(1),
-  gallery: z.array(imageSchema).default([]),
-  resources: z.array(z.object({
-    title: z.string().min(1),
-    description: z.string().min(1),
-    href: z.string().min(1),
-    icon: z.enum(["folder01", "github", "play"]),
-  })).default([]),
-  facts: z.array(z.object({
-    label: z.string().min(1),
-    value: z.string().min(1),
-  })).default([]),
+  gallery: z.array(labGalleryItemSchema).default([]),
+  resources: z.array(labResourceSchema).default([]),
+  facts: z.array(labFactSchema).default([]),
+  related: labRelatedSchema.default({ slugs: [] }),
 });
