@@ -7,83 +7,45 @@
   "statusLabel": "In progress",
   "summary": "A visual workflow builder for connecting repeatable tasks into dependable automated routines.",
   "image": { "src": "/uploads/page-header-projects.png", "alt": "Smart automation workflow experiment", "width": 1372, "height": 1147 },
-  "technologies": [{ "label": "Node.js", "slug": "nodejs" }, { "label": "n8n", "slug": "n8n" }, { "label": "Docker", "slug": "docker" }],
+  "technologies": [
+    { "label": "Node.js", "slug": "nodejs" },
+    { "label": "n8n", "slug": "n8n" },
+    { "label": "Docker", "slug": "docker" }
+  ],
   "stars": 96,
   "forks": 21,
   "updatedLabel": "3 weeks ago",
   "sourceUrl": "https://github.com",
-  "sections": [{ "id": "overview", "title": "Overview", "paragraphs": ["This prototype tests a clearer way to build, inspect, and maintain small business automations."] }],
-  "features": [{ "title": "Composable flows", "description": "Connect reusable steps with visible dependencies.", "icon": "arrowPath" }],
-  "gallery": [{ "src": "/uploads/page-header-projects.png", "alt": "Automation workflow", "width": 1372, "height": 1147 }],
-  "resources": [{ "title": "Source code", "description": "Review the repository.", "href": "https://github.com", "icon": "github" }],
-  "facts": [{ "label": "Category", "value": "Automation" }, { "label": "Status", "value": "In progress" }],
-  "detail": {
-    "page": {
-      "template": "fluid",
-      "sections": [
-        {
-          "id": "lab-summary",
-          "type": "page-header",
-          "template": "media-aside",
-          "settings": { "theme": "canvas", "spacing": "compact", "container": "site" },
-          "content": {
-            "labels": {
-              "breadcrumb": "Breadcrumb",
-              "collection": "Labs",
-              "actions": "Smart Automation actions",
-              "live": "Live demo",
-              "source": "Source code",
-              "technology": "Smart Automation technology stack"
-            },
-            "routes": {
-              "base": "/labs",
-              "categoryBase": "/labs/category",
-              "technologyBase": "/labs/technology"
-            },
-            "metrics": [
-              { "icon": "star", "source": "stars" },
-              { "icon": "github", "source": "forks" },
-              { "icon": "clock01", "source": "updatedLabel" }
-            ],
-            "actions": {
-              "live": { "icon": "arrowUpRight", "variant": "primary" },
-              "source": { "icon": "github", "variant": "outline" }
-            }
-          }
-        },
-        {
-          "id": "lab-content",
-          "type": "article",
-          "settings": { "theme": "canvas", "spacing": "body", "container": "site" },
-          "content": {
-            "appearance": "compact",
-            "layout": { "columns": "twelve", "gap": "lg", "articleSpan": 8, "asideSpan": 4, "asideColumns": "one", "asideGap": "md" }
-          }
-        },
-        {
-          "id": "features",
-          "type": "collection",
-          "template": "cards",
-          "settings": { "theme": "canvas", "spacing": "compact", "container": "site" },
-          "content": {
-            "heading": { "title": "Features", "level": 2, "appearance": "compact" },
-            "layout": { "columns": "one", "gap": "md" },
-            "cards": { "template": "icon-summary", "layout": "grid", "columns": 2, "gap": "sm" }
-          }
-        },
-        {
-          "id": "gallery",
-          "type": "collection",
-          "template": "cards",
-          "settings": { "theme": "canvas", "spacing": "compact", "container": "site" },
-          "content": {
-            "heading": { "title": "Gallery", "level": 2, "appearance": "compact" },
-            "layout": { "columns": "one", "gap": "md" },
-            "cards": { "template": "media-only", "layout": "grid", "columns": 5, "gap": "sm" },
-            "labels": { "openImage": "Open gallery image", "imageTitle": "Gallery image" }
-          }
-        }
+  "content": [
+    {
+      "type": "heading",
+      "id": "overview",
+      "level": 2,
+      "text": "Overview",
+      "navigationLabel": "Overview"
+    },
+    {
+      "type": "paragraph",
+      "text": "This prototype tests a clearer way to build, inspect, and maintain small business automations."
+    },
+    {
+      "type": "feature-grid",
+      "id": "features",
+      "title": "Features",
+      "navigationLabel": "Features",
+      "items": [
+        { "title": "Composable flows", "description": "Connect reusable steps with visible dependencies.", "icon": "arrowPath" }
       ]
     }
-  }
+  ],
+  "gallery": [
+    { "src": "/uploads/page-header-projects.png", "alt": "Automation workflow", "width": 1372, "height": 1147 }
+  ],
+  "resources": [
+    { "title": "Source code", "description": "Review the repository.", "href": "https://github.com", "icon": "github" }
+  ],
+  "facts": [
+    { "label": "Category", "value": "Automation" },
+    { "label": "Status", "value": "In progress" }
+  ]
 }
