@@ -15,8 +15,7 @@
       "collection": "Labs",
       "actionsTemplate": "{title} actions",
       "live": "Live demo",
-      "source": "Source code",
-      "technologyTemplate": "{title} technology stack"
+      "source": "Source code"
     },
     "routes": {
       "base": "/labs",
@@ -50,27 +49,53 @@
       "spacing": "body",
       "container": "site"
     },
-    "appearance": "compact",
-    "featureCards": {
-      "template": "icon-summary",
-      "layout": "grid",
-      "columns": 2,
-      "gap": "sm"
+    "article": {
+      "template": "flow"
     }
   },
   "sidebar": {
     "labelTemplate": "{title} project information",
-    "projectInformationTitle": "Project information"
+    "position": "end",
+    "sticky": true,
+    "stack": {
+      "columns": "one",
+      "gap": "md"
+    },
+    "panel": {
+      "surface": "glass",
+      "radius": "md",
+      "spacing": "md",
+      "stack": {
+        "columns": "one",
+        "gap": "md"
+      }
+    },
+    "labels": {
+      "projectInformation": "Project information",
+      "technologyTemplate": "{title} technology stack"
+    },
+    "header": {
+      "appearance": "compact",
+      "headingLevel": 2
+    }
   },
   "gallery": {
     "id": "gallery",
     "title": "Gallery",
-    "openImageLabel": "Open gallery image",
-    "imageTitleLabel": "Gallery image",
+    "openImageLabelTemplate": "Open gallery image {index}",
+    "imageTitleLabelTemplate": "Gallery image {index}",
     "settings": {
       "theme": "canvas",
       "spacing": "compact",
       "container": "site"
+    },
+    "stack": {
+      "columns": "one",
+      "gap": "md"
+    },
+    "header": {
+      "appearance": "compact",
+      "headingLevel": 2
     },
     "cards": {
       "template": "media-only",
@@ -88,6 +113,14 @@
       "spacing": "compact",
       "container": "site"
     },
+    "stack": {
+      "columns": "one",
+      "gap": "md"
+    },
+    "header": {
+      "appearance": "compact",
+      "headingLevel": 2
+    },
     "cards": {
       "template": "icon-summary",
       "layout": "grid",
@@ -101,10 +134,19 @@
     "actionLabel": "View all Labs",
     "actionIcon": "arrowRight",
     "metricIcon": "star",
+    "categoryDisplay": "text",
     "settings": {
       "theme": "canvas",
       "spacing": "compact",
       "container": "site"
+    },
+    "stack": {
+      "columns": "one",
+      "gap": "md"
+    },
+    "header": {
+      "appearance": "compact",
+      "headingLevel": 2
     },
     "cards": {
       "template": "compact-media",
