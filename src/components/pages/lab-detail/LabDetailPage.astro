@@ -3,12 +3,21 @@ import LPage from "@/components/layout/LPage.astro";
 import LSection from "@/components/layout/LSection.astro";
 import LSidebar from "@/components/layout/LSidebar.astro";
 import CBox from "@/components/object/component/CBox.astro";
+import CButton from "@/components/object/component/CButton.astro";
 import CColumns from "@/components/object/component/CColumns.astro";
 import CDescriptionList from "@/components/object/component/CDescriptionList.astro";
+import CFeature from "@/components/object/component/CFeature.astro";
+import CHeading from "@/components/object/component/CHeading.astro";
+import CIcon from "@/components/object/component/CIcon.astro";
+import CImage from "@/components/object/component/CImage.astro";
+import CLink from "@/components/object/component/CLink.astro";
+import CMedia from "@/components/object/component/CMedia.astro";
+import CMetadata from "@/components/object/component/CMetadata.astro";
+import CRow from "@/components/object/component/CRow.astro";
 import CTabList from "@/components/object/component/CTabList.astro";
 import CTags from "@/components/object/component/CTags.astro";
+import CText from "@/components/object/component/CText.astro";
 import PArticle from "@/components/object/project/article/PArticle.astro";
-import PCard from "@/components/object/project/card/PCard.astro";
 import PPageHeader from "@/components/object/project/page-header/PPageHeader.astro";
 import PSectionHeader from "@/components/object/project/section-header/PSectionHeader.astro";
 import type { LabDetailPageProps } from "@/types/components/pages/lab-detail/LabDetailPage.types";
@@ -20,9 +29,9 @@ const {
 	header,
 	tabs,
 	sidebar,
-	galleryCards,
-	resourceCards,
-	relatedCards,
+	galleryItems,
+	resources,
+	relatedItems,
 } = data;
 ---
 
@@ -33,13 +42,15 @@ const {
 
 	{tabs.length > 0 && (
 		<LSection {...presentation.navigation.settings}>
-			<CTabList
-				label={presentation.navigation.labelTemplate.replace("{title}", lab.title)}
-				appearance={presentation.navigation.appearance}
-				activeValue={tabs[0]?.value}
-				tone={presentation.navigation.tone}
-				{tabs}
-			/>
+			<div class="border-y border-black/10 bg-white">
+				<CTabList
+					label={presentation.navigation.labelTemplate.replace("{title}", lab.title)}
+					appearance={presentation.navigation.appearance}
+					activeValue={tabs[0]?.value}
+					tone={presentation.navigation.tone}
+					{tabs}
+				/>
+			</div>
 		</LSection>
 	)}
 
@@ -61,17 +72,23 @@ const {
 							appearance={presentation.sidebar.header.appearance}
 							headingLevel={presentation.sidebar.header.headingLevel}
 						/>
-						<CDescriptionList items={sidebar.facts} />
-						<CTags label={sidebar.technologyLabel} items={sidebar.technologies} />
+						<div class="border-t border-black/10 pt-4">
+							<CDescriptionList items={sidebar.facts} />
+						</div>
+						<div class="border-t border-black/10 pt-4">
+							<CTags label={sidebar.technologyLabel} items={sidebar.technologies} />
+						</div>
 					</CColumns>
 				</CBox>
 			</CColumns>
 
-			<PArticle template={presentation.content.article.template} content={lab.content} />
+			<div class="min-w-0 max-w-3xl">
+				<PArticle template={presentation.content.article.template} content={lab.content} />
+			</div>
 		</LSidebar>
 	</LSection>
 
-	{galleryCards.length > 0 && (
+	{galleryItems.length > 0 && (
 		<LSection id={presentation.gallery.id} {...presentation.gallery.settings}>
 			<CColumns {...presentation.gallery.stack}>
 				<PSectionHeader
@@ -79,12 +96,25 @@ const {
 					appearance={presentation.gallery.header.appearance}
 					headingLevel={presentation.gallery.header.headingLevel}
 				/>
-				<PCard {...presentation.gallery.cards} items={galleryCards} />
+				<div class="grid grid-cols-2 gap-3 md:grid-cols-3 lg:grid-cols-5">
+					{galleryItems.map((item) => (
+						<CLink href={item.href} aria-label={item.ariaLabel} class="group block overflow-hidden rounded-md bg-black/5">
+							<CMedia ratio="editorial">
+								<CImage {...item.image} variant="fill" class="transition-transform duration-300 group-hover:scale-[1.02]" />
+							</CMedia>
+							{item.title && (
+								<div class="border-t border-black/10 px-3 py-2">
+									<CText variant="caption" tone="muted">{item.title}</CText>
+								</div>
+							)}
+						</CLink>
+					))}
+				</div>
 			</CColumns>
 		</LSection>
 	)}
 
-	{resourceCards.length > 0 && (
+	{resources.length > 0 && (
 		<LSection id={presentation.resources.id} {...presentation.resources.settings}>
 			<CColumns {...presentation.resources.stack}>
 				<PSectionHeader
@@ -92,12 +122,37 @@ const {
 					appearance={presentation.resources.header.appearance}
 					headingLevel={presentation.resources.header.headingLevel}
 				/>
-				<PCard {...presentation.resources.cards} items={resourceCards} />
+				<div class="grid gap-3 md:grid-cols-2 xl:grid-cols-4">
+					{resources.map((resource) => (
+						<CBox as="article" surface="bordered" radius="md" spacing="md">
+							<CColumns columns="one" gap="md">
+								<CRow align="center" justify="between" gap="md">
+									<span class="flex size-10 items-center justify-center rounded-md bg-black text-white">
+										<CIcon name={resource.icon} size="sm" />
+									</span>
+									<CButton
+										href={resource.href}
+										label={resource.actionLabel}
+										icon={presentation.resources.actionIcon}
+										iconOnly
+										size="xs"
+										variant="outline"
+										tone="light"
+									/>
+								</CRow>
+								<CColumns columns="one" gap="xs">
+									<CHeading level={3} variant="h5">{resource.title}</CHeading>
+									<CText variant="body-sm" tone="muted">{resource.description}</CText>
+								</CColumns>
+							</CColumns>
+						</CBox>
+					))}
+				</div>
 			</CColumns>
 		</LSection>
 	)}
 
-	{relatedCards.length > 0 && (
+	{relatedItems.length > 0 && (
 		<LSection id={presentation.related.id} {...presentation.related.settings}>
 			<CColumns {...presentation.related.stack}>
 				<PSectionHeader
@@ -110,7 +165,27 @@ const {
 					appearance={presentation.related.header.appearance}
 					headingLevel={presentation.related.header.headingLevel}
 				/>
-				<PCard {...presentation.related.cards} items={relatedCards} slots={presentation.related.slots} />
+				<div class="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
+					{relatedItems.map((item) => (
+						<CLink href={item.href} aria-label={item.ariaLabel} class="group block h-full">
+							<CBox as="article" surface="bordered" radius="md" overflow="hidden" class="h-full transition-transform duration-300 group-hover:-translate-y-1">
+								<CMedia ratio="editorial">
+									<CImage {...item.image} variant="fill" />
+								</CMedia>
+								<div class="border-t border-black/10 p-4">
+									<CColumns columns="one" gap="sm">
+										<CRow justify="between" align="center" gap="sm">
+											<CMetadata data={{ items: [{ type: "category", label: item.category.label, href: item.category.href, display: "text" }] }} tone="brand" />
+											<CFeature icon={presentation.related.metricIcon} label={item.stars} appearance="caption" />
+										</CRow>
+										<CHeading level={3} variant="h5">{item.title}</CHeading>
+										<CText variant="body-sm" tone="muted">{item.summary}</CText>
+									</CColumns>
+								</div>
+							</CBox>
+						</CLink>
+					))}
+				</div>
 			</CColumns>
 		</LSection>
 	)}
