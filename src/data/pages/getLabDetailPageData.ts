@@ -1,6 +1,11 @@
 import { getLabDetailSettings, getLabs } from "@/data/cms";
-import type { LabDetailPageData, LabDetailTabData } from "@/types/components/pages/lab-detail/LabDetailPage.types";
-import type { PCardData } from "@/types/components/object/project/card/PCard.types";
+import type {
+	LabDetailGalleryItemData,
+	LabDetailPageData,
+	LabDetailRelatedData,
+	LabDetailResourceData,
+	LabDetailTabData,
+} from "@/types/components/pages/lab-detail/LabDetailPage.types";
 
 const formatTitleLabel = (template: string, title: string) =>
 	template.replace("{title}", title);
@@ -103,44 +108,35 @@ export async function getLabDetailPageData(
 		})),
 	};
 
-	const galleryCards: PCardData[] = lab.gallery.map((image, index) => {
+	const galleryItems: LabDetailGalleryItemData[] = lab.gallery.map((image, index) => {
 		const displayIndex = index + 1;
 		return {
 			href: image.src,
 			ariaLabel: formatIndexLabel(presentation.gallery.openImageLabelTemplate, displayIndex),
-			title: [image.caption ?? formatIndexLabel(presentation.gallery.imageTitleLabelTemplate, displayIndex)],
-			media: image,
+			title: image.caption ?? formatIndexLabel(presentation.gallery.imageTitleLabelTemplate, displayIndex),
+			image,
 		};
 	});
 
-	const resourceCards: PCardData[] = lab.resources.map((resource) => ({
+	const resources: LabDetailResourceData[] = lab.resources.map((resource) => ({
+		title: resource.title,
+		description: resource.description,
 		href: resource.href,
-		ariaLabel: resource.title,
-		title: [resource.title],
-		excerpt: resource.description,
 		icon: resource.icon,
-		action: {
-			label: resource.actionLabel,
-			href: resource.href,
-			icon: presentation.resources.actionIcon,
-		},
+		actionLabel: resource.actionLabel,
 	}));
 
-	const relatedCards: PCardData[] = relatedLabs.map((item) => ({
+	const relatedItems: LabDetailRelatedData[] = relatedLabs.map((item) => ({
 		href: item.href,
 		ariaLabel: item.title,
-		title: [item.title],
-		excerpt: item.summary,
-		media: item.image,
-		metadata: {
-			items: [{
-				type: "category",
-				label: item.category.label,
-				href: `${presentation.header.routes.categoryBase}/${item.category.slug}`,
-				display: presentation.related.categoryDisplay,
-			}],
+		title: item.title,
+		summary: item.summary,
+		image: item.image,
+		category: {
+			label: item.category.label,
+			href: `${presentation.header.routes.categoryBase}/${item.category.slug}`,
 		},
-		metrics: [{ icon: presentation.related.metricIcon, label: String(item.stars) }],
+		stars: String(item.stars),
 	}));
 
 	return {
@@ -149,8 +145,8 @@ export async function getLabDetailPageData(
 		header,
 		tabs,
 		sidebar,
-		galleryCards,
-		resourceCards,
-		relatedCards,
+		galleryItems,
+		resources,
+		relatedItems,
 	};
 }
