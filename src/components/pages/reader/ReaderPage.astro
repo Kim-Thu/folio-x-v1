@@ -2,18 +2,19 @@
 import LPage from "@/components/layout/LPage.astro";
 import LSection from "@/components/layout/LSection.astro";
 import PReader from "@/components/object/project/reader/PReader.astro";
+import { getPublicationDetailSettings } from "@/data/cms";
 import type { ReaderPageProps } from "@/types/components/pages/reader/ReaderPage.types";
-import type { LSectionSpacing, LSectionTheme } from "@/types/components/layout/LSection.types";
 
 const { data } = Astro.props as ReaderPageProps;
 const { entry, catalogSlug, chapter } = data;
 const configuredChapter = entry.detail?.reader?.find((item) => item.number === chapter);
-const readerPage = entry.detail?.readerPage;
-if (!readerPage) throw new Error(`Missing CMS reader page: ${catalogSlug}/${entry.slug}`);
 if (!configuredChapter) throw new Error(`Missing CMS reader chapter: ${catalogSlug}/${entry.slug}/${chapter}`);
 
-const config = readerPage.content;
-const indexHref = `/${catalogSlug}/${entry.slug}#chapters`;
+const presentation = await getPublicationDetailSettings();
+const readerPage = presentation.reader;
+const config = readerPage.labels;
+const collectionLabel = presentation.collections[catalogSlug].collectionLabel;
+const indexHref = `/${catalogSlug}/${entry.slug}#${presentation.chapters.id}`;
 const chapterHref = (number: number) => `/${catalogSlug}/${entry.slug}/chapter/${number}`;
 const configuredChapters = [...(entry.detail?.reader ?? [])].sort((a, b) => a.number - b.number);
 const chapterIndex = configuredChapters.findIndex((item) => item.number === chapter);
@@ -50,41 +51,37 @@ const metadataItems = [
 ---
 
 <LPage template={readerPage.template}>
-	<LSection
-		theme={readerPage.settings.theme as LSectionTheme}
-		spacing={readerPage.settings.spacing as LSectionSpacing}
-		container={readerPage.settings.container}
-	>
+	<LSection {...readerPage.settings}>
 		<PReader
 			data={{
 				breadcrumb: {
-					label: config.breadcrumbLabel,
+					label: config.breadcrumb,
 					items: [
-						{ label: config.collectionLabel, href: `/${catalogSlug}` },
+						{ label: collectionLabel, href: `/${catalogSlug}` },
 						{ label: entry.title, href: `/${catalogSlug}/${entry.slug}` },
 					],
-					current: `${config.chapterLabel} ${chapter}`,
+					current: `${config.chapter} ${chapter}`,
 				},
-				badge: `${config.chapterLabel} ${chapter}`,
+				badge: `${config.chapter} ${chapter}`,
 				title: configuredChapter.title,
 				metadata: { items: metadataItems },
 				views: configuredChapter.views ? `${configuredChapter.views} ${config.viewsSuffix}` : undefined,
 				content,
 				actions: {
-					label: config.actionsLabel,
-					index: { label: config.chapterListLabel, href: indexHref, icon: "listView", variant: "outline", size: "md" },
-					settingsLabel: config.settingsLabel,
-					themeLabel: config.themeLabel,
-					next: nextChapter ? { label: config.nextLabel, href: chapterHref(nextChapter.number), icon: "arrowRight", iconPosition: "end", variant: "primary", size: "md" } : undefined,
+					label: config.actions,
+					index: { label: config.chapterList, href: indexHref, icon: "listView", variant: "outline", size: "md" },
+					settingsLabel: config.settings,
+					themeLabel: config.theme,
+					next: nextChapter ? { label: config.next, href: chapterHref(nextChapter.number), icon: "arrowRight", iconPosition: "end", variant: "primary", size: "md" } : undefined,
 				},
-				share: { label: config.shareLabel, links: [] },
-				reactions: { label: config.reactionsLabel, items: [] },
-				bookmarkLabel: config.bookmarkLabel,
+				share: { label: config.share, links: [] },
+				reactions: { label: config.reactions, items: [] },
+				bookmarkLabel: config.bookmark,
 				navigation: {
-					label: config.navigationLabel,
-					previous: previousChapter ? { label: config.previousLabel, href: chapterHref(previousChapter.number), icon: "arrowLeft", variant: "outline", size: "md" } : undefined,
-					index: { label: config.chapterListLabel, href: indexHref, icon: "listView", variant: "outline", size: "md" },
-					next: nextChapter ? { label: config.nextLabel, href: chapterHref(nextChapter.number), icon: "arrowRight", iconPosition: "end", variant: "primary", size: "md" } : undefined,
+					label: config.navigation,
+					previous: previousChapter ? { label: config.previous, href: chapterHref(previousChapter.number), icon: "arrowLeft", variant: "outline", size: "md" } : undefined,
+					index: { label: config.chapterList, href: indexHref, icon: "listView", variant: "outline", size: "md" },
+					next: nextChapter ? { label: config.next, href: chapterHref(nextChapter.number), icon: "arrowRight", iconPosition: "end", variant: "primary", size: "md" } : undefined,
 				},
 			}}
 		/>
