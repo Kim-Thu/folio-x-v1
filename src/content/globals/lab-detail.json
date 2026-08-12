@@ -96,12 +96,6 @@
     "header": {
       "appearance": "compact",
       "headingLevel": 2
-    },
-    "cards": {
-      "template": "media-only",
-      "layout": "grid",
-      "columns": 5,
-      "gap": "sm"
     }
   },
   "resources": {
@@ -120,12 +114,6 @@
     "header": {
       "appearance": "compact",
       "headingLevel": 2
-    },
-    "cards": {
-      "template": "icon-summary",
-      "layout": "grid",
-      "columns": 4,
-      "gap": "sm"
     }
   },
   "related": {
@@ -134,7 +122,6 @@
     "actionLabel": "View all Labs",
     "actionIcon": "arrowRight",
     "metricIcon": "star",
-    "categoryDisplay": "text",
     "settings": {
       "theme": "canvas",
       "spacing": "compact",
@@ -147,17 +134,6 @@
     "header": {
       "appearance": "compact",
       "headingLevel": 2
-    },
-    "cards": {
-      "template": "compact-media",
-      "layout": "grid",
-      "columns": 4,
-      "gap": "sm"
-    },
-    "slots": {
-      "excerpt": true,
-      "tags": false,
-      "action": false
     }
   }
 }
