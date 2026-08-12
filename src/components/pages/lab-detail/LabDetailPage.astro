@@ -12,7 +12,6 @@ import PCard from "@/components/object/project/card/PCard.astro";
 import PPageHeader from "@/components/object/project/page-header/PPageHeader.astro";
 import PSectionHeader from "@/components/object/project/section-header/PSectionHeader.astro";
 import type { LabDetailPageProps } from "@/types/components/pages/lab-detail/LabDetailPage.types";
-import type { PArticleBlock } from "@/types/components/object/project/article/PArticle.types";
 import type { PCardData } from "@/types/components/object/project/card/PCard.types";
 
 const { data } = Astro.props as LabDetailPageProps;
@@ -28,7 +27,11 @@ const actions = [
 
 const tabs = [
 	...lab.content.flatMap((block) => {
-		if ((block.type === "heading" || block.type === "feature-grid") && block.navigationLabel) {
+		if (
+			(block.type === "heading" || block.type === "feature-grid" || block.type === "metric-grid")
+			&& block.navigationLabel
+			&& block.id
+		) {
 			return [{ label: block.navigationLabel, value: block.id, href: `#${block.id}` }];
 		}
 		return [];
@@ -37,33 +40,10 @@ const tabs = [
 	...(lab.resources.length > 0 ? [{ label: presentation.resources.title, value: presentation.resources.id, href: `#${presentation.resources.id}` }] : []),
 ];
 
-const articleBlocks: PArticleBlock[] = [];
-for (const block of lab.content) {
-	if (block.type === "heading") {
-		articleBlocks.push({ id: block.id, title: block.text, paragraphs: [] });
-		continue;
-	}
-
-	if (block.type === "feature-grid") {
-		articleBlocks.push({
-			id: block.id,
-			title: block.title,
-			paragraphs: [],
-			features: block.items.map((item) => ({ icon: item.icon, label: `${item.title} — ${item.description}` })),
-		});
-		continue;
-	}
-
-	const current = articleBlocks.at(-1);
-	if (!current) continue;
-	if (block.type === "paragraph") current.paragraphs.push(block.text);
-	if (block.type === "image") current.image = block.image;
-}
-
 const galleryCards: PCardData[] = lab.gallery.map((image, index) => ({
 	href: image.src,
 	ariaLabel: `${presentation.gallery.openImageLabel} ${index + 1}`,
-	title: [`${presentation.gallery.imageTitleLabel} ${index + 1}`],
+	title: [image.caption ?? `${presentation.gallery.imageTitleLabel} ${index + 1}`],
 	media: image,
 }));
 
@@ -74,7 +54,7 @@ const resourceCards: PCardData[] = lab.resources.map((resource) => ({
 	excerpt: resource.description,
 	icon: resource.icon,
 	action: {
-		label: resource.title,
+		label: resource.actionLabel ?? resource.title,
 		href: resource.href,
 		icon: presentation.resources.actionIcon,
 	},
@@ -148,7 +128,7 @@ const relatedCards: PCardData[] = relatedLabs.map((item) => ({
 				</CBox>
 			</CColumns>
 
-			<PArticle appearance={presentation.content.appearance} blocks={articleBlocks} />
+			<PArticle template="flow" content={lab.content} />
 		</LSidebar>
 	</LSection>
 
