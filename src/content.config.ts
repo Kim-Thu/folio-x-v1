@@ -3,6 +3,7 @@ import { glob } from "astro/loaders";
 import { projectEntrySchema } from "@/content/project-schema";
 import { labEntrySchema } from "@/content/lab-schema";
 import { labDetailSettingsSchema } from "@/content/lab-detail-settings-schema";
+import { publicationEntrySchema } from "@/content/publication-schema";
 import { publicationDetailSettingsSchema } from "@/content/publication-detail-settings-schema";
 import {
   blogEntrySchema,
@@ -12,7 +13,6 @@ import {
   interfaceSettingsSchema,
   navigationSettingsSchema,
   productEntrySchema,
-  publicationEntrySchema,
   siteSettingsSchema,
   systemStatesSettingsSchema,
 } from "@/content/schemas";
