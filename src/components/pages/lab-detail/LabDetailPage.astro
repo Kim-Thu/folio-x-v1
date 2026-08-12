@@ -12,105 +12,29 @@ import PCard from "@/components/object/project/card/PCard.astro";
 import PPageHeader from "@/components/object/project/page-header/PPageHeader.astro";
 import PSectionHeader from "@/components/object/project/section-header/PSectionHeader.astro";
 import type { LabDetailPageProps } from "@/types/components/pages/lab-detail/LabDetailPage.types";
-import type { PCardData } from "@/types/components/object/project/card/PCard.types";
 
 const { data } = Astro.props as LabDetailPageProps;
-const { lab, relatedLabs, presentation } = data;
-const formatTitleLabel = (template: string) => template.replace("{title}", lab.title);
-const formatIndexLabel = (template: string, index: number) => template.replace("{index}", String(index));
-const metricValue = (source: "stars" | "forks" | "updatedLabel") =>
-	source === "updatedLabel" ? lab.updatedLabel : String(lab[source]);
-
-const actions = [
-	...(lab.liveUrl ? [{ label: presentation.header.labels.live, href: lab.liveUrl, ...presentation.header.actions.live }] : []),
-	...(lab.sourceUrl ? [{ label: presentation.header.labels.source, href: lab.sourceUrl, ...presentation.header.actions.source }] : []),
-];
-
-const tabs = [
-	...lab.content.flatMap((block) => {
-		if (
-			(block.type === "heading" || block.type === "feature-grid" || block.type === "metric-grid")
-			&& block.navigationLabel
-			&& block.id
-		) {
-			return [{ label: block.navigationLabel, value: block.id, href: `#${block.id}` }];
-		}
-		return [];
-	}),
-	...(lab.gallery.length > 0 ? [{ label: presentation.gallery.title, value: presentation.gallery.id, href: `#${presentation.gallery.id}` }] : []),
-	...(lab.resources.length > 0 ? [{ label: presentation.resources.title, value: presentation.resources.id, href: `#${presentation.resources.id}` }] : []),
-];
-
-const galleryCards: PCardData[] = lab.gallery.map((image, index) => {
-	const displayIndex = index + 1;
-	return {
-		href: image.src,
-		ariaLabel: formatIndexLabel(presentation.gallery.openImageLabelTemplate, displayIndex),
-		title: [image.caption ?? formatIndexLabel(presentation.gallery.imageTitleLabelTemplate, displayIndex)],
-		media: image,
-	};
-});
-
-const resourceCards: PCardData[] = lab.resources.map((resource) => ({
-	href: resource.href,
-	ariaLabel: resource.title,
-	title: [resource.title],
-	excerpt: resource.description,
-	icon: resource.icon,
-	action: {
-		label: resource.actionLabel,
-		href: resource.href,
-		icon: presentation.resources.actionIcon,
-	},
-}));
-
-const relatedCards: PCardData[] = relatedLabs.map((item) => ({
-	href: item.href,
-	ariaLabel: item.title,
-	title: [item.title],
-	excerpt: item.summary,
-	media: item.image,
-	metadata: {
-		items: [{
-			type: "category",
-			label: item.category.label,
-			href: `${presentation.header.routes.categoryBase}/${item.category.slug}`,
-			display: presentation.related.categoryDisplay,
-		}],
-	},
-	metrics: [{ icon: presentation.related.metricIcon, label: String(item.stars) }],
-}));
+const {
+	lab,
+	presentation,
+	header,
+	tabs,
+	sidebar,
+	galleryCards,
+	resourceCards,
+	relatedCards,
+} = data;
 ---
 
 <LPage template={presentation.page.template}>
 	<LSection id={presentation.header.id} {...presentation.header.settings}>
-		<PPageHeader
-			template={presentation.header.template}
-			data={{
-				breadcrumb: {
-					label: presentation.header.labels.breadcrumb,
-					items: [
-						{ label: presentation.header.labels.collection, href: presentation.header.routes.base },
-						{ label: lab.category.label, href: `${presentation.header.routes.categoryBase}/${lab.category.slug}` },
-					],
-					current: lab.title,
-				},
-				image: lab.image,
-				category: { label: lab.category.label, href: `${presentation.header.routes.categoryBase}/${lab.category.slug}` },
-				badge: lab.statusLabel,
-				title: lab.title,
-				description: lab.summary,
-				metrics: presentation.header.metrics.map((metric) => ({ icon: metric.icon, label: metricValue(metric.source) })),
-				actionsLabel: formatTitleLabel(presentation.header.labels.actionsTemplate),
-				actions,
-			}}
-		/>
+		<PPageHeader template={presentation.header.template} data={header} />
 	</LSection>
 
 	{tabs.length > 0 && (
 		<LSection {...presentation.navigation.settings}>
 			<CTabList
-				label={formatTitleLabel(presentation.navigation.labelTemplate)}
+				label={presentation.navigation.labelTemplate.replace("{title}", lab.title)}
 				appearance={presentation.navigation.appearance}
 				activeValue={tabs[0]?.value}
 				tone={presentation.navigation.tone}
@@ -121,7 +45,7 @@ const relatedCards: PCardData[] = relatedLabs.map((item) => ({
 
 	<LSection id={presentation.content.id} {...presentation.content.settings}>
 		<LSidebar
-			label={formatTitleLabel(presentation.sidebar.labelTemplate)}
+			label={sidebar.label}
 			position={presentation.sidebar.position}
 			sticky={presentation.sidebar.sticky}
 		>
@@ -137,14 +61,8 @@ const relatedCards: PCardData[] = relatedLabs.map((item) => ({
 							appearance={presentation.sidebar.header.appearance}
 							headingLevel={presentation.sidebar.header.headingLevel}
 						/>
-						<CDescriptionList items={lab.facts} />
-						<CTags
-							label={formatTitleLabel(presentation.sidebar.labels.technologyTemplate)}
-							items={lab.technologies.map((technology) => ({
-								label: technology.label,
-								href: `${presentation.header.routes.technologyBase}/${technology.slug}`,
-							}))}
-						/>
+						<CDescriptionList items={sidebar.facts} />
+						<CTags label={sidebar.technologyLabel} items={sidebar.technologies} />
 					</CColumns>
 				</CBox>
 			</CColumns>
