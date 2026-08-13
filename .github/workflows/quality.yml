@@ -31,26 +31,91 @@ jobs:
           node-version: 24
           cache: npm
 
-      - name: Add canonical Comics and Novels editors
+      - name: Add canonical Blog editor
         if: github.event_name == 'pull_request'
         run: |
           node --input-type=module <<'EOF'
           import { readFile, writeFile } from 'node:fs/promises';
+
           const path = 'public/admin/config.yml';
           let config = await readFile(path, 'utf8');
-          if (!config.includes('folder: src/content/publications/comics')) {
-            config += `\n\n  - name: comics\n    label: Comics\n    label_singular: Comic\n    folder: src/content/publications/comics\n    create: true\n    extension: json\n    format: json\n    slug: "{{slug}}"\n    identifier_field: slug\n    summary: "{{title}} — {{status}}"\n    fields: &publication_fields\n      - { label: Order, name: order, widget: number, value_type: int, min: 1 }\n      - { label: Slug, name: slug, widget: string }\n      - { label: Title, name: title, widget: string }\n      - { label: Summary, name: summary, widget: text }\n      - label: Cover\n        name: cover\n        widget: object\n        fields: *image_fields\n      - label: Genres\n        name: genres\n        widget: list\n        fields: *taxonomy_term_fields\n      - { label: Status, name: status, widget: select, options: [complete, ongoing] }\n      - { label: Rating, name: rating, widget: number, value_type: float, min: 0, max: 5 }\n      - { label: Views, name: views, widget: string }\n      - { label: Chapters, name: chapters, widget: number, value_type: int, min: 0 }\n      - { label: Updated label, name: updatedLabel, widget: string }\n      - { label: Author, name: author, widget: string }\n      - label: Detail\n        name: detail\n        widget: object\n        fields:\n          - { label: Language, name: language, widget: string, required: false }\n          - { label: Followers, name: followers, widget: string, required: false }\n          - label: Description\n            name: description\n            widget: list\n            required: false\n            field: { label: Paragraph, name: paragraph, widget: text }\n          - label: Tags\n            name: tags\n            widget: list\n            required: false\n            fields: *taxonomy_term_fields\n          - label: Reader chapters\n            name: reader\n            widget: list\n            required: false\n            summary: "#{{fields.number}} — {{fields.title}}"\n            types:\n              - label: Prose chapter\n                name: prose\n                widget: object\n                fields:\n                  - { label: Kind, name: kind, widget: hidden, default: prose }\n                  - { label: Number, name: number, widget: number, value_type: int, min: 1 }\n                  - { label: Title, name: title, widget: string }\n                  - { label: Published at, name: publishedAt, widget: datetime, date_format: YYYY-MM-DD, time_format: false, format: YYYY-MM-DD }\n                  - { label: Published label, name: publishedLabel, widget: string }\n                  - { label: Read time, name: readTime, widget: string }\n                  - { label: Views, name: views, widget: string }\n                  - label: Prose\n                    name: prose\n                    widget: list\n                    fields:\n                      - { label: Kind, name: kind, widget: select, required: false, options: [paragraph, emphasis, separator] }\n                      - { label: Text, name: text, widget: text }\n              - label: Sequential media chapter\n                name: sequential_media\n                widget: object\n                fields:\n                  - { label: Kind, name: kind, widget: hidden, default: sequential-media }\n                  - { label: Number, name: number, widget: number, value_type: int, min: 1 }\n                  - { label: Title, name: title, widget: string }\n                  - { label: Published at, name: publishedAt, widget: datetime, date_format: YYYY-MM-DD, time_format: false, format: YYYY-MM-DD }\n                  - { label: Published label, name: publishedLabel, widget: string }\n                  - { label: Read time, name: readTime, widget: string }\n                  - { label: Views, name: views, widget: string }\n                  - label: Images\n                    name: images\n                    widget: list\n                    fields: *image_fields\n\n  - name: novels\n    label: Novels\n    label_singular: Novel\n    folder: src/content/publications/novels\n    create: true\n    extension: json\n    format: json\n    slug: "{{slug}}"\n    identifier_field: slug\n    summary: "{{title}} — {{status}}"\n    fields: *publication_fields\n`;
+
+          if (!config.includes('folder: src/content/blog')) {
+            const marker = '\n\n  - name: comics\n';
+            if (!config.includes(marker)) {
+              throw new Error('Cannot locate Comics collection insertion point');
+            }
+
+            const blogCollection = `
+
+  - name: blog
+    label: Blog
+    label_singular: Blog post
+    folder: src/content/blog
+    create: true
+    extension: json
+    format: json
+    slug: "{{slug}}"
+    identifier_field: slug
+    summary: "{{title}} — {{category}}"
+    fields:
+      - { label: Order, name: order, widget: number, value_type: int, min: 1 }
+      - { label: Reading minutes, name: readingMinutes, widget: number, value_type: int, min: 1 }
+      - { label: Slug, name: slug, widget: string }
+      - { label: Category, name: category, widget: string }
+      - { label: Category slug, name: categorySlug, widget: string }
+      - label: Tags
+        name: tags
+        widget: list
+        fields: *taxonomy_term_fields
+      - { label: Title, name: title, widget: string }
+      - { label: Excerpt, name: excerpt, widget: text }
+      - { label: Published at, name: publishedAt, widget: datetime, date_format: YYYY-MM-DD, time_format: false, format: YYYY-MM-DD }
+      - { label: Author, name: author, widget: string }
+      - { label: Image URL, name: image, widget: string }
+      - { label: Image alt, name: imageAlt, widget: string }
+      - label: Content
+        name: content
+        widget: list
+        summary: "{{fields.type}} — {{fields.text}}"
+        types:
+          - label: Heading
+            name: heading
+            widget: object
+            fields:
+              - { label: Type, name: type, widget: hidden, default: heading }
+              - { label: ID, name: id, widget: string }
+              - { label: Level, name: level, widget: select, options: [2, 3] }
+              - { label: Text, name: text, widget: string }
+          - label: Paragraph
+            name: paragraph
+            widget: object
+            fields:
+              - { label: Type, name: type, widget: hidden, default: paragraph }
+              - { label: Text, name: text, widget: text }
+          - label: Image
+            name: image
+            widget: object
+            fields:
+              - { label: Type, name: type, widget: hidden, default: image }
+              - label: Image
+                name: image
+                widget: object
+                fields: *image_fields
+`;
+
+            config = config.replace(marker, `${blogCollection}${marker}`);
+            await writeFile(path, config, 'utf8');
           }
-          await writeFile(path, config, 'utf8');
           EOF
 
           if git diff --quiet -- public/admin/config.yml; then
-            echo "Decap publication collections are already canonical"
+            echo "Decap Blog collection is already canonical"
           else
             git config user.name "github-actions[bot]"
             git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
             git add public/admin/config.yml
-            git commit -m "add canonical Decap publication editors"
+            git commit -m "add canonical Decap blog editor"
             git push origin HEAD:${{ github.head_ref }}
           fi
 
