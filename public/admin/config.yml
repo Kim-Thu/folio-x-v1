@@ -773,3 +773,100 @@ collections:
             widget: list
             max: 4
             field: { label: Lab slug, name: slug, widget: string }
+
+
+  - name: comics
+    label: Comics
+    label_singular: Comic
+    folder: src/content/publications/comics
+    create: true
+    extension: json
+    format: json
+    slug: "{{slug}}"
+    identifier_field: slug
+    summary: "{{title}} — {{status}}"
+    fields: &publication_fields
+      - { label: Order, name: order, widget: number, value_type: int, min: 1 }
+      - { label: Slug, name: slug, widget: string }
+      - { label: Title, name: title, widget: string }
+      - { label: Summary, name: summary, widget: text }
+      - label: Cover
+        name: cover
+        widget: object
+        fields: *image_fields
+      - label: Genres
+        name: genres
+        widget: list
+        fields: *taxonomy_term_fields
+      - { label: Status, name: status, widget: select, options: [complete, ongoing] }
+      - { label: Rating, name: rating, widget: number, value_type: float, min: 0, max: 5 }
+      - { label: Views, name: views, widget: string }
+      - { label: Chapters, name: chapters, widget: number, value_type: int, min: 0 }
+      - { label: Updated label, name: updatedLabel, widget: string }
+      - { label: Author, name: author, widget: string }
+      - label: Detail
+        name: detail
+        widget: object
+        fields:
+          - { label: Language, name: language, widget: string, required: false }
+          - { label: Followers, name: followers, widget: string, required: false }
+          - label: Description
+            name: description
+            widget: list
+            required: false
+            field: { label: Paragraph, name: paragraph, widget: text }
+          - label: Tags
+            name: tags
+            widget: list
+            required: false
+            fields: *taxonomy_term_fields
+          - label: Reader chapters
+            name: reader
+            widget: list
+            required: false
+            summary: "#{{fields.number}} — {{fields.title}}"
+            types:
+              - label: Prose chapter
+                name: prose
+                widget: object
+                fields:
+                  - { label: Kind, name: kind, widget: hidden, default: prose }
+                  - { label: Number, name: number, widget: number, value_type: int, min: 1 }
+                  - { label: Title, name: title, widget: string }
+                  - { label: Published at, name: publishedAt, widget: datetime, date_format: YYYY-MM-DD, time_format: false, format: YYYY-MM-DD }
+                  - { label: Published label, name: publishedLabel, widget: string }
+                  - { label: Read time, name: readTime, widget: string }
+                  - { label: Views, name: views, widget: string }
+                  - label: Prose
+                    name: prose
+                    widget: list
+                    fields:
+                      - { label: Kind, name: kind, widget: select, required: false, options: [paragraph, emphasis, separator] }
+                      - { label: Text, name: text, widget: text }
+              - label: Sequential media chapter
+                name: sequential_media
+                widget: object
+                fields:
+                  - { label: Kind, name: kind, widget: hidden, default: sequential-media }
+                  - { label: Number, name: number, widget: number, value_type: int, min: 1 }
+                  - { label: Title, name: title, widget: string }
+                  - { label: Published at, name: publishedAt, widget: datetime, date_format: YYYY-MM-DD, time_format: false, format: YYYY-MM-DD }
+                  - { label: Published label, name: publishedLabel, widget: string }
+                  - { label: Read time, name: readTime, widget: string }
+                  - { label: Views, name: views, widget: string }
+                  - label: Images
+                    name: images
+                    widget: list
+                    fields: *image_fields
+
+  - name: novels
+    label: Novels
+    label_singular: Novel
+    folder: src/content/publications/novels
+    create: true
+    extension: json
+    format: json
+    slug: "{{slug}}"
+    identifier_field: slug
+    summary: "{{title}} — {{status}}"
+    fields: *publication_fields
