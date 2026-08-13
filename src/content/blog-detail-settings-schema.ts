@@ -6,6 +6,11 @@ const sectionSettingsSchema = z.object({
   container: z.enum(["site", "content", "none"]),
 });
 
+const columnsSchema = z.object({
+  columns: z.enum(["one", "two", "three", "four", "five", "compact-three", "twelve"]),
+  gap: z.enum(["none", "xs", "sm", "md", "lg", "xl"]),
+});
+
 export const blogDetailSettingsSchema = z.object({
   page: z.object({ template: z.enum(["fluid", "contained", "boxed", "sidebar", "centered"]) }),
   section: z.object({ id: z.string().min(1), settings: sectionSettingsSchema }),
@@ -26,13 +31,19 @@ export const blogDetailSettingsSchema = z.object({
   }),
   sidebar: z.object({
     label: z.string().min(1),
+    position: z.enum(["start", "end"]),
+    sticky: z.boolean(),
+    columns: columnsSchema,
     author: z.object({
       label: z.string().min(1),
       role: z.string().min(1),
       bio: z.string().min(1),
       actionLabel: z.string().min(1),
     }),
-    tocLabel: z.string().min(1),
+    toc: z.object({
+      label: z.string().min(1),
+      appearance: z.enum(["plain", "panel"]),
+    }),
     relatedTitle: z.string().min(1),
     relatedLimit: z.number().int().positive().max(8),
     relatedCards: z.object({
@@ -40,6 +51,28 @@ export const blogDetailSettingsSchema = z.object({
       metadataDisplay: z.literal("text"),
       imageWidth: z.number().int().positive(),
       imageHeight: z.number().int().positive(),
+      box: z.object({
+        surface: z.enum(["plain", "accent", "bordered", "canvas", "dark", "glass", "glass-dark", "soft"]),
+        radius: z.enum(["none", "md", "lg"]),
+        spacing: z.enum(["none", "xs", "sm", "md", "lg", "xl"]),
+      }),
+      columns: columnsSchema,
+      heading: z.object({
+        appearance: z.enum(["default", "compact"]),
+        level: z.union([z.literal(1), z.literal(2), z.literal(3), z.literal(4), z.literal(5), z.literal(6)]),
+      }),
+      card: z.object({
+        template: z.literal("compact-media"),
+        layout: z.literal("list"),
+        columns: z.literal(1),
+        gap: z.enum(["none", "sm", "md", "lg", "xl"]),
+        slots: z.object({
+          excerpt: z.boolean(),
+          tags: z.boolean(),
+          metrics: z.boolean(),
+          action: z.boolean(),
+        }),
+      }),
     }),
     newsletter: z.object({
       template: z.literal("form-first"),
@@ -56,5 +89,8 @@ export const blogDetailSettingsSchema = z.object({
       }),
     }),
   }),
-  content: z.object({ template: z.literal("flow") }),
+  content: z.object({
+    template: z.literal("flow"),
+    columns: columnsSchema,
+  }),
 });
