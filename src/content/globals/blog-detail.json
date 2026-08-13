@@ -29,20 +29,48 @@
   },
   "sidebar": {
     "label": "Article supporting information",
+    "position": "end",
+    "sticky": true,
+    "columns": { "columns": "one", "gap": "md" },
     "author": {
       "label": "Author",
       "role": "Writer at NKT Studio",
       "bio": "Writing about product thinking, engineering, and practical systems.",
       "actionLabel": "View all articles"
     },
-    "tocLabel": "Article contents",
+    "toc": {
+      "label": "Article contents",
+      "appearance": "panel"
+    },
     "relatedTitle": "Related articles",
     "relatedLimit": 4,
     "relatedCards": {
       "separator": "dot",
       "metadataDisplay": "text",
       "imageWidth": 640,
-      "imageHeight": 420
+      "imageHeight": 420,
+      "box": {
+        "surface": "glass",
+        "radius": "md",
+        "spacing": "md"
+      },
+      "columns": { "columns": "one", "gap": "sm" },
+      "heading": {
+        "appearance": "compact",
+        "level": 2
+      },
+      "card": {
+        "template": "compact-media",
+        "layout": "list",
+        "columns": 1,
+        "gap": "sm",
+        "slots": {
+          "excerpt": false,
+          "tags": false,
+          "metrics": false,
+          "action": false
+        }
+      }
     },
     "newsletter": {
       "template": "form-first",
@@ -68,5 +96,8 @@
       }
     }
   },
-  "content": { "template": "flow" }
+  "content": {
+    "template": "flow",
+    "columns": { "columns": "one", "gap": "lg" }
+  }
 }
