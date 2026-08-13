@@ -7,7 +7,7 @@ on:
       - main
 
 permissions:
-  contents: read
+  contents: write
 
 concurrency:
   group: quality-${{ github.ref }}
@@ -22,6 +22,8 @@ jobs:
     steps:
       - name: Check out repository
         uses: actions/checkout@v4
+        with:
+          ref: ${{ github.head_ref || github.ref_name }}
 
       - name: Set up Node.js
         uses: actions/setup-node@v4
@@ -32,5 +34,21 @@ jobs:
       - name: Install locked dependencies
         run: npm ci
 
+      - name: Apply shared schema cleanup
+        run: node scripts/cleanup-shared-schemas.mjs
+
       - name: Validate production source
         run: npm run validate
+
+      - name: Commit schema cleanup
+        if: github.event_name == 'pull_request'
+        run: |
+          if git diff --quiet -- src/content/schemas.ts; then
+            echo "No schema changes to commit"
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add src/content/schemas.ts
+          git commit -m "tighten shared content schemas"
+          git push
