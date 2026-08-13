@@ -13,15 +13,14 @@ import PPageHeader from "@/components/object/project/page-header/PPageHeader.ast
 import PSectionHeader from "@/components/object/project/section-header/PSectionHeader.astro";
 import { mapInsightToCard } from "@/data/mappers/card";
 import type { InsightDetailPageProps } from "@/types/components/pages/insight-detail/InsightDetailPage.types";
-import type { PPageHeaderProps } from "@/types/components/object/project/page-header/PPageHeader.types";
-import type { PArticleFlowProps } from "@/types/components/object/project/article/PArticle.types";
+import type { PPageHeaderEditorialData } from "@/types/components/object/project/page-header/PPageHeader.types";
 
 const { data } = Astro.props as InsightDetailPageProps;
 const { post, relatedPosts, presentation } = data;
 const header = presentation.header;
 const sidebar = presentation.sidebar;
 
-const headerData = {
+const headerData: PPageHeaderEditorialData = {
 	breadcrumb: {
 		label: header.breadcrumbLabel,
 		items: [
@@ -57,9 +56,8 @@ const headerData = {
 			{ label: header.share.copyLabel, href: post.href, icon: "link" },
 		],
 	},
-} as unknown as PPageHeaderProps["data"];
+};
 
-const flowContent = post.content as PArticleFlowProps["content"];
 const tocItems = post.content
 	.filter((node) => node.type === "heading")
 	.map((node) => ({ label: node.text, href: `#${node.id}` }));
@@ -77,8 +75,8 @@ const relatedCards = relatedPosts.map((insight) =>
 
 <LPage template={presentation.page.template}>
 	<LSection id={presentation.section.id} {...presentation.section.settings}>
-		<LSidebar label={sidebar.label} position="end" sticky>
-			<CColumns slot="sidebar" columns="one" gap="md">
+		<LSidebar label={sidebar.label} position={sidebar.position} sticky={sidebar.sticky}>
+			<CColumns slot="sidebar" columns={sidebar.columns.columns} gap={sidebar.columns.gap}>
 				<CProfile
 					label={sidebar.author.label}
 					name={post.author}
@@ -89,20 +87,24 @@ const relatedCards = relatedPosts.map((insight) =>
 				/>
 
 				{tocItems.length > 0 && (
-					<CTOC appearance="panel" label={sidebar.tocLabel} items={tocItems} />
+					<CTOC appearance={sidebar.toc.appearance} label={sidebar.toc.label} items={tocItems} />
 				)}
 
 				{relatedCards.length > 0 && (
-					<CBox surface="glass" radius="md" spacing="md">
-						<CColumns columns="one" gap="sm">
-							<PSectionHeader data={{ title: sidebar.relatedTitle }} appearance="compact" headingLevel={2} />
+					<CBox {...sidebar.relatedCards.box}>
+						<CColumns columns={sidebar.relatedCards.columns.columns} gap={sidebar.relatedCards.columns.gap}>
+							<PSectionHeader
+								data={{ title: sidebar.relatedTitle }}
+								appearance={sidebar.relatedCards.heading.appearance}
+								headingLevel={sidebar.relatedCards.heading.level}
+							/>
 							<PCard
-								template="compact-media"
-								layout="list"
-								columns={1}
-								gap="sm"
+								template={sidebar.relatedCards.card.template}
+								layout={sidebar.relatedCards.card.layout}
+								columns={sidebar.relatedCards.card.columns}
+								gap={sidebar.relatedCards.card.gap}
 								items={relatedCards}
-								slots={{ excerpt: false, tags: false, metrics: false, action: false }}
+								slots={sidebar.relatedCards.card.slots}
 							/>
 						</CColumns>
 					</CBox>
@@ -111,9 +113,9 @@ const relatedCards = relatedPosts.map((insight) =>
 				<PAdvertisement template={sidebar.newsletter.template} data={sidebar.newsletter} />
 			</CColumns>
 
-			<CColumns columns="one" gap="lg">
-				<PPageHeader template={header.template as PPageHeaderProps["template"]} data={headerData} />
-				<PArticle template={presentation.content.template} content={flowContent} />
+			<CColumns columns={presentation.content.columns.columns} gap={presentation.content.columns.gap}>
+				<PPageHeader template={header.template} data={headerData} />
+				<PArticle template={presentation.content.template} content={post.content} />
 			</CColumns>
 		</LSidebar>
 	</LSection>
