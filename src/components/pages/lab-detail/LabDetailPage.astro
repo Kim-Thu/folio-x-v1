@@ -23,16 +23,7 @@ import PSectionHeader from "@/components/object/project/section-header/PSectionH
 import type { LabDetailPageProps } from "@/types/components/pages/lab-detail/LabDetailPage.types";
 
 const { data } = Astro.props as LabDetailPageProps;
-const {
-	lab,
-	presentation,
-	header,
-	tabs,
-	sidebar,
-	galleryItems,
-	resources,
-	relatedItems,
-} = data;
+const { lab, presentation, header, tabs, sidebar, galleryItems, resources, relatedItems } = data;
 ---
 
 <LPage template={presentation.page.template}>
@@ -42,71 +33,36 @@ const {
 
 	{tabs.length > 0 && (
 		<LSection {...presentation.navigation.settings}>
-			<div class="border-y border-black/10 bg-white">
-				<CTabList
-					label={presentation.navigation.labelTemplate.replace("{title}", lab.title)}
-					appearance={presentation.navigation.appearance}
-					activeValue={tabs[0]?.value}
-					tone={presentation.navigation.tone}
-					{tabs}
-				/>
+			<div class={presentation.navigation.frameClass}>
+				<CTabList label={presentation.navigation.labelTemplate.replace("{title}", lab.title)} appearance={presentation.navigation.appearance} activeValue={tabs[0]?.value} tone={presentation.navigation.tone} {tabs} />
 			</div>
 		</LSection>
 	)}
 
 	<LSection id={presentation.content.id} {...presentation.content.settings}>
-		<LSidebar
-			label={sidebar.label}
-			position={presentation.sidebar.position}
-			sticky={presentation.sidebar.sticky}
-		>
+		<LSidebar label={sidebar.label} position={presentation.sidebar.position} sticky={presentation.sidebar.sticky}>
 			<CColumns slot="sidebar" {...presentation.sidebar.stack}>
-				<CBox
-					surface={presentation.sidebar.panel.surface}
-					radius={presentation.sidebar.panel.radius}
-					spacing={presentation.sidebar.panel.spacing}
-				>
+				<CBox surface={presentation.sidebar.panel.surface} radius={presentation.sidebar.panel.radius} spacing={presentation.sidebar.panel.spacing}>
 					<CColumns {...presentation.sidebar.panel.stack}>
-						<PSectionHeader
-							data={{ title: presentation.sidebar.labels.projectInformation }}
-							appearance={presentation.sidebar.header.appearance}
-							headingLevel={presentation.sidebar.header.headingLevel}
-						/>
-						<div class="border-t border-black/10 pt-4">
-							<CDescriptionList items={sidebar.facts} />
-						</div>
-						<div class="border-t border-black/10 pt-4">
-							<CTags label={sidebar.technologyLabel} items={sidebar.technologies} />
-						</div>
+						<PSectionHeader data={{ title: presentation.sidebar.labels.projectInformation }} appearance={presentation.sidebar.header.appearance} headingLevel={presentation.sidebar.header.headingLevel} />
+						<div class={presentation.sidebar.panel.dividerClass}><CDescriptionList items={sidebar.facts} /></div>
+						<div class={presentation.sidebar.panel.dividerClass}><CTags label={sidebar.technologyLabel} items={sidebar.technologies} /></div>
 					</CColumns>
 				</CBox>
 			</CColumns>
-
-			<div class="min-w-0 max-w-3xl">
-				<PArticle template={presentation.content.article.template} content={lab.content} />
-			</div>
+			<div class={presentation.content.article.frameClass}><PArticle template={presentation.content.article.template} content={lab.content} /></div>
 		</LSidebar>
 	</LSection>
 
 	{galleryItems.length > 0 && (
 		<LSection id={presentation.gallery.id} {...presentation.gallery.settings}>
 			<CColumns {...presentation.gallery.stack}>
-				<PSectionHeader
-					data={{ title: presentation.gallery.title }}
-					appearance={presentation.gallery.header.appearance}
-					headingLevel={presentation.gallery.header.headingLevel}
-				/>
-				<div class="grid grid-cols-2 gap-3 md:grid-cols-3 lg:grid-cols-5">
+				<PSectionHeader data={{ title: presentation.gallery.title }} appearance={presentation.gallery.header.appearance} headingLevel={presentation.gallery.header.headingLevel} />
+				<div class={presentation.gallery.gridClass}>
 					{galleryItems.map((item) => (
-						<CLink href={item.href} aria-label={item.ariaLabel} class="group block overflow-hidden rounded-md bg-black/5">
-							<CMedia ratio="editorial">
-								<CImage {...item.image} variant="fill" class="transition-transform duration-300 group-hover:scale-[1.02]" />
-							</CMedia>
-							{item.title && (
-								<div class="border-t border-black/10 px-3 py-2">
-									<CText variant="caption" tone="muted">{item.title}</CText>
-								</div>
-							)}
+						<CLink href={item.href} aria-label={item.ariaLabel} class={presentation.gallery.linkClass}>
+							<CMedia ratio={presentation.gallery.mediaRatio}><CImage {...item.image} variant={presentation.gallery.imageVariant} class={presentation.gallery.imageClass} /></CMedia>
+							{item.title && <div class={presentation.gallery.captionClass}><CText variant={presentation.gallery.captionVariant} tone={presentation.gallery.captionTone}>{item.title}</CText></div>}
 						</CLink>
 					))}
 				</div>
@@ -117,32 +73,18 @@ const {
 	{resources.length > 0 && (
 		<LSection id={presentation.resources.id} {...presentation.resources.settings}>
 			<CColumns {...presentation.resources.stack}>
-				<PSectionHeader
-					data={{ title: presentation.resources.title }}
-					appearance={presentation.resources.header.appearance}
-					headingLevel={presentation.resources.header.headingLevel}
-				/>
-				<div class="grid gap-3 md:grid-cols-2 xl:grid-cols-4">
+				<PSectionHeader data={{ title: presentation.resources.title }} appearance={presentation.resources.header.appearance} headingLevel={presentation.resources.header.headingLevel} />
+				<div class={presentation.resources.gridClass}>
 					{resources.map((resource) => (
-						<CBox as="article" surface="bordered" radius="md" spacing="md">
-							<CColumns columns="one" gap="md">
-								<CRow align="center" justify="between" gap="md">
-									<span class="flex size-10 items-center justify-center rounded-md bg-black text-white">
-										<CIcon name={resource.icon} size="sm" />
-									</span>
-									<CButton
-										href={resource.href}
-										label={resource.actionLabel}
-										icon={presentation.resources.actionIcon}
-										iconOnly
-										size="xs"
-										variant="outline"
-										tone="light"
-									/>
+						<CBox as="article" surface={presentation.resources.card.surface} radius={presentation.resources.card.radius} spacing={presentation.resources.card.spacing}>
+							<CColumns {...presentation.resources.card.stack}>
+								<CRow {...presentation.resources.row}>
+									<span class={presentation.resources.iconClass}><CIcon name={resource.icon} size="sm" /></span>
+									<CButton href={resource.href} label={resource.actionLabel} icon={presentation.resources.actionIcon} iconOnly {...presentation.resources.action} />
 								</CRow>
-								<CColumns columns="one" gap="xs">
-									<CHeading level={3} variant="h5">{resource.title}</CHeading>
-									<CText variant="body-sm" tone="muted">{resource.description}</CText>
+								<CColumns {...presentation.resources.copy.stack}>
+									<CHeading level={presentation.resources.copy.headingLevel} variant={presentation.resources.copy.headingVariant}>{resource.title}</CHeading>
+									<CText variant={presentation.resources.copy.bodyVariant} tone={presentation.resources.copy.bodyTone}>{resource.description}</CText>
 								</CColumns>
 							</CColumns>
 						</CBox>
@@ -155,31 +97,20 @@ const {
 	{relatedItems.length > 0 && (
 		<LSection id={presentation.related.id} {...presentation.related.settings}>
 			<CColumns {...presentation.related.stack}>
-				<PSectionHeader
-					data={{ title: presentation.related.title }}
-					action={{
-						label: presentation.related.actionLabel,
-						href: presentation.header.routes.base,
-						icon: presentation.related.actionIcon,
-					}}
-					appearance={presentation.related.header.appearance}
-					headingLevel={presentation.related.header.headingLevel}
-				/>
-				<div class="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
+				<PSectionHeader data={{ title: presentation.related.title }} action={{ label: presentation.related.actionLabel, href: presentation.header.routes.base, icon: presentation.related.actionIcon }} appearance={presentation.related.header.appearance} headingLevel={presentation.related.header.headingLevel} />
+				<div class={presentation.related.gridClass}>
 					{relatedItems.map((item) => (
-						<CLink href={item.href} aria-label={item.ariaLabel} class="group block h-full">
-							<CBox as="article" surface="bordered" radius="md" overflow="hidden" class="h-full transition-transform duration-300 group-hover:-translate-y-1">
-								<CMedia ratio="editorial">
-									<CImage {...item.image} variant="fill" />
-								</CMedia>
-								<div class="border-t border-black/10 p-4">
-									<CColumns columns="one" gap="sm">
-										<CRow justify="between" align="center" gap="sm">
-											<CMetadata data={{ items: [{ type: "category", label: item.category.label, href: item.category.href, display: "text" }] }} tone="brand" />
-											<CFeature icon={presentation.related.metricIcon} label={item.stars} appearance="caption" />
+						<CLink href={item.href} aria-label={item.ariaLabel} class={presentation.related.linkClass}>
+							<CBox as="article" surface={presentation.related.card.surface} radius={presentation.related.card.radius} overflow={presentation.related.card.overflow} class={presentation.related.card.class}>
+								<CMedia ratio={presentation.related.mediaRatio}><CImage {...item.image} variant={presentation.related.imageVariant} /></CMedia>
+								<div class={presentation.related.contentClass}>
+									<CColumns {...presentation.related.copy.stack}>
+										<CRow justify={presentation.related.metaRow.justify} align={presentation.related.metaRow.align} gap={presentation.related.metaRow.gap}>
+											<CMetadata data={{ items: [{ type: "category", label: item.category.label, href: item.category.href, display: "text" }] }} tone={presentation.related.metaRow.metadataTone} />
+											<CFeature icon={presentation.related.metricIcon} label={item.stars} appearance={presentation.related.metaRow.metricAppearance} />
 										</CRow>
-										<CHeading level={3} variant="h5">{item.title}</CHeading>
-										<CText variant="body-sm" tone="muted">{item.summary}</CText>
+										<CHeading level={presentation.related.copy.headingLevel} variant={presentation.related.copy.headingVariant}>{item.title}</CHeading>
+										<CText variant={presentation.related.copy.bodyVariant} tone={presentation.related.copy.bodyTone}>{item.summary}</CText>
 									</CColumns>
 								</div>
 							</CBox>
