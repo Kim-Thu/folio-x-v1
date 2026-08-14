@@ -19,6 +19,7 @@ CMS JSON
 - `PLayout` is a child pattern used by `PPage` templates to render resolved region collections.
 - `PageBuilder` resolves canonical JSON sections; it does not define page geometry.
 - Homepage stays builder-driven and does not require `PPage`.
+- A nested Project pattern keeps its own template contract. For example, `PReader` may use `template: "reader"` without making `reader` a `PPage` template value.
 
 ## Approved page-template contract
 
