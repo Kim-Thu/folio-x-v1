@@ -18,7 +18,8 @@ const { entry, collection, presentation } = data;
 const detail = entry.detail;
 if (!detail) throw new Error(`Missing CMS publication detail: ${collection}/${entry.slug}`);
 
-const collectionLabels = presentation.collections[collection];
+const collectionPresentation = presentation.collections[collection];
+const basePath = collectionPresentation.basePath;
 const description = detail.description?.length ? detail.description : [entry.summary];
 const configuredChapters = [...(detail.reader ?? [])].sort((a, b) => b.number - a.number);
 const chapterItems = configuredChapters.map((chapter) => ({
@@ -28,17 +29,33 @@ const chapterItems = configuredChapters.map((chapter) => ({
 	publishedAt: chapter.publishedAt,
 	publishedLabel: chapter.publishedLabel,
 	views: chapter.views,
-	href: `/${collection}/${entry.slug}/chapter/${chapter.number}`,
+	href: `${basePath}/${entry.slug}/${presentation.routes.chapterSegment}/${chapter.number}`,
 	action: presentation.chapters.itemAction,
 }));
 
-const metrics = [
-	{ label: presentation.header.labels.rating, value: String(entry.rating), icon: "star" },
-	{ label: presentation.header.labels.reads, value: entry.views, icon: "eye" },
-	{ label: presentation.header.labels.chapters, value: String(entry.chapters), icon: "bookOpen" },
-] as PublicationMetric[];
+const metrics: PublicationMetric[] = [
+	{
+		label: presentation.header.labels.rating,
+		value: String(entry.rating),
+		icon: presentation.header.metrics.rating.icon,
+	},
+	{
+		label: presentation.header.labels.reads,
+		value: entry.views,
+		icon: presentation.header.metrics.reads.icon,
+	},
+	{
+		label: presentation.header.labels.chapters,
+		value: String(entry.chapters),
+		icon: presentation.header.metrics.chapters.icon,
+	},
+];
 if (detail.followers) {
-	metrics.push({ label: presentation.header.labels.followers, value: detail.followers, icon: "bookmark" });
+	metrics.push({
+		label: presentation.header.labels.followers,
+		value: detail.followers,
+		icon: presentation.header.metrics.followers.icon,
+	});
 }
 
 const facts = [
@@ -66,18 +83,25 @@ const activeValue = configuredChapters.length > 0
 			data={{
 				breadcrumb: {
 					label: presentation.header.labels.breadcrumb,
-					items: [{ label: collectionLabels.collectionLabel, href: `/${collection}` }],
+					items: [{ label: collectionPresentation.collectionLabel, href: basePath }],
 					current: entry.title,
 				},
 				cover: entry.cover,
 				tagsLabel: presentation.header.labels.tags,
-				tags: entry.genres.map((genre) => ({ label: genre.label, href: `/${collection}/category/${genre.slug}` })),
+				tags: entry.genres.map((genre) => ({
+					label: genre.label,
+					href: `${basePath}/${presentation.routes.categorySegment}/${genre.slug}`,
+				})),
 				title: entry.title,
 				author: { label: presentation.header.labels.author, name: entry.author },
 				metrics,
 				actionsLabel: presentation.header.labels.actions,
 				actions: configuredChapters.length > 0
-					? [{ label: presentation.header.labels.primaryAction, href: `#${presentation.chapters.id}`, icon: "bookOpen", variant: "primary", size: "md" }]
+					? [{
+						label: presentation.header.labels.primaryAction,
+						href: `#${presentation.chapters.id}`,
+						...presentation.header.primaryAction,
+					}]
 					: [],
 				description,
 				facts: {
@@ -100,12 +124,19 @@ const activeValue = configuredChapters.length > 0
 
 	<LSection id={presentation.chapters.id} {...presentation.chapters.settings}>
 		<LSidebar label={presentation.chapters.labels.aside}>
-			<CColumns slot="sidebar" columns="one" gap="md" id={presentation.navigation.tabs.overview.value}>
+			<CColumns
+				slot="sidebar"
+				{...presentation.chapters.overviewLayout}
+				id={presentation.navigation.tabs.overview.value}
+			>
 				<CDescriptionList items={[{ label: presentation.chapters.labels.introduction, value: description[0] }]} />
 				{detail.tags?.length ? (
 					<CTags
 						label={presentation.chapters.labels.tags}
-						items={detail.tags.map((tag) => ({ label: tag.label, href: `/${collection}/tag/${tag.slug}` }))}
+						items={detail.tags.map((tag) => ({
+							label: tag.label,
+							href: `${basePath}/${presentation.routes.tagSegment}/${tag.slug}`,
+						}))}
 					/>
 				) : null}
 			</CColumns>
