@@ -7,7 +7,7 @@ on:
       - main
 
 permissions:
-  contents: write
+  contents: read
 
 concurrency:
   group: quality-${{ github.ref }}
@@ -22,8 +22,6 @@ jobs:
     steps:
       - name: Check out repository
         uses: actions/checkout@v4
-        with:
-          ref: ${{ github.head_ref || github.ref_name }}
 
       - name: Set up Node.js
         uses: actions/setup-node@v4
@@ -34,21 +32,5 @@ jobs:
       - name: Install locked dependencies
         run: npm ci
 
-      - name: Apply publication catalog Decap editor
-        run: node scripts/add-publication-catalog-decap.mjs
-
       - name: Validate production source
         run: npm run validate
-
-      - name: Commit Decap editor
-        if: github.event_name == 'pull_request'
-        run: |
-          if git diff --quiet -- public/admin/config.yml; then
-            echo "No Decap changes to commit"
-            exit 0
-          fi
-          git config user.name "github-actions[bot]"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add public/admin/config.yml
-          git commit -m "add publication catalog Decap editor"
-          git push
