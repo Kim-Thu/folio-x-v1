@@ -328,11 +328,11 @@ const buildBlogArchive = async (section: BlogArchiveSection): Promise<ArchiveReg
 	}])).values());
 	const presentation = itemPresentation as InsightCardPresentation;
 	const categoryFilter: PFilterChoiceGroupData = {
-		appearance: "navigation",
-		control: "category",
+		appearance: sidebar.filter.appearance as PFilterChoiceGroupData["appearance"],
+		control: sidebar.filter.control as PFilterChoiceGroupData["control"],
 		legend: sidebar.filter.legend,
-		name: "insight-category",
-		type: "radio",
+		name: sidebar.filter.name,
+		type: sidebar.filter.type,
 		options: [
 			{
 				label: sidebar.filter.allLabel,
@@ -388,8 +388,8 @@ const buildBlogArchive = async (section: BlogArchiveSection): Promise<ArchiveReg
 				filter: { data: { groups: [categoryFilter] } },
 				cardsHeader: {
 					data: { title: sidebar.featured.title },
-					appearance: "compact",
-					headingLevel: 2,
+					appearance: sidebar.featured.header.appearance as PSectionHeaderProps["appearance"],
+					headingLevel: sidebar.featured.header.headingLevel as PSectionHeaderProps["headingLevel"],
 				},
 				cards: {
 					template: sidebar.featured.cards.template as PCardProps["template"],
@@ -406,8 +406,8 @@ const buildBlogArchive = async (section: BlogArchiveSection): Promise<ArchiveReg
 			result: {
 				header: {
 					data: { title: result.title },
-					appearance: "compact",
-					headingLevel: 2,
+					appearance: result.header.appearance as PSectionHeaderProps["appearance"],
+					headingLevel: result.header.headingLevel as PSectionHeaderProps["headingLevel"],
 				},
 			},
 			cards: {
