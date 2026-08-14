@@ -1,6 +1,6 @@
 import type { CollectionEntry } from "astro:content";
-import type { PageRegion } from "@/types/components/object/project/layout/PLayout.types";
 import type { PPageTemplate } from "@/types/components/object/project/page/PPage.types";
+import type { PageRegion } from "@/types/components/pages/builder/PageRegion.types";
 
 export type PageEntryData = CollectionEntry<"pages">["data"];
 export type PageSectionData = PageEntryData["content"]["sections"][number];
