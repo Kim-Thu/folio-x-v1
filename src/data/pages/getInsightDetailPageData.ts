@@ -1,6 +1,6 @@
 import { getBlogDetailSettings, getInsights } from "@/data/cms";
 import { mapInsightToCard } from "@/data/mappers/card";
-import type { PageRegion } from "@/types/components/object/project/layout/PLayout.types";
+import type { PageRegion } from "@/types/components/pages/builder/PageRegion.types";
 import type { InsightDetailPageData } from "@/types/components/pages/insight-detail/InsightDetailPage.types";
 import type { PPageHeaderEditorialData } from "@/types/components/object/project/page-header/PPageHeader.types";
 
