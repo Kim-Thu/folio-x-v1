@@ -1,0 +1,54 @@
+name: Schema contract cleanup
+
+on:
+  push:
+    branches:
+      - agent/cms-content-migration
+
+permissions:
+  contents: write
+
+jobs:
+  cleanup:
+    if: github.actor != 'github-actions[bot]'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: agent/cms-content-migration
+
+      - name: Tighten mapper and static card schemas
+        shell: bash
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+
+          path = Path('src/content/schemas.ts')
+          text = path.read_text(encoding='utf-8')
+          text = text.replace('metadataDisplay: metadataDisplaySchema,', 'metadataDisplay: z.literal("text"),')
+          text = text.replace('categoryDisplay: metadataDisplaySchema,', 'categoryDisplay: z.literal("text"),')
+          old = 'const staticCardItemSchema = z.record(z.string(), z.unknown());'
+          new = '''const staticCardItemSchema = z.object({
+\thref: z.string().min(1),
+\tariaLabel: z.string().min(1),
+\ttitle: z.array(z.string().min(1)).min(1),
+\texcerpt: z.string().optional(),
+\tmedia: imageSchema.optional(),
+\tappearance: cardAppearanceSchema.optional(),
+\ticon: iconNameSchema.optional(),
+});'''
+          if old not in text:
+              raise SystemExit('static card schema target not found')
+          text = text.replace(old, new)
+          path.write_text(text, encoding='utf-8')
+          PY
+
+      - name: Commit cleanup and remove workflow
+        shell: bash
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add src/content/schemas.ts
+          git rm .github/workflows/schema-contract-cleanup.yml
+          git commit -m "fix(cms): align schema output with card contracts"
+          git push origin HEAD:agent/cms-content-migration
