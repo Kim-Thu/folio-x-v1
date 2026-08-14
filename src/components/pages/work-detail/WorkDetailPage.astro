@@ -9,7 +9,7 @@ import type { WorkDetailPageProps } from "@/types/components/pages/work-detail/W
 import type { LSectionSpacing, LSectionTheme } from "@/types/components/layout/LSection.types";
 
 const { data } = Astro.props as WorkDetailPageProps;
-const { project, previous, next } = data;
+const { project, previous, next, routes } = data;
 const detail = project.detail;
 const page = detail?.page;
 const sections = page?.sections ?? [];
@@ -55,7 +55,7 @@ const articleBlocks = project.sections.map((section, index) => ({
             template={(section.template ?? "slider-aside") as "slider-aside"}
             data={{
               backAction: asRecord(content.backAction) as { label: string; href: string },
-              category: { label: project.category, href: `/projects/category/${project.categorySlug}` },
+              category: { label: project.category, href: `${routes.categoryBase}${project.categorySlug}` },
               title: project.title,
               description: project.summary,
               images: headerImages,
@@ -65,7 +65,7 @@ const articleBlocks = project.sections.map((section, index) => ({
               nextImageLabel: asString(content.nextImageLabel),
               tagsLabel: asString(content.tagsLabel),
               actionsLabel: asString(content.actionsLabel),
-              tags: project.tags.map((tag) => ({ label: tag.label, href: `/projects/tag/${tag.slug}` })),
+              tags: project.tags.map((tag) => ({ label: tag.label, href: `${routes.tagBase}${tag.slug}` })),
               actions,
               asideDecoration: asRecord(content.asideDecoration) as { src: string; alt: string; width: number; height: number },
               facts: [
