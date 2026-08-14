@@ -1,17 +1,6 @@
-import type { Project } from "@/types/content";
+import type { ResolvedPageData } from "@/types/components/pages/builder/PageBuilder.types";
 
-export interface WorkDetailRoutes {
-	base: string;
-	categoryBase: string;
-	tagBase: string;
-}
-
-export interface WorkDetailPageData {
-	project: Project;
-	previous?: Project;
-	next?: Project;
-	routes: WorkDetailRoutes;
-}
+export type WorkDetailPageData = ResolvedPageData;
 
 export interface WorkDetailPageProps {
 	data: WorkDetailPageData;
