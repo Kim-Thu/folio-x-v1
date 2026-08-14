@@ -1,0 +1,41 @@
+---
+import PArchiveToolbar from "@/components/object/project/archive-toolbar/PArchiveToolbar.astro";
+import PLayout from "@/components/object/project/layout/PLayout.astro";
+import PageRegion from "@/components/pages/builder/PageRegion.astro";
+import type { PageGroupRegion } from "@/types/components/pages/builder/PageGroupRegion.types";
+
+type Props = { region: PageGroupRegion };
+const { region } = Astro.props as Props;
+const {
+	asideGap = "md",
+	asideLabel,
+	asidePosition = "end",
+	gap = "lg",
+	panel = false,
+	regions,
+	stickyAside,
+	toolbar,
+} = region.props;
+const enabledRegions = regions.filter((item) => item.enabled !== false);
+const mainRegions = enabledRegions.filter(
+	(item) => (item.placement ?? "main") === "main",
+);
+const asideRegions = enabledRegions.filter(
+	(item) => item.placement === "aside",
+);
+---
+
+<PLayout
+	{asideGap}
+	{asideLabel}
+	{asidePosition}
+	{gap}
+	{panel}
+	{stickyAside}
+>
+	{toolbar && <PArchiveToolbar slot="toolbar" {...toolbar} />}
+	<Fragment slot="aside">
+		{asideRegions.map((item) => <PageRegion region={item} />)}
+	</Fragment>
+	{mainRegions.map((item) => <PageRegion region={item} />)}
+</PLayout>
