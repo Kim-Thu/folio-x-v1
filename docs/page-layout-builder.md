@@ -3,15 +3,42 @@
 ## Responsibilities
 
 - `BaseLayout` owns the document shell, global header, global footer, metadata, and global scripts.
-- `LPage` owns page geometry only. Its templates are `fluid`, `contained`, `boxed`, and `sidebar`.
-- `PageBuilder` owns ordered region placement: `header`, `main`, `aside`, and `cta`.
+- `LPage` owns page geometry only. Its templates are `fluid`, `contained`, `boxed`, `sidebar`, and `centered`.
+- `PLayout` is the Project-level layout dispatcher. It selects an approved `LPage` template from page data and does not own page content.
+- `PageBuilder` renders ordered page regions. It accepts either a validated page entry or a resolved page containing `layout` and `regions`.
 - `PageRegion` owns section theme, spacing, and optional container behavior.
 - The region registry maps approved component keys to reusable `P*` patterns.
-- A region may set `section: false` only when its registered pattern already owns
-  the complete section boundary.
-- Page data mappers connect content data to the typed builder contract.
+- A region may set `section: false` only when its registered pattern is nested inside another region that owns the section boundary.
+- Page data loaders resolve CMS JSON and the current collection entry into the typed builder contract.
 
 Layout and registry components must not contain page, route, collection, or feature names.
+
+## Page pipeline
+
+Standard pages use:
+
+```text
+JSON page entry
+→ Zod schema
+→ page loader
+→ PageBuilder
+→ PLayout
+→ PageRegion dispatcher
+→ registered P*/C*/L* patterns
+```
+
+Detail and reader pages use the same renderer after their loader resolves entry-specific data:
+
+```text
+JSON detail definition + current collection entry
+→ validated loader/resolver
+→ { layout, regions }
+→ PageBuilder
+→ PLayout
+→ PageRegion dispatcher
+```
+
+The detail page root must not manually loop sections or select `PPageHeader`, `PArticle`, `PReviews`, `PReader`, or other section patterns. Section order and page-template selection come from validated CMS/detail data.
 
 ## CMS contract
 
@@ -19,20 +46,19 @@ Decap CMS may store only approved values:
 
 - layout template and container size;
 - aside position and accessible label;
-- region key, enabled state, placement, and order;
-- registered component and compatible template;
-- section theme, spacing, and container.
+- section or region ordering;
+- registered component-compatible templates;
+- section theme, spacing, and container;
+- finite presentation choices defined by component contracts.
 
 CMS content must never store Tailwind classes, direct colors, arbitrary CSS, import paths, or component file names.
 
-`applyPageBuilderControl` merges CMS controls into a typed default configuration. It rejects unknown region keys, component mismatches, and incompatible templates before rendering.
-
 ## Styling rules
 
-- Only `LContainer` may use `max-w-*`.
+- `LContainer` owns shared container width and centering behavior.
 - Reusable visual variants live in variant files and use design tokens.
 - `*-button-outline` belongs to `CButton`; other outlined surfaces use the shared gray token.
-- Page builders and CMS records do not accept `class` or inline style values.
+- Page builders and CMS records do not accept raw `class` or inline style values.
 
 ## Adding a reusable region
 
@@ -40,18 +66,11 @@ CMS content must never store Tailwind classes, direct colors, arbitrary CSS, imp
 2. Name its templates by structure or visual composition, not by page or feature.
 3. Add a discriminated region type to `PageBuilder.types.ts`.
 4. Register it in `PageRegionContent.astro`.
-5. Add only finite CMS enum options and template compatibility rules.
-6. Map page content to the region in the page data mapper.
+5. Add only finite CMS enum options that match the component contract.
+6. Resolve page or entry content into that region in the data layer.
 
 ## Current page coverage
 
-Every page composition under `src/components/pages` calls `PageBuilder`:
+`PageBuilder` is the common renderer for standard pages and the resolved detail pipeline. Detail-like roots for product, project, lab, insight, publication, and publication reader delegate rendering to `PageBuilder` rather than composing sections manually.
 
-- home;
-- product archive and product detail;
-- work archive and work detail;
-- system status pages.
-
-Reusable registry roles currently include `hero`, `page-header`, `collection`,
-`archive`, `article`, `reviews`, `cards`, `cta`, `post-navigation`, and
-`status`.
+Reusable registry roles include `hero`, `page-header`, `collection`, `archive`, `article`, `reviews`, `cards`, `cta`, `post-navigation`, `status`, `tabs`, `gallery`, `entry-index`, `reader`, `details`, `profile`, `toc`, `advertisement`, and `group`.
