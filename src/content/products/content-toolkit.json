@@ -65,7 +65,7 @@
           "settings": {
             "theme": "canvas",
             "spacing": "body",
-            "container": "content"
+            "container": "site"
           },
           "content": {
             "blocks": [

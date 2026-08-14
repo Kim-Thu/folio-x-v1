@@ -44,7 +44,7 @@
         "settings": {
           "theme": "light",
           "spacing": "body",
-          "container": "content"
+          "container": "site"
         },
         "content": {
           "blocks": [
