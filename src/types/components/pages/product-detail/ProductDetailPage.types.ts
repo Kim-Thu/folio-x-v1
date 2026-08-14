@@ -1,19 +1,6 @@
-import type { Product } from "@/types/content";
+import type { ResolvedPageData } from "@/types/components/pages/builder/PageBuilder.types";
 
-export interface ProductDetailPresentation {
-	routes: {
-		base: string;
-		categoryBase: string;
-	};
-	imageWidth: number;
-	imageHeight: number;
-	pricePrefix: string;
-}
-
-export interface ProductDetailPageData {
-	product: Product;
-	presentation: ProductDetailPresentation;
-}
+export type ProductDetailPageData = ResolvedPageData;
 
 export interface ProductDetailPageProps {
 	data: ProductDetailPageData;
