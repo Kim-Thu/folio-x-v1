@@ -24,6 +24,7 @@ export const getSystemStatesSettings = () => getSingleton("systemStatesSettings"
 export const getLabDetailSettings = () => getSingleton("labDetailSettings");
 export const getBlogDetailSettings = () => getSingleton("blogDetailSettings");
 export const getPublicationDetailSettings = () => getSingleton("publicationDetailSettings");
+export const getPublicationCatalogSettings = () => getSingleton("publicationCatalogSettings");
 
 export async function getPage(slug: string): Promise<CollectionEntry<"pages">["data"]> {
 	const pages = await getCollection("pages");
