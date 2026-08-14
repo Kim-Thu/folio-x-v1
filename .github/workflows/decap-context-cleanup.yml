@@ -1,0 +1,76 @@
+name: Decap context cleanup
+
+on:
+  push:
+    branches:
+      - agent/cms-content-migration
+
+permissions:
+  contents: write
+
+jobs:
+  cleanup:
+    if: github.actor != 'github-actions[bot]'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: agent/cms-content-migration
+
+      - name: Fix context-specific Decap contracts
+        shell: bash
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+
+          path = Path('public/admin/config.yml')
+          lines = path.read_text(encoding='utf-8').splitlines()
+          out = []
+          card_templates = '[stacked, horizontal, overlay, featured, boxed, compact-media, compact-bordered, editorial, icon-panel, icon-summary, media-banner, media-caption, media-details, media-only, media-summary, media-metrics]'
+          icon_options = '[arrowLeft, arrowRight, arrowUp, arrowUpRight, arrowPath, archiveBox, bars3, bolt, chevronLeft, chevronDown, chevronRight, github, globeAlt, lightBulb, linkedin, xMark, folder01, facebook, link, twitter, userCircle, calendar03, check, clock01, gridView, listView, play, search, shoppingBag, star, questionMarkCircle, bookOpen, bookmark, eye, lockClosed, adjustmentsHorizontal, moon, handThumbUp, heart, faceSmile, faceFrown]'
+
+          for line in lines:
+              stripped = line.strip()
+              context = '\n'.join(out[-12:])
+              indent = line[:len(line) - len(line.lstrip())]
+
+              if 'name: template' in stripped and card_templates in stripped:
+                  if 'default: collection' in context:
+                      line = f'{indent}- {{ label: Template, name: template, widget: select, required: false, options: [sidebar, cards, split] }}'
+                  elif 'default: article' in context or 'default: reviews' in context:
+                      continue
+                  elif 'default: post-navigation' in context:
+                      line = f'{indent}- {{ label: Template, name: template, widget: hidden, default: split }}'
+
+              if stripped == '- { label: Template, name: template, widget: string }':
+                  if 'label: Cards' in context or 'name: cards' in context:
+                      line = f'{indent}- {{ label: Template, name: template, widget: select, options: {card_templates} }}'
+                  elif 'label: Project header' in context:
+                      line = f'{indent}- {{ label: Template, name: template, widget: hidden, default: slider-aside }}'
+
+              if 'name: appearance' in stripped and 'options: [default, compact, controls, navigation]' in stripped:
+                  if 'name: filter' in context:
+                      line = f'{indent}- {{ label: Appearance, name: appearance, widget: select, options: [controls, navigation] }}'
+                  elif 'name: header' in context:
+                      line = f'{indent}- {{ label: Appearance, name: appearance, widget: select, options: [default, compact] }}'
+
+              if stripped == '- { label: Control, name: control, widget: string }':
+                  line = f'{indent}- {{ label: Control, name: control, widget: select, options: [category, license, platform, status, technology] }}'
+
+              if stripped == '- { label: Icon, name: icon, widget: string, required: false }':
+                  line = f'{indent}- {{ label: Icon, name: icon, widget: select, required: false, options: {icon_options} }}'
+
+              out.append(line)
+
+          path.write_text('\n'.join(out) + '\n', encoding='utf-8')
+          PY
+
+      - name: Commit cleanup and remove workflow
+        shell: bash
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add public/admin/config.yml
+          git rm .github/workflows/decap-context-cleanup.yml
+          git commit -m "fix(cms): align Decap choices with component contracts"
+          git push origin HEAD:agent/cms-content-migration
