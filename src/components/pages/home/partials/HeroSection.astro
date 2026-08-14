@@ -1,0 +1,41 @@
+---
+import LSection from "@/components/layout/LSection.astro";
+import PHero from "@/components/object/project/hero/PHero.astro";
+import type { HomePageData } from "@/types/components/pages/home/HomePage.types";
+
+type PageSection = HomePageData["content"]["sections"][number];
+type HeroSection = Extract<PageSection, { type: "hero" }>;
+
+type Props = {
+	data: HeroSection;
+};
+
+const { data } = Astro.props as Props;
+const { content } = data;
+
+if (!content.eyebrow || !content.description || !content.image || !content.actions) {
+	throw new Error("Home hero is missing required content");
+}
+
+const socialLinks = (content.socialLinks ?? []).map((item) => {
+	if (!item.icon) throw new Error("Home hero social link is missing an icon");
+	return { href: item.href, label: item.label, icon: item.icon };
+});
+
+const heroData = {
+	id: content.id ?? data.id,
+	eyebrow: content.eyebrow,
+	title: Array.isArray(content.title) ? content.title : [content.title],
+	accent: content.accent ?? "",
+	description: content.description,
+	actionsLabel: content.actionsLabel ?? "",
+	actions: content.actions,
+	image: content.image,
+	socialLinks,
+	scrollLabel: content.scrollLabel,
+};
+---
+
+<LSection id={data.id} {...data.settings}>
+	<PHero template={data.template} data={heroData} />
+</LSection>
