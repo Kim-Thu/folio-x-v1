@@ -27,6 +27,7 @@ import type { PStatusProps } from "@/types/components/object/project/status/PSta
 import type { PEntryIndexProps } from "@/types/components/object/project/entry-index/PEntryIndex.types";
 import type { PReaderProps } from "@/types/components/object/project/reader/PReader.types";
 import type { PHeroProps } from "@/types/components/object/project/hero/PHero.types";
+import type { PGalleryProps } from "@/types/components/object/project/gallery/PGallery.types";
 import type { PLayoutProps } from "@/types/components/object/project/layout/PLayout.types";
 
 export type PageEntryData = CollectionEntry<"pages">["data"];
@@ -148,6 +149,11 @@ export interface TabsRegion extends PageRegionBase {
 	props: CTabListProps;
 }
 
+export interface GalleryRegion extends PageRegionBase {
+	component: "gallery";
+	props: PGalleryProps;
+}
+
 export interface EntryIndexRegion extends PageRegionBase {
 	component: "entry-index";
 	props: PEntryIndexProps;
@@ -212,6 +218,7 @@ export type PageRegion =
 	| CollectionRegion
 	| ArchiveRegion
 	| TabsRegion
+	| GalleryRegion
 	| EntryIndexRegion
 	| ReaderRegion
 	| DetailsRegion

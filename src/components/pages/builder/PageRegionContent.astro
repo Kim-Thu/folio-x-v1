@@ -24,6 +24,7 @@ import PStatus from "@/components/object/project/status/PStatus.astro";
 import PEntryIndex from "@/components/object/project/entry-index/PEntryIndex.astro";
 import PReader from "@/components/object/project/reader/PReader.astro";
 import PHero from "@/components/object/project/hero/PHero.astro";
+import PGallery from "@/components/object/project/gallery/PGallery.astro";
 import type { PageRegionProps } from "@/types/components/pages/builder/PageBuilder.types";
 
 const { region } = Astro.props as PageRegionProps;
@@ -78,6 +79,8 @@ const { region } = Astro.props as PageRegionProps;
 {region.component === "status" && <PStatus {...region.props} />}
 
 {region.component === "tabs" && <CTabList {...region.props} />}
+
+{region.component === "gallery" && <PGallery {...region.props} />}
 
 {region.component === "entry-index" && <PEntryIndex {...region.props} />}
 
