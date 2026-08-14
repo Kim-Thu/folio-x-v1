@@ -31,16 +31,15 @@
     "id": "resources", "title": "Resources", "actionIcon": "arrowUpRight", "settings": { "theme": "canvas", "spacing": "compact", "container": "site" }, "stack": { "columns": "one", "gap": "md" }, "header": { "appearance": "compact", "headingLevel": 2 },
     "gridClass": "grid gap-3 md:grid-cols-2 xl:grid-cols-4",
     "card": { "surface": "bordered", "radius": "md", "spacing": "md", "stack": { "columns": "one", "gap": "md" } },
-    "row": { "align": "center", "justify": "between", "gap": "md" }, "iconClass": "flex size-10 items-center justify-center rounded-md bg-black text-white",
-    "action": { "size": "xs", "variant": "outline", "tone": "light" },
+    "row": { "align": "center", "justify": "between", "gap": "md" }, "iconClass": "flex size-10 items-center justify-center rounded-md bg-black text-white", "iconSize": "sm",
+    "action": { "size": "xs", "variant": "outline", "tone": "light", "iconOnly": true },
     "copy": { "stack": { "columns": "one", "gap": "xs" }, "headingLevel": 3, "headingVariant": "h5", "bodyVariant": "body-sm", "bodyTone": "muted" }
   },
   "related": {
     "id": "related-labs", "title": "Related labs", "actionLabel": "View all Labs", "actionIcon": "arrowRight", "metricIcon": "star", "settings": { "theme": "canvas", "spacing": "compact", "container": "site" }, "stack": { "columns": "one", "gap": "md" }, "header": { "appearance": "compact", "headingLevel": 2 },
     "gridClass": "grid gap-4 sm:grid-cols-2 xl:grid-cols-4", "linkClass": "group block h-full",
-    "card": { "surface": "bordered", "radius": "md", "overflow": "hidden", "class": "h-full transition-transform duration-300 group-hover:-translate-y-1" },
-    "mediaRatio": "editorial", "imageVariant": "fill", "contentClass": "border-t border-black/10 p-4",
+    "card": { "surface": "bordered", "radius": "md", "overflow": "hidden", "class": "h-full transition-transform duration-300 group-hover:-translate-y-1" }, "mediaRatio": "editorial", "imageVariant": "fill", "contentClass": "border-t border-black/10 p-4",
     "copy": { "stack": { "columns": "one", "gap": "sm" }, "headingLevel": 3, "headingVariant": "h5", "bodyVariant": "body-sm", "bodyTone": "muted" },
-    "metaRow": { "justify": "between", "align": "center", "gap": "sm", "metadataTone": "brand", "metricAppearance": "caption" }
+    "metaRow": { "justify": "between", "align": "center", "gap": "sm", "metadataTone": "brand", "metadataDisplay": "text", "metricAppearance": "caption" }
   }
 }
