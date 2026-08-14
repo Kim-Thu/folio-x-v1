@@ -1,4 +1,5 @@
 ---
+import LContainer from "@/components/layout/LContainer.astro";
 import LPage from "@/components/layout/LPage.astro";
 import LSection from "@/components/layout/LSection.astro";
 import LSidebar from "@/components/layout/LSidebar.astro";
@@ -27,7 +28,7 @@ const { lab, presentation, header, tabs, sidebar, galleryItems, resources, relat
 
 const classes = {
 	navigationFrame: "border-y border-black/10 bg-white",
-	articleFrame: "min-w-0 max-w-3xl",
+	articleFrame: "min-w-0",
 	sidebarDivider: "border-t border-black/10 pt-4",
 	galleryGrid: "grid grid-cols-2 gap-3 md:grid-cols-3 lg:grid-cols-5",
 	galleryLink: "group block overflow-hidden rounded-md bg-black/5",
@@ -66,7 +67,9 @@ const classes = {
 					</CColumns>
 				</CBox>
 			</CColumns>
-			<div class={classes.articleFrame}><PArticle template={presentation.content.article.template} content={lab.content} /></div>
+			<LContainer size="article" class={classes.articleFrame}>
+				<PArticle template={presentation.content.article.template} content={lab.content} />
+			</LContainer>
 		</LSidebar>
 	</LSection>
 
