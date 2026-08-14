@@ -388,8 +388,10 @@ const buildBlogArchive = async (section: BlogArchiveSection): Promise<ArchiveReg
 				filter: { data: { groups: [categoryFilter] } },
 				cardsHeader: {
 					data: { title: sidebar.featured.title },
-					appearance: sidebar.featured.header.appearance as PSectionHeaderProps["appearance"],
-					headingLevel: sidebar.featured.header.headingLevel as PSectionHeaderProps["headingLevel"],
+					...(sidebar.featured.header && {
+						appearance: sidebar.featured.header.appearance as PSectionHeaderProps["appearance"],
+						headingLevel: sidebar.featured.header.headingLevel as PSectionHeaderProps["headingLevel"],
+					}),
 				},
 				cards: {
 					template: sidebar.featured.cards.template as PCardProps["template"],
