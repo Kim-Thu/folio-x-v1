@@ -318,7 +318,7 @@ export async function getLabDetailPageData(
 									metadata: {
 										items: [
 											{
-												type: "category",
+												type: "category" as const,
 												label: item.category.label,
 												href: `${presentation.header.routes.categoryBase}/${item.category.slug}`,
 												display: presentation.related.metaRow.metadataDisplay,
