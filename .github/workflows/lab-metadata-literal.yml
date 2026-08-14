@@ -1,0 +1,32 @@
+name: lab-metadata-literal
+
+on:
+  push:
+    branches: [agent/cms-content-migration]
+
+permissions:
+  contents: write
+
+jobs:
+  migrate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: agent/cms-content-migration
+      - shell: bash
+        run: |
+          python3 <<'PY'
+          from pathlib import Path
+          p = Path('src/data/pages/getLabDetailPageData.ts')
+          s = p.read_text().replace('type: "category",', 'type: "category" as const,')
+          p.write_text(s)
+          PY
+      - shell: bash
+        run: |
+          git config user.name github-actions[bot]
+          git config user.email 41898282+github-actions[bot]@users.noreply.github.com
+          git add src/data/pages/getLabDetailPageData.ts
+          git rm .github/workflows/lab-metadata-literal.yml
+          git commit -m 'fix(lab): preserve metadata literal contract'
+          git push origin HEAD:agent/cms-content-migration
