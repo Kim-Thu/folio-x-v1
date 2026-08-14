@@ -1,61 +1,8 @@
 ---
-import LPage from "@/components/layout/LPage.astro";
-import ContactSection from "@/components/pages/home/partials/ContactSection.astro";
-import FeaturedProductsSection from "@/components/pages/home/partials/FeaturedProductsSection.astro";
-import HeroSection from "@/components/pages/home/partials/HeroSection.astro";
-import InsightsSection from "@/components/pages/home/partials/InsightsSection.astro";
-import LabsSection from "@/components/pages/home/partials/LabsSection.astro";
-import SelectedWorksSection from "@/components/pages/home/partials/SelectedWorksSection.astro";
-import StoriesSection from "@/components/pages/home/partials/StoriesSection.astro";
-import UniverseSection from "@/components/pages/home/partials/UniverseSection.astro";
+import PageBuilder from "@/components/pages/builder/PageBuilder.astro";
 import { getHomePageData } from "@/data/pages/getHomePageData";
-import type { HomePageData } from "@/types/components/pages/home/HomePage.types";
-
-type PageSection = HomePageData["content"]["sections"][number];
-type HeroSectionData = Extract<PageSection, { type: "hero" }>;
-type CollectionSectionData = Extract<PageSection, { type: "collection" }>;
-type CtaSectionData = Extract<PageSection, { type: "cta" }>;
 
 const page = await getHomePageData();
-const sections = page.content.sections;
-
-const hero = sections.find(
-	(section): section is HeroSectionData => section.id === "hero" && section.type === "hero",
-);
-const universe = sections.find(
-	(section): section is CollectionSectionData => section.id === "universe" && section.type === "collection",
-);
-const featuredProducts = sections.find(
-	(section): section is CollectionSectionData => section.id === "featured-products" && section.type === "collection",
-);
-const selectedWorks = sections.find(
-	(section): section is CollectionSectionData => section.id === "selected-works" && section.type === "collection",
-);
-const labs = sections.find(
-	(section): section is CollectionSectionData => section.id === "labs" && section.type === "collection",
-);
-const stories = sections.find(
-	(section): section is CollectionSectionData => section.id === "stories" && section.type === "collection",
-);
-const insights = sections.find(
-	(section): section is CollectionSectionData => section.id === "insights" && section.type === "collection",
-);
-const contact = sections.find(
-	(section): section is CtaSectionData => section.id === "contact" && section.type === "cta",
-);
-
-if (!hero || !universe || !featuredProducts || !selectedWorks || !labs || !stories || !insights || !contact) {
-	throw new Error("Home page is missing one or more required sections");
-}
 ---
 
-<LPage {...page.content.layout}>
-	<HeroSection data={hero} />
-	<UniverseSection data={universe} />
-	<FeaturedProductsSection data={featuredProducts} />
-	<SelectedWorksSection data={selectedWorks} />
-	<LabsSection data={labs} />
-	<StoriesSection data={stories} />
-	<InsightsSection data={insights} />
-	<ContactSection data={contact} />
-</LPage>
+<PageBuilder {page} />
