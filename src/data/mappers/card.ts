@@ -1,3 +1,4 @@
+import type { CMetadataItemDisplay } from "@/types/components/object/component/CMetadata.types";
 import type { PCardData } from "@/types/components/object/project/card/PCard.types";
 import type { Insight, Lab, Product, Project, PublicationEntry } from "@/types/content";
 
@@ -14,7 +15,7 @@ export interface ProductCardPresentation {
 	imageAltSuffix: string;
 	imageWidth: number;
 	imageHeight: number;
-	categoryDisplay: "text";
+	categoryDisplay: CMetadataItemDisplay;
 	actionHref: string;
 	actionLabelPrefix: string;
 	actionIcon: NonNullable<NonNullable<PCardData["action"]>["icon"]>;
@@ -24,7 +25,7 @@ export interface ProductCardPresentation {
 export interface LabCardPresentation {
 	routes: CardRouteConfig;
 	ariaLabelPrefix: string;
-	categoryDisplay: "text";
+	categoryDisplay: CMetadataItemDisplay;
 	completeBadgeTone: NonNullable<NonNullable<PCardData["badge"]>["tone"]>;
 	activeBadgeTone: NonNullable<NonNullable<PCardData["badge"]>["tone"]>;
 	tagsLabelSuffix: string;
@@ -38,7 +39,7 @@ export interface LabCardPresentation {
 export interface PublicationCardPresentation {
 	routes: CardRouteConfig;
 	ariaLabelPrefix: string;
-	categoryDisplay: "text";
+	categoryDisplay: CMetadataItemDisplay;
 	tagsLabelSuffix: string;
 	viewsIcon: NonNullable<NonNullable<PCardData["metrics"]>[number]["icon"]>;
 }
@@ -52,7 +53,7 @@ export interface ProjectCardPresentation {
 	tagsLabel?: string;
 	lightAppearance?: PCardData["appearance"];
 	darkAppearance?: PCardData["appearance"];
-	metadataDisplay?: "text";
+	metadataDisplay?: CMetadataItemDisplay;
 	imageWidth: number;
 	imageHeight: number;
 }
@@ -60,7 +61,7 @@ export interface ProjectCardPresentation {
 export interface InsightCardPresentation {
 	routes: CardRouteConfig;
 	separator?: string;
-	metadataDisplay?: "text";
+	metadataDisplay?: CMetadataItemDisplay;
 	tagsLabelSuffix?: string;
 	imageWidth: number;
 	imageHeight: number;
