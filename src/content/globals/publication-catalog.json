@@ -1,0 +1,74 @@
+{
+  "toolbar": {
+    "searchLabel": "Search stories",
+    "searchPlaceholder": "Search stories, authors...",
+    "genreLabel": "Genre",
+    "allGenresLabel": "All genres",
+    "statusLabel": "Status",
+    "allStatusesLabel": "All status",
+    "ongoingLabel": "Ongoing",
+    "completeLabel": "Complete",
+    "sortLabel": "Sort",
+    "sortValue": "newest",
+    "sortOptions": [
+      { "label": "Newest", "value": "newest" },
+      { "label": "Oldest", "value": "oldest" }
+    ],
+    "viewLabel": "View",
+    "gridViewLabel": "Grid view",
+    "listViewLabel": "List view"
+  },
+  "sidebar": {
+    "labelTemplate": "{catalog} navigation",
+    "position": "end",
+    "sticky": true,
+    "genresLegend": "Genres",
+    "allGenresShortLabel": "All",
+    "panel": { "surface": "glass", "radius": "md", "spacing": "sm" },
+    "trendingTitle": "Trending",
+    "popularAuthorsTitle": "Popular authors",
+    "listCards": {
+      "template": "compact-media",
+      "layout": "list",
+      "columns": 1,
+      "gap": "sm",
+      "slots": { "excerpt": false, "tags": false, "action": false }
+    },
+    "authorPlaceholder": { "src": "/uploads/avatar-placehoder.png", "width": 512, "height": 512 },
+    "trendingLimit": 5,
+    "authorLimit": 5
+  },
+  "main": {
+    "featuredTitle": "Featured",
+    "latestTitle": "Latest updates",
+    "popularGenresTitle": "Popular genres",
+    "featuredLimit": 5,
+    "latestLimit": 6,
+    "popularGenresLimit": 8,
+    "featuredCards": {
+      "template": "media-metrics",
+      "layout": "grid",
+      "columns": 5,
+      "gap": "sm",
+      "mediaRatio": "portrait",
+      "slots": { "excerpt": false, "action": false }
+    },
+    "latestCards": {
+      "template": "compact-media",
+      "layout": "grid",
+      "columns": 3,
+      "gap": "sm",
+      "slots": { "excerpt": true, "tags": false, "action": false }
+    },
+    "genreCards": {
+      "template": "icon-summary",
+      "layout": "grid",
+      "columns": 4,
+      "gap": "sm",
+      "slots": { "media": false, "metadata": false, "tags": false, "metrics": false, "action": false }
+    },
+    "genreIcons": ["star", "userCircle", "globeAlt", "bolt", "lightBulb", "archiveBox", "folder01"],
+    "genreWorksTemplate": "{count} works",
+    "authorWorksTemplate": "{count} works"
+  }
+}
