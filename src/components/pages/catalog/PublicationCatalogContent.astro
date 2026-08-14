@@ -6,35 +6,27 @@ import PArchiveToolbar from "@/components/object/project/archive-toolbar/PArchiv
 import PCard from "@/components/object/project/card/PCard.astro";
 import PFilterPanel from "@/components/object/project/filter-panel/PFilterPanel.astro";
 import PSectionHeader from "@/components/object/project/section-header/PSectionHeader.astro";
+import { getPublicationCatalogSettings } from "@/data/cms";
 import { mapPublicationToCard } from "@/data/mappers/card";
 import type { PublicationCardPresentation } from "@/data/mappers/card";
 import type { PublicationEntry } from "@/types/content";
-import type { PCardData } from "@/types/components/object/project/card/PCard.types";
+import type { PCardData, PCardProps } from "@/types/components/object/project/card/PCard.types";
 import type { CIconName } from "@/types/components/object/component/CIcon.types";
 
 type Props = {
 	catalog: "novels" | "comics";
 	entries: PublicationEntry[];
+	presentation: PublicationCardPresentation;
 };
 
-const { catalog, entries } = Astro.props as Props;
-const base = `/${catalog}/`;
-const categoryBase = `/${catalog}/category/`;
-
-const presentation: PublicationCardPresentation = {
-	routes: { base, categoryBase },
-	ariaLabelPrefix: "Read ",
-	categoryDisplay: "text",
-	tagsLabelSuffix: " genres",
-	viewsIcon: "globeAlt",
-};
-
+const { catalog, entries, presentation } = Astro.props as Props;
+const settings = await getPublicationCatalogSettings();
 const cards = entries.map((entry) =>
 	mapPublicationToCard(entry, catalog, presentation),
 );
-const featuredCards = cards.slice(0, 5);
-const latestCards = cards.slice(0, 6);
-const trendingCards = cards.slice(0, 5);
+const featuredCards = cards.slice(0, settings.main.featuredLimit);
+const latestCards = cards.slice(0, settings.main.latestLimit);
+const trendingCards = cards.slice(0, settings.sidebar.trendingLimit);
 
 const genreMap = new Map<string, { label: string; slug: string; count: number }>();
 for (const entry of entries) {
@@ -48,21 +40,13 @@ for (const entry of entries) {
 	}
 }
 const genres = [...genreMap.values()].sort((a, b) => b.count - a.count);
-
-const genreIcons: CIconName[] = [
-	"star",
-	"userCircle",
-	"globeAlt",
-	"bolt",
-	"lightBulb",
-	"archiveBox",
-	"folder01",
-];
-const popularGenreCards: PCardData[] = genres.slice(0, 8).map((genre, index) => ({
-	href: `#catalog`,
+const genreIcons = settings.main.genreIcons as CIconName[];
+const formatCount = (template: string, count: number) => template.replace("{count}", String(count));
+const popularGenreCards: PCardData[] = genres.slice(0, settings.main.popularGenresLimit).map((genre, index) => ({
+	href: `${presentation.routes.categoryBase}${genre.slug}`,
 	ariaLabel: genre.label,
 	title: [genre.label],
-	excerpt: `${genre.count} works`,
+	excerpt: formatCount(settings.main.genreWorksTemplate, genre.count),
 	icon: genreIcons[index % genreIcons.length],
 }));
 
@@ -72,17 +56,17 @@ for (const entry of entries) {
 }
 const authorCards: PCardData[] = [...authorCounts.entries()]
 	.sort((a, b) => b[1] - a[1])
-	.slice(0, 5)
+	.slice(0, settings.sidebar.authorLimit)
 	.map(([name, works]) => ({
 		href: "#catalog",
 		ariaLabel: name,
 		title: [name],
-		excerpt: `${works} works`,
+		excerpt: formatCount(settings.main.authorWorksTemplate, works),
 		media: {
-			src: "/uploads/avatar-placehoder.png",
+			src: settings.sidebar.authorPlaceholder.src,
 			alt: name,
-			width: 512,
-			height: 512,
+			width: settings.sidebar.authorPlaceholder.width,
+			height: settings.sidebar.authorPlaceholder.height,
 		},
 	}));
 
@@ -90,68 +74,79 @@ const toolbar = {
 	data: {
 		search: {
 			id: `${catalog}-search`,
-			label: "Search stories",
+			label: settings.toolbar.searchLabel,
 			name: "search",
-			placeholder: "Search stories, authors...",
+			placeholder: settings.toolbar.searchPlaceholder,
 		},
 		selects: [
 			{
 				control: "genre",
 				id: `${catalog}-genre`,
-				label: "Genre",
+				label: settings.toolbar.genreLabel,
 				value: "all",
 				options: [
-					{ label: "All genres", value: "all" },
+					{ label: settings.toolbar.allGenresLabel, value: "all" },
 					...genres.map((genre) => ({ label: genre.label, value: genre.slug })),
 				],
 			},
 			{
 				control: "status",
 				id: `${catalog}-status`,
-				label: "Status",
+				label: settings.toolbar.statusLabel,
 				value: "all",
 				options: [
-					{ label: "All status", value: "all" },
-					{ label: "Ongoing", value: "ongoing" },
-					{ label: "Complete", value: "complete" },
+					{ label: settings.toolbar.allStatusesLabel, value: "all" },
+					{ label: settings.toolbar.ongoingLabel, value: "ongoing" },
+					{ label: settings.toolbar.completeLabel, value: "complete" },
 				],
 			},
 		],
 		sort: {
-			label: "Sort",
-			value: "newest",
-			options: [
-				{ label: "Newest", value: "newest" },
-				{ label: "Oldest", value: "oldest" },
-			],
+			label: settings.toolbar.sortLabel,
+			value: settings.toolbar.sortValue,
+			options: settings.toolbar.sortOptions,
 		},
 		view: {
-			label: "View",
-			gridLabel: "Grid view",
-			listLabel: "List view",
+			label: settings.toolbar.viewLabel,
+			gridLabel: settings.toolbar.gridViewLabel,
+			listLabel: settings.toolbar.listViewLabel,
 		},
 	},
 };
+
+const cardProps = (config: typeof settings.main.featuredCards, items: PCardData[]): PCardProps => ({
+	template: config.template as PCardProps["template"],
+	layout: config.layout as PCardProps["layout"],
+	columns: config.columns as PCardProps["columns"],
+	gap: config.gap as PCardProps["gap"],
+	mediaRatio: config.mediaRatio as PCardProps["mediaRatio"],
+	slots: config.slots,
+	items,
+});
 ---
 
 <CBox data-collection-filter-root>
 	<CColumns columns="one" gap="md">
 		<PArchiveToolbar {...toolbar} />
 
-		<LSidebar label={`${catalog} navigation`} position="end" sticky>
+		<LSidebar
+			label={settings.sidebar.labelTemplate.replace("{catalog}", catalog)}
+			position={settings.sidebar.position}
+			sticky={settings.sidebar.sticky}
+		>
 			<CColumns slot="sidebar" columns="one" gap="md">
-				<CBox surface="glass" radius="md" spacing="sm">
+				<CBox surface={settings.sidebar.panel.surface} radius={settings.sidebar.panel.radius} spacing={settings.sidebar.panel.spacing}>
 					<PFilterPanel
 						data={{
 							groups: [
 								{
 									appearance: "navigation",
 									control: "genre",
-									legend: "Genres",
+									legend: settings.sidebar.genresLegend,
 									name: `${catalog}-genres`,
 									type: "radio",
 									options: [
-										{ label: "All", value: "all", count: entries.length, checked: true },
+										{ label: settings.sidebar.allGenresShortLabel, value: "all", count: entries.length, checked: true },
 										...genres.map((genre) => ({
 											label: genre.label,
 											value: genre.slug,
@@ -164,92 +159,36 @@ const toolbar = {
 					/>
 				</CBox>
 
-				<CBox surface="glass" radius="md" spacing="sm">
+				<CBox surface={settings.sidebar.panel.surface} radius={settings.sidebar.panel.radius} spacing={settings.sidebar.panel.spacing}>
 					<CColumns columns="one" gap="sm">
-						<PSectionHeader
-							data={{ title: "Trending" }}
-							appearance="compact"
-							headingLevel={2}
-						/>
-						<PCard
-							template="compact-media"
-							layout="list"
-							columns={1}
-							gap="sm"
-							items={trendingCards}
-							slots={{ excerpt: false, tags: false, action: false }}
-						/>
+						<PSectionHeader data={{ title: settings.sidebar.trendingTitle }} appearance="compact" headingLevel={2} />
+						<PCard {...cardProps(settings.sidebar.listCards, trendingCards)} />
 					</CColumns>
 				</CBox>
 
-				<CBox surface="glass" radius="md" spacing="sm">
+				<CBox surface={settings.sidebar.panel.surface} radius={settings.sidebar.panel.radius} spacing={settings.sidebar.panel.spacing}>
 					<CColumns columns="one" gap="sm">
-						<PSectionHeader
-							data={{ title: "Popular authors" }}
-							appearance="compact"
-							headingLevel={2}
-						/>
-						<PCard
-							template="compact-media"
-							layout="list"
-							columns={1}
-							gap="sm"
-							items={authorCards}
-							slots={{ metadata: false, tags: false, metrics: false, action: false }}
-						/>
+						<PSectionHeader data={{ title: settings.sidebar.popularAuthorsTitle }} appearance="compact" headingLevel={2} />
+						<PCard {...cardProps(settings.sidebar.listCards, authorCards)} slots={{ metadata: false, tags: false, metrics: false, action: false }} />
 					</CColumns>
 				</CBox>
 			</CColumns>
 
 			<CColumns columns="one" gap="lg">
 				<CColumns columns="one" gap="sm">
-					<PSectionHeader
-						data={{ title: "Featured" }}
-						appearance="compact"
-						headingLevel={2}
-					/>
-					<PCard
-						template="media-metrics"
-						layout="grid"
-						columns={5}
-						gap="sm"
-						mediaRatio="portrait"
-						items={featuredCards}
-						slots={{ excerpt: false, action: false }}
-					/>
+					<PSectionHeader data={{ title: settings.main.featuredTitle }} appearance="compact" headingLevel={2} />
+					<PCard {...cardProps(settings.main.featuredCards, featuredCards)} />
 				</CColumns>
 
 				<CColumns columns="one" gap="sm">
-					<PSectionHeader
-						data={{ title: "Latest updates" }}
-						appearance="compact"
-						headingLevel={2}
-					/>
-					<PCard
-						template="compact-media"
-						layout="grid"
-						columns={3}
-						gap="sm"
-						items={latestCards}
-						slots={{ excerpt: true, tags: false, action: false }}
-					/>
+					<PSectionHeader data={{ title: settings.main.latestTitle }} appearance="compact" headingLevel={2} />
+					<PCard {...cardProps(settings.main.latestCards, latestCards)} />
 				</CColumns>
 
-				<CBox surface="glass" radius="md" spacing="sm">
+				<CBox surface={settings.sidebar.panel.surface} radius={settings.sidebar.panel.radius} spacing={settings.sidebar.panel.spacing}>
 					<CColumns columns="one" gap="sm">
-						<PSectionHeader
-							data={{ title: "Popular genres" }}
-							appearance="compact"
-							headingLevel={2}
-						/>
-						<PCard
-							template="icon-summary"
-							layout="grid"
-							columns={4}
-							gap="sm"
-							items={popularGenreCards}
-							slots={{ media: false, metadata: false, tags: false, metrics: false, action: false }}
-						/>
+						<PSectionHeader data={{ title: settings.main.popularGenresTitle }} appearance="compact" headingLevel={2} />
+						<PCard {...cardProps(settings.main.genreCards, popularGenreCards)} />
 					</CColumns>
 				</CBox>
 			</CColumns>
