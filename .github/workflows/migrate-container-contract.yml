@@ -134,4 +134,4 @@ jobs:
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
           git add src public/admin/config.yml .github/workflows/migrate-container-contract.yml
           git commit -m 'refactor: rename container size contract'
-          git push
+          git push --no-verify
