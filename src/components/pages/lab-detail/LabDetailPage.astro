@@ -1,5 +1,4 @@
 ---
-import LContainer from "@/components/layout/LContainer.astro";
 import LPage from "@/components/layout/LPage.astro";
 import LSection from "@/components/layout/LSection.astro";
 import LSidebar from "@/components/layout/LSidebar.astro";
@@ -67,9 +66,9 @@ const classes = {
 					</CColumns>
 				</CBox>
 			</CColumns>
-			<LContainer size="article" class={classes.articleFrame}>
+			<div class={classes.articleFrame}>
 				<PArticle template={presentation.content.article.template} content={lab.content} />
-			</LContainer>
+			</div>
 		</LSidebar>
 	</LSection>
 
