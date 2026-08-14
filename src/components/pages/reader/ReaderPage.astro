@@ -13,9 +13,10 @@ if (!configuredChapter) throw new Error(`Missing CMS reader chapter: ${catalogSl
 const presentation = await getPublicationDetailSettings();
 const readerPage = presentation.reader;
 const config = readerPage.labels;
-const collectionLabel = presentation.collections[catalogSlug].collectionLabel;
-const indexHref = `/${catalogSlug}/${entry.slug}#${presentation.chapters.id}`;
-const chapterHref = (number: number) => `/${catalogSlug}/${entry.slug}/chapter/${number}`;
+const collectionPresentation = presentation.collections[catalogSlug];
+const basePath = collectionPresentation.basePath;
+const indexHref = `${basePath}/${entry.slug}#${presentation.chapters.id}`;
+const chapterHref = (number: number) => `${basePath}/${entry.slug}/${presentation.routes.chapterSegment}/${number}`;
 const configuredChapters = [...(entry.detail?.reader ?? [])].sort((a, b) => a.number - b.number);
 const chapterIndex = configuredChapters.findIndex((item) => item.number === chapter);
 const previousChapter = chapterIndex > 0 ? configuredChapters[chapterIndex - 1] : undefined;
@@ -35,16 +36,14 @@ const metadataItems = [
 				type: "datetime" as const,
 				label: configuredChapter.publishedLabel,
 				datetime: configuredChapter.publishedAt,
-				icon: "calendar03",
-				display: "icon-text" as const,
+				...readerPage.metadata.published,
 			}
 		: undefined,
 	configuredChapter.readTime
 		? {
 				type: "reading-time" as const,
 				label: configuredChapter.readTime,
-				icon: "clock01",
-				display: "icon-text" as const,
+				...readerPage.metadata.readTime,
 			}
 		: undefined,
 ].filter(Boolean);
@@ -57,8 +56,8 @@ const metadataItems = [
 				breadcrumb: {
 					label: config.breadcrumb,
 					items: [
-						{ label: collectionLabel, href: `/${catalogSlug}` },
-						{ label: entry.title, href: `/${catalogSlug}/${entry.slug}` },
+						{ label: collectionPresentation.collectionLabel, href: basePath },
+						{ label: entry.title, href: `${basePath}/${entry.slug}` },
 					],
 					current: `${config.chapter} ${chapter}`,
 				},
@@ -69,19 +68,39 @@ const metadataItems = [
 				content,
 				actions: {
 					label: config.actions,
-					index: { label: config.chapterList, href: indexHref, icon: "listView", variant: "outline", size: "md" },
+					index: {
+						label: config.chapterList,
+						href: indexHref,
+						...readerPage.controls.chapterList,
+					},
 					settingsLabel: config.settings,
 					themeLabel: config.theme,
-					next: nextChapter ? { label: config.next, href: chapterHref(nextChapter.number), icon: "arrowRight", iconPosition: "end", variant: "primary", size: "md" } : undefined,
+					next: nextChapter ? {
+						label: config.next,
+						href: chapterHref(nextChapter.number),
+						...readerPage.controls.next,
+					} : undefined,
 				},
 				share: { label: config.share, links: [] },
 				reactions: { label: config.reactions, items: [] },
 				bookmarkLabel: config.bookmark,
 				navigation: {
 					label: config.navigation,
-					previous: previousChapter ? { label: config.previous, href: chapterHref(previousChapter.number), icon: "arrowLeft", variant: "outline", size: "md" } : undefined,
-					index: { label: config.chapterList, href: indexHref, icon: "listView", variant: "outline", size: "md" },
-					next: nextChapter ? { label: config.next, href: chapterHref(nextChapter.number), icon: "arrowRight", iconPosition: "end", variant: "primary", size: "md" } : undefined,
+					previous: previousChapter ? {
+						label: config.previous,
+						href: chapterHref(previousChapter.number),
+						...readerPage.controls.previous,
+					} : undefined,
+					index: {
+						label: config.chapterList,
+						href: indexHref,
+						...readerPage.controls.chapterList,
+					},
+					next: nextChapter ? {
+						label: config.next,
+						href: chapterHref(nextChapter.number),
+						...readerPage.controls.next,
+					} : undefined,
 				},
 			}}
 		/>
