@@ -33,13 +33,29 @@
             "salesLabel": "154 reviews",
             "features": [],
             "facts": [
-              { "label": "Platform", "value": "Figma" },
-              { "label": "Category", "value": "Figma UI Kit" }
+              {
+                "label": "Platform",
+                "value": "Figma"
+              },
+              {
+                "label": "Category",
+                "value": "Figma UI Kit"
+              }
             ],
             "actionsLabel": "Orbit UI Kit actions",
             "actions": [
-              { "label": "Contact to purchase", "href": "mailto:thunk.work.91@gmail.com", "icon": "shoppingBag", "variant": "primary" },
-              { "label": "View preview", "href": "/uploads/page-header-insight.png", "icon": "arrowUpRight", "variant": "outline" }
+              {
+                "label": "Contact to purchase",
+                "href": "mailto:thunk.work.91@gmail.com",
+                "icon": "shoppingBag",
+                "variant": "primary"
+              },
+              {
+                "label": "View preview",
+                "href": "/uploads/page-header-insight.png",
+                "icon": "arrowUpRight",
+                "variant": "outline"
+              }
             ],
             "paymentLabel": "Payment methods",
             "paymentMethods": []
@@ -48,7 +64,6 @@
         {
           "id": "product-overview",
           "type": "article",
-          "template": "flow",
           "settings": {
             "theme": "canvas",
             "spacing": "body",

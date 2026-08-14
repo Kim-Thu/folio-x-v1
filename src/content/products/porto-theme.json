@@ -20,7 +20,11 @@
           "id": "product-summary",
           "type": "page-header",
           "template": "gallery-summary",
-          "settings": { "theme": "canvas", "spacing": "lead", "container": "site" },
+          "settings": {
+            "theme": "canvas",
+            "spacing": "lead",
+            "container": "site"
+          },
           "content": {
             "breadcrumbLabel": "Breadcrumb",
             "productsLabel": "Products",
@@ -29,13 +33,29 @@
             "salesLabel": "85 reviews",
             "features": [],
             "facts": [
-              { "label": "Platform", "value": "WordPress" },
-              { "label": "Category", "value": "WordPress Theme" }
+              {
+                "label": "Platform",
+                "value": "WordPress"
+              },
+              {
+                "label": "Category",
+                "value": "WordPress Theme"
+              }
             ],
             "actionsLabel": "Porto Theme actions",
             "actions": [
-              { "label": "Contact to purchase", "href": "mailto:thunk.work.91@gmail.com", "icon": "shoppingBag", "variant": "primary" },
-              { "label": "View preview", "href": "https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&w=900&q=88", "icon": "arrowUpRight", "variant": "outline" }
+              {
+                "label": "Contact to purchase",
+                "href": "mailto:thunk.work.91@gmail.com",
+                "icon": "shoppingBag",
+                "variant": "primary"
+              },
+              {
+                "label": "View preview",
+                "href": "https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&w=900&q=88",
+                "icon": "arrowUpRight",
+                "variant": "outline"
+              }
             ],
             "paymentLabel": "Payment methods",
             "paymentMethods": []
@@ -44,14 +64,19 @@
         {
           "id": "product-overview",
           "type": "article",
-          "template": "flow",
-          "settings": { "theme": "canvas", "spacing": "body", "container": "content" },
+          "settings": {
+            "theme": "canvas",
+            "spacing": "body",
+            "container": "content"
+          },
           "content": {
             "blocks": [
               {
                 "id": "product-overview-content",
                 "title": "Overview",
-                "paragraphs": ["Multipurpose WordPress theme for any business."]
+                "paragraphs": [
+                  "Multipurpose WordPress theme for any business."
+                ]
               }
             ]
           }

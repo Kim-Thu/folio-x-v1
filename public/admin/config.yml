@@ -118,7 +118,7 @@ collections:
                         fields:
                           - { label: ID, name: id, widget: string }
                           - { label: Type, name: type, widget: hidden, default: hero }
-                          - { label: Template, name: template, widget: string }
+                          - { label: Template, name: template, widget: hidden, default: split-media }
                           - label: Settings
                             name: settings
                             widget: object
@@ -126,11 +126,11 @@ collections:
                               - { label: Theme, name: theme, widget: select, options: [dark, light, canvas, accent, none] }
                               - { label: Spacing, name: spacing, widget: select, options: [compact, default, none, lead, body, closing] }
                               - { label: Container, name: container, widget: select, options: [site, content, none] }
-                              - { label: Layout, name: layout, widget: string, required: false }
-                              - { label: Columns, name: columns, widget: number, required: false, value_type: int, min: 1 }
-                              - { label: Gap, name: gap, widget: string, required: false }
-                              - { label: Media ratio, name: mediaRatio, widget: string, required: false }
-                              - { label: Separator, name: separator, widget: string, required: false }
+                              - { label: Layout, name: layout, widget: select, required: false, options: [grid, list, three-column, twelve-column, content-three-column, mosaic, asymmetric, showcase] }
+                              - { label: Columns, name: columns, widget: number, required: false, value_type: int, min: 1, max: 5 }
+                              - { label: Gap, name: gap, widget: select, required: false, options: [none, sm, md, lg, xl] }
+                              - { label: Media ratio, name: mediaRatio, widget: select, required: false, options: [editorial, landscape, natural, panoramic, portrait, square, video] }
+                              - { label: Separator, name: separator, widget: select, required: false, options: [none, light, dark] }
                           - label: Content
                             name: content
                             widget: object
@@ -158,9 +158,9 @@ collections:
                                   - { label: Label, name: label, widget: string }
                                   - { label: Icon, name: icon, widget: string, required: false }
                                   - { label: Icon position, name: iconPosition, widget: select, required: false, options: [start, end] }
-                                  - { label: Variant, name: variant, widget: string, required: false }
-                                  - { label: Tone, name: tone, widget: string, required: false }
-                                  - { label: Size, name: size, widget: string, required: false }
+                                  - { label: Variant, name: variant, widget: select, required: false, options: [primary, secondary, outline, ghost, text, text-subtle, pagination, tab, view] }
+                                  - { label: Tone, name: tone, widget: select, required: false, options: [dark, light] }
+                                  - { label: Size, name: size, widget: select, required: false, options: [xs, sm, md, lg] }
                               - { label: Actions label, name: actionsLabel, widget: string, required: false }
                               - { label: Scroll label, name: scrollLabel, widget: string, required: false }
                       - label: Collection
@@ -169,7 +169,7 @@ collections:
                         fields:
                           - { label: ID, name: id, widget: string }
                           - { label: Type, name: type, widget: hidden, default: collection }
-                          - { label: Template, name: template, widget: string, required: false }
+                          - { label: Template, name: template, widget: select, required: false, options: [stacked, horizontal, overlay, featured, boxed, compact-media, compact-bordered, editorial, icon-panel, icon-summary, media-banner, media-caption, media-details, media-only, media-summary, media-metrics] }
                           - label: Settings
                             name: settings
                             widget: object
@@ -208,7 +208,7 @@ collections:
                         fields:
                           - { label: ID, name: id, widget: string }
                           - { label: Type, name: type, widget: hidden, default: cta }
-                          - { label: Template, name: template, widget: string }
+                          - { label: Template, name: template, widget: select, options: [callout, default, media-pricing, subscription] }
                           - label: Settings
                             name: settings
                             widget: object
@@ -370,7 +370,7 @@ collections:
                                     name: filter
                                     widget: object
                                     fields:
-                                      - { label: Appearance, name: appearance, widget: string }
+                                      - { label: Appearance, name: appearance, widget: select, options: [default, compact, controls, navigation] }
                                       - { label: Control, name: control, widget: string }
                                       - { label: Legend, name: legend, widget: string }
                                       - { label: Name, name: name, widget: string }
@@ -386,18 +386,18 @@ collections:
                                         name: header
                                         widget: object
                                         fields:
-                                          - { label: Appearance, name: appearance, widget: string }
+                                          - { label: Appearance, name: appearance, widget: select, options: [default, compact, controls, navigation] }
                                           - { label: Heading level, name: headingLevel, widget: number, value_type: int, min: 1, max: 6 }
                                       - label: Cards
                                         name: cards
                                         widget: object
                                         fields:
                                           - { label: Template, name: template, widget: string }
-                                          - { label: Layout, name: layout, widget: string }
-                                          - { label: Columns, name: columns, widget: number, value_type: int, min: 1 }
-                                          - { label: Gap, name: gap, widget: string }
-                                          - { label: Media ratio, name: mediaRatio, widget: string, required: false }
-                                          - { label: Separator, name: separator, widget: string, required: false }
+                                          - { label: Layout, name: layout, widget: select, options: [grid, list, three-column, twelve-column, content-three-column, mosaic, asymmetric, showcase] }
+                                          - { label: Columns, name: columns, widget: number, value_type: int, min: 1, max: 5 }
+                                          - { label: Gap, name: gap, widget: select, options: [none, sm, md, lg, xl] }
+                                          - { label: Media ratio, name: mediaRatio, widget: select, required: false, options: [editorial, landscape, natural, panoramic, portrait, square, video] }
+                                          - { label: Separator, name: separator, widget: select, required: false, options: [none, light, dark] }
                                           - { label: Heading level, name: headingLevel, widget: number, value_type: int, min: 1, max: 6, required: false }
                                           - label: Slots
                                             name: slots
@@ -441,7 +441,7 @@ collections:
                                       - { label: Category base, name: categoryBase, widget: string }
                                       - { label: Tag base, name: tagBase, widget: string }
                                   - { label: Separator, name: separator, widget: string }
-                                  - { label: Metadata display, name: metadataDisplay, widget: string }
+                                  - { label: Metadata display, name: metadataDisplay, widget: select, options: [icon, icon-text, text] }
                                   - { label: Tags label suffix, name: tagsLabelSuffix, widget: string }
                                   - { label: Image width, name: imageWidth, widget: number, value_type: int, min: 1 }
                                   - { label: Image height, name: imageHeight, widget: number, value_type: int, min: 1 }
@@ -454,18 +454,18 @@ collections:
                                     name: header
                                     widget: object
                                     fields:
-                                      - { label: Appearance, name: appearance, widget: string }
+                                      - { label: Appearance, name: appearance, widget: select, options: [default, compact, controls, navigation] }
                                       - { label: Heading level, name: headingLevel, widget: number, value_type: int, min: 1, max: 6 }
                               - label: Cards
                                 name: cards
                                 widget: object
                                 fields:
                                   - { label: Template, name: template, widget: string }
-                                  - { label: Layout, name: layout, widget: string }
-                                  - { label: Columns, name: columns, widget: number, value_type: int, min: 1 }
-                                  - { label: Gap, name: gap, widget: string }
-                                  - { label: Media ratio, name: mediaRatio, widget: string, required: false }
-                                  - { label: Separator, name: separator, widget: string, required: false }
+                                  - { label: Layout, name: layout, widget: select, options: [grid, list, three-column, twelve-column, content-three-column, mosaic, asymmetric, showcase] }
+                                  - { label: Columns, name: columns, widget: number, value_type: int, min: 1, max: 5 }
+                                  - { label: Gap, name: gap, widget: select, options: [none, sm, md, lg, xl] }
+                                  - { label: Media ratio, name: mediaRatio, widget: select, required: false, options: [editorial, landscape, natural, panoramic, portrait, square, video] }
+                                  - { label: Separator, name: separator, widget: select, required: false, options: [none, light, dark] }
                                   - { label: Heading level, name: headingLevel, widget: number, value_type: int, min: 1, max: 6, required: false }
                                   - label: Slots
                                     name: slots
@@ -870,9 +870,9 @@ collections:
                 fields: &publication_catalog_card_fields
                   - { label: Template, name: template, widget: string }
                   - { label: Layout, name: layout, widget: select, options: [grid, list] }
-                  - { label: Columns, name: columns, widget: number, value_type: int, min: 1 }
-                  - { label: Gap, name: gap, widget: string }
-                  - { label: Media ratio, name: mediaRatio, widget: string, required: false }
+                  - { label: Columns, name: columns, widget: number, value_type: int, min: 1, max: 5 }
+                  - { label: Gap, name: gap, widget: select, options: [none, sm, md, lg, xl] }
+                  - { label: Media ratio, name: mediaRatio, widget: select, required: false, options: [editorial, landscape, natural, panoramic, portrait, square, video] }
                   - label: Slots
                     name: slots
                     widget: object
@@ -1000,7 +1000,7 @@ collections:
               - { label: ID, name: id, widget: string }
               - { label: Settings, name: settings, widget: object, fields: *publication_section_settings }
               - { label: Label, name: label, widget: string }
-              - { label: Appearance, name: appearance, widget: string }
+              - { label: Appearance, name: appearance, widget: select, options: [default, compact, controls, navigation] }
               - { label: Tone, name: tone, widget: string }
               - label: Tabs
                 name: tabs
@@ -1031,7 +1031,7 @@ collections:
                 widget: object
                 fields:
                   - { label: Columns, name: columns, widget: string }
-                  - { label: Gap, name: gap, widget: string }
+                  - { label: Gap, name: gap, widget: select, options: [none, sm, md, lg, xl] }
               - label: Sort
                 name: sort
                 widget: object
@@ -1386,7 +1386,7 @@ collections:
                     fields:
                       - { label: ID, name: id, widget: string }
                       - { label: Type, name: type, widget: hidden, default: article }
-                      - { label: Template, name: template, widget: string, required: false }
+                      - { label: Template, name: template, widget: select, required: false, options: [stacked, horizontal, overlay, featured, boxed, compact-media, compact-bordered, editorial, icon-panel, icon-summary, media-banner, media-caption, media-details, media-only, media-summary, media-metrics] }
                       - label: Settings
                         name: settings
                         widget: object
@@ -1402,7 +1402,7 @@ collections:
                     fields:
                       - { label: ID, name: id, widget: string }
                       - { label: Type, name: type, widget: hidden, default: reviews }
-                      - { label: Template, name: template, widget: string, required: false }
+                      - { label: Template, name: template, widget: select, required: false, options: [stacked, horizontal, overlay, featured, boxed, compact-media, compact-bordered, editorial, icon-panel, icon-summary, media-banner, media-caption, media-details, media-only, media-summary, media-metrics] }
                       - label: Settings
                         name: settings
                         widget: object
@@ -1418,7 +1418,7 @@ collections:
                     fields:
                       - { label: ID, name: id, widget: string }
                       - { label: Type, name: type, widget: hidden, default: post-navigation }
-                      - { label: Template, name: template, widget: string, required: false }
+                      - { label: Template, name: template, widget: select, required: false, options: [stacked, horizontal, overlay, featured, boxed, compact-media, compact-bordered, editorial, icon-panel, icon-summary, media-banner, media-caption, media-details, media-only, media-summary, media-metrics] }
                       - label: Settings
                         name: settings
                         widget: object

@@ -32,13 +32,29 @@
             "salesLabel": "44 reviews",
             "features": [],
             "facts": [
-              { "label": "Platform", "value": "React / Next.js" },
-              { "label": "Category", "value": "Template" }
+              {
+                "label": "Platform",
+                "value": "React / Next.js"
+              },
+              {
+                "label": "Category",
+                "value": "Template"
+              }
             ],
             "actionsLabel": "React Commerce actions",
             "actions": [
-              { "label": "Contact to purchase", "href": "mailto:hello@example.com", "icon": "shoppingBag", "variant": "primary" },
-              { "label": "View preview", "href": "https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?auto=format&fit=crop&w=900&q=88", "icon": "arrowUpRight", "variant": "outline" }
+              {
+                "label": "Contact to purchase",
+                "href": "mailto:hello@example.com",
+                "icon": "shoppingBag",
+                "variant": "primary"
+              },
+              {
+                "label": "View preview",
+                "href": "https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?auto=format&fit=crop&w=900&q=88",
+                "icon": "arrowUpRight",
+                "variant": "outline"
+              }
             ],
             "paymentLabel": "Payment methods",
             "paymentMethods": []
@@ -47,7 +63,6 @@
         {
           "id": "product-overview",
           "type": "article",
-          "template": "flow",
           "settings": {
             "theme": "canvas",
             "spacing": "body",
@@ -58,7 +73,9 @@
               {
                 "id": "product-overview",
                 "title": "Overview",
-                "paragraphs": ["A fast storefront starter built for modern teams."]
+                "paragraphs": [
+                  "A fast storefront starter built for modern teams."
+                ]
               }
             ]
           }
