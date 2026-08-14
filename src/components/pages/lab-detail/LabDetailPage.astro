@@ -24,6 +24,22 @@ import type { LabDetailPageProps } from "@/types/components/pages/lab-detail/Lab
 
 const { data } = Astro.props as LabDetailPageProps;
 const { lab, presentation, header, tabs, sidebar, galleryItems, resources, relatedItems } = data;
+
+const classes = {
+	navigationFrame: "border-y border-black/10 bg-white",
+	articleFrame: "min-w-0 max-w-3xl",
+	sidebarDivider: "border-t border-black/10 pt-4",
+	galleryGrid: "grid grid-cols-2 gap-3 md:grid-cols-3 lg:grid-cols-5",
+	galleryLink: "group block overflow-hidden rounded-md bg-black/5",
+	galleryImage: "transition-transform duration-300 group-hover:scale-[1.02]",
+	galleryCaption: "border-t border-black/10 px-3 py-2",
+	resourcesGrid: "grid gap-3 md:grid-cols-2 xl:grid-cols-4",
+	resourcesIcon: "flex size-10 items-center justify-center rounded-md bg-black text-white",
+	relatedGrid: "grid gap-4 sm:grid-cols-2 xl:grid-cols-4",
+	relatedLink: "group block h-full",
+	relatedCard: "h-full transition-transform duration-300 group-hover:-translate-y-1",
+	relatedContent: "border-t border-black/10 p-4",
+} as const;
 ---
 
 <LPage template={presentation.page.template}>
@@ -33,7 +49,7 @@ const { lab, presentation, header, tabs, sidebar, galleryItems, resources, relat
 
 	{tabs.length > 0 && (
 		<LSection {...presentation.navigation.settings}>
-			<div class={presentation.navigation.frameClass}>
+			<div class={classes.navigationFrame}>
 				<CTabList label={presentation.navigation.labelTemplate.replace("{title}", lab.title)} appearance={presentation.navigation.appearance} activeValue={tabs[0]?.value} tone={presentation.navigation.tone} {tabs} />
 			</div>
 		</LSection>
@@ -45,12 +61,12 @@ const { lab, presentation, header, tabs, sidebar, galleryItems, resources, relat
 				<CBox surface={presentation.sidebar.panel.surface} radius={presentation.sidebar.panel.radius} spacing={presentation.sidebar.panel.spacing}>
 					<CColumns {...presentation.sidebar.panel.stack}>
 						<PSectionHeader data={{ title: presentation.sidebar.labels.projectInformation }} appearance={presentation.sidebar.header.appearance} headingLevel={presentation.sidebar.header.headingLevel} />
-						<div class={presentation.sidebar.panel.dividerClass}><CDescriptionList items={sidebar.facts} /></div>
-						<div class={presentation.sidebar.panel.dividerClass}><CTags label={sidebar.technologyLabel} items={sidebar.technologies} /></div>
+						<div class={classes.sidebarDivider}><CDescriptionList items={sidebar.facts} /></div>
+						<div class={classes.sidebarDivider}><CTags label={sidebar.technologyLabel} items={sidebar.technologies} /></div>
 					</CColumns>
 				</CBox>
 			</CColumns>
-			<div class={presentation.content.article.frameClass}><PArticle template={presentation.content.article.template} content={lab.content} /></div>
+			<div class={classes.articleFrame}><PArticle template={presentation.content.article.template} content={lab.content} /></div>
 		</LSidebar>
 	</LSection>
 
@@ -58,11 +74,11 @@ const { lab, presentation, header, tabs, sidebar, galleryItems, resources, relat
 		<LSection id={presentation.gallery.id} {...presentation.gallery.settings}>
 			<CColumns {...presentation.gallery.stack}>
 				<PSectionHeader data={{ title: presentation.gallery.title }} appearance={presentation.gallery.header.appearance} headingLevel={presentation.gallery.header.headingLevel} />
-				<div class={presentation.gallery.gridClass}>
+				<div class={classes.galleryGrid}>
 					{galleryItems.map((item) => (
-						<CLink href={item.href} aria-label={item.ariaLabel} class={presentation.gallery.linkClass}>
-							<CMedia ratio={presentation.gallery.mediaRatio}><CImage {...item.image} variant={presentation.gallery.imageVariant} class={presentation.gallery.imageClass} /></CMedia>
-							{item.title && <div class={presentation.gallery.captionClass}><CText variant={presentation.gallery.captionVariant} tone={presentation.gallery.captionTone}>{item.title}</CText></div>}
+						<CLink href={item.href} aria-label={item.ariaLabel} class={classes.galleryLink}>
+							<CMedia ratio={presentation.gallery.mediaRatio}><CImage {...item.image} variant={presentation.gallery.imageVariant} class={classes.galleryImage} /></CMedia>
+							{item.title && <div class={classes.galleryCaption}><CText variant={presentation.gallery.captionVariant} tone={presentation.gallery.captionTone}>{item.title}</CText></div>}
 						</CLink>
 					))}
 				</div>
@@ -74,12 +90,12 @@ const { lab, presentation, header, tabs, sidebar, galleryItems, resources, relat
 		<LSection id={presentation.resources.id} {...presentation.resources.settings}>
 			<CColumns {...presentation.resources.stack}>
 				<PSectionHeader data={{ title: presentation.resources.title }} appearance={presentation.resources.header.appearance} headingLevel={presentation.resources.header.headingLevel} />
-				<div class={presentation.resources.gridClass}>
+				<div class={classes.resourcesGrid}>
 					{resources.map((resource) => (
 						<CBox as="article" surface={presentation.resources.card.surface} radius={presentation.resources.card.radius} spacing={presentation.resources.card.spacing}>
 							<CColumns {...presentation.resources.card.stack}>
 								<CRow {...presentation.resources.row}>
-									<span class={presentation.resources.iconClass}><CIcon name={resource.icon} size={presentation.resources.iconSize} /></span>
+									<span class={classes.resourcesIcon}><CIcon name={resource.icon} size={presentation.resources.iconSize} /></span>
 									<CButton href={resource.href} label={resource.actionLabel} icon={presentation.resources.actionIcon} {...presentation.resources.action} />
 								</CRow>
 								<CColumns {...presentation.resources.copy.stack}>
@@ -98,12 +114,12 @@ const { lab, presentation, header, tabs, sidebar, galleryItems, resources, relat
 		<LSection id={presentation.related.id} {...presentation.related.settings}>
 			<CColumns {...presentation.related.stack}>
 				<PSectionHeader data={{ title: presentation.related.title }} action={{ label: presentation.related.actionLabel, href: presentation.header.routes.base, icon: presentation.related.actionIcon }} appearance={presentation.related.header.appearance} headingLevel={presentation.related.header.headingLevel} />
-				<div class={presentation.related.gridClass}>
+				<div class={classes.relatedGrid}>
 					{relatedItems.map((item) => (
-						<CLink href={item.href} aria-label={item.ariaLabel} class={presentation.related.linkClass}>
-							<CBox as="article" surface={presentation.related.card.surface} radius={presentation.related.card.radius} overflow={presentation.related.card.overflow} class={presentation.related.card.class}>
+						<CLink href={item.href} aria-label={item.ariaLabel} class={classes.relatedLink}>
+							<CBox as="article" surface={presentation.related.card.surface} radius={presentation.related.card.radius} overflow={presentation.related.card.overflow} class={classes.relatedCard}>
 								<CMedia ratio={presentation.related.mediaRatio}><CImage {...item.image} variant={presentation.related.imageVariant} /></CMedia>
-								<div class={presentation.related.contentClass}>
+								<div class={classes.relatedContent}>
 									<CColumns {...presentation.related.copy.stack}>
 										<CRow justify={presentation.related.metaRow.justify} align={presentation.related.metaRow.align} gap={presentation.related.metaRow.gap}>
 											<CMetadata data={{ items: [{ type: "category", label: item.category.label, href: item.category.href, display: presentation.related.metaRow.metadataDisplay }] }} tone={presentation.related.metaRow.metadataTone} />
