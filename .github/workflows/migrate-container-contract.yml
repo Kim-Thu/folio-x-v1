@@ -38,6 +38,18 @@ jobs:
                   'container: z.enum(["site", "content", "none"]),',
                   'container: z.enum(["fluid", "wide", "boxed", "none"]),',
               ),
+              Path('src/content/blog-detail-settings-schema.ts'): (
+                  'container: z.enum(["site", "content", "none"]),',
+                  'container: z.enum(["fluid", "wide", "boxed", "none"]),',
+              ),
+              Path('src/content/lab-detail-settings-schema.ts'): (
+                  'container: z.enum(["site", "content", "none"]),',
+                  'container: z.enum(["fluid", "wide", "boxed", "none"]),',
+              ),
+              Path('src/content/publication-detail-settings-schema.ts'): (
+                  'container: z.enum(["site", "content", "none"]),',
+                  'container: z.enum(["fluid", "wide", "boxed", "none"]),',
+              ),
               Path('public/admin/config.yml'): (
                   'options: [site, content, none]',
                   'options: [fluid, wide, boxed, none]',
@@ -82,7 +94,7 @@ jobs:
       - name: Verify legacy container names are gone
         shell: bash
         run: |
-          if grep -R -n -E '"container"[[:space:]]*:[[:space:]]*"(site|content)"|container=["'"'"'](site|content)["'"'"']|size=["'"'"'](site|content)["'"'"']' src public/admin/config.yml; then
+          if grep -R -n -E '"container"[[:space:]]*:[[:space:]]*"(site|content)"|container=["'"'"'](site|content)["'"'"']|size=["'"'"'](site|content)["'"'"']|z\.enum\(\["site", "content", "none"\]\)' src public/admin/config.yml; then
             echo 'Legacy container naming remains.'
             exit 1
           fi
