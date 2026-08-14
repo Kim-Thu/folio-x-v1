@@ -7,6 +7,7 @@ import { blogEntrySchema } from "@/content/blog-schema";
 import { blogDetailSettingsSchema } from "@/content/blog-detail-settings-schema";
 import { publicationEntrySchema } from "@/content/publication-schema";
 import { publicationDetailSettingsSchema } from "@/content/publication-detail-settings-schema";
+import { publicationCatalogSettingsSchema } from "@/content/publication-catalog-settings-schema";
 import {
   closingProfileSettingsSchema,
   footerSettingsSchema,
@@ -29,6 +30,7 @@ const systemStatesSettings = defineCollection({ loader: glob({ base: settingsBas
 const labDetailSettings = defineCollection({ loader: glob({ base: settingsBase, pattern: "lab-detail.json" }), schema: labDetailSettingsSchema });
 const blogDetailSettings = defineCollection({ loader: glob({ base: settingsBase, pattern: "blog-detail.json" }), schema: blogDetailSettingsSchema });
 const publicationDetailSettings = defineCollection({ loader: glob({ base: settingsBase, pattern: "publication-detail.json" }), schema: publicationDetailSettingsSchema });
+const publicationCatalogSettings = defineCollection({ loader: glob({ base: settingsBase, pattern: "publication-catalog.json" }), schema: publicationCatalogSettingsSchema });
 const projects = defineCollection({ loader: glob({ base: "./src/content/projects", pattern: "*.json" }), schema: projectEntrySchema });
 const products = defineCollection({ loader: glob({ base: "./src/content/products", pattern: "*.json" }), schema: productEntrySchema });
 const labs = defineCollection({ loader: glob({ base: "./src/content/labs", pattern: "*.json" }), schema: labEntrySchema });
@@ -47,6 +49,7 @@ export const collections = {
   labDetailSettings,
   blogDetailSettings,
   publicationDetailSettings,
+  publicationCatalogSettings,
   projects,
   products,
   labs,
