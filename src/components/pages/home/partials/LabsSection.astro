@@ -1,0 +1,49 @@
+---
+import LSection from "@/components/layout/LSection.astro";
+import CColumns from "@/components/object/component/CColumns.astro";
+import PCard from "@/components/object/project/card/PCard.astro";
+import PSectionHeader from "@/components/object/project/section-header/PSectionHeader.astro";
+import { getLabs } from "@/data/cms";
+import { mapLabToCard } from "@/data/mappers/card";
+import type { HomePageData } from "@/types/components/pages/home/HomePage.types";
+
+type PageSection = HomePageData["content"]["sections"][number];
+type CollectionSection = Extract<PageSection, { type: "collection" }>;
+
+type Props = {
+	data: CollectionSection;
+};
+
+const { data } = Astro.props as Props;
+const { content } = data;
+
+if (
+	!("source" in content) ||
+	content.source.collection !== "labs" ||
+	!content.heading ||
+	!content.cards ||
+	content.itemPresentation.categoryDisplay !== "text"
+) {
+	throw new Error("Home labs section has an invalid content contract");
+}
+
+const labs = await getLabs();
+const items = labs
+	.slice(0, content.source.limit)
+	.map((lab) => mapLabToCard(lab, content.itemPresentation));
+---
+
+<LSection id={data.id} {...data.settings}>
+	<CColumns columns="one" gap="xl">
+		<PSectionHeader
+			data={{
+				number: content.heading.number,
+				label: content.heading.label,
+				title: content.heading.title,
+				description: content.heading.description,
+			}}
+			action={content.heading.action}
+		/>
+		<PCard {...content.cards} items={items} />
+	</CColumns>
+</LSection>
