@@ -80,7 +80,7 @@ const { lab, presentation, header, tabs, sidebar, galleryItems, resources, relat
 							<CColumns {...presentation.resources.card.stack}>
 								<CRow {...presentation.resources.row}>
 									<span class={presentation.resources.iconClass}><CIcon name={resource.icon} size={presentation.resources.iconSize} /></span>
-									<CButton href={resource.href} label={resource.actionLabel} icon={presentation.resources.actionIcon} iconOnly={presentation.resources.action.iconOnly} {...presentation.resources.action} />
+									<CButton href={resource.href} label={resource.actionLabel} icon={presentation.resources.actionIcon} {...presentation.resources.action} />
 								</CRow>
 								<CColumns {...presentation.resources.copy.stack}>
 									<CHeading level={presentation.resources.copy.headingLevel} variant={presentation.resources.copy.headingVariant}>{resource.title}</CHeading>
