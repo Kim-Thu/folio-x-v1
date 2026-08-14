@@ -1,100 +1,62 @@
-name: Detail builder contract migration
+name: detail-builder-migration
 
 on:
   push:
-    branches:
-      - agent/cms-content-migration
+    branches: [agent/cms-content-migration]
 
 permissions:
   contents: write
 
 jobs:
   migrate:
-    if: github.actor != 'github-actions[bot]'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
         with:
           ref: agent/cms-content-migration
-
-      - name: Add resolved page and PLayout support
-        shell: bash
+      - shell: bash
         run: |
-          python - <<'PY'
+          python3 <<'PY'
           from pathlib import Path
 
-          types_path = Path('src/types/components/pages/builder/PageBuilder.types.ts')
-          text = types_path.read_text(encoding='utf-8')
-          marker = 'import type { PHeroProps } from "@/types/components/object/project/hero/PHero.types";\n'
-          addition = marker + 'import type { PLayoutProps } from "@/types/components/object/project/layout/PLayout.types";\n'
-          if addition not in text:
-              if marker not in text:
-                  raise SystemExit('PageBuilder type import marker not found')
-              text = text.replace(marker, addition, 1)
-
-          old = '''export interface PageBuilderProps {
-\tpage: PageEntryData;
-\tcontext?: PageBuilderContext;
-}
-'''
-          new = '''export interface ResolvedPageData {
-\tlayout: PLayoutProps;
-\tregions: PageRegion[];
-}
-
-export type PageBuilderProps =
-\t| {
-\t\tpage: PageEntryData;
-\t\tcontext?: PageBuilderContext;
-\t  }
-\t| ResolvedPageData;
-'''
-          if old not in text:
-              raise SystemExit('PageBuilderProps marker not found')
-          text = text.replace(old, new, 1)
-          types_path.write_text(text, encoding='utf-8')
-
-          builder_path = Path('src/components/pages/builder/PageBuilder.astro')
-          text = builder_path.read_text(encoding='utf-8')
-          text = text.replace(
-              'import LPage from "@/components/layout/LPage.astro";\n',
-              'import PLayout from "@/components/object/project/layout/PLayout.astro";\n',
+          p = Path('src/types/components/pages/builder/PageBuilder.types.ts')
+          s = p.read_text()
+          s = s.replace(
+              'import type { PHeroProps } from "@/types/components/object/project/hero/PHero.types";\n',
+              'import type { PHeroProps } from "@/types/components/object/project/hero/PHero.types";\nimport type { PLayoutProps } from "@/types/components/object/project/layout/PLayout.types";\n',
               1,
           )
-          old_regions = '''const regions: PageRegion[] = await Promise.all(props.page.content.sections.map(async (section): Promise<PageRegion> => {'''
-          new_regions = '''const regions: PageRegion[] = "regions" in props
-\t? props.regions
-\t: await Promise.all(props.page.content.sections.map(async (section): Promise<PageRegion> => {'''
-          if old_regions not in text:
-              raise SystemExit('PageBuilder regions marker not found')
-          text = text.replace(old_regions, new_regions, 1)
-          old_close = '''}));
----
+          s = s.replace(
+              'export interface PageBuilderProps {\n\tpage: PageEntryData;\n\tcontext?: PageBuilderContext;\n}\n',
+              'export interface ResolvedPageData {\n\tlayout: PLayoutProps;\n\tregions: PageRegion[];\n}\n\nexport type PageBuilderProps =\n\t| { page: PageEntryData; context?: PageBuilderContext }\n\t| ResolvedPageData;\n',
+              1,
+          )
+          p.write_text(s)
 
-<LPage {...props.page.content.layout}>
-\t{regions.map((region) => <PageRegionView region={region} />)}
-</LPage>
-'''
-          new_close = '''}));
-const layout = "layout" in props ? props.layout : props.page.content.layout;
----
-
-<PLayout {...layout}>
-\t{regions.map((region) => <PageRegionView region={region} />)}
-</PLayout>
-'''
-          if old_close not in text:
-              raise SystemExit('PageBuilder render marker not found')
-          text = text.replace(old_close, new_close, 1)
-          builder_path.write_text(text, encoding='utf-8')
+          p = Path('src/components/pages/builder/PageBuilder.astro')
+          s = p.read_text()
+          s = s.replace(
+              'import LPage from "@/components/layout/LPage.astro";',
+              'import PLayout from "@/components/object/project/layout/PLayout.astro";',
+              1,
+          )
+          s = s.replace(
+              'const regions: PageRegion[] = await Promise.all(props.page.content.sections.map(async (section): Promise<PageRegion> => {',
+              'const regions: PageRegion[] = "regions" in props ? props.regions : await Promise.all(props.page.content.sections.map(async (section): Promise<PageRegion> => {',
+              1,
+          )
+          s = s.replace(
+              '}));\n---\n\n<LPage {...props.page.content.layout}>\n\t{regions.map((region) => <PageRegionView region={region} />)}\n</LPage>',
+              '}));\nconst layout = "layout" in props ? props.layout : props.page.content.layout;\n---\n\n<PLayout {...layout}>\n\t{regions.map((region) => <PageRegionView region={region} />)}\n</PLayout>',
+              1,
+          )
+          p.write_text(s)
           PY
-
-      - name: Commit migration and remove workflow
-        shell: bash
+      - shell: bash
         run: |
-          git config user.name "github-actions[bot]"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git config user.name github-actions[bot]
+          git config user.email 41898282+github-actions[bot]@users.noreply.github.com
           git add src/types/components/pages/builder/PageBuilder.types.ts src/components/pages/builder/PageBuilder.astro
           git rm .github/workflows/detail-builder-contract.yml
-          git commit -m "refactor(builder): support resolved pages through PLayout"
+          git commit -m 'refactor(builder): support resolved pages through PLayout'
           git push origin HEAD:agent/cms-content-migration
