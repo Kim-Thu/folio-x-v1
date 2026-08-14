@@ -1,0 +1,19 @@
+name: Container audit
+
+on:
+  push:
+    branches:
+      - agent/cms-content-migration
+
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Audit container usage
+        shell: bash
+        run: |
+          echo '=== container values ==='
+          grep -R -n -E '"container"[[:space:]]*:[[:space:]]*"(site|content)"|size=["'"'"'](site|content)["'"'"']' src || true
+          echo '=== max width classes ==='
+          grep -R -n -E 'max-w-[A-Za-z0-9_:/.-]+' src || true
