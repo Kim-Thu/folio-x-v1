@@ -10,7 +10,7 @@ import type {
 	PPageTemplate,
 } from "@/types/components/object/project/page/PPage.types";
 
-const { template } = Astro.props as PPageProps;
+const { template = "stacked" } = Astro.props as PPageProps;
 
 const templates = {
 	stacked: PageStacked,
