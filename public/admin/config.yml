@@ -156,7 +156,7 @@ collections:
                                 fields: &action_fields
                                   - { label: Href, name: href, widget: string }
                                   - { label: Label, name: label, widget: string }
-                                  - { label: Icon, name: icon, widget: string, required: false }
+                                  - { label: Icon, name: icon, widget: select, required: false, options: [arrowLeft, arrowRight, arrowUp, arrowUpRight, arrowPath, archiveBox, bars3, bolt, chevronLeft, chevronDown, chevronRight, github, globeAlt, lightBulb, linkedin, xMark, folder01, facebook, link, twitter, userCircle, calendar03, check, clock01, gridView, listView, play, search, shoppingBag, star, questionMarkCircle, bookOpen, bookmark, eye, lockClosed, adjustmentsHorizontal, moon, handThumbUp, heart, faceSmile, faceFrown] }
                                   - { label: Icon position, name: iconPosition, widget: select, required: false, options: [start, end] }
                                   - { label: Variant, name: variant, widget: select, required: false, options: [primary, secondary, outline, ghost, text, text-subtle, pagination, tab, view] }
                                   - { label: Tone, name: tone, widget: select, required: false, options: [dark, light] }
@@ -169,7 +169,7 @@ collections:
                         fields:
                           - { label: ID, name: id, widget: string }
                           - { label: Type, name: type, widget: hidden, default: collection }
-                          - { label: Template, name: template, widget: select, required: false, options: [stacked, horizontal, overlay, featured, boxed, compact-media, compact-bordered, editorial, icon-panel, icon-summary, media-banner, media-caption, media-details, media-only, media-summary, media-metrics] }
+                          - { label: Template, name: template, widget: select, required: false, options: [sidebar, cards, split] }
                           - label: Settings
                             name: settings
                             widget: object
@@ -337,7 +337,7 @@ collections:
                                     name: category
                                     widget: object
                                     fields:
-                                      - { label: Control, name: control, widget: string }
+                                      - { label: Control, name: control, widget: select, options: [category, license, platform, status, technology] }
                                       - { label: ID, name: id, widget: string }
                                       - { label: Label, name: label, widget: string }
                                       - { label: All label, name: allLabel, widget: string }
@@ -370,8 +370,8 @@ collections:
                                     name: filter
                                     widget: object
                                     fields:
-                                      - { label: Appearance, name: appearance, widget: select, options: [default, compact, controls, navigation] }
-                                      - { label: Control, name: control, widget: string }
+                                      - { label: Appearance, name: appearance, widget: select, options: [controls, navigation] }
+                                      - { label: Control, name: control, widget: select, options: [category, license, platform, status, technology] }
                                       - { label: Legend, name: legend, widget: string }
                                       - { label: Name, name: name, widget: string }
                                       - { label: Type, name: type, widget: select, options: [radio, checkbox] }
@@ -386,13 +386,13 @@ collections:
                                         name: header
                                         widget: object
                                         fields:
-                                          - { label: Appearance, name: appearance, widget: select, options: [default, compact, controls, navigation] }
+                                          - { label: Appearance, name: appearance, widget: select, options: [default, compact] }
                                           - { label: Heading level, name: headingLevel, widget: number, value_type: int, min: 1, max: 6 }
                                       - label: Cards
                                         name: cards
                                         widget: object
                                         fields:
-                                          - { label: Template, name: template, widget: string }
+                                          - { label: Template, name: template, widget: select, options: [stacked, horizontal, overlay, featured, boxed, compact-media, compact-bordered, editorial, icon-panel, icon-summary, media-banner, media-caption, media-details, media-only, media-summary, media-metrics] }
                                           - { label: Layout, name: layout, widget: select, options: [grid, list, three-column, twelve-column, content-three-column, mosaic, asymmetric, showcase] }
                                           - { label: Columns, name: columns, widget: number, value_type: int, min: 1, max: 5 }
                                           - { label: Gap, name: gap, widget: select, options: [none, sm, md, lg, xl] }
@@ -454,13 +454,13 @@ collections:
                                     name: header
                                     widget: object
                                     fields:
-                                      - { label: Appearance, name: appearance, widget: select, options: [default, compact, controls, navigation] }
+                                      - { label: Appearance, name: appearance, widget: select, options: [default, compact] }
                                       - { label: Heading level, name: headingLevel, widget: number, value_type: int, min: 1, max: 6 }
                               - label: Cards
                                 name: cards
                                 widget: object
                                 fields:
-                                  - { label: Template, name: template, widget: string }
+                                  - { label: Template, name: template, widget: select, options: [stacked, horizontal, overlay, featured, boxed, compact-media, compact-bordered, editorial, icon-panel, icon-summary, media-banner, media-caption, media-details, media-only, media-summary, media-metrics] }
                                   - { label: Layout, name: layout, widget: select, options: [grid, list, three-column, twelve-column, content-three-column, mosaic, asymmetric, showcase] }
                                   - { label: Columns, name: columns, widget: number, value_type: int, min: 1, max: 5 }
                                   - { label: Gap, name: gap, widget: select, options: [none, sm, md, lg, xl] }
@@ -1186,7 +1186,7 @@ collections:
                 fields:
                   - { label: Href, name: href, widget: string }
                   - { label: Label, name: label, widget: string }
-                  - { label: Icon, name: icon, widget: string, required: false }
+                  - { label: Icon, name: icon, widget: select, required: false, options: [arrowLeft, arrowRight, arrowUp, arrowUpRight, arrowPath, archiveBox, bars3, bolt, chevronLeft, chevronDown, chevronRight, github, globeAlt, lightBulb, linkedin, xMark, folder01, facebook, link, twitter, userCircle, calendar03, check, clock01, gridView, listView, play, search, shoppingBag, star, questionMarkCircle, bookOpen, bookmark, eye, lockClosed, adjustmentsHorizontal, moon, handThumbUp, heart, faceSmile, faceFrown] }
               - label: Secondary action
                 name: secondaryAction
                 widget: object
@@ -1194,7 +1194,7 @@ collections:
                 fields:
                   - { label: Href, name: href, widget: string }
                   - { label: Label, name: label, widget: string }
-                  - { label: Icon, name: icon, widget: string, required: false }
+                  - { label: Icon, name: icon, widget: select, required: false, options: [arrowLeft, arrowRight, arrowUp, arrowUpRight, arrowPath, archiveBox, bars3, bolt, chevronLeft, chevronDown, chevronRight, github, globeAlt, lightBulb, linkedin, xMark, folder01, facebook, link, twitter, userCircle, calendar03, check, clock01, gridView, listView, play, search, shoppingBag, star, questionMarkCircle, bookOpen, bookmark, eye, lockClosed, adjustmentsHorizontal, moon, handThumbUp, heart, faceSmile, faceFrown] }
               - label: Image
                 name: image
                 widget: object
@@ -1346,7 +1346,7 @@ collections:
                     fields:
                       - { label: ID, name: id, widget: string }
                       - { label: Type, name: type, widget: hidden, default: page-header }
-                      - { label: Template, name: template, widget: string }
+                      - { label: Template, name: template, widget: hidden, default: slider-aside }
                       - label: Settings
                         name: settings
                         widget: object
@@ -1386,7 +1386,6 @@ collections:
                     fields:
                       - { label: ID, name: id, widget: string }
                       - { label: Type, name: type, widget: hidden, default: article }
-                      - { label: Template, name: template, widget: select, required: false, options: [stacked, horizontal, overlay, featured, boxed, compact-media, compact-bordered, editorial, icon-panel, icon-summary, media-banner, media-caption, media-details, media-only, media-summary, media-metrics] }
                       - label: Settings
                         name: settings
                         widget: object
@@ -1402,7 +1401,6 @@ collections:
                     fields:
                       - { label: ID, name: id, widget: string }
                       - { label: Type, name: type, widget: hidden, default: reviews }
-                      - { label: Template, name: template, widget: select, required: false, options: [stacked, horizontal, overlay, featured, boxed, compact-media, compact-bordered, editorial, icon-panel, icon-summary, media-banner, media-caption, media-details, media-only, media-summary, media-metrics] }
                       - label: Settings
                         name: settings
                         widget: object
@@ -1418,7 +1416,7 @@ collections:
                     fields:
                       - { label: ID, name: id, widget: string }
                       - { label: Type, name: type, widget: hidden, default: post-navigation }
-                      - { label: Template, name: template, widget: select, required: false, options: [stacked, horizontal, overlay, featured, boxed, compact-media, compact-bordered, editorial, icon-panel, icon-summary, media-banner, media-caption, media-details, media-only, media-summary, media-metrics] }
+                      - { label: Template, name: template, widget: hidden, default: split }
                       - label: Settings
                         name: settings
                         widget: object
