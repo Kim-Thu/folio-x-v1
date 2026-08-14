@@ -177,7 +177,7 @@
           "settings": {
             "theme": "light",
             "spacing": "compact",
-            "container": "site"
+            "container": "wide"
           },
           "content": {
             "backAction": {
@@ -210,7 +210,7 @@
           "settings": {
             "theme": "light",
             "spacing": "body",
-            "container": "site"
+            "container": "wide"
           },
           "content": {
             "source": "sections"
@@ -222,7 +222,7 @@
           "settings": {
             "theme": "light",
             "spacing": "compact",
-            "container": "site"
+            "container": "wide"
           },
           "content": {
             "source": "detail.reviews"
@@ -235,7 +235,7 @@
           "settings": {
             "theme": "light",
             "spacing": "closing",
-            "container": "site"
+            "container": "wide"
           },
           "content": {
             "label": "Previous / Next",

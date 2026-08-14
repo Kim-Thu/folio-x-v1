@@ -174,7 +174,7 @@ export const navigationSettingsSchema = z.object({
 const pageSectionSettingsSchema = z.object({
 	theme: z.enum(["dark", "light", "canvas", "accent", "none"]),
 	spacing: z.enum(["compact", "default", "none", "lead", "body", "closing"]),
-	container: z.enum(["site", "content", "none"]),
+	container: z.enum(["fluid", "wide", "boxed", "none"]),
 	layout: cardLayoutSchema.optional(),
 	columns: cardColumnsSchema.optional(),
 	gap: cardGapSchema.optional(),
@@ -683,7 +683,7 @@ const pageLayoutSchema = z.object({
 const detailSectionSettingsSchema = z.object({
 	theme: z.enum(["dark", "light", "canvas", "accent", "none"]),
 	spacing: z.enum(["compact", "default", "none", "lead", "body", "closing"]),
-	container: z.enum(["site", "content", "none"]),
+	container: z.enum(["fluid", "wide", "boxed", "none"]),
 });
 
 const productActionSchema = z.object({

@@ -18,7 +18,7 @@
         "settings": {
           "theme": "light",
           "spacing": "lead",
-          "container": "site"
+          "container": "wide"
         },
         "content": {
           "id": "top",
@@ -68,7 +68,7 @@
         "settings": {
           "theme": "light",
           "spacing": "compact",
-          "container": "site",
+          "container": "wide",
           "layout": "asymmetric",
           "columns": 2,
           "gap": "sm",
@@ -203,7 +203,7 @@
         "settings": {
           "theme": "light",
           "spacing": "compact",
-          "container": "site"
+          "container": "wide"
         },
         "content": {
           "heading": {
@@ -257,7 +257,7 @@
         "settings": {
           "theme": "light",
           "spacing": "compact",
-          "container": "site",
+          "container": "wide",
           "layout": "showcase",
           "columns": 2,
           "gap": "sm",
@@ -317,7 +317,7 @@
         "settings": {
           "theme": "dark",
           "spacing": "compact",
-          "container": "site",
+          "container": "wide",
           "columns": 4,
           "gap": "none",
           "mediaRatio": "landscape",
@@ -433,7 +433,7 @@
         "settings": {
           "theme": "light",
           "spacing": "compact",
-          "container": "site"
+          "container": "wide"
         },
         "content": {
           "heading": {
@@ -473,7 +473,7 @@
         "settings": {
           "theme": "light",
           "spacing": "compact",
-          "container": "site"
+          "container": "wide"
         },
         "content": {
           "title": "Bạn có ý tưởng dự án?",

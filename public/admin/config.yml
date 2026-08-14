@@ -122,7 +122,7 @@ collections:
                             fields: &section_settings
                               - { label: Theme, name: theme, widget: select, options: [dark, light, canvas, accent, none] }
                               - { label: Spacing, name: spacing, widget: select, options: [compact, default, none, lead, body, closing] }
-                              - { label: Container, name: container, widget: select, options: [site, content, none] }
+                              - { label: Container, name: container, widget: select, options: [fluid, wide, boxed, none] }
                               - { label: Layout, name: layout, widget: select, required: false, options: [grid, list, three-column, twelve-column, content-three-column, mosaic, asymmetric, showcase] }
                               - { label: Columns, name: columns, widget: number, required: false, value_type: int, min: 1, max: 5 }
                               - { label: Gap, name: gap, widget: select, required: false, options: [none, sm, md, lg, xl] }
@@ -536,7 +536,7 @@ collections:
                 fields:
                   - { label: Theme, name: theme, widget: select, options: [dark, light, canvas, accent, none] }
                   - { label: Spacing, name: spacing, widget: select, options: [compact, default, none, lead, body, closing] }
-                  - { label: Container, name: container, widget: select, options: [site, content, none] }
+                  - { label: Container, name: container, widget: select, options: [fluid, wide, boxed, none] }
               - label: Labels
                 name: labels
                 widget: object
@@ -587,7 +587,7 @@ collections:
                 fields:
                   - { label: Theme, name: theme, widget: select, options: [dark, light, canvas, accent, none] }
                   - { label: Spacing, name: spacing, widget: select, options: [compact, default, none, lead, body, closing] }
-                  - { label: Container, name: container, widget: select, options: [site, content, none] }
+                  - { label: Container, name: container, widget: select, options: [fluid, wide, boxed, none] }
               - { label: Appearance, name: appearance, widget: hidden, default: underline }
               - { label: Tone, name: tone, widget: hidden, default: light }
 
@@ -602,7 +602,7 @@ collections:
                 fields:
                   - { label: Theme, name: theme, widget: select, options: [dark, light, canvas, accent, none] }
                   - { label: Spacing, name: spacing, widget: select, options: [compact, default, none, lead, body, closing] }
-                  - { label: Container, name: container, widget: select, options: [site, content, none] }
+                  - { label: Container, name: container, widget: select, options: [fluid, wide, boxed, none] }
               - label: Article
                 name: article
                 widget: object
@@ -662,7 +662,7 @@ collections:
                 fields:
                   - { label: Theme, name: theme, widget: select, options: [dark, light, canvas, accent, none] }
                   - { label: Spacing, name: spacing, widget: select, options: [compact, default, none, lead, body, closing] }
-                  - { label: Container, name: container, widget: select, options: [site, content, none] }
+                  - { label: Container, name: container, widget: select, options: [fluid, wide, boxed, none] }
               - label: Stack
                 name: stack
                 widget: object
@@ -694,7 +694,7 @@ collections:
                 fields:
                   - { label: Theme, name: theme, widget: select, options: [dark, light, canvas, accent, none] }
                   - { label: Spacing, name: spacing, widget: select, options: [compact, default, none, lead, body, closing] }
-                  - { label: Container, name: container, widget: select, options: [site, content, none] }
+                  - { label: Container, name: container, widget: select, options: [fluid, wide, boxed, none] }
               - label: Stack
                 name: stack
                 widget: object
@@ -765,7 +765,7 @@ collections:
                 fields:
                   - { label: Theme, name: theme, widget: select, options: [dark, light, canvas, accent, none] }
                   - { label: Spacing, name: spacing, widget: select, options: [compact, default, none, lead, body, closing] }
-                  - { label: Container, name: container, widget: select, options: [site, content, none] }
+                  - { label: Container, name: container, widget: select, options: [fluid, wide, boxed, none] }
               - label: Stack
                 name: stack
                 widget: object

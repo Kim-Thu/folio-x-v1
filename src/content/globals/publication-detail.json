@@ -23,7 +23,7 @@
     "settings": {
       "theme": "canvas",
       "spacing": "compact",
-      "container": "site"
+      "container": "wide"
     },
     "labels": {
       "breadcrumb": "Breadcrumb",
@@ -68,7 +68,7 @@
     "settings": {
       "theme": "canvas",
       "spacing": "none",
-      "container": "site"
+      "container": "wide"
     },
     "label": "Publication sections",
     "appearance": "underline",
@@ -91,7 +91,7 @@
     "settings": {
       "theme": "canvas",
       "spacing": "body",
-      "container": "site"
+      "container": "wide"
     },
     "labels": {
       "aside": "Supporting information",
@@ -135,7 +135,7 @@
     "settings": {
       "theme": "canvas",
       "spacing": "compact",
-      "container": "site"
+      "container": "wide"
     },
     "labels": {
       "breadcrumb": "Breadcrumb",

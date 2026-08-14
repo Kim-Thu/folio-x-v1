@@ -16,7 +16,7 @@
         "settings": {
           "theme": "canvas",
           "spacing": "lead",
-          "container": "site"
+          "container": "wide"
         },
         "content": {
           "id": "products-hero",
@@ -55,7 +55,7 @@
         "settings": {
           "theme": "canvas",
           "spacing": "body",
-          "container": "site"
+          "container": "wide"
         },
         "content": {
           "source": {
@@ -233,7 +233,7 @@
         "settings": {
           "theme": "canvas",
           "spacing": "closing",
-          "container": "site"
+          "container": "wide"
         },
         "content": {
           "id": "all-access",

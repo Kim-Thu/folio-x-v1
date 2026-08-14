@@ -19,7 +19,7 @@
         "settings": {
           "theme": "light",
           "spacing": "lead",
-          "container": "site"
+          "container": "wide"
         },
         "content": {
           "breadcrumb": {
@@ -44,7 +44,7 @@
         "settings": {
           "theme": "light",
           "spacing": "body",
-          "container": "site"
+          "container": "wide"
         },
         "content": {
           "blocks": [

@@ -7,7 +7,7 @@ const gapSchema = z.enum(["none", "xs", "sm", "md", "lg", "xl"]);
 const sectionSettingsSchema = z.object({
   theme: z.enum(["dark", "light", "canvas", "accent", "none"]),
   spacing: z.enum(["compact", "default", "none", "lead", "body", "closing"]),
-  container: z.enum(["site", "content", "none"]),
+  container: z.enum(["fluid", "wide", "boxed", "none"]),
 });
 const stackSchema = z.object({ columns: z.literal("one"), gap: gapSchema });
 const sectionHeaderSchema = z.object({

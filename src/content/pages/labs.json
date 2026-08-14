@@ -17,7 +17,7 @@
         "settings": {
           "theme": "canvas",
           "spacing": "lead",
-          "container": "site"
+          "container": "wide"
         },
         "content": {
           "id": "labs-hero",
@@ -58,7 +58,7 @@
         "settings": {
           "theme": "canvas",
           "spacing": "body",
-          "container": "site"
+          "container": "wide"
         },
         "content": {
           "source": {
@@ -182,7 +182,7 @@
         "settings": {
           "theme": "canvas",
           "spacing": "compact",
-          "container": "site"
+          "container": "wide"
         },
         "content": {
           "id": "labs-updates",
@@ -207,7 +207,7 @@
         "settings": {
           "theme": "canvas",
           "spacing": "compact",
-          "container": "site"
+          "container": "wide"
         },
         "content": {
           "heading": {
@@ -262,7 +262,7 @@
         "settings": {
           "theme": "canvas",
           "spacing": "closing",
-          "container": "site"
+          "container": "wide"
         },
         "content": {
           "id": "lab-idea",

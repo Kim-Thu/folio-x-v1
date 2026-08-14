@@ -1,6 +1,6 @@
 import type { HTMLAttributes } from "astro/types";
 
-export type LContainerSize = "site" | "content";
+export type LContainerSize = "fluid" | "wide" | "boxed";
 
 export interface LContainerProps
 	extends Omit<HTMLAttributes<"div">, "class"> {

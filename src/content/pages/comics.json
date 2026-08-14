@@ -84,7 +84,7 @@
         "settings": {
           "theme": "canvas",
           "spacing": "body",
-          "container": "site"
+          "container": "wide"
         },
         "content": {
           "heading": {
@@ -137,7 +137,7 @@
         "settings": {
           "theme": "canvas",
           "spacing": "closing",
-          "container": "site"
+          "container": "wide"
         },
         "content": {
           "id": "comics-newsletter",

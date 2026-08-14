@@ -7,7 +7,7 @@
     "settings": {
       "theme": "canvas",
       "spacing": "lead",
-      "container": "site"
+      "container": "wide"
     }
   },
   "header": {

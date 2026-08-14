@@ -8,7 +8,7 @@
     "settings": {
       "theme": "canvas",
       "spacing": "compact",
-      "container": "site"
+      "container": "wide"
     },
     "labels": {
       "breadcrumb": "Breadcrumb",
@@ -52,7 +52,7 @@
     "settings": {
       "theme": "canvas",
       "spacing": "none",
-      "container": "site"
+      "container": "wide"
     },
     "appearance": "underline",
     "tone": "light"
@@ -62,7 +62,7 @@
     "settings": {
       "theme": "canvas",
       "spacing": "body",
-      "container": "site"
+      "container": "wide"
     },
     "article": {
       "template": "flow"
@@ -102,7 +102,7 @@
     "settings": {
       "theme": "canvas",
       "spacing": "compact",
-      "container": "site"
+      "container": "wide"
     },
     "stack": {
       "columns": "one",
@@ -124,7 +124,7 @@
     "settings": {
       "theme": "canvas",
       "spacing": "compact",
-      "container": "site"
+      "container": "wide"
     },
     "stack": {
       "columns": "one",
@@ -175,7 +175,7 @@
     "settings": {
       "theme": "canvas",
       "spacing": "compact",
-      "container": "site"
+      "container": "wide"
     },
     "stack": {
       "columns": "one",

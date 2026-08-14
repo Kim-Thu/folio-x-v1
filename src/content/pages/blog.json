@@ -16,7 +16,7 @@
         "settings": {
           "theme": "canvas",
           "spacing": "lead",
-          "container": "site"
+          "container": "wide"
         },
         "content": {
           "id": "insights-hero",
@@ -47,7 +47,7 @@
         "settings": {
           "theme": "canvas",
           "spacing": "body",
-          "container": "site"
+          "container": "wide"
         },
         "content": {
           "source": {
@@ -184,7 +184,7 @@
         "settings": {
           "theme": "canvas",
           "spacing": "compact",
-          "container": "site"
+          "container": "wide"
         },
         "content": {
           "id": "insights-newsletter",

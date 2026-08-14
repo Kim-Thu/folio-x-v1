@@ -69,7 +69,7 @@ const newsletter = data.page.content.sections.find((section) => section.type ===
 			theme={catalogSection.settings.theme}
 			spacing={catalogSection.settings.spacing}
 		>
-			<LContainer size={catalogSection.settings.container === "none" ? "site" : catalogSection.settings.container}>
+			<LContainer size={catalogSection.settings.container === "none" ? "wide" : catalogSection.settings.container}>
 				<PublicationCatalogContent
 					{catalog}
 					{entries}

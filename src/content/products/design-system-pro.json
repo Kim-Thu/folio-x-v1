@@ -21,7 +21,7 @@
           "settings": {
             "theme": "canvas",
             "spacing": "compact",
-            "container": "site"
+            "container": "wide"
           },
           "content": {
             "breadcrumbLabel": "Breadcrumb",
@@ -65,7 +65,7 @@
           "settings": {
             "theme": "canvas",
             "spacing": "body",
-            "container": "site"
+            "container": "wide"
           },
           "content": {
             "blocks": [
