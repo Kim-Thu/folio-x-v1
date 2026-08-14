@@ -1,32 +1,7 @@
 ---
 import LContainer from "@/components/layout/LContainer.astro";
 import LSection from "@/components/layout/LSection.astro";
-import CBox from "@/components/object/component/CBox.astro";
-import CButton from "@/components/object/component/CButton.astro";
-import CColumns from "@/components/object/component/CColumns.astro";
-import CDescriptionList from "@/components/object/component/CDescriptionList.astro";
-import CHeading from "@/components/object/component/CHeading.astro";
-import CProfile from "@/components/object/component/CProfile.astro";
-import CRow from "@/components/object/component/CRow.astro";
-import CTabList from "@/components/object/component/CTabList.astro";
-import CTags from "@/components/object/component/CTags.astro";
-import CTOC from "@/components/object/component/CTOC.astro";
-import PAdvertisement from "@/components/object/project/advertisement/PAdvertisement.astro";
-import PArticle from "@/components/object/project/article/PArticle.astro";
-import PCard from "@/components/object/project/card/PCard.astro";
-import PCta from "@/components/object/project/cta/PCta.astro";
-import PEntryIndex from "@/components/object/project/entry-index/PEntryIndex.astro";
-import PGallery from "@/components/object/project/gallery/PGallery.astro";
-import PHero from "@/components/object/project/hero/PHero.astro";
-import PPageHeader from "@/components/object/project/page-header/PPageHeader.astro";
-import PPostNavigation from "@/components/object/project/post-navigation/PPostNavigation.astro";
-import PReader from "@/components/object/project/reader/PReader.astro";
-import PReviews from "@/components/object/project/reviews/PReviews.astro";
-import PSectionHeader from "@/components/object/project/section-header/PSectionHeader.astro";
-import PStatus from "@/components/object/project/status/PStatus.astro";
-import ArchiveRegion from "@/components/pages/builder/ArchiveRegion.astro";
-import CollectionRegion from "@/components/pages/builder/CollectionRegion.astro";
-import GroupRegion from "@/components/pages/builder/GroupRegion.astro";
+import PageRegionContent from "@/components/pages/builder/PageRegionContent.astro";
 import type { PageRegionProps } from "@/types/components/pages/builder/PageRegion.types";
 
 const { region } = Astro.props as PageRegionProps;
@@ -40,61 +15,14 @@ const {
 ---
 
 {section === false ? (
-	<Fragment>
-		{region.component === "page-header" && <PPageHeader {...region.props} />}
-		{region.component === "hero" && <PHero {...region.props} />}
-		{region.component === "section-header" && <PSectionHeader {...region.props} />}
-		{region.component === "article" && <PArticle {...region.props} />}
-		{region.component === "reviews" && <PReviews {...region.props} />}
-		{region.component === "cards" && (
-			<CBox surface={region.props.panel ? "glass" : "plain"} radius={region.props.panel ? "md" : "none"} spacing={region.props.panel ? "sm" : "none"}>
-				<CColumns columns="one" gap="md">
-					{region.props.header && region.props.headerAction ? (
-						<CRow justify="between" align="end">
-							<PSectionHeader {...region.props.header} />
-							<CButton {...region.props.headerAction} variant={region.props.headerAction.variant ?? "text"} />
-						</CRow>
-					) : region.props.header && <PSectionHeader {...region.props.header} />}
-					<PCard {...region.props.cards} />
-					{region.props.action && <CRow justify="center"><CButton {...region.props.action} /></CRow>}
-				</CColumns>
-			</CBox>
-		)}
-		{region.component === "cta" && <PCta {...region.props} />}
-		{region.component === "post-navigation" && <PPostNavigation {...region.props} />}
-		{region.component === "collection" && <CollectionRegion region={region} />}
-		{region.component === "archive" && <ArchiveRegion region={region} />}
-		{region.component === "status" && <PStatus {...region.props} />}
-		{region.component === "tabs" && <CTabList {...region.props} />}
-		{region.component === "gallery" && <PGallery {...region.props} />}
-		{region.component === "entry-index" && <PEntryIndex {...region.props} />}
-		{region.component === "reader" && <PReader {...region.props} />}
-		{region.component === "details" && (
-			<CBox surface={region.props.title ? "glass" : "plain"} radius={region.props.title ? "md" : "none"} spacing={region.props.title ? "md" : "none"}>
-				<CColumns columns="one" gap="sm">
-					{region.props.title && <CHeading level={2} variant="h5">{region.props.title}</CHeading>}
-					<CDescriptionList {...region.props.list} variant={region.props.title ? "default" : region.props.list.variant} />
-					{region.props.tags && (
-						<CColumns columns="one" gap="sm">
-							<CHeading level={3} variant="h6">{region.props.tags.title}</CHeading>
-							<CTags {...region.props.tags.list} />
-						</CColumns>
-					)}
-				</CColumns>
-			</CBox>
-		)}
-		{region.component === "profile" && <CProfile {...region.props} />}
-		{region.component === "toc" && <CTOC {...region.props} />}
-		{region.component === "advertisement" && <PAdvertisement {...region.props} />}
-		{region.component === "group" && <GroupRegion region={region} />}
-	</Fragment>
+	<PageRegionContent {region} />
 ) : (
 	<LSection {id} {theme} {spacing} data-page-region={region.key}>
 		{container === "none" ? (
-			<PageRegion region={{ ...region, section: false }} />
+			<PageRegionContent {region} />
 		) : (
 			<LContainer size={container}>
-				<PageRegion region={{ ...region, section: false }} />
+				<PageRegionContent {region} />
 			</LContainer>
 		)}
 	</LSection>
