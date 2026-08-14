@@ -12,7 +12,7 @@ const columnsSchema = z.object({
 });
 
 export const blogDetailSettingsSchema = z.object({
-  page: z.object({ template: z.enum(["fluid", "contained", "boxed", "sidebar", "centered"]) }),
+  page: z.object({ template: z.literal("insight-detail") }),
   section: z.object({ id: z.string().min(1), settings: sectionSettingsSchema }),
   header: z.object({
     template: z.literal("editorial"),

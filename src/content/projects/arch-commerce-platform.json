@@ -7,8 +7,14 @@
   "category": "E-commerce ecosystem",
   "categorySlug": "e-commerce",
   "tags": [
-    { "label": "Commerce", "slug": "commerce" },
-    { "label": "Performance", "slug": "performance" }
+    {
+      "label": "Commerce",
+      "slug": "commerce"
+    },
+    {
+      "label": "Performance",
+      "slug": "performance"
+    }
   ],
   "summary": "Tổ chức lại hành trình mua hàng quanh thông tin cần thiết, tốc độ phản hồi và các điểm quyết định thực sự của khách hàng.",
   "outcome": "+28% hoàn tất checkout",
@@ -37,15 +43,22 @@
     ],
     "results": [],
     "page": {
-      "template": "fluid",
+      "template": "work-detail",
       "sections": [
         {
           "id": "project-summary",
           "type": "page-header",
           "template": "slider-aside",
-          "settings": { "theme": "light", "spacing": "compact", "container": "site" },
+          "settings": {
+            "theme": "light",
+            "spacing": "compact",
+            "container": "site"
+          },
           "content": {
-            "backAction": { "label": "Back to projects", "href": "/projects" },
+            "backAction": {
+              "label": "Back to projects",
+              "href": "/projects"
+            },
             "galleryLabel": "Project gallery",
             "previousImageLabel": "Previous image",
             "nextImageLabel": "Next image",
@@ -53,7 +66,12 @@
             "actionsLabel": "Project actions",
             "liveActionLabel": "Live site",
             "sourceActionLabel": "Source code",
-            "asideDecoration": { "src": "/uploads/pattern-1.png", "alt": "", "width": 1536, "height": 1536 },
+            "asideDecoration": {
+              "src": "/uploads/pattern-1.png",
+              "alt": "",
+              "width": 1536,
+              "height": 1536
+            },
             "facts": {
               "clientLabel": "Client",
               "roleLabel": "Role",
@@ -64,14 +82,24 @@
         {
           "id": "project-content",
           "type": "article",
-          "settings": { "theme": "light", "spacing": "body", "container": "site" },
-          "content": { "source": "sections" }
+          "settings": {
+            "theme": "light",
+            "spacing": "body",
+            "container": "site"
+          },
+          "content": {
+            "source": "sections"
+          }
         },
         {
           "id": "project-navigation",
           "type": "post-navigation",
           "template": "split",
-          "settings": { "theme": "light", "spacing": "closing", "container": "site" },
+          "settings": {
+            "theme": "light",
+            "spacing": "closing",
+            "container": "site"
+          },
           "content": {
             "label": "Previous / Next",
             "previousLabel": "Previous",

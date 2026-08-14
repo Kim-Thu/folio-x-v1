@@ -1,1 +1,13 @@
-{"slug":"/contact","meta":{"title":"Contact","description":"Contact NKT Studio."},"content":{"layout":{"template":"fluid"},"sections":[]}}
+{
+  "slug": "/contact",
+  "meta": {
+    "title": "Contact",
+    "description": "Contact NKT Studio."
+  },
+  "content": {
+    "layout": {
+      "template": "default"
+    },
+    "sections": []
+  }
+}

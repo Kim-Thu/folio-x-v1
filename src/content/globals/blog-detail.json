@@ -1,8 +1,14 @@
 {
-  "page": { "template": "fluid" },
+  "page": {
+    "template": "insight-detail"
+  },
   "section": {
     "id": "article-detail",
-    "settings": { "theme": "canvas", "spacing": "lead", "container": "site" }
+    "settings": {
+      "theme": "canvas",
+      "spacing": "lead",
+      "container": "site"
+    }
   },
   "header": {
     "template": "editorial",
@@ -31,7 +37,10 @@
     "label": "Article supporting information",
     "position": "end",
     "sticky": true,
-    "columns": { "columns": "one", "gap": "md" },
+    "columns": {
+      "columns": "one",
+      "gap": "md"
+    },
     "author": {
       "label": "Author",
       "role": "Writer at NKT Studio",
@@ -54,7 +63,10 @@
         "radius": "md",
         "spacing": "md"
       },
-      "columns": { "columns": "one", "gap": "sm" },
+      "columns": {
+        "columns": "one",
+        "gap": "sm"
+      },
       "heading": {
         "appearance": "compact",
         "level": 2
@@ -98,6 +110,9 @@
   },
   "content": {
     "template": "flow",
-    "columns": { "columns": "one", "gap": "lg" }
+    "columns": {
+      "columns": "one",
+      "gap": "lg"
+    }
   }
 }

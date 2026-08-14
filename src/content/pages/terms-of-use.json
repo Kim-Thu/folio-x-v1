@@ -8,7 +8,9 @@
   },
   "seo": null,
   "content": {
-    "layout": { "template": "fluid" },
+    "layout": {
+      "template": "policy"
+    },
     "sections": [
       {
         "id": "lead",
@@ -30,7 +32,9 @@
             ],
             "current": "Terms of Use"
           },
-          "title": ["Terms of Use"],
+          "title": [
+            "Terms of Use"
+          ],
           "description": "Các điều kiện cơ bản khi truy cập và sử dụng nội dung trên website portfolio này. Cập nhật lần cuối: 16 tháng 7, 2026."
         }
       },

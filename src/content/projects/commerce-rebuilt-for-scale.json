@@ -7,9 +7,18 @@
   "category": "E-commerce ecosystem",
   "categorySlug": "e-commerce",
   "tags": [
-    { "label": "Next.js", "slug": "nextjs" },
-    { "label": "NestJS", "slug": "nestjs" },
-    { "label": "Odoo", "slug": "odoo" }
+    {
+      "label": "Next.js",
+      "slug": "nextjs"
+    },
+    {
+      "label": "NestJS",
+      "slug": "nestjs"
+    },
+    {
+      "label": "Odoo",
+      "slug": "odoo"
+    }
   ],
   "summary": "Tái kiến trúc hệ sinh thái bán lẻ từ WordPress sang Next.js và NestJS, kết nối tồn kho Odoo theo thời gian thực cho hơn 20 cửa hàng.",
   "outcome": "−40% load time",
@@ -48,20 +57,59 @@
     "liveUrl": "https://xedap.vn/",
     "sourceUrl": "https://github.com/Kim-Thu/folio-x-v1",
     "features": [
-      { "title": "Dữ liệu thời gian thực", "description": "Đồng bộ tồn kho và trạng thái sản phẩm giữa storefront với hệ thống vận hành.", "icon": "folder01" },
-      { "title": "Kiến trúc có thể mở rộng", "description": "Tách rõ các miền trách nhiệm để từng phần có thể thay đổi và triển khai độc lập.", "icon": "lightBulb" },
-      { "title": "Quản trị linh hoạt", "description": "Đội nội dung duy trì quyền chủ động mà không phụ thuộc vào chu kỳ phát hành code.", "icon": "userCircle" }
+      {
+        "title": "Dữ liệu thời gian thực",
+        "description": "Đồng bộ tồn kho và trạng thái sản phẩm giữa storefront với hệ thống vận hành.",
+        "icon": "folder01"
+      },
+      {
+        "title": "Kiến trúc có thể mở rộng",
+        "description": "Tách rõ các miền trách nhiệm để từng phần có thể thay đổi và triển khai độc lập.",
+        "icon": "lightBulb"
+      },
+      {
+        "title": "Quản trị linh hoạt",
+        "description": "Đội nội dung duy trì quyền chủ động mà không phụ thuộc vào chu kỳ phát hành code.",
+        "icon": "userCircle"
+      }
     ],
     "gallery": [
-      { "src": "https://images.unsplash.com/photo-1558981806-ec527fa84c39?auto=format&fit=crop&w=1800&q=85", "alt": "Ảnh placeholder cho gallery dự án thương mại điện tử", "width": 1600, "height": 1000 },
-      { "src": "https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?auto=format&fit=crop&w=1800&q=85", "alt": "Khách hàng thanh toán trên nền tảng thương mại điện tử", "width": 1600, "height": 1000 },
-      { "src": "https://images.unsplash.com/photo-1556740758-90de374c12ad?auto=format&fit=crop&w=1800&q=85", "alt": "Đội ngũ vận hành theo dõi hệ thống bán lẻ", "width": 1600, "height": 1000 }
+      {
+        "src": "https://images.unsplash.com/photo-1558981806-ec527fa84c39?auto=format&fit=crop&w=1800&q=85",
+        "alt": "Ảnh placeholder cho gallery dự án thương mại điện tử",
+        "width": 1600,
+        "height": 1000
+      },
+      {
+        "src": "https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?auto=format&fit=crop&w=1800&q=85",
+        "alt": "Khách hàng thanh toán trên nền tảng thương mại điện tử",
+        "width": 1600,
+        "height": 1000
+      },
+      {
+        "src": "https://images.unsplash.com/photo-1556740758-90de374c12ad?auto=format&fit=crop&w=1800&q=85",
+        "alt": "Đội ngũ vận hành theo dõi hệ thống bán lẻ",
+        "width": 1600,
+        "height": 1000
+      }
     ],
     "results": [
-      { "value": "−40%", "label": "Thời gian tải trang" },
-      { "value": "20+", "label": "Cửa hàng được kết nối" },
-      { "value": "Realtime", "label": "Đồng bộ tồn kho" },
-      { "value": "1", "label": "Luồng vận hành thống nhất" }
+      {
+        "value": "−40%",
+        "label": "Thời gian tải trang"
+      },
+      {
+        "value": "20+",
+        "label": "Cửa hàng được kết nối"
+      },
+      {
+        "value": "Realtime",
+        "label": "Đồng bộ tồn kho"
+      },
+      {
+        "value": "1",
+        "label": "Luồng vận hành thống nhất"
+      }
     ],
     "reviews": {
       "eyebrow": "Đánh giá từ khách hàng",
@@ -71,30 +119,71 @@
         "maximum": 5,
         "totalLabel": "Dựa trên 128 đánh giá",
         "distribution": [
-          { "label": "5 sao", "value": 92 },
-          { "label": "4 sao", "value": 6 },
-          { "label": "3 sao", "value": 1 },
-          { "label": "2 sao", "value": 0.5 },
-          { "label": "1 sao", "value": 0.5 }
+          {
+            "label": "5 sao",
+            "value": 92
+          },
+          {
+            "label": "4 sao",
+            "value": 6
+          },
+          {
+            "label": "3 sao",
+            "value": 1
+          },
+          {
+            "label": "2 sao",
+            "value": 0.5
+          },
+          {
+            "label": "1 sao",
+            "value": 0.5
+          }
         ]
       },
       "items": [
-        { "name": "Huy Nguyễn", "date": "2 tuần trước", "quote": "Theme đẹp, dễ tuỳ biến và tốc độ rất ấn tượng. Hỗ trợ khách hàng cũng rất nhanh chóng.", "rating": 5 },
-        { "name": "Lan Anh", "date": "1 tháng trước", "quote": "Mình đã thử nhiều giải pháp nhưng đây là hệ thống tốt nhất từ trước đến giờ. Highly recommended!", "rating": 5 },
-        { "name": "Minh Trí", "date": "1 tháng trước", "quote": "Giao diện hiện đại, nhiều demo chất lượng và luồng vận hành rõ ràng. Kết quả vượt mong đợi.", "rating": 5 }
+        {
+          "name": "Huy Nguyễn",
+          "date": "2 tuần trước",
+          "quote": "Theme đẹp, dễ tuỳ biến và tốc độ rất ấn tượng. Hỗ trợ khách hàng cũng rất nhanh chóng.",
+          "rating": 5
+        },
+        {
+          "name": "Lan Anh",
+          "date": "1 tháng trước",
+          "quote": "Mình đã thử nhiều giải pháp nhưng đây là hệ thống tốt nhất từ trước đến giờ. Highly recommended!",
+          "rating": 5
+        },
+        {
+          "name": "Minh Trí",
+          "date": "1 tháng trước",
+          "quote": "Giao diện hiện đại, nhiều demo chất lượng và luồng vận hành rõ ràng. Kết quả vượt mong đợi.",
+          "rating": 5
+        }
       ]
     },
-    "testimonial": { "quote": "Hệ thống mới giúp đội ngũ nhìn rõ dữ liệu và vận hành nhất quán hơn giữa các cửa hàng.", "name": "Project stakeholder", "role": "Retail operations" },
+    "testimonial": {
+      "quote": "Hệ thống mới giúp đội ngũ nhìn rõ dữ liệu và vận hành nhất quán hơn giữa các cửa hàng.",
+      "name": "Project stakeholder",
+      "role": "Retail operations"
+    },
     "page": {
-      "template": "fluid",
+      "template": "work-detail",
       "sections": [
         {
           "id": "project-summary",
           "type": "page-header",
           "template": "slider-aside",
-          "settings": { "theme": "light", "spacing": "compact", "container": "site" },
+          "settings": {
+            "theme": "light",
+            "spacing": "compact",
+            "container": "site"
+          },
           "content": {
-            "backAction": { "label": "Back to projects", "href": "/projects" },
+            "backAction": {
+              "label": "Back to projects",
+              "href": "/projects"
+            },
             "galleryLabel": "Project gallery",
             "previousImageLabel": "Previous image",
             "nextImageLabel": "Next image",
@@ -102,7 +191,12 @@
             "actionsLabel": "Project actions",
             "liveActionLabel": "Live site",
             "sourceActionLabel": "Source code",
-            "asideDecoration": { "src": "/uploads/pattern-1.png", "alt": "", "width": 1536, "height": 1536 },
+            "asideDecoration": {
+              "src": "/uploads/pattern-1.png",
+              "alt": "",
+              "width": 1536,
+              "height": 1536
+            },
             "facts": {
               "clientLabel": "Client",
               "roleLabel": "Role",
@@ -113,20 +207,36 @@
         {
           "id": "project-content",
           "type": "article",
-          "settings": { "theme": "light", "spacing": "body", "container": "site" },
-          "content": { "source": "sections" }
+          "settings": {
+            "theme": "light",
+            "spacing": "body",
+            "container": "site"
+          },
+          "content": {
+            "source": "sections"
+          }
         },
         {
           "id": "customer-reviews",
           "type": "reviews",
-          "settings": { "theme": "light", "spacing": "compact", "container": "site" },
-          "content": { "source": "detail.reviews" }
+          "settings": {
+            "theme": "light",
+            "spacing": "compact",
+            "container": "site"
+          },
+          "content": {
+            "source": "detail.reviews"
+          }
         },
         {
           "id": "project-navigation",
           "type": "post-navigation",
           "template": "split",
-          "settings": { "theme": "light", "spacing": "closing", "container": "site" },
+          "settings": {
+            "theme": "light",
+            "spacing": "closing",
+            "container": "site"
+          },
           "content": {
             "label": "Previous / Next",
             "previousLabel": "Previous",

@@ -14,7 +14,7 @@
   "image": "/uploads/page-header-insight.png",
   "detail": {
     "page": {
-      "template": "fluid",
+      "template": "product-detail",
       "sections": [
         {
           "id": "product-summary",

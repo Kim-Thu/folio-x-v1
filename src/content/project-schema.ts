@@ -75,7 +75,7 @@ const projectNavigationSectionSchema = z.object({
 });
 
 const projectDetailPageSchema = z.object({
-	template: z.enum(["fluid", "contained", "boxed", "sidebar", "centered"]),
+	template: z.literal("work-detail"),
 	sections: z.array(
 		z.discriminatedUnion("type", [
 			projectHeaderSectionSchema,

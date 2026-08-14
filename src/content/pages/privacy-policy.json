@@ -8,7 +8,9 @@
   },
   "seo": null,
   "content": {
-    "layout": { "template": "fluid" },
+    "layout": {
+      "template": "policy"
+    },
     "sections": [
       {
         "id": "lead",
@@ -30,7 +32,9 @@
             ],
             "current": "Privacy Policy"
           },
-          "title": ["Privacy Policy"],
+          "title": [
+            "Privacy Policy"
+          ],
           "description": "Cách website này xử lý thông tin khi bạn truy cập hoặc chủ động liên hệ. Cập nhật lần cuối: 16 tháng 7, 2026."
         }
       },

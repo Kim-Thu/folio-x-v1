@@ -6,109 +6,278 @@
   },
   "seo": null,
   "content": {
-    "layout": { "template": "fluid" },
+    "layout": {
+      "template": "archive"
+    },
     "sections": [
       {
         "id": "labs-hero",
         "type": "page-header",
         "template": "split-benefits",
-        "settings": { "theme": "canvas", "spacing": "lead", "container": "site" },
+        "settings": {
+          "theme": "canvas",
+          "spacing": "lead",
+          "container": "site"
+        },
         "content": {
           "id": "labs-hero",
           "eyebrow": "NKT Labs",
-          "title": ["Experiment. Innovate. Share"],
+          "title": [
+            "Experiment. Innovate. Share"
+          ],
           "accent": ".",
           "description": "A place for testing new ideas, emerging technology, and useful creative systems.",
-          "benefits": { "items": [
-            { "icon": "lightBulb", "label": "Practical experiments" },
-            { "icon": "github", "label": "Open source" },
-            { "icon": "arrowUpRight", "label": "Share what we learn" }
-          ] },
-          "image": { "src": "/uploads/labs-hero.png", "alt": "An isometric laboratory with robotics and experiments", "width": 1536, "height": 1024 }
+          "benefits": {
+            "items": [
+              {
+                "icon": "lightBulb",
+                "label": "Practical experiments"
+              },
+              {
+                "icon": "github",
+                "label": "Open source"
+              },
+              {
+                "icon": "arrowUpRight",
+                "label": "Share what we learn"
+              }
+            ]
+          },
+          "image": {
+            "src": "/uploads/labs-hero.png",
+            "alt": "An isometric laboratory with robotics and experiments",
+            "width": 1536,
+            "height": 1024
+          }
         }
       },
       {
         "id": "labs",
         "type": "archive",
         "template": "faceted",
-        "settings": { "theme": "canvas", "spacing": "body", "container": "site" },
+        "settings": {
+          "theme": "canvas",
+          "spacing": "body",
+          "container": "site"
+        },
         "content": {
-          "source": { "collection": "labs" },
+          "source": {
+            "collection": "labs"
+          },
           "toolbar": {
-            "search": { "id": "labs-search", "label": "Search experiments", "name": "search", "placeholder": "Search projects, technology, or ideas..." },
-            "selects": [{
-              "control": "status", "id": "labs-status", "label": "Status", "value": "all",
+            "search": {
+              "id": "labs-search",
+              "label": "Search experiments",
+              "name": "search",
+              "placeholder": "Search projects, technology, or ideas..."
+            },
+            "selects": [
+              {
+                "control": "status",
+                "id": "labs-status",
+                "label": "Status",
+                "value": "all",
+                "options": [
+                  {
+                    "label": "All statuses",
+                    "value": "all"
+                  },
+                  {
+                    "label": "Experiment",
+                    "value": "experiment"
+                  },
+                  {
+                    "label": "In progress",
+                    "value": "in-progress"
+                  },
+                  {
+                    "label": "Complete",
+                    "value": "complete"
+                  }
+                ]
+              }
+            ],
+            "sort": {
+              "label": "Sort experiments",
+              "value": "newest",
               "options": [
-                { "label": "All statuses", "value": "all" },
-                { "label": "Experiment", "value": "experiment" },
-                { "label": "In progress", "value": "in-progress" },
-                { "label": "Complete", "value": "complete" }
+                {
+                  "label": "Newest",
+                  "value": "newest"
+                },
+                {
+                  "label": "Oldest",
+                  "value": "oldest"
+                }
               ]
-            }],
-            "sort": { "label": "Sort experiments", "value": "newest", "options": [{ "label": "Newest", "value": "newest" }, { "label": "Oldest", "value": "oldest" }] },
-            "view": { "label": "Experiment view", "gridLabel": "Grid view", "listLabel": "List view" }
+            },
+            "view": {
+              "label": "Experiment view",
+              "gridLabel": "Grid view",
+              "listLabel": "List view"
+            }
           },
           "sidebar": {
             "label": "Lab filters",
             "filterLabel": "Technology",
-            "category": { "appearance": "navigation", "control": "category", "legend": "Categories", "name": "labs-category", "type": "radio", "allLabel": "All projects", "allValue": "all", "allHref": "/labs" },
-            "technology": { "appearance": "navigation", "control": "technology", "legend": "Tech stack", "name": "labs-technology", "type": "checkbox" }
+            "category": {
+              "appearance": "navigation",
+              "control": "category",
+              "legend": "Categories",
+              "name": "labs-category",
+              "type": "radio",
+              "allLabel": "All projects",
+              "allValue": "all",
+              "allHref": "/labs"
+            },
+            "technology": {
+              "appearance": "navigation",
+              "control": "technology",
+              "legend": "Tech stack",
+              "name": "labs-technology",
+              "type": "checkbox"
+            }
           },
-          "routes": { "categoryBase": "/labs/category/", "technologyBase": "/labs/technology/" },
+          "routes": {
+            "categoryBase": "/labs/category/",
+            "technologyBase": "/labs/technology/"
+          },
           "itemPresentation": {
-            "routes": { "base": "/labs/", "categoryBase": "/labs/category/", "technologyBase": "/labs/technology/" },
+            "routes": {
+              "base": "/labs/",
+              "categoryBase": "/labs/category/",
+              "technologyBase": "/labs/technology/"
+            },
             "ariaLabelPrefix": "View ",
             "categoryDisplay": "text",
             "completeBadgeTone": "neutral",
             "activeBadgeTone": "brand",
             "tagsLabelSuffix": " technologies",
-            "metricIcons": ["star", "github", "clock01"]
+            "metricIcons": [
+              "star",
+              "github",
+              "clock01"
+            ]
           },
           "resultLabel": "experiments found",
-          "cards": { "template": "media-metrics", "layout": "grid", "columns": 3, "gap": "md" },
+          "cards": {
+            "template": "media-metrics",
+            "layout": "grid",
+            "columns": 3,
+            "gap": "md"
+          },
           "emptyLabel": "No experiments match the selected filters.",
-          "pagination": { "label": "Lab pages", "previousLabel": "Previous page", "nextLabel": "Next page", "pageSize": 6 }
+          "pagination": {
+            "label": "Lab pages",
+            "previousLabel": "Previous page",
+            "nextLabel": "Next page",
+            "pageSize": 6
+          }
         }
       },
       {
         "id": "labs-updates",
         "type": "cta",
         "template": "default",
-        "settings": { "theme": "canvas", "spacing": "compact", "container": "site" },
+        "settings": {
+          "theme": "canvas",
+          "spacing": "compact",
+          "container": "site"
+        },
         "content": {
           "id": "labs-updates",
           "title": "Get updates from NKT Labs",
           "description": "Receive new experiments, technical notes, and useful resources.",
-          "image": { "src": "/uploads/pattern-1.png", "alt": "", "width": 1536, "height": 1536 },
-          "action": { "href": "mailto:hello@nkt.studio?subject=Labs%20updates", "label": "Subscribe" }
+          "image": {
+            "src": "/uploads/pattern-1.png",
+            "alt": "",
+            "width": 1536,
+            "height": 1536
+          },
+          "action": {
+            "href": "mailto:hello@nkt.studio?subject=Labs%20updates",
+            "label": "Subscribe"
+          }
         }
       },
       {
         "id": "labs-principles",
         "type": "collection",
         "template": "cards",
-        "settings": { "theme": "canvas", "spacing": "compact", "container": "site" },
+        "settings": {
+          "theme": "canvas",
+          "spacing": "compact",
+          "container": "site"
+        },
         "content": {
-          "heading": { "label": "Why Labs", "title": ["Why we build experiments"] },
+          "heading": {
+            "label": "Why Labs",
+            "title": [
+              "Why we build experiments"
+            ]
+          },
           "items": [
-            { "href": "#labs", "ariaLabel": "Practical experiments", "title": ["Practical experiments"], "excerpt": "Small, focused prototypes help us learn quickly from real constraints." },
-            { "href": "#labs", "ariaLabel": "Open collaboration", "title": ["Open collaboration"], "excerpt": "We share the useful parts so ideas can improve through real feedback." },
-            { "href": "#labs", "ariaLabel": "Useful by default", "title": ["Useful by default"], "excerpt": "Every experiment aims to leave behind a reusable tool or lesson." }
+            {
+              "href": "#labs",
+              "ariaLabel": "Practical experiments",
+              "title": [
+                "Practical experiments"
+              ],
+              "excerpt": "Small, focused prototypes help us learn quickly from real constraints."
+            },
+            {
+              "href": "#labs",
+              "ariaLabel": "Open collaboration",
+              "title": [
+                "Open collaboration"
+              ],
+              "excerpt": "We share the useful parts so ideas can improve through real feedback."
+            },
+            {
+              "href": "#labs",
+              "ariaLabel": "Useful by default",
+              "title": [
+                "Useful by default"
+              ],
+              "excerpt": "Every experiment aims to leave behind a reusable tool or lesson."
+            }
           ],
-          "cards": { "template": "boxed", "layout": "grid", "columns": 3, "gap": "md", "slots": { "media": false, "metadata": false, "action": false } }
+          "cards": {
+            "template": "boxed",
+            "layout": "grid",
+            "columns": 3,
+            "gap": "md",
+            "slots": {
+              "media": false,
+              "metadata": false,
+              "action": false
+            }
+          }
         }
       },
       {
         "id": "lab-idea",
         "type": "cta",
         "template": "callout",
-        "settings": { "theme": "canvas", "spacing": "closing", "container": "site" },
+        "settings": {
+          "theme": "canvas",
+          "spacing": "closing",
+          "container": "site"
+        },
         "content": {
           "id": "lab-idea",
           "title": "Have an idea worth testing?",
           "description": "Let us turn a promising direction into a useful experiment.",
-          "image": { "src": "/uploads/patten-2.png", "alt": "", "width": 1536, "height": 1024 },
-          "action": { "href": "mailto:hello@nkt.studio", "label": "Start a conversation" }
+          "image": {
+            "src": "/uploads/patten-2.png",
+            "alt": "",
+            "width": 1536,
+            "height": 1024
+          },
+          "action": {
+            "href": "mailto:hello@nkt.studio",
+            "label": "Start a conversation"
+          }
         }
       }
     ]

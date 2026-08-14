@@ -2,9 +2,9 @@
 import LSidebar from "@/components/layout/LSidebar.astro";
 import CBox from "@/components/object/component/CBox.astro";
 import CColumns from "@/components/object/component/CColumns.astro";
-import PageRegion from "@/components/pages/builder/PageRegion.astro";
+import LayoutRegion from "@/components/object/project/layout/parts/LayoutRegion.astro";
 import PArchiveToolbar from "@/components/object/project/archive-toolbar/PArchiveToolbar.astro";
-import type { GroupRegion } from "@/types/components/pages/builder/PageBuilder.types";
+import type { GroupRegion } from "@/types/components/object/project/layout/PLayout.types";
 
 type Props = { region: GroupRegion };
 const { region } = Astro.props as Props;
@@ -40,11 +40,11 @@ const asideRegions = enabledRegions.filter(
 				columns="one"
 				gap={asideGap}
 			>
-				{asideRegions.map((item) => <PageRegion region={item} />)}
+				{asideRegions.map((item) => <LayoutRegion region={item} />)}
 			</CColumns>
 
 			<CColumns columns="one" {gap}>
-				{mainRegions.map((item) => <PageRegion region={item} />)}
+				{mainRegions.map((item) => <LayoutRegion region={item} />)}
 			</CColumns>
 		</LSidebar>
 	</CColumns>

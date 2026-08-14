@@ -7,8 +7,14 @@
   "category": "Brand system",
   "categorySlug": "brand-system",
   "tags": [
-    { "label": "Design system", "slug": "design-system" },
-    { "label": "Branding", "slug": "branding" }
+    {
+      "label": "Design system",
+      "slug": "design-system"
+    },
+    {
+      "label": "Branding",
+      "slug": "branding"
+    }
   ],
   "summary": "Chuyển nhận diện thành một hệ thống thành phần và quy tắc để sản phẩm, nội dung và chiến dịch cùng nói một ngôn ngữ.",
   "outcome": "1 hệ thống đa kênh",
@@ -25,15 +31,22 @@
   ],
   "detail": {
     "page": {
-      "template": "fluid",
+      "template": "work-detail",
       "sections": [
         {
           "id": "project-summary",
           "type": "page-header",
           "template": "slider-aside",
-          "settings": { "theme": "light", "spacing": "compact", "container": "site" },
+          "settings": {
+            "theme": "light",
+            "spacing": "compact",
+            "container": "site"
+          },
           "content": {
-            "backAction": { "label": "Back to projects", "href": "/projects" },
+            "backAction": {
+              "label": "Back to projects",
+              "href": "/projects"
+            },
             "galleryLabel": "Project gallery",
             "previousImageLabel": "Previous image",
             "nextImageLabel": "Next image",
@@ -41,7 +54,12 @@
             "actionsLabel": "Project actions",
             "liveActionLabel": "Live site",
             "sourceActionLabel": "Source code",
-            "asideDecoration": { "src": "/uploads/pattern-1.png", "alt": "", "width": 1536, "height": 1536 },
+            "asideDecoration": {
+              "src": "/uploads/pattern-1.png",
+              "alt": "",
+              "width": 1536,
+              "height": 1536
+            },
             "facts": {
               "clientLabel": "Client",
               "roleLabel": "Role",
@@ -52,14 +70,24 @@
         {
           "id": "project-content",
           "type": "article",
-          "settings": { "theme": "light", "spacing": "body", "container": "site" },
-          "content": { "source": "sections" }
+          "settings": {
+            "theme": "light",
+            "spacing": "body",
+            "container": "site"
+          },
+          "content": {
+            "source": "sections"
+          }
         },
         {
           "id": "project-navigation",
           "type": "post-navigation",
           "template": "split",
-          "settings": { "theme": "light", "spacing": "closing", "container": "site" },
+          "settings": {
+            "theme": "light",
+            "spacing": "closing",
+            "container": "site"
+          },
           "content": {
             "label": "Previous / Next",
             "previousLabel": "Previous",

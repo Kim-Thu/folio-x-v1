@@ -1,8 +1,8 @@
 ---
 import LContainer from "@/components/layout/LContainer.astro";
 import LSection from "@/components/layout/LSection.astro";
-import PageRegionContent from "@/components/pages/builder/PageRegionContent.astro";
-import type { PageRegionProps } from "@/types/components/pages/builder/PageBuilder.types";
+import LayoutRegionContent from "@/components/object/project/layout/parts/LayoutRegionContent.astro";
+import type { PageRegionProps } from "@/types/components/object/project/layout/PLayout.types";
 
 const { region } = Astro.props as PageRegionProps;
 const section = region.section;
@@ -15,14 +15,14 @@ const {
 ---
 
 {section === false ? (
-	<PageRegionContent {region} />
+	<LayoutRegionContent {region} />
 ) : (
 	<LSection {id} {theme} {spacing} data-page-region={region.key}>
 		{container === "none" ? (
-			<PageRegionContent {region} />
+			<LayoutRegionContent {region} />
 		) : (
 			<LContainer size={container}>
-				<PageRegionContent {region} />
+				<LayoutRegionContent {region} />
 			</LContainer>
 		)}
 	</LSection>

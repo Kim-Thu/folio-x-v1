@@ -1,5 +1,5 @@
 import { getPublicationDetailSettings, getPublications } from "@/data/cms";
-import type { PageRegion } from "@/types/components/pages/builder/PageBuilder.types";
+import type { PageRegion } from "@/types/components/object/project/layout/PLayout.types";
 import type {
 	PublicationCollection,
 	PublicationDetailPageData,
@@ -223,7 +223,7 @@ export async function getPublicationDetailPageData(
 
 	return {
 		entry,
-		layout: { template: presentation.page.template },
+		pageTemplate: presentation.page.template ,
 		regions,
 	};
 }

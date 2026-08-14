@@ -1,5 +1,5 @@
 import { getLabDetailSettings, getLabs } from "@/data/cms";
-import type { PageRegion } from "@/types/components/pages/builder/PageBuilder.types";
+import type { PageRegion } from "@/types/components/object/project/layout/PLayout.types";
 import type { LabDetailPageData } from "@/types/components/pages/lab-detail/LabDetailPage.types";
 import type { PPageHeaderMediaAsideData } from "@/types/components/object/project/page-header/PPageHeader.types";
 
@@ -341,7 +341,7 @@ export async function getLabDetailPageData(
 
 	return {
 		lab,
-		layout: { template: presentation.page.template },
+		pageTemplate: presentation.page.template ,
 		regions,
 	};
 }

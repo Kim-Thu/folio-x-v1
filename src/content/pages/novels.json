@@ -5,13 +5,19 @@
     "description": "Original novels and illustrated stories."
   },
   "content": {
-    "layout": { "template": "fluid" },
+    "layout": {
+      "template": "catalog"
+    },
     "sections": [
       {
         "id": "novels-hero",
         "type": "page-header",
         "template": "immersive",
-        "settings": { "theme": "canvas", "spacing": "none", "container": "none" },
+        "settings": {
+          "theme": "canvas",
+          "spacing": "none",
+          "container": "none"
+        },
         "content": {
           "id": "novels-hero",
           "eyebrow": "Novels",
@@ -20,17 +26,54 @@
           "description": "Explore novels, light novels, and web fiction with vivid worlds and stories worth staying up late for.",
           "actionsLabel": "Novels actions",
           "actions": [
-            { "label": "Start reading", "href": "/novels#catalog", "icon": "arrowRight", "iconPosition": "end", "variant": "primary", "tone": "light", "size": "md" },
-            { "label": "Reading guide", "href": "/novels#catalog", "icon": "archiveBox", "iconPosition": "end", "variant": "outline", "tone": "light", "size": "md" }
+            {
+              "label": "Start reading",
+              "href": "/novels#catalog",
+              "icon": "arrowRight",
+              "iconPosition": "end",
+              "variant": "primary",
+              "tone": "light",
+              "size": "md"
+            },
+            {
+              "label": "Reading guide",
+              "href": "/novels#catalog",
+              "icon": "archiveBox",
+              "iconPosition": "end",
+              "variant": "outline",
+              "tone": "light",
+              "size": "md"
+            }
           ],
-          "image": { "src": "/uploads/library-hero-reading.webp", "alt": "A reader discovering a fantasy city through an open book", "width": 1672, "height": 941 },
+          "image": {
+            "src": "/uploads/library-hero-reading.webp",
+            "alt": "A reader discovering a fantasy city through an open book",
+            "width": 1672,
+            "height": 941
+          },
           "quote": "Some stories stay with us forever.",
           "quoteCredit": "NKT Studio",
           "metrics": [
-            { "label": "Works", "value": "186+", "icon": "archiveBox" },
-            { "label": "Chapters", "value": "12.5K+", "icon": "folder01" },
-            { "label": "Reads", "value": "2.1M+", "icon": "globeAlt" },
-            { "label": "Rating", "value": "4.9", "icon": "star" }
+            {
+              "label": "Works",
+              "value": "186+",
+              "icon": "archiveBox"
+            },
+            {
+              "label": "Chapters",
+              "value": "12.5K+",
+              "icon": "folder01"
+            },
+            {
+              "label": "Reads",
+              "value": "2.1M+",
+              "icon": "globeAlt"
+            },
+            {
+              "label": "Rating",
+              "value": "4.9",
+              "icon": "star"
+            }
           ]
         }
       },
@@ -38,17 +81,34 @@
         "id": "catalog",
         "type": "collection",
         "template": "cards",
-        "settings": { "theme": "canvas", "spacing": "body", "container": "site" },
+        "settings": {
+          "theme": "canvas",
+          "spacing": "body",
+          "container": "site"
+        },
         "content": {
           "heading": {
             "label": "Library",
-            "title": ["Explore", "Novels"],
+            "title": [
+              "Explore",
+              "Novels"
+            ],
             "description": "Browse original novels, light novels, and web fiction.",
-            "action": { "label": "View all", "href": "/novels", "icon": "arrowRight" }
+            "action": {
+              "label": "View all",
+              "href": "/novels",
+              "icon": "arrowRight"
+            }
           },
-          "source": { "collection": "novels", "limit": 24 },
+          "source": {
+            "collection": "novels",
+            "limit": 24
+          },
           "itemPresentation": {
-            "routes": { "base": "/novels/", "categoryBase": "/novels/category/" },
+            "routes": {
+              "base": "/novels/",
+              "categoryBase": "/novels/category/"
+            },
             "ariaLabelPrefix": "Read ",
             "categoryDisplay": "text",
             "tagsLabelSuffix": " genres",
@@ -61,7 +121,12 @@
             "gap": "sm",
             "mediaRatio": "portrait",
             "headingLevel": 3,
-            "slots": { "excerpt": true, "tags": true, "metrics": true, "action": false }
+            "slots": {
+              "excerpt": true,
+              "tags": true,
+              "metrics": true,
+              "action": false
+            }
           }
         }
       },
@@ -69,12 +134,21 @@
         "id": "novels-newsletter",
         "type": "cta",
         "template": "subscription",
-        "settings": { "theme": "canvas", "spacing": "closing", "container": "site" },
+        "settings": {
+          "theme": "canvas",
+          "spacing": "closing",
+          "container": "site"
+        },
         "content": {
           "id": "novels-newsletter",
           "title": "Never miss a new chapter",
           "description": "Get notified whenever a story you follow receives a new chapter.",
-          "image": { "src": "/uploads/library-newsletter-book.webp", "alt": "An open storybook with floating pages", "width": 1448, "height": 1086 },
+          "image": {
+            "src": "/uploads/library-newsletter-book.webp",
+            "alt": "An open storybook with floating pages",
+            "width": 1448,
+            "height": 1086
+          },
           "form": {
             "formName": "novels-newsletter",
             "inputId": "novels-newsletter-email",

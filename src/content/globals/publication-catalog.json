@@ -11,8 +11,14 @@
     "sortLabel": "Sort",
     "sortValue": "newest",
     "sortOptions": [
-      { "label": "Newest", "value": "newest" },
-      { "label": "Oldest", "value": "oldest" }
+      {
+        "label": "Newest",
+        "value": "newest"
+      },
+      {
+        "label": "Oldest",
+        "value": "oldest"
+      }
     ],
     "viewLabel": "View",
     "gridViewLabel": "Grid view",
@@ -24,7 +30,11 @@
     "sticky": true,
     "genresLegend": "Genres",
     "allGenresShortLabel": "All",
-    "panel": { "surface": "glass", "radius": "md", "spacing": "sm" },
+    "panel": {
+      "surface": "glass",
+      "radius": "md",
+      "spacing": "sm"
+    },
     "trendingTitle": "Trending",
     "popularAuthorsTitle": "Popular authors",
     "listCards": {
@@ -32,9 +42,17 @@
       "layout": "list",
       "columns": 1,
       "gap": "sm",
-      "slots": { "excerpt": false, "tags": false, "action": false }
+      "slots": {
+        "excerpt": false,
+        "tags": false,
+        "action": false
+      }
     },
-    "authorPlaceholder": { "src": "/uploads/avatar-placehoder.png", "width": 512, "height": 512 },
+    "authorPlaceholder": {
+      "src": "/uploads/avatar-placehoder.png",
+      "width": 512,
+      "height": 512
+    },
     "trendingLimit": 5,
     "authorLimit": 5
   },
@@ -51,23 +69,44 @@
       "columns": 5,
       "gap": "sm",
       "mediaRatio": "portrait",
-      "slots": { "excerpt": false, "action": false }
+      "slots": {
+        "excerpt": false,
+        "action": false
+      }
     },
     "latestCards": {
       "template": "compact-media",
       "layout": "grid",
       "columns": 3,
       "gap": "sm",
-      "slots": { "excerpt": true, "tags": false, "action": false }
+      "slots": {
+        "excerpt": true,
+        "tags": false,
+        "action": false
+      }
     },
     "genreCards": {
       "template": "icon-summary",
       "layout": "grid",
       "columns": 4,
       "gap": "sm",
-      "slots": { "media": false, "metadata": false, "tags": false, "metrics": false, "action": false }
+      "slots": {
+        "media": false,
+        "metadata": false,
+        "tags": false,
+        "metrics": false,
+        "action": false
+      }
     },
-    "genreIcons": ["star", "userCircle", "globeAlt", "bolt", "lightBulb", "archiveBox", "folder01"],
+    "genreIcons": [
+      "star",
+      "userCircle",
+      "globeAlt",
+      "bolt",
+      "lightBulb",
+      "archiveBox",
+      "folder01"
+    ],
     "genreWorksTemplate": "{count} works",
     "authorWorksTemplate": "{count} works"
   }

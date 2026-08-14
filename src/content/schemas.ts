@@ -677,10 +677,7 @@ export const pageSectionSchema = z.union([
 ]);
 
 const pageLayoutSchema = z.object({
-	template: z.enum(["fluid", "contained", "boxed", "sidebar", "centered"]),
-	containerSize: z.enum(["site", "content"]).optional(),
-	asideLabel: z.string().min(1).optional(),
-	asidePosition: z.enum(["start", "end"]).optional(),
+	template: z.enum(["home", "default", "archive", "catalog", "work-detail", "insight-detail", "lab-detail", "product-detail", "publication-detail", "reader", "policy", "system-state"]),
 });
 
 const detailSectionSettingsSchema = z.object({
@@ -697,7 +694,7 @@ const productActionSchema = z.object({
 });
 
 const productDetailPageSchema = z.object({
-	template: z.enum(["fluid", "contained", "boxed", "sidebar", "centered"]),
+	template: z.literal("product-detail"),
 	sections: z.array(z.discriminatedUnion("type", [
 		z.object({
 			id: z.string().min(1),

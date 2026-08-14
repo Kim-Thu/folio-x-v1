@@ -5,7 +5,9 @@
     "description": "Ideas, insights, and practical notes about design, engineering, and product systems."
   },
   "content": {
-    "layout": { "template": "fluid" },
+    "layout": {
+      "template": "archive"
+    },
     "sections": [
       {
         "id": "insights-hero",
@@ -22,7 +24,9 @@
           "title": "Ideas. Insights. Inspiration",
           "accent": ".",
           "description": "Ideas, insights, and practical notes about design, engineering, and product systems.",
-          "source": { "collection": "blog" },
+          "source": {
+            "collection": "blog"
+          },
           "benefits": {
             "articleLabel": "articles",
             "topicLabel": "topics",
@@ -46,7 +50,9 @@
           "container": "site"
         },
         "content": {
-          "source": { "collection": "blog" },
+          "source": {
+            "collection": "blog"
+          },
           "toolbar": {
             "search": {
               "id": "insights-search",
@@ -65,8 +71,14 @@
               "label": "Newest",
               "value": "newest",
               "options": [
-                { "label": "Newest", "value": "newest" },
-                { "label": "Oldest", "value": "oldest" }
+                {
+                  "label": "Newest",
+                  "value": "newest"
+                },
+                {
+                  "label": "Oldest",
+                  "value": "oldest"
+                }
               ]
             },
             "view": {

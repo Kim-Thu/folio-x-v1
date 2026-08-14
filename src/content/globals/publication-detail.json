@@ -1,8 +1,16 @@
 {
-  "page": { "template": "fluid" },
+  "page": {
+    "template": "publication-detail"
+  },
   "collections": {
-    "comics": { "collectionLabel": "Comics", "basePath": "/comics" },
-    "novels": { "collectionLabel": "Novels", "basePath": "/novels" }
+    "comics": {
+      "collectionLabel": "Comics",
+      "basePath": "/comics"
+    },
+    "novels": {
+      "collectionLabel": "Novels",
+      "basePath": "/novels"
+    }
   },
   "routes": {
     "categorySegment": "category",
@@ -12,7 +20,11 @@
   "header": {
     "id": "publication-summary",
     "template": "cover-summary",
-    "settings": { "theme": "canvas", "spacing": "compact", "container": "site" },
+    "settings": {
+      "theme": "canvas",
+      "spacing": "compact",
+      "container": "site"
+    },
     "labels": {
       "breadcrumb": "Breadcrumb",
       "tags": "Genres",
@@ -32,10 +44,18 @@
       "complete": "Complete"
     },
     "metrics": {
-      "rating": { "icon": "star" },
-      "reads": { "icon": "eye" },
-      "chapters": { "icon": "bookOpen" },
-      "followers": { "icon": "bookmark" }
+      "rating": {
+        "icon": "star"
+      },
+      "reads": {
+        "icon": "eye"
+      },
+      "chapters": {
+        "icon": "bookOpen"
+      },
+      "followers": {
+        "icon": "bookmark"
+      }
     },
     "primaryAction": {
       "icon": "bookOpen",
@@ -45,18 +65,34 @@
   },
   "navigation": {
     "id": "publication-navigation",
-    "settings": { "theme": "canvas", "spacing": "none", "container": "site" },
+    "settings": {
+      "theme": "canvas",
+      "spacing": "none",
+      "container": "site"
+    },
     "label": "Publication sections",
     "appearance": "underline",
     "tone": "light",
     "tabs": {
-      "chapters": { "label": "Chapters", "value": "chapters", "href": "#chapters" },
-      "overview": { "label": "Introduction", "value": "overview", "href": "#overview" }
+      "chapters": {
+        "label": "Chapters",
+        "value": "chapters",
+        "href": "#chapters"
+      },
+      "overview": {
+        "label": "Introduction",
+        "value": "overview",
+        "href": "#overview"
+      }
     }
   },
   "chapters": {
     "id": "chapters",
-    "settings": { "theme": "canvas", "spacing": "body", "container": "site" },
+    "settings": {
+      "theme": "canvas",
+      "spacing": "body",
+      "container": "site"
+    },
     "labels": {
       "aside": "Supporting information",
       "introduction": "Introduction",
@@ -76,8 +112,14 @@
       "label": "Sort chapters",
       "value": "newest",
       "options": [
-        { "label": "Newest", "value": "newest" },
-        { "label": "Oldest", "value": "oldest" }
+        {
+          "label": "Newest",
+          "value": "newest"
+        },
+        {
+          "label": "Oldest",
+          "value": "oldest"
+        }
       ]
     },
     "itemAction": {
@@ -89,8 +131,12 @@
     }
   },
   "reader": {
-    "template": "fluid",
-    "settings": { "theme": "canvas", "spacing": "compact", "container": "site" },
+    "template": "reader",
+    "settings": {
+      "theme": "canvas",
+      "spacing": "compact",
+      "container": "site"
+    },
     "labels": {
       "breadcrumb": "Breadcrumb",
       "chapter": "Chapter",
@@ -107,13 +153,32 @@
       "navigation": "Chapter navigation"
     },
     "metadata": {
-      "published": { "icon": "calendar03", "display": "icon-text" },
-      "readTime": { "icon": "clock01", "display": "icon-text" }
+      "published": {
+        "icon": "calendar03",
+        "display": "icon-text"
+      },
+      "readTime": {
+        "icon": "clock01",
+        "display": "icon-text"
+      }
     },
     "controls": {
-      "chapterList": { "icon": "listView", "variant": "outline", "size": "md" },
-      "previous": { "icon": "arrowLeft", "variant": "outline", "size": "md" },
-      "next": { "icon": "arrowRight", "iconPosition": "end", "variant": "primary", "size": "md" }
+      "chapterList": {
+        "icon": "listView",
+        "variant": "outline",
+        "size": "md"
+      },
+      "previous": {
+        "icon": "arrowLeft",
+        "variant": "outline",
+        "size": "md"
+      },
+      "next": {
+        "icon": "arrowRight",
+        "iconPosition": "end",
+        "variant": "primary",
+        "size": "md"
+      }
     }
   }
 }

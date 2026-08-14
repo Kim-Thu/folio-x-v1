@@ -5,13 +5,19 @@
     "description": "Illustrated series and graphic stories."
   },
   "content": {
-    "layout": { "template": "fluid" },
+    "layout": {
+      "template": "catalog"
+    },
     "sections": [
       {
         "id": "comics-hero",
         "type": "page-header",
         "template": "immersive",
-        "settings": { "theme": "canvas", "spacing": "none", "container": "none" },
+        "settings": {
+          "theme": "canvas",
+          "spacing": "none",
+          "container": "none"
+        },
         "content": {
           "id": "comics-hero",
           "eyebrow": "Comics",
@@ -20,17 +26,54 @@
           "description": "Discover illustrated series, graphic stories, and original comics built panel by panel.",
           "actionsLabel": "Comics actions",
           "actions": [
-            { "label": "Browse comics", "href": "/comics#catalog", "icon": "arrowRight", "iconPosition": "end", "variant": "primary", "tone": "light", "size": "md" },
-            { "label": "Creator guide", "href": "/comics#catalog", "icon": "archiveBox", "iconPosition": "end", "variant": "outline", "tone": "light", "size": "md" }
+            {
+              "label": "Browse comics",
+              "href": "/comics#catalog",
+              "icon": "arrowRight",
+              "iconPosition": "end",
+              "variant": "primary",
+              "tone": "light",
+              "size": "md"
+            },
+            {
+              "label": "Creator guide",
+              "href": "/comics#catalog",
+              "icon": "archiveBox",
+              "iconPosition": "end",
+              "variant": "outline",
+              "tone": "light",
+              "size": "md"
+            }
           ],
-          "image": { "src": "/uploads/library-hero-drawing.webp", "alt": "An illustrator creating a fantasy comic at night", "width": 1672, "height": 941 },
+          "image": {
+            "src": "/uploads/library-hero-drawing.webp",
+            "alt": "An illustrator creating a fantasy comic at night",
+            "width": 1672,
+            "height": 941
+          },
           "quote": "Every panel opens another world.",
           "quoteCredit": "NKT Studio",
           "metrics": [
-            { "label": "Series", "value": "96+", "icon": "archiveBox" },
-            { "label": "Episodes", "value": "8.4K+", "icon": "folder01" },
-            { "label": "Views", "value": "1.8M+", "icon": "globeAlt" },
-            { "label": "Rating", "value": "4.8", "icon": "star" }
+            {
+              "label": "Series",
+              "value": "96+",
+              "icon": "archiveBox"
+            },
+            {
+              "label": "Episodes",
+              "value": "8.4K+",
+              "icon": "folder01"
+            },
+            {
+              "label": "Views",
+              "value": "1.8M+",
+              "icon": "globeAlt"
+            },
+            {
+              "label": "Rating",
+              "value": "4.8",
+              "icon": "star"
+            }
           ]
         }
       },
@@ -38,17 +81,34 @@
         "id": "catalog",
         "type": "collection",
         "template": "cards",
-        "settings": { "theme": "canvas", "spacing": "body", "container": "site" },
+        "settings": {
+          "theme": "canvas",
+          "spacing": "body",
+          "container": "site"
+        },
         "content": {
           "heading": {
             "label": "Library",
-            "title": ["Explore", "Comics"],
+            "title": [
+              "Explore",
+              "Comics"
+            ],
             "description": "Browse illustrated series, graphic stories, and original comics.",
-            "action": { "label": "View all", "href": "/comics", "icon": "arrowRight" }
+            "action": {
+              "label": "View all",
+              "href": "/comics",
+              "icon": "arrowRight"
+            }
           },
-          "source": { "collection": "comics", "limit": 24 },
+          "source": {
+            "collection": "comics",
+            "limit": 24
+          },
           "itemPresentation": {
-            "routes": { "base": "/comics/", "categoryBase": "/comics/category/" },
+            "routes": {
+              "base": "/comics/",
+              "categoryBase": "/comics/category/"
+            },
             "ariaLabelPrefix": "Read ",
             "categoryDisplay": "text",
             "tagsLabelSuffix": " genres",
@@ -61,7 +121,12 @@
             "gap": "sm",
             "mediaRatio": "portrait",
             "headingLevel": 3,
-            "slots": { "excerpt": true, "tags": true, "metrics": true, "action": false }
+            "slots": {
+              "excerpt": true,
+              "tags": true,
+              "metrics": true,
+              "action": false
+            }
           }
         }
       },
@@ -69,12 +134,21 @@
         "id": "comics-newsletter",
         "type": "cta",
         "template": "subscription",
-        "settings": { "theme": "canvas", "spacing": "closing", "container": "site" },
+        "settings": {
+          "theme": "canvas",
+          "spacing": "closing",
+          "container": "site"
+        },
         "content": {
           "id": "comics-newsletter",
           "title": "New episodes, right on time",
           "description": "Subscribe for updates whenever your favorite illustrated series continues.",
-          "image": { "src": "/uploads/library-newsletter-book.webp", "alt": "An open illustrated book with floating pages", "width": 1448, "height": 1086 },
+          "image": {
+            "src": "/uploads/library-newsletter-book.webp",
+            "alt": "An open illustrated book with floating pages",
+            "width": 1448,
+            "height": 1086
+          },
           "form": {
             "formName": "comics-newsletter",
             "inputId": "comics-newsletter-email",

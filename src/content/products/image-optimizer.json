@@ -14,7 +14,7 @@
   "image": "/uploads/page-header-insight.png",
   "detail": {
     "page": {
-      "template": "fluid",
+      "template": "product-detail",
       "sections": [
         {
           "id": "product-summary",
@@ -33,13 +33,29 @@
             "salesLabel": "35 reviews",
             "features": [],
             "facts": [
-              { "label": "Platform", "value": "WordPress" },
-              { "label": "Category", "value": "WordPress Plugin" }
+              {
+                "label": "Platform",
+                "value": "WordPress"
+              },
+              {
+                "label": "Category",
+                "value": "WordPress Plugin"
+              }
             ],
             "actionsLabel": "Image Optimizer actions",
             "actions": [
-              { "label": "Contact to purchase", "href": "mailto:hello@nkt.studio?subject=Image%20Optimizer", "icon": "shoppingBag", "variant": "primary" },
-              { "label": "View preview", "href": "/uploads/page-header-insight.png", "icon": "arrowUpRight", "variant": "outline" }
+              {
+                "label": "Contact to purchase",
+                "href": "mailto:hello@nkt.studio?subject=Image%20Optimizer",
+                "icon": "shoppingBag",
+                "variant": "primary"
+              },
+              {
+                "label": "View preview",
+                "href": "/uploads/page-header-insight.png",
+                "icon": "arrowUpRight",
+                "variant": "outline"
+              }
             ],
             "paymentLabel": "Payment methods",
             "paymentMethods": []

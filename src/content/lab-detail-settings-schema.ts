@@ -31,7 +31,7 @@ const copySchema = z.object({
 
 export const labDetailSettingsSchema = z.object({
   page: z.object({
-    template: z.enum(["fluid", "contained", "boxed", "sidebar", "centered"]),
+    template: z.literal("lab-detail"),
   }),
   header: z.object({
     id: z.string().min(1),

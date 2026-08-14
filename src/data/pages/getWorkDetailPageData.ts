@@ -1,5 +1,5 @@
 import { getPage, getProjects } from "@/data/cms";
-import type { PageRegion } from "@/types/components/pages/builder/PageBuilder.types";
+import type { PageRegion } from "@/types/components/object/project/layout/PLayout.types";
 import type { WorkDetailPageData } from "@/types/components/pages/work-detail/WorkDetailPage.types";
 
 type ProjectsPage = Awaited<ReturnType<typeof getPage>>;
@@ -219,7 +219,7 @@ export async function getWorkDetailPageData(
 
 	return {
 		project,
-		layout: { template: page.template },
+		pageTemplate: page.template ,
 		regions,
 	};
 }

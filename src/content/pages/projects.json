@@ -6,29 +6,65 @@
   },
   "seo": null,
   "content": {
-    "layout": { "template": "fluid" },
+    "layout": {
+      "template": "archive"
+    },
     "sections": [
       {
         "id": "lead",
         "type": "page-header",
         "template": "split-media",
-        "settings": { "theme": "light", "spacing": "lead", "container": "site" },
+        "settings": {
+          "theme": "light",
+          "spacing": "lead",
+          "container": "site"
+        },
         "content": {
-          "breadcrumb": { "label": "Breadcrumb", "items": [{ "label": "Home", "href": "/" }], "current": "Projects" },
-          "title": ["Works", "that build value."],
+          "breadcrumb": {
+            "label": "Breadcrumb",
+            "items": [
+              {
+                "label": "Home",
+                "href": "/"
+              }
+            ],
+            "current": "Projects"
+          },
+          "title": [
+            "Works",
+            "that build value."
+          ],
           "description": "Các hệ thống được tổ chức theo bài toán, lĩnh vực và năng lực kỹ thuật.",
-          "image": { "src": "/uploads/page-header-work.webp", "alt": "Khối lập phương mô-đun đại diện cho các dự án được xây dựng thành hệ thống", "width": 1400, "height": 1050 }
+          "image": {
+            "src": "/uploads/page-header-work.webp",
+            "alt": "Khối lập phương mô-đun đại diện cho các dự án được xây dựng thành hệ thống",
+            "width": 1400,
+            "height": 1050
+          }
         }
       },
       {
         "id": "archive",
         "type": "archive",
         "template": "taxonomy",
-        "settings": { "theme": "light", "spacing": "compact", "container": "site" },
+        "settings": {
+          "theme": "light",
+          "spacing": "compact",
+          "container": "site"
+        },
         "content": {
-          "source": { "collection": "projects" },
-          "routes": { "base": "/projects", "categoryBase": "/projects/category/", "tagBase": "/projects/tag/" },
-          "taxonomy": { "categoryPrefix": "Project category", "tagPrefix": "Project tag" },
+          "source": {
+            "collection": "projects"
+          },
+          "routes": {
+            "base": "/projects",
+            "categoryBase": "/projects/category/",
+            "tagBase": "/projects/tag/"
+          },
+          "taxonomy": {
+            "categoryPrefix": "Project category",
+            "tagPrefix": "Project tag"
+          },
           "toolbar": {
             "filterLabel": "Lọc project theo category",
             "allLabel": "Tất cả",
@@ -36,16 +72,29 @@
             "sortLabel": "Sắp xếp dự án",
             "sortValue": "featured",
             "sortOptions": [
-              { "label": "Nổi bật", "value": "featured" },
-              { "label": "Mới nhất", "value": "newest" },
-              { "label": "Cũ nhất", "value": "oldest" }
+              {
+                "label": "Nổi bật",
+                "value": "featured"
+              },
+              {
+                "label": "Mới nhất",
+                "value": "newest"
+              },
+              {
+                "label": "Cũ nhất",
+                "value": "oldest"
+              }
             ],
             "viewLabel": "Kiểu hiển thị",
             "gridViewLabel": "Hiển thị dạng lưới",
             "listViewLabel": "Hiển thị dạng danh sách"
           },
           "itemPresentation": {
-            "routes": { "base": "/projects/", "categoryBase": "/projects/category/", "tagBase": "/projects/tag/" },
+            "routes": {
+              "base": "/projects/",
+              "categoryBase": "/projects/category/",
+              "tagBase": "/projects/tag/"
+            },
             "actionLabel": "Xem case study",
             "actionIcon": "arrowUpRight",
             "separator": "",
@@ -57,22 +106,43 @@
             "imageWidth": 800,
             "imageHeight": 600
           },
-          "cards": { "template": "overlay", "layout": "mosaic", "gap": "sm" },
+          "cards": {
+            "template": "overlay",
+            "layout": "mosaic",
+            "gap": "sm"
+          },
           "emptyLabel": "Không có project phù hợp với bộ lọc này.",
-          "pagination": { "label": "Phân trang dự án", "previousLabel": "Trang trước", "nextLabel": "Trang sau", "pageSize": 7 }
+          "pagination": {
+            "label": "Phân trang dự án",
+            "previousLabel": "Trang trước",
+            "nextLabel": "Trang sau",
+            "pageSize": 7
+          }
         }
       },
       {
         "id": "closing",
         "type": "cta",
         "template": "callout",
-        "settings": { "theme": "light", "spacing": "closing", "container": "site" },
+        "settings": {
+          "theme": "light",
+          "spacing": "closing",
+          "container": "site"
+        },
         "content": {
           "id": "contact",
           "title": "Bạn có ý tưởng dự án?",
           "description": "Hãy cùng tạo ra một sản phẩm rõ ràng, hữu ích và đáng nhớ.",
-          "action": { "href": "mailto:hello@nvt.studio", "label": "Liên hệ tôi" },
-          "image": { "src": "/uploads/cta-banner.webp", "alt": "Nhân vật 3D đang làm việc tại bàn máy tính", "width": 1536, "height": 720 }
+          "action": {
+            "href": "mailto:hello@nvt.studio",
+            "label": "Liên hệ tôi"
+          },
+          "image": {
+            "src": "/uploads/cta-banner.webp",
+            "alt": "Nhân vật 3D đang làm việc tại bàn máy tính",
+            "width": 1536,
+            "height": 720
+          }
         }
       }
     ]

@@ -103,10 +103,7 @@ collections:
                     name: layout
                     widget: object
                     fields:
-                      - { label: Template, name: template, widget: select, options: [fluid, contained, boxed, sidebar, centered] }
-                      - { label: Container size, name: containerSize, widget: select, required: false, options: [site, content] }
-                      - { label: Aside label, name: asideLabel, widget: string, required: false }
-                      - { label: Aside position, name: asidePosition, widget: select, required: false, options: [start, end] }
+                      - { label: Template, name: template, widget: select, options: [home, default, archive, catalog, work-detail, insight-detail, lab-detail, product-detail, publication-detail, reader, policy, system-state] }
                   - label: Sections
                     name: sections
                     widget: list
@@ -253,10 +250,7 @@ collections:
                     name: layout
                     widget: object
                     fields:
-                      - { label: Template, name: template, widget: select, options: [fluid, contained, boxed, sidebar, centered] }
-                      - { label: Container size, name: containerSize, widget: select, required: false, options: [site, content] }
-                      - { label: Aside label, name: asideLabel, widget: string, required: false }
-                      - { label: Aside position, name: asidePosition, widget: select, required: false, options: [start, end] }
+                      - { label: Template, name: template, widget: select, options: [home, default, archive, catalog, work-detail, insight-detail, lab-detail, product-detail, publication-detail, reader, policy, system-state] }
                   - label: Sections
                     name: sections
                     widget: list
@@ -528,7 +522,7 @@ collections:
             name: page
             widget: object
             fields:
-              - { label: Template, name: template, widget: select, options: [fluid, contained, boxed, sidebar, centered] }
+              - { label: Template, name: template, widget: select, options: [home, default, archive, catalog, work-detail, insight-detail, lab-detail, product-detail, publication-detail, reader, policy, system-state] }
 
           - label: Header
             name: header
@@ -1334,7 +1328,7 @@ collections:
             name: page
             widget: object
             fields:
-              - { label: Template, name: template, widget: select, options: [fluid, contained, boxed, sidebar, centered] }
+              - { label: Template, name: template, widget: select, options: [home, default, archive, catalog, work-detail, insight-detail, lab-detail, product-detail, publication-detail, reader, policy, system-state] }
               - label: Sections
                 name: sections
                 widget: list

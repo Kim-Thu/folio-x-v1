@@ -14,13 +14,17 @@
   "image": "https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&w=900&q=88",
   "detail": {
     "page": {
-      "template": "fluid",
+      "template": "product-detail",
       "sections": [
         {
           "id": "product-summary",
           "type": "page-header",
           "template": "gallery-summary",
-          "settings": { "theme": "canvas", "spacing": "compact", "container": "site" },
+          "settings": {
+            "theme": "canvas",
+            "spacing": "compact",
+            "container": "site"
+          },
           "content": {
             "breadcrumbLabel": "Breadcrumb",
             "productsLabel": "Products",
@@ -29,13 +33,29 @@
             "salesLabel": "96 reviews",
             "features": [],
             "facts": [
-              { "label": "Platform", "value": "WordPress" },
-              { "label": "Category", "value": "WordPress Plugin" }
+              {
+                "label": "Platform",
+                "value": "WordPress"
+              },
+              {
+                "label": "Category",
+                "value": "WordPress Plugin"
+              }
             ],
             "actionsLabel": "Auto Post System actions",
             "actions": [
-              { "label": "Contact to purchase", "href": "mailto:hello@nkt.studio?subject=Auto%20Post%20System", "icon": "shoppingBag", "variant": "primary" },
-              { "label": "View preview", "href": "https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&w=900&q=88", "icon": "arrowUpRight", "variant": "outline" }
+              {
+                "label": "Contact to purchase",
+                "href": "mailto:hello@nkt.studio?subject=Auto%20Post%20System",
+                "icon": "shoppingBag",
+                "variant": "primary"
+              },
+              {
+                "label": "View preview",
+                "href": "https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&w=900&q=88",
+                "icon": "arrowUpRight",
+                "variant": "outline"
+              }
             ],
             "paymentLabel": "Payment methods",
             "paymentMethods": []
@@ -44,10 +64,20 @@
         {
           "id": "product-overview",
           "type": "article",
-          "settings": { "theme": "canvas", "spacing": "body", "container": "site" },
+          "settings": {
+            "theme": "canvas",
+            "spacing": "body",
+            "container": "site"
+          },
           "content": {
             "blocks": [
-              { "id": "product-overview", "title": "Overview", "paragraphs": ["Automatically share your content to social media."] }
+              {
+                "id": "product-overview",
+                "title": "Overview",
+                "paragraphs": [
+                  "Automatically share your content to social media."
+                ]
+              }
             ]
           }
         }

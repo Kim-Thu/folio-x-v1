@@ -33,7 +33,7 @@ const buttonPresentationSchema = z.object({
 
 export const publicationDetailSettingsSchema = z.object({
   page: z.object({
-    template: z.enum(["fluid", "contained", "boxed", "sidebar", "centered"]),
+    template: z.literal("publication-detail"),
   }),
   collections: z.object({
     comics: collectionLabelsSchema,
@@ -117,7 +117,7 @@ export const publicationDetailSettingsSchema = z.object({
     }),
   }),
   reader: z.object({
-    template: z.enum(["fluid", "contained", "boxed", "sidebar", "centered"]),
+    template: z.literal("reader"),
     settings: sectionSettingsSchema,
     labels: z.object({
       breadcrumb: z.string().min(1),

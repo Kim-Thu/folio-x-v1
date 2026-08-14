@@ -1,5 +1,5 @@
 import { getPage, getProducts } from "@/data/cms";
-import type { PageRegion } from "@/types/components/pages/builder/PageBuilder.types";
+import type { PageRegion } from "@/types/components/object/project/layout/PLayout.types";
 import type { ProductDetailPageData } from "@/types/components/pages/product-detail/ProductDetailPage.types";
 
 type ProductsPage = Awaited<ReturnType<typeof getPage>>;
@@ -133,7 +133,7 @@ export async function getProductDetailPageData(
 
 	return {
 		product,
-		layout: { template: page.template },
+		pageTemplate: page.template ,
 		regions,
 	};
 }

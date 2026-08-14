@@ -1,1 +1,13 @@
-{"slug":"/about","meta":{"title":"About","description":"About NKT Studio."},"content":{"layout":{"template":"fluid"},"sections":[]}}
+{
+  "slug": "/about",
+  "meta": {
+    "title": "About",
+    "description": "About NKT Studio."
+  },
+  "content": {
+    "layout": {
+      "template": "default"
+    },
+    "sections": []
+  }
+}

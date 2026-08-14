@@ -1,6 +1,7 @@
 ---
+import LPage from "@/components/layout/LPage.astro";
 import PLayout from "@/components/object/project/layout/PLayout.astro";
-import PageRegionView from "@/components/pages/builder/PageRegion.astro";
+import PPage from "@/components/object/project/page/PPage.astro";
 import {
 	getInsights,
 	getLabs,
@@ -24,11 +25,13 @@ import type {
 	PublicationCardPresentation,
 } from "@/data/mappers/card";
 import type {
-	ArchiveRegion,
 	PageBuilderProps,
-	PageRegion,
 	PageSectionData,
 } from "@/types/components/pages/builder/PageBuilder.types";
+import type {
+	ArchiveRegion,
+	PageRegion,
+} from "@/types/components/object/project/layout/PLayout.types";
 import type { CIconName } from "@/types/components/object/component/CIcon.types";
 import type { PAdvertisementData } from "@/types/components/object/project/advertisement/PAdvertisement.types";
 import type { PCardData, PCardProps } from "@/types/components/object/project/card/PCard.types";
@@ -456,9 +459,16 @@ const regions: PageRegion[] = "regions" in props ? props.regions : await Promise
 		}
 	}
 }));
-const layout = "layout" in props ? props.layout : props.page.content.layout;
+const pageTemplate = "page" in props
+	? props.page.content.layout.template
+	: props.pageTemplate;
+const isHome = "page" in props && props.page.slug === "/";
 ---
 
-<PLayout {...layout}>
-	{regions.map((region) => <PageRegionView region={region} />)}
-</PLayout>
+{isHome ? (
+	<LPage data-page-template="home">
+		<PLayout {regions} />
+	</LPage>
+) : (
+	<PPage template={pageTemplate} {regions} />
+)}

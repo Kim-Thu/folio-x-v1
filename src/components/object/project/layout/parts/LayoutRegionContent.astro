@@ -9,9 +9,9 @@ import CTags from "@/components/object/component/CTags.astro";
 import CProfile from "@/components/object/component/CProfile.astro";
 import CTOC from "@/components/object/component/CTOC.astro";
 import CTabList from "@/components/object/component/CTabList.astro";
-import ArchiveRegionContent from "@/components/pages/builder/ArchiveRegionContent.astro";
-import CollectionRegionContent from "@/components/pages/builder/CollectionRegionContent.astro";
-import GroupRegionContent from "@/components/pages/builder/GroupRegionContent.astro";
+import ArchiveRegionContent from "@/components/object/project/layout/parts/ArchiveRegionContent.astro";
+import CollectionRegionContent from "@/components/object/project/layout/parts/CollectionRegionContent.astro";
+import GroupRegionContent from "@/components/object/project/layout/parts/GroupRegionContent.astro";
 import PArticle from "@/components/object/project/article/PArticle.astro";
 import PAdvertisement from "@/components/object/project/advertisement/PAdvertisement.astro";
 import PCard from "@/components/object/project/card/PCard.astro";
@@ -25,7 +25,7 @@ import PEntryIndex from "@/components/object/project/entry-index/PEntryIndex.ast
 import PReader from "@/components/object/project/reader/PReader.astro";
 import PHero from "@/components/object/project/hero/PHero.astro";
 import PGallery from "@/components/object/project/gallery/PGallery.astro";
-import type { PageRegionProps } from "@/types/components/pages/builder/PageBuilder.types";
+import type { PageRegionProps } from "@/types/components/object/project/layout/PLayout.types";
 
 const { region } = Astro.props as PageRegionProps;
 ---

@@ -1,9 +1,15 @@
 {
-  "page": { "template": "fluid" },
+  "page": {
+    "template": "lab-detail"
+  },
   "header": {
     "id": "lab-summary",
     "template": "media-aside",
-    "settings": { "theme": "canvas", "spacing": "compact", "container": "site" },
+    "settings": {
+      "theme": "canvas",
+      "spacing": "compact",
+      "container": "site"
+    },
     "labels": {
       "breadcrumb": "Breadcrumb",
       "collection": "Labs",
@@ -17,51 +23,95 @@
       "technologyBase": "/labs/technology"
     },
     "metrics": [
-      { "icon": "star", "source": "stars" },
-      { "icon": "github", "source": "forks" },
-      { "icon": "clock01", "source": "updatedLabel" }
+      {
+        "icon": "star",
+        "source": "stars"
+      },
+      {
+        "icon": "github",
+        "source": "forks"
+      },
+      {
+        "icon": "clock01",
+        "source": "updatedLabel"
+      }
     ],
     "actions": {
-      "live": { "icon": "arrowUpRight", "variant": "primary" },
-      "source": { "icon": "github", "variant": "outline" }
+      "live": {
+        "icon": "arrowUpRight",
+        "variant": "primary"
+      },
+      "source": {
+        "icon": "github",
+        "variant": "outline"
+      }
     }
   },
   "navigation": {
     "labelTemplate": "{title} navigation",
-    "settings": { "theme": "canvas", "spacing": "none", "container": "site" },
+    "settings": {
+      "theme": "canvas",
+      "spacing": "none",
+      "container": "site"
+    },
     "appearance": "underline",
     "tone": "light"
   },
   "content": {
     "id": "lab-content",
-    "settings": { "theme": "canvas", "spacing": "body", "container": "site" },
-    "article": { "template": "flow" }
+    "settings": {
+      "theme": "canvas",
+      "spacing": "body",
+      "container": "site"
+    },
+    "article": {
+      "template": "flow"
+    }
   },
   "sidebar": {
     "labelTemplate": "{title} project information",
     "position": "end",
     "sticky": true,
-    "stack": { "columns": "one", "gap": "md" },
+    "stack": {
+      "columns": "one",
+      "gap": "md"
+    },
     "panel": {
       "surface": "glass",
       "radius": "md",
       "spacing": "md",
-      "stack": { "columns": "one", "gap": "md" }
+      "stack": {
+        "columns": "one",
+        "gap": "md"
+      }
     },
     "labels": {
       "projectInformation": "Project information",
       "technologyTemplate": "{title} technology stack"
     },
-    "header": { "appearance": "compact", "headingLevel": 2 }
+    "header": {
+      "appearance": "compact",
+      "headingLevel": 2
+    }
   },
   "gallery": {
     "id": "gallery",
     "title": "Gallery",
     "openImageLabelTemplate": "Open gallery image {index}",
     "imageTitleLabelTemplate": "Gallery image {index}",
-    "settings": { "theme": "canvas", "spacing": "compact", "container": "site" },
-    "stack": { "columns": "one", "gap": "md" },
-    "header": { "appearance": "compact", "headingLevel": 2 },
+    "settings": {
+      "theme": "canvas",
+      "spacing": "compact",
+      "container": "site"
+    },
+    "stack": {
+      "columns": "one",
+      "gap": "md"
+    },
+    "header": {
+      "appearance": "compact",
+      "headingLevel": 2
+    },
     "mediaRatio": "editorial",
     "imageVariant": "fill",
     "captionVariant": "caption",
@@ -71,20 +121,45 @@
     "id": "resources",
     "title": "Resources",
     "actionIcon": "arrowUpRight",
-    "settings": { "theme": "canvas", "spacing": "compact", "container": "site" },
-    "stack": { "columns": "one", "gap": "md" },
-    "header": { "appearance": "compact", "headingLevel": 2 },
+    "settings": {
+      "theme": "canvas",
+      "spacing": "compact",
+      "container": "site"
+    },
+    "stack": {
+      "columns": "one",
+      "gap": "md"
+    },
+    "header": {
+      "appearance": "compact",
+      "headingLevel": 2
+    },
     "card": {
       "surface": "bordered",
       "radius": "md",
       "spacing": "md",
-      "stack": { "columns": "one", "gap": "md" }
+      "stack": {
+        "columns": "one",
+        "gap": "md"
+      }
     },
-    "row": { "align": "center", "justify": "between", "gap": "md" },
+    "row": {
+      "align": "center",
+      "justify": "between",
+      "gap": "md"
+    },
     "iconSize": "sm",
-    "action": { "size": "xs", "variant": "outline", "tone": "light", "iconOnly": true },
+    "action": {
+      "size": "xs",
+      "variant": "outline",
+      "tone": "light",
+      "iconOnly": true
+    },
     "copy": {
-      "stack": { "columns": "one", "gap": "xs" },
+      "stack": {
+        "columns": "one",
+        "gap": "xs"
+      },
       "headingLevel": 3,
       "headingVariant": "h5",
       "bodyVariant": "body-sm",
@@ -97,14 +172,31 @@
     "actionLabel": "View all Labs",
     "actionIcon": "arrowRight",
     "metricIcon": "star",
-    "settings": { "theme": "canvas", "spacing": "compact", "container": "site" },
-    "stack": { "columns": "one", "gap": "md" },
-    "header": { "appearance": "compact", "headingLevel": 2 },
-    "card": { "surface": "bordered", "radius": "md", "overflow": "hidden" },
+    "settings": {
+      "theme": "canvas",
+      "spacing": "compact",
+      "container": "site"
+    },
+    "stack": {
+      "columns": "one",
+      "gap": "md"
+    },
+    "header": {
+      "appearance": "compact",
+      "headingLevel": 2
+    },
+    "card": {
+      "surface": "bordered",
+      "radius": "md",
+      "overflow": "hidden"
+    },
     "mediaRatio": "editorial",
     "imageVariant": "fill",
     "copy": {
-      "stack": { "columns": "one", "gap": "sm" },
+      "stack": {
+        "columns": "one",
+        "gap": "sm"
+      },
       "headingLevel": 3,
       "headingVariant": "h5",
       "bodyVariant": "body-sm",

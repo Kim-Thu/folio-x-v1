@@ -14,13 +14,17 @@
   "image": "https://images.unsplash.com/photo-1558655146-d09347e92766?auto=format&fit=crop&w=900&q=88",
   "detail": {
     "page": {
-      "template": "fluid",
+      "template": "product-detail",
       "sections": [
         {
           "id": "summary",
           "type": "page-header",
           "template": "gallery-summary",
-          "settings": { "theme": "canvas", "spacing": "compact", "container": "site" },
+          "settings": {
+            "theme": "canvas",
+            "spacing": "compact",
+            "container": "site"
+          },
           "content": {
             "breadcrumbLabel": "Breadcrumb",
             "productsLabel": "Products",
@@ -29,13 +33,29 @@
             "salesLabel": "128 reviews",
             "features": [],
             "facts": [
-              { "label": "Platform", "value": "WordPress" },
-              { "label": "Category", "value": "WordPress Theme" }
+              {
+                "label": "Platform",
+                "value": "WordPress"
+              },
+              {
+                "label": "Category",
+                "value": "WordPress Theme"
+              }
             ],
             "actionsLabel": "Nebula Theme actions",
             "actions": [
-              { "label": "Contact to purchase", "href": "mailto:hello@nkt.studio?subject=Nebula%20Theme", "icon": "shoppingBag", "variant": "primary" },
-              { "label": "View preview", "href": "https://images.unsplash.com/photo-1558655146-d09347e92766?auto=format&fit=crop&w=900&q=88", "icon": "arrowUpRight", "variant": "outline" }
+              {
+                "label": "Contact to purchase",
+                "href": "mailto:hello@nkt.studio?subject=Nebula%20Theme",
+                "icon": "shoppingBag",
+                "variant": "primary"
+              },
+              {
+                "label": "View preview",
+                "href": "https://images.unsplash.com/photo-1558655146-d09347e92766?auto=format&fit=crop&w=900&q=88",
+                "icon": "arrowUpRight",
+                "variant": "outline"
+              }
             ],
             "paymentLabel": "Payment methods",
             "paymentMethods": []
@@ -44,13 +64,19 @@
         {
           "id": "product-overview",
           "type": "article",
-          "settings": { "theme": "canvas", "spacing": "body", "container": "site" },
+          "settings": {
+            "theme": "canvas",
+            "spacing": "body",
+            "container": "site"
+          },
           "content": {
             "blocks": [
               {
                 "id": "product-overview",
                 "title": "Overview",
-                "paragraphs": ["WordPress theme for SaaS, startup and digital products."]
+                "paragraphs": [
+                  "WordPress theme for SaaS, startup and digital products."
+                ]
               }
             ]
           }
