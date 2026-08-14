@@ -1,0 +1,34 @@
+---
+import LPage from "@/components/layout/LPage.astro";
+import type { LPageTemplate } from "@/types/components/layout/LPage.types";
+import type { PLayoutProps } from "@/types/components/object/project/layout/PLayout.types";
+
+const {
+	template,
+	containerSize,
+	asideLabel,
+	asidePosition,
+} = Astro.props as PLayoutProps;
+
+const templates: Record<PLayoutProps["template"], LPageTemplate> = {
+	fluid: "fluid",
+	contained: "contained",
+	boxed: "boxed",
+	sidebar: "sidebar",
+	centered: "centered",
+};
+
+const selectedTemplate = templates[template];
+---
+
+<LPage
+	template={selectedTemplate}
+	{containerSize}
+	{asideLabel}
+	{asidePosition}
+>
+	{Astro.slots.has("header") && <slot name="header" slot="header" />}
+	{Astro.slots.has("aside") && <slot name="aside" slot="aside" />}
+	<slot />
+	{Astro.slots.has("cta") && <slot name="cta" slot="cta" />}
+</LPage>
