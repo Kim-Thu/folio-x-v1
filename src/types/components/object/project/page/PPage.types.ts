@@ -6,5 +6,5 @@ export type PPageTemplate =
 	| "lead-navigation-content";
 
 export interface PPageProps {
-	template: PPageTemplate;
+	template?: PPageTemplate;
 }
