@@ -79,8 +79,8 @@ const { lab, presentation, header, tabs, sidebar, galleryItems, resources, relat
 						<CBox as="article" surface={presentation.resources.card.surface} radius={presentation.resources.card.radius} spacing={presentation.resources.card.spacing}>
 							<CColumns {...presentation.resources.card.stack}>
 								<CRow {...presentation.resources.row}>
-									<span class={presentation.resources.iconClass}><CIcon name={resource.icon} size="sm" /></span>
-									<CButton href={resource.href} label={resource.actionLabel} icon={presentation.resources.actionIcon} iconOnly {...presentation.resources.action} />
+									<span class={presentation.resources.iconClass}><CIcon name={resource.icon} size={presentation.resources.iconSize} /></span>
+									<CButton href={resource.href} label={resource.actionLabel} icon={presentation.resources.actionIcon} iconOnly={presentation.resources.action.iconOnly} {...presentation.resources.action} />
 								</CRow>
 								<CColumns {...presentation.resources.copy.stack}>
 									<CHeading level={presentation.resources.copy.headingLevel} variant={presentation.resources.copy.headingVariant}>{resource.title}</CHeading>
@@ -106,7 +106,7 @@ const { lab, presentation, header, tabs, sidebar, galleryItems, resources, relat
 								<div class={presentation.related.contentClass}>
 									<CColumns {...presentation.related.copy.stack}>
 										<CRow justify={presentation.related.metaRow.justify} align={presentation.related.metaRow.align} gap={presentation.related.metaRow.gap}>
-											<CMetadata data={{ items: [{ type: "category", label: item.category.label, href: item.category.href, display: "text" }] }} tone={presentation.related.metaRow.metadataTone} />
+											<CMetadata data={{ items: [{ type: "category", label: item.category.label, href: item.category.href, display: presentation.related.metaRow.metadataDisplay }] }} tone={presentation.related.metaRow.metadataTone} />
 											<CFeature icon={presentation.related.metricIcon} label={item.stars} appearance={presentation.related.metaRow.metricAppearance} />
 										</CRow>
 										<CHeading level={presentation.related.copy.headingLevel} variant={presentation.related.copy.headingVariant}>{item.title}</CHeading>
