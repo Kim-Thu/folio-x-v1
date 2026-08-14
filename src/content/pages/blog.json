@@ -78,12 +78,20 @@
           "sidebar": {
             "label": "Insight navigation",
             "filter": {
+              "appearance": "navigation",
+              "control": "category",
               "legend": "Topics",
+              "name": "insight-category",
+              "type": "radio",
               "allLabel": "All"
             },
             "featured": {
               "title": "Featured articles",
               "limit": 4,
+              "header": {
+                "appearance": "compact",
+                "headingLevel": 2
+              },
               "cards": {
                 "template": "compact-media",
                 "layout": "list",
@@ -131,7 +139,13 @@
             "imageWidth": 1536,
             "imageHeight": 1536
           },
-          "result": { "title": "All articles" },
+          "result": {
+            "title": "All articles",
+            "header": {
+              "appearance": "compact",
+              "headingLevel": 2
+            }
+          },
           "cards": {
             "template": "editorial",
             "layout": "grid",
