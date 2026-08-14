@@ -1,8 +1,13 @@
 {
   "page": { "template": "fluid" },
   "collections": {
-    "comics": { "collectionLabel": "Comics" },
-    "novels": { "collectionLabel": "Novels" }
+    "comics": { "collectionLabel": "Comics", "basePath": "/comics" },
+    "novels": { "collectionLabel": "Novels", "basePath": "/novels" }
+  },
+  "routes": {
+    "categorySegment": "category",
+    "tagSegment": "tag",
+    "chapterSegment": "chapter"
   },
   "header": {
     "id": "publication-summary",
@@ -25,6 +30,17 @@
       "views": "Views",
       "ongoing": "Ongoing",
       "complete": "Complete"
+    },
+    "metrics": {
+      "rating": { "icon": "star" },
+      "reads": { "icon": "eye" },
+      "chapters": { "icon": "bookOpen" },
+      "followers": { "icon": "bookmark" }
+    },
+    "primaryAction": {
+      "icon": "bookOpen",
+      "variant": "primary",
+      "size": "md"
     }
   },
   "navigation": {
@@ -50,6 +66,10 @@
       "listView": "List view",
       "numberPrefix": "#",
       "chapter": "Chapter"
+    },
+    "overviewLayout": {
+      "columns": "one",
+      "gap": "md"
     },
     "sort": {
       "id": "chapter-sort",
@@ -85,6 +105,15 @@
       "reactions": "Rate this chapter",
       "bookmark": "Bookmark chapter",
       "navigation": "Chapter navigation"
+    },
+    "metadata": {
+      "published": { "icon": "calendar03", "display": "icon-text" },
+      "readTime": { "icon": "clock01", "display": "icon-text" }
+    },
+    "controls": {
+      "chapterList": { "icon": "listView", "variant": "outline", "size": "md" },
+      "previous": { "icon": "arrowLeft", "variant": "outline", "size": "md" },
+      "next": { "icon": "arrowRight", "iconPosition": "end", "variant": "primary", "size": "md" }
     }
   }
 }
