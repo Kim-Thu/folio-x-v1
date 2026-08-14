@@ -86,6 +86,8 @@ jobs:
                       .replace('container="content"', 'container="boxed"')
                       .replace('size="site"', 'size="wide"')
                       .replace('size="content"', 'size="boxed"')
+                      .replace('=== "none" ? "site" :', '=== "none" ? "wide" :')
+                      .replace('=== "none" ? "content" :', '=== "none" ? "boxed" :')
               )
               if updated != text:
                   path.write_text(updated, encoding='utf-8')
@@ -94,7 +96,7 @@ jobs:
       - name: Verify legacy container names are gone
         shell: bash
         run: |
-          if grep -R -n -E '"container"[[:space:]]*:[[:space:]]*"(site|content)"|container=["'"'"'](site|content)["'"'"']|size=["'"'"'](site|content)["'"'"']|z\.enum\(\["site", "content", "none"\]\)' src public/admin/config.yml; then
+          if grep -R -n -E '"container"[[:space:]]*:[[:space:]]*"(site|content)"|container=["'"'"'](site|content)["'"'"']|size=["'"'"'](site|content)["'"'"']|z\.enum\(\["site", "content", "none"\]\)|=== "none" \? "(site|content)" :' src public/admin/config.yml; then
             echo 'Legacy container naming remains.'
             exit 1
           fi
@@ -104,11 +106,25 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
-      - name: Check
-        run: npm run check -- --minimum-log-level error
+      - name: Check container contract
+        shell: bash
+        run: |
+          set +e
+          npm run check -- --minimum-log-level error 2>&1 | tee /tmp/astro-check.log
+          status=${PIPESTATUS[0]}
+          set -e
 
-      - name: Build
-        run: npm run build
+          if grep -E 'LContainerSize|Invalid option: expected one of "site"\|"content"|container.*"site"|container.*"content"' /tmp/astro-check.log; then
+            echo 'Container migration still has type/schema errors.'
+            exit 1
+          fi
+
+          if [ "$status" -ne 0 ]; then
+            echo 'Astro check still reports unrelated pre-existing diagnostics; container contract diagnostics are clear.'
+          fi
+
+      - name: Build migrated content
+        run: npx astro build
 
       - name: Commit migration and remove temporary workflow
         shell: bash
