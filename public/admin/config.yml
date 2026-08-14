@@ -596,7 +596,6 @@ collections:
                   - { label: Container, name: container, widget: select, options: [site, content, none] }
               - { label: Appearance, name: appearance, widget: hidden, default: underline }
               - { label: Tone, name: tone, widget: hidden, default: light }
-              - { label: Frame class, name: frameClass, widget: string }
 
           - label: Content
             name: content
@@ -615,7 +614,6 @@ collections:
                 widget: object
                 fields:
                   - { label: Template, name: template, widget: hidden, default: flow }
-                  - { label: Frame class, name: frameClass, widget: string }
 
           - label: Sidebar
             name: sidebar
@@ -643,7 +641,6 @@ collections:
                     fields:
                       - { label: Columns, name: columns, widget: hidden, default: one }
                       - { label: Gap, name: gap, widget: select, options: [none, xs, sm, md, lg, xl] }
-                  - { label: Divider class, name: dividerClass, widget: string }
               - label: Labels
                 name: labels
                 widget: object
@@ -684,12 +681,8 @@ collections:
                 fields:
                   - { label: Appearance, name: appearance, widget: select, options: [default, compact] }
                   - { label: Heading level, name: headingLevel, widget: number, value_type: int, min: 1, max: 6 }
-              - { label: Grid class, name: gridClass, widget: string }
-              - { label: Link class, name: linkClass, widget: string }
               - { label: Media ratio, name: mediaRatio, widget: hidden, default: editorial }
               - { label: Image variant, name: imageVariant, widget: hidden, default: fill }
-              - { label: Image class, name: imageClass, widget: string }
-              - { label: Caption class, name: captionClass, widget: string }
               - { label: Caption variant, name: captionVariant, widget: hidden, default: caption }
               - { label: Caption tone, name: captionTone, widget: hidden, default: muted }
 
@@ -720,7 +713,6 @@ collections:
                 fields:
                   - { label: Appearance, name: appearance, widget: select, options: [default, compact] }
                   - { label: Heading level, name: headingLevel, widget: number, value_type: int, min: 1, max: 6 }
-              - { label: Grid class, name: gridClass, widget: string }
               - label: Card
                 name: card
                 widget: object
@@ -741,7 +733,6 @@ collections:
                   - { label: Align, name: align, widget: hidden, default: center }
                   - { label: Justify, name: justify, widget: hidden, default: between }
                   - { label: Gap, name: gap, widget: hidden, default: md }
-              - { label: Icon class, name: iconClass, widget: string }
               - label: Action presentation
                 name: action
                 widget: object
@@ -793,8 +784,6 @@ collections:
                 fields:
                   - { label: Appearance, name: appearance, widget: select, options: [default, compact] }
                   - { label: Heading level, name: headingLevel, widget: number, value_type: int, min: 1, max: 6 }
-              - { label: Grid class, name: gridClass, widget: string }
-              - { label: Link class, name: linkClass, widget: string }
               - label: Card
                 name: card
                 widget: object
@@ -802,10 +791,8 @@ collections:
                   - { label: Surface, name: surface, widget: hidden, default: bordered }
                   - { label: Radius, name: radius, widget: hidden, default: md }
                   - { label: Overflow, name: overflow, widget: hidden, default: hidden }
-                  - { label: Class, name: class, widget: string }
               - { label: Media ratio, name: mediaRatio, widget: hidden, default: editorial }
               - { label: Image variant, name: imageVariant, widget: hidden, default: fill }
-              - { label: Content class, name: contentClass, widget: string }
               - label: Copy
                 name: copy
                 widget: object
