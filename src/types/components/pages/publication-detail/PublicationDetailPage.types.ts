@@ -1,13 +1,7 @@
-import type { PublicationEntry } from "@/types/content";
-import type { CollectionEntry } from "astro:content";
+import type { ResolvedPageData } from "@/types/components/pages/builder/PageBuilder.types";
 
 export type PublicationCollection = "comics" | "novels";
-
-export interface PublicationDetailPageData {
-	entry: PublicationEntry;
-	collection: PublicationCollection;
-	presentation: CollectionEntry<"publicationDetailSettings">["data"];
-}
+export type PublicationDetailPageData = ResolvedPageData;
 
 export interface PublicationDetailPageProps {
 	data: PublicationDetailPageData;
