@@ -1,0 +1,42 @@
+name: detail-contract-finalize
+
+on:
+  push:
+    branches: [agent/cms-content-migration]
+
+permissions:
+  contents: write
+
+jobs:
+  migrate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: agent/cms-content-migration
+      - shell: bash
+        run: |
+          python3 <<'PY'
+          from pathlib import Path
+
+          p = Path('src/data/pages/getLabDetailPageData.ts')
+          s = p.read_text().replace('columns: 4,', 'columns: 4 as const,')
+          p.write_text(s)
+
+          p = Path('src/content/schemas.ts')
+          s = p.read_text()
+          s = s.replace('icon: iconNameSchema.optional(),\n\tvariant: z.enum(["primary", "outline"]).optional(),', 'icon: iconNameSchema,\n\tvariant: z.enum(["primary", "outline"]),', 1)
+          p.write_text(s)
+
+          p = Path('src/data/pages/getWorkDetailPageData.ts')
+          s = p.read_text().replace('props: detail.reviews,', 'props: { id: section.id, ...detail.reviews },', 1)
+          p.write_text(s)
+          PY
+      - shell: bash
+        run: |
+          git config user.name github-actions[bot]
+          git config user.email 41898282+github-actions[bot]@users.noreply.github.com
+          git add src/data/pages/getLabDetailPageData.ts src/content/schemas.ts src/data/pages/getWorkDetailPageData.ts
+          git rm .github/workflows/detail-contract-finalize.yml
+          git commit -m 'fix(detail): finalize region contracts'
+          git push origin HEAD:agent/cms-content-migration
