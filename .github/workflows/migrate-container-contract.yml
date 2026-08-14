@@ -25,7 +25,7 @@ jobs:
           python - <<'PY'
           from pathlib import Path
 
-          files = {
+          replacements = {
               Path('src/types/components/layout/LContainer.types.ts'): (
                   'export type LContainerSize = "site" | "content";',
                   'export type LContainerSize = "fluid" | "wide" | "boxed";',
@@ -34,29 +34,13 @@ jobs:
                   'size = "site",',
                   'size = "wide",',
               ),
-              Path('src/content/schemas.ts'): (
-                  'container: z.enum(["site", "content", "none"]),',
-                  'container: z.enum(["fluid", "wide", "boxed", "none"]),',
-              ),
-              Path('src/content/blog-detail-settings-schema.ts'): (
-                  'container: z.enum(["site", "content", "none"]),',
-                  'container: z.enum(["fluid", "wide", "boxed", "none"]),',
-              ),
-              Path('src/content/lab-detail-settings-schema.ts'): (
-                  'container: z.enum(["site", "content", "none"]),',
-                  'container: z.enum(["fluid", "wide", "boxed", "none"]),',
-              ),
-              Path('src/content/publication-detail-settings-schema.ts'): (
-                  'container: z.enum(["site", "content", "none"]),',
-                  'container: z.enum(["fluid", "wide", "boxed", "none"]),',
-              ),
               Path('public/admin/config.yml'): (
                   'options: [site, content, none]',
                   'options: [fluid, wide, boxed, none]',
               ),
           }
 
-          for path, (before, after) in files.items():
+          for path, (before, after) in replacements.items():
               text = path.read_text(encoding='utf-8')
               if before not in text:
                   raise SystemExit(f'Missing expected contract in {path}: {before}')
@@ -69,6 +53,22 @@ jobs:
           if before not in text:
               raise SystemExit('Missing expected LContainer variant map')
           variants.write_text(text.replace(before, after), encoding='utf-8')
+
+          schema_before = 'container: z.enum(["site", "content", "none"]),'
+          schema_after = 'container: z.enum(["fluid", "wide", "boxed", "none"]),'
+          schema_files = []
+          for path in Path('src/content').rglob('*.ts'):
+              text = path.read_text(encoding='utf-8')
+              if schema_before in text:
+                  path.write_text(text.replace(schema_before, schema_after), encoding='utf-8')
+                  schema_files.append(str(path))
+
+          if not schema_files:
+              raise SystemExit('No content schema contained the legacy container enum')
+
+          print('Updated container schemas:')
+          for path in schema_files:
+              print(path)
 
           for path in Path('src/content').rglob('*.json'):
               text = path.read_text(encoding='utf-8')
