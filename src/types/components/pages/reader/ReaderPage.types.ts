@@ -1,10 +1,6 @@
-import type { PublicationEntry } from "@/types/content";
+import type { ResolvedPageData } from "@/types/components/pages/builder/PageBuilder.types";
 
-export interface ReaderPageData {
-	entry: PublicationEntry;
-	catalogSlug: "comics" | "novels";
-	chapter: number;
-}
+export type ReaderPageData = ResolvedPageData;
 
 export interface ReaderPageProps {
 	data: ReaderPageData;
