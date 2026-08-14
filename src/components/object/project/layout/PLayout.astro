@@ -1,9 +1,34 @@
 ---
-import LayoutRegion from "@/components/object/project/layout/parts/LayoutRegion.astro";
+import LSidebar from "@/components/layout/LSidebar.astro";
+import CBox from "@/components/object/component/CBox.astro";
+import CColumns from "@/components/object/component/CColumns.astro";
 import type { PLayoutProps } from "@/types/components/object/project/layout/PLayout.types";
 
-const { regions } = Astro.props as PLayoutProps;
-const enabledRegions = regions.filter((region) => region.enabled !== false);
+const {
+	asideGap = "md",
+	asideLabel,
+	asidePosition = "end",
+	gap = "lg",
+	panel = false,
+	stickyAside,
+} = Astro.props as PLayoutProps;
+const hasToolbar = Astro.slots.has("toolbar");
 ---
 
-{enabledRegions.map((region) => <LayoutRegion {region} />)}
+<CBox
+	surface={panel ? "glass" : "plain"}
+	radius={panel ? "md" : "none"}
+	spacing={panel ? "sm" : "none"}
+>
+	<CColumns columns="one" gap="md">
+		{hasToolbar && <slot name="toolbar" />}
+		<LSidebar label={asideLabel} position={asidePosition} sticky={stickyAside}>
+			<CColumns slot="sidebar" columns="one" gap={asideGap}>
+				<slot name="aside" />
+			</CColumns>
+			<CColumns columns="one" gap={gap}>
+				<slot />
+			</CColumns>
+		</LSidebar>
+	</CColumns>
+</CBox>
