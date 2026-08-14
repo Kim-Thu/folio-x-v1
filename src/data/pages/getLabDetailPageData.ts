@@ -264,7 +264,7 @@ export async function getLabDetailPageData(
 							cards: {
 								template: "icon-panel" as const,
 								layout: "grid" as const,
-								columns: 4,
+								columns: 4 as const,
 								gap: "md" as const,
 								items: lab.resources.map((resource) => ({
 									href: resource.href,
@@ -306,7 +306,7 @@ export async function getLabDetailPageData(
 							cards: {
 								template: "editorial" as const,
 								layout: "grid" as const,
-								columns: 4,
+								columns: 4 as const,
 								gap: "md" as const,
 								mediaRatio: presentation.related.mediaRatio,
 								items: relatedLabs.map((item) => ({

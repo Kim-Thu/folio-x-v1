@@ -166,7 +166,7 @@ export async function getWorkDetailPageData(
 							key: section.id,
 							component: "reviews" as const,
 							section: frame,
-							props: detail.reviews,
+							props: { id: section.id, ...detail.reviews },
 						},
 					]
 				: [];

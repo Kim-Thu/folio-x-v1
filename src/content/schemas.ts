@@ -692,8 +692,8 @@ const detailSectionSettingsSchema = z.object({
 const productActionSchema = z.object({
 	label: z.string().min(1),
 	href: z.string().min(1),
-	icon: iconNameSchema.optional(),
-	variant: z.enum(["primary", "outline"]).optional(),
+	icon: iconNameSchema,
+	variant: z.enum(["primary", "outline"]),
 });
 
 const productDetailPageSchema = z.object({
