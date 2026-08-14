@@ -16,10 +16,6 @@ STRUCTURAL_PAGE_TEMPLATES = [
 ]
 
 
-def read(path: str) -> str:
-    return (ROOT / path).read_text(encoding="utf-8")
-
-
 def write(path: str, content: str) -> None:
     target = ROOT / path
     target.parent.mkdir(parents=True, exist_ok=True)
@@ -338,6 +334,16 @@ for path in (ROOT / "src").rglob("*.ts"):
         )
     if text != original:
         path.write_text(text, encoding="utf-8")
+
+# Publication reader owns a PReader template named "reader". That component
+# template must not leak into the PPage template contract.
+reader_loader = ROOT / "src/data/pages/getPublicationReaderPageData.ts"
+reader_loader_text = reader_loader.read_text(encoding="utf-8")
+reader_loader_text = reader_loader_text.replace(
+    "pageTemplate: readerPage.template ,",
+    'pageTemplate: "stacked",',
+)
+reader_loader.write_text(reader_loader_text, encoding="utf-8")
 
 
 # ---------------------------------------------------------------------------
