@@ -27,6 +27,7 @@ import type { PStatusProps } from "@/types/components/object/project/status/PSta
 import type { PEntryIndexProps } from "@/types/components/object/project/entry-index/PEntryIndex.types";
 import type { PReaderProps } from "@/types/components/object/project/reader/PReader.types";
 import type { PHeroProps } from "@/types/components/object/project/hero/PHero.types";
+import type { PLayoutProps } from "@/types/components/object/project/layout/PLayout.types";
 
 export type PageEntryData = CollectionEntry<"pages">["data"];
 export type PageSectionData = PageEntryData["content"]["sections"][number];
@@ -220,10 +221,14 @@ export type PageRegion =
 	| GroupRegion
 	| StatusRegion;
 
-export interface PageBuilderProps {
-	page: PageEntryData;
-	context?: PageBuilderContext;
+export interface ResolvedPageData {
+	layout: PLayoutProps;
+	regions: PageRegion[];
 }
+
+export type PageBuilderProps =
+	| { page: PageEntryData; context?: PageBuilderContext }
+	| ResolvedPageData;
 
 export interface PageRegionProps {
 	region: PageRegion;

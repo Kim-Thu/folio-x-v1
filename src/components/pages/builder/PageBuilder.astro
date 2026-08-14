@@ -1,5 +1,5 @@
 ---
-import LPage from "@/components/layout/LPage.astro";
+import PLayout from "@/components/object/project/layout/PLayout.astro";
 import PageRegionView from "@/components/pages/builder/PageRegion.astro";
 import {
 	getInsights,
@@ -424,7 +424,7 @@ const buildBlogArchive = async (section: BlogArchiveSection): Promise<ArchiveReg
 	};
 };
 
-const regions: PageRegion[] = await Promise.all(props.page.content.sections.map(async (section): Promise<PageRegion> => {
+const regions: PageRegion[] = "regions" in props ? props.regions : await Promise.all(props.page.content.sections.map(async (section): Promise<PageRegion> => {
 	const frame = sectionFrame(section);
 	switch (section.type) {
 		case "hero":
@@ -454,8 +454,9 @@ const regions: PageRegion[] = await Promise.all(props.page.content.sections.map(
 		}
 	}
 }));
+const layout = "layout" in props ? props.layout : props.page.content.layout;
 ---
 
-<LPage {...props.page.content.layout}>
+<PLayout {...layout}>
 	{regions.map((region) => <PageRegionView region={region} />)}
-</LPage>
+</PLayout>
