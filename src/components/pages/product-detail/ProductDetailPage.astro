@@ -6,12 +6,13 @@ import PArticle from "@/components/object/project/article/PArticle.astro";
 import type { ProductDetailPageProps } from "@/types/components/pages/product-detail/ProductDetailPage.types";
 
 const { data } = Astro.props as ProductDetailPageProps;
-const { product } = data;
+const { product, presentation } = data;
 const page = product.detail.page;
+const categoryHref = `${presentation.routes.categoryBase}${product.categorySlug}`;
 
 const price = {
-	current: `$${product.price}`,
-	previous: product.oldPrice ? `$${product.oldPrice}` : undefined,
+	current: `${presentation.pricePrefix}${product.price}`,
+	previous: product.oldPrice ? `${presentation.pricePrefix}${product.oldPrice}` : undefined,
 	discount: product.oldPrice ? `-${Math.round((1 - product.price / product.oldPrice) * 100)}%` : undefined,
 };
 ---
@@ -28,16 +29,21 @@ const price = {
 							breadcrumb: {
 								label: content.breadcrumbLabel,
 								items: [
-									{ label: content.productsLabel, href: "/products" },
-									{ label: product.category, href: `/products/category/${product.categorySlug}` },
+									{ label: content.productsLabel, href: presentation.routes.base },
+									{ label: product.category, href: categoryHref },
 								],
 								current: product.title,
 							},
-							category: { label: product.category, href: `/products/category/${product.categorySlug}` },
+							category: { label: product.category, href: categoryHref },
 							title: product.title,
 							description: product.description,
 							badge: product.badge,
-							images: [{ src: product.image, alt: content.galleryLabel, width: 900, height: 562 }],
+							images: [{
+								src: product.image,
+								alt: content.galleryLabel,
+								width: presentation.imageWidth,
+								height: presentation.imageHeight,
+							}],
 							galleryLabel: content.galleryLabel,
 							thumbnailLabel: content.thumbnailLabel,
 							rating: { value: product.rating, maximum: 5, count: product.reviews, salesLabel: content.salesLabel },
