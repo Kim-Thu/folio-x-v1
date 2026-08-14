@@ -1,476 +1,71 @@
 ---
 import LPage from "@/components/layout/LPage.astro";
-import PLayout from "@/components/object/project/layout/PLayout.astro";
 import PPage from "@/components/object/project/page/PPage.astro";
-import {
-	getInsights,
-	getLabs,
-	getProductCategories,
-	getProducts,
-	getProjects,
-	getPublications,
-} from "@/data/cms";
-import {
-	mapInsightToCard,
-	mapLabToCard,
-	mapProductToCard,
-	mapProjectToCard,
-	mapPublicationToCard,
-} from "@/data/mappers/card";
-import type {
-	InsightCardPresentation,
-	LabCardPresentation,
-	ProductCardPresentation,
-	ProjectCardPresentation,
-	PublicationCardPresentation,
-} from "@/data/mappers/card";
-import type {
-	PageBuilderProps,
-	PageSectionData,
-} from "@/types/components/pages/builder/PageBuilder.types";
-import type {
-	ArchiveRegion,
-	PageRegion,
-} from "@/types/components/object/project/layout/PLayout.types";
-import type { CIconName } from "@/types/components/object/component/CIcon.types";
-import type { PAdvertisementData } from "@/types/components/object/project/advertisement/PAdvertisement.types";
-import type { PCardData, PCardProps } from "@/types/components/object/project/card/PCard.types";
-import type { PFilterChoiceGroupData } from "@/types/components/object/project/filter-panel/PFilterPanel.types";
-import type { PSectionHeaderProps } from "@/types/components/object/project/section-header/PSectionHeader.types";
+import PageRegion from "@/components/pages/builder/PageRegion.astro";
+import { getPageBuilderData } from "@/data/pages/getPageBuilderData";
+import type { PageBuilderProps } from "@/types/components/pages/builder/PageBuilder.types";
+import type { PageRegion as PageRegionData } from "@/types/components/pages/builder/PageRegion.types";
+import type { PPageTemplate } from "@/types/components/object/project/page/PPage.types";
 
 const props = Astro.props as PageBuilderProps;
-const context = "page" in props ? (props.context ?? {}) : {};
 
-type CollectionSection = Extract<PageSectionData, { type: "collection" }>;
-type CollectionContent = CollectionSection["content"];
-type SourcedCollectionContent = Extract<CollectionContent, { source: unknown }>;
-type ProductsCollectionContent = Extract<SourcedCollectionContent, { source: { collection: "products" } }>;
-type ProjectsCollectionContent = Extract<SourcedCollectionContent, { source: { collection: "projects" } }>;
-type LabsCollectionContent = Extract<SourcedCollectionContent, { source: { collection: "labs" } }>;
-type BlogCollectionContent = Extract<SourcedCollectionContent, { source: { collection: "blog" } }>;
-type ComicsCollectionContent = Extract<SourcedCollectionContent, { source: { collection: "comics" } }>;
-type NovelsCollectionContent = Extract<SourcedCollectionContent, { source: { collection: "novels" } }>;
-type PublicationsCollectionContent = Extract<SourcedCollectionContent, { source: { collection: "publications" } }>;
+const resolved = "page" in props
+	? await getPageBuilderData(props.page, props.context)
+	: { ...props, isHome: false };
 
-type ArchiveSection = Extract<PageSectionData, { type: "archive" }>;
-type ArchiveContent = ArchiveSection["content"];
-type ProjectsArchiveContent = Extract<ArchiveContent, { source: { collection: "projects" } }>;
-type LabsArchiveContent = Extract<ArchiveContent, { source: { collection: "labs" } }>;
-type ProductsArchiveContent = Extract<ArchiveContent, { source: { collection: "products" } }>;
-type BlogArchiveContent = Extract<ArchiveContent, { source: { collection: "blog" } }>;
-type ProjectsArchiveSection = Omit<ArchiveSection, "content"> & { content: ProjectsArchiveContent };
-type LabsArchiveSection = Omit<ArchiveSection, "content"> & { content: LabsArchiveContent };
-type ProductsArchiveSection = Omit<ArchiveSection, "content"> & { content: ProductsArchiveContent };
-type BlogArchiveSection = Omit<ArchiveSection, "content"> & { content: BlogArchiveContent };
+const { isHome, pageTemplate, regions } = resolved;
+const enabledRegions = regions.filter((region) => region.enabled !== false);
 
-type HeroRegionProps = Extract<PageRegion, { component: "hero" }>["props"];
-type PageHeaderRegionProps = Extract<PageRegion, { component: "page-header" }>["props"];
-type ArticleRegionProps = Extract<PageRegion, { component: "article" }>["props"];
-type CtaRegionProps = Extract<PageRegion, { component: "cta" }>["props"];
+const isLead = (region: PageRegionData) =>
+	region.component === "page-header" || region.component === "hero";
 
-const sectionFrame = (section: PageSectionData) => ({
-	id: section.id,
-	theme: section.settings.theme,
-	spacing: section.settings.spacing,
-	container: section.settings.container,
-});
+const isNavigation = (region: PageRegionData, template: PPageTemplate) =>
+	(template === "lead-content-navigation" && region.component === "post-navigation") ||
+	(template === "lead-navigation-content" && region.component === "tabs");
 
-const sectionHeader = (section: CollectionSection): PSectionHeaderProps | undefined => {
-	const heading = section.content.heading;
-	if (!heading) return undefined;
+const isClosing = (region: PageRegionData, template: PPageTemplate) =>
+	template === "lead-content-closing" && region.component === "cta";
 
-	return {
-		data: {
-			number: heading.number,
-			label: heading.label,
-			title: heading.title,
-			description: heading.description,
-		},
-		action: heading.action as PSectionHeaderProps["action"],
-	};
-};
-
-const cardConfig = (section: CollectionSection, items: PCardData[]): PCardProps => {
-	const cards = section.content.cards;
-	return {
-		template: (cards?.template ?? section.template) as PCardProps["template"],
-		layout: (cards?.layout ?? section.settings.layout) as PCardProps["layout"],
-		columns: (cards?.columns ?? section.settings.columns) as PCardProps["columns"],
-		gap: (cards?.gap ?? section.settings.gap) as PCardProps["gap"],
-		mediaRatio: (cards?.mediaRatio ?? section.settings.mediaRatio) as PCardProps["mediaRatio"],
-		separator: (cards?.separator ?? section.settings.separator) as PCardProps["separator"],
-		headingLevel: cards?.headingLevel as PCardProps["headingLevel"],
-		slots: cards?.slots as PCardProps["slots"],
-		items,
-	};
-};
-
-const take = <T,>(items: T[], limit?: number) =>
-	limit === undefined ? items : items.slice(0, limit);
-
-const resolveCollectionItems = async (section: CollectionSection): Promise<PCardData[]> => {
-	const content = section.content;
-	if ("items" in content) return content.items as unknown as PCardData[];
-	if (!("source" in content)) return [];
-
-	switch (content.source.collection) {
-		case "products": {
-			const typed = content as ProductsCollectionContent;
-			return take(await getProducts(), typed.source.limit).map((item) =>
-				mapProductToCard(item, typed.itemPresentation as ProductCardPresentation),
-			);
-		}
-		case "projects": {
-			const typed = content as ProjectsCollectionContent;
-			return take(await getProjects(), typed.source.limit).map((item) =>
-				mapProjectToCard(item, typed.itemPresentation as ProjectCardPresentation),
-			);
-		}
-		case "labs": {
-			const typed = content as LabsCollectionContent;
-			return take(await getLabs(), typed.source.limit).map((item) =>
-				mapLabToCard(item, typed.itemPresentation as LabCardPresentation),
-			);
-		}
-		case "blog": {
-			const typed = content as BlogCollectionContent;
-			return take(await getInsights(), typed.source.limit).map((item) =>
-				mapInsightToCard(item, typed.itemPresentation as InsightCardPresentation),
-			);
-		}
-		case "comics": {
-			const typed = content as ComicsCollectionContent;
-			return take(await getPublications("comics"), typed.source.limit).map((item) =>
-				mapPublicationToCard(item, "comics", typed.itemPresentation as PublicationCardPresentation),
-			);
-		}
-		case "novels": {
-			const typed = content as NovelsCollectionContent;
-			return take(await getPublications("novels"), typed.source.limit).map((item) =>
-				mapPublicationToCard(item, "novels", typed.itemPresentation as PublicationCardPresentation),
-			);
-		}
-		case "publications": {
-			const typed = content as PublicationsCollectionContent;
-			const [novels, comics] = await Promise.all([
-				getPublications("novels"),
-				getPublications("comics"),
-			]);
-			return take([
-				...novels.map((item) => mapPublicationToCard(item, "novels", typed.itemPresentation.novels as PublicationCardPresentation)),
-				...comics.map((item) => mapPublicationToCard(item, "comics", typed.itemPresentation.comics as PublicationCardPresentation)),
-			], typed.source.limit);
-		}
-	}
-};
-
-const buildProjectsArchive = async (section: ProjectsArchiveSection): Promise<ArchiveRegion> => {
-	const { toolbar, cards, routes, itemPresentation, pagination, emptyLabel } = section.content;
-	const projects = await getProjects();
-	const visibleProjects = projects.filter((project) => {
-		if (context.categorySlug) return project.categorySlug === context.categorySlug;
-		if (context.tagSlug) return project.tags.some((tag) => tag.slug === context.tagSlug);
-		return true;
-	});
-	const categories = Array.from(new Map(projects.map((project) => [project.categorySlug, {
-		label: project.category,
-		value: project.categorySlug,
-		href: `${routes.categoryBase}${project.categorySlug}`,
-	}])).values());
-
-	return {
-		key: section.id,
-		component: "archive",
-		section: sectionFrame(section as PageSectionData),
-		props: {
-			mode: "taxonomy",
-			toolbar: { data: {
-				filter: { label: toolbar.filterLabel, activeValue: context.categorySlug ?? toolbar.allValue, tabs: [{ label: toolbar.allLabel, value: toolbar.allValue, href: routes.base }, ...categories] },
-				sort: { label: toolbar.sortLabel, value: toolbar.sortValue, options: toolbar.sortOptions },
-				view: { label: toolbar.viewLabel, gridLabel: toolbar.gridViewLabel, listLabel: toolbar.listViewLabel },
-			} },
-			cards: {
-				template: cards.template as PCardProps["template"],
-				layout: cards.layout as PCardProps["layout"],
-				columns: cards.columns as PCardProps["columns"],
-				gap: cards.gap as PCardProps["gap"],
-				items: visibleProjects.map((project) =>
-					mapProjectToCard(project, itemPresentation as ProjectCardPresentation),
-				),
-			},
-			emptyLabel,
-			pagination: { ...pagination, totalPages: Math.max(1, Math.ceil(visibleProjects.length / pagination.pageSize)) },
-		},
-	};
-};
-
-const buildLabsArchive = async (section: LabsArchiveSection): Promise<ArchiveRegion> => {
-	const { toolbar, sidebar, routes, cards, itemPresentation, pagination, emptyLabel, resultLabel } = section.content;
-	const labs = await getLabs();
-	const visibleLabs = labs.filter((lab) => (!context.categorySlug || lab.category.slug === context.categorySlug) && (!context.technologySlug || lab.technologies.some((technology) => technology.slug === context.technologySlug)));
-	const categories = Array.from(new Map(labs.map((lab) => [lab.category.slug, lab.category])).values());
-	const technologies = Array.from(new Map(labs.flatMap((lab) => lab.technologies.map((technology) => [technology.slug, technology] as const))).values());
-	const categoryFilter: PFilterChoiceGroupData = {
-		appearance: sidebar.category.appearance as PFilterChoiceGroupData["appearance"],
-		control: sidebar.category.control as PFilterChoiceGroupData["control"],
-		legend: sidebar.category.legend,
-		name: sidebar.category.name,
-		type: sidebar.category.type,
-		options: [{ label: sidebar.category.allLabel, value: sidebar.category.allValue, href: sidebar.category.allHref, count: labs.length, checked: !context.categorySlug }, ...categories.map((category) => ({ label: category.label, value: category.slug, href: `${routes.categoryBase}${category.slug}`, count: labs.filter((lab) => lab.category.slug === category.slug).length, checked: context.categorySlug === category.slug }))],
-	};
-	const technologyFilter: PFilterChoiceGroupData = {
-		appearance: sidebar.technology.appearance as PFilterChoiceGroupData["appearance"],
-		control: sidebar.technology.control as PFilterChoiceGroupData["control"],
-		legend: sidebar.technology.legend,
-		name: sidebar.technology.name,
-		type: sidebar.technology.type,
-		options: technologies.map((technology) => ({ label: technology.label, value: technology.slug, href: `${routes.technologyBase}${technology.slug}`, count: labs.filter((lab) => lab.technologies.some((item) => item.slug === technology.slug)).length, checked: context.technologySlug === technology.slug })),
-	};
-
-	return {
-		key: section.id,
-		component: "archive",
-		section: sectionFrame(section as PageSectionData),
-		props: {
-			mode: "faceted",
-			toolbar: { data: { search: toolbar.search, selects: toolbar.selects, sort: toolbar.sort, view: toolbar.view } },
-			sidebar: { label: sidebar.label, filter: { data: {
-				filterLabel: sidebar.filterLabel,
-				category: categoryFilter,
-				groups: [technologyFilter],
-			} } },
-			result: { count: visibleLabs.length, label: resultLabel },
-			cards: {
-				template: cards.template as PCardProps["template"],
-				layout: cards.layout as PCardProps["layout"],
-				columns: cards.columns as PCardProps["columns"],
-				gap: cards.gap as PCardProps["gap"],
-				items: visibleLabs.map((lab) => mapLabToCard(lab, itemPresentation as LabCardPresentation)),
-			},
-			emptyLabel,
-			pagination: { ...pagination, totalPages: Math.max(1, Math.ceil(visibleLabs.length / pagination.pageSize)) },
-		},
-	};
-};
-
-const buildProductsArchive = async (section: ProductsArchiveSection): Promise<ArchiveRegion> => {
-	const { toolbar, sidebar, routes, cards, itemPresentation, pagination, emptyLabel, result } = section.content;
-	const [products, categories] = await Promise.all([getProducts(), getProductCategories()]);
-	const visibleProducts = context.categorySlug ? products.filter((product) => product.categorySlug === context.categorySlug) : products;
-	const categoryFilters = [{ label: toolbar.category.allLabel, value: toolbar.category.allValue, href: routes.base, checked: !context.categorySlug }, ...categories.map((category) => ({ ...category, href: `${routes.categoryBase}${category.value}`, checked: context.categorySlug === category.value }))];
-	const platformFilters = toolbar.platform.options.map((option) => ({ ...option, checked: option.value === toolbar.platform.value }));
-	const categoryFilter: PFilterChoiceGroupData = {
-		...sidebar.category,
-		appearance: sidebar.category.appearance as PFilterChoiceGroupData["appearance"],
-		control: sidebar.category.control as PFilterChoiceGroupData["control"],
-		options: categoryFilters,
-	};
-	const platformFilter: PFilterChoiceGroupData = {
-		...sidebar.platform,
-		appearance: sidebar.platform.appearance as PFilterChoiceGroupData["appearance"],
-		control: sidebar.platform.control as PFilterChoiceGroupData["control"],
-		options: platformFilters,
-	};
-	const advertisement: PAdvertisementData = {
-		title: sidebar.advertisement.title,
-		description: sidebar.advertisement.description,
-		image: sidebar.advertisement.image,
-		action: {
-			href: sidebar.advertisement.action.href,
-			label: sidebar.advertisement.action.label,
-			icon: sidebar.advertisement.action.icon as CIconName | undefined,
-		},
-	};
-
-	return {
-		key: section.id,
-		component: "archive",
-		section: sectionFrame(section as PageSectionData),
-		props: {
-			mode: "faceted",
-			toolbar: { data: {
-				search: toolbar.search,
-				selects: [
-					{ control: toolbar.category.control, id: toolbar.category.id, label: toolbar.category.label, value: context.categorySlug ?? toolbar.category.value, options: categoryFilters },
-					{ control: toolbar.platform.control, id: toolbar.platform.id, label: toolbar.platform.label, value: toolbar.platform.value, options: platformFilters },
-				],
-				sort: toolbar.sort,
-				view: toolbar.view,
-			} },
-			sidebar: {
-				label: sidebar.label,
-				filter: { data: { filterLabel: sidebar.filterLabel, category: categoryFilter, groups: [platformFilter] } },
-				advertisement: { data: advertisement },
-			},
-			result: { count: visibleProducts.length, label: result.label },
-			cards: {
-				template: cards.template as PCardProps["template"],
-				layout: cards.layout as PCardProps["layout"],
-				columns: cards.columns as PCardProps["columns"],
-				gap: cards.gap as PCardProps["gap"],
-				items: visibleProducts.map((product) =>
-					mapProductToCard(product, itemPresentation as ProductCardPresentation),
-				),
-			},
-			emptyLabel,
-			pagination: { ...pagination, totalPages: Math.max(1, Math.ceil(visibleProducts.length / pagination.pageSize)) },
-		},
-	};
-};
-
-const buildBlogArchive = async (section: BlogArchiveSection): Promise<ArchiveRegion> => {
-	const { toolbar, sidebar, itemPresentation, result, cards, pagination, emptyLabel } = section.content;
-	const insights = await getInsights();
-	const visibleInsights = insights.filter((insight) =>
-		(!context.categorySlug || insight.categorySlug === context.categorySlug) &&
-		(!context.tagSlug || insight.tags.some((tag) => tag.slug === context.tagSlug)),
+const leadRegions = pageTemplate === "stacked"
+	? []
+	: enabledRegions.filter(isLead);
+const navigationRegions = enabledRegions.filter((region) =>
+	isNavigation(region, pageTemplate),
+);
+const closingRegions = enabledRegions.filter((region) =>
+	isClosing(region, pageTemplate),
+);
+const contentRegions = pageTemplate === "stacked"
+	? enabledRegions
+	: enabledRegions.filter(
+		(region) =>
+			!isLead(region) &&
+			!isNavigation(region, pageTemplate) &&
+			!isClosing(region, pageTemplate),
 	);
-	const categories = Array.from(new Map(insights.map((insight) => [insight.categorySlug, {
-		label: insight.category,
-		slug: insight.categorySlug,
-	}])).values());
-	const presentation = itemPresentation as InsightCardPresentation;
-	const categoryFilter: PFilterChoiceGroupData = {
-		appearance: sidebar.filter.appearance as PFilterChoiceGroupData["appearance"],
-		control: sidebar.filter.control as PFilterChoiceGroupData["control"],
-		legend: sidebar.filter.legend,
-		name: sidebar.filter.name,
-		type: sidebar.filter.type,
-		options: [
-			{
-				label: sidebar.filter.allLabel,
-				value: toolbar.category.allValue,
-				href: presentation.routes.base,
-				count: insights.length,
-				checked: !context.categorySlug,
-			},
-			...categories.map((category) => ({
-				label: category.label,
-				value: category.slug,
-				href: `${presentation.routes.categoryBase}${category.slug}`,
-				count: insights.filter((insight) => insight.categorySlug === category.slug).length,
-				checked: context.categorySlug === category.slug,
-			})),
-		],
-	};
-	const newsletter: PAdvertisementData = {
-		title: sidebar.newsletter.title,
-		description: sidebar.newsletter.description,
-		image: sidebar.newsletter.image,
-		action: {
-			href: sidebar.newsletter.action.href,
-			label: sidebar.newsletter.action.label,
-			icon: sidebar.newsletter.action.icon as CIconName | undefined,
-		},
-		form: sidebar.newsletter.form,
-	};
-
-	return {
-		key: section.id,
-		component: "archive",
-		section: sectionFrame(section as PageSectionData),
-		props: {
-			mode: "faceted",
-			toolbar: { data: {
-				search: toolbar.search,
-				selects: [{
-					control: toolbar.category.control,
-					id: toolbar.category.id,
-					label: toolbar.category.label,
-					value: context.categorySlug ?? toolbar.category.allValue,
-					options: [
-						{ label: toolbar.category.allLabel, value: toolbar.category.allValue },
-						...categories.map((category) => ({ label: category.label, value: category.slug })),
-					],
-				}],
-				sort: toolbar.sort,
-				view: toolbar.view,
-			} },
-			sidebar: {
-				label: sidebar.label,
-				filter: { data: { groups: [categoryFilter] } },
-				cardsHeader: {
-					data: { title: sidebar.featured.title },
-					...(sidebar.featured.header && {
-						appearance: sidebar.featured.header.appearance as PSectionHeaderProps["appearance"],
-						headingLevel: sidebar.featured.header.headingLevel as PSectionHeaderProps["headingLevel"],
-					}),
-				},
-				cards: {
-					template: sidebar.featured.cards.template as PCardProps["template"],
-					layout: sidebar.featured.cards.layout as PCardProps["layout"],
-					columns: sidebar.featured.cards.columns as PCardProps["columns"],
-					gap: sidebar.featured.cards.gap as PCardProps["gap"],
-					slots: sidebar.featured.cards.slots as PCardProps["slots"],
-					items: insights.slice(0, sidebar.featured.limit).map((insight) =>
-						mapInsightToCard(insight, presentation),
-					),
-				},
-				advertisement: { template: sidebar.newsletter.template, data: newsletter },
-			},
-			result: {
-				header: {
-					data: { title: result.title },
-					...(result.header && {
-						appearance: result.header.appearance as PSectionHeaderProps["appearance"],
-						headingLevel: result.header.headingLevel as PSectionHeaderProps["headingLevel"],
-					}),
-				},
-			},
-			cards: {
-				template: cards.template as PCardProps["template"],
-				layout: cards.layout as PCardProps["layout"],
-				columns: cards.columns as PCardProps["columns"],
-				gap: cards.gap as PCardProps["gap"],
-				slots: cards.slots as PCardProps["slots"],
-				items: visibleInsights.map((insight) => mapInsightToCard(insight, presentation)),
-			},
-			emptyLabel,
-			pagination: { ...pagination, totalPages: Math.max(1, Math.ceil(visibleInsights.length / pagination.pageSize)) },
-		},
-	};
-};
-
-const regions: PageRegion[] = "regions" in props ? props.regions : await Promise.all(props.page.content.sections.map(async (section): Promise<PageRegion> => {
-	const frame = sectionFrame(section);
-	switch (section.type) {
-		case "hero":
-			return { key: section.id, component: "hero", section: frame, props: { template: section.template, data: section.content } as unknown as HeroRegionProps };
-		case "page-header":
-			return { key: section.id, component: "page-header", section: frame, props: { template: section.template, data: section.content } as unknown as PageHeaderRegionProps };
-		case "article":
-			return { key: section.id, component: "article", section: frame, props: { blocks: section.content.blocks } as unknown as ArticleRegionProps };
-		case "cta":
-			return { key: section.id, component: "cta", section: frame, props: { template: section.template, data: section.content } as unknown as CtaRegionProps };
-		case "collection": {
-			const items = await resolveCollectionItems(section);
-			return { key: section.id, component: "collection", section: frame, props: { template: section.template as "stack" | "split" | undefined, header: sectionHeader(section), cardGroups: [cardConfig(section, items)] } };
-		}
-		case "archive": {
-			const archiveContent = section.content;
-			switch (archiveContent.source.collection) {
-				case "projects":
-					return buildProjectsArchive({ ...section, content: archiveContent as ProjectsArchiveContent });
-				case "labs":
-					return buildLabsArchive({ ...section, content: archiveContent as LabsArchiveContent });
-				case "products":
-					return buildProductsArchive({ ...section, content: archiveContent as ProductsArchiveContent });
-				case "blog":
-					return buildBlogArchive({ ...section, content: archiveContent as BlogArchiveContent });
-			}
-		}
-	}
-}));
-const pageTemplate = "page" in props
-	? props.page.content.layout.template
-	: props.pageTemplate;
-const isHome = "page" in props && props.page.slug === "/";
 ---
 
 {isHome ? (
 	<LPage data-page-template="home">
-		<PLayout {regions} />
+		{enabledRegions.map((region) => <PageRegion {region} />)}
 	</LPage>
 ) : (
-	<PPage template={pageTemplate} {regions} />
+	<PPage template={pageTemplate}>
+		{leadRegions.length > 0 && (
+			<Fragment slot="lead">
+				{leadRegions.map((region) => <PageRegion {region} />)}
+			</Fragment>
+		)}
+		{navigationRegions.length > 0 && (
+			<Fragment slot="navigation">
+				{navigationRegions.map((region) => <PageRegion {region} />)}
+			</Fragment>
+		)}
+		{contentRegions.map((region) => <PageRegion {region} />)}
+		{closingRegions.length > 0 && (
+			<Fragment slot="closing">
+				{closingRegions.map((region) => <PageRegion {region} />)}
+			</Fragment>
+		)}
+	</PPage>
 )}
