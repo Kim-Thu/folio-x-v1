@@ -8,6 +8,27 @@ const sectionSettingsSchema = z.object({
 
 const collectionLabelsSchema = z.object({
   collectionLabel: z.string().min(1),
+  basePath: z.string().startsWith("/"),
+});
+
+const iconSchema = z.enum([
+  "star",
+  "eye",
+  "bookOpen",
+  "bookmark",
+  "arrowUpRight",
+  "calendar03",
+  "clock01",
+  "listView",
+  "arrowLeft",
+  "arrowRight",
+]);
+
+const buttonPresentationSchema = z.object({
+  icon: iconSchema,
+  iconPosition: z.enum(["start", "end"]).optional(),
+  size: z.enum(["sm", "md"]),
+  variant: z.enum(["primary", "outline"]),
 });
 
 export const publicationDetailSettingsSchema = z.object({
@@ -17,6 +38,11 @@ export const publicationDetailSettingsSchema = z.object({
   collections: z.object({
     comics: collectionLabelsSchema,
     novels: collectionLabelsSchema,
+  }),
+  routes: z.object({
+    categorySegment: z.string().min(1),
+    tagSegment: z.string().min(1),
+    chapterSegment: z.string().min(1),
   }),
   header: z.object({
     id: z.string().min(1),
@@ -40,6 +66,13 @@ export const publicationDetailSettingsSchema = z.object({
       ongoing: z.string().min(1),
       complete: z.string().min(1),
     }),
+    metrics: z.object({
+      rating: z.object({ icon: iconSchema }),
+      reads: z.object({ icon: iconSchema }),
+      chapters: z.object({ icon: iconSchema }),
+      followers: z.object({ icon: iconSchema }),
+    }),
+    primaryAction: buttonPresentationSchema,
   }),
   navigation: z.object({
     id: z.string().min(1),
@@ -65,6 +98,10 @@ export const publicationDetailSettingsSchema = z.object({
       numberPrefix: z.string(),
       chapter: z.string().min(1),
     }),
+    overviewLayout: z.object({
+      columns: z.enum(["one", "two", "three", "four", "five", "compact-three", "twelve"]),
+      gap: z.enum(["none", "xs", "sm", "md", "lg", "xl"]),
+    }),
     sort: z.object({
       id: z.string().min(1),
       label: z.string().min(1),
@@ -73,10 +110,10 @@ export const publicationDetailSettingsSchema = z.object({
     }),
     itemAction: z.object({
       label: z.string().min(1),
-      icon: z.literal("arrowUpRight"),
-      iconPosition: z.literal("end"),
-      size: z.literal("sm"),
-      variant: z.literal("primary"),
+      icon: iconSchema,
+      iconPosition: z.enum(["start", "end"]),
+      size: z.enum(["sm", "md"]),
+      variant: z.enum(["primary", "outline"]),
     }),
   }),
   reader: z.object({
@@ -96,6 +133,15 @@ export const publicationDetailSettingsSchema = z.object({
       reactions: z.string().min(1),
       bookmark: z.string().min(1),
       navigation: z.string().min(1),
+    }),
+    metadata: z.object({
+      published: z.object({ icon: iconSchema, display: z.literal("icon-text") }),
+      readTime: z.object({ icon: iconSchema, display: z.literal("icon-text") }),
+    }),
+    controls: z.object({
+      chapterList: buttonPresentationSchema,
+      previous: buttonPresentationSchema,
+      next: buttonPresentationSchema,
     }),
   }),
 });
