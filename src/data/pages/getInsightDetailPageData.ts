@@ -195,6 +195,7 @@ export async function getInsightDetailPageData(
 	];
 
 	return {
+		post,
 		layout: { template: presentation.page.template },
 		regions: [
 			{

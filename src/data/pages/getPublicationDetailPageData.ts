@@ -222,6 +222,7 @@ export async function getPublicationDetailPageData(
 	];
 
 	return {
+		entry,
 		layout: { template: presentation.page.template },
 		regions,
 	};

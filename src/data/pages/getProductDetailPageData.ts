@@ -132,6 +132,7 @@ export async function getProductDetailPageData(
 	});
 
 	return {
+		product,
 		layout: { template: page.template },
 		regions,
 	};

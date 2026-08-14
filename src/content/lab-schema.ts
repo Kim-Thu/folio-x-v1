@@ -28,7 +28,7 @@ const iconSchema = z.enum([
 const featureSchema = z.object({
   title: z.string().min(1),
   description: z.string().min(1),
-  icon: iconSchema,
+  icon: z.enum(["lightBulb", "bolt", "globeAlt", "arrowPath"]),
 });
 
 const headingBlockSchema = z.object({

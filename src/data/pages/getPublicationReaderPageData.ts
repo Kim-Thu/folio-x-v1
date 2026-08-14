@@ -158,6 +158,7 @@ export async function getPublicationReaderPageData(
 	];
 
 	return {
+		entry,
 		layout: { template: readerPage.template },
 		regions,
 	};

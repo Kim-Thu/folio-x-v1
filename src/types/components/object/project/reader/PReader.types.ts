@@ -19,7 +19,7 @@ export interface PReaderData {
 	badge: string;
 	title: string;
 	metadata: CMetadataData;
-	views: string;
+	views?: string;
 	content: PReaderContent;
 	actions: {
 		label: string;

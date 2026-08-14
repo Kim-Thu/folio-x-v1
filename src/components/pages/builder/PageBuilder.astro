@@ -36,7 +36,7 @@ import type { PFilterChoiceGroupData } from "@/types/components/object/project/f
 import type { PSectionHeaderProps } from "@/types/components/object/project/section-header/PSectionHeader.types";
 
 const props = Astro.props as PageBuilderProps;
-const context = props.context ?? {};
+const context = "page" in props ? (props.context ?? {}) : {};
 
 type CollectionSection = Extract<PageSectionData, { type: "collection" }>;
 type CollectionContent = CollectionSection["content"];

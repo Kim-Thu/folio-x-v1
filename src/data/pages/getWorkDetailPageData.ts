@@ -68,7 +68,7 @@ export async function getWorkDetailPageData(
 		image: gallery[blockIndex % gallery.length],
 	}));
 
-	const regions: PageRegion[] = page.sections.flatMap((section) => {
+	const regions: PageRegion[] = page.sections.flatMap((section): PageRegion[] => {
 		const frame = {
 			id: section.id,
 			theme: section.settings.theme,
@@ -218,6 +218,7 @@ export async function getWorkDetailPageData(
 	});
 
 	return {
+		project,
 		layout: { template: page.template },
 		regions,
 	};

@@ -44,7 +44,7 @@ const { data } = Astro.props as PReaderProps;
 								data={data.metadata}
 								slots={{ author: false, category: false, index: false, icons: true }}
 							/>
-							<CFeature icon="eye" label={data.views} />
+							{data.views && <CFeature icon="eye" label={data.views} />}
 						</CRow>
 					</CColumns>
 

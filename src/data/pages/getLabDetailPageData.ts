@@ -262,10 +262,10 @@ export async function getLabDetailPageData(
 								headingLevel: presentation.resources.header.headingLevel,
 							},
 							cards: {
-								template: "icon-panel",
-								layout: "grid",
+								template: "icon-panel" as const,
+								layout: "grid" as const,
 								columns: 4,
-								gap: "md",
+								gap: "md" as const,
 								items: lab.resources.map((resource) => ({
 									href: resource.href,
 									ariaLabel: resource.actionLabel,
@@ -304,10 +304,10 @@ export async function getLabDetailPageData(
 								icon: presentation.related.actionIcon,
 							},
 							cards: {
-								template: "editorial",
-								layout: "grid",
+								template: "editorial" as const,
+								layout: "grid" as const,
 								columns: 4,
-								gap: "md",
+								gap: "md" as const,
 								mediaRatio: presentation.related.mediaRatio,
 								items: relatedLabs.map((item) => ({
 									href: item.href,
@@ -340,6 +340,7 @@ export async function getLabDetailPageData(
 	];
 
 	return {
+		lab,
 		layout: { template: presentation.page.template },
 		regions,
 	};
