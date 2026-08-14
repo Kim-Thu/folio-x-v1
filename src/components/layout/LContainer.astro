@@ -11,7 +11,7 @@ const {
 	...attributes
 } = Astro.props;
 
-const classes = cn("mx-auto w-full px-4", containerSizeClasses[size], className);
+const classes = cn("mx-auto px-4", containerSizeClasses[size], className);
 ---
 
 <div {...attributes} class={classes}>
