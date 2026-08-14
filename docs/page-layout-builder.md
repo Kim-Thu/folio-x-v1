@@ -40,6 +40,8 @@ JSON detail definition + current collection entry
 
 The detail page root must not manually loop sections or select `PPageHeader`, `PArticle`, `PReviews`, `PReader`, or other section patterns. Section order and page-template selection come from validated CMS/detail data.
 
+A resolved detail payload may also retain the current content entry for route-level document metadata such as `title` and `description`. That entry metadata is not used to compose or order page regions.
+
 ## CMS contract
 
 Decap CMS may store only approved values:
