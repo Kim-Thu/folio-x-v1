@@ -1,0 +1,109 @@
+name: Migrate container contract
+
+on:
+  push:
+    branches:
+      - agent/cms-content-migration
+
+permissions:
+  contents: write
+
+jobs:
+  migrate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+
+      - name: Migrate container contract
+        shell: bash
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+
+          files = {
+              Path('src/types/components/layout/LContainer.types.ts'): (
+                  'export type LContainerSize = "site" | "content";',
+                  'export type LContainerSize = "fluid" | "wide" | "boxed";',
+              ),
+              Path('src/components/layout/LContainer.astro'): (
+                  'size = "site",',
+                  'size = "wide",',
+              ),
+              Path('src/content/schemas.ts'): (
+                  'container: z.enum(["site", "content", "none"]),',
+                  'container: z.enum(["fluid", "wide", "boxed", "none"]),',
+              ),
+              Path('public/admin/config.yml'): (
+                  'options: [site, content, none]',
+                  'options: [fluid, wide, boxed, none]',
+              ),
+          }
+
+          for path, (before, after) in files.items():
+              text = path.read_text(encoding='utf-8')
+              if before not in text:
+                  raise SystemExit(f'Missing expected contract in {path}: {before}')
+              path.write_text(text.replace(before, after), encoding='utf-8')
+
+          variants = Path('src/variants/components/layout/LContainer.variants.ts')
+          text = variants.read_text(encoding='utf-8')
+          before = '''export const containerSizeClasses: Record<LContainerSize, string> = {\n\tsite: "max-w-screen-2xl",\n\tcontent: "max-w-7xl",\n};'''
+          after = '''export const containerSizeClasses: Record<LContainerSize, string> = {\n\tfluid: "max-w-none",\n\twide: "max-w-screen-2xl",\n\tboxed: "max-w-7xl",\n};'''
+          if before not in text:
+              raise SystemExit('Missing expected LContainer variant map')
+          variants.write_text(text.replace(before, after), encoding='utf-8')
+
+          for path in Path('src/content').rglob('*.json'):
+              text = path.read_text(encoding='utf-8')
+              updated = (
+                  text.replace('"container": "site"', '"container": "wide"')
+                      .replace('"container": "content"', '"container": "boxed"')
+              )
+              if updated != text:
+                  path.write_text(updated, encoding='utf-8')
+
+          for path in Path('src').rglob('*.astro'):
+              text = path.read_text(encoding='utf-8')
+              updated = (
+                  text.replace('container="site"', 'container="wide"')
+                      .replace('container="content"', 'container="boxed"')
+                      .replace('size="site"', 'size="wide"')
+                      .replace('size="content"', 'size="boxed"')
+              )
+              if updated != text:
+                  path.write_text(updated, encoding='utf-8')
+          PY
+
+      - name: Verify legacy container names are gone
+        shell: bash
+        run: |
+          if grep -R -n -E '"container"[[:space:]]*:[[:space:]]*"(site|content)"|container=["'"'"'](site|content)["'"'"']|size=["'"'"'](site|content)["'"'"']' src public/admin/config.yml; then
+            echo 'Legacy container naming remains.'
+            exit 1
+          fi
+
+          grep -R -n -E 'max-w-[A-Za-z0-9_:/.-]+' src
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Check
+        run: npm run check -- --minimum-log-level error
+
+      - name: Build
+        run: npm run build
+
+      - name: Commit migration and remove temporary workflow
+        shell: bash
+        run: |
+          rm .github/workflows/migrate-container-contract.yml
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add src public/admin/config.yml .github/workflows/migrate-container-contract.yml
+          git commit -m 'refactor: rename container size contract'
+          git push
