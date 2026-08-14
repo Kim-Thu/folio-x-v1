@@ -1,0 +1,107 @@
+name: detail-contract-fixes
+
+on:
+  push:
+    branches: [agent/cms-content-migration]
+
+permissions:
+  contents: write
+
+jobs:
+  migrate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: agent/cms-content-migration
+      - shell: bash
+        run: |
+          python3 <<'PY'
+          from pathlib import Path
+
+          p = Path('src/components/pages/builder/PageBuilder.astro')
+          s = p.read_text()
+          s = s.replace('const context = props.context ?? {};', 'const context = "page" in props ? (props.context ?? {}) : {};', 1)
+          p.write_text(s)
+
+          metadata = {
+              'src/data/pages/getProductDetailPageData.ts': 'product',
+              'src/data/pages/getWorkDetailPageData.ts': 'project',
+              'src/data/pages/getInsightDetailPageData.ts': 'post',
+              'src/data/pages/getPublicationDetailPageData.ts': 'entry',
+              'src/data/pages/getLabDetailPageData.ts': 'lab',
+              'src/data/pages/getPublicationReaderPageData.ts': 'entry',
+          }
+          for filename, key in metadata.items():
+              p = Path(filename)
+              s = p.read_text()
+              target = '\treturn {\n\t\tlayout:'
+              replacement = f'\treturn {{\n\t\t{key},\n\t\tlayout:'
+              if target not in s:
+                  raise SystemExit(f'return marker not found: {filename}')
+              s = s.replace(target, replacement, 1)
+              p.write_text(s)
+
+          p = Path('src/data/pages/getWorkDetailPageData.ts')
+          s = p.read_text()
+          s = s.replace(
+              'const regions: PageRegion[] = page.sections.flatMap((section) => {',
+              'const regions: PageRegion[] = page.sections.flatMap((section): PageRegion[] => {',
+              1,
+          )
+          p.write_text(s)
+
+          p = Path('src/data/pages/getLabDetailPageData.ts')
+          s = p.read_text()
+          for old, new in [
+              ('template: "icon-panel",', 'template: "icon-panel" as const,'),
+              ('template: "editorial",', 'template: "editorial" as const,'),
+              ('layout: "grid",', 'layout: "grid" as const,'),
+              ('gap: "md",', 'gap: "md" as const,'),
+          ]:
+              s = s.replace(old, new)
+          p.write_text(s)
+
+          p = Path('src/content/lab-schema.ts')
+          s = p.read_text()
+          s = s.replace(
+              'const featureSchema = z.object({\n  title: z.string().min(1),\n  description: z.string().min(1),\n  icon: iconSchema,\n});',
+              'const featureSchema = z.object({\n  title: z.string().min(1),\n  description: z.string().min(1),\n  icon: z.enum(["lightBulb", "bolt", "globeAlt", "arrowPath"]),\n});',
+              1,
+          )
+          p.write_text(s)
+
+          p = Path('src/content/schemas.ts')
+          s = p.read_text()
+          s = s.replace(
+              'features: z.array(z.record(z.string(), z.unknown())),',
+              'features: z.array(z.object({ label: z.string().min(1), icon: iconNameSchema.optional() })),',
+              1,
+          )
+          s = s.replace(
+              'paymentMethods: z.array(z.unknown()),',
+              'paymentMethods: z.array(imageSchema),',
+              1,
+          )
+          p.write_text(s)
+
+          p = Path('src/types/components/object/project/reader/PReader.types.ts')
+          s = p.read_text().replace('\tviews: string;\n', '\tviews?: string;\n', 1)
+          p.write_text(s)
+
+          p = Path('src/components/object/project/reader/PReader.astro')
+          s = p.read_text().replace(
+              '\t\t\t\t\t\t\t<CFeature icon="eye" label={data.views} />',
+              '\t\t\t\t\t\t\t{data.views && <CFeature icon="eye" label={data.views} />}',
+              1,
+          )
+          p.write_text(s)
+          PY
+      - shell: bash
+        run: |
+          git config user.name github-actions[bot]
+          git config user.email 41898282+github-actions[bot]@users.noreply.github.com
+          git add src/components/pages/builder/PageBuilder.astro src/data/pages/getProductDetailPageData.ts src/data/pages/getWorkDetailPageData.ts src/data/pages/getInsightDetailPageData.ts src/data/pages/getPublicationDetailPageData.ts src/data/pages/getLabDetailPageData.ts src/data/pages/getPublicationReaderPageData.ts src/content/lab-schema.ts src/content/schemas.ts src/types/components/object/project/reader/PReader.types.ts src/components/object/project/reader/PReader.astro
+          git rm .github/workflows/detail-contract-fixes.yml
+          git commit -m 'fix(detail): align resolved page contracts'
+          git push origin HEAD:agent/cms-content-migration
