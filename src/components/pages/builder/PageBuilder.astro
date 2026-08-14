@@ -411,8 +411,10 @@ const buildBlogArchive = async (section: BlogArchiveSection): Promise<ArchiveReg
 			result: {
 				header: {
 					data: { title: result.title },
-					appearance: result.header.appearance as PSectionHeaderProps["appearance"],
-					headingLevel: result.header.headingLevel as PSectionHeaderProps["headingLevel"],
+					...(result.header && {
+						appearance: result.header.appearance as PSectionHeaderProps["appearance"],
+						headingLevel: result.header.headingLevel as PSectionHeaderProps["headingLevel"],
+					}),
 				},
 			},
 			cards: {

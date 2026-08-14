@@ -559,7 +559,7 @@ const blogArchiveSectionSchema = z.object({
 			}),
 		}),
 		itemPresentation: insightCardPresentationSchema,
-		result: z.object({ title: z.string().min(1), header: sectionHeaderPresentationSchema }),
+		result: z.object({ title: z.string().min(1), header: sectionHeaderPresentationSchema.optional() }),
 		cards: pageCardConfigSchema,
 		emptyLabel: z.string().min(1),
 		pagination: paginationSchema,
