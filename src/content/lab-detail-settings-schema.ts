@@ -33,12 +33,12 @@ export const labDetailSettingsSchema = z.object({
   resources: z.object({
     id: z.string().min(1), title: z.string().min(1), actionIcon: iconSchema, settings: sectionSettingsSchema, stack: stackSchema, header: sectionHeaderSchema, gridClass: classSchema,
     card: z.object({ surface: z.literal("bordered"), radius: z.literal("md"), spacing: z.literal("md"), stack: stackSchema }),
-    row: z.object({ align: z.literal("center"), justify: z.literal("between"), gap: z.literal("md") }), iconClass: classSchema,
-    action: z.object({ size: z.literal("xs"), variant: z.literal("outline"), tone: z.literal("light") }), copy: copySchema,
+    row: z.object({ align: z.literal("center"), justify: z.literal("between"), gap: z.literal("md") }), iconClass: classSchema, iconSize: z.literal("sm"),
+    action: z.object({ size: z.literal("xs"), variant: z.literal("outline"), tone: z.literal("light"), iconOnly: z.boolean() }), copy: copySchema,
   }),
   related: z.object({
     id: z.string().min(1), title: z.string().min(1), actionLabel: z.string().min(1), actionIcon: iconSchema, metricIcon: iconSchema, settings: sectionSettingsSchema, stack: stackSchema, header: sectionHeaderSchema, gridClass: classSchema, linkClass: classSchema,
     card: z.object({ surface: z.literal("bordered"), radius: z.literal("md"), overflow: z.literal("hidden"), class: classSchema }), mediaRatio: z.literal("editorial"), imageVariant: z.literal("fill"), contentClass: classSchema,
-    copy: copySchema, metaRow: z.object({ justify: z.literal("between"), align: z.literal("center"), gap: z.literal("sm"), metadataTone: z.literal("brand"), metricAppearance: z.literal("caption") }),
+    copy: copySchema, metaRow: z.object({ justify: z.literal("between"), align: z.literal("center"), gap: z.literal("sm"), metadataTone: z.literal("brand"), metadataDisplay: z.literal("text"), metricAppearance: z.literal("caption") }),
   }),
 });
