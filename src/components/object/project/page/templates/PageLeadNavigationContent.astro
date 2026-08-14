@@ -3,11 +3,18 @@ import PLayout from "@/components/object/project/layout/PLayout.astro";
 import type { PPageTemplateProps } from "@/types/components/object/project/page/PPage.types";
 
 const { regions } = Astro.props as PPageTemplateProps;
-const header = regions.filter((region) => region.component === "page-header");
+const lead = regions.filter(
+	(region) => region.component === "page-header" || region.component === "hero",
+);
 const navigation = regions.filter((region) => region.component === "tabs");
-const content = regions.filter((region) => region.component !== "page-header" && region.component !== "tabs");
+const content = regions.filter(
+	(region) =>
+		region.component !== "page-header" &&
+		region.component !== "hero" &&
+		region.component !== "tabs",
+);
 ---
 
-<PLayout regions={header} />
+<PLayout regions={lead} />
 <PLayout regions={navigation} />
 <PLayout regions={content} />

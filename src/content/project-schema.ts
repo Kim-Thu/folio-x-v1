@@ -75,7 +75,7 @@ const projectNavigationSectionSchema = z.object({
 });
 
 const projectDetailPageSchema = z.object({
-	template: z.literal("work-detail"),
+	template: z.literal("lead-content-navigation"),
 	sections: z.array(
 		z.discriminatedUnion("type", [
 			projectHeaderSectionSchema,

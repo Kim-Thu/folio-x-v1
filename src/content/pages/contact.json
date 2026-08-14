@@ -6,7 +6,7 @@
   },
   "content": {
     "layout": {
-      "template": "default"
+      "template": "stacked"
     },
     "sections": []
   }

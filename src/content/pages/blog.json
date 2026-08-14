@@ -6,7 +6,7 @@
   },
   "content": {
     "layout": {
-      "template": "archive"
+      "template": "lead-content-closing"
     },
     "sections": [
       {

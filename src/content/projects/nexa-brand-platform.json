@@ -31,7 +31,7 @@
   ],
   "detail": {
     "page": {
-      "template": "work-detail",
+      "template": "lead-content-navigation",
       "sections": [
         {
           "id": "project-summary",

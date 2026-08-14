@@ -33,7 +33,7 @@ const buttonPresentationSchema = z.object({
 
 export const publicationDetailSettingsSchema = z.object({
   page: z.object({
-    template: z.literal("publication-detail"),
+    template: z.literal("lead-navigation-content"),
   }),
   collections: z.object({
     comics: collectionLabelsSchema,

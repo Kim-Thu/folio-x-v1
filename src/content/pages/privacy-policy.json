@@ -9,7 +9,7 @@
   "seo": null,
   "content": {
     "layout": {
-      "template": "policy"
+      "template": "stacked"
     },
     "sections": [
       {

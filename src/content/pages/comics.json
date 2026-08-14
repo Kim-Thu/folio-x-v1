@@ -6,7 +6,7 @@
   },
   "content": {
     "layout": {
-      "template": "catalog"
+      "template": "lead-content-closing"
     },
     "sections": [
       {

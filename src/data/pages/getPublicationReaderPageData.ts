@@ -159,7 +159,7 @@ export async function getPublicationReaderPageData(
 
 	return {
 		entry,
-		pageTemplate: readerPage.template ,
+		pageTemplate: "stacked",
 		regions,
 	};
 }

@@ -1,6 +1,6 @@
 {
   "page": {
-    "template": "lab-detail"
+    "template": "lead-navigation-content"
   },
   "header": {
     "id": "lab-summary",

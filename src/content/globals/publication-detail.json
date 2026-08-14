@@ -1,6 +1,6 @@
 {
   "page": {
-    "template": "publication-detail"
+    "template": "lead-navigation-content"
   },
   "collections": {
     "comics": {

@@ -103,7 +103,7 @@ collections:
                     name: layout
                     widget: object
                     fields:
-                      - { label: Template, name: template, widget: select, options: [home, default, archive, catalog, work-detail, insight-detail, lab-detail, product-detail, publication-detail, reader, policy, system-state] }
+                      - { label: Template, name: template, widget: select, options: [home, stacked, lead-content, lead-content-closing, lead-content-navigation, lead-navigation-content] }
                   - label: Sections
                     name: sections
                     widget: list
@@ -250,7 +250,7 @@ collections:
                     name: layout
                     widget: object
                     fields:
-                      - { label: Template, name: template, widget: select, options: [home, default, archive, catalog, work-detail, insight-detail, lab-detail, product-detail, publication-detail, reader, policy, system-state] }
+                      - { label: Template, name: template, widget: select, options: [home, stacked, lead-content, lead-content-closing, lead-content-navigation, lead-navigation-content] }
                   - label: Sections
                     name: sections
                     widget: list
@@ -522,7 +522,7 @@ collections:
             name: page
             widget: object
             fields:
-              - { label: Template, name: template, widget: select, options: [home, default, archive, catalog, work-detail, insight-detail, lab-detail, product-detail, publication-detail, reader, policy, system-state] }
+              - { label: Template, name: template, widget: select, options: [home, stacked, lead-content, lead-content-closing, lead-content-navigation, lead-navigation-content] }
 
           - label: Header
             name: header
@@ -1328,7 +1328,7 @@ collections:
             name: page
             widget: object
             fields:
-              - { label: Template, name: template, widget: select, options: [home, default, archive, catalog, work-detail, insight-detail, lab-detail, product-detail, publication-detail, reader, policy, system-state] }
+              - { label: Template, name: template, widget: select, options: [home, stacked, lead-content, lead-content-closing, lead-content-navigation, lead-navigation-content] }
               - label: Sections
                 name: sections
                 widget: list

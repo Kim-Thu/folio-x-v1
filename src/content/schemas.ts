@@ -677,7 +677,7 @@ export const pageSectionSchema = z.union([
 ]);
 
 const pageLayoutSchema = z.object({
-	template: z.enum(["home", "default", "archive", "catalog", "work-detail", "insight-detail", "lab-detail", "product-detail", "publication-detail", "reader", "policy", "system-state"]),
+	template: z.enum(["home", "stacked", "lead-content", "lead-content-closing", "lead-content-navigation", "lead-navigation-content"]),
 });
 
 const detailSectionSettingsSchema = z.object({
@@ -694,7 +694,7 @@ const productActionSchema = z.object({
 });
 
 const productDetailPageSchema = z.object({
-	template: z.literal("product-detail"),
+	template: z.literal("lead-content"),
 	sections: z.array(z.discriminatedUnion("type", [
 		z.object({
 			id: z.string().min(1),

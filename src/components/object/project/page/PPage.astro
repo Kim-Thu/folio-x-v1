@@ -1,37 +1,27 @@
 ---
 import LPage from "@/components/layout/LPage.astro";
-import PageArchive from "@/components/object/project/page/templates/PageArchive.astro";
-import PageCatalog from "@/components/object/project/page/templates/PageCatalog.astro";
-import PageDefault from "@/components/object/project/page/templates/PageDefault.astro";
-import PageInsightDetail from "@/components/object/project/page/templates/PageInsightDetail.astro";
-import PageLabDetail from "@/components/object/project/page/templates/PageLabDetail.astro";
-import PagePolicy from "@/components/object/project/page/templates/PagePolicy.astro";
-import PageProductDetail from "@/components/object/project/page/templates/PageProductDetail.astro";
-import PagePublicationDetail from "@/components/object/project/page/templates/PagePublicationDetail.astro";
-import PageReader from "@/components/object/project/page/templates/PageReader.astro";
-import PageSystemState from "@/components/object/project/page/templates/PageSystemState.astro";
-import PageWorkDetail from "@/components/object/project/page/templates/PageWorkDetail.astro";
-import type { PPageProps, PPageTemplate } from "@/types/components/object/project/page/PPage.types";
+import PLayout from "@/components/object/project/layout/PLayout.astro";
+import PageLeadContent from "@/components/object/project/page/templates/PageLeadContent.astro";
+import PageLeadContentClosing from "@/components/object/project/page/templates/PageLeadContentClosing.astro";
+import PageLeadContentNavigation from "@/components/object/project/page/templates/PageLeadContentNavigation.astro";
+import PageLeadNavigationContent from "@/components/object/project/page/templates/PageLeadNavigationContent.astro";
+import type {
+	PPageProps,
+	PPageTemplate,
+} from "@/types/components/object/project/page/PPage.types";
 
 const { template, regions } = Astro.props as PPageProps;
 
 const templates = {
-	default: PageDefault,
-	archive: PageArchive,
-	catalog: PageCatalog,
-	"work-detail": PageWorkDetail,
-	"insight-detail": PageInsightDetail,
-	"lab-detail": PageLabDetail,
-	"product-detail": PageProductDetail,
-	"publication-detail": PagePublicationDetail,
-	reader: PageReader,
-	policy: PagePolicy,
-	"system-state": PageSystemState,
-} satisfies Record<PPageTemplate, typeof PageDefault>;
+	"lead-content": PageLeadContent,
+	"lead-content-closing": PageLeadContentClosing,
+	"lead-content-navigation": PageLeadContentNavigation,
+	"lead-navigation-content": PageLeadNavigationContent,
+} satisfies Record<Exclude<PPageTemplate, "stacked">, typeof PageLeadContent>;
 
-const PageTemplate = templates[template];
+const PageTemplate = template === "stacked" ? undefined : templates[template];
 ---
 
 <LPage data-page-template={template}>
-	<PageTemplate {regions} />
+	{PageTemplate ? <PageTemplate {regions} /> : <PLayout {regions} />}
 </LPage>
