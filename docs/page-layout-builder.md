@@ -42,6 +42,8 @@ The detail page root must not manually loop sections or select `PPageHeader`, `P
 
 A resolved detail payload may also retain the current content entry for route-level document metadata such as `title` and `description`. That entry metadata is not used to compose or order page regions.
 
+Resolver output must preserve the finite literal contracts used by registered patterns. Component names, templates, layout values, card columns, metadata item types, icon names, and similar discriminators must remain compatible with their owning `P*` or `C*` types rather than being widened to arbitrary strings or numbers.
+
 ## CMS contract
 
 Decap CMS may store only approved values:
