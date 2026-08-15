@@ -22,13 +22,13 @@ const { data } = Astro.props as { data: PPageHeaderMediaAsideData };
 <CColumns columns="one" gap="md">
 	<CBreadcrumb {...data.breadcrumb} />
 	<CColumns columns="twelve" gap="md">
-		<CGridItem mdSpan={7} lgSpan={8}>
+		<CGridItem lgSpan={8}>
 			<CMedia ratio="video">
 				<CImage {...data.image} variant="fill" />
 			</CMedia>
 		</CGridItem>
 
-		<CGridItem as="header" mdSpan={5} lgSpan={4}>
+		<CGridItem as="header" lgSpan={4}>
 			<CBox surface="glass" radius="md" spacing="md" class="h-full">
 				<CColumns columns="one" gap="sm">
 					{data.badge && <CBadge>{data.badge}</CBadge>}
