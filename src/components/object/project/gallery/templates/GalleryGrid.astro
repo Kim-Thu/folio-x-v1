@@ -29,7 +29,11 @@ const {
 	{
 		items.map((item) => (
 			<CBox radius="md" overflow="hidden">
-				<CMedia ratio={mediaRatio}>
+				<CMedia
+					ratio={mediaRatio}
+					href={item.href}
+					ariaLabel={item.ariaLabel}
+				>
 					<CImage {...item} variant={imageVariant} />
 				</CMedia>
 				{item.caption && (
