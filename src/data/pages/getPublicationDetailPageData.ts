@@ -28,19 +28,26 @@ export async function getPublicationDetailPageData(
 	const collectionPresentation = presentation.collections[collection];
 	const basePath = collectionPresentation.basePath;
 	const description = detail.description?.length ? detail.description : [entry.summary];
-	const configuredChapters = [...(detail.reader ?? [])].sort((a, b) => b.number - a.number);
+	const configuredChapters = detail.reader ?? [];
+	const configuredByNumber = new Map(
+		configuredChapters.map((chapter) => [chapter.number, chapter]),
+	);
 	const hasChapters = entry.chapters > 0;
-	const hasReadableChapters = configuredChapters.length > 0;
-	const chapterItems = configuredChapters.map((chapter) => ({
-		order: chapter.number,
-		number: `${presentation.chapters.labels.numberPrefix}${chapter.number}`,
-		title: chapter.title,
-		publishedAt: chapter.publishedAt,
-		publishedLabel: chapter.publishedLabel,
-		views: chapter.views,
-		href: `${basePath}/${entry.slug}/${presentation.routes.chapterSegment}/${chapter.number}`,
-		action: presentation.chapters.itemAction,
-	}));
+	const chapterItems = Array.from({ length: entry.chapters }, (_, index) => {
+		const number = entry.chapters - index;
+		const configuredChapter = configuredByNumber.get(number);
+
+		return {
+			order: number,
+			number: `${presentation.chapters.labels.numberPrefix}${number}`,
+			title: configuredChapter?.title ?? `${presentation.chapters.labels.chapter} ${number}`,
+			publishedAt: configuredChapter?.publishedAt,
+			publishedLabel: configuredChapter?.publishedLabel,
+			views: configuredChapter?.views,
+			href: `${basePath}/${entry.slug}/${presentation.routes.chapterSegment}/${number}`,
+			action: presentation.chapters.itemAction,
+		};
+	});
 
 	const metrics: Array<{ label: string; value: string; icon: CIconName }> = [
 		{
@@ -129,7 +136,7 @@ export async function getPublicationDetailPageData(
 					},
 					metrics,
 					actionsLabel: presentation.header.labels.actions,
-					actions: hasReadableChapters
+					actions: hasChapters
 						? [
 								{
 									label: presentation.header.labels.primaryAction,
