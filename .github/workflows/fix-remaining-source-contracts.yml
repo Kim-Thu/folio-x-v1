@@ -1,0 +1,140 @@
+name: Fix remaining source contracts
+
+on:
+  push:
+    branches:
+      - agent/cms-content-migration
+
+permissions:
+  contents: write
+
+jobs:
+  migrate:
+    if: github.actor != 'github-actions[bot]'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: agent/cms-content-migration
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+      - name: Apply source contract fixes
+        run: |
+          python <<'PY'
+          from pathlib import Path
+          import json
+
+          def replace(path: str, old: str, new: str, expected: int = 1):
+              p = Path(path)
+              text = p.read_text()
+              count = text.count(old)
+              if count != expected:
+                  raise SystemExit(f'{path}: expected {expected} matches, found {count}')
+              p.write_text(text.replace(old, new))
+
+          # 1) Typed Products sidebar schema.
+          replace(
+              'src/content/schemas.ts',
+              '''\t\t\tprice: z.record(z.string(), z.unknown()).optional(),\n\t\t\tlicense: z.record(z.string(), z.unknown()).optional(),\n\t\t\tratings: z.record(z.string(), z.unknown()).optional(),''',
+              '''\t\t\tprice: z.object({\n\t\t\t\tid: z.string().min(1),\n\t\t\t\tlabel: z.string().min(1),\n\t\t\t\tname: z.string().min(1),\n\t\t\t\tmin: z.number(),\n\t\t\t\tmax: z.number(),\n\t\t\t\tvalue: z.number(),\n\t\t\t\tmaxSuffix: z.string().optional(),\n\t\t\t\tprefix: z.string().optional(),\n\t\t\t}).optional(),\n\t\t\tlicense: filterGroupSchema.extend({\n\t\t\t\tcontrol: z.literal("license"),\n\t\t\t\toptions: z.array(optionSchema).min(1),\n\t\t\t}).optional(),\n\t\t\tratings: z.object({\n\t\t\t\tlegend: z.string().min(1),\n\t\t\t}).optional(),'''
+          )
+
+          # 2) Products page data: platform is a control group; license becomes an explicit approved filter contract.
+          products_path = Path('src/content/pages/products.json')
+          products = json.loads(products_path.read_text())
+          archive = next(section for section in products['content']['sections'] if section['id'] == 'products')
+          sidebar = archive['content']['sidebar']
+          sidebar['platform']['appearance'] = 'controls'
+          sidebar['license'] = {
+              'appearance': 'controls',
+              'control': 'license',
+              'legend': sidebar['license']['legend'],
+              'name': 'product-license',
+              'type': 'checkbox',
+              'options': [
+                  {'label': sidebar['license']['freeLabel'], 'value': 'free'},
+                  {'label': sidebar['license']['proLabel'], 'value': 'pro'},
+              ],
+          }
+          products_path.write_text(json.dumps(products, ensure_ascii=False, indent=2) + '\n')
+
+          # 3) PageBuilder: map complete Product sidebar contract and route-aware Blog category options.
+          replace(
+              'src/data/pages/getPageBuilderData.ts',
+              '''\tconst platformFilters = toolbar.platform.options.map((option) => ({ ...option, checked: option.value === toolbar.platform.value }));\n\tconst categoryFilter: PFilterChoiceGroupData = { ...sidebar.category, options: categoryFilters };\n\tconst platformFilter: PFilterChoiceGroupData = { ...sidebar.platform, options: platformFilters };''',
+              '''\tconst platformFilters = toolbar.platform.options\n\t\t.filter((option) => option.value !== toolbar.platform.allValue)\n\t\t.map((option) => ({ ...option, checked: false }));\n\tconst categoryFilter: PFilterChoiceGroupData = { ...sidebar.category, options: categoryFilters };\n\tconst platformFilter: PFilterChoiceGroupData = { ...sidebar.platform, options: platformFilters };\n\tconst licenseFilter: PFilterChoiceGroupData | undefined = sidebar.license\n\t\t? { ...sidebar.license }\n\t\t: undefined;\n\tconst ratingValues = Array.from(new Set(products.map((product) => product.rating))).sort(\n\t\t(first, second) => second - first,\n\t);'''
+          )
+
+          replace(
+              'src/data/pages/getPageBuilderData.ts',
+              '''\t\t\tsidebar: {\n\t\t\t\tlabel: sidebar.label,\n\t\t\t\tfilter: { data: { filterLabel: sidebar.filterLabel, category: categoryFilter, groups: [platformFilter] } },\n\t\t\t\tadvertisement: { data: advertisement },\n\t\t\t},''',
+              '''\t\t\tsidebar: {\n\t\t\t\tlabel: sidebar.label,\n\t\t\t\tfilter: { data: {\n\t\t\t\t\tfilterLabel: sidebar.filterLabel,\n\t\t\t\t\tcategory: categoryFilter,\n\t\t\t\t\tgroups: [platformFilter, ...(licenseFilter ? [licenseFilter] : [])],\n\t\t\t\t\trange: sidebar.price,\n\t\t\t\t\tratings: sidebar.ratings ? {\n\t\t\t\t\t\tlegend: sidebar.ratings.legend,\n\t\t\t\t\t\tname: "rating",\n\t\t\t\t\t\toptions: ratingValues.map((value) => ({\n\t\t\t\t\t\t\tvalue,\n\t\t\t\t\t\t\tcount: products.filter((product) => product.rating >= value).length,\n\t\t\t\t\t\t})),\n\t\t\t\t\t} : undefined,\n\t\t\t\t} },\n\t\t\t\tadvertisement: { data: advertisement },\n\t\t\t},'''
+          )
+
+          replace(
+              'src/data/pages/getPageBuilderData.ts',
+              '''\t\t\t\t\toptions: [{ label: toolbar.category.allLabel, value: toolbar.category.allValue }, ...categories.map((category) => ({ label: category.label, value: category.slug }))],''',
+              '''\t\t\t\t\toptions: [\n\t\t\t\t\t\t{ label: toolbar.category.allLabel, value: toolbar.category.allValue, href: presentation.routes.base },\n\t\t\t\t\t\t...categories.map((category) => ({\n\t\t\t\t\t\t\tlabel: category.label,\n\t\t\t\t\t\t\tvalue: category.slug,\n\t\t\t\t\t\t\thref: `${presentation.routes.categoryBase}${category.slug}`,\n\t\t\t\t\t\t})),\n\t\t\t\t\t],'''
+          )
+
+          # 4) Route-aware CSelect option contract.
+          replace(
+              'src/types/components/object/component/CSelect.types.ts',
+              '''export interface CSelectOption {\n\tlabel: string;\n\tvalue: string;\n}''',
+              '''export interface CSelectOption {\n\tlabel: string;\n\tvalue: string;\n\thref?: string;\n}'''
+          )
+
+          replace(
+              'src/components/object/component/CSelect.astro',
+              '''\t\t\t\t\tdata-select-option\n\t\t\t\t\tdata-value={option.value}\n\t\t\t\t>''',
+              '''\t\t\t\t\tdata-select-option\n\t\t\t\t\tdata-value={option.value}\n\t\t\t\t\tdata-href={option.href}\n\t\t\t\t>'''
+          )
+
+          replace(
+              'src/components/object/component/CSelect.astro',
+              '''\t\t\t<option\n\t\t\t\tvalue={option.value}\n\t\t\t\tselected={option.value === selectedOption?.value}\n\t\t\t>''',
+              '''\t\t\t<option\n\t\t\t\tvalue={option.value}\n\t\t\t\tselected={option.value === selectedOption?.value}\n\t\t\t\tdata-href={option.href}\n\t\t\t>'''
+          )
+
+          replace(
+              'src/scripts/select.ts',
+              '''\t\t\tnativeSelect.dispatchEvent(new Event("change", { bubbles: true }));\n\t\t\tclose(true);''',
+              '''\t\t\tconst href = option.dataset.href;\n\t\t\tif (href) {\n\t\t\t\tclose();\n\t\t\t\twindow.location.assign(href);\n\t\t\t\treturn;\n\t\t\t}\n\n\t\t\tnativeSelect.dispatchEvent(new Event("change", { bubbles: true }));\n\t\t\tclose(true);'''
+          )
+
+          # 5) Decap parity for project icons and Publication Reader page template.
+          config_path = Path('public/admin/config.yml')
+          config = config_path.read_text()
+
+          old = '''                          - { label: Live action label, name: liveActionLabel, widget: string }\n                          - { label: Source action label, name: sourceActionLabel, widget: string }'''
+          new = '''                          - { label: Live action label, name: liveActionLabel, widget: string }\n                          - { label: Live action icon, name: liveActionIcon, widget: hidden, default: arrowUpRight }\n                          - { label: Source action label, name: sourceActionLabel, widget: string }\n                          - { label: Source action icon, name: sourceActionIcon, widget: hidden, default: github }'''
+          count = config.count(old)
+          if count < 1:
+              raise SystemExit(f'config project action fields: expected >=1 matches, found {count}')
+          config = config.replace(old, new)
+
+          old = '''                          - { label: Previous label, name: previousLabel, widget: string }\n                          - { label: Next label, name: nextLabel, widget: string }'''
+          new = '''                          - { label: Previous label, name: previousLabel, widget: string }\n                          - { label: Previous icon, name: previousIcon, widget: hidden, default: arrowLeft }\n                          - { label: Next label, name: nextLabel, widget: string }\n                          - { label: Next icon, name: nextIcon, widget: hidden, default: arrowRight }'''
+          count = config.count(old)
+          if count < 1:
+              raise SystemExit(f'config post navigation fields: expected >=1 matches, found {count}')
+          config = config.replace(old, new)
+
+          old = '''          - label: Reader\n            name: reader\n            widget: object\n            fields:\n              - { label: Settings, name: settings, widget: object, fields: *publication_section_settings }'''
+          new = '''          - label: Reader\n            name: reader\n            widget: object\n            fields:\n              - { label: Page template, name: pageTemplate, widget: hidden, default: stacked }\n              - { label: Settings, name: settings, widget: object, fields: *publication_section_settings }'''
+          count = config.count(old)
+          if count < 1:
+              raise SystemExit(f'config publication reader fields: expected >=1 matches, found {count}')
+          config = config.replace(old, new)
+          config_path.write_text(config)
+          PY
+
+      - name: Commit migration and remove temporary workflow
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git rm .github/workflows/fix-remaining-source-contracts.yml
+          git add src/content/schemas.ts src/content/pages/products.json src/data/pages/getPageBuilderData.ts src/types/components/object/component/CSelect.types.ts src/components/object/component/CSelect.astro src/scripts/select.ts public/admin/config.yml
+          git commit -m "Fix remaining archive and CMS contracts"
+          git push origin HEAD:agent/cms-content-migration
