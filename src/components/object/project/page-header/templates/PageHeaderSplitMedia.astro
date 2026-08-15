@@ -13,7 +13,7 @@ const { data } = Astro.props as Props;
 ---
 
 <CColumns columns="twelve" gap="lg">
-	<CGridItem as="header" mdSpan={5} align="center">
+	<CGridItem as="header" lgSpan={5} align="center">
 	<CColumns columns="one" gap="md">
 		<CBreadcrumb {...data.breadcrumb} />
 		<CHeading level={1} variant="display-3" lines={data.title} />
@@ -22,7 +22,7 @@ const { data } = Astro.props as Props;
 	</CGridItem>
 
 	{data.image && (
-		<CGridItem mdSpan={7} align="center">
+		<CGridItem lgSpan={7} align="center">
 		<CMedia>
 			<CImage
 				{...data.image}
