@@ -1,5 +1,5 @@
 ---
-import PageRegion from "@/components/object/project/page/parts/PageRegion.astro";
+import LayoutRegion from "@/components/object/project/layout/parts/LayoutRegion.astro";
 import type { PPageTemplateProps } from "@/types/components/object/project/page/PPage.types";
 
 const { regions } = Astro.props as PPageTemplateProps;
@@ -11,5 +11,5 @@ const content = regions.filter(
 );
 ---
 
-{lead.map((region) => <PageRegion {region} />)}
-{content.map((region) => <PageRegion {region} />)}
+{lead.map((region) => <LayoutRegion {region} />)}
+{content.map((region) => <LayoutRegion {region} />)}

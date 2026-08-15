@@ -2,8 +2,8 @@
 import LSidebar from "@/components/layout/LSidebar.astro";
 import CBox from "@/components/object/component/CBox.astro";
 import CColumns from "@/components/object/component/CColumns.astro";
+import LayoutRegion from "@/components/object/project/layout/parts/LayoutRegion.astro";
 import PArchiveToolbar from "@/components/object/project/archive-toolbar/PArchiveToolbar.astro";
-import PageRegion from "@/components/object/project/page/parts/PageRegion.astro";
 import type { PageGroupRegion } from "@/types/components/object/project/page/PageGroupRegion.types";
 
 type Props = { region: PageGroupRegion };
@@ -35,11 +35,16 @@ const asideRegions = enabledRegions.filter(
 	<CColumns columns="one" gap="md">
 		{toolbar && <PArchiveToolbar {...toolbar} />}
 		<LSidebar label={asideLabel} position={asidePosition} sticky={stickyAside}>
-			<CColumns slot="sidebar" columns="one" gap={asideGap}>
-				{asideRegions.map((item) => <PageRegion region={item} />)}
+			<CColumns
+				slot="sidebar"
+				columns="one"
+				gap={asideGap}
+			>
+				{asideRegions.map((item) => <LayoutRegion region={item} />)}
 			</CColumns>
-			<CColumns columns="one" gap={gap}>
-				{mainRegions.map((item) => <PageRegion region={item} />)}
+
+			<CColumns columns="one" {gap}>
+				{mainRegions.map((item) => <LayoutRegion region={item} />)}
 			</CColumns>
 		</LSidebar>
 	</CColumns>

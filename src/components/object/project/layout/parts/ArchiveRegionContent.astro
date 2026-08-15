@@ -34,7 +34,11 @@ const paginationProps = {
 
 	{mode === "faceted" && sidebar ? (
 		<LSidebar label={sidebar.label} sticky>
-			<CColumns slot="sidebar" columns="one" gap="md">
+			<CColumns
+				slot="sidebar"
+				columns="one"
+				gap="md"
+			>
 				<PFilterPanel {...sidebar.filter} />
 				{sidebar.cards && (
 					<CBox surface="glass" radius="md" spacing="sm">
@@ -51,7 +55,11 @@ const paginationProps = {
 				)}
 			</CColumns>
 
-			<CColumns columns="one" gap="md" data-archive-results>
+			<CColumns
+				columns="one"
+				gap="md"
+				data-archive-results
+			>
 				{result?.header && <PSectionHeader {...result.header} />}
 				{result?.count !== undefined && result.label && (
 					<CText variant="caption" tone="subtle">

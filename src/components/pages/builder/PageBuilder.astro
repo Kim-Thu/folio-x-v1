@@ -1,7 +1,7 @@
 ---
 import LPage from "@/components/layout/LPage.astro";
 import PPage from "@/components/object/project/page/PPage.astro";
-import PageRegionRenderer from "@/components/object/project/page/parts/PageRegion.astro";
+import LayoutRegion from "@/components/object/project/layout/parts/LayoutRegion.astro";
 import {
 	getInsights,
 	getLabs,
@@ -467,7 +467,7 @@ const isHome = "page" in props && props.page.slug === "/";
 
 {isHome ? (
 	<LPage data-page-template="home">
-		{regions.map((region) => <PageRegionRenderer {region} />)}
+		{regions.map((region) => <LayoutRegion {region} />)}
 	</LPage>
 ) : (
 	<PPage template={pageTemplate} {regions} />

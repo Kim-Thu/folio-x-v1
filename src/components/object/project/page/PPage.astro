@@ -1,6 +1,6 @@
 ---
 import LPage from "@/components/layout/LPage.astro";
-import PageRegion from "@/components/object/project/page/parts/PageRegion.astro";
+import LayoutRegion from "@/components/object/project/layout/parts/LayoutRegion.astro";
 import PageLeadContent from "@/components/object/project/page/templates/PageLeadContent.astro";
 import PageLeadContentClosing from "@/components/object/project/page/templates/PageLeadContentClosing.astro";
 import PageLeadContentNavigation from "@/components/object/project/page/templates/PageLeadContentNavigation.astro";
@@ -26,6 +26,6 @@ const PageTemplate = template === "stacked" ? undefined : templates[template];
 	{PageTemplate ? (
 		<PageTemplate {regions} />
 	) : (
-		regions.map((region) => <PageRegion {region} />)
+		regions.map((region) => <LayoutRegion {region} />)
 	)}
 </LPage>
