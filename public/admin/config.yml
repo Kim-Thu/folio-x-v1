@@ -76,443 +76,474 @@ collections:
               - { label: Icon, name: icon, widget: select, required: false, options: [linkedin, github] }
               - { label: Đường dẫn, name: href, widget: string }
 
-      - name: pages
-        label: Pages
-        files:
-          - name: home
-            label: Home
-            file: src/content/pages/home.json
-            format: json
+      - name: home
+        label: Home
+        file: src/content/pages/home.json
+        format: json
+        fields:
+          - { label: Slug, name: slug, widget: string }
+          - label: Meta
+            name: meta
+            widget: object
             fields:
-              - { label: Slug, name: slug, widget: string }
-              - label: Meta
-                name: meta
+              - { label: Title, name: title, widget: string }
+              - { label: Description, name: description, widget: text, required: false }
+              - { label: Author, name: author, widget: string, required: false }
+              - { label: Published at, name: publishedAt, widget: string, required: false }
+              - { label: Updated at, name: updatedAt, widget: string, required: false }
+          - label: Content
+            name: content
+            widget: object
+            fields:
+              - label: Layout
+                name: layout
                 widget: object
                 fields:
-                  - { label: Title, name: title, widget: string }
-                  - { label: Description, name: description, widget: text, required: false }
-                  - { label: Author, name: author, widget: string, required: false }
-                  - { label: Published at, name: publishedAt, widget: string, required: false }
-                  - { label: Updated at, name: updatedAt, widget: string, required: false }
-              - { label: SEO override, name: seo, widget: object, required: false, fields: [] }
-              - label: Content
-                name: content
-                widget: object
-                fields:
-                  - label: Layout
-                    name: layout
+                  - { label: Template, name: template, widget: select, options: [home, stacked, lead-content, lead-content-closing, lead-content-navigation, lead-navigation-content] }
+              - label: Sections
+                name: sections
+                widget: list
+                summary: "{{fields.id}} — {{fields.type}}"
+                types:
+                  - label: Hero
+                    name: hero
                     widget: object
                     fields:
-                      - { label: Template, name: template, widget: select, options: [home, stacked, lead-content, lead-content-closing, lead-content-navigation, lead-navigation-content] }
-                  - label: Sections
-                    name: sections
-                    widget: list
-                    summary: "{{fields.id}} — {{fields.type}}"
-                    types:
-                      - label: Hero
-                        name: hero
+                      - { label: ID, name: id, widget: string }
+                      - { label: Type, name: type, widget: hidden, default: hero }
+                      - { label: Template, name: template, widget: hidden, default: split-media }
+                      - label: Settings
+                        name: settings
+                        widget: object
+                        fields: &section_settings
+                          - { label: Theme, name: theme, widget: select, options: [dark, light, canvas, accent, none] }
+                          - { label: Spacing, name: spacing, widget: select, options: [compact, default, none, lead, body, closing] }
+                          - { label: Container, name: container, widget: select, options: [fluid, wide, boxed, none] }
+                          - { label: Layout, name: layout, widget: select, required: false, options: [grid, list, three-column, twelve-column, content-three-column, mosaic, asymmetric, showcase] }
+                          - { label: Columns, name: columns, widget: number, required: false, value_type: int, min: 1, max: 5 }
+                          - { label: Gap, name: gap, widget: select, required: false, options: [none, sm, md, lg, xl] }
+                          - { label: Media ratio, name: mediaRatio, widget: select, required: false, options: [editorial, landscape, natural, panoramic, portrait, square, video] }
+                          - { label: Separator, name: separator, widget: select, required: false, options: [none, light, dark] }
+                      - label: Content
+                        name: content
                         widget: object
                         fields:
-                          - { label: ID, name: id, widget: string }
-                          - { label: Type, name: type, widget: hidden, default: hero }
-                          - { label: Template, name: template, widget: hidden, default: split-media }
-                          - label: Settings
-                            name: settings
+                          - { label: Content ID, name: id, widget: string, required: false }
+                          - { label: Eyebrow, name: eyebrow, widget: string, required: false }
+                          - { label: Title, name: title, widget: list, field: { label: Dòng, name: line, widget: string } }
+                          - { label: Accent, name: accent, widget: string, required: false }
+                          - { label: Description, name: description, widget: text, required: false }
+                          - label: Image
+                            name: image
                             widget: object
-                            fields: &section_settings
-                              - { label: Theme, name: theme, widget: select, options: [dark, light, canvas, accent, none] }
-                              - { label: Spacing, name: spacing, widget: select, options: [compact, default, none, lead, body, closing] }
-                              - { label: Container, name: container, widget: select, options: [fluid, wide, boxed, none] }
-                              - { label: Layout, name: layout, widget: select, required: false, options: [grid, list, three-column, twelve-column, content-three-column, mosaic, asymmetric, showcase] }
-                              - { label: Columns, name: columns, widget: number, required: false, value_type: int, min: 1, max: 5 }
-                              - { label: Gap, name: gap, widget: select, required: false, options: [none, sm, md, lg, xl] }
-                              - { label: Media ratio, name: mediaRatio, widget: select, required: false, options: [editorial, landscape, natural, panoramic, portrait, square, video] }
-                              - { label: Separator, name: separator, widget: select, required: false, options: [none, light, dark] }
-                          - label: Content
-                            name: content
+                            required: false
+                            fields: &image_fields
+                              - { label: Ảnh, name: src, widget: image }
+                              - { label: Alt, name: alt, widget: string }
+                              - { label: Width, name: width, widget: number, value_type: int, min: 1 }
+                              - { label: Height, name: height, widget: number, value_type: int, min: 1 }
+                          - label: Actions
+                            name: actions
+                            widget: list
+                            required: false
+                            fields: &action_fields
+                              - { label: Href, name: href, widget: string }
+                              - { label: Label, name: label, widget: string }
+                              - { label: Icon, name: icon, widget: select, required: false, options: [arrowLeft, arrowRight, arrowUp, arrowUpRight, arrowPath, archiveBox, bars3, bolt, chevronLeft, chevronDown, chevronRight, github, globeAlt, lightBulb, linkedin, xMark, folder01, facebook, link, twitter, userCircle, calendar03, check, clock01, gridView, listView, play, search, shoppingBag, star, questionMarkCircle, bookOpen, bookmark, eye, lockClosed, adjustmentsHorizontal, moon, handThumbUp, heart, faceSmile, faceFrown] }
+                              - { label: Icon position, name: iconPosition, widget: select, required: false, options: [start, end] }
+                              - { label: Variant, name: variant, widget: select, required: false, options: [primary, secondary, outline, ghost, text, text-subtle, pagination, tab, view] }
+                              - { label: Tone, name: tone, widget: select, required: false, options: [dark, light] }
+                              - { label: Size, name: size, widget: select, required: false, options: [xs, sm, md, lg] }
+                          - { label: Actions label, name: actionsLabel, widget: string, required: false }
+                          - { label: Scroll label, name: scrollLabel, widget: string, required: false }
+                  - label: Collection
+                    name: collection
+                    widget: object
+                    fields:
+                      - { label: ID, name: id, widget: string }
+                      - { label: Type, name: type, widget: hidden, default: collection }
+                      - { label: Template, name: template, widget: select, required: false, options: [sidebar, cards, split] }
+                      - label: Settings
+                        name: settings
+                        widget: object
+                        fields: *section_settings
+                      - label: Content
+                        name: content
+                        widget: object
+                        fields:
+                          - label: Heading
+                            name: heading
                             widget: object
+                            required: false
                             fields:
-                              - { label: Content ID, name: id, widget: string, required: false }
-                              - { label: Eyebrow, name: eyebrow, widget: string, required: false }
+                              - { label: Number, name: number, widget: string, required: false }
+                              - { label: Label, name: label, widget: string, required: false }
                               - { label: Title, name: title, widget: list, field: { label: Dòng, name: line, widget: string } }
-                              - { label: Accent, name: accent, widget: string, required: false }
-                              - { label: Description, name: description, widget: text, required: false }
-                              - label: Image
-                                name: image
-                                widget: object
-                                required: false
-                                fields: &image_fields
-                                  - { label: Ảnh, name: src, widget: image }
-                                  - { label: Alt, name: alt, widget: string }
-                                  - { label: Width, name: width, widget: number, value_type: int, min: 1 }
-                                  - { label: Height, name: height, widget: number, value_type: int, min: 1 }
-                              - label: Actions
-                                name: actions
-                                widget: list
-                                required: false
-                                fields: &action_fields
-                                  - { label: Href, name: href, widget: string }
-                                  - { label: Label, name: label, widget: string }
-                                  - { label: Icon, name: icon, widget: select, required: false, options: [arrowLeft, arrowRight, arrowUp, arrowUpRight, arrowPath, archiveBox, bars3, bolt, chevronLeft, chevronDown, chevronRight, github, globeAlt, lightBulb, linkedin, xMark, folder01, facebook, link, twitter, userCircle, calendar03, check, clock01, gridView, listView, play, search, shoppingBag, star, questionMarkCircle, bookOpen, bookmark, eye, lockClosed, adjustmentsHorizontal, moon, handThumbUp, heart, faceSmile, faceFrown] }
-                                  - { label: Icon position, name: iconPosition, widget: select, required: false, options: [start, end] }
-                                  - { label: Variant, name: variant, widget: select, required: false, options: [primary, secondary, outline, ghost, text, text-subtle, pagination, tab, view] }
-                                  - { label: Tone, name: tone, widget: select, required: false, options: [dark, light] }
-                                  - { label: Size, name: size, widget: select, required: false, options: [xs, sm, md, lg] }
-                              - { label: Actions label, name: actionsLabel, widget: string, required: false }
-                              - { label: Scroll label, name: scrollLabel, widget: string, required: false }
-                      - label: Collection
-                        name: collection
-                        widget: object
-                        fields:
-                          - { label: ID, name: id, widget: string }
-                          - { label: Type, name: type, widget: hidden, default: collection }
-                          - { label: Template, name: template, widget: select, required: false, options: [sidebar, cards, split] }
-                          - label: Settings
-                            name: settings
-                            widget: object
-                            fields: *section_settings
-                          - label: Content
-                            name: content
-                            widget: object
-                            fields:
-                              - label: Heading
-                                name: heading
-                                widget: object
-                                required: false
-                                fields:
-                                  - { label: Number, name: number, widget: string, required: false }
-                                  - { label: Label, name: label, widget: string, required: false }
-                                  - { label: Title, name: title, widget: list, field: { label: Dòng, name: line, widget: string } }
-                                  - { label: Description, name: description, widget: text, required: false }
-                                  - label: Action
-                                    name: action
-                                    widget: object
-                                    required: false
-                                    fields: *action_fields
-                              - label: Source
-                                name: source
-                                widget: object
-                                required: false
-                                fields:
-                                  - { label: Collection, name: collection, widget: select, options: [products, projects, labs, blog, comics, novels, publications] }
-                                  - { label: Limit, name: limit, widget: number, required: false, value_type: int, min: 1 }
-                              - { label: Static items, name: items, widget: list, required: false, fields: [] }
-                              - { label: Item presentation, name: itemPresentation, widget: object, required: false, fields: [] }
-                              - { label: Cards, name: cards, widget: object, required: false, fields: [] }
-                      - label: CTA
-                        name: cta
-                        widget: object
-                        fields:
-                          - { label: ID, name: id, widget: string }
-                          - { label: Type, name: type, widget: hidden, default: cta }
-                          - { label: Template, name: template, widget: select, options: [callout, default, media-pricing, subscription] }
-                          - label: Settings
-                            name: settings
-                            widget: object
-                            fields: *section_settings
-                          - label: Content
-                            name: content
-                            widget: object
-                            fields:
-                              - { label: Title, name: title, widget: string }
                               - { label: Description, name: description, widget: text, required: false }
                               - label: Action
                                 name: action
                                 widget: object
                                 required: false
                                 fields: *action_fields
-                              - label: Image
-                                name: image
+                          - label: Source
+                            name: source
+                            widget: object
+                            required: false
+                            fields:
+                              - { label: Collection, name: collection, widget: select, options: [products, projects, labs, blog, comics, novels, publications] }
+                              - { label: Limit, name: limit, widget: number, required: false, value_type: int, min: 1 }
+                          - label: Static items
+                            name: items
+                            widget: list
+                            required: false
+                            fields:
+                              - { label: Href, name: href, widget: string }
+                              - { label: ARIA label, name: ariaLabel, widget: string }
+                              - label: Title
+                                name: title
+                                widget: list
+                                field: { label: Line, name: line, widget: string }
+                              - { label: Excerpt, name: excerpt, widget: text, required: false }
+                              - { label: Media, name: media, widget: object, required: false, fields: *image_fields }
+                              - { label: Appearance, name: appearance, widget: select, required: false, options: [default, inverse] }
+                          - label: Cards
+                            name: cards
+                            widget: object
+                            required: false
+                            fields:
+                              - { label: Template, name: template, widget: select, required: false, options: [stacked, horizontal, overlay, featured, boxed, compact-media, compact-bordered, editorial, icon-panel, icon-summary, media-banner, media-caption, media-details, media-only, media-summary, media-metrics] }
+                              - { label: Layout, name: layout, widget: select, required: false, options: [grid, list, three-column, twelve-column, content-three-column, mosaic, asymmetric, showcase] }
+                              - { label: Columns, name: columns, widget: number, required: false, value_type: int, min: 1, max: 5 }
+                              - { label: Gap, name: gap, widget: select, required: false, options: [none, sm, md, lg, xl] }
+                              - { label: Media ratio, name: mediaRatio, widget: select, required: false, options: [editorial, landscape, natural, panoramic, portrait, square, video] }
+                              - { label: Separator, name: separator, widget: select, required: false, options: [none, light, dark] }
+                              - { label: Heading level, name: headingLevel, widget: number, required: false, value_type: int, min: 1, max: 6 }
+                              - label: Slots
+                                name: slots
                                 widget: object
                                 required: false
-                                fields: *image_fields
-
-          - name: blog_page
-            label: Blog Page
-            file: src/content/pages/blog.json
-            format: json
-            fields:
-              - { label: Slug, name: slug, widget: string }
-              - label: Meta
-                name: meta
-                widget: object
-                fields:
-                  - { label: Title, name: title, widget: string }
-                  - { label: Description, name: description, widget: text, required: false }
-                  - { label: Author, name: author, widget: string, required: false }
-                  - { label: Published at, name: publishedAt, widget: string, required: false }
-                  - { label: Updated at, name: updatedAt, widget: string, required: false }
-              - label: Content
-                name: content
-                widget: object
-                fields:
-                  - label: Layout
-                    name: layout
+                                fields:
+                                  - { label: Media, name: media, widget: boolean, required: false }
+                                  - { label: Icon, name: icon, widget: boolean, required: false }
+                                  - { label: Metadata, name: metadata, widget: boolean, required: false }
+                                  - { label: Tags, name: tags, widget: boolean, required: false }
+                                  - { label: Metrics, name: metrics, widget: boolean, required: false }
+                                  - { label: Title, name: title, widget: boolean, required: false }
+                                  - { label: Excerpt, name: excerpt, widget: boolean, required: false }
+                                  - { label: Action, name: action, widget: boolean, required: false }
+                  - label: CTA
+                    name: cta
                     widget: object
                     fields:
-                      - { label: Template, name: template, widget: select, options: [home, stacked, lead-content, lead-content-closing, lead-content-navigation, lead-navigation-content] }
-                  - label: Sections
-                    name: sections
-                    widget: list
-                    summary: "{{fields.id}} — {{fields.type}}"
-                    types:
-                      - label: Blog page header
-                        name: page_header
+                      - { label: ID, name: id, widget: string }
+                      - { label: Type, name: type, widget: hidden, default: cta }
+                      - { label: Template, name: template, widget: select, options: [callout, default, media-pricing, subscription] }
+                      - label: Settings
+                        name: settings
+                        widget: object
+                        fields: *section_settings
+                      - label: Content
+                        name: content
                         widget: object
                         fields:
-                          - { label: ID, name: id, widget: string }
-                          - { label: Type, name: type, widget: hidden, default: page-header }
-                          - { label: Template, name: template, widget: select, options: [split-media, split-benefits, immersive] }
-                          - label: Settings
-                            name: settings
+                          - { label: Title, name: title, widget: string }
+                          - { label: Description, name: description, widget: text, required: false }
+                          - label: Action
+                            name: action
                             widget: object
-                            fields: *section_settings
-                          - label: Content
-                            name: content
+                            required: false
+                            fields: *action_fields
+                          - label: Image
+                            name: image
                             widget: object
-                            fields:
-                              - { label: Content ID, name: id, widget: string, required: false }
-                              - { label: Eyebrow, name: eyebrow, widget: string, required: false }
-                              - { label: Title, name: title, widget: string, required: false }
-                              - { label: Accent, name: accent, widget: string, required: false }
-                              - { label: Description, name: description, widget: text, required: false }
-                              - label: Source
-                                name: source
-                                widget: object
-                                required: false
-                                fields:
-                                  - { label: Collection, name: collection, widget: hidden, default: blog }
-                              - label: Benefits
-                                name: benefits
-                                widget: object
-                                required: false
-                                fields:
-                                  - { label: Article label, name: articleLabel, widget: string }
-                                  - { label: Topic label, name: topicLabel, widget: string }
-                                  - { label: Minute label, name: minuteLabel, widget: string }
-                              - label: Image
-                                name: image
-                                widget: object
-                                required: false
-                                fields: *image_fields
-                      - label: Blog archive
-                        name: archive
+                            required: false
+                            fields: *image_fields
+
+      - name: blog_page
+        label: Blog Page
+        file: src/content/pages/blog.json
+        format: json
+        fields:
+          - { label: Slug, name: slug, widget: string }
+          - label: Meta
+            name: meta
+            widget: object
+            fields:
+              - { label: Title, name: title, widget: string }
+              - { label: Description, name: description, widget: text, required: false }
+              - { label: Author, name: author, widget: string, required: false }
+              - { label: Published at, name: publishedAt, widget: string, required: false }
+              - { label: Updated at, name: updatedAt, widget: string, required: false }
+          - label: Content
+            name: content
+            widget: object
+            fields:
+              - label: Layout
+                name: layout
+                widget: object
+                fields:
+                  - { label: Template, name: template, widget: select, options: [home, stacked, lead-content, lead-content-closing, lead-content-navigation, lead-navigation-content] }
+              - label: Sections
+                name: sections
+                widget: list
+                summary: "{{fields.id}} — {{fields.type}}"
+                types:
+                  - label: Blog page header
+                    name: page_header
+                    widget: object
+                    fields:
+                      - { label: ID, name: id, widget: string }
+                      - { label: Type, name: type, widget: hidden, default: page-header }
+                      - { label: Template, name: template, widget: select, options: [split-media, split-benefits, immersive] }
+                      - label: Settings
+                        name: settings
+                        widget: object
+                        fields: *section_settings
+                      - label: Content
+                        name: content
                         widget: object
                         fields:
-                          - { label: ID, name: id, widget: string }
-                          - { label: Type, name: type, widget: hidden, default: archive }
-                          - { label: Template, name: template, widget: hidden, default: faceted }
-                          - label: Settings
-                            name: settings
+                          - { label: Content ID, name: id, widget: string, required: false }
+                          - { label: Eyebrow, name: eyebrow, widget: string, required: false }
+                          - { label: Title, name: title, widget: string, required: false }
+                          - { label: Accent, name: accent, widget: string, required: false }
+                          - { label: Description, name: description, widget: text, required: false }
+                          - label: Source
+                            name: source
                             widget: object
-                            fields: *section_settings
-                          - label: Content
-                            name: content
+                            required: false
+                            fields:
+                              - { label: Collection, name: collection, widget: hidden, default: blog }
+                          - label: Benefits
+                            name: benefits
+                            widget: object
+                            required: false
+                            fields:
+                              - { label: Article label, name: articleLabel, widget: string }
+                              - { label: Topic label, name: topicLabel, widget: string }
+                              - { label: Minute label, name: minuteLabel, widget: string }
+                          - label: Image
+                            name: image
+                            widget: object
+                            required: false
+                            fields: *image_fields
+                  - label: Blog archive
+                    name: archive
+                    widget: object
+                    fields:
+                      - { label: ID, name: id, widget: string }
+                      - { label: Type, name: type, widget: hidden, default: archive }
+                      - { label: Template, name: template, widget: hidden, default: faceted }
+                      - label: Settings
+                        name: settings
+                        widget: object
+                        fields: *section_settings
+                      - label: Content
+                        name: content
+                        widget: object
+                        fields:
+                          - label: Source
+                            name: source
                             widget: object
                             fields:
-                              - label: Source
-                                name: source
+                              - { label: Collection, name: collection, widget: hidden, default: blog }
+                          - label: Toolbar
+                            name: toolbar
+                            widget: object
+                            fields:
+                              - label: Search
+                                name: search
                                 widget: object
                                 fields:
-                                  - { label: Collection, name: collection, widget: hidden, default: blog }
-                              - label: Toolbar
-                                name: toolbar
+                                  - { label: ID, name: id, widget: string }
+                                  - { label: Label, name: label, widget: string }
+                                  - { label: Name, name: name, widget: string }
+                                  - { label: Placeholder, name: placeholder, widget: string }
+                              - label: Category
+                                name: category
                                 widget: object
                                 fields:
-                                  - label: Search
-                                    name: search
-                                    widget: object
-                                    fields:
-                                      - { label: ID, name: id, widget: string }
-                                      - { label: Label, name: label, widget: string }
-                                      - { label: Name, name: name, widget: string }
-                                      - { label: Placeholder, name: placeholder, widget: string }
-                                  - label: Category
-                                    name: category
-                                    widget: object
-                                    fields:
-                                      - { label: Control, name: control, widget: select, options: [category, license, platform, status, technology] }
-                                      - { label: ID, name: id, widget: string }
-                                      - { label: Label, name: label, widget: string }
-                                      - { label: All label, name: allLabel, widget: string }
-                                      - { label: All value, name: allValue, widget: string }
-                                  - label: Sort
-                                    name: sort
-                                    widget: object
+                                  - { label: Control, name: control, widget: select, options: [category, license, platform, status, technology] }
+                                  - { label: ID, name: id, widget: string }
+                                  - { label: Label, name: label, widget: string }
+                                  - { label: All label, name: allLabel, widget: string }
+                                  - { label: All value, name: allValue, widget: string }
+                              - label: Sort
+                                name: sort
+                                widget: object
+                                fields:
+                                  - { label: Label, name: label, widget: string }
+                                  - { label: Value, name: value, widget: string }
+                                  - label: Options
+                                    name: options
+                                    widget: list
                                     fields:
                                       - { label: Label, name: label, widget: string }
                                       - { label: Value, name: value, widget: string }
-                                      - label: Options
-                                        name: options
-                                        widget: list
-                                        fields:
-                                          - { label: Label, name: label, widget: string }
-                                          - { label: Value, name: value, widget: string }
-                                  - label: View
-                                    name: view
-                                    widget: object
-                                    fields:
-                                      - { label: Label, name: label, widget: string }
-                                      - { label: Grid label, name: gridLabel, widget: string }
-                                      - { label: List label, name: listLabel, widget: string }
-                              - label: Sidebar
-                                name: sidebar
+                              - label: View
+                                name: view
                                 widget: object
                                 fields:
-                                  - { label: Navigation label, name: label, widget: string }
-                                  - label: Filter
-                                    name: filter
-                                    widget: object
-                                    fields:
-                                      - { label: Appearance, name: appearance, widget: select, options: [controls, navigation] }
-                                      - { label: Control, name: control, widget: select, options: [category, license, platform, status, technology] }
-                                      - { label: Legend, name: legend, widget: string }
-                                      - { label: Name, name: name, widget: string }
-                                      - { label: Type, name: type, widget: select, options: [radio, checkbox] }
-                                      - { label: All label, name: allLabel, widget: string }
-                                  - label: Featured articles
-                                    name: featured
-                                    widget: object
-                                    fields:
-                                      - { label: Title, name: title, widget: string }
-                                      - { label: Limit, name: limit, widget: number, value_type: int, min: 1 }
-                                      - label: Header presentation
-                                        name: header
-                                        widget: object
-                                        fields:
-                                          - { label: Appearance, name: appearance, widget: select, options: [default, compact] }
-                                          - { label: Heading level, name: headingLevel, widget: number, value_type: int, min: 1, max: 6 }
-                                      - label: Cards
-                                        name: cards
-                                        widget: object
-                                        fields:
-                                          - { label: Template, name: template, widget: select, options: [stacked, horizontal, overlay, featured, boxed, compact-media, compact-bordered, editorial, icon-panel, icon-summary, media-banner, media-caption, media-details, media-only, media-summary, media-metrics] }
-                                          - { label: Layout, name: layout, widget: select, options: [grid, list, three-column, twelve-column, content-three-column, mosaic, asymmetric, showcase] }
-                                          - { label: Columns, name: columns, widget: number, value_type: int, min: 1, max: 5 }
-                                          - { label: Gap, name: gap, widget: select, options: [none, sm, md, lg, xl] }
-                                          - { label: Media ratio, name: mediaRatio, widget: select, required: false, options: [editorial, landscape, natural, panoramic, portrait, square, video] }
-                                          - { label: Separator, name: separator, widget: select, required: false, options: [none, light, dark] }
-                                          - { label: Heading level, name: headingLevel, widget: number, value_type: int, min: 1, max: 6, required: false }
-                                          - label: Slots
-                                            name: slots
-                                            widget: object
-                                            required: false
-                                            fields:
-                                              - { label: Media, name: media, widget: boolean, required: false }
-                                              - { label: Excerpt, name: excerpt, widget: boolean, required: false }
-                                              - { label: Metadata, name: metadata, widget: boolean, required: false }
-                                              - { label: Tags, name: tags, widget: boolean, required: false }
-                                              - { label: Metrics, name: metrics, widget: boolean, required: false }
-                                              - { label: Action, name: action, widget: boolean, required: false }
-                                  - label: Newsletter
-                                    name: newsletter
-                                    widget: object
-                                    fields:
-                                      - { label: Template, name: template, widget: select, options: [form-first, media-first] }
-                                      - { label: Title, name: title, widget: string }
-                                      - { label: Description, name: description, widget: text }
-                                      - { label: Image, name: image, widget: object, fields: *image_fields }
-                                      - { label: Action, name: action, widget: object, fields: *action_fields }
-                                      - label: Form
-                                        name: form
-                                        widget: object
-                                        fields:
-                                          - { label: Form name, name: formName, widget: string }
-                                          - { label: Input ID, name: inputId, widget: string }
-                                          - { label: Input label, name: inputLabel, widget: string }
-                                          - { label: Placeholder, name: placeholder, widget: string }
-                                          - { label: Submit label, name: submitLabel, widget: string }
-                                          - { label: Tone, name: tone, widget: select, required: false, options: [dark, light] }
-                              - label: Item presentation
-                                name: itemPresentation
+                                  - { label: Label, name: label, widget: string }
+                                  - { label: Grid label, name: gridLabel, widget: string }
+                                  - { label: List label, name: listLabel, widget: string }
+                          - label: Sidebar
+                            name: sidebar
+                            widget: object
+                            fields:
+                              - { label: Navigation label, name: label, widget: string }
+                              - label: Filter
+                                name: filter
                                 widget: object
                                 fields:
-                                  - label: Routes
-                                    name: routes
-                                    widget: object
-                                    fields:
-                                      - { label: Base, name: base, widget: string }
-                                      - { label: Category base, name: categoryBase, widget: string }
-                                      - { label: Tag base, name: tagBase, widget: string }
-                                  - { label: Separator, name: separator, widget: string }
-                                  - { label: Metadata display, name: metadataDisplay, widget: select, options: [icon, icon-text, text] }
-                                  - { label: Tags label suffix, name: tagsLabelSuffix, widget: string }
-                                  - { label: Image width, name: imageWidth, widget: number, value_type: int, min: 1 }
-                                  - { label: Image height, name: imageHeight, widget: number, value_type: int, min: 1 }
-                              - label: Result
-                                name: result
+                                  - { label: Appearance, name: appearance, widget: select, options: [controls, navigation] }
+                                  - { label: Control, name: control, widget: select, options: [category, license, platform, status, technology] }
+                                  - { label: Legend, name: legend, widget: string }
+                                  - { label: Name, name: name, widget: string }
+                                  - { label: Type, name: type, widget: select, options: [radio, checkbox] }
+                                  - { label: All label, name: allLabel, widget: string }
+                              - label: Featured articles
+                                name: featured
                                 widget: object
                                 fields:
                                   - { label: Title, name: title, widget: string }
+                                  - { label: Limit, name: limit, widget: number, value_type: int, min: 1 }
                                   - label: Header presentation
                                     name: header
                                     widget: object
                                     fields:
                                       - { label: Appearance, name: appearance, widget: select, options: [default, compact] }
                                       - { label: Heading level, name: headingLevel, widget: number, value_type: int, min: 1, max: 6 }
-                              - label: Cards
-                                name: cards
-                                widget: object
-                                fields:
-                                  - { label: Template, name: template, widget: select, options: [stacked, horizontal, overlay, featured, boxed, compact-media, compact-bordered, editorial, icon-panel, icon-summary, media-banner, media-caption, media-details, media-only, media-summary, media-metrics] }
-                                  - { label: Layout, name: layout, widget: select, options: [grid, list, three-column, twelve-column, content-three-column, mosaic, asymmetric, showcase] }
-                                  - { label: Columns, name: columns, widget: number, value_type: int, min: 1, max: 5 }
-                                  - { label: Gap, name: gap, widget: select, options: [none, sm, md, lg, xl] }
-                                  - { label: Media ratio, name: mediaRatio, widget: select, required: false, options: [editorial, landscape, natural, panoramic, portrait, square, video] }
-                                  - { label: Separator, name: separator, widget: select, required: false, options: [none, light, dark] }
-                                  - { label: Heading level, name: headingLevel, widget: number, value_type: int, min: 1, max: 6, required: false }
-                                  - label: Slots
-                                    name: slots
+                                  - label: Cards
+                                    name: cards
                                     widget: object
-                                    required: false
                                     fields:
-                                      - { label: Media, name: media, widget: boolean, required: false }
-                                      - { label: Excerpt, name: excerpt, widget: boolean, required: false }
-                                      - { label: Metadata, name: metadata, widget: boolean, required: false }
-                                      - { label: Tags, name: tags, widget: boolean, required: false }
-                                      - { label: Metrics, name: metrics, widget: boolean, required: false }
-                                      - { label: Action, name: action, widget: boolean, required: false }
-                              - { label: Empty label, name: emptyLabel, widget: string }
-                              - label: Pagination
-                                name: pagination
+                                      - { label: Template, name: template, widget: select, options: [stacked, horizontal, overlay, featured, boxed, compact-media, compact-bordered, editorial, icon-panel, icon-summary, media-banner, media-caption, media-details, media-only, media-summary, media-metrics] }
+                                      - { label: Layout, name: layout, widget: select, options: [grid, list, three-column, twelve-column, content-three-column, mosaic, asymmetric, showcase] }
+                                      - { label: Columns, name: columns, widget: number, value_type: int, min: 1, max: 5 }
+                                      - { label: Gap, name: gap, widget: select, options: [none, sm, md, lg, xl] }
+                                      - { label: Media ratio, name: mediaRatio, widget: select, required: false, options: [editorial, landscape, natural, panoramic, portrait, square, video] }
+                                      - { label: Separator, name: separator, widget: select, required: false, options: [none, light, dark] }
+                                      - { label: Heading level, name: headingLevel, widget: number, value_type: int, min: 1, max: 6, required: false }
+                                      - label: Slots
+                                        name: slots
+                                        widget: object
+                                        required: false
+                                        fields:
+                                          - { label: Media, name: media, widget: boolean, required: false }
+                                          - { label: Excerpt, name: excerpt, widget: boolean, required: false }
+                                          - { label: Metadata, name: metadata, widget: boolean, required: false }
+                                          - { label: Tags, name: tags, widget: boolean, required: false }
+                                          - { label: Metrics, name: metrics, widget: boolean, required: false }
+                                          - { label: Action, name: action, widget: boolean, required: false }
+                              - label: Newsletter
+                                name: newsletter
                                 widget: object
                                 fields:
-                                  - { label: Label, name: label, widget: string }
-                                  - { label: Previous label, name: previousLabel, widget: string }
-                                  - { label: Next label, name: nextLabel, widget: string }
-                                  - { label: Page size, name: pageSize, widget: number, value_type: int, min: 1 }
-                      - label: Blog subscription CTA
-                        name: cta
-                        widget: object
-                        fields:
-                          - { label: ID, name: id, widget: string }
-                          - { label: Type, name: type, widget: hidden, default: cta }
-                          - { label: Template, name: template, widget: select, options: [callout, default, media-pricing, subscription] }
-                          - label: Settings
-                            name: settings
-                            widget: object
-                            fields: *section_settings
-                          - label: Content
-                            name: content
+                                  - { label: Template, name: template, widget: select, options: [form-first, media-first] }
+                                  - { label: Title, name: title, widget: string }
+                                  - { label: Description, name: description, widget: text }
+                                  - { label: Image, name: image, widget: object, fields: *image_fields }
+                                  - { label: Action, name: action, widget: object, fields: *action_fields }
+                                  - label: Form
+                                    name: form
+                                    widget: object
+                                    fields:
+                                      - { label: Form name, name: formName, widget: string }
+                                      - { label: Input ID, name: inputId, widget: string }
+                                      - { label: Input label, name: inputLabel, widget: string }
+                                      - { label: Placeholder, name: placeholder, widget: string }
+                                      - { label: Submit label, name: submitLabel, widget: string }
+                                      - { label: Tone, name: tone, widget: select, required: false, options: [dark, light] }
+                          - label: Item presentation
+                            name: itemPresentation
                             widget: object
                             fields:
-                              - { label: Content ID, name: id, widget: string, required: false }
+                              - label: Routes
+                                name: routes
+                                widget: object
+                                fields:
+                                  - { label: Base, name: base, widget: string }
+                                  - { label: Category base, name: categoryBase, widget: string }
+                                  - { label: Tag base, name: tagBase, widget: string }
+                              - { label: Separator, name: separator, widget: string }
+                              - { label: Metadata display, name: metadataDisplay, widget: select, options: [icon, icon-text, text] }
+                              - { label: Tags label suffix, name: tagsLabelSuffix, widget: string }
+                              - { label: Image width, name: imageWidth, widget: number, value_type: int, min: 1 }
+                              - { label: Image height, name: imageHeight, widget: number, value_type: int, min: 1 }
+                          - label: Result
+                            name: result
+                            widget: object
+                            fields:
                               - { label: Title, name: title, widget: string }
-                              - { label: Description, name: description, widget: text, required: false }
-                              - { label: Action, name: action, widget: object, required: false, fields: *action_fields }
-                              - { label: Image, name: image, widget: object, required: false, fields: *image_fields }
-                              - label: Form
-                                name: form
+                              - label: Header presentation
+                                name: header
+                                widget: object
+                                fields:
+                                  - { label: Appearance, name: appearance, widget: select, options: [default, compact] }
+                                  - { label: Heading level, name: headingLevel, widget: number, value_type: int, min: 1, max: 6 }
+                          - label: Cards
+                            name: cards
+                            widget: object
+                            fields:
+                              - { label: Template, name: template, widget: select, options: [stacked, horizontal, overlay, featured, boxed, compact-media, compact-bordered, editorial, icon-panel, icon-summary, media-banner, media-caption, media-details, media-only, media-summary, media-metrics] }
+                              - { label: Layout, name: layout, widget: select, options: [grid, list, three-column, twelve-column, content-three-column, mosaic, asymmetric, showcase] }
+                              - { label: Columns, name: columns, widget: number, value_type: int, min: 1, max: 5 }
+                              - { label: Gap, name: gap, widget: select, options: [none, sm, md, lg, xl] }
+                              - { label: Media ratio, name: mediaRatio, widget: select, required: false, options: [editorial, landscape, natural, panoramic, portrait, square, video] }
+                              - { label: Separator, name: separator, widget: select, required: false, options: [none, light, dark] }
+                              - { label: Heading level, name: headingLevel, widget: number, value_type: int, min: 1, max: 6, required: false }
+                              - label: Slots
+                                name: slots
                                 widget: object
                                 required: false
                                 fields:
-                                  - { label: Form name, name: formName, widget: string }
-                                  - { label: Input ID, name: inputId, widget: string }
-                                  - { label: Input label, name: inputLabel, widget: string }
-                                  - { label: Placeholder, name: placeholder, widget: string }
-                                  - { label: Submit label, name: submitLabel, widget: string }
-                                  - { label: Tone, name: tone, widget: select, required: false, options: [dark, light] }
-
+                                  - { label: Media, name: media, widget: boolean, required: false }
+                                  - { label: Excerpt, name: excerpt, widget: boolean, required: false }
+                                  - { label: Metadata, name: metadata, widget: boolean, required: false }
+                                  - { label: Tags, name: tags, widget: boolean, required: false }
+                                  - { label: Metrics, name: metrics, widget: boolean, required: false }
+                                  - { label: Action, name: action, widget: boolean, required: false }
+                          - { label: Empty label, name: emptyLabel, widget: string }
+                          - label: Pagination
+                            name: pagination
+                            widget: object
+                            fields:
+                              - { label: Label, name: label, widget: string }
+                              - { label: Previous label, name: previousLabel, widget: string }
+                              - { label: Next label, name: nextLabel, widget: string }
+                              - { label: Page size, name: pageSize, widget: number, value_type: int, min: 1 }
+                  - label: Blog subscription CTA
+                    name: cta
+                    widget: object
+                    fields:
+                      - { label: ID, name: id, widget: string }
+                      - { label: Type, name: type, widget: hidden, default: cta }
+                      - { label: Template, name: template, widget: select, options: [callout, default, media-pricing, subscription] }
+                      - label: Settings
+                        name: settings
+                        widget: object
+                        fields: *section_settings
+                      - label: Content
+                        name: content
+                        widget: object
+                        fields:
+                          - { label: Content ID, name: id, widget: string, required: false }
+                          - { label: Title, name: title, widget: string }
+                          - { label: Description, name: description, widget: text, required: false }
+                          - { label: Action, name: action, widget: object, required: false, fields: *action_fields }
+                          - { label: Image, name: image, widget: object, required: false, fields: *image_fields }
+                          - label: Form
+                            name: form
+                            widget: object
+                            required: false
+                            fields:
+                              - { label: Form name, name: formName, widget: string }
+                              - { label: Input ID, name: inputId, widget: string }
+                              - { label: Input label, name: inputLabel, widget: string }
+                              - { label: Placeholder, name: placeholder, widget: string }
+                              - { label: Submit label, name: submitLabel, widget: string }
+                              - { label: Tone, name: tone, widget: select, required: false, options: [dark, light] }
       - name: lab_detail
         label: Giao diện Lab Detail
         file: src/content/globals/lab-detail.json
@@ -1509,23 +1540,6 @@ collections:
               - { label: Type, name: type, widget: hidden, default: list }
               - { label: Style, name: style, widget: select, options: [bullet, ordered] }
               - { label: Items, name: items, widget: list, field: { label: Item, name: item, widget: string } }
-          - label: Table
-            name: table
-            widget: object
-            fields:
-              - { label: Type, name: type, widget: hidden, default: table }
-              - { label: ID, name: id, widget: string, required: false }
-              - { label: Caption, name: caption, widget: string, required: false }
-              - label: Columns
-                name: columns
-                widget: list
-                fields:
-                  - { label: Key, name: key, widget: string }
-                  - { label: Label, name: label, widget: string }
-              - label: Rows
-                name: rows
-                widget: list
-                field: { label: Row JSON, name: row, widget: object, fields: [] }
           - label: Quote
             name: quote
             widget: object
