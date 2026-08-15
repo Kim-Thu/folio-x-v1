@@ -65,7 +65,10 @@ jobs:
           text = text.replace(
               'import type { ArchiveRegion } from "@/types/components/object/project/layout/PLayout.types";',
               'import type { PageArchiveRegion } from "@/types/components/object/project/page/PageArchiveRegion.types";',
-          ).replace('ArchiveRegion', 'PageArchiveRegion')
+          ).replace(
+              'type Props = { region: ArchiveRegion };',
+              'type Props = { region: PageArchiveRegion };',
+          )
           path.write_text(text)
 
           path = Path("src/components/object/project/layout/parts/CollectionRegionContent.astro")
@@ -73,7 +76,10 @@ jobs:
           text = text.replace(
               'import type { CollectionRegion } from "@/types/components/object/project/layout/PLayout.types";',
               'import type { PageCollectionRegion } from "@/types/components/object/project/page/PageCollectionRegion.types";',
-          ).replace('CollectionRegion', 'PageCollectionRegion')
+          ).replace(
+              'type Props = { region: CollectionRegion };',
+              'type Props = { region: PageCollectionRegion };',
+          )
           path.write_text(text)
 
           path = Path("src/components/object/project/layout/parts/GroupRegionContent.astro")
@@ -81,7 +87,10 @@ jobs:
           text = text.replace(
               'import type { GroupRegion } from "@/types/components/object/project/layout/PLayout.types";',
               'import type { PageGroupRegion } from "@/types/components/object/project/page/PageGroupRegion.types";',
-          ).replace('GroupRegion', 'PageGroupRegion')
+          ).replace(
+              'type Props = { region: GroupRegion };',
+              'type Props = { region: PageGroupRegion };',
+          )
           path.write_text(text)
 
           ppage = Path("src/components/object/project/page/PPage.astro")
