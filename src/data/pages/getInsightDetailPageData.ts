@@ -209,9 +209,11 @@ export async function getInsightDetailPageData(
 				props: {
 					template: "sidebar",
 					asideLabel: sidebar.label,
+					asideColumns: sidebar.columns.columns,
 					asidePosition: sidebar.position,
 					stickyAside: sidebar.sticky,
 					asideGap: sidebar.columns.gap,
+					columns: presentation.content.columns.columns,
 					gap: presentation.content.columns.gap,
 					regions: nestedRegions,
 				},
