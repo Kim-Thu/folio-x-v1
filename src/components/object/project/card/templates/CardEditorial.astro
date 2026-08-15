@@ -1,15 +1,23 @@
 ---
 import CBox from "@/components/object/component/CBox.astro";
 import CColumns from "@/components/object/component/CColumns.astro";
+import CFeature from "@/components/object/component/CFeature.astro";
 import CHeading from "@/components/object/component/CHeading.astro";
 import CImage from "@/components/object/component/CImage.astro";
 import CLink from "@/components/object/component/CLink.astro";
 import CMedia from "@/components/object/component/CMedia.astro";
 import CMetadata from "@/components/object/component/CMetadata.astro";
+import CRow from "@/components/object/component/CRow.astro";
 import CText from "@/components/object/component/CText.astro";
 import type { PCardItemProps } from "@/types/components/object/project/card/PCard.types";
 
-const { data, headingLevel = 3, index, slots } = Astro.props as PCardItemProps;
+const {
+	data,
+	headingLevel = 3,
+	index,
+	mediaRatio = "video",
+	slots,
+} = Astro.props as PCardItemProps;
 ---
 
 <CBox
@@ -24,7 +32,7 @@ const { data, headingLevel = 3, index, slots } = Astro.props as PCardItemProps;
 	data-sort-index={index}
 >
 	{slots.media && data.media && (
-		<CMedia ratio="video" href={data.href} ariaLabel={data.ariaLabel}>
+		<CMedia ratio={mediaRatio} href={data.href} ariaLabel={data.ariaLabel}>
 			<CImage {...data.media} variant="fill" />
 		</CMedia>
 	)}
@@ -32,6 +40,13 @@ const { data, headingLevel = 3, index, slots } = Astro.props as PCardItemProps;
 		<CColumns columns="one" gap="xs">
 			{slots.metadata && data.metadata && (
 				<CMetadata data={data.metadata} tone="brand" />
+			)}
+			{slots.metrics && data.metrics && data.metrics.length > 0 && (
+				<CRow gap="md">
+					{data.metrics.map((metric) => (
+						<CFeature {...metric} appearance="caption" />
+					))}
+				</CRow>
 			)}
 			{slots.title && (
 				<CHeading level={headingLevel} variant="h4">
