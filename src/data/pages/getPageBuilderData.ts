@@ -6,13 +6,6 @@ import {
 	getProjects,
 	getPublications,
 } from "@/data/cms";
-import {
-	mapInsightToCard,
-	mapLabToCard,
-	mapProductToCard,
-	mapProjectToCard,
-	mapPublicationToCard,
-} from "@/data/mappers/card";
 import type { PAdvertisementData } from "@/types/components/object/project/advertisement/PAdvertisement.types";
 import type { PCtaProps } from "@/types/components/object/project/cta/PCta.types";
 import type { PHeroProps } from "@/types/components/object/project/hero/PHero.types";
@@ -159,34 +152,231 @@ const resolveCollectionItems = async (section: CollectionSection): Promise<PCard
 	if (!("source" in content)) return [];
 
 	if (isProductsCollectionContent(content)) {
-		return take(await getProducts(), content.source.limit).map((item) =>
-			mapProductToCard(item, content.itemPresentation),
-		);
+		return take(await getProducts(), content.source.limit).map((item): PCardData => ({
+			href: `${content.itemPresentation.routes.base}${item.slug}`,
+			ariaLabel: `${content.itemPresentation.ariaLabelPrefix}${item.title}`,
+			title: [item.title],
+			excerpt: item.description,
+			media: {
+				src: item.image,
+				alt: `${item.title}${content.itemPresentation.imageAltSuffix}`,
+				width: content.itemPresentation.imageWidth,
+				height: content.itemPresentation.imageHeight,
+			},
+			metadata: {
+				items: [{
+					type: "category",
+					label: item.category,
+					href: `${content.itemPresentation.routes.categoryBase}${item.categorySlug}`,
+					display: content.itemPresentation.categoryDisplay,
+				}],
+			},
+			action: {
+				href: content.itemPresentation.actionHref,
+				label: `${content.itemPresentation.actionLabelPrefix}${item.title}`,
+				icon: content.itemPresentation.actionIcon,
+			},
+			product: {
+				badge: item.badge,
+				category: item.category,
+				categorySlug: item.categorySlug,
+				license: content.itemPresentation.license,
+				oldPrice: item.oldPrice,
+				platform: item.platform,
+				price: item.price,
+				rating: item.rating,
+				reviews: item.reviews,
+			},
+		}));
 	}
 	if (isProjectsCollectionContent(content)) {
-		return take(await getProjects(), content.source.limit).map((item) =>
-			mapProjectToCard(item, content.itemPresentation),
-		);
+		return take(await getProjects(), content.source.limit).map((item): PCardData => ({
+			href: item.href,
+			ariaLabel: item.title,
+			title: [item.title],
+			excerpt: item.summary,
+			filterValue: item.categorySlug,
+			sortValue: item.year,
+			size: content.itemPresentation.size,
+			supportingLabel: item.outcome,
+			tags: item.tags.map((tag) => ({
+				label: tag.label,
+				href: `${content.itemPresentation.routes.tagBase}${tag.slug}`,
+			})),
+			tagsLabel: content.itemPresentation.tagsLabel,
+			appearance: item.tone === "dark"
+				? content.itemPresentation.darkAppearance
+				: content.itemPresentation.lightAppearance,
+			metadata: {
+				separator: content.itemPresentation.separator,
+				items: [
+					{ type: "index", label: item.number, display: content.itemPresentation.metadataDisplay },
+					{
+						type: "category",
+						label: item.category.toUpperCase(),
+						href: `${content.itemPresentation.routes.categoryBase}${item.categorySlug}`,
+						display: content.itemPresentation.metadataDisplay,
+					},
+					{
+						type: "datetime",
+						label: item.year,
+						datetime: item.year,
+						display: content.itemPresentation.metadataDisplay,
+					},
+				],
+			},
+			action: content.itemPresentation.actionLabel ? {
+				label: content.itemPresentation.actionLabel,
+				href: item.href,
+				icon: content.itemPresentation.actionIcon,
+			} : undefined,
+			media: item.image ? {
+				src: item.image,
+				alt: item.alt || item.title,
+				width: content.itemPresentation.imageWidth,
+				height: content.itemPresentation.imageHeight,
+			} : undefined,
+		}));
 	}
 	if (isLabsCollectionContent(content)) {
-		return take(await getLabs(), content.source.limit).map((item) =>
-			mapLabToCard(item, content.itemPresentation),
-		);
+		return take(await getLabs(), content.source.limit).map((item): PCardData => ({
+			href: item.href,
+			ariaLabel: `${content.itemPresentation.ariaLabelPrefix}${item.title}`,
+			title: [item.title],
+			excerpt: item.summary,
+			media: item.image,
+			metadata: {
+				items: [{
+					type: "category",
+					label: item.category.label,
+					href: `${content.itemPresentation.routes.categoryBase}${item.category.slug}`,
+					display: content.itemPresentation.categoryDisplay,
+				}],
+			},
+			badge: {
+				label: item.statusLabel,
+				tone: item.status === "complete"
+					? content.itemPresentation.completeBadgeTone
+					: content.itemPresentation.activeBadgeTone,
+			},
+			tags: item.technologies.map((technology) => ({
+				label: technology.label,
+				href: `${content.itemPresentation.routes.technologyBase}${technology.slug}`,
+			})),
+			tagsLabel: `${item.title}${content.itemPresentation.tagsLabelSuffix}`,
+			metrics: [
+				{ icon: content.itemPresentation.metricIcons[0], label: String(item.stars) },
+				{ icon: content.itemPresentation.metricIcons[1], label: String(item.forks) },
+				{ icon: content.itemPresentation.metricIcons[2], label: item.updatedLabel },
+			],
+			facets: {
+				category: [item.category.slug],
+				status: [item.status],
+				technology: item.technologies.map((technology) => technology.slug),
+			},
+			searchValue: [item.title, item.summary, item.category.label, ...item.technologies.map((technology) => technology.label)].join(" "),
+		}));
 	}
 	if (isBlogCollectionContent(content)) {
-		return take(await getInsights(), content.source.limit).map((item) =>
-			mapInsightToCard(item, content.itemPresentation),
-		);
+		return take(await getInsights(), content.source.limit).map((item): PCardData => ({
+			href: item.href,
+			ariaLabel: item.title,
+			title: [item.title],
+			excerpt: item.excerpt,
+			metadata: {
+				separator: content.itemPresentation.separator,
+				items: [
+					{
+						type: "category",
+						label: item.category,
+						href: `${content.itemPresentation.routes.categoryBase}${item.categorySlug}`,
+						display: content.itemPresentation.metadataDisplay,
+					},
+					{ type: "reading-time", label: item.readTime, display: content.itemPresentation.metadataDisplay },
+				],
+			},
+			secondaryMetadata: {
+				separator: content.itemPresentation.separator,
+				items: [
+					{ type: "author", label: item.author, display: content.itemPresentation.metadataDisplay },
+					{
+						type: "datetime",
+						label: item.publishedLabel,
+						datetime: item.publishedAt,
+						display: content.itemPresentation.metadataDisplay,
+					},
+				],
+			},
+			tags: item.tags.map((tag) => ({
+				label: tag.label,
+				href: `${content.itemPresentation.routes.tagBase}${tag.slug}`,
+			})),
+			tagsLabel: content.itemPresentation.tagsLabelSuffix
+				? `${item.title}${content.itemPresentation.tagsLabelSuffix}`
+				: undefined,
+			facets: {
+				category: [item.categorySlug],
+				tag: item.tags.map((tag) => tag.slug),
+			},
+			searchValue: [item.title, item.excerpt, item.category, item.author, ...item.tags.map((tag) => tag.label)].join(" "),
+			sortValue: item.publishedAt,
+			media: item.image && item.imageAlt ? {
+				src: item.image,
+				alt: item.imageAlt,
+				width: content.itemPresentation.imageWidth,
+				height: content.itemPresentation.imageHeight,
+			} : undefined,
+		}));
 	}
 	if (isComicsCollectionContent(content)) {
-		return take(await getPublications("comics"), content.source.limit).map((item) =>
-			mapPublicationToCard(item, "comics", content.itemPresentation),
-		);
+		return take(await getPublications("comics"), content.source.limit).map((item): PCardData => ({
+			href: `${content.itemPresentation.routes.base}${item.slug}`,
+			ariaLabel: `${content.itemPresentation.ariaLabelPrefix}${item.title}`,
+			title: [item.title],
+			excerpt: item.summary,
+			media: item.cover,
+			metadata: { items: item.genres.map((genre) => ({
+				type: "category",
+				label: genre.label,
+				href: `${content.itemPresentation.routes.categoryBase}${genre.slug}`,
+				display: content.itemPresentation.categoryDisplay,
+			})) },
+			tags: item.genres.map((genre) => ({
+				label: genre.label,
+				href: `${content.itemPresentation.routes.categoryBase}${genre.slug}`,
+			})),
+			tagsLabel: `${item.title}${content.itemPresentation.tagsLabelSuffix}`,
+			metrics: [{ icon: content.itemPresentation.viewsIcon, label: item.views }],
+			rating: { value: item.rating },
+			facets: { genre: item.genres.map((genre) => genre.slug), status: [item.status] },
+			searchValue: [item.title, item.summary, item.author, ...item.genres.map((genre) => genre.label)].join(" "),
+			sortValue: String(item.order).padStart(4, "0"),
+		}));
 	}
 	if (isNovelsCollectionContent(content)) {
-		return take(await getPublications("novels"), content.source.limit).map((item) =>
-			mapPublicationToCard(item, "novels", content.itemPresentation),
-		);
+		return take(await getPublications("novels"), content.source.limit).map((item): PCardData => ({
+			href: `${content.itemPresentation.routes.base}${item.slug}`,
+			ariaLabel: `${content.itemPresentation.ariaLabelPrefix}${item.title}`,
+			title: [item.title],
+			excerpt: item.summary,
+			media: item.cover,
+			metadata: { items: item.genres.map((genre) => ({
+				type: "category",
+				label: genre.label,
+				href: `${content.itemPresentation.routes.categoryBase}${genre.slug}`,
+				display: content.itemPresentation.categoryDisplay,
+			})) },
+			tags: item.genres.map((genre) => ({
+				label: genre.label,
+				href: `${content.itemPresentation.routes.categoryBase}${genre.slug}`,
+			})),
+			tagsLabel: `${item.title}${content.itemPresentation.tagsLabelSuffix}`,
+			metrics: [{ icon: content.itemPresentation.viewsIcon, label: item.views }],
+			rating: { value: item.rating },
+			facets: { genre: item.genres.map((genre) => genre.slug), status: [item.status] },
+			searchValue: [item.title, item.summary, item.author, ...item.genres.map((genre) => genre.label)].join(" "),
+			sortValue: String(item.order).padStart(4, "0"),
+		}));
 	}
 	if (isPublicationsCollectionContent(content)) {
 		const [novels, comics] = await Promise.all([
@@ -194,8 +384,36 @@ const resolveCollectionItems = async (section: CollectionSection): Promise<PCard
 			getPublications("comics"),
 		]);
 		return take([
-			...novels.map((item) => mapPublicationToCard(item, "novels", content.itemPresentation.novels)),
-			...comics.map((item) => mapPublicationToCard(item, "comics", content.itemPresentation.comics)),
+			...novels.map((item): PCardData => {
+				const presentation = content.itemPresentation.novels;
+				return {
+					href: `${presentation.routes.base}${item.slug}`,
+					ariaLabel: `${presentation.ariaLabelPrefix}${item.title}`,
+					title: [item.title], excerpt: item.summary, media: item.cover,
+					metadata: { items: item.genres.map((genre) => ({ type: "category", label: genre.label, href: `${presentation.routes.categoryBase}${genre.slug}`, display: presentation.categoryDisplay })) },
+					tags: item.genres.map((genre) => ({ label: genre.label, href: `${presentation.routes.categoryBase}${genre.slug}` })),
+					tagsLabel: `${item.title}${presentation.tagsLabelSuffix}`,
+					metrics: [{ icon: presentation.viewsIcon, label: item.views }], rating: { value: item.rating },
+					facets: { genre: item.genres.map((genre) => genre.slug), status: [item.status] },
+					searchValue: [item.title, item.summary, item.author, ...item.genres.map((genre) => genre.label)].join(" "),
+					sortValue: String(item.order).padStart(4, "0"),
+				};
+			}),
+			...comics.map((item): PCardData => {
+				const presentation = content.itemPresentation.comics;
+				return {
+					href: `${presentation.routes.base}${item.slug}`,
+					ariaLabel: `${presentation.ariaLabelPrefix}${item.title}`,
+					title: [item.title], excerpt: item.summary, media: item.cover,
+					metadata: { items: item.genres.map((genre) => ({ type: "category", label: genre.label, href: `${presentation.routes.categoryBase}${genre.slug}`, display: presentation.categoryDisplay })) },
+					tags: item.genres.map((genre) => ({ label: genre.label, href: `${presentation.routes.categoryBase}${genre.slug}` })),
+					tagsLabel: `${item.title}${presentation.tagsLabelSuffix}`,
+					metrics: [{ icon: presentation.viewsIcon, label: item.views }], rating: { value: item.rating },
+					facets: { genre: item.genres.map((genre) => genre.slug), status: [item.status] },
+					searchValue: [item.title, item.summary, item.author, ...item.genres.map((genre) => genre.label)].join(" "),
+					sortValue: String(item.order).padStart(4, "0"),
+				};
+			}),
 		], content.source.limit);
 	}
 
@@ -242,9 +460,29 @@ const buildProjectsArchive = async (
 				sort: { label: toolbar.sortLabel, value: toolbar.sortValue, options: toolbar.sortOptions },
 				view: { label: toolbar.viewLabel, gridLabel: toolbar.gridViewLabel, listLabel: toolbar.listViewLabel },
 			} },
-			cards: archiveCards(cards, visibleProjects.map((project) =>
-				mapProjectToCard(project, itemPresentation),
-			)),
+			cards: archiveCards(cards, visibleProjects.map((project): PCardData => ({
+				href: project.href,
+				ariaLabel: project.title,
+				title: [project.title],
+				excerpt: project.summary,
+				filterValue: project.categorySlug,
+				sortValue: project.year,
+				size: itemPresentation.size,
+				supportingLabel: project.outcome,
+				tags: project.tags.map((tag) => ({ label: tag.label, href: `${itemPresentation.routes.tagBase}${tag.slug}` })),
+				tagsLabel: itemPresentation.tagsLabel,
+				appearance: project.tone === "dark" ? itemPresentation.darkAppearance : itemPresentation.lightAppearance,
+				metadata: {
+					separator: itemPresentation.separator,
+					items: [
+						{ type: "index", label: project.number, display: itemPresentation.metadataDisplay },
+						{ type: "category", label: project.category.toUpperCase(), href: `${itemPresentation.routes.categoryBase}${project.categorySlug}`, display: itemPresentation.metadataDisplay },
+						{ type: "datetime", label: project.year, datetime: project.year, display: itemPresentation.metadataDisplay },
+					],
+				},
+				action: itemPresentation.actionLabel ? { label: itemPresentation.actionLabel, href: project.href, icon: itemPresentation.actionIcon } : undefined,
+				media: project.image ? { src: project.image, alt: project.alt || project.title, width: itemPresentation.imageWidth, height: itemPresentation.imageHeight } : undefined,
+			}))),
 			emptyLabel,
 			pagination: { ...pagination, totalPages: Math.max(1, Math.ceil(visibleProjects.length / pagination.pageSize)) },
 		},
@@ -290,7 +528,22 @@ const buildLabsArchive = async (
 				groups: [technologyFilter],
 			} } },
 			result: { count: visibleLabs.length, label: resultLabel },
-			cards: archiveCards(cards, visibleLabs.map((lab) => mapLabToCard(lab, itemPresentation))),
+			cards: archiveCards(cards, visibleLabs.map((lab): PCardData => ({
+				href: lab.href,
+				ariaLabel: `${itemPresentation.ariaLabelPrefix}${lab.title}`,
+				title: [lab.title], excerpt: lab.summary, media: lab.image,
+				metadata: { items: [{ type: "category", label: lab.category.label, href: `${itemPresentation.routes.categoryBase}${lab.category.slug}`, display: itemPresentation.categoryDisplay }] },
+				badge: { label: lab.statusLabel, tone: lab.status === "complete" ? itemPresentation.completeBadgeTone : itemPresentation.activeBadgeTone },
+				tags: lab.technologies.map((technology) => ({ label: technology.label, href: `${itemPresentation.routes.technologyBase}${technology.slug}` })),
+				tagsLabel: `${lab.title}${itemPresentation.tagsLabelSuffix}`,
+				metrics: [
+					{ icon: itemPresentation.metricIcons[0], label: String(lab.stars) },
+					{ icon: itemPresentation.metricIcons[1], label: String(lab.forks) },
+					{ icon: itemPresentation.metricIcons[2], label: lab.updatedLabel },
+				],
+				facets: { category: [lab.category.slug], status: [lab.status], technology: lab.technologies.map((technology) => technology.slug) },
+				searchValue: [lab.title, lab.summary, lab.category.label, ...lab.technologies.map((technology) => technology.label)].join(" "),
+			}))),
 			emptyLabel,
 			pagination: { ...pagination, totalPages: Math.max(1, Math.ceil(visibleLabs.length / pagination.pageSize)) },
 		},
@@ -361,9 +614,15 @@ const buildProductsArchive = async (
 				advertisement: { data: advertisement },
 			},
 			result: { count: visibleProducts.length, label: result.label },
-			cards: archiveCards(cards, visibleProducts.map((product) =>
-				mapProductToCard(product, itemPresentation),
-			)),
+			cards: archiveCards(cards, visibleProducts.map((product): PCardData => ({
+				href: `${itemPresentation.routes.base}${product.slug}`,
+				ariaLabel: `${itemPresentation.ariaLabelPrefix}${product.title}`,
+				title: [product.title], excerpt: product.description,
+				media: { src: product.image, alt: `${product.title}${itemPresentation.imageAltSuffix}`, width: itemPresentation.imageWidth, height: itemPresentation.imageHeight },
+				metadata: { items: [{ type: "category", label: product.category, href: `${itemPresentation.routes.categoryBase}${product.categorySlug}`, display: itemPresentation.categoryDisplay }] },
+				action: { href: itemPresentation.actionHref, label: `${itemPresentation.actionLabelPrefix}${product.title}`, icon: itemPresentation.actionIcon },
+				product: { badge: product.badge, category: product.category, categorySlug: product.categorySlug, license: itemPresentation.license, oldPrice: product.oldPrice, platform: product.platform, price: product.price, rating: product.rating, reviews: product.reviews },
+			}))),
 			emptyLabel,
 			pagination: { ...pagination, totalPages: Math.max(1, Math.ceil(visibleProducts.length / pagination.pageSize)) },
 		},
@@ -441,7 +700,22 @@ const buildBlogArchive = async (
 					appearance: sidebar.featured.header.appearance,
 					headingLevel: headingLevel(sidebar.featured.header.headingLevel),
 				},
-				cards: archiveCards(sidebar.featured.cards, insights.slice(0, sidebar.featured.limit).map((insight) => mapInsightToCard(insight, presentation))),
+				cards: archiveCards(sidebar.featured.cards, insights.slice(0, sidebar.featured.limit).map((insight): PCardData => ({
+					href: insight.href, ariaLabel: insight.title, title: [insight.title], excerpt: insight.excerpt,
+					metadata: { separator: presentation.separator, items: [
+						{ type: "category", label: insight.category, href: `${presentation.routes.categoryBase}${insight.categorySlug}`, display: presentation.metadataDisplay },
+						{ type: "reading-time", label: insight.readTime, display: presentation.metadataDisplay },
+					] },
+					secondaryMetadata: { separator: presentation.separator, items: [
+						{ type: "author", label: insight.author, display: presentation.metadataDisplay },
+						{ type: "datetime", label: insight.publishedLabel, datetime: insight.publishedAt, display: presentation.metadataDisplay },
+					] },
+					tags: insight.tags.map((tag) => ({ label: tag.label, href: `${presentation.routes.tagBase}${tag.slug}` })),
+					tagsLabel: presentation.tagsLabelSuffix ? `${insight.title}${presentation.tagsLabelSuffix}` : undefined,
+					facets: { category: [insight.categorySlug], tag: insight.tags.map((tag) => tag.slug) },
+					searchValue: [insight.title, insight.excerpt, insight.category, insight.author, ...insight.tags.map((tag) => tag.label)].join(" "), sortValue: insight.publishedAt,
+					media: insight.image && insight.imageAlt ? { src: insight.image, alt: insight.imageAlt, width: presentation.imageWidth, height: presentation.imageHeight } : undefined,
+				}))),
 				advertisement: { template: sidebar.newsletter.template, data: newsletter },
 			},
 			result: {
@@ -453,7 +727,22 @@ const buildBlogArchive = async (
 					}),
 				},
 			},
-			cards: archiveCards(cards, visibleInsights.map((insight) => mapInsightToCard(insight, presentation))),
+			cards: archiveCards(cards, visibleInsights.map((insight): PCardData => ({
+				href: insight.href, ariaLabel: insight.title, title: [insight.title], excerpt: insight.excerpt,
+				metadata: { separator: presentation.separator, items: [
+					{ type: "category", label: insight.category, href: `${presentation.routes.categoryBase}${insight.categorySlug}`, display: presentation.metadataDisplay },
+					{ type: "reading-time", label: insight.readTime, display: presentation.metadataDisplay },
+				] },
+				secondaryMetadata: { separator: presentation.separator, items: [
+					{ type: "author", label: insight.author, display: presentation.metadataDisplay },
+					{ type: "datetime", label: insight.publishedLabel, datetime: insight.publishedAt, display: presentation.metadataDisplay },
+				] },
+				tags: insight.tags.map((tag) => ({ label: tag.label, href: `${presentation.routes.tagBase}${tag.slug}` })),
+				tagsLabel: presentation.tagsLabelSuffix ? `${insight.title}${presentation.tagsLabelSuffix}` : undefined,
+				facets: { category: [insight.categorySlug], tag: insight.tags.map((tag) => tag.slug) },
+				searchValue: [insight.title, insight.excerpt, insight.category, insight.author, ...insight.tags.map((tag) => tag.label)].join(" "), sortValue: insight.publishedAt,
+				media: insight.image && insight.imageAlt ? { src: insight.image, alt: insight.imageAlt, width: presentation.imageWidth, height: presentation.imageHeight } : undefined,
+			}))),
 			emptyLabel,
 			pagination: { ...pagination, totalPages: Math.max(1, Math.ceil(visibleInsights.length / pagination.pageSize)) },
 		},
