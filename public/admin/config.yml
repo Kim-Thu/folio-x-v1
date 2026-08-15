@@ -754,6 +754,7 @@ collections:
             fields:
               - { label: ID, name: id, widget: string }
               - { label: Title, name: title, widget: string }
+              - { label: Template, name: template, widget: select, options: [grid, slider] }
               - { label: Open image label template, name: openImageLabelTemplate, widget: string }
               - { label: Image title label template, name: imageTitleLabelTemplate, widget: string }
               - label: Settings
@@ -806,6 +807,14 @@ collections:
                 fields:
                   - { label: Appearance, name: appearance, widget: select, options: [default, compact] }
                   - { label: Heading level, name: headingLevel, widget: number, value_type: int, min: 1, max: 6 }
+              - label: Cards
+                name: cards
+                widget: object
+                fields:
+                  - { label: Template, name: template, widget: hidden, default: icon-panel }
+                  - { label: Layout, name: layout, widget: hidden, default: grid }
+                  - { label: Columns, name: columns, widget: hidden, default: 4 }
+                  - { label: Gap, name: gap, widget: select, options: [none, sm, md, lg, xl] }
 
           - label: Related Labs
             name: related
@@ -835,6 +844,14 @@ collections:
                 fields:
                   - { label: Appearance, name: appearance, widget: select, options: [default, compact] }
                   - { label: Heading level, name: headingLevel, widget: number, value_type: int, min: 1, max: 6 }
+              - label: Cards
+                name: cards
+                widget: object
+                fields:
+                  - { label: Template, name: template, widget: hidden, default: media-caption }
+                  - { label: Layout, name: layout, widget: hidden, default: grid }
+                  - { label: Columns, name: columns, widget: hidden, default: 4 }
+                  - { label: Gap, name: gap, widget: select, options: [none, sm, md, lg, xl] }
 
       - name: publication_catalog
         label: Giao diện Comics / Novels
