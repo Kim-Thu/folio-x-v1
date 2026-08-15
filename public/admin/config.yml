@@ -1,7 +1,7 @@
 backend:
   name: github
   repo: Kim-Thu/folio-x-v1
-  branch: agent/cms-content-migration
+  branch: main
 
 local_backend: true
 
@@ -91,6 +91,7 @@ collections:
               - { label: Author, name: author, widget: string, required: false }
               - { label: Published at, name: publishedAt, widget: string, required: false }
               - { label: Updated at, name: updatedAt, widget: string, required: false }
+          - { label: SEO, name: seo, widget: hidden, required: false }
           - label: Content
             name: content
             widget: object
@@ -154,6 +155,15 @@ collections:
                               - { label: Variant, name: variant, widget: select, required: false, options: [primary, secondary, outline, ghost, text, text-subtle, pagination, tab, view] }
                               - { label: Tone, name: tone, widget: select, required: false, options: [dark, light] }
                               - { label: Size, name: size, widget: select, required: false, options: [xs, sm, md, lg] }
+                          - label: Social links
+                            name: socialLinks
+                            widget: list
+                            required: false
+                            fields:
+                              - { label: Label, name: label, widget: string }
+                              - { label: Short label, name: shortLabel, widget: string }
+                              - { label: Icon, name: icon, widget: select, required: false, options: [github, linkedin] }
+                              - { label: Href, name: href, widget: string }
                           - { label: Actions label, name: actionsLabel, widget: string, required: false }
                           - { label: Scroll label, name: scrollLabel, widget: string, required: false }
                   - label: Collection
@@ -206,6 +216,65 @@ collections:
                               - { label: Excerpt, name: excerpt, widget: text, required: false }
                               - { label: Media, name: media, widget: object, required: false, fields: *image_fields }
                               - { label: Appearance, name: appearance, widget: select, required: false, options: [default, inverse] }
+                          - label: Item presentation
+                            name: itemPresentation
+                            widget: object
+                            required: false
+                            fields:
+                              - label: Routes
+                                name: routes
+                                widget: object
+                                required: false
+                                fields:
+                                  - { label: Base, name: base, widget: string, required: false }
+                                  - { label: Category base, name: categoryBase, widget: string, required: false }
+                                  - { label: Tag base, name: tagBase, widget: string, required: false }
+                                  - { label: Technology base, name: technologyBase, widget: string, required: false }
+                              - { label: ARIA label prefix, name: ariaLabelPrefix, widget: string, required: false }
+                              - { label: Image alt suffix, name: imageAltSuffix, widget: string, required: false }
+                              - { label: Image width, name: imageWidth, widget: number, value_type: int, min: 1, required: false }
+                              - { label: Image height, name: imageHeight, widget: number, value_type: int, min: 1, required: false }
+                              - { label: Category display, name: categoryDisplay, widget: select, required: false, options: [icon, icon-text, text] }
+                              - { label: Action href, name: actionHref, widget: string, required: false }
+                              - { label: Action label prefix, name: actionLabelPrefix, widget: string, required: false }
+                              - { label: Action label, name: actionLabel, widget: string, required: false }
+                              - { label: Action icon, name: actionIcon, widget: select, required: false, options: [arrowLeft, arrowRight, arrowUp, arrowUpRight, arrowPath, archiveBox, bars3, bolt, chevronLeft, chevronDown, chevronRight, github, globeAlt, lightBulb, linkedin, xMark, folder01, facebook, link, twitter, userCircle, calendar03, check, clock01, gridView, listView, play, search, shoppingBag, star, questionMarkCircle, bookOpen, bookmark, eye, lockClosed, adjustmentsHorizontal, moon, handThumbUp, heart, faceSmile, faceFrown] }
+                              - { label: License, name: license, widget: select, required: false, options: [free, pro] }
+                              - { label: Separator, name: separator, widget: string, required: false }
+                              - { label: Size, name: size, widget: select, required: false, options: [standard, wide] }
+                              - { label: Tags label, name: tagsLabel, widget: string, required: false }
+                              - { label: Light appearance, name: lightAppearance, widget: select, required: false, options: [default, inverse] }
+                              - { label: Dark appearance, name: darkAppearance, widget: select, required: false, options: [default, inverse] }
+                              - { label: Metadata display, name: metadataDisplay, widget: select, required: false, options: [icon, icon-text, text] }
+                              - { label: Complete badge tone, name: completeBadgeTone, widget: select, required: false, options: [brand, neutral, inverse] }
+                              - { label: Active badge tone, name: activeBadgeTone, widget: select, required: false, options: [brand, neutral, inverse] }
+                              - { label: Tags label suffix, name: tagsLabelSuffix, widget: string, required: false }
+                              - label: Metric icons
+                                name: metricIcons
+                                widget: list
+                                required: false
+                                field: { label: Icon, name: icon, widget: select, options: [arrowLeft, arrowRight, arrowUp, arrowUpRight, arrowPath, archiveBox, bars3, bolt, chevronLeft, chevronDown, chevronRight, github, globeAlt, lightBulb, linkedin, xMark, folder01, facebook, link, twitter, userCircle, calendar03, check, clock01, gridView, listView, play, search, shoppingBag, star, questionMarkCircle, bookOpen, bookmark, eye, lockClosed, adjustmentsHorizontal, moon, handThumbUp, heart, faceSmile, faceFrown] }
+                              - { label: Views icon, name: viewsIcon, widget: select, required: false, options: [arrowLeft, arrowRight, arrowUp, arrowUpRight, arrowPath, archiveBox, bars3, bolt, chevronLeft, chevronDown, chevronRight, github, globeAlt, lightBulb, linkedin, xMark, folder01, facebook, link, twitter, userCircle, calendar03, check, clock01, gridView, listView, play, search, shoppingBag, star, questionMarkCircle, bookOpen, bookmark, eye, lockClosed, adjustmentsHorizontal, moon, handThumbUp, heart, faceSmile, faceFrown] }
+                              - label: Comics presentation
+                                name: comics
+                                widget: object
+                                required: false
+                                fields: &publication_item_presentation_fields
+                                  - label: Routes
+                                    name: routes
+                                    widget: object
+                                    fields:
+                                      - { label: Base, name: base, widget: string }
+                                      - { label: Category base, name: categoryBase, widget: string }
+                                  - { label: ARIA label prefix, name: ariaLabelPrefix, widget: string }
+                                  - { label: Category display, name: categoryDisplay, widget: select, options: [icon, icon-text, text] }
+                                  - { label: Tags label suffix, name: tagsLabelSuffix, widget: string }
+                                  - { label: Views icon, name: viewsIcon, widget: select, options: [arrowLeft, arrowRight, arrowUp, arrowUpRight, arrowPath, archiveBox, bars3, bolt, chevronLeft, chevronDown, chevronRight, github, globeAlt, lightBulb, linkedin, xMark, folder01, facebook, link, twitter, userCircle, calendar03, check, clock01, gridView, listView, play, search, shoppingBag, star, questionMarkCircle, bookOpen, bookmark, eye, lockClosed, adjustmentsHorizontal, moon, handThumbUp, heart, faceSmile, faceFrown] }
+                              - label: Novels presentation
+                                name: novels
+                                widget: object
+                                required: false
+                                fields: *publication_item_presentation_fields
                           - label: Cards
                             name: cards
                             widget: object
@@ -289,7 +358,7 @@ collections:
                 summary: "{{fields.id}} — {{fields.type}}"
                 types:
                   - label: Blog page header
-                    name: page_header
+                    name: page-header
                     widget: object
                     fields:
                       - { label: ID, name: id, widget: string }
@@ -1276,6 +1345,7 @@ collections:
       - { label: Order, name: order, widget: number, value_type: int, min: 1 }
       - { label: Slug, name: slug, widget: string }
       - { label: Title, name: title, widget: string }
+      - { label: Client, name: client, widget: string }
       - { label: Category, name: category, widget: string }
       - { label: Category slug, name: categorySlug, widget: string }
       - { label: Year, name: year, widget: string }
@@ -1290,6 +1360,15 @@ collections:
         fields: &taxonomy_term_fields
           - { label: Label, name: label, widget: string }
           - { label: Slug, name: slug, widget: string }
+      - label: Content sections
+        name: sections
+        widget: list
+        fields:
+          - { label: Title, name: title, widget: string }
+          - label: Paragraphs
+            name: paragraphs
+            widget: list
+            field: { label: Paragraph, name: paragraph, widget: text }
       - label: Detail
         name: detail
         widget: object
@@ -1297,6 +1376,7 @@ collections:
         fields:
           - { label: Role, name: role, widget: string, required: false }
           - { label: Duration, name: duration, widget: string, required: false }
+          - { label: Show back action, name: showBackAction, widget: boolean, required: false }
           - { label: Live URL, name: liveUrl, widget: string, required: false }
           - { label: Source URL, name: sourceUrl, widget: string, required: false }
           - label: Features
@@ -1366,7 +1446,7 @@ collections:
                 summary: "{{fields.id}} — {{fields.type}}"
                 types:
                   - label: Project header
-                    name: project_header
+                    name: page-header
                     widget: object
                     fields:
                       - { label: ID, name: id, widget: string }
@@ -1436,7 +1516,7 @@ collections:
                         fields:
                           - { label: Source, name: source, widget: string }
                   - label: Post navigation
-                    name: post_navigation
+                    name: post-navigation
                     widget: object
                     fields:
                       - { label: ID, name: id, widget: string }
@@ -1519,7 +1599,7 @@ collections:
                 fields: *image_fields
               - { label: Caption, name: caption, widget: text, required: false }
           - label: Feature grid
-            name: feature_grid
+            name: feature-grid
             widget: object
             fields:
               - { label: Type, name: type, widget: hidden, default: feature-grid }
@@ -1591,7 +1671,7 @@ collections:
               - { label: Controls, name: controls, widget: boolean, default: true }
               - { label: Autoplay, name: autoplay, widget: boolean, default: false }
           - label: Metric grid
-            name: metric_grid
+            name: metric-grid
             widget: object
             fields:
               - { label: Type, name: type, widget: hidden, default: metric-grid }
@@ -1748,6 +1828,7 @@ collections:
             widget: list
             required: false
             summary: "#{{fields.number}} — {{fields.title}}"
+            typeKey: kind
             types:
               - label: Prose chapter
                 name: prose
@@ -1767,7 +1848,7 @@ collections:
                       - { label: Kind, name: kind, widget: select, required: false, options: [paragraph, emphasis, separator] }
                       - { label: Text, name: text, widget: text }
               - label: Sequential media chapter
-                name: sequential_media
+                name: sequential-media
                 widget: object
                 fields:
                   - { label: Kind, name: kind, widget: hidden, default: sequential-media }
