@@ -1,5 +1,3 @@
-import type { PageRegion } from "@/types/components/object/project/layout/PLayout.types";
-
 export type PPageTemplate =
 	| "stacked"
 	| "lead-content"
@@ -9,9 +7,4 @@ export type PPageTemplate =
 
 export interface PPageProps {
 	template: PPageTemplate;
-	regions: PageRegion[];
-}
-
-export interface PPageTemplateProps {
-	regions: PageRegion[];
 }

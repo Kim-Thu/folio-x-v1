@@ -1,22 +1,3 @@
----
-import PLayout from "@/components/object/project/layout/PLayout.astro";
-import type { PPageTemplateProps } from "@/types/components/object/project/page/PPage.types";
-
-const { regions } = Astro.props as PPageTemplateProps;
-const lead = regions.filter(
-	(region) => region.component === "page-header" || region.component === "hero",
-);
-const navigation = regions.filter(
-	(region) => region.component === "post-navigation",
-);
-const content = regions.filter(
-	(region) =>
-		region.component !== "page-header" &&
-		region.component !== "hero" &&
-		region.component !== "post-navigation",
-);
----
-
-<PLayout regions={lead} />
-<PLayout regions={content} />
-<PLayout regions={navigation} />
+<slot name="lead" />
+<slot />
+<slot name="navigation" />

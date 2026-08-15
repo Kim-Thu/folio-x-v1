@@ -1,5 +1,5 @@
 import { getPublicationDetailSettings, getPublications } from "@/data/cms";
-import type { PageRegion } from "@/types/components/object/project/layout/PLayout.types";
+import type { PageRegion } from "@/types/components/pages/builder/PageRegion.types";
 import type { ReaderPageData } from "@/types/components/pages/reader/ReaderPage.types";
 
 type CatalogSlug = "comics" | "novels";

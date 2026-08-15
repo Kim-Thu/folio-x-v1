@@ -1,6 +1,5 @@
 ---
 import LPage from "@/components/layout/LPage.astro";
-import PLayout from "@/components/object/project/layout/PLayout.astro";
 import PageLeadContent from "@/components/object/project/page/templates/PageLeadContent.astro";
 import PageLeadContentClosing from "@/components/object/project/page/templates/PageLeadContentClosing.astro";
 import PageLeadContentNavigation from "@/components/object/project/page/templates/PageLeadContentNavigation.astro";
@@ -10,7 +9,7 @@ import type {
 	PPageTemplate,
 } from "@/types/components/object/project/page/PPage.types";
 
-const { template, regions } = Astro.props as PPageProps;
+const { template } = Astro.props as PPageProps;
 
 const templates = {
 	"lead-content": PageLeadContent,
@@ -23,5 +22,14 @@ const PageTemplate = template === "stacked" ? undefined : templates[template];
 ---
 
 <LPage data-page-template={template}>
-	{PageTemplate ? <PageTemplate {regions} /> : <PLayout {regions} />}
+	{PageTemplate ? (
+		<PageTemplate>
+			{Astro.slots.has("lead") && <slot name="lead" slot="lead" />}
+			{Astro.slots.has("navigation") && <slot name="navigation" slot="navigation" />}
+			<slot />
+			{Astro.slots.has("closing") && <slot name="closing" slot="closing" />}
+		</PageTemplate>
+	) : (
+		<slot />
+	)}
 </LPage>

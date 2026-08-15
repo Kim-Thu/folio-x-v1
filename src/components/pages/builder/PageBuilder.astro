@@ -1,7 +1,7 @@
 ---
 import LPage from "@/components/layout/LPage.astro";
-import PLayout from "@/components/object/project/layout/PLayout.astro";
 import PPage from "@/components/object/project/page/PPage.astro";
+import PageRegionRenderer from "@/components/pages/builder/PageRegion.astro";
 import {
 	getInsights,
 	getLabs,
@@ -28,10 +28,8 @@ import type {
 	PageBuilderProps,
 	PageSectionData,
 } from "@/types/components/pages/builder/PageBuilder.types";
-import type {
-	ArchiveRegion,
-	PageRegion,
-} from "@/types/components/object/project/layout/PLayout.types";
+import type { PageArchiveRegion } from "@/types/components/pages/builder/PageArchiveRegion.types";
+import type { PageRegion } from "@/types/components/pages/builder/PageRegion.types";
 import type { CIconName } from "@/types/components/object/component/CIcon.types";
 import type { PAdvertisementData } from "@/types/components/object/project/advertisement/PAdvertisement.types";
 import type { PCardData, PCardProps } from "@/types/components/object/project/card/PCard.types";
@@ -164,7 +162,7 @@ const resolveCollectionItems = async (section: CollectionSection): Promise<PCard
 	}
 };
 
-const buildProjectsArchive = async (section: ProjectsArchiveSection): Promise<ArchiveRegion> => {
+const buildProjectsArchive = async (section: ProjectsArchiveSection): Promise<PageArchiveRegion> => {
 	const { toolbar, cards, routes, itemPresentation, pagination, emptyLabel } = section.content;
 	const projects = await getProjects();
 	const visibleProjects = projects.filter((project) => {
@@ -204,7 +202,7 @@ const buildProjectsArchive = async (section: ProjectsArchiveSection): Promise<Ar
 	};
 };
 
-const buildLabsArchive = async (section: LabsArchiveSection): Promise<ArchiveRegion> => {
+const buildLabsArchive = async (section: LabsArchiveSection): Promise<PageArchiveRegion> => {
 	const { toolbar, sidebar, routes, cards, itemPresentation, pagination, emptyLabel, resultLabel } = section.content;
 	const labs = await getLabs();
 	const visibleLabs = labs.filter((lab) => (!context.categorySlug || lab.category.slug === context.categorySlug) && (!context.technologySlug || lab.technologies.some((technology) => technology.slug === context.technologySlug)));
@@ -253,7 +251,7 @@ const buildLabsArchive = async (section: LabsArchiveSection): Promise<ArchiveReg
 	};
 };
 
-const buildProductsArchive = async (section: ProductsArchiveSection): Promise<ArchiveRegion> => {
+const buildProductsArchive = async (section: ProductsArchiveSection): Promise<PageArchiveRegion> => {
 	const { toolbar, sidebar, routes, cards, itemPresentation, pagination, emptyLabel, result } = section.content;
 	const [products, categories] = await Promise.all([getProducts(), getProductCategories()]);
 	const visibleProducts = context.categorySlug ? products.filter((product) => product.categorySlug === context.categorySlug) : products;
@@ -318,7 +316,7 @@ const buildProductsArchive = async (section: ProductsArchiveSection): Promise<Ar
 	};
 };
 
-const buildBlogArchive = async (section: BlogArchiveSection): Promise<ArchiveRegion> => {
+const buildBlogArchive = async (section: BlogArchiveSection): Promise<PageArchiveRegion> => {
 	const { toolbar, sidebar, itemPresentation, result, cards, pagination, emptyLabel } = section.content;
 	const insights = await getInsights();
 	const visibleInsights = insights.filter((insight) =>
@@ -465,12 +463,49 @@ const pageTemplate = "page" in props
 	? props.page.content.layout.template
 	: props.pageTemplate;
 const isHome = "page" in props && props.page.slug === "/";
+
+const leadRegions: PageRegion[] = pageTemplate === "stacked"
+	? []
+	: regions.filter(
+		(region) => region.component === "page-header" || region.component === "hero",
+	);
+const navigationRegions: PageRegion[] = pageTemplate === "lead-content-navigation"
+	? regions.filter((region) => region.component === "post-navigation")
+	: pageTemplate === "lead-navigation-content"
+		? regions.filter((region) => region.component === "tabs")
+		: [];
+const closingRegions: PageRegion[] = pageTemplate === "lead-content-closing"
+	? regions.filter((region) => region.component === "cta")
+	: [];
+const contentRegions: PageRegion[] = isHome || pageTemplate === "stacked"
+	? regions
+	: regions.filter((region) => {
+		if (region.component === "page-header" || region.component === "hero") return false;
+		if (
+			pageTemplate === "lead-content-navigation" &&
+			region.component === "post-navigation"
+		) return false;
+		if (
+			pageTemplate === "lead-navigation-content" &&
+			region.component === "tabs"
+		) return false;
+		if (
+			pageTemplate === "lead-content-closing" &&
+			region.component === "cta"
+		) return false;
+		return true;
+	});
 ---
 
 {isHome ? (
 	<LPage data-page-template="home">
-		<PLayout {regions} />
+		{contentRegions.map((region) => <PageRegionRenderer {region} />)}
 	</LPage>
 ) : (
-	<PPage template={pageTemplate} {regions} />
+	<PPage template={pageTemplate}>
+		{leadRegions.map((region) => <PageRegionRenderer {region} slot="lead" />)}
+		{navigationRegions.map((region) => <PageRegionRenderer {region} slot="navigation" />)}
+		{contentRegions.map((region) => <PageRegionRenderer {region} />)}
+		{closingRegions.map((region) => <PageRegionRenderer {region} slot="closing" />)}
+	</PPage>
 )}
