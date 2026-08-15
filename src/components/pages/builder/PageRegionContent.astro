@@ -28,28 +28,6 @@ import GroupRegion from "@/components/pages/builder/GroupRegion.astro";
 import type { PageRegionProps } from "@/types/components/pages/builder/PageRegion.types";
 
 const { region } = Astro.props as PageRegionProps;
-
-const cardsBox = region.component === "cards"
-	? region.props.box ?? {
-			surface: region.props.panel ? "glass" : "plain",
-			radius: region.props.panel ? "md" : "none",
-			spacing: region.props.panel ? "sm" : "none",
-		} as const
-	: undefined;
-const cardsStack = region.component === "cards"
-	? region.props.stack ?? { columns: "one", gap: "md" } as const
-	: undefined;
-
-const detailsBox = region.component === "details"
-	? region.props.box ?? {
-			surface: region.props.title ? "glass" : "plain",
-			radius: region.props.title ? "md" : "none",
-			spacing: region.props.title ? "md" : "none",
-		} as const
-	: undefined;
-const detailsStack = region.component === "details"
-	? region.props.stack ?? { columns: "one", gap: "sm" } as const
-	: undefined;
 ---
 
 {region.component === "page-header" && <PPageHeader {...region.props} />}
@@ -57,9 +35,9 @@ const detailsStack = region.component === "details"
 {region.component === "section-header" && <PSectionHeader {...region.props} />}
 {region.component === "article" && <PArticle {...region.props} />}
 {region.component === "reviews" && <PReviews {...region.props} />}
-{region.component === "cards" && cardsBox && cardsStack && (
-	<CBox {...cardsBox}>
-		<CColumns {...cardsStack}>
+{region.component === "cards" && (
+	<CBox {...region.props.box}>
+		<CColumns {...region.props.stack}>
 			{region.props.header && region.props.headerAction ? (
 				<CRow justify="between" align="end">
 					<PSectionHeader {...region.props.header} />
@@ -79,7 +57,7 @@ const detailsStack = region.component === "details"
 {region.component === "tabs" && <CTabList {...region.props} />}
 {region.component === "gallery" && (
 	region.props.header || region.props.stack ? (
-		<CColumns {...(region.props.stack ?? { columns: "one", gap: "md" })}>
+		<CColumns {...region.props.stack}>
 			{region.props.header && <PSectionHeader {...region.props.header} />}
 			<PGallery
 				items={region.props.items}
@@ -111,9 +89,9 @@ const detailsStack = region.component === "details"
 )}
 {region.component === "entry-index" && <PEntryIndex {...region.props} />}
 {region.component === "reader" && <PReader {...region.props} />}
-{region.component === "details" && detailsBox && detailsStack && (
-	<CBox {...detailsBox}>
-		<CColumns {...detailsStack}>
+{region.component === "details" && (
+	<CBox {...region.props.box}>
+		<CColumns {...region.props.stack}>
 			{region.props.title && region.props.header ? (
 				<PSectionHeader
 					data={{ title: region.props.title }}
@@ -123,7 +101,7 @@ const detailsStack = region.component === "details"
 			) : region.props.title && (
 				<CHeading level={2} variant="h5">{region.props.title}</CHeading>
 			)}
-			<CDescriptionList {...region.props.list} variant={region.props.title ? "default" : region.props.list.variant} />
+			<CDescriptionList {...region.props.list} variant={region.props.list.variant} />
 			{region.props.tags && (
 				<CColumns columns="one" gap="sm">
 					<CHeading level={3} variant="h6">{region.props.tags.title}</CHeading>
