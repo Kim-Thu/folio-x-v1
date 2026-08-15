@@ -1,6 +1,5 @@
 const COMPLETION_DURATION = 300;
 const PROGRESS_DURATION = 900;
-const MINIMUM_VISIBLE_DURATION = PROGRESS_DURATION;
 const FADE_FALLBACK_DURATION = 600;
 const INITIAL_PROGRESS_LIMIT = 92;
 const LAST_TIP_STORAGE_KEY = "loading-screen:last-tip";
@@ -48,7 +47,6 @@ export function initLoadingScreen(): void {
 	const documentRoot = document.documentElement;
 	documentRoot.classList.add("overflow-hidden");
 
-	const startedAt = performance.now();
 	let currentValue = 0;
 	let frameId = 0;
 
@@ -103,17 +101,9 @@ export function initLoadingScreen(): void {
 
 	animateProgress(0, INITIAL_PROGRESS_LIMIT, PROGRESS_DURATION);
 
-	const completeAfterMinimumDuration = (): void => {
-		const remainingDuration = Math.max(
-			MINIMUM_VISIBLE_DURATION - (performance.now() - startedAt),
-			0,
-		);
-		window.setTimeout(complete, remainingDuration);
-	};
-
-	if (document.readyState === "complete") completeAfterMinimumDuration();
-	else
-		window.addEventListener("load", completeAfterMinimumDuration, {
-			once: true,
-		});
+	if (document.readyState === "loading") {
+		document.addEventListener("DOMContentLoaded", complete, { once: true });
+	} else {
+		complete();
+	}
 }
