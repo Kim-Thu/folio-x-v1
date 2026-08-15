@@ -40,12 +40,16 @@ const { id, label, title, sort, listViewLabel, items, visibleCount = items.lengt
 						</CRow>
 						</CGridItem>
 						<CGridItem mdSpan={2}>
-						<CMetadata
-							data={{ items: [{ type: "datetime", label: item.publishedLabel, datetime: item.publishedAt, display: "text" }] }}
-							slots={{ author: false, category: false, index: false, readingTime: false, icons: false }}
-						/>
+							{item.publishedAt && item.publishedLabel && (
+								<CMetadata
+									data={{ items: [{ type: "datetime", label: item.publishedLabel, datetime: item.publishedAt, display: "text" }] }}
+									slots={{ author: false, category: false, index: false, readingTime: false, icons: false }}
+								/>
+							)}
 						</CGridItem>
-						<CGridItem mdSpan={2}><CFeature icon="eye" label={item.views} appearance="caption" /></CGridItem>
+						<CGridItem mdSpan={2}>
+							{item.views && <CFeature icon="eye" label={item.views} appearance="caption" />}
+						</CGridItem>
 						<CGridItem mdSpan={2}>
 							{item.action && <CButton {...item.action} href={item.href} />}
 						</CGridItem>
