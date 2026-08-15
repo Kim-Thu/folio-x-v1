@@ -1,0 +1,42 @@
+name: Run publication catalog migration
+
+on:
+  push:
+    branches:
+      - agent/cms-content-migration
+
+permissions:
+  contents: write
+
+jobs:
+  migrate:
+    if: "${{ github.actor != 'github-actions[bot]' }}"
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: agent/cms-content-migration
+          fetch-depth: 0
+
+      - name: Run migration source
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          from textwrap import dedent
+
+          workflow = Path('.github/workflows/migrate-publication-catalog-pagebuilder.yml').read_text(encoding='utf-8')
+          start_marker = "          python - <<'PY'\n"
+          end_marker = "\n          PY\n\n      - name: Commit migration"
+          start = workflow.index(start_marker) + len(start_marker)
+          end = workflow.index(end_marker, start)
+          source = dedent(workflow[start:end])
+          exec(compile(source, 'publication-catalog-migration.py', 'exec'))
+          PY
+
+      - name: Commit migration
+        run: |
+          git config user.name "Kim-Thu"
+          git config user.email "49784235+Kim-Thu@users.noreply.github.com"
+          git add src public/admin/config.yml
+          git commit -m "Unify publication catalogs with PageBuilder"
+          git push origin HEAD:agent/cms-content-migration
