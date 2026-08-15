@@ -36,7 +36,6 @@
       "spacing": "sm"
     },
     "trendingTitle": "Trending",
-    "popularAuthorsTitle": "Popular authors",
     "listCards": {
       "template": "compact-media",
       "layout": "list",
@@ -48,13 +47,7 @@
         "action": false
       }
     },
-    "authorPlaceholder": {
-      "src": "/uploads/avatar-placehoder.png",
-      "width": 512,
-      "height": 512
-    },
-    "trendingLimit": 5,
-    "authorLimit": 5
+    "trendingLimit": 5
   },
   "main": {
     "featuredTitle": "Featured",
@@ -107,7 +100,6 @@
       "archiveBox",
       "folder01"
     ],
-    "genreWorksTemplate": "{count} works",
-    "authorWorksTemplate": "{count} works"
+    "genreWorksTemplate": "{count} works"
   }
 }

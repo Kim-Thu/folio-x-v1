@@ -4,8 +4,10 @@ import {
 	getProductCategories,
 	getProducts,
 	getProjects,
+	getPublicationCatalogSettings,
 	getPublications,
 } from "@/data/cms";
+import type { CIconName } from "@/types/components/object/component/CIcon.types";
 import type { PAdvertisementData } from "@/types/components/object/project/advertisement/PAdvertisement.types";
 import type { PCtaProps } from "@/types/components/object/project/cta/PCta.types";
 import type { PHeroProps } from "@/types/components/object/project/hero/PHero.types";
@@ -20,6 +22,7 @@ import type {
 	ResolvedPageData,
 } from "@/types/components/pages/builder/PageBuilder.types";
 import type { PageArchiveRegion } from "@/types/components/pages/builder/PageArchiveRegion.types";
+import type { PageCollectionRegion } from "@/types/components/pages/builder/PageCollectionRegion.types";
 import type { PageRegion } from "@/types/components/pages/builder/PageRegion.types";
 
 type CollectionSection = Extract<PageSectionData, { type: "collection" }>;
@@ -418,6 +421,221 @@ const resolveCollectionItems = async (section: CollectionSection): Promise<PCard
 	}
 
 	return [];
+};
+
+
+type PublicationCatalogSettings = Awaited<ReturnType<typeof getPublicationCatalogSettings>>;
+
+const publicationCatalogCardProps = (
+	config: PublicationCatalogSettings["main"]["featuredCards"],
+	items: PCardData[],
+): PCardProps => ({
+	template: config.template as PCardProps["template"],
+	layout: config.layout as PCardProps["layout"],
+	columns: cardColumns(config.columns),
+	gap: config.gap as PCardProps["gap"],
+	mediaRatio: config.mediaRatio as PCardProps["mediaRatio"],
+	slots: config.slots,
+	items,
+});
+
+const resolvePublicationCatalogCollection = async (
+	section: CollectionSection,
+): Promise<PageCollectionRegion> => {
+	const content = section.content;
+	if (!("source" in content) || !(
+		isComicsCollectionContent(content) || isNovelsCollectionContent(content)
+	)) {
+		throw new Error(`Invalid publication catalog collection "${section.id}".`);
+	}
+
+	const catalog = content.source.collection;
+	const [allEntries, settings] = await Promise.all([
+		getPublications(catalog),
+		getPublicationCatalogSettings(),
+	]);
+	const entries = take(allEntries, content.source.limit);
+	const presentation = content.itemPresentation;
+	const cards: PCardData[] = entries.map((entry) => ({
+		href: `${presentation.routes.base}${entry.slug}`,
+		ariaLabel: `${presentation.ariaLabelPrefix}${entry.title}`,
+		title: [entry.title],
+		excerpt: entry.summary,
+		media: entry.cover,
+		metadata: {
+			items: entry.genres.map((genre) => ({
+				type: "category",
+				label: genre.label,
+				href: `${presentation.routes.categoryBase}${genre.slug}`,
+				display: presentation.categoryDisplay,
+			})),
+		},
+		tags: entry.genres.map((genre) => ({
+			label: genre.label,
+			href: `${presentation.routes.categoryBase}${genre.slug}`,
+		})),
+		tagsLabel: `${entry.title}${presentation.tagsLabelSuffix}`,
+		metrics: [{ icon: presentation.viewsIcon, label: entry.views }],
+		rating: { value: entry.rating },
+		facets: {
+			genre: entry.genres.map((genre) => genre.slug),
+			status: [entry.status],
+		},
+		searchValue: [
+			entry.title,
+			entry.summary,
+			entry.author,
+			...entry.genres.map((genre) => genre.label),
+		].join(" "),
+		sortValue: String(entry.order).padStart(4, "0"),
+	}));
+
+	const genreMap = new Map<string, { label: string; slug: string; count: number }>();
+	for (const entry of entries) {
+		for (const genre of entry.genres) {
+			const current = genreMap.get(genre.slug);
+			genreMap.set(genre.slug, {
+				label: genre.label,
+				slug: genre.slug,
+				count: (current?.count ?? 0) + 1,
+			});
+		}
+	}
+	const genres = [...genreMap.values()].sort((first, second) => second.count - first.count);
+	const genreIcons = settings.main.genreIcons as CIconName[];
+	const popularGenreCards: PCardData[] = genres
+		.slice(0, settings.main.popularGenresLimit)
+		.map((genre, index) => ({
+			href: `${presentation.routes.categoryBase}${genre.slug}`,
+			ariaLabel: genre.label,
+			title: [genre.label],
+			excerpt: settings.main.genreWorksTemplate.replace("{count}", String(genre.count)),
+			icon: genreIcons[index % genreIcons.length],
+		}));
+
+	const panel = {
+		surface: settings.sidebar.panel.surface as "glass",
+		radius: settings.sidebar.panel.radius as "md",
+		spacing: settings.sidebar.panel.spacing as "sm",
+	};
+	const compactHeader = (title: string) => ({
+		data: { title },
+		appearance: "compact" as const,
+		headingLevel: 2 as const,
+	});
+
+	return {
+		key: section.id,
+		component: "collection",
+		section: sectionFrame(section),
+		props: {
+			template: "sidebar",
+			header: sectionHeader(section),
+			toolbar: {
+				data: {
+					search: {
+						id: `${catalog}-search`,
+						label: settings.toolbar.searchLabel,
+						name: "search",
+						placeholder: settings.toolbar.searchPlaceholder,
+					},
+					selects: [
+						{
+							control: "genre",
+							id: `${catalog}-genre`,
+							label: settings.toolbar.genreLabel,
+							value: "all",
+							options: [
+								{ label: settings.toolbar.allGenresLabel, value: "all" },
+								...genres.map((genre) => ({ label: genre.label, value: genre.slug })),
+							],
+						},
+						{
+							control: "status",
+							id: `${catalog}-status`,
+							label: settings.toolbar.statusLabel,
+							value: "all",
+							options: [
+								{ label: settings.toolbar.allStatusesLabel, value: "all" },
+								{ label: settings.toolbar.ongoingLabel, value: "ongoing" },
+								{ label: settings.toolbar.completeLabel, value: "complete" },
+							],
+						},
+					],
+					sort: {
+						label: settings.toolbar.sortLabel,
+						value: settings.toolbar.sortValue,
+						options: settings.toolbar.sortOptions,
+					},
+					view: {
+						label: settings.toolbar.viewLabel,
+						gridLabel: settings.toolbar.gridViewLabel,
+						listLabel: settings.toolbar.listViewLabel,
+					},
+				},
+			},
+			sidebar: {
+				layout: {
+					label: settings.sidebar.labelTemplate.replace("{catalog}", catalog),
+					position: settings.sidebar.position,
+					sticky: settings.sidebar.sticky,
+				},
+				panel,
+				filter: {
+					data: {
+						groups: [{
+							appearance: "controls",
+							control: "genre",
+							legend: settings.sidebar.genresLegend,
+							name: `${catalog}-genres`,
+							type: "radio",
+							options: [
+								{
+									label: settings.sidebar.allGenresShortLabel,
+									value: "all",
+									count: entries.length,
+									checked: true,
+								},
+								...genres.map((genre) => ({
+									label: genre.label,
+									value: genre.slug,
+									count: genre.count,
+								})),
+							],
+						}],
+					},
+				},
+				cardGroups: [{
+					header: compactHeader(settings.sidebar.trendingTitle),
+					cards: publicationCatalogCardProps(
+						settings.sidebar.listCards,
+						cards.slice(0, settings.sidebar.trendingLimit),
+					),
+				}],
+			},
+			cardGroups: [
+				{
+					header: compactHeader(settings.main.featuredTitle),
+					cards: publicationCatalogCardProps(
+						settings.main.featuredCards,
+						cards.slice(0, settings.main.featuredLimit),
+					),
+				},
+				{
+					header: compactHeader(settings.main.latestTitle),
+					cards: publicationCatalogCardProps(
+						settings.main.latestCards,
+						cards.slice(0, settings.main.latestLimit),
+					),
+				},
+				{
+					header: compactHeader(settings.main.popularGenresTitle),
+					cards: publicationCatalogCardProps(settings.main.genreCards, popularGenreCards),
+					panel,
+				},
+			],
+		},
+	};
 };
 
 const archiveCards = (cards: CollectionSection["content"]["cards"], items: PCardData[]): PCardProps => ({
@@ -959,6 +1177,9 @@ const resolveSection = async (
 				props: resolveCtaProps(section),
 			};
 		case "collection": {
+			if (section.template === "sidebar") {
+				return resolvePublicationCatalogCollection(section);
+			}
 			const items = await resolveCollectionItems(section);
 			return {
 				key: section.id,

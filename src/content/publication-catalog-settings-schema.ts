@@ -39,11 +39,8 @@ export const publicationCatalogSettingsSchema = z.object({
 		allGenresShortLabel: z.string().min(1),
 		panel: z.object({ surface: z.string().min(1), radius: z.string().min(1), spacing: z.string().min(1) }),
 		trendingTitle: z.string().min(1),
-		popularAuthorsTitle: z.string().min(1),
 		listCards: cardConfigSchema,
-		authorPlaceholder: z.object({ src: z.string().min(1), width: z.number().int().positive(), height: z.number().int().positive() }),
 		trendingLimit: z.number().int().positive(),
-		authorLimit: z.number().int().positive(),
 	}),
 	main: z.object({
 		featuredTitle: z.string().min(1),
@@ -57,6 +54,5 @@ export const publicationCatalogSettingsSchema = z.object({
 		genreCards: cardConfigSchema,
 		genreIcons: z.array(z.string().min(1)).min(1),
 		genreWorksTemplate: z.string().min(1),
-		authorWorksTemplate: z.string().min(1),
 	}),
 });

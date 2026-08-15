@@ -80,7 +80,7 @@
       {
         "id": "catalog",
         "type": "collection",
-        "template": "cards",
+        "template": "sidebar",
         "settings": {
           "theme": "canvas",
           "spacing": "body",
@@ -107,7 +107,7 @@
           "itemPresentation": {
             "routes": {
               "base": "/novels/",
-              "categoryBase": "/novels/category/"
+              "categoryBase": "/novels?genre="
             },
             "ariaLabelPrefix": "Read ",
             "categoryDisplay": "text",

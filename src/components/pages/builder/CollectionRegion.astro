@@ -1,52 +1,92 @@
 ---
+import LSidebar from "@/components/layout/LSidebar.astro";
+import CBox from "@/components/object/component/CBox.astro";
 import CButton from "@/components/object/component/CButton.astro";
 import CColumns from "@/components/object/component/CColumns.astro";
 import CGridItem from "@/components/object/component/CGridItem.astro";
 import CRow from "@/components/object/component/CRow.astro";
 import CTabList from "@/components/object/component/CTabList.astro";
+import PArchiveToolbar from "@/components/object/project/archive-toolbar/PArchiveToolbar.astro";
 import PCard from "@/components/object/project/card/PCard.astro";
+import PFilterPanel from "@/components/object/project/filter-panel/PFilterPanel.astro";
 import PSectionHeader from "@/components/object/project/section-header/PSectionHeader.astro";
 import PStatement from "@/components/object/project/statement/PStatement.astro";
 import type { PageCollectionRegion } from "@/types/components/pages/builder/PageCollectionRegion.types";
 
 type Props = { region: PageCollectionRegion };
 const { region } = Astro.props as Props;
-const {
-	template = "stack",
-	header,
-	tabs,
-	cardGroups,
-	action,
-	statement,
-	behavior,
-} = region.props;
+const props = region.props;
 ---
 
-<CColumns
-	columns="one"
-	gap="xl"
-	data-tabbed-collection={behavior === "tabbed" ? "" : undefined}
->
-	{header && <PSectionHeader {...header} />}
-	{tabs && <CTabList {...tabs} />}
+{props.template === "sidebar" ? (
+	<CBox data-collection-filter-root>
+		<CColumns columns="one" gap="md">
+			{props.header && <PSectionHeader {...props.header} />}
+			<PArchiveToolbar {...props.toolbar} />
 
+			<LSidebar {...props.sidebar.layout}>
+				<CColumns slot="sidebar" columns="one" gap="md">
+					<CBox {...props.sidebar.panel}>
+						<PFilterPanel {...props.sidebar.filter} />
+					</CBox>
+
+					{props.sidebar.cardGroups.map((group) => (
+						<CBox {...(group.panel ?? props.sidebar.panel)}>
+							<CColumns columns="one" gap="sm">
+								{group.header && <PSectionHeader {...group.header} />}
+								<PCard {...group.cards} />
+							</CColumns>
+						</CBox>
+					))}
+				</CColumns>
+
+				<CColumns columns="one" gap="lg">
+					{props.cardGroups.map((group) => (
+						group.panel ? (
+							<CBox {...group.panel}>
+								<CColumns columns="one" gap="sm">
+									{group.header && <PSectionHeader {...group.header} />}
+									<PCard {...group.cards} />
+								</CColumns>
+							</CBox>
+						) : (
+							<CColumns columns="one" gap="sm">
+								{group.header && <PSectionHeader {...group.header} />}
+								<PCard {...group.cards} />
+							</CColumns>
+						)
+					))}
+				</CColumns>
+			</LSidebar>
+		</CColumns>
+	</CBox>
+) : (
 	<CColumns
-		columns={template === "split" ? "twelve" : "one"}
+		columns="one"
 		gap="xl"
-		data-collection-panel={behavior === "tabbed" ? "" : undefined}
+		data-tabbed-collection={props.behavior === "tabbed" ? "" : undefined}
 	>
-		{cardGroups.map((cards, index) => (
-			<CGridItem lgSpan={template === "split" ? (index === 0 ? 7 : 5) : "full"}>
-				<PCard {...cards} />
-			</CGridItem>
-		))}
+		{props.header && <PSectionHeader {...props.header} />}
+		{props.tabs && <CTabList {...props.tabs} />}
+
+		<CColumns
+			columns={props.template === "split" ? "twelve" : "one"}
+			gap="xl"
+			data-collection-panel={props.behavior === "tabbed" ? "" : undefined}
+		>
+			{props.cardGroups.map((cards, index) => (
+				<CGridItem lgSpan={props.template === "split" ? (index === 0 ? 7 : 5) : "full"}>
+					<PCard {...cards} />
+				</CGridItem>
+			))}
+		</CColumns>
+
+		{props.statement && <PStatement {...props.statement} />}
+
+		{props.action && (
+			<CRow>
+				<CButton {...props.action} />
+			</CRow>
+		)}
 	</CColumns>
-
-	{statement && <PStatement {...statement} />}
-
-	{action && (
-		<CRow>
-			<CButton {...action} />
-		</CRow>
-	)}
-</CColumns>
+)}

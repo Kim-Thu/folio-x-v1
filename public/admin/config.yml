@@ -898,7 +898,6 @@ collections:
                   - { label: Radius, name: radius, widget: string }
                   - { label: Spacing, name: spacing, widget: string }
               - { label: Trending title, name: trendingTitle, widget: string }
-              - { label: Popular authors title, name: popularAuthorsTitle, widget: string }
               - label: List card presentation
                 name: listCards
                 widget: object
@@ -927,7 +926,6 @@ collections:
                   - { label: Width, name: width, widget: number, value_type: int, min: 1 }
                   - { label: Height, name: height, widget: number, value_type: int, min: 1 }
               - { label: Trending limit, name: trendingLimit, widget: number, value_type: int, min: 1 }
-              - { label: Author limit, name: authorLimit, widget: number, value_type: int, min: 1 }
           - label: Main content
             name: main
             widget: object
@@ -946,7 +944,6 @@ collections:
                 widget: list
                 field: { label: Icon, name: icon, widget: string }
               - { label: Genre works template, name: genreWorksTemplate, widget: string, hint: "Use {count} as the number placeholder" }
-              - { label: Author works template, name: authorWorksTemplate, widget: string, hint: "Use {count} as the number placeholder" }
 
       - name: publication_detail
         label: Giao diện chi tiết Comics / Novels
