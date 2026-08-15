@@ -81,7 +81,6 @@ export interface CardsRegion extends PageRegionBase {
 		action?: CButtonLinkProps;
 		box?: RegionBoxProps;
 		stack?: RegionStackProps;
-		panel?: boolean;
 	};
 }
 
