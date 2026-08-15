@@ -10,6 +10,10 @@ const {
 	nextLabel,
 	sliderControls,
 	template = "grid",
+	mediaRatio,
+	imageVariant,
+	captionVariant,
+	captionTone,
 } = Astro.props as PGalleryProps;
 ---
 
@@ -23,6 +27,13 @@ const {
 			{sliderControls}
 		/>
 	) : (
-		<GalleryGrid {items} {label} />
+		<GalleryGrid
+			{items}
+			{label}
+			{mediaRatio}
+			{imageVariant}
+			{captionVariant}
+			{captionTone}
+		/>
 	)
 }
