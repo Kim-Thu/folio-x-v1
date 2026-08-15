@@ -72,8 +72,8 @@ const resolverPath = "src/data/pages/getLabDetailPageData.ts";
 let resolver = read(resolverPath);
 const resolverReplacements = [
   ['template: "editorial" as const,', 'template: "media-caption" as const,'],
-  ["\n\t\t\t\t\tmediaRatio: presentation.related.mediaRatio,", ""],
-  ["\n\t\t\t\t\t\t\t\tdisplay: presentation.related.metaRow.metadataDisplay,", ""],
+  ["\n\t\t\t\t\t\t\t\tmediaRatio: presentation.related.mediaRatio,", ""],
+  ["\n\t\t\t\t\t\t\t\t\t\t\t\tdisplay: presentation.related.metaRow.metadataDisplay,", ""],
 ];
 for (const [from, to] of resolverReplacements) {
   if (!resolver.includes(from)) throw new Error(`Missing resolver fragment: ${from}`);
