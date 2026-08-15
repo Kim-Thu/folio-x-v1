@@ -90,7 +90,7 @@ function initProductsRoot(root: HTMLElement): void {
 			Number,
 		);
 		const toolbarPlatform = platformSelect?.value ?? "all";
-		const maxPrice = Number(range?.value ?? 69);
+		const maxPrice = range ? Number(range.value) : Number.POSITIVE_INFINITY;
 
 		const visible = cards.filter((card) => {
 			const matchesTerm = !term || (card.dataset.title ?? "").includes(term);
