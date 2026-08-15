@@ -1,3 +1,4 @@
+import { cardCollectionViewClasses } from "@/variants/components/object/project/card/PCard.variants";
 import { parseFacetData } from "@/scripts/facet-data";
 
 export function initCollectionFilter(scope: ParentNode = document): void {
@@ -17,18 +18,51 @@ export function initCollectionFilter(scope: ParentNode = document): void {
 			);
 			const search = root.querySelector<HTMLInputElement>("[data-archive-search]");
 			const sort = root.querySelector<HTMLSelectElement>("[data-archive-sort]");
+			const viewButtons = Array.from(
+				root.querySelectorAll<HTMLButtonElement>("[data-view-control]"),
+			);
 
-			const selectedFacets = (): Record<string, string> =>
-				Object.fromEntries(
-					Array.from(
-						root.querySelectorAll<HTMLSelectElement>("[data-facet-select]"),
-					)
-						.filter((control) => control.value && control.value !== "all")
-						.flatMap((control) => {
-							const key = control.dataset.facetKey;
-							return key ? [[key, control.value] as const] : [];
-						}),
-				);
+			const selectedFacets = (): Record<string, string[]> => {
+				const selected: Record<string, string[]> = {};
+
+				root
+					.querySelectorAll<HTMLInputElement>("[data-facet-filter]:checked")
+					.forEach((control) => {
+						const key = control.dataset.facetKey;
+						if (!key || control.value === "all") return;
+						(selected[key] ??= []).push(control.value);
+					});
+
+				root
+					.querySelectorAll<HTMLSelectElement>("[data-facet-select]")
+					.forEach((control) => {
+						const key = control.dataset.facetKey;
+						if (!key || !control.value || control.value === "all") return;
+						(selected[key] ??= []).push(control.value);
+					});
+
+				return selected;
+			};
+
+			const applyView = (view: "grid" | "list"): void => {
+				const isList = view === "list";
+				collections.forEach((collection) => {
+					collection.dataset.view = view;
+					collection.classList.toggle(
+						cardCollectionViewClasses.list.collection,
+						isList,
+					);
+					cardsByCollection.get(collection)?.forEach((card) => {
+						card.classList.toggle(cardCollectionViewClasses.list.item, isList);
+					});
+				});
+				viewButtons.forEach((button) => {
+					button.setAttribute(
+						"aria-pressed",
+						String(button.dataset.viewControl === view),
+					);
+				});
+			};
 
 			const render = (): void => {
 				const term = search?.value.trim().toLowerCase() ?? "";
@@ -46,7 +80,8 @@ export function initCollectionFilter(scope: ParentNode = document): void {
 						const matchesSearch =
 							!term || (card.dataset.searchValue ?? "").includes(term);
 						const matchesFacets = Object.entries(selected).every(
-							([key, value]) => facets[key]?.includes(value),
+							([key, values]) =>
+								!values.length || values.some((value) => facets[key]?.includes(value)),
 						);
 						card.hidden = !(matchesSearch && matchesFacets);
 						collection.append(card);
@@ -54,32 +89,55 @@ export function initCollectionFilter(scope: ParentNode = document): void {
 				});
 			};
 
+			const syncFacetControls = (key: string, value: string): void => {
+				root
+					.querySelectorAll<HTMLSelectElement>(`[data-facet-select][data-facet-key="${key}"]`)
+					.forEach((control) => {
+						control.value = value;
+					});
+				root
+					.querySelectorAll<HTMLInputElement>(`[data-facet-filter][data-facet-key="${key}"]`)
+					.forEach((control) => {
+						if (control.type === "radio") control.checked = control.value === value;
+					});
+			};
+
 			root
-				.querySelectorAll<HTMLSelectElement>("[data-facet-select], [data-archive-sort]")
-				.forEach((control) => control.addEventListener("change", render));
-			search?.addEventListener("input", render);
-			root
-				.querySelectorAll<HTMLButtonElement>("[data-view-control]")
-				.forEach((button) => {
-					button.addEventListener("click", () => {
-						collections.forEach((collection) => {
-							collection.dataset.view = button.dataset.viewControl ?? "grid";
-						});
-						root
-							.querySelectorAll<HTMLElement>("[data-view-control]")
-							.forEach((control) =>
-								control.setAttribute("aria-pressed", String(control === button)),
-							);
+				.querySelectorAll<HTMLSelectElement>("[data-facet-select]")
+				.forEach((control) => {
+					control.addEventListener("change", () => {
+						const key = control.dataset.facetKey;
+						if (key) syncFacetControls(key, control.value);
+						render();
 					});
 				});
+			root
+				.querySelectorAll<HTMLInputElement>("[data-facet-filter]")
+				.forEach((control) => {
+					control.addEventListener("change", () => {
+						const key = control.dataset.facetKey;
+						if (key && control.checked && control.type === "radio") {
+							syncFacetControls(key, control.value);
+						}
+						render();
+					});
+				});
+			sort?.addEventListener("change", render);
+			search?.addEventListener("input", render);
+			viewButtons.forEach((button) => {
+				button.addEventListener("click", () => {
+					applyView(button.dataset.viewControl === "list" ? "list" : "grid");
+				});
+			});
 
 			const genre = new URLSearchParams(window.location.search).get("genre");
-			if (genre) {
-				const control = root.querySelector<HTMLSelectElement>(
-					'[data-facet-key="genre"]',
-				);
-				if (control) control.value = genre;
-			}
+			if (genre) syncFacetControls("genre", genre);
+
+			applyView(
+				collections.some((collection) => collection.dataset.view === "list")
+					? "list"
+					: "grid",
+			);
 			render();
 		});
 }
