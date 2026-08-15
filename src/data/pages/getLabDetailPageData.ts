@@ -324,11 +324,10 @@ export async function getLabDetailPageData(
 								headingLevel: presentation.related.header.headingLevel,
 							},
 							cards: {
-								template: "editorial" as const,
+								template: "media-caption" as const,
 								layout: "grid" as const,
 								columns: 4 as const,
 								gap: "md" as const,
-								mediaRatio: presentation.related.mediaRatio,
 								items: relatedLabs.map((item) => ({
 									href: item.href,
 									ariaLabel: item.title,
@@ -341,7 +340,6 @@ export async function getLabDetailPageData(
 												type: "category" as const,
 												label: item.category.label,
 												href: `${presentation.header.routes.categoryBase}/${item.category.slug}`,
-												display: presentation.related.metaRow.metadataDisplay,
 											},
 										],
 									},

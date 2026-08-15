@@ -835,20 +835,10 @@ collections:
                 fields:
                   - { label: Appearance, name: appearance, widget: select, options: [default, compact] }
                   - { label: Heading level, name: headingLevel, widget: number, value_type: int, min: 1, max: 6 }
-              - label: Card
-                name: card
-                widget: object
-                fields:
-                  - { label: Surface, name: surface, widget: hidden, default: bordered }
+              - { label: Surface, name: surface, widget: hidden, default: bordered }
                   - { label: Radius, name: radius, widget: hidden, default: md }
                   - { label: Overflow, name: overflow, widget: hidden, default: hidden }
-              - { label: Media ratio, name: mediaRatio, widget: hidden, default: editorial }
-              - { label: Image variant, name: imageVariant, widget: hidden, default: fill }
-              - label: Copy
-                name: copy
-                widget: object
-                fields:
-                  - label: Stack
+              - label: Stack
                     name: stack
                     widget: object
                     fields:
@@ -858,11 +848,7 @@ collections:
                   - { label: Heading variant, name: headingVariant, widget: hidden, default: h5 }
                   - { label: Body variant, name: bodyVariant, widget: hidden, default: body-sm }
                   - { label: Body tone, name: bodyTone, widget: hidden, default: muted }
-              - label: Metadata row
-                name: metaRow
-                widget: object
-                fields:
-                  - { label: Justify, name: justify, widget: hidden, default: between }
+              - { label: Justify, name: justify, widget: hidden, default: between }
                   - { label: Align, name: align, widget: hidden, default: center }
                   - { label: Gap, name: gap, widget: hidden, default: sm }
                   - { label: Metadata tone, name: metadataTone, widget: hidden, default: brand }

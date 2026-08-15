@@ -21,14 +21,6 @@ const sectionHeaderSchema = z.object({
     z.literal(6),
   ]),
 });
-const copySchema = z.object({
-  stack: stackSchema,
-  headingLevel: z.literal(3),
-  headingVariant: z.literal("h5"),
-  bodyVariant: z.literal("body-sm"),
-  bodyTone: z.literal("muted"),
-});
-
 export const labDetailSettingsSchema = z.object({
   page: z.object({
     template: z.literal("lead-navigation-content"),
@@ -135,21 +127,5 @@ export const labDetailSettingsSchema = z.object({
     settings: sectionSettingsSchema,
     stack: stackSchema,
     header: sectionHeaderSchema,
-    card: z.object({
-      surface: z.literal("bordered"),
-      radius: z.literal("md"),
-      overflow: z.literal("hidden"),
-    }),
-    mediaRatio: z.literal("editorial"),
-    imageVariant: z.literal("fill"),
-    copy: copySchema,
-    metaRow: z.object({
-      justify: z.literal("between"),
-      align: z.literal("center"),
-      gap: z.literal("sm"),
-      metadataTone: z.literal("brand"),
-      metadataDisplay: z.literal("text"),
-      metricAppearance: z.literal("caption"),
-    }),
-  }),
+  })
 });

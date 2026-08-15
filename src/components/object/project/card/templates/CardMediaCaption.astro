@@ -1,43 +1,58 @@
 ---
 import CBox from "@/components/object/component/CBox.astro";
 import CColumns from "@/components/object/component/CColumns.astro";
+import CFeature from "@/components/object/component/CFeature.astro";
 import CHeading from "@/components/object/component/CHeading.astro";
 import CImage from "@/components/object/component/CImage.astro";
 import CLink from "@/components/object/component/CLink.astro";
 import CMedia from "@/components/object/component/CMedia.astro";
 import CMetadata from "@/components/object/component/CMetadata.astro";
+import CRow from "@/components/object/component/CRow.astro";
 import CText from "@/components/object/component/CText.astro";
 import type { PCardItemProps } from "@/types/components/object/project/card/PCard.types";
 
 const {
 	data,
 	headingLevel = 3,
-	mediaRatio = "landscape",
+	mediaRatio = "editorial",
 	slots,
 } = Astro.props as PCardItemProps;
-const inverse = data.appearance === "inverse";
 ---
 
-<CBox as="article">
+<CBox
+	as="article"
+	surface="bordered"
+	radius="md"
+	overflow="hidden"
+	class="h-full transition-transform duration-300 hover:-translate-y-1"
+>
 	{slots.media && data.media && (
 		<CMedia ratio={mediaRatio} href={data.href} ariaLabel={data.ariaLabel} shape="none">
 			<CImage {...data.media} variant="fill" />
 		</CMedia>
 	)}
-	<CBox spacing="md">
-		<CColumns columns="one" gap="xs">
+
+	<CBox spacing="xs" class="border-t border-black/10">
+		<CColumns columns="one" gap="sm">
+			{((slots.metadata && data.metadata) || (slots.metrics && data.metrics && data.metrics.length > 0)) && (
+				<CRow justify="between" align="center" gap="sm">
+					{slots.metadata && data.metadata && (
+						<CMetadata data={data.metadata} tone="brand" slots={{ icons: false }} />
+					)}
+					{slots.metrics && data.metrics && data.metrics.map((metric) => (
+						<CFeature {...metric} appearance="caption" />
+					))}
+				</CRow>
+			)}
+
 			{slots.title && (
 				<CHeading level={headingLevel} variant="h5">
 					<CLink href={data.href}>{data.title.join(" ")}</CLink>
 				</CHeading>
 			)}
-			{slots.metadata && data.metadata && (
-				<CMetadata data={data.metadata} size="xs" tone={inverse ? "on-dark-subtle" : "subtle"} />
-			)}
+
 			{slots.excerpt && data.excerpt && (
-				<CText variant="body-sm" tone={inverse ? "on-dark-muted" : "muted"}>
-					{data.excerpt}
-				</CText>
+				<CText variant="body-sm" tone="muted">{data.excerpt}</CText>
 			)}
 		</CColumns>
 	</CBox>
