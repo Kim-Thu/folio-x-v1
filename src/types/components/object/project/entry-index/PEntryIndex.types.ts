@@ -5,9 +5,9 @@ export interface PEntryIndexItem {
 	order: number;
 	number: string;
 	title: string;
-	publishedAt: string;
-	publishedLabel: string;
-	views: string;
+	publishedAt?: string;
+	publishedLabel?: string;
+	views?: string;
 	href: string;
 	badge?: string;
 	action?: Omit<CButtonLinkProps, "href">;
