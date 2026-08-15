@@ -7,65 +7,48 @@ import PageHeaderSliderAside from "@/components/object/project/page-header/templ
 import PageHeaderSplitMedia from "@/components/object/project/page-header/templates/PageHeaderSplitMedia.astro";
 import PageHeaderMediaAside from "@/components/object/project/page-header/templates/PageHeaderMediaAside.astro";
 import PageHeaderCoverSummary from "@/components/object/project/page-header/templates/PageHeaderCoverSummary.astro";
-import type {
-	PPageHeaderProps,
-	PPageHeaderEditorialData,
-	PPageHeaderImmersiveData,
-	PPageHeaderSplitBenefitsData,
-	PPageHeaderGallerySummaryData,
-	PPageHeaderSliderAsideData,
-	PPageHeaderSplitMediaData,
-	PPageHeaderMediaAsideData,
-	PPageHeaderCoverSummaryData,
-} from "@/types/components/object/project/page-header/PPageHeader.types";
+import type { PPageHeaderProps } from "@/types/components/object/project/page-header/PPageHeader.types";
 
 const props = Astro.props as PPageHeaderProps;
-const template = props.template ?? "split-media";
 ---
 
 {
-	template === "editorial" && (
-		<PageHeaderEditorial data={props.data as PPageHeaderEditorialData} />
+	props.template === "editorial" && (
+		<PageHeaderEditorial data={props.data} />
 	)
 }
 {
-	template === "cover-summary" && (
-		<PageHeaderCoverSummary data={props.data as PPageHeaderCoverSummaryData} />
+	props.template === "cover-summary" && (
+		<PageHeaderCoverSummary data={props.data} />
 	)
 }
 {
-	template === "immersive" && (
-		<PageHeaderImmersive data={props.data as PPageHeaderImmersiveData} />
+	props.template === "immersive" && (
+		<PageHeaderImmersive data={props.data} />
 	)
 }
 {
-	template === "split-benefits" && (
-		<PageHeaderSplitBenefits
-			data={props.data as PPageHeaderSplitBenefitsData}
-		/>
+	props.template === "split-benefits" && (
+		<PageHeaderSplitBenefits data={props.data} />
 	)
 }
 {
-	template === "media-aside" && (
-		<PageHeaderMediaAside data={props.data as PPageHeaderMediaAsideData} />
+	props.template === "media-aside" && (
+		<PageHeaderMediaAside data={props.data} />
 	)
 }
 {
-	template === "slider-aside" && (
-		<PageHeaderSliderAside
-			data={props.data as PPageHeaderSliderAsideData}
-		/>
+	props.template === "slider-aside" && (
+		<PageHeaderSliderAside data={props.data} />
 	)
 }
 {
-	template === "gallery-summary" && (
-		<PageHeaderGallerySummary
-			data={props.data as PPageHeaderGallerySummaryData}
-		/>
+	props.template === "gallery-summary" && (
+		<PageHeaderGallerySummary data={props.data} />
 	)
 }
 {
-	template === "split-media" && (
-		<PageHeaderSplitMedia data={props.data as PPageHeaderSplitMediaData} />
+	(!props.template || props.template === "split-media") && (
+		<PageHeaderSplitMedia data={props.data} />
 	)
 }

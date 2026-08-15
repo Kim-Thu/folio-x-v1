@@ -79,7 +79,7 @@ export interface PPageHeaderSplitBenefitsData {
   title: string;
   accent: string;
   description: string;
-  benefits: {
+  benefits?: {
     items: CFeatureData[];
   };
   image: CImageData;

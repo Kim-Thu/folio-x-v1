@@ -14,6 +14,9 @@ import {
 	mapPublicationToCard,
 } from "@/data/mappers/card";
 import type { PAdvertisementData } from "@/types/components/object/project/advertisement/PAdvertisement.types";
+import type { PCtaProps } from "@/types/components/object/project/cta/PCta.types";
+import type { PHeroProps } from "@/types/components/object/project/hero/PHero.types";
+import type { PPageHeaderProps } from "@/types/components/object/project/page-header/PPageHeader.types";
 import type { PCardData, PCardProps } from "@/types/components/object/project/card/PCard.types";
 import type { PFilterChoiceGroupData } from "@/types/components/object/project/filter-panel/PFilterPanel.types";
 import type { PSectionHeaderProps } from "@/types/components/object/project/section-header/PSectionHeader.types";
@@ -36,6 +39,10 @@ type BlogCollectionContent = Extract<SourcedCollectionContent, { source: { colle
 type ComicsCollectionContent = Extract<SourcedCollectionContent, { source: { collection: "comics" } }>;
 type NovelsCollectionContent = Extract<SourcedCollectionContent, { source: { collection: "novels" } }>;
 type PublicationsCollectionContent = Extract<SourcedCollectionContent, { source: { collection: "publications" } }>;
+
+type HeroSection = Extract<PageSectionData, { type: "hero" }>;
+type PageHeaderSection = Extract<PageSectionData, { type: "page-header" }>;
+type CtaSection = Extract<PageSectionData, { type: "cta" }>;
 
 type ArchiveSection = Extract<PageSectionData, { type: "archive" }>;
 type ProjectsArchiveSection = Extract<ArchiveSection, { content: { source: { collection: "projects" } } }>;
@@ -446,6 +453,159 @@ const resolveArchive = async (
 	throw new Error("Unsupported archive collection.");
 };
 
+const resolveHeroProps = (section: HeroSection): PHeroProps => {
+	const content = section.content;
+	if (
+		typeof content.eyebrow !== "string" ||
+		!Array.isArray(content.title) ||
+		typeof content.description !== "string" ||
+		!content.image ||
+		!content.actions
+	) {
+		throw new Error(`Invalid hero content for section "${section.id}".`);
+	}
+
+	const socialLinks = content.socialLinks?.map((link) => {
+		if (!link.icon) {
+			throw new Error(`Hero social link in section "${section.id}" requires an icon.`);
+		}
+		return { href: link.href, label: link.label, icon: link.icon };
+	});
+
+	return {
+		template: section.template,
+		data: {
+			id: content.id ?? section.id,
+			eyebrow: content.eyebrow,
+			title: content.title,
+			accent: content.accent,
+			description: content.description,
+			actions: content.actions,
+			socialLinks,
+			image: content.image,
+			scrollLabel: content.scrollLabel,
+		},
+	};
+};
+
+const resolvePageHeaderProps = (section: PageHeaderSection): PPageHeaderProps => {
+	const content = section.content;
+
+	switch (section.template) {
+		case "split-media":
+			if (
+				!content.breadcrumb ||
+				!Array.isArray(content.title) ||
+				typeof content.description !== "string"
+			) {
+				throw new Error(`Invalid split-media page header content for section "${section.id}".`);
+			}
+			return {
+				template: "split-media",
+				data: {
+					breadcrumb: content.breadcrumb,
+					title: content.title,
+					description: content.description,
+					image: content.image,
+				},
+			};
+
+		case "split-benefits": {
+			if (
+				typeof content.eyebrow !== "string" ||
+				typeof content.title !== "string" ||
+				typeof content.accent !== "string" ||
+				typeof content.description !== "string" ||
+				!content.image
+			) {
+				throw new Error(`Invalid split-benefits page header content for section "${section.id}".`);
+			}
+
+			const benefits = content.benefits && "items" in content.benefits
+				? content.benefits
+				: undefined;
+
+			return {
+				template: "split-benefits",
+				data: {
+					id: content.id ?? section.id,
+					eyebrow: content.eyebrow,
+					title: content.title,
+					accent: content.accent,
+					description: content.description,
+					benefits,
+					image: content.image,
+				},
+			};
+		}
+
+		case "immersive":
+			if (
+				typeof content.eyebrow !== "string" ||
+				typeof content.title !== "string" ||
+				typeof content.accent !== "string" ||
+				typeof content.description !== "string" ||
+				typeof content.actionsLabel !== "string" ||
+				!content.actions ||
+				!content.image ||
+				!content.metrics
+			) {
+				throw new Error(`Invalid immersive page header content for section "${section.id}".`);
+			}
+			return {
+				template: "immersive",
+				data: {
+					id: content.id ?? section.id,
+					eyebrow: content.eyebrow,
+					title: content.title,
+					accent: content.accent,
+					description: content.description,
+					actionsLabel: content.actionsLabel,
+					actions: content.actions,
+					image: content.image,
+					quote: content.quote,
+					quoteCredit: content.quoteCredit,
+					metrics: content.metrics,
+				},
+			};
+	}
+};
+
+const resolveCtaProps = (section: CtaSection): PCtaProps => {
+	const content = section.content;
+	if (typeof content.title !== "string") {
+		throw new Error(`Invalid CTA title for section "${section.id}".`);
+	}
+
+	let price: PCtaProps["data"]["price"];
+	if (content.price) {
+		if (typeof content.price.period !== "string") {
+			throw new Error(`CTA price in section "${section.id}" requires a period.`);
+		}
+		price = {
+			current: content.price.current,
+			period: content.price.period,
+			previous: content.price.previous,
+		};
+	}
+
+	return {
+		template: section.template,
+		data: {
+			id: content.id ?? section.id,
+			title: content.title,
+			description: content.description,
+			action: content.action
+				? { href: content.action.href, label: content.action.label }
+				: undefined,
+			form: content.form,
+			image: content.image,
+			features: content.features,
+			price,
+		},
+	};
+};
+
 const resolveSection = async (
 	section: PageSectionData,
 	context: PageBuilderContext,
@@ -458,14 +618,14 @@ const resolveSection = async (
 				key: section.id,
 				component: "hero",
 				section: frame,
-				props: { template: section.template, data: section.content } as Extract<PageRegion, { component: "hero" }>["props"],
+				props: resolveHeroProps(section),
 			};
 		case "page-header":
 			return {
 				key: section.id,
 				component: "page-header",
 				section: frame,
-				props: { template: section.template, data: section.content } as Extract<PageRegion, { component: "page-header" }>["props"],
+				props: resolvePageHeaderProps(section),
 			};
 		case "article":
 			return {
@@ -479,7 +639,7 @@ const resolveSection = async (
 				key: section.id,
 				component: "cta",
 				section: frame,
-				props: { template: section.template, data: section.content } as Extract<PageRegion, { component: "cta" }>["props"],
+				props: resolveCtaProps(section),
 			};
 		case "collection": {
 			const items = await resolveCollectionItems(section);

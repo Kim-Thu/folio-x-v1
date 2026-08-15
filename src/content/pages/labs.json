@@ -22,9 +22,7 @@
         "content": {
           "id": "labs-hero",
           "eyebrow": "NKT Labs",
-          "title": [
-            "Experiment. Innovate. Share"
-          ],
+          "title": "Experiment. Innovate. Share",
           "accent": ".",
           "description": "A place for testing new ideas, emerging technology, and useful creative systems.",
           "benefits": {
