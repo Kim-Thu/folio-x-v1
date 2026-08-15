@@ -1,0 +1,40 @@
+name: Repair Decap local branch config
+
+on:
+  push:
+    branches:
+      - agent/cms-content-migration
+
+permissions:
+  contents: write
+
+jobs:
+  repair:
+    if: github.actor != 'github-actions[bot]'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: agent/cms-content-migration
+
+      - name: Point Decap proxy at migration branch
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+
+          path = Path('public/admin/config.yml')
+          text = path.read_text()
+          old = '  branch: main\n'
+          new = '  branch: agent/cms-content-migration\n'
+          if old not in text:
+              raise SystemExit('Expected backend branch not found')
+          path.write_text(text.replace(old, new, 1))
+          PY
+
+      - name: Commit config repair
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add public/admin/config.yml
+          git commit -m "fix: point Decap proxy at CMS migration branch"
+          git push origin HEAD:agent/cms-content-migration
