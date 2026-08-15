@@ -1,8 +1,21 @@
 ---
-import PageBuilder from "@/components/pages/builder/PageBuilder.astro";
+import PPage from "@/components/object/project/page/PPage.astro";
+import ContentSection from "@/components/pages/lab-detail/partials/ContentSection.astro";
+import GallerySection from "@/components/pages/lab-detail/partials/GallerySection.astro";
+import HeaderSection from "@/components/pages/lab-detail/partials/HeaderSection.astro";
+import NavigationSection from "@/components/pages/lab-detail/partials/NavigationSection.astro";
+import RelatedSection from "@/components/pages/lab-detail/partials/RelatedSection.astro";
+import ResourcesSection from "@/components/pages/lab-detail/partials/ResourcesSection.astro";
 import type { LabDetailPageProps } from "@/types/components/pages/lab-detail/LabDetailPage.types";
 
 const { data } = Astro.props as LabDetailPageProps;
 ---
 
-<PageBuilder {...data} />
+<PPage template={data.presentation.page.template}>
+	<HeaderSection slot="lead" {data} />
+	{data.tabs.length > 0 && <NavigationSection slot="navigation" {data} />}
+	<ContentSection {data} />
+	{data.galleryItems.length > 0 && <GallerySection {data} />}
+	{data.resources.length > 0 && <ResourcesSection {data} />}
+	{data.relatedItems.length > 0 && <RelatedSection {data} />}
+</PPage>
