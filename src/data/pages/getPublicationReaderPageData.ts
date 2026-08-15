@@ -144,7 +144,7 @@ export async function getPublicationReaderPageData(
 
 	return {
 		entry,
-		pageTemplate: "stacked",
+		pageTemplate: readerPage.pageTemplate,
 		regions,
 	};
 }
