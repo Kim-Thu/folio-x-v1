@@ -247,7 +247,7 @@ export async function getLabDetailPageData(
 							...presentation.gallery.settings,
 						},
 						props: {
-							template: "grid" as const,
+							template: presentation.gallery.template,
 							label: presentation.gallery.title,
 							items: lab.gallery,
 							header: {
@@ -281,10 +281,7 @@ export async function getLabDetailPageData(
 								headingLevel: presentation.resources.header.headingLevel,
 							},
 							cards: {
-								template: "icon-panel" as const,
-								layout: "grid" as const,
-								columns: 4 as const,
-								gap: "md" as const,
+								...presentation.resources.cards,
 								items: lab.resources.map((resource) => ({
 									href: resource.href,
 									ariaLabel: resource.actionLabel,
@@ -324,10 +321,7 @@ export async function getLabDetailPageData(
 								headingLevel: presentation.related.header.headingLevel,
 							},
 							cards: {
-								template: "media-caption" as const,
-								layout: "grid" as const,
-								columns: 4 as const,
-								gap: "md" as const,
+								...presentation.related.cards,
 								items: relatedLabs.map((item) => ({
 									href: item.href,
 									ariaLabel: item.title,
