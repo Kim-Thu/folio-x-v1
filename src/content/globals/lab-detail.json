@@ -97,6 +97,7 @@
   "gallery": {
     "id": "gallery",
     "title": "Gallery",
+    "template": "grid",
     "openImageLabelTemplate": "Open gallery image {index}",
     "imageTitleLabelTemplate": "Gallery image {index}",
     "settings": {
@@ -133,6 +134,12 @@
     "header": {
       "appearance": "compact",
       "headingLevel": 2
+    },
+    "cards": {
+      "template": "icon-panel",
+      "layout": "grid",
+      "columns": 4,
+      "gap": "md"
     }
   },
   "related": {
@@ -153,6 +160,12 @@
     "header": {
       "appearance": "compact",
       "headingLevel": 2
+    },
+    "cards": {
+      "template": "media-caption",
+      "layout": "grid",
+      "columns": 4,
+      "gap": "md"
     }
   }
 }
