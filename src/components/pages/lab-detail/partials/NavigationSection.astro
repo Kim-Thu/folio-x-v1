@@ -1,0 +1,25 @@
+---
+import LSection from "@/components/layout/LSection.astro";
+import CTabList from "@/components/object/component/CTabList.astro";
+import type { LabDetailPageData } from "@/types/components/pages/lab-detail/LabDetailPage.types";
+
+type Props = {
+	data: LabDetailPageData;
+};
+
+const { data } = Astro.props as Props;
+const { lab, presentation, tabs } = data;
+const navigationFrameClass = "border-y border-black/10 bg-white";
+---
+
+<LSection {...presentation.navigation.settings}>
+	<div class={navigationFrameClass}>
+		<CTabList
+			label={presentation.navigation.labelTemplate.replace("{title}", lab.title)}
+			appearance={presentation.navigation.appearance}
+			activeValue={tabs[0]?.value}
+			tone={presentation.navigation.tone}
+			{tabs}
+		/>
+	</div>
+</LSection>
