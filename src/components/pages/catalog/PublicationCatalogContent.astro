@@ -87,26 +87,6 @@ const popularGenreCards: PCardData[] = genres.slice(0, settings.main.popularGenr
 	icon: genreIcons[index % genreIcons.length],
 }));
 
-const authorCounts = new Map<string, number>();
-for (const entry of entries) {
-	authorCounts.set(entry.author, (authorCounts.get(entry.author) ?? 0) + 1);
-}
-const authorCards: PCardData[] = [...authorCounts.entries()]
-	.sort((a, b) => b[1] - a[1])
-	.slice(0, settings.sidebar.authorLimit)
-	.map(([name, works]) => ({
-		href: "#catalog",
-		ariaLabel: name,
-		title: [name],
-		excerpt: formatCount(settings.main.authorWorksTemplate, works),
-		media: {
-			src: settings.sidebar.authorPlaceholder.src,
-			alt: name,
-			width: settings.sidebar.authorPlaceholder.width,
-			height: settings.sidebar.authorPlaceholder.height,
-		},
-	}));
-
 const toolbar = {
 	data: {
 		search: {
@@ -177,7 +157,7 @@ const cardProps = (config: typeof settings.main.featuredCards, items: PCardData[
 						data={{
 							groups: [
 								{
-									appearance: "navigation",
+									appearance: "controls",
 									control: "genre",
 									legend: settings.sidebar.genresLegend,
 									name: `${catalog}-genres`,
@@ -200,13 +180,6 @@ const cardProps = (config: typeof settings.main.featuredCards, items: PCardData[
 					<CColumns columns="one" gap="sm">
 						<PSectionHeader data={{ title: settings.sidebar.trendingTitle }} appearance="compact" headingLevel={2} />
 						<PCard {...cardProps(settings.sidebar.listCards, trendingCards)} />
-					</CColumns>
-				</CBox>
-
-				<CBox surface={settings.sidebar.panel.surface} radius={settings.sidebar.panel.radius} spacing={settings.sidebar.panel.spacing}>
-					<CColumns columns="one" gap="sm">
-						<PSectionHeader data={{ title: settings.sidebar.popularAuthorsTitle }} appearance="compact" headingLevel={2} />
-						<PCard {...cardProps(settings.sidebar.listCards, authorCards)} slots={{ metadata: false, tags: false, metrics: false, action: false }} />
 					</CColumns>
 				</CBox>
 			</CColumns>
