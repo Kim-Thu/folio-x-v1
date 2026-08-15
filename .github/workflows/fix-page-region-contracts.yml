@@ -59,8 +59,13 @@ jobs:
           table_end = text.index('          - label: Quote\n', table_start)
           text = text[:table_start] + text[table_end:]
 
-          if 'fields: []' in text:
-              raise SystemExit('empty Decap fields remain')
+          remaining = [
+              f'{index}: {line}'
+              for index, line in enumerate(text.splitlines(), start=1)
+              if 'fields: []' in line
+          ]
+          if remaining:
+              raise SystemExit('empty Decap fields remain:\n' + '\n'.join(remaining))
           if '      - name: pages\n        label: Pages\n        files:\n' in text:
               raise SystemExit('invalid nested pages wrapper remains')
           if '      - name: home\n        label: Home\n        file: src/content/pages/home.json\n' not in text:
