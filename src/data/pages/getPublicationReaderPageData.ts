@@ -7,8 +7,8 @@ type CatalogSlug = "comics" | "novels";
 export async function getPublicationReaderPaths(catalogSlug: CatalogSlug) {
 	const entries = await getPublications(catalogSlug);
 	return entries.flatMap((entry) =>
-		(entry.detail?.reader ?? []).map((chapter) => ({
-			params: { slug: entry.slug, chapter: String(chapter.number) },
+		Array.from({ length: entry.chapters }, (_, index) => ({
+			params: { slug: entry.slug, chapter: String(index + 1) },
 		})),
 	);
 }
@@ -26,17 +26,13 @@ export async function getPublicationReaderPageData(
 	if (!entry) throw new Error(`Missing publication: ${catalogSlug}/${entrySlug}`);
 
 	const chapter = Number.parseInt(chapterParam, 10);
-	if (!Number.isInteger(chapter) || chapter < 1) {
+	if (!Number.isInteger(chapter) || chapter < 1 || chapter > entry.chapters) {
 		throw new Error(`Invalid chapter: ${chapterParam}`);
 	}
 
-	const configuredChapter = entry.detail?.reader?.find(
+	const configuredChapter = entry.detail.reader?.find(
 		(item) => item.number === chapter,
 	);
-	if (!configuredChapter) {
-		throw new Error(`Missing CMS reader chapter: ${catalogSlug}/${entrySlug}/${chapter}`);
-	}
-
 	const readerPage = presentation.reader;
 	const labels = readerPage.labels;
 	const collectionPresentation = presentation.collections[catalogSlug];
@@ -44,31 +40,20 @@ export async function getPublicationReaderPageData(
 	const indexHref = `${basePath}/${entry.slug}#${presentation.chapters.id}`;
 	const chapterHref = (number: number) =>
 		`${basePath}/${entry.slug}/${presentation.routes.chapterSegment}/${number}`;
-	const configuredChapters = [...(entry.detail?.reader ?? [])].sort(
-		(a, b) => a.number - b.number,
-	);
-	const chapterIndex = configuredChapters.findIndex(
-		(item) => item.number === chapter,
-	);
-	const previousChapter =
-		chapterIndex > 0 ? configuredChapters[chapterIndex - 1] : undefined;
-	const nextChapter =
-		chapterIndex >= 0 && chapterIndex < configuredChapters.length - 1
-			? configuredChapters[chapterIndex + 1]
-			: undefined;
+	const previousChapter = chapter > 1 ? chapter - 1 : undefined;
+	const nextChapter = chapter < entry.chapters ? chapter + 1 : undefined;
+	const title = configuredChapter?.title ?? `${labels.chapter} ${chapter}: ${entry.title}`;
 
-	const content =
-		configuredChapter.kind === "sequential-media" && configuredChapter.images?.length
-			? { kind: "sequential-media" as const, images: configuredChapter.images }
-			: configuredChapter.kind === "prose" && configuredChapter.prose?.length
-				? { kind: "prose" as const, items: configuredChapter.prose }
-				: undefined;
-	if (!content) {
-		throw new Error(`Missing CMS reader content: ${catalogSlug}/${entry.slug}/${chapter}`);
-	}
+	const content = configuredChapter?.kind === "sequential-media" && configuredChapter.images?.length
+		? { kind: "sequential-media" as const, images: configuredChapter.images }
+		: configuredChapter?.kind === "prose" && configuredChapter.prose?.length
+			? { kind: "prose" as const, items: configuredChapter.prose }
+			: catalogSlug === "comics"
+				? { kind: "sequential-media" as const, images: [entry.cover] }
+				: { kind: "prose" as const, items: [{ text: entry.summary }] };
 
 	const metadataItems = [
-		configuredChapter.publishedLabel && configuredChapter.publishedAt
+		configuredChapter?.publishedLabel && configuredChapter.publishedAt
 			? {
 					type: "datetime" as const,
 					label: configuredChapter.publishedLabel,
@@ -76,7 +61,7 @@ export async function getPublicationReaderPageData(
 					...readerPage.metadata.published,
 				}
 			: undefined,
-		configuredChapter.readTime
+		configuredChapter?.readTime
 			? {
 					type: "reading-time" as const,
 					label: configuredChapter.readTime,
@@ -104,9 +89,9 @@ export async function getPublicationReaderPageData(
 						current: `${labels.chapter} ${chapter}`,
 					},
 					badge: `${labels.chapter} ${chapter}`,
-					title: configuredChapter.title,
+					title,
 					metadata: { items: metadataItems },
-					views: configuredChapter.views
+					views: configuredChapter?.views
 						? `${configuredChapter.views} ${labels.viewsSuffix}`
 						: undefined,
 					content,
@@ -122,7 +107,7 @@ export async function getPublicationReaderPageData(
 						next: nextChapter
 							? {
 									label: labels.next,
-									href: chapterHref(nextChapter.number),
+									href: chapterHref(nextChapter),
 									...readerPage.controls.next,
 								}
 							: undefined,
@@ -135,7 +120,7 @@ export async function getPublicationReaderPageData(
 						previous: previousChapter
 							? {
 									label: labels.previous,
-									href: chapterHref(previousChapter.number),
+									href: chapterHref(previousChapter),
 									...readerPage.controls.previous,
 								}
 							: undefined,
@@ -147,7 +132,7 @@ export async function getPublicationReaderPageData(
 						next: nextChapter
 							? {
 									label: labels.next,
-									href: chapterHref(nextChapter.number),
+									href: chapterHref(nextChapter),
 									...readerPage.controls.next,
 								}
 							: undefined,
