@@ -930,13 +930,12 @@ collections:
             name: main
             widget: object
             fields:
-              - { label: Featured title, name: featuredTitle, widget: string }
+              - { label: Top rated title, name: featuredTitle, widget: string }
               - { label: Browse title, name: latestTitle, widget: string }
               - { label: Popular genres title, name: popularGenresTitle, widget: string }
-              - { label: Featured limit, name: featuredLimit, widget: number, value_type: int, min: 1 }
-              - { label: Browse limit, name: latestLimit, widget: number, value_type: int, min: 1 }
+              - { label: Top rated limit, name: featuredLimit, widget: number, value_type: int, min: 1 }
               - { label: Popular genres limit, name: popularGenresLimit, widget: number, value_type: int, min: 1 }
-              - { label: Featured cards, name: featuredCards, widget: object, fields: *publication_catalog_card_fields }
+              - { label: Top rated cards, name: featuredCards, widget: object, fields: *publication_catalog_card_fields }
               - { label: Browse cards, name: latestCards, widget: object, fields: *publication_catalog_card_fields }
               - { label: Genre cards, name: genreCards, widget: object, fields: *publication_catalog_card_fields }
               - label: Genre icons

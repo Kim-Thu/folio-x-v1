@@ -47,7 +47,6 @@ export const publicationCatalogSettingsSchema = z.object({
 		latestTitle: z.string().min(1),
 		popularGenresTitle: z.string().min(1),
 		featuredLimit: z.number().int().positive(),
-		latestLimit: z.number().int().positive(),
 		popularGenresLimit: z.number().int().positive(),
 		featuredCards: cardConfigSchema,
 		latestCards: cardConfigSchema,

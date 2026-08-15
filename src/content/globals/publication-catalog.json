@@ -50,11 +50,10 @@
     "trendingLimit": 5
   },
   "main": {
-    "featuredTitle": "Featured",
+    "featuredTitle": "Top rated",
     "latestTitle": "Browse all",
     "popularGenresTitle": "Popular genres",
     "featuredLimit": 5,
-    "latestLimit": 24,
     "popularGenresLimit": 8,
     "featuredCards": {
       "template": "media-metrics",

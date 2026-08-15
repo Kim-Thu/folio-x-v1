@@ -490,7 +490,7 @@ const resolvePublicationCatalogCollection = async (
 		sortValue: String(entry.order).padStart(4, "0"),
 	}));
 
-	const featuredCards = [...cards]
+	const topRatedCards = [...cards]
 		.sort((first, second) => (second.rating?.value ?? 0) - (first.rating?.value ?? 0))
 		.slice(0, settings.main.featuredLimit);
 	const trendingCards = [...cards]
@@ -506,7 +506,7 @@ const resolvePublicationCatalogCollection = async (
 			return secondValue - firstValue;
 		})
 		.slice(0, settings.sidebar.trendingLimit);
-	const browseCards = cards.slice(0, settings.main.latestLimit);
+	const browseCards = cards;
 
 	const genreMap = new Map<string, { label: string; slug: string; count: number }>();
 	for (const entry of entries) {
@@ -636,7 +636,7 @@ const resolvePublicationCatalogCollection = async (
 					header: compactHeader(settings.main.featuredTitle),
 					cards: publicationCatalogCardProps(
 						settings.main.featuredCards,
-						featuredCards,
+						topRatedCards,
 					),
 				},
 				{
