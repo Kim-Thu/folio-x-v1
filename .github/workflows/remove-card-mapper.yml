@@ -1,0 +1,463 @@
+name: Remove card mapper
+
+on:
+  push:
+    branches:
+      - agent/cms-content-migration
+
+permissions:
+  contents: write
+
+jobs:
+  refactor:
+    if: github.actor != 'github-actions[bot]'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: agent/cms-content-migration
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.x'
+      - name: Remove mapper layer
+        shell: bash
+        run: |
+          python <<'PY'
+          from pathlib import Path
+
+          path = Path('src/data/pages/getPageBuilderData.ts')
+          text = path.read_text()
+
+          import_block = '''import {
+\tmapInsightToCard,
+\tmapLabToCard,
+\tmapProductToCard,
+\tmapProjectToCard,
+\tmapPublicationToCard,
+} from "@/data/mappers/card";
+'''
+          if import_block not in text:
+              raise SystemExit('mapper import block not found')
+          text = text.replace(import_block, '')
+
+          replacements = {
+          '''\tif (isProductsCollectionContent(content)) {
+\t\treturn take(await getProducts(), content.source.limit).map((item) =>
+\t\t\tmapProductToCard(item, content.itemPresentation),
+\t\t);
+\t}''': '''\tif (isProductsCollectionContent(content)) {
+\t\treturn take(await getProducts(), content.source.limit).map((item): PCardData => ({
+\t\t\thref: `${content.itemPresentation.routes.base}${item.slug}`,
+\t\t\tariaLabel: `${content.itemPresentation.ariaLabelPrefix}${item.title}`,
+\t\t\ttitle: [item.title],
+\t\t\texcerpt: item.description,
+\t\t\tmedia: {
+\t\t\t\tsrc: item.image,
+\t\t\t\talt: `${item.title}${content.itemPresentation.imageAltSuffix}`,
+\t\t\t\twidth: content.itemPresentation.imageWidth,
+\t\t\t\theight: content.itemPresentation.imageHeight,
+\t\t\t},
+\t\t\tmetadata: {
+\t\t\t\titems: [{
+\t\t\t\t\ttype: "category",
+\t\t\t\t\tlabel: item.category,
+\t\t\t\t\thref: `${content.itemPresentation.routes.categoryBase}${item.categorySlug}`,
+\t\t\t\t\tdisplay: content.itemPresentation.categoryDisplay,
+\t\t\t\t}],
+\t\t\t},
+\t\t\taction: {
+\t\t\t\thref: content.itemPresentation.actionHref,
+\t\t\t\tlabel: `${content.itemPresentation.actionLabelPrefix}${item.title}`,
+\t\t\t\ticon: content.itemPresentation.actionIcon,
+\t\t\t},
+\t\t\tproduct: {
+\t\t\t\tbadge: item.badge,
+\t\t\t\tcategory: item.category,
+\t\t\t\tcategorySlug: item.categorySlug,
+\t\t\t\tlicense: content.itemPresentation.license,
+\t\t\t\toldPrice: item.oldPrice,
+\t\t\t\tplatform: item.platform,
+\t\t\t\tprice: item.price,
+\t\t\t\trating: item.rating,
+\t\t\t\treviews: item.reviews,
+\t\t\t},
+\t\t}));
+\t}''',
+          '''\tif (isProjectsCollectionContent(content)) {
+\t\treturn take(await getProjects(), content.source.limit).map((item) =>
+\t\t\tmapProjectToCard(item, content.itemPresentation),
+\t\t);
+\t}''': '''\tif (isProjectsCollectionContent(content)) {
+\t\treturn take(await getProjects(), content.source.limit).map((item): PCardData => ({
+\t\t\thref: item.href,
+\t\t\tariaLabel: item.title,
+\t\t\ttitle: [item.title],
+\t\t\texcerpt: item.summary,
+\t\t\tfilterValue: item.categorySlug,
+\t\t\tsortValue: item.year,
+\t\t\tsize: content.itemPresentation.size,
+\t\t\tsupportingLabel: item.outcome,
+\t\t\ttags: item.tags.map((tag) => ({
+\t\t\t\tlabel: tag.label,
+\t\t\t\thref: `${content.itemPresentation.routes.tagBase}${tag.slug}`,
+\t\t\t})),
+\t\t\ttagsLabel: content.itemPresentation.tagsLabel,
+\t\t\tappearance: item.tone === "dark"
+\t\t\t\t? content.itemPresentation.darkAppearance
+\t\t\t\t: content.itemPresentation.lightAppearance,
+\t\t\tmetadata: {
+\t\t\t\tseparator: content.itemPresentation.separator,
+\t\t\t\titems: [
+\t\t\t\t\t{ type: "index", label: item.number, display: content.itemPresentation.metadataDisplay },
+\t\t\t\t\t{
+\t\t\t\t\t\ttype: "category",
+\t\t\t\t\t\tlabel: item.category.toUpperCase(),
+\t\t\t\t\t\thref: `${content.itemPresentation.routes.categoryBase}${item.categorySlug}`,
+\t\t\t\t\t\tdisplay: content.itemPresentation.metadataDisplay,
+\t\t\t\t\t},
+\t\t\t\t\t{
+\t\t\t\t\t\ttype: "datetime",
+\t\t\t\t\t\tlabel: item.year,
+\t\t\t\t\t\tdatetime: item.year,
+\t\t\t\t\t\tdisplay: content.itemPresentation.metadataDisplay,
+\t\t\t\t\t},
+\t\t\t\t],
+\t\t\t},
+\t\t\taction: content.itemPresentation.actionLabel ? {
+\t\t\t\tlabel: content.itemPresentation.actionLabel,
+\t\t\t\thref: item.href,
+\t\t\t\ticon: content.itemPresentation.actionIcon,
+\t\t\t} : undefined,
+\t\t\tmedia: item.image ? {
+\t\t\t\tsrc: item.image,
+\t\t\t\talt: item.alt || item.title,
+\t\t\t\twidth: content.itemPresentation.imageWidth,
+\t\t\t\theight: content.itemPresentation.imageHeight,
+\t\t\t} : undefined,
+\t\t}));
+\t}''',
+          '''\tif (isLabsCollectionContent(content)) {
+\t\treturn take(await getLabs(), content.source.limit).map((item) =>
+\t\t\tmapLabToCard(item, content.itemPresentation),
+\t\t);
+\t}''': '''\tif (isLabsCollectionContent(content)) {
+\t\treturn take(await getLabs(), content.source.limit).map((item): PCardData => ({
+\t\t\thref: item.href,
+\t\t\tariaLabel: `${content.itemPresentation.ariaLabelPrefix}${item.title}`,
+\t\t\ttitle: [item.title],
+\t\t\texcerpt: item.summary,
+\t\t\tmedia: item.image,
+\t\t\tmetadata: {
+\t\t\t\titems: [{
+\t\t\t\t\ttype: "category",
+\t\t\t\t\tlabel: item.category.label,
+\t\t\t\t\thref: `${content.itemPresentation.routes.categoryBase}${item.category.slug}`,
+\t\t\t\t\tdisplay: content.itemPresentation.categoryDisplay,
+\t\t\t\t}],
+\t\t\t},
+\t\t\tbadge: {
+\t\t\t\tlabel: item.statusLabel,
+\t\t\t\ttone: item.status === "complete"
+\t\t\t\t\t? content.itemPresentation.completeBadgeTone
+\t\t\t\t\t: content.itemPresentation.activeBadgeTone,
+\t\t\t},
+\t\t\ttags: item.technologies.map((technology) => ({
+\t\t\t\tlabel: technology.label,
+\t\t\t\thref: `${content.itemPresentation.routes.technologyBase}${technology.slug}`,
+\t\t\t})),
+\t\t\ttagsLabel: `${item.title}${content.itemPresentation.tagsLabelSuffix}`,
+\t\t\tmetrics: [
+\t\t\t\t{ icon: content.itemPresentation.metricIcons[0], label: String(item.stars) },
+\t\t\t\t{ icon: content.itemPresentation.metricIcons[1], label: String(item.forks) },
+\t\t\t\t{ icon: content.itemPresentation.metricIcons[2], label: item.updatedLabel },
+\t\t\t],
+\t\t\tfacets: {
+\t\t\t\tcategory: [item.category.slug],
+\t\t\t\tstatus: [item.status],
+\t\t\t\ttechnology: item.technologies.map((technology) => technology.slug),
+\t\t\t},
+\t\t\tsearchValue: [item.title, item.summary, item.category.label, ...item.technologies.map((technology) => technology.label)].join(" "),
+\t\t}));
+\t}''',
+          '''\tif (isBlogCollectionContent(content)) {
+\t\treturn take(await getInsights(), content.source.limit).map((item) =>
+\t\t\tmapInsightToCard(item, content.itemPresentation),
+\t\t);
+\t}''': '''\tif (isBlogCollectionContent(content)) {
+\t\treturn take(await getInsights(), content.source.limit).map((item): PCardData => ({
+\t\t\thref: item.href,
+\t\t\tariaLabel: item.title,
+\t\t\ttitle: [item.title],
+\t\t\texcerpt: item.excerpt,
+\t\t\tmetadata: {
+\t\t\t\tseparator: content.itemPresentation.separator,
+\t\t\t\titems: [
+\t\t\t\t\t{
+\t\t\t\t\t\ttype: "category",
+\t\t\t\t\t\tlabel: item.category,
+\t\t\t\t\t\thref: `${content.itemPresentation.routes.categoryBase}${item.categorySlug}`,
+\t\t\t\t\t\tdisplay: content.itemPresentation.metadataDisplay,
+\t\t\t\t\t},
+\t\t\t\t\t{ type: "reading-time", label: item.readTime, display: content.itemPresentation.metadataDisplay },
+\t\t\t\t],
+\t\t\t},
+\t\t\tsecondaryMetadata: {
+\t\t\t\tseparator: content.itemPresentation.separator,
+\t\t\t\titems: [
+\t\t\t\t\t{ type: "author", label: item.author, display: content.itemPresentation.metadataDisplay },
+\t\t\t\t\t{
+\t\t\t\t\t\ttype: "datetime",
+\t\t\t\t\t\tlabel: item.publishedLabel,
+\t\t\t\t\t\tdatetime: item.publishedAt,
+\t\t\t\t\t\tdisplay: content.itemPresentation.metadataDisplay,
+\t\t\t\t\t},
+\t\t\t\t],
+\t\t\t},
+\t\t\ttags: item.tags.map((tag) => ({
+\t\t\t\tlabel: tag.label,
+\t\t\t\thref: `${content.itemPresentation.routes.tagBase}${tag.slug}`,
+\t\t\t})),
+\t\t\ttagsLabel: content.itemPresentation.tagsLabelSuffix
+\t\t\t\t? `${item.title}${content.itemPresentation.tagsLabelSuffix}`
+\t\t\t\t: undefined,
+\t\t\tfacets: {
+\t\t\t\tcategory: [item.categorySlug],
+\t\t\t\ttag: item.tags.map((tag) => tag.slug),
+\t\t\t},
+\t\t\tsearchValue: [item.title, item.excerpt, item.category, item.author, ...item.tags.map((tag) => tag.label)].join(" "),
+\t\t\tsortValue: item.publishedAt,
+\t\t\tmedia: item.image && item.imageAlt ? {
+\t\t\t\tsrc: item.image,
+\t\t\t\talt: item.imageAlt,
+\t\t\t\twidth: content.itemPresentation.imageWidth,
+\t\t\t\theight: content.itemPresentation.imageHeight,
+\t\t\t} : undefined,
+\t\t}));
+\t}''',
+          '''\tif (isComicsCollectionContent(content)) {
+\t\treturn take(await getPublications("comics"), content.source.limit).map((item) =>
+\t\t\tmapPublicationToCard(item, "comics", content.itemPresentation),
+\t\t);
+\t}''': '''\tif (isComicsCollectionContent(content)) {
+\t\treturn take(await getPublications("comics"), content.source.limit).map((item): PCardData => ({
+\t\t\thref: `${content.itemPresentation.routes.base}${item.slug}`,
+\t\t\tariaLabel: `${content.itemPresentation.ariaLabelPrefix}${item.title}`,
+\t\t\ttitle: [item.title],
+\t\t\texcerpt: item.summary,
+\t\t\tmedia: item.cover,
+\t\t\tmetadata: { items: item.genres.map((genre) => ({
+\t\t\t\ttype: "category",
+\t\t\t\tlabel: genre.label,
+\t\t\t\thref: `${content.itemPresentation.routes.categoryBase}${genre.slug}`,
+\t\t\t\tdisplay: content.itemPresentation.categoryDisplay,
+\t\t\t})) },
+\t\t\ttags: item.genres.map((genre) => ({
+\t\t\t\tlabel: genre.label,
+\t\t\t\thref: `${content.itemPresentation.routes.categoryBase}${genre.slug}`,
+\t\t\t})),
+\t\t\ttagsLabel: `${item.title}${content.itemPresentation.tagsLabelSuffix}`,
+\t\t\tmetrics: [{ icon: content.itemPresentation.viewsIcon, label: item.views }],
+\t\t\trating: { value: item.rating },
+\t\t\tfacets: { genre: item.genres.map((genre) => genre.slug), status: [item.status] },
+\t\t\tsearchValue: [item.title, item.summary, item.author, ...item.genres.map((genre) => genre.label)].join(" "),
+\t\t\tsortValue: String(item.order).padStart(4, "0"),
+\t\t}));
+\t}''',
+          '''\tif (isNovelsCollectionContent(content)) {
+\t\treturn take(await getPublications("novels"), content.source.limit).map((item) =>
+\t\t\tmapPublicationToCard(item, "novels", content.itemPresentation),
+\t\t);
+\t}''': '''\tif (isNovelsCollectionContent(content)) {
+\t\treturn take(await getPublications("novels"), content.source.limit).map((item): PCardData => ({
+\t\t\thref: `${content.itemPresentation.routes.base}${item.slug}`,
+\t\t\tariaLabel: `${content.itemPresentation.ariaLabelPrefix}${item.title}`,
+\t\t\ttitle: [item.title],
+\t\t\texcerpt: item.summary,
+\t\t\tmedia: item.cover,
+\t\t\tmetadata: { items: item.genres.map((genre) => ({
+\t\t\t\ttype: "category",
+\t\t\t\tlabel: genre.label,
+\t\t\t\thref: `${content.itemPresentation.routes.categoryBase}${genre.slug}`,
+\t\t\t\tdisplay: content.itemPresentation.categoryDisplay,
+\t\t\t})) },
+\t\t\ttags: item.genres.map((genre) => ({
+\t\t\t\tlabel: genre.label,
+\t\t\t\thref: `${content.itemPresentation.routes.categoryBase}${genre.slug}`,
+\t\t\t})),
+\t\t\ttagsLabel: `${item.title}${content.itemPresentation.tagsLabelSuffix}`,
+\t\t\tmetrics: [{ icon: content.itemPresentation.viewsIcon, label: item.views }],
+\t\t\trating: { value: item.rating },
+\t\t\tfacets: { genre: item.genres.map((genre) => genre.slug), status: [item.status] },
+\t\t\tsearchValue: [item.title, item.summary, item.author, ...item.genres.map((genre) => genre.label)].join(" "),
+\t\t\tsortValue: String(item.order).padStart(4, "0"),
+\t\t}));
+\t}'''
+          }
+
+          for old, new in replacements.items():
+              if old not in text:
+                  raise SystemExit('expected collection block not found')
+              text = text.replace(old, new)
+
+          old_publications = '''\tif (isPublicationsCollectionContent(content)) {
+\t\tconst [novels, comics] = await Promise.all([
+\t\t\tgetPublications("novels"),
+\t\t\tgetPublications("comics"),
+\t\t]);
+\t\treturn take([
+\t\t\t...novels.map((item) => mapPublicationToCard(item, "novels", content.itemPresentation.novels)),
+\t\t\t...comics.map((item) => mapPublicationToCard(item, "comics", content.itemPresentation.comics)),
+\t\t], content.source.limit);
+\t}'''
+          new_publications = '''\tif (isPublicationsCollectionContent(content)) {
+\t\tconst [novels, comics] = await Promise.all([
+\t\t\tgetPublications("novels"),
+\t\t\tgetPublications("comics"),
+\t\t]);
+\t\treturn take([
+\t\t\t...novels.map((item): PCardData => {
+\t\t\t\tconst presentation = content.itemPresentation.novels;
+\t\t\t\treturn {
+\t\t\t\t\thref: `${presentation.routes.base}${item.slug}`,
+\t\t\t\t\tariaLabel: `${presentation.ariaLabelPrefix}${item.title}`,
+\t\t\t\t\ttitle: [item.title], excerpt: item.summary, media: item.cover,
+\t\t\t\t\tmetadata: { items: item.genres.map((genre) => ({ type: "category", label: genre.label, href: `${presentation.routes.categoryBase}${genre.slug}`, display: presentation.categoryDisplay })) },
+\t\t\t\t\ttags: item.genres.map((genre) => ({ label: genre.label, href: `${presentation.routes.categoryBase}${genre.slug}` })),
+\t\t\t\t\ttagsLabel: `${item.title}${presentation.tagsLabelSuffix}`,
+\t\t\t\t\tmetrics: [{ icon: presentation.viewsIcon, label: item.views }], rating: { value: item.rating },
+\t\t\t\t\tfacets: { genre: item.genres.map((genre) => genre.slug), status: [item.status] },
+\t\t\t\t\tsearchValue: [item.title, item.summary, item.author, ...item.genres.map((genre) => genre.label)].join(" "),
+\t\t\t\t\tsortValue: String(item.order).padStart(4, "0"),
+\t\t\t\t};
+\t\t\t}),
+\t\t\t...comics.map((item): PCardData => {
+\t\t\t\tconst presentation = content.itemPresentation.comics;
+\t\t\t\treturn {
+\t\t\t\t\thref: `${presentation.routes.base}${item.slug}`,
+\t\t\t\t\tariaLabel: `${presentation.ariaLabelPrefix}${item.title}`,
+\t\t\t\t\ttitle: [item.title], excerpt: item.summary, media: item.cover,
+\t\t\t\t\tmetadata: { items: item.genres.map((genre) => ({ type: "category", label: genre.label, href: `${presentation.routes.categoryBase}${genre.slug}`, display: presentation.categoryDisplay })) },
+\t\t\t\t\ttags: item.genres.map((genre) => ({ label: genre.label, href: `${presentation.routes.categoryBase}${genre.slug}` })),
+\t\t\t\t\ttagsLabel: `${item.title}${presentation.tagsLabelSuffix}`,
+\t\t\t\t\tmetrics: [{ icon: presentation.viewsIcon, label: item.views }], rating: { value: item.rating },
+\t\t\t\t\tfacets: { genre: item.genres.map((genre) => genre.slug), status: [item.status] },
+\t\t\t\t\tsearchValue: [item.title, item.summary, item.author, ...item.genres.map((genre) => genre.label)].join(" "),
+\t\t\t\t\tsortValue: String(item.order).padStart(4, "0"),
+\t\t\t\t};
+\t\t\t}),
+\t\t], content.source.limit);
+\t}'''
+          if old_publications not in text:
+              raise SystemExit('publications block not found')
+          text = text.replace(old_publications, new_publications)
+
+          # Reuse the same resolved card shape directly in archive contexts.
+          archive_replacements = {
+          '''visibleProjects.map((project) =>
+\t\t\t\tmapProjectToCard(project, itemPresentation),
+\t\t\t)''': '''visibleProjects.map((project): PCardData => ({
+\t\t\t\thref: project.href,
+\t\t\t\tariaLabel: project.title,
+\t\t\t\ttitle: [project.title],
+\t\t\t\texcerpt: project.summary,
+\t\t\t\tfilterValue: project.categorySlug,
+\t\t\t\tsortValue: project.year,
+\t\t\t\tsize: itemPresentation.size,
+\t\t\t\tsupportingLabel: project.outcome,
+\t\t\t\ttags: project.tags.map((tag) => ({ label: tag.label, href: `${itemPresentation.routes.tagBase}${tag.slug}` })),
+\t\t\t\ttagsLabel: itemPresentation.tagsLabel,
+\t\t\t\tappearance: project.tone === "dark" ? itemPresentation.darkAppearance : itemPresentation.lightAppearance,
+\t\t\t\tmetadata: {
+\t\t\t\t\tseparator: itemPresentation.separator,
+\t\t\t\t\titems: [
+\t\t\t\t\t\t{ type: "index", label: project.number, display: itemPresentation.metadataDisplay },
+\t\t\t\t\t\t{ type: "category", label: project.category.toUpperCase(), href: `${itemPresentation.routes.categoryBase}${project.categorySlug}`, display: itemPresentation.metadataDisplay },
+\t\t\t\t\t\t{ type: "datetime", label: project.year, datetime: project.year, display: itemPresentation.metadataDisplay },
+\t\t\t\t\t],
+\t\t\t\t},
+\t\t\t\taction: itemPresentation.actionLabel ? { label: itemPresentation.actionLabel, href: project.href, icon: itemPresentation.actionIcon } : undefined,
+\t\t\t\tmedia: project.image ? { src: project.image, alt: project.alt || project.title, width: itemPresentation.imageWidth, height: itemPresentation.imageHeight } : undefined,
+\t\t\t}))''',
+          '''visibleLabs.map((lab) => mapLabToCard(lab, itemPresentation))''': '''visibleLabs.map((lab): PCardData => ({
+\t\t\t\thref: lab.href,
+\t\t\t\tariaLabel: `${itemPresentation.ariaLabelPrefix}${lab.title}`,
+\t\t\t\ttitle: [lab.title], excerpt: lab.summary, media: lab.image,
+\t\t\t\tmetadata: { items: [{ type: "category", label: lab.category.label, href: `${itemPresentation.routes.categoryBase}${lab.category.slug}`, display: itemPresentation.categoryDisplay }] },
+\t\t\t\tbadge: { label: lab.statusLabel, tone: lab.status === "complete" ? itemPresentation.completeBadgeTone : itemPresentation.activeBadgeTone },
+\t\t\t\ttags: lab.technologies.map((technology) => ({ label: technology.label, href: `${itemPresentation.routes.technologyBase}${technology.slug}` })),
+\t\t\t\ttagsLabel: `${lab.title}${itemPresentation.tagsLabelSuffix}`,
+\t\t\t\tmetrics: [
+\t\t\t\t\t{ icon: itemPresentation.metricIcons[0], label: String(lab.stars) },
+\t\t\t\t\t{ icon: itemPresentation.metricIcons[1], label: String(lab.forks) },
+\t\t\t\t\t{ icon: itemPresentation.metricIcons[2], label: lab.updatedLabel },
+\t\t\t\t],
+\t\t\t\tfacets: { category: [lab.category.slug], status: [lab.status], technology: lab.technologies.map((technology) => technology.slug) },
+\t\t\t\tsearchValue: [lab.title, lab.summary, lab.category.label, ...lab.technologies.map((technology) => technology.label)].join(" "),
+\t\t\t}))''',
+          '''visibleProducts.map((product) =>
+\t\t\t\tmapProductToCard(product, itemPresentation),
+\t\t\t)''': '''visibleProducts.map((product): PCardData => ({
+\t\t\t\thref: `${itemPresentation.routes.base}${product.slug}`,
+\t\t\t\tariaLabel: `${itemPresentation.ariaLabelPrefix}${product.title}`,
+\t\t\t\ttitle: [product.title], excerpt: product.description,
+\t\t\t\tmedia: { src: product.image, alt: `${product.title}${itemPresentation.imageAltSuffix}`, width: itemPresentation.imageWidth, height: itemPresentation.imageHeight },
+\t\t\t\tmetadata: { items: [{ type: "category", label: product.category, href: `${itemPresentation.routes.categoryBase}${product.categorySlug}`, display: itemPresentation.categoryDisplay }] },
+\t\t\t\taction: { href: itemPresentation.actionHref, label: `${itemPresentation.actionLabelPrefix}${product.title}`, icon: itemPresentation.actionIcon },
+\t\t\t\tproduct: { badge: product.badge, category: product.category, categorySlug: product.categorySlug, license: itemPresentation.license, oldPrice: product.oldPrice, platform: product.platform, price: product.price, rating: product.rating, reviews: product.reviews },
+\t\t\t}))''',
+          '''insights.slice(0, sidebar.featured.limit).map((insight) => mapInsightToCard(insight, presentation))''': '''insights.slice(0, sidebar.featured.limit).map((insight): PCardData => ({
+\t\t\t\t\thref: insight.href, ariaLabel: insight.title, title: [insight.title], excerpt: insight.excerpt,
+\t\t\t\t\tmetadata: { separator: presentation.separator, items: [
+\t\t\t\t\t\t{ type: "category", label: insight.category, href: `${presentation.routes.categoryBase}${insight.categorySlug}`, display: presentation.metadataDisplay },
+\t\t\t\t\t\t{ type: "reading-time", label: insight.readTime, display: presentation.metadataDisplay },
+\t\t\t\t\t] },
+\t\t\t\t\tsecondaryMetadata: { separator: presentation.separator, items: [
+\t\t\t\t\t\t{ type: "author", label: insight.author, display: presentation.metadataDisplay },
+\t\t\t\t\t\t{ type: "datetime", label: insight.publishedLabel, datetime: insight.publishedAt, display: presentation.metadataDisplay },
+\t\t\t\t\t] },
+\t\t\t\t\ttags: insight.tags.map((tag) => ({ label: tag.label, href: `${presentation.routes.tagBase}${tag.slug}` })),
+\t\t\t\t\ttagsLabel: presentation.tagsLabelSuffix ? `${insight.title}${presentation.tagsLabelSuffix}` : undefined,
+\t\t\t\t\tfacets: { category: [insight.categorySlug], tag: insight.tags.map((tag) => tag.slug) },
+\t\t\t\t\tsearchValue: [insight.title, insight.excerpt, insight.category, insight.author, ...insight.tags.map((tag) => tag.label)].join(" "), sortValue: insight.publishedAt,
+\t\t\t\t\tmedia: insight.image && insight.imageAlt ? { src: insight.image, alt: insight.imageAlt, width: presentation.imageWidth, height: presentation.imageHeight } : undefined,
+\t\t\t\t}))''',
+          '''visibleInsights.map((insight) => mapInsightToCard(insight, presentation))''': '''visibleInsights.map((insight): PCardData => ({
+\t\t\t\thref: insight.href, ariaLabel: insight.title, title: [insight.title], excerpt: insight.excerpt,
+\t\t\t\tmetadata: { separator: presentation.separator, items: [
+\t\t\t\t\t{ type: "category", label: insight.category, href: `${presentation.routes.categoryBase}${insight.categorySlug}`, display: presentation.metadataDisplay },
+\t\t\t\t\t{ type: "reading-time", label: insight.readTime, display: presentation.metadataDisplay },
+\t\t\t\t] },
+\t\t\t\tsecondaryMetadata: { separator: presentation.separator, items: [
+\t\t\t\t\t{ type: "author", label: insight.author, display: presentation.metadataDisplay },
+\t\t\t\t\t{ type: "datetime", label: insight.publishedLabel, datetime: insight.publishedAt, display: presentation.metadataDisplay },
+\t\t\t\t] },
+\t\t\t\ttags: insight.tags.map((tag) => ({ label: tag.label, href: `${presentation.routes.tagBase}${tag.slug}` })),
+\t\t\t\ttagsLabel: presentation.tagsLabelSuffix ? `${insight.title}${presentation.tagsLabelSuffix}` : undefined,
+\t\t\t\tfacets: { category: [insight.categorySlug], tag: insight.tags.map((tag) => tag.slug) },
+\t\t\t\tsearchValue: [insight.title, insight.excerpt, insight.category, insight.author, ...insight.tags.map((tag) => tag.label)].join(" "), sortValue: insight.publishedAt,
+\t\t\t\tmedia: insight.image && insight.imageAlt ? { src: insight.image, alt: insight.imageAlt, width: presentation.imageWidth, height: presentation.imageHeight } : undefined,
+\t\t\t}))'''
+          }
+          for old, new in archive_replacements.items():
+              if old not in text:
+                  raise SystemExit(f'expected archive mapping not found: {old[:80]}')
+              text = text.replace(old, new)
+
+          if 'mapProductToCard' in text or 'mapProjectToCard' in text or 'mapLabToCard' in text or 'mapInsightToCard' in text or 'mapPublicationToCard' in text or '@/data/mappers/card' in text:
+              raise SystemExit('mapper reference remains')
+
+          path.write_text(text)
+          mapper = Path('src/data/mappers/card.ts')
+          if not mapper.exists():
+              raise SystemExit('card mapper missing')
+          mapper.unlink()
+          PY
+      - name: Commit refactor
+        shell: bash
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add src/data/pages/getPageBuilderData.ts src/data/mappers/card.ts
+          git commit -m "Remove card mapper layer"
+          git push origin HEAD:agent/cms-content-migration
