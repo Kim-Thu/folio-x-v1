@@ -25,7 +25,7 @@ export interface PFilterPanelData {
   range?: CRangeProps;
   ratings?: {
     legend: string;
-    name: string;
+    name?: string;
     options: Array<Pick<CRatingProps, "count" | "value">>;
   };
 }
