@@ -1,0 +1,147 @@
+name: Restore page template renderer
+
+on:
+  push:
+    branches:
+      - agent/ppage-template-fix-runner
+    paths:
+      - .github/workflows/restore-page-template-renderer.yml
+
+permissions:
+  contents: write
+
+jobs:
+  fix:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out target branch
+        uses: actions/checkout@v4
+        with:
+          ref: agent/cms-content-migration
+          fetch-depth: 0
+
+      - name: Verify target checkpoint
+        run: |
+          test "$(git rev-parse HEAD)" = "d4e66fa20a6a1a215c51f0ee8a72bc1d7c1185f8"
+
+      - name: Restore existing renderer and simplify PPage
+        run: |
+          set -euo pipefail
+          old=14912ab67ab67585473285346ba93febb78c2cd6
+          mkdir -p src/components/object/project/layout/parts
+          for path in \
+            src/components/object/project/layout/parts/LayoutRegion.astro \
+            src/components/object/project/layout/parts/LayoutRegionContent.astro \
+            src/components/object/project/layout/parts/ArchiveRegionContent.astro \
+            src/components/object/project/layout/parts/CollectionRegionContent.astro \
+            src/components/object/project/layout/parts/GroupRegionContent.astro
+          do
+            git show "$old:$path" > "$path"
+          done
+
+          python3 <<'PY'
+          from pathlib import Path
+
+          def replace(path: str, old: str, new: str):
+              p = Path(path)
+              text = p.read_text()
+              if old not in text:
+                  raise SystemExit(f"Expected text not found in {path}: {old}")
+              p.write_text(text.replace(old, new))
+
+          replace(
+              "src/components/object/project/layout/parts/LayoutRegion.astro",
+              '@/types/components/object/project/layout/PLayout.types',
+              '@/types/components/object/project/page/PageRegion.types',
+          )
+          replace(
+              "src/components/object/project/layout/parts/LayoutRegionContent.astro",
+              '@/types/components/object/project/layout/PLayout.types',
+              '@/types/components/object/project/page/PageRegion.types',
+          )
+
+          path = Path("src/components/object/project/layout/parts/ArchiveRegionContent.astro")
+          text = path.read_text()
+          text = text.replace(
+              'import type { ArchiveRegion } from "@/types/components/object/project/layout/PLayout.types";',
+              'import type { PageArchiveRegion } from "@/types/components/object/project/page/PageArchiveRegion.types";',
+          ).replace('ArchiveRegion', 'PageArchiveRegion')
+          path.write_text(text)
+
+          path = Path("src/components/object/project/layout/parts/CollectionRegionContent.astro")
+          text = path.read_text()
+          text = text.replace(
+              'import type { CollectionRegion } from "@/types/components/object/project/layout/PLayout.types";',
+              'import type { PageCollectionRegion } from "@/types/components/object/project/page/PageCollectionRegion.types";',
+          ).replace('CollectionRegion', 'PageCollectionRegion')
+          path.write_text(text)
+
+          path = Path("src/components/object/project/layout/parts/GroupRegionContent.astro")
+          text = path.read_text()
+          text = text.replace(
+              'import type { GroupRegion } from "@/types/components/object/project/layout/PLayout.types";',
+              'import type { PageGroupRegion } from "@/types/components/object/project/page/PageGroupRegion.types";',
+          ).replace('GroupRegion', 'PageGroupRegion')
+          path.write_text(text)
+
+          ppage = Path("src/components/object/project/page/PPage.astro")
+          text = ppage.read_text()
+          text = text.replace(
+              'import PageRegion from "@/components/object/project/page/parts/PageRegion.astro";',
+              'import LayoutRegion from "@/components/object/project/layout/parts/LayoutRegion.astro";',
+          ).replace('<PageRegion {region} />', '<LayoutRegion {region} />')
+          ppage.write_text(text)
+
+          for path_str in [
+              "src/components/object/project/page/templates/PageLeadContent.astro",
+              "src/components/object/project/page/templates/PageLeadContentClosing.astro",
+              "src/components/object/project/page/templates/PageLeadContentNavigation.astro",
+              "src/components/object/project/page/templates/PageLeadNavigationContent.astro",
+          ]:
+              path = Path(path_str)
+              text = path.read_text()
+              text = text.replace(
+                  'import PageRegion from "@/components/object/project/page/parts/PageRegion.astro";',
+                  'import LayoutRegion from "@/components/object/project/layout/parts/LayoutRegion.astro";',
+              ).replace('<PageRegion {region} />', '<LayoutRegion {region} />')
+              path.write_text(text)
+
+          builder = Path("src/components/pages/builder/PageBuilder.astro")
+          text = builder.read_text()
+          text = text.replace(
+              'import PageRegionRenderer from "@/components/object/project/page/parts/PageRegion.astro";',
+              'import LayoutRegion from "@/components/object/project/layout/parts/LayoutRegion.astro";',
+          ).replace('<PageRegionRenderer {region} />', '<LayoutRegion {region} />')
+          builder.write_text(text)
+          PY
+
+          rm -rf src/components/object/project/page/parts
+
+          test ! -d src/components/object/project/page/parts
+          ! grep -R "object/project/page/parts" -n src
+          ! grep -R "PLayout\.astro" -n src/components/object/project/page src/components/pages/builder/PageBuilder.astro
+          grep -q 'LayoutRegion from "@/components/object/project/layout/parts/LayoutRegion.astro"' src/components/object/project/page/PPage.astro
+          grep -q '<PPage template={pageTemplate} {regions} />' src/components/pages/builder/PageBuilder.astro
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Validate source
+        run: npm run validate
+
+      - name: Check diff
+        run: git diff --check
+
+      - name: Commit and push target branch
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A
+          git commit -m "fix: restore existing page region renderer"
+          git push origin HEAD:agent/cms-content-migration
