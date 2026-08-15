@@ -1,11 +1,9 @@
 import { getPage } from "@/data/cms";
 import type { CatalogPageData } from "@/types/components/pages/catalog/CatalogPage.types";
-import type { PublicationCatalog } from "@/types/content";
-
-type CatalogSlug = PublicationCatalog["slug"];
+import type { PublicationCollection } from "@/types/content/PublicationCatalog";
 
 export async function getPublicationCatalogPageData(
-	slug: CatalogSlug,
+	slug: PublicationCollection,
 ): Promise<CatalogPageData> {
 	const page = await getPage(`/${slug}`);
 	return { page };

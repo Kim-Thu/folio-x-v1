@@ -34,15 +34,6 @@
               "variant": "primary",
               "tone": "light",
               "size": "md"
-            },
-            {
-              "label": "Creator guide",
-              "href": "/comics#catalog",
-              "icon": "archiveBox",
-              "iconPosition": "end",
-              "variant": "outline",
-              "tone": "light",
-              "size": "md"
             }
           ],
           "image": {
@@ -93,12 +84,7 @@
               "Explore",
               "Comics"
             ],
-            "description": "Browse illustrated series, graphic stories, and original comics.",
-            "action": {
-              "label": "View all",
-              "href": "/comics",
-              "icon": "arrowRight"
-            }
+            "description": "Browse illustrated series, graphic stories, and original comics."
           },
           "source": {
             "collection": "comics"
@@ -112,20 +98,6 @@
             "categoryDisplay": "text",
             "tagsLabelSuffix": " genres",
             "viewsIcon": "globeAlt"
-          },
-          "cards": {
-            "template": "media-metrics",
-            "layout": "grid",
-            "columns": 4,
-            "gap": "sm",
-            "mediaRatio": "portrait",
-            "headingLevel": 3,
-            "slots": {
-              "excerpt": true,
-              "tags": true,
-              "metrics": true,
-              "action": false
-            }
           }
         }
       },

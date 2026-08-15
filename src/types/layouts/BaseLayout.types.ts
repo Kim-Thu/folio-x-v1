@@ -6,6 +6,7 @@ import type { PLoadingScreenProps } from "@/types/components/object/project/load
 export interface BaseLayoutProps {
 	title: string;
 	description: string;
+	favicon?: string;
 	language?: string;
 	hasOverlayHeader?: boolean;
 	tone?: "dark" | "light";

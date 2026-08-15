@@ -12,13 +12,15 @@ const imageSchema = z.object({
   height: z.number().int().positive(),
 });
 
+const compactCountSchema = z.string().regex(/^\d+(?:\.\d+)?[KMB]?$/i);
+
 const readerBaseSchema = z.object({
   number: z.number().int().positive(),
   title: z.string().min(1),
   publishedAt: z.iso.date(),
   publishedLabel: z.string().min(1),
   readTime: z.string().min(1),
-  views: z.string().min(1),
+  views: compactCountSchema,
 });
 
 const proseChapterSchema = readerBaseSchema.extend({
@@ -48,7 +50,7 @@ export const publicationEntrySchema = z.object({
   genres: z.array(taxonomyTermSchema).min(1),
   status: z.enum(["complete", "ongoing"]),
   rating: z.number().min(0).max(5),
-  views: z.string().min(1),
+  views: compactCountSchema,
   chapters: z.number().int().nonnegative(),
   updatedLabel: z.string().min(1),
   author: z.string().min(1),

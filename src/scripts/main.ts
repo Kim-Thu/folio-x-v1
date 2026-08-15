@@ -21,11 +21,6 @@ loadWhenPresent("[data-image-gallery]", async () => {
 	initImageGalleries();
 });
 
-loadWhenPresent("#scroll-progress-bar", async () => {
-	const { initScrollProgress } = await import("@/scripts/scroll-progress");
-	initScrollProgress();
-});
-
 loadWhenPresent(".faq", async () => {
 	const { initAccordion } = await import("@/scripts/accordion");
 	initAccordion();

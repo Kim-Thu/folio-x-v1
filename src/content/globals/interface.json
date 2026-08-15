@@ -1,6 +1,5 @@
 {
   "skipToContent": "Đi tới nội dung chính",
-  "backToTop": "Về đầu trang",
   "openMenu": "Mở menu",
   "closeMenu": "Đóng menu",
   "loadingScreen": {
@@ -25,14 +24,7 @@
     "primaryLabel": "Điều hướng chính",
     "mobileLabel": "Điều hướng mobile",
     "socialLabel": "Mạng xã hội",
-    "footerSocialLabel": "Mạng xã hội ở chân trang",
-    "railSocialDisplay": "icon"
-  },
-  "progress": {
-    "railLabel": "Tiến trình trang",
-    "readingLabel": "Tiến độ đọc trang",
-    "initialSection": "01 / 07",
-    "initialValue": "0%"
+    "footerSocialLabel": "Mạng xã hội ở chân trang"
   },
   "separators": {
     "slash": "/",

@@ -1,17 +1,27 @@
 import { z } from "astro/zod";
+import {
+	cardColumnsSchema,
+	cardGapSchema,
+	cardLayoutSchema,
+	cardSlotsSchema,
+	cardTemplateSchema,
+	iconNameSchema,
+	mediaRatioSchema,
+} from "@/content/schemas";
 
+const publicationSortValueSchema = z.enum(["newest", "oldest"]);
 const optionSchema = z.object({
 	label: z.string().min(1),
-	value: z.string().min(1),
+	value: publicationSortValueSchema,
 });
 
 const cardConfigSchema = z.object({
-	template: z.string().min(1),
-	layout: z.string().min(1),
-	columns: z.number().int().positive(),
-	gap: z.string().min(1),
-	mediaRatio: z.string().optional(),
-	slots: z.record(z.string(), z.boolean()).optional(),
+	template: cardTemplateSchema,
+	layout: cardLayoutSchema,
+	columns: cardColumnsSchema,
+	gap: cardGapSchema,
+	mediaRatio: mediaRatioSchema.optional(),
+	slots: cardSlotsSchema.optional(),
 });
 
 export const publicationCatalogSettingsSchema = z.object({
@@ -25,7 +35,7 @@ export const publicationCatalogSettingsSchema = z.object({
 		ongoingLabel: z.string().min(1),
 		completeLabel: z.string().min(1),
 		sortLabel: z.string().min(1),
-		sortValue: z.string().min(1),
+		sortValue: publicationSortValueSchema,
 		sortOptions: z.array(optionSchema).min(1),
 		viewLabel: z.string().min(1),
 		gridViewLabel: z.string().min(1),
@@ -37,7 +47,11 @@ export const publicationCatalogSettingsSchema = z.object({
 		sticky: z.boolean(),
 		genresLegend: z.string().min(1),
 		allGenresShortLabel: z.string().min(1),
-		panel: z.object({ surface: z.string().min(1), radius: z.string().min(1), spacing: z.string().min(1) }),
+		panel: z.object({
+			surface: z.enum(["plain", "accent", "bordered", "canvas", "dark", "glass", "glass-dark", "soft"]),
+			radius: z.enum(["none", "md", "lg"]),
+			spacing: z.enum(["none", "xs", "sm", "md", "lg", "xl"]),
+		}),
 		trendingTitle: z.string().min(1),
 		listCards: cardConfigSchema,
 		trendingLimit: z.number().int().positive(),
@@ -51,7 +65,7 @@ export const publicationCatalogSettingsSchema = z.object({
 		featuredCards: cardConfigSchema,
 		latestCards: cardConfigSchema,
 		genreCards: cardConfigSchema,
-		genreIcons: z.array(z.string().min(1)).min(1),
+		genreIcons: z.array(iconNameSchema).min(1),
 		genreWorksTemplate: z.string().min(1),
 	}),
 });

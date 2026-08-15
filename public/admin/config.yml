@@ -172,7 +172,7 @@ collections:
                     fields:
                       - { label: ID, name: id, widget: string }
                       - { label: Type, name: type, widget: hidden, default: collection }
-                      - { label: Template, name: template, widget: select, required: false, options: [sidebar, cards, split] }
+                      - { label: Template, name: template, widget: select, required: false, options: [cards, split] }
                       - label: Settings
                         name: settings
                         widget: object
@@ -235,11 +235,9 @@ collections:
                               - { label: Image width, name: imageWidth, widget: number, value_type: int, min: 1, required: false }
                               - { label: Image height, name: imageHeight, widget: number, value_type: int, min: 1, required: false }
                               - { label: Category display, name: categoryDisplay, widget: select, required: false, options: [icon, icon-text, text] }
-                              - { label: Action href, name: actionHref, widget: string, required: false }
                               - { label: Action label prefix, name: actionLabelPrefix, widget: string, required: false }
                               - { label: Action label, name: actionLabel, widget: string, required: false }
                               - { label: Action icon, name: actionIcon, widget: select, required: false, options: [arrowLeft, arrowRight, arrowUp, arrowUpRight, arrowPath, archiveBox, bars3, bolt, chevronLeft, chevronDown, chevronRight, github, globeAlt, lightBulb, linkedin, xMark, folder01, facebook, link, twitter, userCircle, calendar03, check, clock01, gridView, listView, play, search, shoppingBag, star, questionMarkCircle, bookOpen, bookmark, eye, lockClosed, adjustmentsHorizontal, moon, handThumbUp, heart, faceSmile, faceFrown] }
-                              - { label: License, name: license, widget: select, required: false, options: [free, pro] }
                               - { label: Separator, name: separator, widget: string, required: false }
                               - { label: Size, name: size, widget: select, required: false, options: [standard, wide] }
                               - { label: Tags label, name: tagsLabel, widget: string, required: false }
@@ -871,13 +869,13 @@ collections:
               - { label: Ongoing label, name: ongoingLabel, widget: string }
               - { label: Complete label, name: completeLabel, widget: string }
               - { label: Sort label, name: sortLabel, widget: string }
-              - { label: Sort value, name: sortValue, widget: string }
+              - { label: Sort value, name: sortValue, widget: select, options: [newest, oldest] }
               - label: Sort options
                 name: sortOptions
                 widget: list
                 fields: &publication_catalog_options
                   - { label: Label, name: label, widget: string }
-                  - { label: Value, name: value, widget: string }
+                  - { label: Value, name: value, widget: select, options: [newest, oldest] }
               - { label: View label, name: viewLabel, widget: string }
               - { label: Grid view label, name: gridViewLabel, widget: string }
               - { label: List view label, name: listViewLabel, widget: string }
@@ -894,16 +892,16 @@ collections:
                 name: panel
                 widget: object
                 fields:
-                  - { label: Surface, name: surface, widget: string }
-                  - { label: Radius, name: radius, widget: string }
-                  - { label: Spacing, name: spacing, widget: string }
+                  - { label: Surface, name: surface, widget: select, options: [plain, accent, bordered, canvas, dark, glass, glass-dark, soft] }
+                  - { label: Radius, name: radius, widget: select, options: [none, md, lg] }
+                  - { label: Spacing, name: spacing, widget: select, options: [none, xs, sm, md, lg, xl] }
               - { label: Trending title, name: trendingTitle, widget: string }
               - label: List card presentation
                 name: listCards
                 widget: object
                 fields: &publication_catalog_card_fields
-                  - { label: Template, name: template, widget: string }
-                  - { label: Layout, name: layout, widget: select, options: [grid, list] }
+                  - { label: Template, name: template, widget: select, options: [stacked, horizontal, overlay, featured, boxed, compact-media, compact-bordered, editorial, icon-panel, icon-summary, media-banner, media-caption, media-details, media-only, media-summary, media-metrics] }
+                  - { label: Layout, name: layout, widget: select, options: [grid, list, three-column, twelve-column, content-three-column, mosaic, asymmetric, showcase] }
                   - { label: Columns, name: columns, widget: number, value_type: int, min: 1, max: 5 }
                   - { label: Gap, name: gap, widget: select, options: [none, sm, md, lg, xl] }
                   - { label: Media ratio, name: mediaRatio, widget: select, required: false, options: [editorial, landscape, natural, panoramic, portrait, square, video] }
@@ -918,13 +916,6 @@ collections:
                       - { label: Tags, name: tags, widget: boolean, required: false }
                       - { label: Metrics, name: metrics, widget: boolean, required: false }
                       - { label: Action, name: action, widget: boolean, required: false }
-              - label: Author placeholder
-                name: authorPlaceholder
-                widget: object
-                fields:
-                  - { label: Image, name: src, widget: image }
-                  - { label: Width, name: width, widget: number, value_type: int, min: 1 }
-                  - { label: Height, name: height, widget: number, value_type: int, min: 1 }
               - { label: Trending limit, name: trendingLimit, widget: number, value_type: int, min: 1 }
           - label: Main content
             name: main
@@ -941,7 +932,7 @@ collections:
               - label: Genre icons
                 name: genreIcons
                 widget: list
-                field: { label: Icon, name: icon, widget: string }
+                field: { label: Icon, name: icon, widget: select, options: [arrowLeft, arrowRight, arrowUp, arrowUpRight, arrowPath, archiveBox, bars3, bolt, chevronLeft, chevronDown, chevronRight, github, globeAlt, lightBulb, linkedin, xMark, folder01, facebook, link, twitter, userCircle, calendar03, check, clock01, gridView, listView, play, search, shoppingBag, star, questionMarkCircle, bookOpen, bookmark, eye, lockClosed, adjustmentsHorizontal, moon, handThumbUp, heart, faceSmile, faceFrown] }
               - { label: Genre works template, name: genreWorksTemplate, widget: string, hint: "Use {count} as the number placeholder" }
 
       - name: publication_detail
@@ -986,7 +977,7 @@ collections:
                 widget: object
                 fields: &publication_section_settings
                   - { label: Theme, name: theme, widget: string }
-                  - { label: Spacing, name: spacing, widget: string }
+                  - { label: Spacing, name: spacing, widget: select, options: [compact, default, none, lead, body, closing] }
                   - { label: Container, name: container, widget: string }
               - label: Labels
                 name: labels
@@ -1128,7 +1119,6 @@ collections:
         format: json
         fields:
           - { label: Skip to content, name: skipToContent, widget: string }
-          - { label: Back to top, name: backToTop, widget: string }
           - { label: Open menu, name: openMenu, widget: string }
           - { label: Close menu, name: closeMenu, widget: string }
           - label: Loading screen
@@ -1152,15 +1142,6 @@ collections:
               - { label: Mobile label, name: mobileLabel, widget: string }
               - { label: Social label, name: socialLabel, widget: string }
               - { label: Footer social label, name: footerSocialLabel, widget: string }
-              - { label: Rail social display, name: railSocialDisplay, widget: select, options: [label, shortLabel, icon] }
-          - label: Progress
-            name: progress
-            widget: object
-            fields:
-              - { label: Rail label, name: railLabel, widget: string }
-              - { label: Reading label, name: readingLabel, widget: string }
-              - { label: Initial section, name: initialSection, widget: string }
-              - { label: Initial value, name: initialValue, widget: string }
           - label: Separators
             name: separators
             widget: object

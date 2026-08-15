@@ -48,8 +48,8 @@
             },
             {
               "href": "#selected-works",
-              "label": "Xem video giới thiệu",
-              "icon": "play",
+              "label": "Xem dự án nổi bật",
+              "icon": "arrowRight",
               "iconPosition": "end",
               "variant": "text",
               "tone": "light",
@@ -64,7 +64,7 @@
       {
         "id": "universe",
         "type": "collection",
-        "template": "sidebar",
+        "template": "cards",
         "settings": {
           "theme": "light",
           "spacing": "compact",
@@ -84,7 +84,7 @@
             "description": "Chọn một hành tinh để khám phá thế giới của mình.",
             "action": {
               "href": "#featured-products",
-              "label": "Xem tất cả",
+              "label": "Xem sản phẩm nổi bật",
               "icon": "arrowRight"
             }
           },
@@ -199,7 +199,7 @@
       {
         "id": "featured-products",
         "type": "collection",
-        "template": "sidebar",
+        "template": "cards",
         "settings": {
           "theme": "light",
           "spacing": "compact",
@@ -233,10 +233,8 @@
             "imageWidth": 900,
             "imageHeight": 562,
             "categoryDisplay": "text",
-            "actionHref": "#products",
             "actionLabelPrefix": "Add ",
-            "actionIcon": "shoppingBag",
-            "license": "pro"
+            "actionIcon": "shoppingBag"
           },
           "cards": {
             "template": "media-details",
@@ -253,7 +251,7 @@
       {
         "id": "selected-works",
         "type": "collection",
-        "template": "sidebar",
+        "template": "cards",
         "settings": {
           "theme": "light",
           "spacing": "compact",
@@ -313,7 +311,7 @@
       {
         "id": "labs",
         "type": "collection",
-        "template": "sidebar",
+        "template": "cards",
         "settings": {
           "theme": "dark",
           "spacing": "compact",
@@ -393,7 +391,7 @@
             "comics": {
               "routes": {
                 "base": "/comics/",
-                "categoryBase": "/comics/category/"
+                "categoryBase": "/comics?genre="
               },
               "ariaLabelPrefix": "Read ",
               "categoryDisplay": "text",
@@ -403,7 +401,7 @@
             "novels": {
               "routes": {
                 "base": "/novels/",
-                "categoryBase": "/novels/category/"
+                "categoryBase": "/novels?genre="
               },
               "ariaLabelPrefix": "Read ",
               "categoryDisplay": "text",
@@ -479,7 +477,7 @@
           "title": "Bạn có ý tưởng dự án?",
           "description": "Hãy cùng tạo ra một sản phẩm rõ ràng, hữu ích và đáng nhớ.",
           "action": {
-            "href": "mailto:hello@nvt.studio",
+            "href": "mailto:thunk.work.91@gmail.com",
             "label": "Liên hệ tôi"
           },
           "image": {

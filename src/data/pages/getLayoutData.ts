@@ -8,7 +8,7 @@ import {
 import type { BaseLayoutProps } from "@/types/layouts/BaseLayout.types";
 
 export interface LayoutData extends Required<
-	Pick<BaseLayoutProps, "title" | "description" | "language" | "header" | "footer" | "closingProfile" | "loadingScreen" | "skipToContent">
+	Pick<BaseLayoutProps, "title" | "description" | "favicon" | "language" | "header" | "footer" | "closingProfile" | "loadingScreen" | "skipToContent">
 > {}
 
 export async function getLayoutData(): Promise<LayoutData> {
@@ -32,6 +32,7 @@ export async function getLayoutData(): Promise<LayoutData> {
 	return {
 		title: metadata.title,
 		description: metadata.description,
+		favicon: site.favicon ?? "/favicon.ico",
 		language: metadata.language,
 		skipToContent: interfaceSettings.skipToContent,
 		header: {

@@ -200,7 +200,7 @@
               },
               "action": {
                 "href": "#products",
-                "label": "Xem bundles",
+                "label": "Xem sản phẩm",
                 "icon": "arrowRight"
               }
             }
@@ -215,10 +215,8 @@
             "imageWidth": 900,
             "imageHeight": 562,
             "categoryDisplay": "text",
-            "actionHref": "#products",
             "actionLabelPrefix": "Add ",
-            "actionIcon": "shoppingBag",
-            "license": "pro"
+            "actionIcon": "shoppingBag"
           },
           "result": {
             "label": "products found"

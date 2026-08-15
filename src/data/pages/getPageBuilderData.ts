@@ -7,7 +7,6 @@ import {
 	getPublicationCatalogSettings,
 	getPublications,
 } from "@/data/cms";
-import type { CIconName } from "@/types/components/object/component/CIcon.types";
 import type { PAdvertisementData } from "@/types/components/object/project/advertisement/PAdvertisement.types";
 import type { PCtaProps } from "@/types/components/object/project/cta/PCta.types";
 import type { PHeroProps } from "@/types/components/object/project/hero/PHero.types";
@@ -96,7 +95,7 @@ const headingLevel = (value: number | undefined): PCardProps["headingLevel"] => 
 };
 
 const cardConfig = (section: CollectionSection, items: PCardData[]): PCardProps => {
-	const cards = section.content.cards;
+	const cards = "cards" in section.content ? section.content.cards : undefined;
 	return {
 		template: cards?.template,
 		layout: cards?.layout ?? section.settings.layout,
@@ -109,27 +108,6 @@ const cardConfig = (section: CollectionSection, items: PCardData[]): PCardProps 
 		items,
 	};
 };
-
-const isRecord = (value: unknown): value is Record<string, unknown> =>
-	typeof value === "object" && value !== null && !Array.isArray(value);
-
-const isPCardData = (value: unknown): value is PCardData => {
-	if (!isRecord(value)) return false;
-	return (
-		typeof value.href === "string" &&
-		typeof value.ariaLabel === "string" &&
-		Array.isArray(value.title) &&
-		value.title.every((item) => typeof item === "string")
-	);
-};
-
-const staticCardItems = (items: unknown[]): PCardData[] =>
-	items.map((item) => {
-		if (!isPCardData(item)) {
-			throw new Error("Invalid static card data in page collection.");
-		}
-		return item;
-	});
 
 const take = <T>(items: T[], limit?: number) =>
 	limit === undefined ? items : items.slice(0, limit);
@@ -151,7 +129,7 @@ const isPublicationsCollectionContent = (content: SourcedCollectionContent): con
 
 const resolveCollectionItems = async (section: CollectionSection): Promise<PCardData[]> => {
 	const content = section.content;
-	if ("items" in content) return staticCardItems(content.items);
+	if ("items" in content) return content.items;
 	if (!("source" in content)) return [];
 
 	if (isProductsCollectionContent(content)) {
@@ -175,7 +153,7 @@ const resolveCollectionItems = async (section: CollectionSection): Promise<PCard
 				}],
 			},
 			action: {
-				href: content.itemPresentation.actionHref,
+				href: `${content.itemPresentation.routes.base}${item.slug}`,
 				label: `${content.itemPresentation.actionLabelPrefix}${item.title}`,
 				icon: content.itemPresentation.actionIcon,
 			},
@@ -183,7 +161,7 @@ const resolveCollectionItems = async (section: CollectionSection): Promise<PCard
 				badge: item.badge,
 				category: item.category,
 				categorySlug: item.categorySlug,
-				license: content.itemPresentation.license,
+				license: item.license,
 				oldPrice: item.oldPrice,
 				platform: item.platform,
 				price: item.price,
@@ -430,11 +408,11 @@ const publicationCatalogCardProps = (
 	config: PublicationCatalogSettings["main"]["featuredCards"],
 	items: PCardData[],
 ): PCardProps => ({
-	template: config.template as PCardProps["template"],
-	layout: config.layout as PCardProps["layout"],
+	template: config.template,
+	layout: config.layout,
 	columns: cardColumns(config.columns),
-	gap: config.gap as PCardProps["gap"],
-	mediaRatio: config.mediaRatio as PCardProps["mediaRatio"],
+	gap: config.gap,
+	mediaRatio: config.mediaRatio,
 	slots: config.slots,
 	items,
 });
@@ -520,7 +498,7 @@ const resolvePublicationCatalogCollection = async (
 		}
 	}
 	const genres = [...genreMap.values()].sort((first, second) => second.count - first.count);
-	const genreIcons = settings.main.genreIcons as CIconName[];
+	const genreIcons = settings.main.genreIcons;
 	const popularGenreCards: PCardData[] = genres
 		.slice(0, settings.main.popularGenresLimit)
 		.map((genre, index) => ({
@@ -532,9 +510,9 @@ const resolvePublicationCatalogCollection = async (
 		}));
 
 	const panel = {
-		surface: settings.sidebar.panel.surface as "glass",
-		radius: settings.sidebar.panel.radius as "md",
-		spacing: settings.sidebar.panel.spacing as "sm",
+		surface: settings.sidebar.panel.surface,
+		radius: settings.sidebar.panel.radius,
+		spacing: settings.sidebar.panel.spacing,
 	};
 	const compactHeader = (title: string) => ({
 		data: { title },
@@ -656,7 +634,7 @@ const resolvePublicationCatalogCollection = async (
 	};
 };
 
-const archiveCards = (cards: CollectionSection["content"]["cards"], items: PCardData[]): PCardProps => ({
+const archiveCards = (cards: ProjectsArchiveSection["content"]["cards"], items: PCardData[]): PCardProps => ({
 	template: cards?.template,
 	layout: cards?.layout,
 	columns: cardColumns(cards?.columns),
@@ -856,8 +834,8 @@ const buildProductsArchive = async (
 				title: [product.title], excerpt: product.description,
 				media: { src: product.image, alt: `${product.title}${itemPresentation.imageAltSuffix}`, width: itemPresentation.imageWidth, height: itemPresentation.imageHeight },
 				metadata: { items: [{ type: "category", label: product.category, href: `${itemPresentation.routes.categoryBase}${product.categorySlug}`, display: itemPresentation.categoryDisplay }] },
-				action: { href: itemPresentation.actionHref, label: `${itemPresentation.actionLabelPrefix}${product.title}`, icon: itemPresentation.actionIcon },
-				product: { badge: product.badge, category: product.category, categorySlug: product.categorySlug, license: itemPresentation.license, oldPrice: product.oldPrice, platform: product.platform, price: product.price, rating: product.rating, reviews: product.reviews },
+				action: { href: `${itemPresentation.routes.base}${product.slug}`, label: `${itemPresentation.actionLabelPrefix}${product.title}`, icon: itemPresentation.actionIcon },
+				product: { badge: product.badge, category: product.category, categorySlug: product.categorySlug, license: product.license, oldPrice: product.oldPrice, platform: product.platform, price: product.price, rating: product.rating, reviews: product.reviews },
 			}))),
 			emptyLabel,
 			pagination: { ...pagination, totalPages: Math.max(1, Math.ceil(visibleProducts.length / pagination.pageSize)) },

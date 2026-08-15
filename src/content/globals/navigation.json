@@ -1,28 +1,24 @@
 {
   "navItems": [
     {
-			"href": "/",
-			"label": "Home"
+      "href": "/",
+      "label": "Home"
     },
     {
-			"href": "/products",
-			"label": "Products"
+      "href": "/products",
+      "label": "Products"
     },
     {
-			"href": "/projects",
-			"label": "Works"
+      "href": "/projects",
+      "label": "Works"
     },
     {
-			"href": "/labs",
-			"label": "Lab"
-		},
-		{
-			"href": "/blog",
-			"label": "Stories"
-		},
-		{
-			"href": "/#about",
-			"label": "About"
+      "href": "/labs",
+      "label": "Lab"
+    },
+    {
+      "href": "/blog",
+      "label": "Stories"
     }
   ],
   "footerNavItems": [
@@ -31,20 +27,12 @@
       "label": "Home"
     },
     {
-      "href": "/#about",
-      "label": "About"
-    },
-    {
       "href": "/projects",
       "label": "Projects"
     },
     {
       "href": "/blog",
       "label": "Blog & Insights"
-    },
-    {
-      "href": "/#qa",
-      "label": "Q&A"
     }
   ],
   "resourceLinks": [
@@ -55,10 +43,6 @@
     {
       "href": "/blog",
       "label": "Blog & Insights"
-    },
-    {
-      "href": "/#qa",
-      "label": "Q&A"
     }
   ],
   "legalLinks": [

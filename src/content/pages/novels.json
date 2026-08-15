@@ -34,15 +34,6 @@
               "variant": "primary",
               "tone": "light",
               "size": "md"
-            },
-            {
-              "label": "Reading guide",
-              "href": "/novels#catalog",
-              "icon": "archiveBox",
-              "iconPosition": "end",
-              "variant": "outline",
-              "tone": "light",
-              "size": "md"
             }
           ],
           "image": {
@@ -93,12 +84,7 @@
               "Explore",
               "Novels"
             ],
-            "description": "Browse original novels, light novels, and web fiction.",
-            "action": {
-              "label": "View all",
-              "href": "/novels",
-              "icon": "arrowRight"
-            }
+            "description": "Browse original novels, light novels, and web fiction."
           },
           "source": {
             "collection": "novels"
@@ -112,20 +98,6 @@
             "categoryDisplay": "text",
             "tagsLabelSuffix": " genres",
             "viewsIcon": "globeAlt"
-          },
-          "cards": {
-            "template": "media-metrics",
-            "layout": "grid",
-            "columns": 4,
-            "gap": "sm",
-            "mediaRatio": "portrait",
-            "headingLevel": 3,
-            "slots": {
-              "excerpt": true,
-              "tags": true,
-              "metrics": true,
-              "action": false
-            }
           }
         }
       },

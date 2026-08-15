@@ -1,6 +1,6 @@
 import { z } from "astro/zod";
 
-const iconNameSchema = z.enum([
+export const iconNameSchema = z.enum([
 	"arrowLeft",
 	"arrowRight",
 	"arrowUp",
@@ -57,7 +57,7 @@ const buttonVariantSchema = z.enum([
 ]);
 const buttonSizeSchema = z.enum(["xs", "sm", "md", "lg"]);
 const buttonToneSchema = z.enum(["dark", "light"]);
-const mediaRatioSchema = z.enum([
+export const mediaRatioSchema = z.enum([
 	"editorial",
 	"landscape",
 	"natural",
@@ -66,7 +66,7 @@ const mediaRatioSchema = z.enum([
 	"square",
 	"video",
 ]);
-const cardTemplateSchema = z.enum([
+export const cardTemplateSchema = z.enum([
 	"stacked",
 	"horizontal",
 	"overlay",
@@ -84,7 +84,7 @@ const cardTemplateSchema = z.enum([
 	"media-summary",
 	"media-metrics",
 ]);
-const cardLayoutSchema = z.enum([
+export const cardLayoutSchema = z.enum([
 	"grid",
 	"list",
 	"three-column",
@@ -94,8 +94,8 @@ const cardLayoutSchema = z.enum([
 	"asymmetric",
 	"showcase",
 ]);
-const cardColumnsSchema = z.number().int().min(1).max(5);
-const cardGapSchema = z.enum(["none", "sm", "md", "lg", "xl"]);
+export const cardColumnsSchema = z.number().int().min(1).max(5);
+export const cardGapSchema = z.enum(["none", "sm", "md", "lg", "xl"]);
 const cardSeparatorSchema = z.enum(["none", "light", "dark"]);
 const metadataDisplaySchema = z.enum(["icon", "icon-text", "text"]);
 const badgeToneSchema = z.enum(["brand", "neutral", "inverse"]);
@@ -200,7 +200,7 @@ const pageHeadingSchema = z.object({
 	action: pageActionSchema.optional(),
 });
 
-const cardSlotsSchema = z.object({
+export const cardSlotsSchema = z.object({
 	media: z.boolean().optional(),
 	icon: z.boolean().optional(),
 	metadata: z.boolean().optional(),
@@ -291,10 +291,8 @@ const productCardPresentationSchema = z.object({
 	imageWidth: z.number().int().positive(),
 	imageHeight: z.number().int().positive(),
 	categoryDisplay: metadataDisplaySchema,
-	actionHref: z.string().min(1),
 	actionLabelPrefix: z.string(),
 	actionIcon: iconNameSchema,
-	license: z.enum(["free", "pro"]),
 });
 
 const insightCardPresentationSchema = z.object({
@@ -318,11 +316,18 @@ const publicationCardPresentationSchema = z.object({
 	viewsIcon: iconNameSchema,
 });
 
-const staticCardItemSchema = z.record(z.string(), z.unknown());
+const staticCardItemSchema = z.object({
+	href: z.string().min(1),
+	ariaLabel: z.string().min(1),
+	title: z.array(z.string().min(1)).min(1),
+	excerpt: z.string().optional(),
+	media: imageSchema.optional(),
+	appearance: cardAppearanceSchema.optional(),
+});
 const collectionSectionBase = {
 	id: z.string().min(1),
 	type: z.literal("collection"),
-	template: z.enum(["sidebar", "cards", "split"]).optional(),
+	template: z.enum(["cards", "split"]).optional(),
 	settings: pageSectionSettingsSchema,
 };
 const collectionContentBase = {
@@ -370,16 +375,18 @@ const blogCollectionSectionSchema = z.object({
 });
 const comicsCollectionSectionSchema = z.object({
 	...collectionSectionBase,
+	template: z.literal("sidebar"),
 	content: z.object({
-		...collectionContentBase,
+		heading: pageHeadingSchema.optional(),
 		source: z.object({ collection: z.literal("comics"), limit: z.number().int().positive().optional() }),
 		itemPresentation: publicationCardPresentationSchema,
 	}),
 });
 const novelsCollectionSectionSchema = z.object({
 	...collectionSectionBase,
+	template: z.literal("sidebar"),
 	content: z.object({
-		...collectionContentBase,
+		heading: pageHeadingSchema.optional(),
 		source: z.object({ collection: z.literal("novels"), limit: z.number().int().positive().optional() }),
 		itemPresentation: publicationCardPresentationSchema,
 	}),
@@ -774,7 +781,6 @@ export const closingProfileSettingsSchema = z.object({
 
 export const interfaceSettingsSchema = z.object({
 	skipToContent: z.string().min(1),
-	backToTop: z.string().min(1),
 	openMenu: z.string().min(1),
 	closeMenu: z.string().min(1),
 	loadingScreen: z.object({
@@ -790,13 +796,6 @@ export const interfaceSettingsSchema = z.object({
 		mobileLabel: z.string().min(1),
 		socialLabel: z.string().min(1),
 		footerSocialLabel: z.string().min(1),
-		railSocialDisplay: z.enum(["label", "shortLabel", "icon"]),
-	}),
-	progress: z.object({
-		railLabel: z.string().min(1),
-		readingLabel: z.string().min(1),
-		initialSection: z.string().min(1),
-		initialValue: z.string().min(1),
 	}),
 	separators: z.object({ slash: z.string(), dot: z.string() }),
 	contentFormatting: z.object({
@@ -812,6 +811,7 @@ export const productEntrySchema = z.object({
 	category: z.string().min(1),
 	categorySlug: z.string().min(1),
 	platform: z.string().min(1),
+	license: z.enum(["free", "pro"]),
 	description: z.string().min(1),
 	price: z.number().nonnegative(),
 	oldPrice: z.number().nonnegative().optional(),
