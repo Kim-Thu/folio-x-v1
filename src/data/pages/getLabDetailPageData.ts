@@ -243,6 +243,7 @@ export async function getLabDetailPageData(
 							label: presentation.gallery.title,
 							items: lab.gallery,
 						},
+					},
 				]
 			: []),
 		...(lab.resources.length > 0
