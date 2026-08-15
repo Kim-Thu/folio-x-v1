@@ -4,6 +4,7 @@ const iconSchema = z.enum([
   "arrowLeft", "arrowRight", "arrowUp", "arrowUpRight", "arrowPath", "archiveBox", "bars3", "bolt", "chevronLeft", "chevronDown", "chevronRight", "github", "globeAlt", "lightBulb", "linkedin", "xMark", "folder01", "facebook", "link", "twitter", "userCircle", "calendar03", "check", "clock01", "gridView", "listView", "play", "search", "shoppingBag", "star", "questionMarkCircle", "bookOpen", "bookmark", "eye", "lockClosed", "adjustmentsHorizontal", "moon", "handThumbUp", "heart", "faceSmile", "faceFrown",
 ]);
 const gapSchema = z.enum(["none", "xs", "sm", "md", "lg", "xl"]);
+const cardGapSchema = z.enum(["none", "sm", "md", "lg", "xl"]);
 const sectionSettingsSchema = z.object({
   theme: z.enum(["dark", "light", "canvas", "accent", "none"]),
   spacing: z.enum(["compact", "default", "none", "lead", "body", "closing"]),
@@ -21,43 +22,10 @@ const sectionHeaderSchema = z.object({
     z.literal(6),
   ]),
 });
-const cardPresentationSchema = z.object({
-  template: z.enum([
-    "stacked",
-    "horizontal",
-    "overlay",
-    "featured",
-    "boxed",
-    "compact-media",
-    "compact-bordered",
-    "editorial",
-    "icon-panel",
-    "icon-summary",
-    "media-banner",
-    "media-caption",
-    "media-details",
-    "media-only",
-    "media-summary",
-    "media-metrics",
-  ]),
-  layout: z.enum([
-    "grid",
-    "list",
-    "three-column",
-    "twelve-column",
-    "content-three-column",
-    "mosaic",
-    "asymmetric",
-    "showcase",
-  ]),
-  columns: z.union([
-    z.literal(1),
-    z.literal(2),
-    z.literal(3),
-    z.literal(4),
-    z.literal(5),
-  ]),
-  gap: z.enum(["none", "sm", "md", "lg", "xl"]),
+const fourColumnGridSchema = z.object({
+  layout: z.literal("grid"),
+  columns: z.literal(4),
+  gap: cardGapSchema,
 });
 
 export const labDetailSettingsSchema = z.object({
@@ -157,7 +125,9 @@ export const labDetailSettingsSchema = z.object({
     settings: sectionSettingsSchema,
     stack: stackSchema,
     header: sectionHeaderSchema,
-    cards: cardPresentationSchema,
+    cards: fourColumnGridSchema.extend({
+      template: z.literal("icon-panel"),
+    }),
   }),
   related: z.object({
     id: z.string().min(1),
@@ -168,6 +138,8 @@ export const labDetailSettingsSchema = z.object({
     settings: sectionSettingsSchema,
     stack: stackSchema,
     header: sectionHeaderSchema,
-    cards: cardPresentationSchema,
+    cards: fourColumnGridSchema.extend({
+      template: z.literal("media-caption"),
+    }),
   }),
 });
