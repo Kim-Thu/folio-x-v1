@@ -164,6 +164,13 @@ export async function getLabDetailPageData(
 					section: false,
 					props: {
 						title: presentation.sidebar.labels.projectInformation,
+						box: {
+							surface: presentation.sidebar.panel.surface,
+							radius: presentation.sidebar.panel.radius,
+							spacing: presentation.sidebar.panel.spacing,
+						},
+						stack: presentation.sidebar.panel.stack,
+						header: presentation.sidebar.header,
 						list: { items: lab.facts },
 						tags: {
 							title: formatTitleLabel(
@@ -242,6 +249,16 @@ export async function getLabDetailPageData(
 							template: "grid" as const,
 							label: presentation.gallery.title,
 							items: lab.gallery,
+							header: {
+								data: { title: presentation.gallery.title },
+								appearance: presentation.gallery.header.appearance,
+								headingLevel: presentation.gallery.header.headingLevel,
+							},
+							stack: presentation.gallery.stack,
+							mediaRatio: presentation.gallery.mediaRatio,
+							imageVariant: presentation.gallery.imageVariant,
+							captionVariant: presentation.gallery.captionVariant,
+							captionTone: presentation.gallery.captionTone,
 						},
 					},
 				]
@@ -256,6 +273,7 @@ export async function getLabDetailPageData(
 							...presentation.resources.settings,
 						},
 						props: {
+							stack: presentation.resources.stack,
 							header: {
 								data: { title: presentation.resources.title },
 								appearance: presentation.resources.header.appearance,
@@ -293,15 +311,16 @@ export async function getLabDetailPageData(
 							...presentation.related.settings,
 						},
 						props: {
+							stack: presentation.related.stack,
 							header: {
 								data: { title: presentation.related.title },
+								action: {
+									label: presentation.related.actionLabel,
+									href: presentation.header.routes.base,
+									icon: presentation.related.actionIcon,
+								},
 								appearance: presentation.related.header.appearance,
 								headingLevel: presentation.related.header.headingLevel,
-							},
-							headerAction: {
-								label: presentation.related.actionLabel,
-								href: presentation.header.routes.base,
-								icon: presentation.related.actionIcon,
 							},
 							cards: {
 								template: "editorial" as const,
