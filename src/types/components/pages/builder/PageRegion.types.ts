@@ -30,6 +30,9 @@ import type { PageGroupRegion } from "@/types/components/pages/builder/PageGroup
 
 export type PageRegionContainer = LContainerSize | "none";
 
+type RegionBoxProps = Pick<CBoxProps, "radius" | "spacing" | "surface">;
+type RegionStackProps = Pick<CColumnsProps, "columns" | "gap">;
+
 export interface PageRegionBase {
 	key: string;
 	enabled?: boolean;
@@ -76,8 +79,8 @@ export interface CardsRegion extends PageRegionBase {
 		headerAction?: CButtonLinkProps;
 		cards: PCardProps;
 		action?: CButtonLinkProps;
-		box?: Pick<CBoxProps, "radius" | "spacing" | "surface">;
-		stack?: Pick<CColumnsProps, "columns" | "gap">;
+		box?: RegionBoxProps;
+		stack?: RegionStackProps;
 		panel?: boolean;
 	};
 }
@@ -104,7 +107,10 @@ export interface TabsRegion extends PageRegionBase {
 
 export interface GalleryRegion extends PageRegionBase {
 	component: "gallery";
-	props: PGalleryProps;
+	props: PGalleryProps & {
+		header?: PSectionHeaderProps;
+		stack?: RegionStackProps;
+	};
 }
 
 export interface EntryIndexRegion extends PageRegionBase {
@@ -126,6 +132,9 @@ export interface DetailsRegion extends PageRegionBase {
 			title: string;
 			list: CTagsProps;
 		};
+		box?: RegionBoxProps;
+		stack?: RegionStackProps;
+		header?: Pick<PSectionHeaderProps, "appearance" | "headingLevel">;
 	};
 }
 
