@@ -13,6 +13,8 @@ export type PGalleryTemplate = "grid" | "slider";
 
 export interface PGalleryItem extends CImageData {
 	caption?: string;
+	href?: string;
+	ariaLabel?: string;
 }
 
 export interface PGalleryProps {
