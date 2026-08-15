@@ -12,17 +12,11 @@ import type { PCardItemProps } from "@/types/components/object/project/card/PCar
 const { data, headingLevel = 3, slots } = Astro.props as PCardItemProps;
 ---
 
-<CBox as="article" surface="glass" radius="md" spacing="sm">
-	<CRow align="start" gap="sm" wrap={false}>
-		{slots.icon && data.icon && <CIconTile icon={data.icon} />}
-		<CColumns columns="one" gap="xs">
-			{slots.title && (
-				<CHeading level={headingLevel} variant="h5">
-					<CLink href={data.href}>{data.title.join(" ")}</CLink>
-				</CHeading>
-			)}
-			{slots.excerpt && data.excerpt && (
-				<CText variant="body-sm" tone="subtle">{data.excerpt}</CText>
+<CBox as="article" surface="bordered" radius="md" spacing="md">
+	<CColumns columns="one" gap="md">
+		<CRow align="center" justify="between" gap="md" wrap={false}>
+			{slots.icon && data.icon && (
+				<CIconTile icon={data.icon} iconSize="sm" />
 			)}
 			{slots.action && data.action && (
 				<CButton
@@ -33,8 +27,19 @@ const { data, headingLevel = 3, slots } = Astro.props as PCardItemProps;
 					variant="outline"
 					tone="light"
 					size="xs"
+					iconOnly
 				/>
 			)}
+		</CRow>
+		<CColumns columns="one" gap="xs">
+			{slots.title && (
+				<CHeading level={headingLevel} variant="h5">
+					<CLink href={data.href}>{data.title.join(" ")}</CLink>
+				</CHeading>
+			)}
+			{slots.excerpt && data.excerpt && (
+				<CText variant="body-sm" tone="muted">{data.excerpt}</CText>
+			)}
 		</CColumns>
-	</CRow>
+	</CColumns>
 </CBox>
