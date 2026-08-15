@@ -38,7 +38,9 @@ const projectHeaderSectionSchema = z.object({
 		tagsLabel: z.string().min(1),
 		actionsLabel: z.string().min(1),
 		liveActionLabel: z.string().min(1),
+		liveActionIcon: z.literal("arrowUpRight").default("arrowUpRight"),
 		sourceActionLabel: z.string().min(1),
+		sourceActionIcon: z.literal("github").default("github"),
 		asideDecoration: imageSchema,
 		facts: z.object({
 			clientLabel: z.string().min(1),
@@ -70,7 +72,9 @@ const projectNavigationSectionSchema = z.object({
 	content: z.object({
 		label: z.string().min(1),
 		previousLabel: z.string().min(1),
+		previousIcon: z.literal("arrowLeft").default("arrowLeft"),
 		nextLabel: z.string().min(1),
+		nextIcon: z.literal("arrowRight").default("arrowRight"),
 	}),
 });
 
