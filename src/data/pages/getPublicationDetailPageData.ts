@@ -178,6 +178,8 @@ export async function getPublicationDetailPageData(
 			props: {
 				template: "sidebar",
 				asideLabel: presentation.chapters.labels.aside,
+				columns: presentation.chapters.overviewLayout.columns,
+				gap: presentation.chapters.overviewLayout.gap,
 				regions: [
 					{
 						key: "publication-overview",
