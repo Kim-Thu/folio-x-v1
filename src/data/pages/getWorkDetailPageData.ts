@@ -84,7 +84,7 @@ export async function getWorkDetailPageData(
 								kind: "live" as const,
 								label: section.content.liveActionLabel,
 								href: detail.liveUrl,
-								icon: "arrowUpRight" as const,
+								icon: section.content.liveActionIcon,
 							},
 						]
 					: []),
@@ -94,7 +94,7 @@ export async function getWorkDetailPageData(
 								kind: "source" as const,
 								label: section.content.sourceActionLabel,
 								href: detail.sourceUrl,
-								icon: "github" as const,
+								icon: section.content.sourceActionIcon,
 							},
 						]
 					: []),
@@ -181,7 +181,7 @@ export async function getWorkDetailPageData(
 							image: previous.image,
 							alt: previous.alt,
 							label: section.content.previousLabel,
-							icon: "arrowLeft" as const,
+							icon: section.content.previousIcon,
 							summary: previous.summary,
 						},
 					]
@@ -194,7 +194,7 @@ export async function getWorkDetailPageData(
 							image: next.image,
 							alt: next.alt,
 							label: section.content.nextLabel,
-							icon: "arrowRight" as const,
+							icon: section.content.nextIcon,
 							summary: next.summary,
 						},
 					]
@@ -219,7 +219,7 @@ export async function getWorkDetailPageData(
 
 	return {
 		project,
-		pageTemplate: page.template ,
+		pageTemplate: page.template,
 		regions,
 	};
 }
