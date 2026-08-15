@@ -6,7 +6,6 @@ import PCta from "@/components/object/project/cta/PCta.astro";
 import PPageHeader from "@/components/object/project/page-header/PPageHeader.astro";
 import PublicationCatalogContent from "@/components/pages/catalog/PublicationCatalogContent.astro";
 import { getPublications } from "@/data/cms";
-import type { PublicationCardPresentation } from "@/data/mappers/card";
 import type { CatalogPageProps } from "@/types/components/pages/catalog/CatalogPage.types";
 import type { PageSectionData } from "@/types/components/pages/builder/PageBuilder.types";
 import type { PCtaProps } from "@/types/components/object/project/cta/PCta.types";
@@ -16,13 +15,13 @@ const { data } = Astro.props as CatalogPageProps;
 const catalog = data.page.slug === "/comics" ? "comics" : "novels";
 const entries = await getPublications(catalog);
 
-type CollectionSection = Extract<PageSectionData, { type: "collection" }>;
-type PublicationCatalogSection = CollectionSection & {
-	content: CollectionSection["content"] & {
-		source: { collection: "comics" | "novels"; limit?: number };
-		itemPresentation: PublicationCardPresentation;
-	};
-};
+type PublicationCatalogSection = Extract<
+	PageSectionData,
+	{
+		type: "collection";
+		content: { source: { collection: "comics" | "novels" } };
+	}
+>;
 
 const isPublicationCatalogSection = (
 	section: PageSectionData,
