@@ -7,23 +7,60 @@ import PCard from "@/components/object/project/card/PCard.astro";
 import PFilterPanel from "@/components/object/project/filter-panel/PFilterPanel.astro";
 import PSectionHeader from "@/components/object/project/section-header/PSectionHeader.astro";
 import { getPublicationCatalogSettings } from "@/data/cms";
-import { mapPublicationToCard } from "@/data/mappers/card";
-import type { PublicationCardPresentation } from "@/data/mappers/card";
 import type { PublicationEntry } from "@/types/content";
+import type { PageSectionData } from "@/types/components/pages/builder/PageBuilder.types";
 import type { PCardData, PCardProps } from "@/types/components/object/project/card/PCard.types";
 import type { CIconName } from "@/types/components/object/component/CIcon.types";
+
+type PublicationCatalogSection = Extract<
+	PageSectionData,
+	{
+		type: "collection";
+		content: { source: { collection: "comics" | "novels" } };
+	}
+>;
 
 type Props = {
 	catalog: "novels" | "comics";
 	entries: PublicationEntry[];
-	presentation: PublicationCardPresentation;
+	presentation: PublicationCatalogSection["content"]["itemPresentation"];
 };
 
 const { catalog, entries, presentation } = Astro.props as Props;
 const settings = await getPublicationCatalogSettings();
-const cards = entries.map((entry) =>
-	mapPublicationToCard(entry, catalog, presentation),
-);
+const cards: PCardData[] = entries.map((entry) => ({
+	href: `${presentation.routes.base}${entry.slug}`,
+	ariaLabel: `${presentation.ariaLabelPrefix}${entry.title}`,
+	title: [entry.title],
+	excerpt: entry.summary,
+	media: entry.cover,
+	metadata: {
+		items: entry.genres.map((genre) => ({
+			type: "category",
+			label: genre.label,
+			href: `${presentation.routes.categoryBase}${genre.slug}`,
+			display: presentation.categoryDisplay,
+		})),
+	},
+	tags: entry.genres.map((genre) => ({
+		label: genre.label,
+		href: `${presentation.routes.categoryBase}${genre.slug}`,
+	})),
+	tagsLabel: `${entry.title}${presentation.tagsLabelSuffix}`,
+	metrics: [{ icon: presentation.viewsIcon, label: entry.views }],
+	rating: { value: entry.rating },
+	facets: {
+		genre: entry.genres.map((genre) => genre.slug),
+		status: [entry.status],
+	},
+	searchValue: [
+		entry.title,
+		entry.summary,
+		entry.author,
+		...entry.genres.map((genre) => genre.label),
+	].join(" "),
+	sortValue: String(entry.order).padStart(4, "0"),
+}));
 const featuredCards = cards.slice(0, settings.main.featuredLimit);
 const latestCards = cards.slice(0, settings.main.latestLimit);
 const trendingCards = cards.slice(0, settings.sidebar.trendingLimit);
