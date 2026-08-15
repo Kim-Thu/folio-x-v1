@@ -28,6 +28,17 @@ import GroupRegion from "@/components/pages/builder/GroupRegion.astro";
 import type { PageRegionProps } from "@/types/components/pages/builder/PageRegion.types";
 
 const { region } = Astro.props as PageRegionProps;
+
+const cardsBox = region.component === "cards"
+	? region.props.box ?? {
+			surface: region.props.panel ? "glass" : "plain",
+			radius: region.props.panel ? "md" : "none",
+			spacing: region.props.panel ? "sm" : "none",
+		} as const
+	: undefined;
+const cardsStack = region.component === "cards"
+	? region.props.stack ?? { columns: "one", gap: "md" } as const
+	: undefined;
 ---
 
 {region.component === "page-header" && <PPageHeader {...region.props} />}
@@ -35,9 +46,9 @@ const { region } = Astro.props as PageRegionProps;
 {region.component === "section-header" && <PSectionHeader {...region.props} />}
 {region.component === "article" && <PArticle {...region.props} />}
 {region.component === "reviews" && <PReviews {...region.props} />}
-{region.component === "cards" && (
-	<CBox surface={region.props.panel ? "glass" : "plain"} radius={region.props.panel ? "md" : "none"} spacing={region.props.panel ? "sm" : "none"}>
-		<CColumns columns="one" gap="md">
+{region.component === "cards" && cardsBox && cardsStack && (
+	<CBox {...cardsBox}>
+		<CColumns {...cardsStack}>
 			{region.props.header && region.props.headerAction ? (
 				<CRow justify="between" align="end">
 					<PSectionHeader {...region.props.header} />
