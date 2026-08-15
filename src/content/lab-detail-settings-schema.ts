@@ -125,25 +125,6 @@ export const labDetailSettingsSchema = z.object({
     settings: sectionSettingsSchema,
     stack: stackSchema,
     header: sectionHeaderSchema,
-    card: z.object({
-      surface: z.literal("bordered"),
-      radius: z.literal("md"),
-      spacing: z.literal("md"),
-      stack: stackSchema,
-    }),
-    row: z.object({
-      align: z.literal("center"),
-      justify: z.literal("between"),
-      gap: z.literal("md"),
-    }),
-    iconSize: z.literal("sm"),
-    action: z.object({
-      size: z.literal("xs"),
-      variant: z.literal("outline"),
-      tone: z.literal("light"),
-      iconOnly: z.boolean(),
-    }),
-    copy: copySchema,
   }),
   related: z.object({
     id: z.string().min(1),

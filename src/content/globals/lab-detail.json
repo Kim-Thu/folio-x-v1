@@ -133,37 +133,6 @@
     "header": {
       "appearance": "compact",
       "headingLevel": 2
-    },
-    "card": {
-      "surface": "bordered",
-      "radius": "md",
-      "spacing": "md",
-      "stack": {
-        "columns": "one",
-        "gap": "md"
-      }
-    },
-    "row": {
-      "align": "center",
-      "justify": "between",
-      "gap": "md"
-    },
-    "iconSize": "sm",
-    "action": {
-      "size": "xs",
-      "variant": "outline",
-      "tone": "light",
-      "iconOnly": true
-    },
-    "copy": {
-      "stack": {
-        "columns": "one",
-        "gap": "xs"
-      },
-      "headingLevel": 3,
-      "headingVariant": "h5",
-      "bodyVariant": "body-sm",
-      "bodyTone": "muted"
     }
   },
   "related": {

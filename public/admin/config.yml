@@ -787,7 +787,6 @@ collections:
               - { label: ID, name: id, widget: string }
               - { label: Title, name: title, widget: string }
               - { label: Action icon, name: actionIcon, widget: string }
-              - { label: Resource icon size, name: iconSize, widget: select, options: [xs, sm, md, lg, xl] }
               - label: Settings
                 name: settings
                 widget: object
@@ -807,48 +806,6 @@ collections:
                 fields:
                   - { label: Appearance, name: appearance, widget: select, options: [default, compact] }
                   - { label: Heading level, name: headingLevel, widget: number, value_type: int, min: 1, max: 6 }
-              - label: Card
-                name: card
-                widget: object
-                fields:
-                  - { label: Surface, name: surface, widget: hidden, default: bordered }
-                  - { label: Radius, name: radius, widget: hidden, default: md }
-                  - { label: Spacing, name: spacing, widget: hidden, default: md }
-                  - label: Stack
-                    name: stack
-                    widget: object
-                    fields:
-                      - { label: Columns, name: columns, widget: hidden, default: one }
-                      - { label: Gap, name: gap, widget: select, options: [none, xs, sm, md, lg, xl] }
-              - label: Row
-                name: row
-                widget: object
-                fields:
-                  - { label: Align, name: align, widget: hidden, default: center }
-                  - { label: Justify, name: justify, widget: hidden, default: between }
-                  - { label: Gap, name: gap, widget: hidden, default: md }
-              - label: Action presentation
-                name: action
-                widget: object
-                fields:
-                  - { label: Size, name: size, widget: hidden, default: xs }
-                  - { label: Variant, name: variant, widget: hidden, default: outline }
-                  - { label: Tone, name: tone, widget: hidden, default: light }
-                  - { label: Icon only, name: iconOnly, widget: boolean }
-              - label: Copy
-                name: copy
-                widget: object
-                fields:
-                  - label: Stack
-                    name: stack
-                    widget: object
-                    fields:
-                      - { label: Columns, name: columns, widget: hidden, default: one }
-                      - { label: Gap, name: gap, widget: select, options: [none, xs, sm, md, lg, xl] }
-                  - { label: Heading level, name: headingLevel, widget: hidden, default: 3 }
-                  - { label: Heading variant, name: headingVariant, widget: hidden, default: h5 }
-                  - { label: Body variant, name: bodyVariant, widget: hidden, default: body-sm }
-                  - { label: Body tone, name: bodyTone, widget: hidden, default: muted }
 
           - label: Related Labs
             name: related
