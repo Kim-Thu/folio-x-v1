@@ -835,25 +835,6 @@ collections:
                 fields:
                   - { label: Appearance, name: appearance, widget: select, options: [default, compact] }
                   - { label: Heading level, name: headingLevel, widget: number, value_type: int, min: 1, max: 6 }
-              - { label: Surface, name: surface, widget: hidden, default: bordered }
-                  - { label: Radius, name: radius, widget: hidden, default: md }
-                  - { label: Overflow, name: overflow, widget: hidden, default: hidden }
-              - label: Stack
-                    name: stack
-                    widget: object
-                    fields:
-                      - { label: Columns, name: columns, widget: hidden, default: one }
-                      - { label: Gap, name: gap, widget: select, options: [none, xs, sm, md, lg, xl] }
-                  - { label: Heading level, name: headingLevel, widget: hidden, default: 3 }
-                  - { label: Heading variant, name: headingVariant, widget: hidden, default: h5 }
-                  - { label: Body variant, name: bodyVariant, widget: hidden, default: body-sm }
-                  - { label: Body tone, name: bodyTone, widget: hidden, default: muted }
-              - { label: Justify, name: justify, widget: hidden, default: between }
-                  - { label: Align, name: align, widget: hidden, default: center }
-                  - { label: Gap, name: gap, widget: hidden, default: sm }
-                  - { label: Metadata tone, name: metadataTone, widget: hidden, default: brand }
-                  - { label: Metadata display, name: metadataDisplay, widget: select, options: [text, icon, icon-text] }
-                  - { label: Metric appearance, name: metricAppearance, widget: hidden, default: caption }
 
       - name: publication_catalog
         label: Giao diện Comics / Novels
