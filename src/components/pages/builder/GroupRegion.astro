@@ -7,9 +7,11 @@ import type { PageGroupRegion } from "@/types/components/pages/builder/PageGroup
 type Props = { region: PageGroupRegion };
 const { region } = Astro.props as Props;
 const {
+	asideColumns = "one",
 	asideGap = "md",
 	asideLabel,
 	asidePosition = "end",
+	columns = "one",
 	gap = "lg",
 	panel = false,
 	regions,
@@ -26,9 +28,11 @@ const asideRegions = enabledRegions.filter(
 ---
 
 <PLayout
+	{asideColumns}
 	{asideGap}
 	{asideLabel}
 	{asidePosition}
+	{columns}
 	{gap}
 	{panel}
 	{stickyAside}
