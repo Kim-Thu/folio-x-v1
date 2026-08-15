@@ -1152,7 +1152,6 @@ collections:
             name: reader
             widget: object
             fields:
-              - { label: Template, name: template, widget: string }
               - { label: Settings, name: settings, widget: object, fields: *publication_section_settings }
               - label: Labels
                 name: labels

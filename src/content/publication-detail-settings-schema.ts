@@ -117,7 +117,6 @@ export const publicationDetailSettingsSchema = z.object({
     }),
   }),
   reader: z.object({
-    template: z.literal("reader"),
     settings: sectionSettingsSchema,
     labels: z.object({
       breadcrumb: z.string().min(1),

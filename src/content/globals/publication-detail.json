@@ -131,7 +131,6 @@
     }
   },
   "reader": {
-    "template": "reader",
     "settings": {
       "theme": "canvas",
       "spacing": "compact",
