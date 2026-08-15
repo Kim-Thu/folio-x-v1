@@ -117,6 +117,7 @@ export const publicationDetailSettingsSchema = z.object({
     }),
   }),
   reader: z.object({
+    pageTemplate: z.literal("stacked"),
     settings: sectionSettingsSchema,
     labels: z.object({
       breadcrumb: z.string().min(1),
