@@ -3,17 +3,42 @@ import CBox from "@/components/object/component/CBox.astro";
 import CColumns from "@/components/object/component/CColumns.astro";
 import CImage from "@/components/object/component/CImage.astro";
 import CMedia from "@/components/object/component/CMedia.astro";
+import CText from "@/components/object/component/CText.astro";
 import type { PGalleryProps } from "@/types/components/object/project/gallery/PGallery.types";
 
-type Props = Pick<PGalleryProps, "items" | "label">;
-const { items, label } = Astro.props as Props;
+type Props = Pick<
+	PGalleryProps,
+	| "items"
+	| "label"
+	| "mediaRatio"
+	| "imageVariant"
+	| "captionVariant"
+	| "captionTone"
+>;
+const {
+	items,
+	label,
+	mediaRatio = "video",
+	imageVariant = "fill",
+	captionVariant = "caption",
+	captionTone = "muted",
+} = Astro.props as Props;
 ---
 
 <CColumns columns="two" gap="sm" aria-label={label}>
 	{
 		items.map((item) => (
 			<CBox radius="md" overflow="hidden">
-				<CMedia ratio="video"><CImage {...item} variant="fill" /></CMedia>
+				<CMedia ratio={mediaRatio}>
+					<CImage {...item} variant={imageVariant} />
+				</CMedia>
+				{item.caption && (
+					<CBox spacing="xs">
+						<CText variant={captionVariant} tone={captionTone}>
+							{item.caption}
+						</CText>
+					</CBox>
+				)}
 			</CBox>
 		))
 	}
