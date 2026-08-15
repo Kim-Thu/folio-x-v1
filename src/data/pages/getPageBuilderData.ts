@@ -1177,7 +1177,14 @@ const resolveSection = async (
 				props: resolveCtaProps(section),
 			};
 		case "collection": {
-			if (section.template === "sidebar") {
+			if (
+				section.template === "sidebar" &&
+				"source" in section.content &&
+				(
+					section.content.source.collection === "comics" ||
+					section.content.source.collection === "novels"
+				)
+			) {
 				return resolvePublicationCatalogCollection(section);
 			}
 			const items = await resolveCollectionItems(section);
