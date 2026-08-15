@@ -1,3 +1,4 @@
+import { cardCollectionViewClasses } from "@/variants/components/object/project/card/PCard.variants";
 import { parseFacetData } from "@/scripts/facet-data";
 
 function initArchiveFacetsRoot(root: HTMLElement): void {
@@ -24,6 +25,24 @@ function initArchiveFacetsRoot(root: HTMLElement): void {
 	let currentPage = 1;
 
 	if (!cards.length || !collection) return;
+
+	const applyView = (view: "grid" | "list"): void => {
+		collection.dataset.view = view;
+		const isList = view === "list";
+		collection.classList.toggle(
+			cardCollectionViewClasses.list.collection,
+			isList,
+		);
+		cards.forEach((card) => {
+			card.classList.toggle(cardCollectionViewClasses.list.item, isList);
+		});
+		root.querySelectorAll<HTMLButtonElement>("[data-view-control]").forEach((item) => {
+			item.setAttribute(
+				"aria-pressed",
+				String(item.dataset.viewControl === view),
+			);
+		});
+	};
 
 	const selectedByKey = (): Record<string, string[]> => {
 		const selected: Record<string, string[]> = {};
@@ -109,10 +128,7 @@ function initArchiveFacetsRoot(root: HTMLElement): void {
 		.querySelectorAll<HTMLButtonElement>("[data-view-control]")
 		.forEach((button) => {
 			button.addEventListener("click", () => {
-				collection.dataset.view = button.dataset.viewControl ?? "grid";
-				root.querySelectorAll("[data-view-control]").forEach((item) => {
-					item.setAttribute("aria-pressed", String(item === button));
-				});
+				applyView(button.dataset.viewControl === "list" ? "list" : "grid");
 			});
 		});
 
@@ -131,6 +147,7 @@ function initArchiveFacetsRoot(root: HTMLElement): void {
 		render();
 	});
 
+	applyView(collection.dataset.view === "list" ? "list" : "grid");
 	render();
 }
 
