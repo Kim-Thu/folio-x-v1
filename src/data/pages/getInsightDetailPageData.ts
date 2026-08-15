@@ -146,7 +146,8 @@ export async function getInsightDetailPageData(
 						placement: "aside" as const,
 						section: false as const,
 						props: {
-							panel: true,
+							box: sidebar.relatedCards.box,
+							stack: sidebar.relatedCards.columns,
 							header: {
 								data: { title: sidebar.relatedTitle },
 								appearance: sidebar.relatedCards.heading.appearance,
@@ -196,7 +197,7 @@ export async function getInsightDetailPageData(
 
 	return {
 		post,
-		pageTemplate: presentation.page.template ,
+		pageTemplate: presentation.page.template,
 		regions: [
 			{
 				key: presentation.section.id,
