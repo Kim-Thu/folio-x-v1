@@ -7,7 +7,7 @@ on:
       - main
 
 permissions:
-  contents: write
+  contents: read
 
 concurrency:
   group: quality-${{ github.ref }}
@@ -15,17 +15,13 @@ concurrency:
 
 jobs:
   validate:
-    if: github.actor != 'github-actions[bot]'
-    name: Repair Decap config and validate
+    name: Astro check, build, and dependency audit
     runs-on: ubuntu-latest
     timeout-minutes: 10
 
     steps:
       - name: Check out repository
         uses: actions/checkout@v4
-        with:
-          ref: agent/cms-content-migration
-          fetch-depth: 0
 
       - name: Set up Node.js
         uses: actions/setup-node@v4
@@ -36,22 +32,5 @@ jobs:
       - name: Install locked dependencies
         run: npm ci
 
-      - name: Repair Decap config
-        run: python .github/scripts/fix_decap_config.py
-
-      - name: Parse YAML
-        run: ruby -e "require 'yaml'; YAML.load_file('public/admin/config.yml', aliases: true); puts 'config.yml YAML parse OK'"
-
       - name: Validate production source
         run: npm run validate
-
-      - name: Commit repaired config and restore workflow
-        run: |
-          git config user.name "github-actions[bot]"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git show origin/main:.github/workflows/quality.yml > .github/workflows/quality.yml
-          rm -f .github/workflows/fix-decap-config.yml
-          rm -f .github/scripts/fix_decap_config.py
-          git add public/admin/config.yml .github/workflows/quality.yml .github/workflows/fix-decap-config.yml .github/scripts/fix_decap_config.py
-          git commit -m "fix: repair Decap CMS configuration"
-          git push --no-verify origin HEAD:agent/cms-content-migration
