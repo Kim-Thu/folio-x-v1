@@ -41,7 +41,7 @@ const { region } = Astro.props as PageRegionProps;
 			{region.props.header && region.props.headerAction ? (
 				<CRow justify="between" align="end">
 					<PSectionHeader {...region.props.header} />
-					<CButton {...region.props.headerAction} variant={region.props.headerAction.variant ?? "text"} />
+					<CButton {...region.props.headerAction} variant={region.props.headerAction.variant} />
 				</CRow>
 			) : region.props.header && <PSectionHeader {...region.props.header} />}
 			<PCard {...region.props.cards} />
@@ -55,24 +55,9 @@ const { region } = Astro.props as PageRegionProps;
 {region.component === "archive" && <ArchiveRegion region={region} />}
 {region.component === "status" && <PStatus {...region.props} />}
 {region.component === "tabs" && <CTabList {...region.props} />}
-{region.component === "gallery" && (
-	region.props.header || region.props.stack ? (
-		<CColumns {...region.props.stack}>
-			{region.props.header && <PSectionHeader {...region.props.header} />}
-			<PGallery
-				items={region.props.items}
-				label={region.props.label}
-				previousLabel={region.props.previousLabel}
-				nextLabel={region.props.nextLabel}
-				sliderControls={region.props.sliderControls}
-				template={region.props.template}
-				mediaRatio={region.props.mediaRatio}
-				imageVariant={region.props.imageVariant}
-				captionVariant={region.props.captionVariant}
-				captionTone={region.props.captionTone}
-			/>
-		</CColumns>
-	) : (
+{region.component === "gallery" && region.props.stack ? (
+	<CColumns {...region.props.stack}>
+		{region.props.header && <PSectionHeader {...region.props.header} />}
 		<PGallery
 			items={region.props.items}
 			label={region.props.label}
@@ -85,7 +70,23 @@ const { region } = Astro.props as PageRegionProps;
 			captionVariant={region.props.captionVariant}
 			captionTone={region.props.captionTone}
 		/>
-	)
+	</CColumns>
+) : region.component === "gallery" && (
+	<>
+		{region.props.header && <PSectionHeader {...region.props.header} />}
+		<PGallery
+			items={region.props.items}
+			label={region.props.label}
+			previousLabel={region.props.previousLabel}
+			nextLabel={region.props.nextLabel}
+			sliderControls={region.props.sliderControls}
+			template={region.props.template}
+			mediaRatio={region.props.mediaRatio}
+			imageVariant={region.props.imageVariant}
+			captionVariant={region.props.captionVariant}
+			captionTone={region.props.captionTone}
+		/>
+	</>
 )}
 {region.component === "entry-index" && <PEntryIndex {...region.props} />}
 {region.component === "reader" && <PReader {...region.props} />}
@@ -101,7 +102,7 @@ const { region } = Astro.props as PageRegionProps;
 			) : region.props.title && (
 				<CHeading level={2} variant="h5">{region.props.title}</CHeading>
 			)}
-			<CDescriptionList {...region.props.list} variant={region.props.list.variant} />
+			<CDescriptionList {...region.props.list} />
 			{region.props.tags && (
 				<CColumns columns="one" gap="sm">
 					<CHeading level={3} variant="h6">{region.props.tags.title}</CHeading>
