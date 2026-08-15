@@ -190,7 +190,7 @@ export function mapProjectToCard(project: Project, presentation: ProjectCardPres
 		ariaLabel: project.title,
 		title: [project.title],
 		excerpt: project.summary,
-		filterValue: project.category,
+		filterValue: project.categorySlug,
 		sortValue: project.year,
 		size: presentation.size,
 		supportingLabel: project.outcome,
