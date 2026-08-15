@@ -13,14 +13,6 @@ import {
 	mapProjectToCard,
 	mapPublicationToCard,
 } from "@/data/mappers/card";
-import type {
-	InsightCardPresentation,
-	LabCardPresentation,
-	ProductCardPresentation,
-	ProjectCardPresentation,
-	PublicationCardPresentation,
-} from "@/data/mappers/card";
-import type { CIconName } from "@/types/components/object/component/CIcon.types";
 import type { PAdvertisementData } from "@/types/components/object/project/advertisement/PAdvertisement.types";
 import type { PCardData, PCardProps } from "@/types/components/object/project/card/PCard.types";
 import type { PFilterChoiceGroupData } from "@/types/components/object/project/filter-panel/PFilterPanel.types";
@@ -46,15 +38,10 @@ type NovelsCollectionContent = Extract<SourcedCollectionContent, { source: { col
 type PublicationsCollectionContent = Extract<SourcedCollectionContent, { source: { collection: "publications" } }>;
 
 type ArchiveSection = Extract<PageSectionData, { type: "archive" }>;
-type ArchiveContent = ArchiveSection["content"];
-type ProjectsArchiveContent = Extract<ArchiveContent, { source: { collection: "projects" } }>;
-type LabsArchiveContent = Extract<ArchiveContent, { source: { collection: "labs" } }>;
-type ProductsArchiveContent = Extract<ArchiveContent, { source: { collection: "products" } }>;
-type BlogArchiveContent = Extract<ArchiveContent, { source: { collection: "blog" } }>;
-type ProjectsArchiveSection = Omit<ArchiveSection, "content"> & { content: ProjectsArchiveContent };
-type LabsArchiveSection = Omit<ArchiveSection, "content"> & { content: LabsArchiveContent };
-type ProductsArchiveSection = Omit<ArchiveSection, "content"> & { content: ProductsArchiveContent };
-type BlogArchiveSection = Omit<ArchiveSection, "content"> & { content: BlogArchiveContent };
+type ProjectsArchiveSection = Extract<ArchiveSection, { content: { source: { collection: "projects" } } }>;
+type LabsArchiveSection = Extract<ArchiveSection, { content: { source: { collection: "labs" } } }>;
+type ProductsArchiveSection = Extract<ArchiveSection, { content: { source: { collection: "products" } } }>;
+type BlogArchiveSection = Extract<ArchiveSection, { content: { source: { collection: "blog" } } }>;
 
 const sectionFrame = (section: PageSectionData) => ({
 	id: section.id,
@@ -120,13 +107,20 @@ const cardConfig = (section: CollectionSection, items: PCardData[]): PCardProps 
 	};
 };
 
-const isPCardData = (value: Record<string, unknown>): value is PCardData =>
-	typeof value.href === "string" &&
-	typeof value.ariaLabel === "string" &&
-	Array.isArray(value.title) &&
-	value.title.every((item) => typeof item === "string");
+const isRecord = (value: unknown): value is Record<string, unknown> =>
+	typeof value === "object" && value !== null && !Array.isArray(value);
 
-const staticCardItems = (items: Record<string, unknown>[]): PCardData[] =>
+const isPCardData = (value: unknown): value is PCardData => {
+	if (!isRecord(value)) return false;
+	return (
+		typeof value.href === "string" &&
+		typeof value.ariaLabel === "string" &&
+		Array.isArray(value.title) &&
+		value.title.every((item) => typeof item === "string")
+	);
+};
+
+const staticCardItems = (items: unknown[]): PCardData[] =>
 	items.map((item) => {
 		if (!isPCardData(item)) {
 			throw new Error("Invalid static card data in page collection.");
@@ -137,60 +131,68 @@ const staticCardItems = (items: Record<string, unknown>[]): PCardData[] =>
 const take = <T>(items: T[], limit?: number) =>
 	limit === undefined ? items : items.slice(0, limit);
 
+const isProductsCollectionContent = (content: SourcedCollectionContent): content is ProductsCollectionContent =>
+	content.source.collection === "products";
+const isProjectsCollectionContent = (content: SourcedCollectionContent): content is ProjectsCollectionContent =>
+	content.source.collection === "projects";
+const isLabsCollectionContent = (content: SourcedCollectionContent): content is LabsCollectionContent =>
+	content.source.collection === "labs";
+const isBlogCollectionContent = (content: SourcedCollectionContent): content is BlogCollectionContent =>
+	content.source.collection === "blog";
+const isComicsCollectionContent = (content: SourcedCollectionContent): content is ComicsCollectionContent =>
+	content.source.collection === "comics";
+const isNovelsCollectionContent = (content: SourcedCollectionContent): content is NovelsCollectionContent =>
+	content.source.collection === "novels";
+const isPublicationsCollectionContent = (content: SourcedCollectionContent): content is PublicationsCollectionContent =>
+	content.source.collection === "publications";
+
 const resolveCollectionItems = async (section: CollectionSection): Promise<PCardData[]> => {
 	const content = section.content;
 	if ("items" in content) return staticCardItems(content.items);
 	if (!("source" in content)) return [];
 
-	switch (content.source.collection) {
-		case "products": {
-			const typed: ProductsCollectionContent = content;
-			return take(await getProducts(), typed.source.limit).map((item) =>
-				mapProductToCard(item, typed.itemPresentation as ProductCardPresentation),
-			);
-		}
-		case "projects": {
-			const typed: ProjectsCollectionContent = content;
-			return take(await getProjects(), typed.source.limit).map((item) =>
-				mapProjectToCard(item, typed.itemPresentation as ProjectCardPresentation),
-			);
-		}
-		case "labs": {
-			const typed: LabsCollectionContent = content;
-			return take(await getLabs(), typed.source.limit).map((item) =>
-				mapLabToCard(item, typed.itemPresentation as LabCardPresentation),
-			);
-		}
-		case "blog": {
-			const typed: BlogCollectionContent = content;
-			return take(await getInsights(), typed.source.limit).map((item) =>
-				mapInsightToCard(item, typed.itemPresentation as InsightCardPresentation),
-			);
-		}
-		case "comics": {
-			const typed: ComicsCollectionContent = content;
-			return take(await getPublications("comics"), typed.source.limit).map((item) =>
-				mapPublicationToCard(item, "comics", typed.itemPresentation as PublicationCardPresentation),
-			);
-		}
-		case "novels": {
-			const typed: NovelsCollectionContent = content;
-			return take(await getPublications("novels"), typed.source.limit).map((item) =>
-				mapPublicationToCard(item, "novels", typed.itemPresentation as PublicationCardPresentation),
-			);
-		}
-		case "publications": {
-			const typed: PublicationsCollectionContent = content;
-			const [novels, comics] = await Promise.all([
-				getPublications("novels"),
-				getPublications("comics"),
-			]);
-			return take([
-				...novels.map((item) => mapPublicationToCard(item, "novels", typed.itemPresentation.novels as PublicationCardPresentation)),
-				...comics.map((item) => mapPublicationToCard(item, "comics", typed.itemPresentation.comics as PublicationCardPresentation)),
-			], typed.source.limit);
-		}
+	if (isProductsCollectionContent(content)) {
+		return take(await getProducts(), content.source.limit).map((item) =>
+			mapProductToCard(item, content.itemPresentation),
+		);
 	}
+	if (isProjectsCollectionContent(content)) {
+		return take(await getProjects(), content.source.limit).map((item) =>
+			mapProjectToCard(item, content.itemPresentation),
+		);
+	}
+	if (isLabsCollectionContent(content)) {
+		return take(await getLabs(), content.source.limit).map((item) =>
+			mapLabToCard(item, content.itemPresentation),
+		);
+	}
+	if (isBlogCollectionContent(content)) {
+		return take(await getInsights(), content.source.limit).map((item) =>
+			mapInsightToCard(item, content.itemPresentation),
+		);
+	}
+	if (isComicsCollectionContent(content)) {
+		return take(await getPublications("comics"), content.source.limit).map((item) =>
+			mapPublicationToCard(item, "comics", content.itemPresentation),
+		);
+	}
+	if (isNovelsCollectionContent(content)) {
+		return take(await getPublications("novels"), content.source.limit).map((item) =>
+			mapPublicationToCard(item, "novels", content.itemPresentation),
+		);
+	}
+	if (isPublicationsCollectionContent(content)) {
+		const [novels, comics] = await Promise.all([
+			getPublications("novels"),
+			getPublications("comics"),
+		]);
+		return take([
+			...novels.map((item) => mapPublicationToCard(item, "novels", content.itemPresentation.novels)),
+			...comics.map((item) => mapPublicationToCard(item, "comics", content.itemPresentation.comics)),
+		], content.source.limit);
+	}
+
+	return [];
 };
 
 const archiveCards = (cards: CollectionSection["content"]["cards"], items: PCardData[]): PCardProps => ({
@@ -234,7 +236,7 @@ const buildProjectsArchive = async (
 				view: { label: toolbar.viewLabel, gridLabel: toolbar.gridViewLabel, listLabel: toolbar.listViewLabel },
 			} },
 			cards: archiveCards(cards, visibleProjects.map((project) =>
-				mapProjectToCard(project, itemPresentation as ProjectCardPresentation),
+				mapProjectToCard(project, itemPresentation),
 			)),
 			emptyLabel,
 			pagination: { ...pagination, totalPages: Math.max(1, Math.ceil(visibleProjects.length / pagination.pageSize)) },
@@ -281,7 +283,7 @@ const buildLabsArchive = async (
 				groups: [technologyFilter],
 			} } },
 			result: { count: visibleLabs.length, label: resultLabel },
-			cards: archiveCards(cards, visibleLabs.map((lab) => mapLabToCard(lab, itemPresentation as LabCardPresentation))),
+			cards: archiveCards(cards, visibleLabs.map((lab) => mapLabToCard(lab, itemPresentation))),
 			emptyLabel,
 			pagination: { ...pagination, totalPages: Math.max(1, Math.ceil(visibleLabs.length / pagination.pageSize)) },
 		},
@@ -306,7 +308,7 @@ const buildProductsArchive = async (
 		action: {
 			href: sidebar.advertisement.action.href,
 			label: sidebar.advertisement.action.label,
-			icon: sidebar.advertisement.action.icon as CIconName | undefined,
+			icon: sidebar.advertisement.action.icon,
 		},
 	};
 
@@ -332,7 +334,7 @@ const buildProductsArchive = async (
 			},
 			result: { count: visibleProducts.length, label: result.label },
 			cards: archiveCards(cards, visibleProducts.map((product) =>
-				mapProductToCard(product, itemPresentation as ProductCardPresentation),
+				mapProductToCard(product, itemPresentation),
 			)),
 			emptyLabel,
 			pagination: { ...pagination, totalPages: Math.max(1, Math.ceil(visibleProducts.length / pagination.pageSize)) },
@@ -354,7 +356,7 @@ const buildBlogArchive = async (
 		label: insight.category,
 		slug: insight.categorySlug,
 	}])).values());
-	const presentation = itemPresentation as InsightCardPresentation;
+	const presentation = itemPresentation;
 	const categoryFilter: PFilterChoiceGroupData = {
 		appearance: sidebar.filter.appearance,
 		control: sidebar.filter.control,
@@ -373,7 +375,7 @@ const buildBlogArchive = async (
 		action: {
 			href: sidebar.newsletter.action.href,
 			label: sidebar.newsletter.action.label,
-			icon: sidebar.newsletter.action.icon as CIconName | undefined,
+			icon: sidebar.newsletter.action.icon,
 		},
 		form: sidebar.newsletter.form,
 	};
@@ -402,7 +404,7 @@ const buildBlogArchive = async (
 				cardsHeader: {
 					data: { title: sidebar.featured.title },
 					appearance: sidebar.featured.header.appearance,
-					headingLevel: sidebar.featured.header.headingLevel,
+					headingLevel: headingLevel(sidebar.featured.header.headingLevel),
 				},
 				cards: archiveCards(sidebar.featured.cards, insights.slice(0, sidebar.featured.limit).map((insight) => mapInsightToCard(insight, presentation))),
 				advertisement: { template: sidebar.newsletter.template, data: newsletter },
@@ -412,7 +414,7 @@ const buildBlogArchive = async (
 					data: { title: result.title },
 					...(result.header && {
 						appearance: result.header.appearance,
-						headingLevel: result.header.headingLevel,
+						headingLevel: headingLevel(result.header.headingLevel),
 					}),
 				},
 			},
@@ -423,20 +425,25 @@ const buildBlogArchive = async (
 	};
 };
 
+const isProjectsArchiveSection = (section: ArchiveSection): section is ProjectsArchiveSection =>
+	section.content.source.collection === "projects";
+const isLabsArchiveSection = (section: ArchiveSection): section is LabsArchiveSection =>
+	section.content.source.collection === "labs";
+const isProductsArchiveSection = (section: ArchiveSection): section is ProductsArchiveSection =>
+	section.content.source.collection === "products";
+const isBlogArchiveSection = (section: ArchiveSection): section is BlogArchiveSection =>
+	section.content.source.collection === "blog";
+
 const resolveArchive = async (
 	section: ArchiveSection,
 	context: PageBuilderContext,
 ): Promise<PageArchiveRegion> => {
-	switch (section.content.source.collection) {
-		case "projects":
-			return buildProjectsArchive(section as ProjectsArchiveSection, context);
-		case "labs":
-			return buildLabsArchive(section as LabsArchiveSection, context);
-		case "products":
-			return buildProductsArchive(section as ProductsArchiveSection, context);
-		case "blog":
-			return buildBlogArchive(section as BlogArchiveSection, context);
-	}
+	if (isProjectsArchiveSection(section)) return buildProjectsArchive(section, context);
+	if (isLabsArchiveSection(section)) return buildLabsArchive(section, context);
+	if (isProductsArchiveSection(section)) return buildProductsArchive(section, context);
+	if (isBlogArchiveSection(section)) return buildBlogArchive(section, context);
+
+	throw new Error("Unsupported archive collection.");
 };
 
 const resolveSection = async (
