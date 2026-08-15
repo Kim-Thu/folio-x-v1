@@ -101,8 +101,7 @@
             }
           },
           "source": {
-            "collection": "comics",
-            "limit": 24
+            "collection": "comics"
           },
           "itemPresentation": {
             "routes": {
