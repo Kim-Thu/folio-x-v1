@@ -5,9 +5,11 @@ import CColumns from "@/components/object/component/CColumns.astro";
 import type { PLayoutProps } from "@/types/components/object/project/layout/PLayout.types";
 
 const {
+	asideColumns = "one",
 	asideGap = "md",
 	asideLabel,
 	asidePosition = "end",
+	columns = "one",
 	gap = "lg",
 	panel = false,
 	stickyAside,
@@ -23,10 +25,10 @@ const hasToolbar = Astro.slots.has("toolbar");
 	<CColumns columns="one" gap="md">
 		{hasToolbar && <slot name="toolbar" />}
 		<LSidebar label={asideLabel} position={asidePosition} sticky={stickyAside}>
-			<CColumns slot="sidebar" columns="one" gap={asideGap}>
+			<CColumns slot="sidebar" columns={asideColumns} gap={asideGap}>
 				<slot name="aside" />
 			</CColumns>
-			<CColumns columns="one" gap={gap}>
+			<CColumns {columns} gap={gap}>
 				<slot />
 			</CColumns>
 		</LSidebar>
