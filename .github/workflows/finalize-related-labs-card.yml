@@ -1,0 +1,215 @@
+name: Finalize Related Labs card
+
+on:
+  push:
+    branches:
+      - agent/cms-content-migration
+    paths:
+      - .github/workflows/finalize-related-labs-card.yml
+
+permissions:
+  contents: write
+
+jobs:
+  migrate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+
+      - name: Install locked dependencies
+        run: npm ci
+
+      - name: Finalize Related Labs card contract
+        shell: python
+        run: |
+          import json
+          from pathlib import Path
+
+          card_path = Path("src/components/object/project/card/templates/CardMediaCaption.astro")
+          card_path.write_text('''---
+          import CBox from "@/components/object/component/CBox.astro";
+          import CColumns from "@/components/object/component/CColumns.astro";
+          import CFeature from "@/components/object/component/CFeature.astro";
+          import CHeading from "@/components/object/component/CHeading.astro";
+          import CImage from "@/components/object/component/CImage.astro";
+          import CLink from "@/components/object/component/CLink.astro";
+          import CMedia from "@/components/object/component/CMedia.astro";
+          import CMetadata from "@/components/object/component/CMetadata.astro";
+          import CRow from "@/components/object/component/CRow.astro";
+          import CText from "@/components/object/component/CText.astro";
+          import type { PCardItemProps } from "@/types/components/object/project/card/PCard.types";
+
+          const {
+          \tdata,
+          \theadingLevel = 3,
+          \tmediaRatio = "editorial",
+          \tslots,
+          } = Astro.props as PCardItemProps;
+          ---
+
+          <CBox
+          \tas="article"
+          \tsurface="bordered"
+          \tradius="md"
+          \toverflow="hidden"
+          \tclass="h-full transition-transform duration-300 hover:-translate-y-1"
+          >
+          \t{slots.media && data.media && (
+          \t\t<CMedia ratio={mediaRatio} href={data.href} ariaLabel={data.ariaLabel} shape="none">
+          \t\t\t<CImage {...data.media} variant="fill" />
+          \t\t</CMedia>
+          \t)}
+
+          \t<CBox spacing="xs" class="border-t border-black/10">
+          \t\t<CColumns columns="one" gap="sm">
+          \t\t\t{((slots.metadata && data.metadata) || (slots.metrics && data.metrics && data.metrics.length > 0)) && (
+          \t\t\t\t<CRow justify="between" align="center" gap="sm">
+          \t\t\t\t\t{slots.metadata && data.metadata && (
+          \t\t\t\t\t\t<CMetadata data={data.metadata} tone="brand" slots={{ icons: false }} />
+          \t\t\t\t\t)}
+          \t\t\t\t\t{slots.metrics && data.metrics && data.metrics.map((metric) => (
+          \t\t\t\t\t\t<CFeature {...metric} appearance="caption" />
+          \t\t\t\t\t))}
+          \t\t\t\t</CRow>
+          \t\t\t)}
+
+          \t\t\t{slots.title && (
+          \t\t\t\t<CHeading level={headingLevel} variant="h5">
+          \t\t\t\t\t<CLink href={data.href}>{data.title.join(" ")}</CLink>
+          \t\t\t\t</CHeading>
+          \t\t\t)}
+
+          \t\t\t{slots.excerpt && data.excerpt && (
+          \t\t\t\t<CText variant="body-sm" tone="muted">{data.excerpt}</CText>
+          \t\t\t)}
+          \t\t</CColumns>
+          \t</CBox>
+          </CBox>
+          ''', encoding="utf-8")
+
+          resolver_path = Path("src/data/pages/getLabDetailPageData.ts")
+          resolver = resolver_path.read_text(encoding="utf-8")
+          replacements = [
+              ('template: "editorial" as const,', 'template: "media-caption" as const,'),
+              ('\n\t\t\t\t\tmediaRatio: presentation.related.mediaRatio,', ''),
+              ('\n\t\t\t\t\t\t\t\tdisplay: presentation.related.metaRow.metadataDisplay,', ''),
+          ]
+          for old, new in replacements:
+              if old not in resolver:
+                  raise SystemExit(f"Expected resolver fragment not found: {old}")
+              resolver = resolver.replace(old, new, 1)
+          resolver_path.write_text(resolver, encoding="utf-8")
+
+          json_path = Path("src/content/globals/lab-detail.json")
+          data = json.loads(json_path.read_text(encoding="utf-8"))
+          related = data.get("related")
+          if not isinstance(related, dict):
+              raise SystemExit("Missing related Lab settings")
+          fixed_keys = {"card", "mediaRatio", "imageVariant", "copy", "metaRow"}
+          missing = fixed_keys.difference(related)
+          if missing:
+              raise SystemExit(f"Expected Related Labs fixed fields before cleanup: {sorted(missing)}")
+          for key in fixed_keys:
+              del related[key]
+          json_path.write_text(json.dumps(data, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+
+          schema_path = Path("src/content/lab-detail-settings-schema.ts")
+          schema = schema_path.read_text(encoding="utf-8")
+          copy_schema = '''const copySchema = z.object({
+            stack: stackSchema,
+            headingLevel: z.literal(3),
+            headingVariant: z.literal("h5"),
+            bodyVariant: z.literal("body-sm"),
+            bodyTone: z.literal("muted"),
+          });
+          '''
+          if copy_schema not in schema:
+              raise SystemExit("Expected copySchema not found")
+          schema = schema.replace(copy_schema, "", 1)
+          related_old = '''    header: sectionHeaderSchema,
+            card: z.object({
+              surface: z.literal("bordered"),
+              radius: z.literal("md"),
+              overflow: z.literal("hidden"),
+            }),
+            mediaRatio: z.literal("editorial"),
+            imageVariant: z.literal("fill"),
+            copy: copySchema,
+            metaRow: z.object({
+              justify: z.literal("between"),
+              align: z.literal("center"),
+              gap: z.literal("sm"),
+              metadataTone: z.literal("brand"),
+              metadataDisplay: z.literal("text"),
+              metricAppearance: z.literal("caption"),
+            }),
+          }),
+          });'''
+          related_new = '''    header: sectionHeaderSchema,
+          }),
+          });'''
+          if related_old not in schema:
+              raise SystemExit("Expected Related Labs schema presentation block not found")
+          schema_path.write_text(schema.replace(related_old, related_new, 1), encoding="utf-8")
+
+          config_path = Path("public/admin/config.yml")
+          config = config_path.read_text(encoding="utf-8")
+          related_start_marker = '''          - label: Related Labs
+            name: related
+            widget: object
+            fields:
+          '''
+          next_marker = '''
+      - name: publication_catalog
+          '''
+          start = config.find(related_start_marker)
+          if start < 0:
+              raise SystemExit("Related Labs Decap block not found")
+          end = config.find(next_marker, start)
+          if end < 0:
+              raise SystemExit("Publication catalog marker not found after Related Labs")
+          block = config[start:end]
+
+          simple_lines = [
+              '              - { label: Media ratio, name: mediaRatio, widget: hidden, default: editorial }\n',
+              '              - { label: Image variant, name: imageVariant, widget: hidden, default: fill }\n',
+          ]
+          for line in simple_lines:
+              if line not in block:
+                  raise SystemExit(f"Expected Decap line not found: {line.strip()}")
+              block = block.replace(line, "", 1)
+
+          def remove_object_block(text, label):
+              marker = f"              - label: {label}\n"
+              block_start = text.find(marker)
+              if block_start < 0:
+                  raise SystemExit(f"Expected Decap object block not found: {label}")
+              next_start = text.find("              - ", block_start + len(marker))
+              if next_start < 0:
+                  return text[:block_start]
+              return text[:block_start] + text[next_start:]
+
+          for label in ["Card", "Copy", "Metadata row"]:
+              block = remove_object_block(block, label)
+
+          config_path.write_text(config[:start] + block + config[end:], encoding="utf-8")
+
+      - name: Validate production source
+        run: npm run validate
+
+      - name: Commit migration and remove temporary workflow
+        run: |
+          rm .github/workflows/finalize-related-labs-card.yml
+          git add src/components/object/project/card/templates/CardMediaCaption.astro src/data/pages/getLabDetailPageData.ts src/content/globals/lab-detail.json src/content/lab-detail-settings-schema.ts public/admin/config.yml .github/workflows/finalize-related-labs-card.yml
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git commit -m "refactor: restore Related Labs card structure"
+          git push
