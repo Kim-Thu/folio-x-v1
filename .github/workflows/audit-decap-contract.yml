@@ -26,22 +26,16 @@ jobs:
           path = Path("public/admin/config.yml")
           text = path.read_text()
 
-          text = text.replace(
-              "branch: agent/cms-content-migration",
-              "branch: main",
-              1,
-          )
+          text = text.replace("branch: agent/cms-content-migration", "branch: main", 1)
 
           home_start = text.index("      - name: home\n")
           home_end = text.index("\n      - name: blog_page\n", home_start)
           home = text[home_start:home_end]
-
           home = home.replace(
               "              - { label: Updated at, name: updatedAt, widget: string, required: false }\n          - label: Content\n",
               "              - { label: Updated at, name: updatedAt, widget: string, required: false }\n          - { label: SEO, name: seo, widget: hidden, required: false }\n          - label: Content\n",
               1,
           )
-
           home = home.replace(
               "                          - { label: Actions label, name: actionsLabel, widget: string, required: false }\n",
               """                          - label: Social links
@@ -57,7 +51,6 @@ jobs:
 """,
               1,
           )
-
           cards_marker = "                          - label: Cards\n                            name: cards\n"
           item_presentation = """                          - label: Item presentation
                             name: itemPresentation
@@ -121,13 +114,11 @@ jobs:
 """
           if "name: itemPresentation" not in home:
               home = home.replace(cards_marker, item_presentation + cards_marker, 1)
-
           text = text[:home_start] + home + text[home_end:]
 
           blog_page_start = text.index("      - name: blog_page\n")
           blog_page_end = text.index("\n      - name: lab_detail\n", blog_page_start)
-          blog_page = text[blog_page_start:blog_page_end]
-          blog_page = blog_page.replace("                    name: page_header\n", "                    name: page-header\n", 1)
+          blog_page = text[blog_page_start:blog_page_end].replace("                    name: page_header\n", "                    name: page-header\n", 1)
           text = text[:blog_page_start] + blog_page + text[blog_page_end:]
 
           projects_start = text.index("  - name: projects\n")
@@ -184,32 +175,27 @@ jobs:
           path.write_text(text)
 
       - name: Parse config YAML
-        run: ruby -e "require 'yaml'; YAML.load_file('public/admin/config.yml', aliases: true); puts 'config.yml YAML parse OK'"
+        run: |
+          ruby -e "require 'yaml'; YAML.load_file('public/admin/config.yml', aliases: true); puts 'config.yml YAML parse OK'"
 
       - name: Audit Decap config against JSON data
         shell: ruby {0}
         run: |
           require "yaml"
           require "json"
-
           config = YAML.load_file("public/admin/config.yml", aliases: true)
           errors = []
-
           validate_fields = nil
           validate_field = nil
-
           validate_fields = lambda do |value, fields, path|
             return unless value.is_a?(Hash)
             configured = Array(fields).map { |field| field["name"] }.compact
-            value.keys.each do |key|
-              errors << "UNCONFIGURED #{path}.#{key}" unless configured.include?(key)
-            end
+            value.keys.each { |key| errors << "UNCONFIGURED #{path}.#{key}" unless configured.include?(key) }
             Array(fields).each do |field|
               next unless value.key?(field["name"])
               validate_field.call(value[field["name"]], field, "#{path}.#{field["name"]}")
             end
           end
-
           validate_field = lambda do |value, field, path|
             widget = field["widget"]
             if widget == "object"
@@ -230,13 +216,10 @@ jobs:
                   validate_fields.call(comparable, type["fields"], "#{path}[#{index}]")
                 end
               elsif field["fields"]
-                value.each_with_index do |item, index|
-                  validate_fields.call(item, field["fields"], "#{path}[#{index}]")
-                end
+                value.each_with_index { |item, index| validate_fields.call(item, field["fields"], "#{path}[#{index}]") }
               end
             end
           end
-
           Array(config["collections"]).each do |collection|
             if collection["files"]
               Array(collection["files"]).each do |entry|
@@ -250,7 +233,6 @@ jobs:
               end
             end
           end
-
           if errors.empty?
             puts "Decap config covers all managed JSON fields and variable types."
           else
