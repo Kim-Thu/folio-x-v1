@@ -152,6 +152,7 @@ export async function getLabDetailPageData(
 		props: {
 			template: "sidebar",
 			asideLabel: formatTitleLabel(presentation.sidebar.labelTemplate, lab.title),
+			asideColumns: presentation.sidebar.stack.columns,
 			asidePosition: presentation.sidebar.position,
 			stickyAside: presentation.sidebar.sticky,
 			asideGap: presentation.sidebar.stack.gap,
