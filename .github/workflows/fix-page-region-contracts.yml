@@ -70,7 +70,8 @@ jobs:
 
           path.write_text(text)
       - name: Parse config YAML
-        run: ruby -e "require 'yaml'; YAML.load_file('public/admin/config.yml', aliases: true); puts 'config.yml YAML parse OK'"
+        run: |
+          ruby -e "require 'yaml'; YAML.load_file('public/admin/config.yml', aliases: true); puts 'config.yml YAML parse OK'"
       - name: Validate project
         run: npm run validate
       - name: Commit fixes and remove temporary workflow
