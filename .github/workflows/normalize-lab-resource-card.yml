@@ -1,0 +1,164 @@
+name: Normalize Lab resource card
+
+on:
+  push:
+    branches:
+      - agent/cms-content-migration
+    paths:
+      - .github/workflows/normalize-lab-resource-card.yml
+
+permissions:
+  contents: write
+
+jobs:
+  normalize:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+
+      - name: Install locked dependencies
+        run: npm ci
+
+      - name: Remove fixed resource item presentation from CMS
+        shell: python
+        run: |
+          import json
+          from pathlib import Path
+
+          json_path = Path("src/content/globals/lab-detail.json")
+          data = json.loads(json_path.read_text(encoding="utf-8"))
+          resources = data.get("resources")
+          if not isinstance(resources, dict):
+              raise SystemExit("Missing Lab resources settings")
+          expected = {"card", "row", "iconSize", "action", "copy"}
+          missing = expected.difference(resources)
+          if missing:
+              raise SystemExit(f"Expected fixed resource fields before cleanup: {sorted(missing)}")
+          for key in expected:
+              del resources[key]
+          json_path.write_text(json.dumps(data, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+
+          schema_path = Path("src/content/lab-detail-settings-schema.ts")
+          schema = schema_path.read_text(encoding="utf-8")
+          schema_old = '''    header: sectionHeaderSchema,
+    card: z.object({
+      surface: z.literal("bordered"),
+      radius: z.literal("md"),
+      spacing: z.literal("md"),
+      stack: stackSchema,
+    }),
+    row: z.object({
+      align: z.literal("center"),
+      justify: z.literal("between"),
+      gap: z.literal("md"),
+    }),
+    iconSize: z.literal("sm"),
+    action: z.object({
+      size: z.literal("xs"),
+      variant: z.literal("outline"),
+      tone: z.literal("light"),
+      iconOnly: z.boolean(),
+    }),
+    copy: copySchema,
+  }),
+  related: z.object({'''
+          schema_new = '''    header: sectionHeaderSchema,
+  }),
+  related: z.object({'''
+          if schema_old not in schema:
+              raise SystemExit("Expected Lab resource presentation schema block not found")
+          schema_path.write_text(schema.replace(schema_old, schema_new, 1), encoding="utf-8")
+
+          config_path = Path("public/admin/config.yml")
+          config = config_path.read_text(encoding="utf-8")
+          start_marker = '''          - label: Resources
+            name: resources
+            widget: object
+            fields:
+'''
+          end_marker = '''
+          - label: Related Labs
+            name: related
+'''
+          start = config.find(start_marker)
+          if start < 0:
+              raise SystemExit("Lab Resources Decap block not found")
+          end = config.find(end_marker, start)
+          if end < 0:
+              raise SystemExit("Lab Related Labs Decap block not found")
+          resource_block = config[start:end]
+
+          removable_parts = [
+              '              - { label: Resource icon size, name: iconSize, widget: select, options: [xs, sm, md, lg, xl] }\n',
+              '''              - label: Card
+                name: card
+                widget: object
+                fields:
+                  - { label: Surface, name: surface, widget: hidden, default: bordered }
+                  - { label: Radius, name: radius, widget: hidden, default: md }
+                  - { label: Spacing, name: spacing, widget: hidden, default: md }
+                  - label: Stack
+                    name: stack
+                    widget: object
+                    fields:
+                      - { label: Columns, name: columns, widget: hidden, default: one }
+                      - { label: Gap, name: gap, widget: select, options: [none, xs, sm, md, lg, xl] }
+''',
+              '''              - label: Row
+                name: row
+                widget: object
+                fields:
+                  - { label: Align, name: align, widget: hidden, default: center }
+                  - { label: Justify, name: justify, widget: hidden, default: between }
+                  - { label: Gap, name: gap, widget: hidden, default: md }
+''',
+              '''              - label: Action presentation
+                name: action
+                widget: object
+                fields:
+                  - { label: Size, name: size, widget: hidden, default: xs }
+                  - { label: Variant, name: variant, widget: hidden, default: outline }
+                  - { label: Tone, name: tone, widget: hidden, default: light }
+                  - { label: Icon only, name: iconOnly, widget: boolean }
+''',
+              '''              - label: Copy
+                name: copy
+                widget: object
+                fields:
+                  - label: Stack
+                    name: stack
+                    widget: object
+                    fields:
+                      - { label: Columns, name: columns, widget: hidden, default: one }
+                      - { label: Gap, name: gap, widget: select, options: [none, xs, sm, md, lg, xl] }
+                  - { label: Heading level, name: headingLevel, widget: hidden, default: 3 }
+                  - { label: Heading variant, name: headingVariant, widget: hidden, default: h5 }
+                  - { label: Body variant, name: bodyVariant, widget: hidden, default: body-sm }
+                  - { label: Body tone, name: bodyTone, widget: hidden, default: muted }
+''',
+          ]
+          for part in removable_parts:
+              if part not in resource_block:
+                  raise SystemExit("Expected fixed Lab resource Decap field block not found")
+              resource_block = resource_block.replace(part, "", 1)
+          config_path.write_text(config[:start] + resource_block + config[end:], encoding="utf-8")
+
+      - name: Validate production source
+        run: npm run validate
+
+      - name: Commit normalization and remove temporary workflow
+        run: |
+          rm .github/workflows/normalize-lab-resource-card.yml
+          git add src/components/object/project/card/templates/CardIconPanel.astro src/content/globals/lab-detail.json src/content/lab-detail-settings-schema.ts public/admin/config.yml .github/workflows/normalize-lab-resource-card.yml
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git commit -m "refactor: normalize Lab resource card presentation"
+          git push
