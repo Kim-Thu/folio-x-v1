@@ -3,6 +3,7 @@ import type { HTMLAttributes } from "astro/types";
 export interface CSelectOption {
 	label: string;
 	value: string;
+	href?: string;
 }
 
 export type CSelectAppearance = "pill" | "panel";

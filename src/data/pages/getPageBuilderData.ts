@@ -305,9 +305,17 @@ const buildProductsArchive = async (
 	const [products, categories] = await Promise.all([getProducts(), getProductCategories()]);
 	const visibleProducts = context.categorySlug ? products.filter((product) => product.categorySlug === context.categorySlug) : products;
 	const categoryFilters = [{ label: toolbar.category.allLabel, value: toolbar.category.allValue, href: routes.base, checked: !context.categorySlug }, ...categories.map((category) => ({ ...category, href: `${routes.categoryBase}${category.value}`, checked: context.categorySlug === category.value }))];
-	const platformFilters = toolbar.platform.options.map((option) => ({ ...option, checked: option.value === toolbar.platform.value }));
+	const platformFilters = toolbar.platform.options
+		.filter((option) => option.value !== toolbar.platform.allValue)
+		.map((option) => ({ ...option, checked: false }));
 	const categoryFilter: PFilterChoiceGroupData = { ...sidebar.category, options: categoryFilters };
 	const platformFilter: PFilterChoiceGroupData = { ...sidebar.platform, options: platformFilters };
+	const licenseFilter: PFilterChoiceGroupData | undefined = sidebar.license
+		? { ...sidebar.license }
+		: undefined;
+	const ratingValues = Array.from(new Set(products.map((product) => product.rating))).sort(
+		(first, second) => second - first,
+	);
 	const advertisement: PAdvertisementData = {
 		title: sidebar.advertisement.title,
 		description: sidebar.advertisement.description,
@@ -336,7 +344,20 @@ const buildProductsArchive = async (
 			} },
 			sidebar: {
 				label: sidebar.label,
-				filter: { data: { filterLabel: sidebar.filterLabel, category: categoryFilter, groups: [platformFilter] } },
+				filter: { data: {
+					filterLabel: sidebar.filterLabel,
+					category: categoryFilter,
+					groups: [platformFilter, ...(licenseFilter ? [licenseFilter] : [])],
+					range: sidebar.price,
+					ratings: sidebar.ratings ? {
+						legend: sidebar.ratings.legend,
+						name: "rating",
+						options: ratingValues.map((value) => ({
+							value,
+							count: products.filter((product) => product.rating >= value).length,
+						})),
+					} : undefined,
+				} },
 				advertisement: { data: advertisement },
 			},
 			result: { count: visibleProducts.length, label: result.label },
@@ -400,7 +421,14 @@ const buildBlogArchive = async (
 					id: toolbar.category.id,
 					label: toolbar.category.label,
 					value: context.categorySlug ?? toolbar.category.allValue,
-					options: [{ label: toolbar.category.allLabel, value: toolbar.category.allValue }, ...categories.map((category) => ({ label: category.label, value: category.slug }))],
+					options: [
+						{ label: toolbar.category.allLabel, value: toolbar.category.allValue, href: presentation.routes.base },
+						...categories.map((category) => ({
+							label: category.label,
+							value: category.slug,
+							href: `${presentation.routes.categoryBase}${category.slug}`,
+						})),
+					],
 				}],
 				sort: toolbar.sort,
 				view: toolbar.view,

@@ -52,6 +52,13 @@ export function initSelect(): void {
 			options.forEach((item) =>
 				item.setAttribute("aria-selected", String(item === option)),
 			);
+			const href = option.dataset.href;
+			if (href) {
+				close();
+				window.location.assign(href);
+				return;
+			}
+
 			nativeSelect.dispatchEvent(new Event("change", { bubbles: true }));
 			close(true);
 		};

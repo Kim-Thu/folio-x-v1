@@ -1093,6 +1093,7 @@ collections:
             name: reader
             widget: object
             fields:
+              - { label: Page template, name: pageTemplate, widget: hidden, default: stacked }
               - { label: Settings, name: settings, widget: object, fields: *publication_section_settings }
               - label: Labels
                 name: labels
@@ -1412,7 +1413,9 @@ collections:
                           - { label: Tags label, name: tagsLabel, widget: string }
                           - { label: Actions label, name: actionsLabel, widget: string }
                           - { label: Live action label, name: liveActionLabel, widget: string }
+                          - { label: Live action icon, name: liveActionIcon, widget: hidden, default: arrowUpRight }
                           - { label: Source action label, name: sourceActionLabel, widget: string }
+                          - { label: Source action icon, name: sourceActionIcon, widget: hidden, default: github }
                           - label: Aside decoration
                             name: asideDecoration
                             widget: object
@@ -1472,7 +1475,9 @@ collections:
                         fields:
                           - { label: Label, name: label, widget: string }
                           - { label: Previous label, name: previousLabel, widget: string }
+                          - { label: Previous icon, name: previousIcon, widget: hidden, default: arrowLeft }
                           - { label: Next label, name: nextLabel, widget: string }
+                          - { label: Next icon, name: nextIcon, widget: hidden, default: arrowRight }
 
   - name: labs
     label: Labs

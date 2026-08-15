@@ -153,7 +153,7 @@
               "type": "radio"
             },
             "platform": {
-              "appearance": "navigation",
+              "appearance": "controls",
               "control": "platform",
               "legend": "Platform",
               "name": "product-platform",
@@ -170,9 +170,21 @@
               "prefix": "$"
             },
             "license": {
+              "appearance": "controls",
+              "control": "license",
               "legend": "Free / Pro",
-              "freeLabel": "Free",
-              "proLabel": "Pro"
+              "name": "product-license",
+              "type": "checkbox",
+              "options": [
+                {
+                  "label": "Free",
+                  "value": "free"
+                },
+                {
+                  "label": "Pro",
+                  "value": "pro"
+                }
+              ]
             },
             "ratings": {
               "legend": "Ratings"
