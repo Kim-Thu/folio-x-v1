@@ -1,3 +1,5 @@
+import { cardCollectionViewClasses } from "@/variants/components/object/project/card/PCard.variants";
+
 function initProductsRoot(root: HTMLElement): void {
 	const cards = Array.from(
 		root.querySelectorAll<HTMLElement>("[data-product-card]"),
@@ -8,7 +10,7 @@ function initProductsRoot(root: HTMLElement): void {
 		root.querySelector<HTMLSelectElement>("[data-category-select]");
 	const platformSelect =
 		root.querySelector<HTMLSelectElement>("[data-platform-select]");
-	const sortSelect = root.querySelector<HTMLSelectElement>("[data-product-sort]");
+	const sortSelect = root.querySelector<HTMLSelectElement>("[data-archive-sort]");
 	const range = root.querySelector<HTMLInputElement>("[data-price-filter]");
 	const priceOutput =
 		root.querySelector<HTMLOutputElement>("[data-price-output]");
@@ -21,10 +23,28 @@ function initProductsRoot(root: HTMLElement): void {
 	const previous =
 		root.querySelector<HTMLButtonElement>("[data-page-previous]");
 	const next = root.querySelector<HTMLButtonElement>("[data-page-next]");
-	const pageSize = 9;
+	const pageSize = Number(root.dataset.paginationPageSize) || cards.length || 1;
 	let currentPage = 1;
 
 	if (!cards.length || !grid) return;
+
+	const applyView = (view: "grid" | "list"): void => {
+		grid.dataset.view = view;
+		const isList = view === "list";
+		grid.classList.toggle(
+			cardCollectionViewClasses.list.collection,
+			isList,
+		);
+		cards.forEach((card) => {
+			card.classList.toggle(cardCollectionViewClasses.list.item, isList);
+		});
+		root.querySelectorAll<HTMLButtonElement>("[data-view-control]").forEach((item) => {
+			item.setAttribute(
+				"aria-pressed",
+				String(item.dataset.viewControl === view),
+			);
+		});
+	};
 
 	const selectedCategory = (): string =>
 		root.querySelector<HTMLInputElement>(
@@ -184,10 +204,7 @@ function initProductsRoot(root: HTMLElement): void {
 		.querySelectorAll<HTMLButtonElement>("[data-view-control]")
 		.forEach((button) => {
 			button.addEventListener("click", () => {
-				root.querySelectorAll("[data-view-control]").forEach((item) => {
-					item.setAttribute("aria-pressed", String(item === button));
-				});
-				grid.dataset.view = button.dataset.viewControl;
+				applyView(button.dataset.viewControl === "list" ? "list" : "grid");
 			});
 		});
 
@@ -216,6 +233,7 @@ function initProductsRoot(root: HTMLElement): void {
 		render();
 	});
 
+	applyView(grid.dataset.view === "list" ? "list" : "grid");
 	syncPriceOutput();
 	render();
 }
