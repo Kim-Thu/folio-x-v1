@@ -28,8 +28,9 @@ jobs:
         run: npm ci
 
       - name: Remove fixed resource item presentation from CMS
-        shell: python
+        shell: bash
         run: |
+          python - <<'PY'
           import json
           from pathlib import Path
 
@@ -150,6 +151,7 @@ jobs:
                   raise SystemExit("Expected fixed Lab resource Decap field block not found")
               resource_block = resource_block.replace(part, "", 1)
           config_path.write_text(config[:start] + resource_block + config[end:], encoding="utf-8")
+          PY
 
       - name: Validate production source
         run: npm run validate
