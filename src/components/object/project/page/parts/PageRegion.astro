@@ -1,11 +1,11 @@
 ---
 import LContainer from "@/components/layout/LContainer.astro";
 import LSection from "@/components/layout/LSection.astro";
-import PageRegionContent from "@/components/pages/builder/PageRegionContent.astro";
+import PageRegionContent from "@/components/object/project/page/parts/PageRegionContent.astro";
 import type {
 	PageRegion,
 	PageRegionProps,
-} from "@/types/components/pages/builder/PageRegion.types";
+} from "@/types/components/object/project/page/PageRegion.types";
 
 const { region } = Astro.props as PageRegionProps;
 const section = region.section;

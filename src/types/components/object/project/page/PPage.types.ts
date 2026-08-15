@@ -1,3 +1,5 @@
+import type { PageRegion } from "@/types/components/object/project/page/PageRegion.types";
+
 export type PPageTemplate =
 	| "stacked"
 	| "lead-content"
@@ -7,4 +9,9 @@ export type PPageTemplate =
 
 export interface PPageProps {
 	template: PPageTemplate;
+	regions: PageRegion[];
+}
+
+export interface PPageTemplateProps {
+	regions: PageRegion[];
 }

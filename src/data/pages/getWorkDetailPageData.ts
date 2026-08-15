@@ -1,5 +1,5 @@
 import { getPage, getProjects } from "@/data/cms";
-import type { PageRegion } from "@/types/components/pages/builder/PageRegion.types";
+import type { PageRegion } from "@/types/components/object/project/page/PageRegion.types";
 import type { WorkDetailPageData } from "@/types/components/pages/work-detail/WorkDetailPage.types";
 
 type ProjectsPage = Awaited<ReturnType<typeof getPage>>;

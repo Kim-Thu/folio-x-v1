@@ -1,6 +1,6 @@
 import type { CColumnsGap } from "@/types/components/object/component/CColumns.types";
 import type { PArchiveToolbarProps } from "@/types/components/object/project/archive-toolbar/PArchiveToolbar.types";
-import type { PageRegion, PageRegionBase } from "@/types/components/pages/builder/PageRegion.types";
+import type { PageRegion, PageRegionBase } from "@/types/components/object/project/page/PageRegion.types";
 
 export interface PageGroupRegion extends PageRegionBase {
 	component: "group";

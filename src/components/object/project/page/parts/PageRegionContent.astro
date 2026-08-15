@@ -22,10 +22,10 @@ import PReader from "@/components/object/project/reader/PReader.astro";
 import PReviews from "@/components/object/project/reviews/PReviews.astro";
 import PSectionHeader from "@/components/object/project/section-header/PSectionHeader.astro";
 import PStatus from "@/components/object/project/status/PStatus.astro";
-import ArchiveRegion from "@/components/pages/builder/ArchiveRegion.astro";
-import CollectionRegion from "@/components/pages/builder/CollectionRegion.astro";
-import GroupRegion from "@/components/pages/builder/GroupRegion.astro";
-import type { PageRegion } from "@/types/components/pages/builder/PageRegion.types";
+import ArchiveRegion from "@/components/object/project/page/parts/ArchiveRegion.astro";
+import CollectionRegion from "@/components/object/project/page/parts/CollectionRegion.astro";
+import GroupRegion from "@/components/object/project/page/parts/GroupRegion.astro";
+import type { PageRegion } from "@/types/components/object/project/page/PageRegion.types";
 
 type Props = { region: PageRegion };
 const { region } = Astro.props as Props;

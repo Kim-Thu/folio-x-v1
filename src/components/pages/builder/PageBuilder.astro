@@ -1,7 +1,7 @@
 ---
 import LPage from "@/components/layout/LPage.astro";
 import PPage from "@/components/object/project/page/PPage.astro";
-import PageRegionRenderer from "@/components/pages/builder/PageRegion.astro";
+import PageRegionRenderer from "@/components/object/project/page/parts/PageRegion.astro";
 import {
 	getInsights,
 	getLabs,
@@ -28,8 +28,8 @@ import type {
 	PageBuilderProps,
 	PageSectionData,
 } from "@/types/components/pages/builder/PageBuilder.types";
-import type { PageArchiveRegion } from "@/types/components/pages/builder/PageArchiveRegion.types";
-import type { PageRegion } from "@/types/components/pages/builder/PageRegion.types";
+import type { PageArchiveRegion } from "@/types/components/object/project/page/PageArchiveRegion.types";
+import type { PageRegion } from "@/types/components/object/project/page/PageRegion.types";
 import type { CIconName } from "@/types/components/object/component/CIcon.types";
 import type { PAdvertisementData } from "@/types/components/object/project/advertisement/PAdvertisement.types";
 import type { PCardData, PCardProps } from "@/types/components/object/project/card/PCard.types";
@@ -463,49 +463,12 @@ const pageTemplate = "page" in props
 	? props.page.content.layout.template
 	: props.pageTemplate;
 const isHome = "page" in props && props.page.slug === "/";
-
-const leadRegions: PageRegion[] = pageTemplate === "stacked"
-	? []
-	: regions.filter(
-		(region) => region.component === "page-header" || region.component === "hero",
-	);
-const navigationRegions: PageRegion[] = pageTemplate === "lead-content-navigation"
-	? regions.filter((region) => region.component === "post-navigation")
-	: pageTemplate === "lead-navigation-content"
-		? regions.filter((region) => region.component === "tabs")
-		: [];
-const closingRegions: PageRegion[] = pageTemplate === "lead-content-closing"
-	? regions.filter((region) => region.component === "cta")
-	: [];
-const contentRegions: PageRegion[] = isHome || pageTemplate === "stacked"
-	? regions
-	: regions.filter((region) => {
-		if (region.component === "page-header" || region.component === "hero") return false;
-		if (
-			pageTemplate === "lead-content-navigation" &&
-			region.component === "post-navigation"
-		) return false;
-		if (
-			pageTemplate === "lead-navigation-content" &&
-			region.component === "tabs"
-		) return false;
-		if (
-			pageTemplate === "lead-content-closing" &&
-			region.component === "cta"
-		) return false;
-		return true;
-	});
 ---
 
 {isHome ? (
 	<LPage data-page-template="home">
-		{contentRegions.map((region) => <PageRegionRenderer {region} />)}
+		{regions.map((region) => <PageRegionRenderer {region} />)}
 	</LPage>
 ) : (
-	<PPage template={pageTemplate}>
-		{leadRegions.map((region) => <PageRegionRenderer {region} slot="lead" />)}
-		{navigationRegions.map((region) => <PageRegionRenderer {region} slot="navigation" />)}
-		{contentRegions.map((region) => <PageRegionRenderer {region} />)}
-		{closingRegions.map((region) => <PageRegionRenderer {region} slot="closing" />)}
-	</PPage>
+	<PPage template={pageTemplate} {regions} />
 )}

@@ -1,3 +1,20 @@
-<slot name="lead" />
-<slot />
-<slot name="closing" />
+---
+import PageRegion from "@/components/object/project/page/parts/PageRegion.astro";
+import type { PPageTemplateProps } from "@/types/components/object/project/page/PPage.types";
+
+const { regions } = Astro.props as PPageTemplateProps;
+const lead = regions.filter(
+	(region) => region.component === "page-header" || region.component === "hero",
+);
+const closing = regions.filter((region) => region.component === "cta");
+const content = regions.filter(
+	(region) =>
+		region.component !== "page-header" &&
+		region.component !== "hero" &&
+		region.component !== "cta",
+);
+---
+
+{lead.map((region) => <PageRegion {region} />)}
+{content.map((region) => <PageRegion {region} />)}
+{closing.map((region) => <PageRegion {region} />)}

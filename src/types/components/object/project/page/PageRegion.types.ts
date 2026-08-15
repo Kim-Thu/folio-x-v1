@@ -22,9 +22,9 @@ import type { PReaderProps } from "@/types/components/object/project/reader/PRea
 import type { PReviewsProps } from "@/types/components/object/project/reviews/PReviews.types";
 import type { PSectionHeaderProps } from "@/types/components/object/project/section-header/PSectionHeader.types";
 import type { PStatusProps } from "@/types/components/object/project/status/PStatus.types";
-import type { PageArchiveRegion } from "@/types/components/pages/builder/PageArchiveRegion.types";
-import type { PageCollectionRegion } from "@/types/components/pages/builder/PageCollectionRegion.types";
-import type { PageGroupRegion } from "@/types/components/pages/builder/PageGroupRegion.types";
+import type { PageArchiveRegion } from "@/types/components/object/project/page/PageArchiveRegion.types";
+import type { PageCollectionRegion } from "@/types/components/object/project/page/PageCollectionRegion.types";
+import type { PageGroupRegion } from "@/types/components/object/project/page/PageGroupRegion.types";
 
 export type PageRegionContainer = LContainerSize | "none";
 

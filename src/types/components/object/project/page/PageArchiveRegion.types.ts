@@ -4,7 +4,7 @@ import type { PArchiveToolbarProps } from "@/types/components/object/project/arc
 import type { PCardProps } from "@/types/components/object/project/card/PCard.types";
 import type { PFilterPanelProps } from "@/types/components/object/project/filter-panel/PFilterPanel.types";
 import type { PSectionHeaderProps } from "@/types/components/object/project/section-header/PSectionHeader.types";
-import type { PageRegionBase } from "@/types/components/pages/builder/PageRegion.types";
+import type { PageRegionBase } from "@/types/components/object/project/page/PageRegion.types";
 
 export interface PageArchiveRegion extends PageRegionBase {
 	component: "archive";
