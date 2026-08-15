@@ -1,5 +1,5 @@
 import { readdir, readFile, writeFile } from 'node:fs/promises';
-import { extname, resolve } from 'node:path';
+import { extname, relative, resolve, sep } from 'node:path';
 
 const outputDirectory = resolve('dist');
 
@@ -18,14 +18,23 @@ function readAttribute(tag, name) {
   return match?.[1] ?? match?.[2];
 }
 
+function routeForHtmlFile(htmlFile) {
+  const outputPath = relative(outputDirectory, htmlFile).split(sep).join('/');
+  if (outputPath === 'index.html') return '/';
+  if (outputPath.endsWith('/index.html')) {
+    return `/${outputPath.slice(0, -'index.html'.length)}`;
+  }
+  return `/${outputPath}`;
+}
+
 const htmlFiles = await findHtmlFiles(outputDirectory);
 if (htmlFiles.length === 0) {
   throw new Error('No generated HTML files were found in dist.');
 }
 
-const stylesheetUrls = new Set();
-const fontUrls = new Set();
 const inlineStyleViolations = [];
+const routeResources = [];
+let stylesheetCount = 0;
 
 for (const htmlFile of htmlFiles) {
   const document = await readFile(htmlFile, 'utf8');
@@ -36,6 +45,12 @@ for (const htmlFile of htmlFiles) {
   if (/\sstyle=(?:"[^"]*"|'[^']*')/i.test(document)) {
     inlineStyleViolations.push(`${htmlFile}: inline style attribute`);
   }
+
+  const route = routeForHtmlFile(htmlFile);
+  if (route.startsWith('/admin/')) continue;
+
+  const stylesheetUrls = new Set();
+  const fontUrls = new Set();
 
   for (const match of document.matchAll(/<link\b[^>]*>/gi)) {
     const tag = match[0];
@@ -51,20 +66,18 @@ for (const htmlFile of htmlFiles) {
       fontUrls.add(href);
     }
   }
+
+  stylesheetCount += stylesheetUrls.size;
+  routeResources.push({ route, stylesheetUrls, fontUrls });
 }
 
 if (inlineStyleViolations.length > 0) {
   throw new Error(`Inline/internal CSS is not allowed in generated HTML:\n${inlineStyleViolations.join('\n')}`);
 }
 
-if (stylesheetUrls.size === 0) {
+if (stylesheetCount === 0) {
   throw new Error('No external stylesheet links were found in the generated site.');
 }
-
-const resourceHints = [
-  ...[...stylesheetUrls].map((url) => `<${url}>; rel=preload; as=style`),
-  ...[...fontUrls].map((url) => `<${url}>; rel=preload; as=font; type="font/woff2"; crossorigin`),
-];
 
 const contentSecurityPolicy = [
   "default-src 'self'",
@@ -80,13 +93,21 @@ const contentSecurityPolicy = [
   'upgrade-insecure-requests',
 ].join('; ');
 
-// Netlify reads this file at deploy time. Stylesheets stay external by policy;
-// response-level preload hints start them early without relaxing CSP for inline CSS.
-const headers = [
-  '/*',
-  `  Link: ${resourceHints.join(', ')}`,
-  `  Content-Security-Policy: ${contentSecurityPolicy}`,
-  '',
-].join('\n');
+const headers = routeResources
+  .sort((left, right) => left.route.localeCompare(right.route))
+  .flatMap(({ route, stylesheetUrls, fontUrls }) => {
+    const resourceHints = [
+      ...[...stylesheetUrls].map((url) => `<${url}>; rel=preload; as=style`),
+      ...[...fontUrls].map((url) => `<${url}>; rel=preload; as=font; type="font/woff2"; crossorigin`),
+    ];
+
+    return [
+      route,
+      ...(resourceHints.length > 0 ? [`  Link: ${resourceHints.join(', ')}`] : []),
+      `  Content-Security-Policy: ${contentSecurityPolicy}`,
+      '',
+    ];
+  })
+  .join('\n');
 
 await writeFile(resolve(outputDirectory, '_headers'), headers, 'utf8');
