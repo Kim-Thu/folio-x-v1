@@ -3,7 +3,9 @@ import type {
 	LSectionSpacing,
 	LSectionTheme,
 } from "@/types/components/layout/LSection.types";
+import type { CBoxProps } from "@/types/components/object/component/CBox.types";
 import type { CButtonLinkProps } from "@/types/components/object/component/CButton.types";
+import type { CColumnsProps } from "@/types/components/object/component/CColumns.types";
 import type { CDescriptionListProps } from "@/types/components/object/component/CDescriptionList.types";
 import type { CProfileProps } from "@/types/components/object/component/CProfile.types";
 import type { CTabListProps } from "@/types/components/object/component/CTabList.types";
@@ -74,6 +76,8 @@ export interface CardsRegion extends PageRegionBase {
 		headerAction?: CButtonLinkProps;
 		cards: PCardProps;
 		action?: CButtonLinkProps;
+		box?: Pick<CBoxProps, "radius" | "spacing" | "surface">;
+		stack?: Pick<CColumnsProps, "columns" | "gap">;
 		panel?: boolean;
 	};
 }
