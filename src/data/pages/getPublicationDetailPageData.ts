@@ -29,6 +29,8 @@ export async function getPublicationDetailPageData(
 	const basePath = collectionPresentation.basePath;
 	const description = detail.description?.length ? detail.description : [entry.summary];
 	const configuredChapters = [...(detail.reader ?? [])].sort((a, b) => b.number - a.number);
+	const hasChapters = entry.chapters > 0;
+	const hasReadableChapters = configuredChapters.length > 0;
 	const chapterItems = configuredChapters.map((chapter) => ({
 		order: chapter.number,
 		number: `${presentation.chapters.labels.numberPrefix}${chapter.number}`,
@@ -86,10 +88,10 @@ export async function getPublicationDetailPageData(
 	];
 
 	const tabs = [
-		...(configuredChapters.length > 0 ? [presentation.navigation.tabs.chapters] : []),
+		...(hasChapters ? [presentation.navigation.tabs.chapters] : []),
 		presentation.navigation.tabs.overview,
 	];
-	const activeValue = configuredChapters.length > 0
+	const activeValue = hasChapters
 		? presentation.navigation.tabs.chapters.value
 		: presentation.navigation.tabs.overview.value;
 
@@ -127,7 +129,7 @@ export async function getPublicationDetailPageData(
 					},
 					metrics,
 					actionsLabel: presentation.header.labels.actions,
-					actions: configuredChapters.length > 0
+					actions: hasReadableChapters
 						? [
 								{
 									label: presentation.header.labels.primaryAction,
@@ -198,7 +200,7 @@ export async function getPublicationDetailPageData(
 								: undefined,
 						},
 					},
-					...(chapterItems.length > 0
+					...(hasChapters
 						? [
 								{
 									key: "chapter-index",
@@ -223,7 +225,7 @@ export async function getPublicationDetailPageData(
 
 	return {
 		entry,
-		pageTemplate: presentation.page.template ,
+		pageTemplate: presentation.page.template,
 		regions,
 	};
 }
