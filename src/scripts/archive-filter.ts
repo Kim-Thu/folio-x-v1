@@ -1,3 +1,5 @@
+import { cardCollectionViewClasses } from "@/variants/components/object/project/card/PCard.variants";
+
 export function initArchiveFilter(): void {
 	document.querySelectorAll<HTMLElement>("[data-filter-root]").forEach((root) => {
 		const filterButtons = Array.from(
@@ -35,6 +37,24 @@ export function initArchiveFilter(): void {
 
 		let activeFilter = "all";
 		let activePage = 1;
+
+		const applyView = (view: "grid" | "list"): void => {
+			collection.dataset.view = view;
+			const isList = view === "list";
+			collection.classList.toggle(
+				cardCollectionViewClasses.list.collection,
+				isList,
+			);
+			entries.forEach(({ item }) => {
+				item.classList.toggle(cardCollectionViewClasses.list.item, isList);
+			});
+			viewButtons.forEach((button) =>
+				button.setAttribute(
+					"aria-pressed",
+					String(button.dataset.viewControl === view),
+				),
+			);
+		};
 
 		const getOrderedCards = () => {
 			const direction = sortControl?.value === "oldest" ? 1 : -1;
@@ -105,10 +125,7 @@ export function initArchiveFilter(): void {
 
 		viewButtons.forEach((button) => {
 			button.addEventListener("click", () => {
-				collection.dataset.view = button.dataset.viewControl ?? "grid";
-				viewButtons.forEach((item) =>
-					item.setAttribute("aria-pressed", String(item === button)),
-				);
+				applyView(button.dataset.viewControl === "list" ? "list" : "grid");
 			});
 		});
 
@@ -129,6 +146,7 @@ export function initArchiveFilter(): void {
 			render();
 		});
 
+		applyView(collection.dataset.view === "list" ? "list" : "grid");
 		render();
 	});
 }
