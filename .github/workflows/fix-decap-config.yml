@@ -1,0 +1,91 @@
+name: Fix Decap config
+
+on:
+  push:
+    branches:
+      - agent/cms-content-migration
+
+permissions:
+  contents: write
+
+jobs:
+  fix:
+    if: github.actor != 'github-actions[bot]'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: agent/cms-content-migration
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - run: npm ci
+      - name: Repair Decap config structure
+        shell: python
+        run: |
+          from pathlib import Path
+
+          path = Path('public/admin/config.yml')
+          text = path.read_text()
+
+          wrapper_start = text.index('      - name: pages\n        label: Pages\n        files:\n')
+          wrapper_end = text.index('\n      - name: lab_detail\n', wrapper_start)
+          wrapper = text[wrapper_start:wrapper_end]
+          lines = wrapper.splitlines()
+          page_entries = lines[3:]
+          dedented = []
+          for line in page_entries:
+              if line.startswith('    '):
+                  dedented.append(line[4:])
+              else:
+                  dedented.append(line)
+          text = text[:wrapper_start] + '\n'.join(dedented) + text[wrapper_end:]
+
+          text = text.replace(
+              '              - { label: SEO override, name: seo, widget: object, required: false, fields: [] }\n',
+              ''
+          )
+
+          text = text.replace(
+              '                              - { label: Static items, name: items, widget: list, required: false, fields: [] }\n',
+              '''                              - label: Static items\n                                name: items\n                                widget: list\n                                required: false\n                                fields:\n                                  - { label: Href, name: href, widget: string }\n                                  - { label: ARIA label, name: ariaLabel, widget: string }\n                                  - label: Title\n                                    name: title\n                                    widget: list\n                                    field: { label: Line, name: line, widget: string }\n                                  - { label: Excerpt, name: excerpt, widget: text, required: false }\n                                  - { label: Media, name: media, widget: object, required: false, fields: *image_fields }\n                                  - { label: Appearance, name: appearance, widget: select, required: false, options: [default, inverse] }\n'''
+          )
+
+          text = text.replace(
+              '                              - { label: Item presentation, name: itemPresentation, widget: object, required: false, fields: [] }\n',
+              ''
+          )
+
+          text = text.replace(
+              '                              - { label: Cards, name: cards, widget: object, required: false, fields: [] }\n',
+              '''                              - label: Cards\n                                name: cards\n                                widget: object\n                                required: false\n                                fields:\n                                  - { label: Template, name: template, widget: select, required: false, options: [stacked, horizontal, overlay, featured, boxed, compact-media, compact-bordered, editorial, icon-panel, icon-summary, media-banner, media-caption, media-details, media-only, media-summary, media-metrics] }\n                                  - { label: Layout, name: layout, widget: select, required: false, options: [grid, list, three-column, twelve-column, content-three-column, mosaic, asymmetric, showcase] }\n                                  - { label: Columns, name: columns, widget: number, required: false, value_type: int, min: 1, max: 5 }\n                                  - { label: Gap, name: gap, widget: select, required: false, options: [none, sm, md, lg, xl] }\n                                  - { label: Media ratio, name: mediaRatio, widget: select, required: false, options: [editorial, landscape, natural, panoramic, portrait, square, video] }\n                                  - { label: Separator, name: separator, widget: select, required: false, options: [none, light, dark] }\n                                  - { label: Heading level, name: headingLevel, widget: number, required: false, value_type: int, min: 1, max: 6 }\n                                  - label: Slots\n                                    name: slots\n                                    widget: object\n                                    required: false\n                                    fields:\n                                      - { label: Media, name: media, widget: boolean, required: false }\n                                      - { label: Icon, name: icon, widget: boolean, required: false }\n                                      - { label: Metadata, name: metadata, widget: boolean, required: false }\n                                      - { label: Tags, name: tags, widget: boolean, required: false }\n                                      - { label: Metrics, name: metrics, widget: boolean, required: false }\n                                      - { label: Title, name: title, widget: boolean, required: false }\n                                      - { label: Excerpt, name: excerpt, widget: boolean, required: false }\n                                      - { label: Action, name: action, widget: boolean, required: false }\n'''
+          )
+
+          table_start = text.index('          - label: Table\n            name: table\n            widget: object\n')
+          table_end = text.index('          - label: Quote\n', table_start)
+          text = text[:table_start] + text[table_end:]
+
+          if 'fields: []' in text:
+              raise SystemExit('Decap config still contains empty fields arrays')
+          if '      - name: pages\n        label: Pages\n        files:\n' in text:
+              raise SystemExit('Invalid nested pages files wrapper still present')
+          if '      - name: home\n        label: Home\n        file: src/content/pages/home.json\n' not in text:
+              raise SystemExit('Home page is not a direct settings file entry')
+          if '      - name: blog_page\n        label: Blog Page\n        file: src/content/pages/blog.json\n' not in text:
+              raise SystemExit('Blog page is not a direct settings file entry')
+
+          path.write_text(text)
+      - name: Parse YAML
+        run: ruby -e "require 'yaml'; YAML.load_file('public/admin/config.yml', aliases: true); puts 'config.yml YAML parse OK'"
+      - name: Validate project
+        run: npm run validate
+      - name: Commit fix and remove temporary workflow
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          rm .github/workflows/fix-decap-config.yml
+          git add public/admin/config.yml .github/workflows/fix-decap-config.yml
+          git commit -m "fix: repair Decap CMS configuration"
+          git push --no-verify origin HEAD:agent/cms-content-migration
