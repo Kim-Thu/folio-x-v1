@@ -1,5 +1,5 @@
 import { getBlogDetailSettings, getInsights } from "@/data/cms";
-import { mapInsightToCard } from "@/data/mappers/card";
+import type { PCardData } from "@/types/components/object/project/card/PCard.types";
 import type { PageRegion } from "@/types/components/pages/builder/PageRegion.types";
 import type { InsightDetailPageData } from "@/types/components/pages/insight-detail/InsightDetailPage.types";
 import type { PPageHeaderEditorialData } from "@/types/components/object/project/page-header/PPageHeader.types";
@@ -90,15 +90,66 @@ export async function getInsightDetailPageData(
 		.filter((node) => node.type === "heading")
 		.map((node) => ({ label: node.text, href: `#${node.id}` }));
 
-	const relatedCards = relatedPosts.map((insight) =>
-		mapInsightToCard(insight, {
-			routes: header.routes,
+	const relatedCards: PCardData[] = relatedPosts.map((insight) => ({
+		href: insight.href,
+		ariaLabel: insight.title,
+		title: [insight.title],
+		excerpt: insight.excerpt,
+		metadata: {
 			separator: sidebar.relatedCards.separator,
-			metadataDisplay: sidebar.relatedCards.metadataDisplay,
-			imageWidth: sidebar.relatedCards.imageWidth,
-			imageHeight: sidebar.relatedCards.imageHeight,
-		}),
-	);
+			items: [
+				{
+					type: "category",
+					label: insight.category,
+					href: `${header.routes.categoryBase}${insight.categorySlug}`,
+					display: sidebar.relatedCards.metadataDisplay,
+				},
+				{
+					type: "reading-time",
+					label: insight.readTime,
+					display: sidebar.relatedCards.metadataDisplay,
+				},
+			],
+		},
+		secondaryMetadata: {
+			separator: sidebar.relatedCards.separator,
+			items: [
+				{
+					type: "author",
+					label: insight.author,
+					display: sidebar.relatedCards.metadataDisplay,
+				},
+				{
+					type: "datetime",
+					label: insight.publishedLabel,
+					datetime: insight.publishedAt,
+					display: sidebar.relatedCards.metadataDisplay,
+				},
+			],
+		},
+		tags: insight.tags.map((tag) => ({
+			label: tag.label,
+			href: `${header.routes.tagBase}${tag.slug}`,
+		})),
+		facets: {
+			category: [insight.categorySlug],
+			tag: insight.tags.map((tag) => tag.slug),
+		},
+		searchValue: [
+			insight.title,
+			insight.excerpt,
+			insight.category,
+			insight.author,
+			...insight.tags.map((tag) => tag.label),
+		].join(" "),
+		sortValue: insight.publishedAt,
+		media: insight.image && insight.imageAlt ? {
+			src: insight.image,
+			alt: insight.imageAlt,
+			width: sidebar.relatedCards.imageWidth,
+			height: sidebar.relatedCards.imageHeight,
+		} : undefined,
+	}));
 
 	const nestedRegions: PageRegion[] = [
 		{
