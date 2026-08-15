@@ -10,112 +10,41 @@ permissions:
 
 jobs:
   fix:
+    name: Repair Decap CMS config
     runs-on: ubuntu-latest
+    timeout-minutes: 10
+
     steps:
-      - uses: actions/checkout@v4
+      - name: Check out repository
+        uses: actions/checkout@v4
         with:
           ref: agent/cms-content-migration
           fetch-depth: 0
-      - uses: actions/setup-node@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
         with:
           node-version: 24
           cache: npm
-      - run: npm ci
-      - name: Repair Decap config structure
-        run: |
-          python - <<'PY'
-          from pathlib import Path
 
-          path = Path("public/admin/config.yml")
-          text = path.read_text()
+      - name: Install locked dependencies
+        run: npm ci
 
-          wrapper_start = text.index("      - name: pages\n        label: Pages\n        files:\n")
-          wrapper_end = text.index("\n      - name: lab_detail\n", wrapper_start)
-          wrapper = text[wrapper_start:wrapper_end]
-          lines = wrapper.splitlines()
-          page_entries = lines[3:]
-          dedented = [line[4:] if line.startswith("    ") else line for line in page_entries]
-          text = text[:wrapper_start] + "\n".join(dedented) + text[wrapper_end:]
+      - name: Repair Decap config
+        run: python .github/scripts/fix_decap_config.py
 
-          text = text.replace(
-              "              - { label: SEO override, name: seo, widget: object, required: false, fields: [] }\n",
-              "",
-          )
-
-          text = text.replace(
-              "                              - { label: Static items, name: items, widget: list, required: false, fields: [] }\n",
-              """                              - label: Static items
-                                name: items
-                                widget: list
-                                required: false
-                                fields:
-                                  - { label: Href, name: href, widget: string }
-                                  - { label: ARIA label, name: ariaLabel, widget: string }
-                                  - label: Title
-                                    name: title
-                                    widget: list
-                                    field: { label: Line, name: line, widget: string }
-                                  - { label: Excerpt, name: excerpt, widget: text, required: false }
-                                  - { label: Media, name: media, widget: object, required: false, fields: *image_fields }
-                                  - { label: Appearance, name: appearance, widget: select, required: false, options: [default, inverse] }
-""",
-          )
-
-          text = text.replace(
-              "                              - { label: Item presentation, name: itemPresentation, widget: object, required: false, fields: [] }\n",
-              "",
-          )
-
-          text = text.replace(
-              "                              - { label: Cards, name: cards, widget: object, required: false, fields: [] }\n",
-              """                              - label: Cards
-                                name: cards
-                                widget: object
-                                required: false
-                                fields:
-                                  - { label: Template, name: template, widget: select, required: false, options: [stacked, horizontal, overlay, featured, boxed, compact-media, compact-bordered, editorial, icon-panel, icon-summary, media-banner, media-caption, media-details, media-only, media-summary, media-metrics] }
-                                  - { label: Layout, name: layout, widget: select, required: false, options: [grid, list, three-column, twelve-column, content-three-column, mosaic, asymmetric, showcase] }
-                                  - { label: Columns, name: columns, widget: number, required: false, value_type: int, min: 1, max: 5 }
-                                  - { label: Gap, name: gap, widget: select, required: false, options: [none, sm, md, lg, xl] }
-                                  - { label: Media ratio, name: mediaRatio, widget: select, required: false, options: [editorial, landscape, natural, panoramic, portrait, square, video] }
-                                  - { label: Separator, name: separator, widget: select, required: false, options: [none, light, dark] }
-                                  - { label: Heading level, name: headingLevel, widget: number, required: false, value_type: int, min: 1, max: 6 }
-                                  - label: Slots
-                                    name: slots
-                                    widget: object
-                                    required: false
-                                    fields:
-                                      - { label: Media, name: media, widget: boolean, required: false }
-                                      - { label: Icon, name: icon, widget: boolean, required: false }
-                                      - { label: Metadata, name: metadata, widget: boolean, required: false }
-                                      - { label: Tags, name: tags, widget: boolean, required: false }
-                                      - { label: Metrics, name: metrics, widget: boolean, required: false }
-                                      - { label: Title, name: title, widget: boolean, required: false }
-                                      - { label: Excerpt, name: excerpt, widget: boolean, required: false }
-                                      - { label: Action, name: action, widget: boolean, required: false }
-""",
-          )
-
-          table_start = text.index("          - label: Table\n            name: table\n            widget: object\n")
-          table_end = text.index("          - label: Quote\n", table_start)
-          text = text[:table_start] + text[table_end:]
-
-          assert "fields: []" not in text
-          assert "      - name: pages\n        label: Pages\n        files:\n" not in text
-          assert "      - name: home\n        label: Home\n        file: src/content/pages/home.json\n" in text
-          assert "      - name: blog_page\n        label: Blog Page\n        file: src/content/pages/blog.json\n" in text
-
-          path.write_text(text)
-          PY
       - name: Parse YAML
         run: ruby -e "require 'yaml'; YAML.load_file('public/admin/config.yml', aliases: true); puts 'config.yml YAML parse OK'"
-      - name: Validate project
+
+      - name: Validate production source
         run: npm run validate
-      - name: Commit fix and remove temporary workflow
+
+      - name: Commit repaired config
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           rm .github/workflows/fix-decap-config.yml
-          git add public/admin/config.yml .github/workflows/fix-decap-config.yml
+          rm .github/scripts/fix_decap_config.py
+          git add public/admin/config.yml .github/workflows/fix-decap-config.yml .github/scripts/fix_decap_config.py
           git commit -m "fix: repair Decap CMS configuration"
           git push --no-verify origin HEAD:agent/cms-content-migration
