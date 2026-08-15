@@ -21,6 +21,45 @@ const sectionHeaderSchema = z.object({
     z.literal(6),
   ]),
 });
+const cardPresentationSchema = z.object({
+  template: z.enum([
+    "stacked",
+    "horizontal",
+    "overlay",
+    "featured",
+    "boxed",
+    "compact-media",
+    "compact-bordered",
+    "editorial",
+    "icon-panel",
+    "icon-summary",
+    "media-banner",
+    "media-caption",
+    "media-details",
+    "media-only",
+    "media-summary",
+    "media-metrics",
+  ]),
+  layout: z.enum([
+    "grid",
+    "list",
+    "three-column",
+    "twelve-column",
+    "content-three-column",
+    "mosaic",
+    "asymmetric",
+    "showcase",
+  ]),
+  columns: z.union([
+    z.literal(1),
+    z.literal(2),
+    z.literal(3),
+    z.literal(4),
+    z.literal(5),
+  ]),
+  gap: z.enum(["none", "sm", "md", "lg", "xl"]),
+});
+
 export const labDetailSettingsSchema = z.object({
   page: z.object({
     template: z.literal("lead-navigation-content"),
@@ -100,6 +139,7 @@ export const labDetailSettingsSchema = z.object({
   gallery: z.object({
     id: z.string().min(1),
     title: z.string().min(1),
+    template: z.enum(["grid", "slider"]),
     openImageLabelTemplate: z.string().includes("{index}"),
     imageTitleLabelTemplate: z.string().includes("{index}"),
     settings: sectionSettingsSchema,
@@ -117,6 +157,7 @@ export const labDetailSettingsSchema = z.object({
     settings: sectionSettingsSchema,
     stack: stackSchema,
     header: sectionHeaderSchema,
+    cards: cardPresentationSchema,
   }),
   related: z.object({
     id: z.string().min(1),
@@ -127,5 +168,6 @@ export const labDetailSettingsSchema = z.object({
     settings: sectionSettingsSchema,
     stack: stackSchema,
     header: sectionHeaderSchema,
-  })
+    cards: cardPresentationSchema,
+  }),
 });
