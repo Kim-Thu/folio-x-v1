@@ -490,6 +490,24 @@ const resolvePublicationCatalogCollection = async (
 		sortValue: String(entry.order).padStart(4, "0"),
 	}));
 
+	const featuredCards = [...cards]
+		.sort((first, second) => (second.rating?.value ?? 0) - (first.rating?.value ?? 0))
+		.slice(0, settings.main.featuredLimit);
+	const trendingCards = [...cards]
+		.sort((first, second) => {
+			const firstLabel = first.metrics?.[0]?.label ?? "0";
+			const secondLabel = second.metrics?.[0]?.label ?? "0";
+			const firstUnit = firstLabel.slice(-1).toUpperCase();
+			const secondUnit = secondLabel.slice(-1).toUpperCase();
+			const firstValue = (Number.parseFloat(firstLabel) || 0) *
+				(firstUnit === "B" ? 1_000_000_000 : firstUnit === "M" ? 1_000_000 : firstUnit === "K" ? 1_000 : 1);
+			const secondValue = (Number.parseFloat(secondLabel) || 0) *
+				(secondUnit === "B" ? 1_000_000_000 : secondUnit === "M" ? 1_000_000 : secondUnit === "K" ? 1_000 : 1);
+			return secondValue - firstValue;
+		})
+		.slice(0, settings.sidebar.trendingLimit);
+	const browseCards = cards.slice(0, settings.main.latestLimit);
+
 	const genreMap = new Map<string, { label: string; slug: string; count: number }>();
 	for (const entry of entries) {
 		for (const genre of entry.genres) {
@@ -609,7 +627,7 @@ const resolvePublicationCatalogCollection = async (
 					header: compactHeader(settings.sidebar.trendingTitle),
 					cards: publicationCatalogCardProps(
 						settings.sidebar.listCards,
-						cards.slice(0, settings.sidebar.trendingLimit),
+						trendingCards,
 					),
 				}],
 			},
@@ -618,15 +636,15 @@ const resolvePublicationCatalogCollection = async (
 					header: compactHeader(settings.main.featuredTitle),
 					cards: publicationCatalogCardProps(
 						settings.main.featuredCards,
-						cards.slice(0, settings.main.featuredLimit),
+						featuredCards,
 					),
 				},
 				{
 					header: compactHeader(settings.main.latestTitle),
-					cards: publicationCatalogCardProps(
-						settings.main.latestCards,
-						cards.slice(0, settings.main.latestLimit),
-					),
+					cards: {
+						...publicationCatalogCardProps(settings.main.latestCards, browseCards),
+						"data-collection-filter-target": "",
+					},
 				},
 				{
 					header: compactHeader(settings.main.popularGenresTitle),

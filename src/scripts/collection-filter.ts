@@ -6,7 +6,7 @@ export function initCollectionFilter(scope: ParentNode = document): void {
 		.querySelectorAll<HTMLElement>("[data-collection-filter-root]")
 		.forEach((root) => {
 			const collections = Array.from(
-				root.querySelectorAll<HTMLElement>("[data-card-collection]"),
+				root.querySelectorAll<HTMLElement>("[data-card-collection][data-collection-filter-target]"),
 			).filter((collection) => collection.querySelector("[data-facet-card]"));
 			const cardsByCollection = new Map(
 				collections.map((collection) => [

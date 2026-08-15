@@ -8,15 +8,15 @@
     "allStatusesLabel": "All status",
     "ongoingLabel": "Ongoing",
     "completeLabel": "Complete",
-    "sortLabel": "Sort",
+    "sortLabel": "Order",
     "sortValue": "newest",
     "sortOptions": [
       {
-        "label": "Newest",
+        "label": "Default",
         "value": "newest"
       },
       {
-        "label": "Oldest",
+        "label": "Reverse",
         "value": "oldest"
       }
     ],
@@ -51,10 +51,10 @@
   },
   "main": {
     "featuredTitle": "Featured",
-    "latestTitle": "Latest updates",
+    "latestTitle": "Browse all",
     "popularGenresTitle": "Popular genres",
     "featuredLimit": 5,
-    "latestLimit": 6,
+    "latestLimit": 24,
     "popularGenresLimit": 8,
     "featuredCards": {
       "template": "media-metrics",
