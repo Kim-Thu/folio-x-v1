@@ -2,6 +2,7 @@ import type { HTMLAttributes } from "astro/types";
 
 export type CChoiceGroupControl =
   | "category"
+  | "genre"
   | "license"
   | "platform"
   | "status"
