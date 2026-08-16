@@ -1,13 +1,13 @@
 ---
 import CCard from "@/components/object/component/card/CCard.astro";
-import CSlide from "@/components/object/component/CSlide.astro";
 import CSlider from "@/components/object/component/CSlider.astro";
 import type { PCardTemplateProps } from "@/types/components/object/project/card/PCard.types";
+import { pCardSliderItemClasses } from "@/variants/components/object/project/card/PCard.variants";
 
 const {
 	template,
-	columns,
-	gap,
+	columns = 4,
+	gap = "lg",
 	separator,
 	card,
 	items,
@@ -15,8 +15,6 @@ const {
 } = Astro.props as PCardTemplateProps;
 
 void template;
-void columns;
-void gap;
 void separator;
 
 const cardConfig = card ?? {};
@@ -29,13 +27,20 @@ const sliderLabel = items.map((item) => item.title.join(" ")).join(", ");
 	label={sliderLabel}
 	previousLabel={sliderLabel}
 	nextLabel={sliderLabel}
+	controls="below-left"
+	gap={gap}
+	shape="none"
 	data-card-collection
 	data-product-grid={cardConfig.template === "media-details" ? "" : undefined}
 	data-view="carousel"
 >
 	{items.map((item, index) => (
-		<CSlide aria-label={item.ariaLabel}>
+		<div
+			class={pCardSliderItemClasses[columns]}
+			aria-label={item.ariaLabel}
+			data-slide
+		>
 			<CCard {...cardConfig} data={item} index={index} />
-		</CSlide>
+		</div>
 	))}
 </CSlider>
