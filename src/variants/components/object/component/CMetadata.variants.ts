@@ -25,5 +25,5 @@ export const metadataToneClasses: Record<CMetadataTone, string> = {
 };
 
 export const metadataItemContentClasses = "inline-flex items-center gap-1";
-export const metadataCategoryLinkClasses = "text-blue-600";
+export const metadataCategoryLinkClasses = "text-current";
 export const metadataSeparatorClasses = "";
