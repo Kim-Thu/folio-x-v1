@@ -12,10 +12,8 @@ import {
 	choiceLabelClasses,
 	choiceNavigationClasses,
 	choiceNavigationTitleClasses,
-	choiceOptionCurrentClasses,
 	choiceOptionClasses,
 } from "@/variants/components/object/component/CChoiceGroup.variants";
-import { cn } from "@/utils/cn";
 
 const {
 	appearance = "controls",
@@ -44,8 +42,11 @@ const {
 				option.href ? (
 					<CLink
 						href={option.href}
-						class={cn(choiceOptionClasses.navigation, option.checked && choiceOptionCurrentClasses)}
+						class={choiceOptionClasses.navigation}
 						aria-current={option.checked ? "page" : undefined}
+						data-choice-link
+						data-choice-control={control}
+						data-choice-value={option.value}
 					>
 						<span class={choiceLabelClasses}>{option.label}</span>
 						{typeof option.count === "number" && (
