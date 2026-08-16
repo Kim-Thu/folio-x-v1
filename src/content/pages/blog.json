@@ -20,6 +20,16 @@
         },
         "content": {
           "id": "insights-hero",
+          "breadcrumb": {
+            "label": "Breadcrumb",
+            "items": [
+              {
+                "label": "Home",
+                "href": "/"
+              }
+            ],
+            "current": "Insights"
+          },
           "eyebrow": "Stories & Insights",
           "title": "Ideas. Insights. Inspiration",
           "accent": ".",
