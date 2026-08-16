@@ -1,4 +1,5 @@
 ---
+import SectionHeaderActionRight from "@/components/object/project/section-header/templates/SectionHeaderActionRight.astro";
 import SectionHeaderDefault from "@/components/object/project/section-header/templates/SectionHeaderDefault.astro";
 import SectionHeaderSplit from "@/components/object/project/section-header/templates/SectionHeaderSplit.astro";
 import CButton from "@/components/object/component/CButton.astro";
@@ -13,21 +14,24 @@ import type {
 type Props = PSectionHeaderProps;
 
 const {
-	template = "default",
+	template,
 	headingLevel = 2,
 	action,
 	...props
 } = Astro.props as Props;
 
+const resolvedTemplate: PSectionHeaderTemplate = template ?? (action ? "action-right" : "default");
+
 const templates = {
 	default: SectionHeaderDefault,
 	split: SectionHeaderSplit,
+	"action-right": SectionHeaderActionRight,
 } satisfies Record<PSectionHeaderTemplate, typeof SectionHeaderDefault>;
 
-const Template = templates[template];
+const Template = templates[resolvedTemplate];
 ---
 
 <CColumns columns="one" gap="sm">
-	<Template {...props} headingLevel={headingLevel} />
-	{action && <CRow><CButton {...action} /></CRow>}
+	<Template {...props} headingLevel={headingLevel} action={action} />
+	{action && resolvedTemplate !== "action-right" && <CRow><CButton {...action} /></CRow>}
 </CColumns>
