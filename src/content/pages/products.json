@@ -215,7 +215,7 @@
             "template": "media-details",
             "layout": "grid",
             "columns": 3,
-            "gap": "md"
+            "gap": "sm"
           },
           "emptyLabel": "No products match your filters.",
           "pagination": {
