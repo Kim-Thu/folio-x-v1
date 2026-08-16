@@ -43,6 +43,11 @@ const metadata = insight
 		separator: insightPresentation?.separator,
 		items: [
 			{
+				type: "index" as const,
+				label: insight.index,
+				display: insightPresentation?.metadataDisplay,
+			},
+			{
 				type: "category" as const,
 				label: insight.category,
 				href: insightPresentation?.routes.categoryBase
