@@ -17,9 +17,9 @@ export const badgeAppearanceToneClasses: Record<
 		inverse: "bg-white/10 text-white",
 	},
 	outline: {
-		brand: "bg-transparent text-blue-600 ring-1 ring-inset ring-blue-600/40",
-		neutral: "bg-transparent text-gray-600 ring-1 ring-inset ring-gray-300",
-		inverse: "bg-transparent text-white ring-1 ring-inset ring-white/60",
+		brand: "bg-blue-600/10 text-blue-600 ring-1 ring-inset ring-blue-600/40",
+		neutral: "bg-white/80 text-black ring-1 ring-inset ring-gray-100 backdrop-blur-sm",
+		inverse: "bg-black/18 text-white ring-1 ring-inset ring-gray-10/12 backdrop-blur-sm",
 	},
 };
 
