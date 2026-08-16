@@ -38,18 +38,20 @@ const headingId = `${data.id}-title`;
 				{data.description && <CText tone="subtle">{data.description}</CText>}
 				{
 					data.features && (
-						<CRow align="center" gap="md">
-							{data.features.items.map((feature) => (
-								<CFeature {...feature} appearance="body" />
-							))}
-						</CRow>
+						<div class="pt-12">
+							<CRow align="center" gap="md">
+								{data.features.items.map((feature) => (
+									<CFeature {...feature} appearance="body" />
+								))}
+							</CRow>
+						</div>
 					)
 				}
 			</CColumns>
 		</CGridItem>
 
 		<CGridItem lgSpan={3}>
-			<CColumns columns="one" gap="sm">
+			<CColumns columns="one" gap="none">
 				{
 					data.action && (
 						<CRow justify="start" class="lg:justify-end">
@@ -66,19 +68,21 @@ const headingId = `${data.id}-title`;
 				}
 				{
 					data.price && (
-						<CRow align="baseline" justify="start" gap="xs" class="lg:justify-end">
-							<CText as="span" variant="price">{data.price.current}</CText>
-							<CText as="small" variant="caption" tone="subtle">
-								{data.price.period}
-							</CText>
-							{
-								data.price.previous && (
-									<CText as="small" variant="price-old" tone="subtle">
-										{data.price.previous}
-									</CText>
-								)
-							}
-						</CRow>
+						<div class="pt-12">
+							<CRow align="baseline" justify="start" gap="xs" class="lg:justify-end">
+								<CText as="span" variant="price-display">{data.price.current}</CText>
+								<CText as="small" variant="caption" tone="subtle">
+									{data.price.period}
+								</CText>
+								{
+									data.price.previous && (
+										<CText as="small" variant="price-old" tone="subtle">
+											{data.price.previous}
+										</CText>
+									)
+								}
+							</CRow>
+						</div>
 					)
 				}
 			</CColumns>
