@@ -26,17 +26,19 @@ const headingId = data.id ? `${data.id}-title` : undefined;
 						{[data.number, data.label].filter(Boolean).join(" / ")}
 					</CText>
 				)}
-				{data.title && (
-					<CHeading
-						id={headingId}
-						level={headingLevel}
-						variant={appearance === "compact" ? "h4" : "h2"}
-						lines={Array.isArray(data.title) ? data.title : undefined}
-					>
-						{Array.isArray(data.title) ? undefined : data.title}
-					</CHeading>
-				)}
-				{data.description && <CText tone="subtle">{data.description}</CText>}
+				<CColumns columns="one" gap="none" class="gap-2">
+					{data.title && (
+						<CHeading
+							id={headingId}
+							level={headingLevel}
+							variant={appearance === "compact" ? "h4" : "h2"}
+							lines={Array.isArray(data.title) ? data.title : undefined}
+						>
+							{Array.isArray(data.title) ? undefined : data.title}
+						</CHeading>
+					)}
+					{data.description && <CText tone="subtle">{data.description}</CText>}
+				</CColumns>
 			</CColumns>
 		</CGridItem>
 
