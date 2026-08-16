@@ -7,6 +7,7 @@ import { cn } from "@/utils/cn";
 import {
 	featureAppearanceClasses,
 	featureClasses,
+	featureIconClasses,
 	featureToneClasses,
 } from "@/variants/components/object/component/CFeature.variants";
 
@@ -31,6 +32,10 @@ const {
 		className,
 	)}
 >
-	{icon && <CIcon name={icon} size="sm" />}
+	{icon && (
+		<span class={featureIconClasses[appearance]}>
+			<CIcon name={icon} size="sm" />
+		</span>
+	)}
 	<CText as="span" variant="inherit" tone="inherit">{label}</CText>
 </CRow>
