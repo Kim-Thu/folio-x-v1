@@ -10,7 +10,12 @@ import { getPublicationCatalogSettings } from "@/data/cms";
 import { mapPublicationToCard } from "@/data/mappers/card";
 import type { PublicationCardPresentation } from "@/data/mappers/card";
 import type { PublicationEntry } from "@/types/content";
-import type { PCardData, PCardProps } from "@/types/components/object/project/card/PCard.types";
+import type {
+	CCardConfig,
+	CCardData,
+	CCardSlotOptions,
+} from "@/types/components/object/component/card/CCard.types";
+import type { PCardProps } from "@/types/components/object/project/card/PCard.types";
 import type { CIconName } from "@/types/components/object/component/CIcon.types";
 
 type Props = {
@@ -42,7 +47,7 @@ for (const entry of entries) {
 const genres = [...genreMap.values()].sort((a, b) => b.count - a.count);
 const genreIcons = settings.main.genreIcons as CIconName[];
 const formatCount = (template: string, count: number) => template.replace("{count}", String(count));
-const popularGenreCards: PCardData[] = genres.slice(0, settings.main.popularGenresLimit).map((genre, index) => ({
+const popularGenreCards: CCardData[] = genres.slice(0, settings.main.popularGenresLimit).map((genre, index) => ({
 	href: `${presentation.routes.categoryBase}${genre.slug}`,
 	ariaLabel: genre.label,
 	title: [genre.label],
@@ -54,7 +59,7 @@ const authorCounts = new Map<string, number>();
 for (const entry of entries) {
 	authorCounts.set(entry.author, (authorCounts.get(entry.author) ?? 0) + 1);
 }
-const authorCards: PCardData[] = [...authorCounts.entries()]
+const authorCards: CCardData[] = [...authorCounts.entries()]
 	.sort((a, b) => b[1] - a[1])
 	.slice(0, settings.sidebar.authorLimit)
 	.map(([name, works]) => ({
@@ -114,13 +119,24 @@ const toolbar = {
 	},
 };
 
-const cardProps = (config: typeof settings.main.featuredCards, items: PCardData[]): PCardProps => ({
-	template: config.template as PCardProps["template"],
-	layout: config.layout as PCardProps["layout"],
+type CatalogCardConfig = typeof settings.main.featuredCards;
+
+const resolveTemplate = (layout: string): PCardProps["template"] =>
+	(layout === "carousel" ? "slider" : layout) as PCardProps["template"];
+
+const cardProps = (
+	config: CatalogCardConfig,
+	items: CCardData[],
+	slots?: CCardSlotOptions,
+): PCardProps => ({
+	template: resolveTemplate(config.layout),
 	columns: config.columns as PCardProps["columns"],
 	gap: config.gap as PCardProps["gap"],
-	mediaRatio: config.mediaRatio as PCardProps["mediaRatio"],
-	slots: config.slots,
+	card: {
+		template: config.template as CCardConfig["template"],
+		mediaRatio: config.mediaRatio as CCardConfig["mediaRatio"],
+		slots: { ...config.slots, ...slots },
+	},
 	items,
 });
 ---
@@ -169,7 +185,14 @@ const cardProps = (config: typeof settings.main.featuredCards, items: PCardData[
 				<CBox surface={settings.sidebar.panel.surface} radius={settings.sidebar.panel.radius} spacing={settings.sidebar.panel.spacing}>
 					<CColumns columns="one" gap="sm">
 						<PSectionHeader data={{ title: settings.sidebar.popularAuthorsTitle }} appearance="compact" headingLevel={2} />
-						<PCard {...cardProps(settings.sidebar.listCards, authorCards)} slots={{ metadata: false, tags: false, metrics: false, action: false }} />
+						<PCard
+							{...cardProps(settings.sidebar.listCards, authorCards, {
+								metadata: false,
+								tags: false,
+								metrics: false,
+								action: false,
+							})}
+						/>
 					</CColumns>
 				</CBox>
 			</CColumns>
