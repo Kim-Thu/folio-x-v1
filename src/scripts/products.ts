@@ -28,7 +28,10 @@ function initProductsRoot(root: HTMLElement): void {
 	const navigationLinks = Array.from(
 		root.querySelectorAll<HTMLAnchorElement>("[data-choice-link]"),
 	);
-	const pageSize = 9;
+	const platformControls = Array.from(
+		root.querySelectorAll<HTMLInputElement>("[data-platform-filter]"),
+	);
+	const pageSize = Number(root.dataset.paginationPageSize ?? 9);
 	let currentPage = 1;
 
 	if (!cards.length || !grid) return;
@@ -124,6 +127,21 @@ function initProductsRoot(root: HTMLElement): void {
 		}`;
 	};
 
+	const syncPlatformControls = (value: string): void => {
+		platformControls.forEach((control) => {
+			control.checked = value !== "all" && control.value === value;
+		});
+	};
+
+	const syncPlatformSelectFromControls = (): void => {
+		if (!platformSelect) return;
+		const selected = platformControls.filter((control) => control.checked);
+		syncSelectDisplay(
+			platformSelect,
+			selected.length === 1 ? selected[0].value : "all",
+		);
+	};
+
 	const applyView = (view: "grid" | "list"): void => {
 		gridColumnClasses.forEach((className) => {
 			grid.classList.toggle(className, view === "grid");
@@ -154,9 +172,13 @@ function initProductsRoot(root: HTMLElement): void {
 		const selectedRatings = selectedValues("[data-rating-filter]:checked").map(
 			Number,
 		);
-		const toolbarPlatform =
-			platformSelect?.value ?? selectedNavigationValue("platform") ?? "all";
-		const maxPrice = Number(range?.value ?? 69);
+		const toolbarPlatform = platformSelect?.value ?? "all";
+		const activePlatforms = selectedPlatforms.length
+			? selectedPlatforms
+			: toolbarPlatform !== "all"
+				? [toolbarPlatform]
+				: [];
+		const maxPrice = range ? Number(range.value) : Number.POSITIVE_INFINITY;
 
 		const visible = cards.filter((card) => {
 			const data = cardData(card).dataset;
@@ -164,16 +186,14 @@ function initProductsRoot(root: HTMLElement): void {
 			const matchesCategory =
 				category === "all" || data.filterCategory === category;
 			const matchesPlatforms =
-				!selectedPlatforms.length ||
-				selectedPlatforms.includes(data.platform ?? "");
+				!activePlatforms.length ||
+				activePlatforms.includes(data.platform ?? "");
 			const matchesLicense =
 				!selectedLicenses.length ||
 				selectedLicenses.includes(data.license ?? "");
 			const matchesRating =
 				!selectedRatings.length ||
 				selectedRatings.some((rating) => Number(data.rating) >= rating);
-			const matchesToolbarPlatform =
-				toolbarPlatform === "all" || data.platform === toolbarPlatform;
 
 			return (
 				matchesTerm &&
@@ -181,7 +201,6 @@ function initProductsRoot(root: HTMLElement): void {
 				matchesPlatforms &&
 				matchesLicense &&
 				matchesRating &&
-				matchesToolbarPlatform &&
 				Number(data.price) <= maxPrice
 			);
 		});
@@ -236,30 +255,16 @@ function initProductsRoot(root: HTMLElement): void {
 		render();
 	};
 
-	const selectExclusiveFilter = (control: string, value: string): void => {
-		if (control === "category") {
-			if (categorySelect) syncSelectDisplay(categorySelect, value);
-			syncNavigationFilter("category", value);
+	const selectCategory = (value: string): void => {
+		if (categorySelect) syncSelectDisplay(categorySelect, value);
+		syncNavigationFilter("category", value);
+		syncLocation("category", value);
+		resetAndRender();
+	};
 
-			if (value !== "all") {
-				if (platformSelect) syncSelectDisplay(platformSelect, "all");
-				syncNavigationFilter("platform", "all");
-			}
-
-			syncLocation("category", value);
-		}
-
-		if (control === "platform") {
-			if (platformSelect) syncSelectDisplay(platformSelect, value);
-			syncNavigationFilter("platform", value);
-
-			if (value !== "all") {
-				if (categorySelect) syncSelectDisplay(categorySelect, "all");
-				syncNavigationFilter("category", "all");
-				syncLocation("category", "all");
-			}
-		}
-
+	const selectToolbarPlatform = (value: string): void => {
+		if (platformSelect) syncSelectDisplay(platformSelect, value);
+		syncPlatformControls(value);
 		resetAndRender();
 	};
 
@@ -278,7 +283,6 @@ function initProductsRoot(root: HTMLElement): void {
 			});
 
 		syncNavigationFilter("category", "all");
-		syncNavigationFilter("platform", "all");
 		syncLocation("category", "all");
 		syncPriceOutput();
 		resetAndRender();
@@ -288,32 +292,26 @@ function initProductsRoot(root: HTMLElement): void {
 		.querySelectorAll<HTMLInputElement>('input[name="product-category"]')
 		.forEach((radio) => {
 			radio.addEventListener("change", () => {
-				selectExclusiveFilter("category", radio.value);
+				selectCategory(radio.value);
 			});
 		});
 
-	[categorySelect, platformSelect, sortSelect].forEach((control) => {
-		control?.addEventListener("change", () => {
-			if (categorySelect && control === categorySelect) {
-				selectExclusiveFilter("category", categorySelect.value);
-				return;
-			}
-
-			if (platformSelect && control === platformSelect) {
-				selectExclusiveFilter("platform", platformSelect.value);
-				return;
-			}
-
-			resetAndRender();
-		});
+	categorySelect?.addEventListener("change", () => {
+		selectCategory(categorySelect.value);
 	});
+
+	platformSelect?.addEventListener("change", () => {
+		selectToolbarPlatform(platformSelect.value);
+	});
+
+	sortSelect?.addEventListener("change", resetAndRender);
 
 	navigationFilters.forEach((button) => {
 		button.addEventListener("click", () => {
 			const control = button.dataset.choiceControl;
 			const value = button.dataset.choiceValue;
 			if (!control || !value) return;
-			selectExclusiveFilter(control, value);
+			if (control === "category") selectCategory(value);
 		});
 	});
 
@@ -322,9 +320,10 @@ function initProductsRoot(root: HTMLElement): void {
 			const control = link.dataset.choiceControl;
 			const value = link.dataset.choiceValue;
 			if (!control || !value) return;
+			if (control !== "category") return;
 
 			event.preventDefault();
-			selectExclusiveFilter(control, value);
+			selectCategory(value);
 		});
 	});
 
@@ -337,9 +336,16 @@ function initProductsRoot(root: HTMLElement): void {
 		});
 	});
 
+	platformControls.forEach((control) => {
+		control.addEventListener("change", () => {
+			syncPlatformSelectFromControls();
+			resetAndRender();
+		});
+	});
+
 	root
 		.querySelectorAll<HTMLInputElement>(
-			"[data-platform-filter], [data-license-filter], [data-rating-filter]",
+			"[data-license-filter], [data-rating-filter]",
 		)
 		.forEach((control) => control.addEventListener("change", resetAndRender));
 
@@ -395,21 +401,13 @@ function initProductsRoot(root: HTMLElement): void {
 
 		if (categorySelect) syncSelectDisplay(categorySelect, value);
 		syncNavigationFilter("category", value);
-
-		if (value !== "all") {
-			if (platformSelect) syncSelectDisplay(platformSelect, "all");
-			syncNavigationFilter("platform", "all");
-		}
-
 		resetAndRender();
 	};
 
 	window.addEventListener("popstate", syncCategoryFromLocation);
 
 	syncCategoryFromLocation();
-	if (platformSelect && categorySelect?.value === "all") {
-		syncNavigationFilter("platform", platformSelect.value);
-	}
+	syncPlatformSelectFromControls();
 	syncPriceOutput();
 	applyView("grid");
 	render();
