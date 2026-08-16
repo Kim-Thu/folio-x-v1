@@ -158,7 +158,7 @@ export function resolveProjectOverlayCard({
 				},
 				{
 					type: "datetime" as const,
-					label: `Updated ${project.year}`,
+					label: project.year,
 					display: projectPresentation?.metadataDisplay,
 				},
 			],
