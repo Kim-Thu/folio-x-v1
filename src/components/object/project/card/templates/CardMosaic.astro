@@ -26,7 +26,7 @@ const cardConfig = card ?? {};
 	data-view="grid"
 >
 	{items.map((item, index) => (
-		<CGridItem lgSpan={spans[index] ?? 12}>
+		<CGridItem lgSpan={spans[index] ?? 12} align="stretch">
 			<CCard {...cardConfig} data={item} index={index} />
 		</CGridItem>
 	))}
