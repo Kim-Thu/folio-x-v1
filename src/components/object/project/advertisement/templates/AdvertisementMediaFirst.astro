@@ -1,7 +1,6 @@
 ---
 import CBox from "@/components/object/component/CBox.astro";
 import CButton from "@/components/object/component/CButton.astro";
-import CColumns from "@/components/object/component/CColumns.astro";
 import CHeading from "@/components/object/component/CHeading.astro";
 import CImage from "@/components/object/component/CImage.astro";
 import CMedia from "@/components/object/component/CMedia.astro";
@@ -12,33 +11,38 @@ import type { PAdvertisementData } from "@/types/components/object/project/adver
 const { data } = Astro.props as { data: PAdvertisementData };
 ---
 
-<CBox as="aside" surface="glass-dark" radius="md" overflow="hidden">
-	<CColumns columns="one" gap="none">
-		<CMedia ratio="editorial">
-			<CImage {...data.image} variant="background-contain" />
-		</CMedia>
-		<CBox spacing="md">
-			<div class="grid gap-2">
-				<CHeading level={3} variant="h5">{data.title}</CHeading>
-				<CText variant="body-sm" tone="on-dark-muted">
-					{data.description}
-				</CText>
-			</div>
+<CBox
+	as="aside"
+	surface="glass-dark"
+	radius="md"
+	position="relative"
+	overflow="hidden"
+>
+	<CMedia ratio="natural" placement="background" shape="none">
+		<CImage {...data.image} variant="background-contain" />
+	</CMedia>
 
-			{data.form ? (
-				<CSubscriptionForm {...data.form} />
-			) : (
-				<div class="pt-8">
-					<CButton
-						href={data.action.href}
-						label={data.action.label}
-						icon={data.action.icon ?? "arrowRight"}
-						size="lg"
-						tone="dark"
-						variant="outline"
-					/>
-				</div>
-			)}
-		</CBox>
-	</CColumns>
+	<CBox position="relative" spacing="md">
+		<div class="grid gap-2">
+			<CHeading level={3} variant="h4">{data.title}</CHeading>
+			<CText variant="body-sm" tone="on-dark-muted">
+				{data.description}
+			</CText>
+		</div>
+
+		{data.form ? (
+			<CSubscriptionForm {...data.form} />
+		) : (
+			<div class="pt-8">
+				<CButton
+					href={data.action.href}
+					label={data.action.label}
+					icon={data.action.icon ?? "arrowRight"}
+					size="lg"
+					tone="dark"
+					variant="outline"
+				/>
+			</div>
+		)}
+	</CBox>
 </CBox>
