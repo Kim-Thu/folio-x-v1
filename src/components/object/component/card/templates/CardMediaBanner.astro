@@ -12,7 +12,7 @@ import type {
 	PublicationCardPresentation,
 	PublicationCollectionPresentation,
 } from "@/types/components/object/component/card/CCard.types";
-import type { PublicationEntry } from "@/types/content";
+import { getCardSourceContext } from "@/utils/card";
 
 const {
 	data,
@@ -23,13 +23,18 @@ const {
 	source,
 } = Astro.props as CCardTemplateProps;
 
-const publication = source === "comics" || source === "novels" || source === "publications"
-	? data as unknown as PublicationEntry
-	: undefined;
+const publicationContext = source === "publications"
+	? getCardSourceContext("publications", { data, source, presentation })
+	: source === "comics"
+		? getCardSourceContext("comics", { data, source, presentation })
+		: source === "novels"
+			? getCardSourceContext("novels", { data, source, presentation })
+			: { item: undefined, presentation: undefined };
+const publication = publicationContext.item;
 const publicationPresentation = publication
 	? source === "publications"
-		? (presentation as PublicationCollectionPresentation | undefined)?.[publication.catalog]
-		: presentation as PublicationCardPresentation | undefined
+		? (publicationContext.presentation as PublicationCollectionPresentation | undefined)?.[publication.catalog]
+		: publicationContext.presentation as PublicationCardPresentation | undefined
 	: undefined;
 const href = publication?.href ?? data.href;
 const title = publication?.title ?? data.title.join(" ");
