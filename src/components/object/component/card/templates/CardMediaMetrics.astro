@@ -12,15 +12,129 @@ import CRating from "@/components/object/component/CRating.astro";
 import CRow from "@/components/object/component/CRow.astro";
 import CTags from "@/components/object/component/CTags.astro";
 import CText from "@/components/object/component/CText.astro";
-import type { CCardTemplateProps } from "@/types/components/object/component/card/CCard.types";
+import type {
+	CCardTemplateProps,
+	LabCardPresentation,
+	PublicationCardPresentation,
+	PublicationCollectionPresentation,
+} from "@/types/components/object/component/card/CCard.types";
+import type { Lab, PublicationEntry } from "@/types/content";
 
 const {
 	data,
 	headingLevel = 3,
 	index,
 	mediaRatio = "video",
+	presentation,
 	slots,
+	source,
 } = Astro.props as CCardTemplateProps;
+
+const lab = source === "labs" ? data as unknown as Lab : undefined;
+const publication = source === "comics" || source === "novels" || source === "publications"
+	? data as unknown as PublicationEntry
+	: undefined;
+const labPresentation = lab
+	? presentation as LabCardPresentation | undefined
+	: undefined;
+const publicationPresentation = publication
+	? source === "publications"
+		? (presentation as PublicationCollectionPresentation | undefined)?.[publication.catalog]
+		: presentation as PublicationCardPresentation | undefined
+	: undefined;
+
+const href = lab?.href ?? publication?.href ?? data.href;
+const title = lab?.title ?? publication?.title ?? data.title.join(" ");
+const excerpt = lab?.summary ?? publication?.summary ?? data.excerpt;
+const media = lab?.image ?? publication?.cover ?? data.media;
+const ariaLabel = lab
+	? `${labPresentation?.ariaLabelPrefix ?? ""}${lab.title}`
+	: publication
+		? `${publicationPresentation?.ariaLabelPrefix ?? ""}${publication.title}`
+		: data.ariaLabel;
+const metadata = lab
+	? {
+		items: [
+			{
+				type: "category" as const,
+				label: lab.category.label,
+				href: labPresentation?.routes.categoryBase
+					? `${labPresentation.routes.categoryBase}${lab.category.slug}`
+					: undefined,
+				display: labPresentation?.categoryDisplay,
+			},
+		],
+	}
+	: publication
+		? {
+			items: publication.genres.map((genre) => ({
+				type: "category" as const,
+				label: genre.label,
+				href: publicationPresentation?.routes.categoryBase
+					? `${publicationPresentation.routes.categoryBase}${genre.slug}`
+					: undefined,
+				display: publicationPresentation?.categoryDisplay,
+			})),
+		}
+		: data.metadata;
+const badge = lab
+	? {
+		label: lab.statusLabel,
+		tone: lab.status === "complete"
+			? labPresentation?.completeBadgeTone
+			: labPresentation?.activeBadgeTone,
+	}
+	: data.badge;
+const tags = lab
+	? lab.technologies.map((technology) => ({
+		label: technology.label,
+		href: labPresentation?.routes.technologyBase
+			? `${labPresentation.routes.technologyBase}${technology.slug}`
+			: undefined,
+	}))
+	: publication
+		? publication.genres.map((genre) => ({
+			label: genre.label,
+			href: publicationPresentation?.routes.categoryBase
+				? `${publicationPresentation.routes.categoryBase}${genre.slug}`
+				: undefined,
+		}))
+		: data.tags;
+const tagsLabel = lab
+	? `${lab.title}${labPresentation?.tagsLabelSuffix ?? ""}`
+	: publication
+		? `${publication.title}${publicationPresentation?.tagsLabelSuffix ?? ""}`
+		: data.tagsLabel;
+const metrics = lab && labPresentation
+	? [
+		{ icon: labPresentation.metricIcons[0], label: String(lab.stars) },
+		{ icon: labPresentation.metricIcons[1], label: String(lab.forks) },
+		{ icon: labPresentation.metricIcons[2], label: lab.updatedLabel },
+	]
+	: publication && publicationPresentation
+		? [{ icon: publicationPresentation.viewsIcon, label: publication.views }]
+		: data.metrics;
+const rating = publication ? { value: publication.rating } : data.rating;
+const facets = lab
+	? {
+		category: [lab.category.slug],
+		status: [lab.status],
+		technology: lab.technologies.map((technology) => technology.slug),
+	}
+	: publication
+		? {
+			genre: publication.genres.map((genre) => genre.slug),
+			status: [publication.status],
+		}
+		: data.facets;
+const searchValue = lab
+	? [lab.title, lab.summary, lab.category.label, ...lab.technologies.map((technology) => technology.label)].join(" ")
+	: publication
+		? [publication.title, publication.summary, publication.author, ...publication.genres.map((genre) => genre.label)].join(" ")
+		: data.searchValue ?? title;
+const sortValue = publication
+	? String(publication.order).padStart(4, "0")
+	: data.sortValue;
 ---
 
 <CBox
@@ -28,33 +142,46 @@ const {
 	surface="glass"
 	radius="md"
 	overflow="hidden"
-	data-facet-card={data.facets ? "" : undefined}
-	data-facets={data.facets ? JSON.stringify(data.facets) : undefined}
-	data-search-value={(data.searchValue ?? data.title.join(" ")).toLowerCase()}
+	data-facet-card={facets ? "" : undefined}
+	data-facets={facets ? JSON.stringify(facets) : undefined}
+	data-search-value={searchValue.toLowerCase()}
+	data-sort-value={sortValue}
 	data-sort-index={index}
 >
-	{slots.media && data.media && (
-		<CMedia ratio={mediaRatio} href={data.href} ariaLabel={data.ariaLabel}>
-			<CImage {...data.media} variant="fill" />
-			{data.badge && <CBadge placement="top-end" tone={data.badge.tone}>{data.badge.label}</CBadge>}
+	{slots.media && media && (
+		<CMedia ratio={mediaRatio} href={href} ariaLabel={ariaLabel}>
+			<CImage {...media} variant="fill" />
+			{badge && <CBadge placement="top-end" tone={badge.tone}>{badge.label}</CBadge>}
 		</CMedia>
 	)}
+
 	<CBox spacing="sm">
 		<CColumns columns="one" gap="xs">
-			{slots.metadata && data.metadata && <CMetadata data={data.metadata} slots={{ icons: false }} tone="brand" />}
+			{slots.metadata && metadata && (
+				<CMetadata data={metadata} slots={{ icons: false }} tone="brand" />
+			)}
+
 			{slots.title && (
 				<CHeading level={headingLevel} variant="h4">
-					<CLink href={data.href}>{data.title.join(" ")}</CLink>
+					<CLink href={href}>{title}</CLink>
 				</CHeading>
 			)}
-			{slots.excerpt && data.excerpt && <CText variant="body-sm" tone="subtle">{data.excerpt}</CText>}
-			{slots.tags && data.tags && data.tags.length > 0 && (
-				<CTags items={data.tags} label={data.tagsLabel ?? `${data.title.join(" ")} tags`} />
+
+			{slots.excerpt && excerpt && (
+				<CText variant="body-sm" tone="subtle">{excerpt}</CText>
 			)}
-			{slots.metrics && data.metrics && data.metrics.length > 0 && (
-				<CRow gap="md">{data.metrics.map((metric) => <CFeature {...metric} appearance="caption" />)}</CRow>
+
+			{slots.tags && tags && tags.length > 0 && (
+				<CTags items={tags} label={tagsLabel ?? `${title} tags`} />
 			)}
-			{data.rating && <CRating style="compact" value={data.rating.value} maximum={5} count={data.rating.count} />}
+
+			{slots.metrics && metrics && metrics.length > 0 && (
+				<CRow gap="md">
+					{metrics.map((metric) => <CFeature {...metric} appearance="caption" />)}
+				</CRow>
+			)}
+
+			{rating && <CRating style="compact" value={rating.value} maximum={5} count={rating.count} />}
 		</CColumns>
 	</CBox>
 </CBox>
