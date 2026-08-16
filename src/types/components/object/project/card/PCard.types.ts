@@ -18,6 +18,7 @@ export type PCardTemplate =
 	| "mosaic"
 	| "asymmetric"
 	| "showcase"
+	| "editorial-split"
 	| "slider";
 
 export type PCardColumns = 1 | 2 | 3 | 4 | 5;
