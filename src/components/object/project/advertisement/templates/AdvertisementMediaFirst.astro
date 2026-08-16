@@ -20,10 +20,18 @@ const { data } = Astro.props as { data: PAdvertisementData };
 	overflow="hidden"
 >
 	<CMedia ratio="natural" placement="background" shape="none">
-		<CImage {...data.image} variant="background-contain" />
+		<CImage
+			{...data.image}
+			variant="background-contain"
+			class="object-top"
+		/>
 	</CMedia>
 
-	<CBox position="relative" spacing="md" class="flex h-full flex-col">
+	<CBox
+		position="relative"
+		spacing="md"
+		class="flex h-full flex-col justify-end"
+	>
 		<div class="grid gap-2">
 			<CHeading level={3} variant="h3">{data.title}</CHeading>
 			<CText variant="body-sm" tone="on-dark-muted">
@@ -32,11 +40,11 @@ const { data } = Astro.props as { data: PAdvertisementData };
 		</div>
 
 		{data.form ? (
-			<div class="mt-auto pt-8">
+			<div class="pt-8">
 				<CSubscriptionForm {...data.form} />
 			</div>
 		) : (
-			<div class="mt-auto pt-8">
+			<div class="pt-8">
 				<CButton
 					href={data.action.href}
 					label={data.action.label}
