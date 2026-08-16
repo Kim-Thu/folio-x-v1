@@ -25,7 +25,7 @@ export const sliderViewportShapeClasses: Record<CSliderShape, string> = {
 export const sliderControlsClasses: Record<CSliderControls, string> = {
 	overlay: "absolute bottom-4 right-4 flex items-center gap-2",
 	below: "mt-4 flex items-center gap-4",
-	"below-left": "mt-4 flex items-center",
+	"below-left": "mt-12 flex items-center",
 	dots: "absolute bottom-6 left-1/2 z-20 flex -translate-x-1/2 items-center gap-2",
 };
 
