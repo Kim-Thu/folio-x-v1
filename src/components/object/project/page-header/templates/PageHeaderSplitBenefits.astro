@@ -17,17 +17,23 @@ const benefits = data.benefits?.items ?? [];
 
 <CColumns columns="twelve" gap="lg" align="center">
 	<CGridItem as="header" lgSpan={6}>
-		<CColumns columns="one" gap="md">
+		<CColumns columns="one" gap="lg">
 			{data.breadcrumb && <CBreadcrumb {...data.breadcrumb} />}
-			<CText variant="label" tone="brand">{data.eyebrow}</CText>
-			<CHeading id={titleId} level={1} variant="display-3">
-				{data.title}<CText as="span" variant="inherit" tone="brand">
-					{data.accent}
+
+			<CColumns columns="one" gap="sm">
+				<CText variant="label" tone="brand">{data.eyebrow}</CText>
+
+				<CHeading id={titleId} level={1} variant="display-3">
+					{data.title}<CText as="span" variant="inherit" tone="brand">
+						{data.accent}
+					</CText>
+				</CHeading>
+
+				<CText variant="body-responsive" tone="subtle">
+					{data.description}
 				</CText>
-			</CHeading>
-			<CText variant="body-responsive" tone="subtle">
-				{data.description}
-			</CText>
+			</CColumns>
+
 			{benefits.length > 0 && (
 				<CRow align="center" gap="lg">
 					{benefits.map((benefit) => (
@@ -37,6 +43,7 @@ const benefits = data.benefits?.items ?? [];
 			)}
 		</CColumns>
 	</CGridItem>
+
 	<CGridItem lgSpan={6} align="center">
 		<CMedia ratio="natural">
 			<CImage
