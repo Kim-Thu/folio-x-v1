@@ -3,6 +3,7 @@ import { initArchiveFacets } from "@/scripts/archive-facets";
 import { initArchiveFilter } from "@/scripts/archive-filter";
 import { initArticleToc } from "@/scripts/article-toc";
 import { initCollectionFilter } from "@/scripts/collection-filter";
+import { initDialogs } from "@/scripts/dialog";
 import { initEntryIndex } from "@/scripts/entry-index";
 import { initFooterReveal } from "@/scripts/footer-reveal";
 import { initHeader } from "@/scripts/header";
@@ -26,6 +27,7 @@ const initializers: ReadonlyArray<() => void> = [
 	initArchiveFilter,
 	initArchiveFacets,
 	initCollectionFilter,
+	initDialogs,
 	initProducts,
 	initEntryIndex,
 	initReader,
