@@ -41,16 +41,32 @@ const {
 		</CText>
 		<div class={choiceNavigationClasses}>
 			{options.map((option) => (
-				<CLink
-					href={option.href ?? "#"}
-					class={cn(choiceOptionClasses.navigation, option.checked && choiceOptionCurrentClasses)}
-					aria-current={option.checked ? "page" : undefined}
-				>
-					<span class={choiceLabelClasses}>{option.label}</span>
-					{typeof option.count === "number" && (
-						<small class={choiceCountClasses}>{option.count}</small>
-					)}
-				</CLink>
+				option.href ? (
+					<CLink
+						href={option.href}
+						class={cn(choiceOptionClasses.navigation, option.checked && choiceOptionCurrentClasses)}
+						aria-current={option.checked ? "page" : undefined}
+					>
+						<span class={choiceLabelClasses}>{option.label}</span>
+						{typeof option.count === "number" && (
+							<small class={choiceCountClasses}>{option.count}</small>
+						)}
+					</CLink>
+				) : (
+					<button
+						type="button"
+						class={choiceOptionClasses.navigation}
+						aria-pressed={option.checked ? "true" : "false"}
+						data-choice-filter
+						data-choice-control={control}
+						data-choice-value={option.value}
+					>
+						<span class={choiceLabelClasses}>{option.label}</span>
+						{typeof option.count === "number" && (
+							<small class={choiceCountClasses}>{option.count}</small>
+						)}
+					</button>
+				)
 			))}
 		</div>
 	</nav>
