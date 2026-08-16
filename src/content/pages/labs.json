@@ -186,6 +186,28 @@
         }
       },
       {
+        "id": "labs-seo-content",
+        "type": "article",
+        "template": "grouped",
+        "settings": {
+          "theme": "canvas",
+          "spacing": "closing",
+          "container": "content"
+        },
+        "content": {
+          "blocks": [
+            {
+              "id": "experiments-in-ai-automation-and-developer-tools",
+              "title": "Experiments in AI, automation and developer tools",
+              "paragraphs": [
+                "NKT Labs explores practical experiments in artificial intelligence, workflow automation, developer tools, data, and interaction design. Each experiment focuses on testing a clear idea, documenting the approach, and turning useful findings into reusable tools, patterns, or technical lessons.",
+                "Browse Labs by category, technology, and status to find experiments related to specific technical areas, platforms, and implementation approaches."
+              ]
+            }
+          ]
+        }
+      },
+      {
         "id": "lab-idea",
         "type": "cta",
         "template": "callout",
