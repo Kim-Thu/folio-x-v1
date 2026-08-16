@@ -44,7 +44,7 @@ const desktopRatioClasses: Record<NonNullable<CCardTemplateProps["mediaRatio"]>,
 			<CImage {...data.media} variant="fill" />
 		</CMedia>
 	)}
-	<CBox position="relative" spacing="lg">
+	<CBox position="relative" class="p-8">
 		<CColumns columns="one" gap="sm">
 			{slots.metadata && data.metadata && (
 				<CMetadata data={data.metadata} size="xs" tone={inverse ? "on-dark" : "brand"} />
