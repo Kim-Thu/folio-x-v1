@@ -43,7 +43,7 @@ export const boxRadiusClasses: Record<CBoxRadius, string> = {
 export const boxSpacingClasses: Record<CBoxSpacing, string> = {
 	none: "",
 	xs: "p-4",
-	sm: "px-4 py-8",
+	sm: "p-4",
 	md: "p-6",
 	lg: "p-8 md:p-10",
 	xl: "p-8 md:p-12",
