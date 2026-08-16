@@ -22,9 +22,11 @@ const inverse = data.appearance === "inverse";
 	overflow="hidden"
 >
 	{slots.media && data.media && (
-		<CMedia ratio="editorial" href={data.href} ariaLabel={data.ariaLabel}>
-			<CImage {...data.media} variant="fill" />
-		</CMedia>
+		<CBox radius="md" overflow="hidden">
+			<CMedia ratio="editorial" shape="none" href={data.href} ariaLabel={data.ariaLabel}>
+				<CImage {...data.media} variant="fill" />
+			</CMedia>
+		</CBox>
 	)}
 	<CBox spacing="sm">
 		<CColumns columns="one" gap="xs">
