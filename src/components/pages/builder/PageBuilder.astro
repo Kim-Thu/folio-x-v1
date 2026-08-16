@@ -332,8 +332,28 @@ const buildProductsArchive = async (section: ProductsArchiveSection): Promise<Pa
 	const { toolbar, sidebar, routes, cards, itemPresentation, pagination, emptyLabel, result } = section.content;
 	const [products, categories] = await Promise.all([getProducts(), getProductCategories()]);
 	const visibleProducts = context.categorySlug ? products.filter((product) => product.categorySlug === context.categorySlug) : products;
-	const categoryFilters = [{ label: toolbar.category.allLabel, value: toolbar.category.allValue, href: routes.base, checked: !context.categorySlug }, ...categories.map((category) => ({ ...category, href: `${routes.categoryBase}${category.value}`, checked: context.categorySlug === category.value }))];
-	const platformFilters = toolbar.platform.options.map((option) => ({ ...option, checked: option.value === toolbar.platform.value }));
+	const categoryFilters = [
+		{
+			label: toolbar.category.allLabel,
+			value: toolbar.category.allValue,
+			href: routes.base,
+			count: products.length,
+			checked: !context.categorySlug,
+		},
+		...categories.map((category) => ({
+			...category,
+			href: `${routes.categoryBase}${category.value}`,
+			count: products.filter((product) => product.categorySlug === category.value).length,
+			checked: context.categorySlug === category.value,
+		})),
+	];
+	const platformFilters = toolbar.platform.options
+		.filter((option) => option.value !== toolbar.platform.allValue)
+		.map((option) => ({
+			...option,
+			count: products.filter((product) => product.platform === option.value).length,
+			checked: false,
+		}));
 	const categoryFilter: PFilterChoiceGroupData = {
 		...sidebar.category,
 		appearance: sidebar.category.appearance as PFilterChoiceGroupData["appearance"],
@@ -345,6 +365,34 @@ const buildProductsArchive = async (section: ProductsArchiveSection): Promise<Pa
 		appearance: sidebar.platform.appearance as PFilterChoiceGroupData["appearance"],
 		control: sidebar.platform.control as PFilterChoiceGroupData["control"],
 		options: platformFilters,
+	};
+	const licenseValue = itemPresentation.license;
+	const licenseFilter: PFilterChoiceGroupData = {
+		appearance: "controls",
+		control: "license",
+		legend: sidebar.license.legend,
+		name: "product-license",
+		type: "checkbox",
+		options: [
+			{
+				label: sidebar.license.freeLabel,
+				value: "free",
+				count: licenseValue === "free" ? products.length : 0,
+			},
+			{
+				label: sidebar.license.proLabel,
+				value: "pro",
+				count: licenseValue === "pro" ? products.length : 0,
+			},
+		],
+	};
+	const ratings = {
+		legend: sidebar.ratings.legend,
+		name: "product-rating",
+		options: [5, 4, 3, 2, 1].map((value) => ({
+			value,
+			count: products.filter((product) => product.rating >= value).length,
+		})),
 	};
 	const advertisement: PAdvertisementData = {
 		title: sidebar.advertisement.title,
@@ -366,15 +414,36 @@ const buildProductsArchive = async (section: ProductsArchiveSection): Promise<Pa
 			toolbar: { data: {
 				search: toolbar.search,
 				selects: [
-					{ control: toolbar.category.control, id: toolbar.category.id, label: toolbar.category.label, value: context.categorySlug ?? toolbar.category.value, options: categoryFilters },
-					{ control: toolbar.platform.control, id: toolbar.platform.id, label: toolbar.platform.label, value: toolbar.platform.value, options: platformFilters },
+					{
+						control: toolbar.category.control,
+						id: toolbar.category.id,
+						label: toolbar.category.label,
+						value: context.categorySlug ?? toolbar.category.value,
+						options: categoryFilters,
+					},
+					{
+						control: toolbar.platform.control,
+						id: toolbar.platform.id,
+						label: toolbar.platform.label,
+						value: toolbar.platform.value,
+						options: toolbar.platform.options,
+					},
 				],
 				sort: toolbar.sort,
 				view: toolbar.view,
 			} },
 			sidebar: {
 				label: sidebar.label,
-				filter: { data: { filterLabel: sidebar.filterLabel, category: categoryFilter, groups: [platformFilter] } },
+				filter: {
+					data: {
+						filterLabel: sidebar.filterLabel,
+						category: categoryFilter,
+						platform: platformFilter,
+						range: sidebar.price,
+						license: licenseFilter,
+						ratings,
+					},
+				},
 				advertisement: { data: advertisement },
 			},
 			result: { count: visibleProducts.length, label: result.label },
