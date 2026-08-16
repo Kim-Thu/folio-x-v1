@@ -25,7 +25,7 @@ const headingId = `${data.id}-title`;
 			</CGridItem>
 		)}
 
-		<CGridItem as="header" lgSpan={data.image && !data.form ? 4 : 5} align="center">
+		<CGridItem as="header" lgSpan={5} align="center">
 			<CBox spacing="xl">
 				<CColumns columns="one" gap="md">
 					<CHeading id={headingId} level={2} variant="h2">
@@ -63,9 +63,9 @@ const headingId = `${data.id}-title`;
 		)}
 
 		{data.image && !data.form && (
-			<CGridItem lgSpan={8}>
-				<CMedia ratio="panoramic" shape="none">
-					<CImage {...data.image} variant="background-contain" />
+			<CGridItem lgSpan={7}>
+				<CMedia ratio="natural" shape="none" class="aspect-5/2">
+					<CImage {...data.image} variant="fill" />
 				</CMedia>
 			</CGridItem>
 		)}
