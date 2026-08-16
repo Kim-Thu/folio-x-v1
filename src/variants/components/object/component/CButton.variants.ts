@@ -8,7 +8,7 @@ import type { CIconName } from "@/types/components/object/component/CIcon.types"
 import { twJoin } from "@/utils/cn";
 
 const buttonBaseClasses =
-	"group/button relative z-10 inline-flex cursor-pointer items-center justify-center justify-self-start font-medium leading-none no-underline transition-colors duration-300 disabled:cursor-not-allowed disabled:opacity-50 aria-disabled:pointer-events-none aria-disabled:opacity-50 aria-pressed:bg-blue-600 aria-pressed:text-black";
+	"group/button relative z-10 inline-flex cursor-pointer items-center justify-center justify-self-start font-medium leading-none no-underline transition-colors duration-300 disabled:cursor-not-allowed disabled:opacity-50 aria-disabled:pointer-events-none aria-disabled:opacity-50";
 
 const buttonSizeClasses: Record<CButtonSize, string> = {
 	xs: "gap-2 px-3 py-2 text-xs",
