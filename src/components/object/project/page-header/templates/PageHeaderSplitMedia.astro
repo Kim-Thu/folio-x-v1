@@ -12,25 +12,28 @@ type Props = { data: PPageHeaderSplitMediaData };
 const { data } = Astro.props as Props;
 ---
 
-<CColumns columns="twelve" gap="lg">
-	<CGridItem as="header" mdSpan={5} align="center">
-	<CColumns columns="one" gap="md">
-		<CBreadcrumb {...data.breadcrumb} />
-		<CHeading level={1} variant="display-3" lines={data.title} />
-		<CText tone="muted">{data.description}</CText>
-	</CColumns>
+<CColumns columns="twelve" gap="lg" align="center">
+	<CGridItem as="header" mdSpan={5}>
+		<CColumns columns="one" gap="lg">
+			<CBreadcrumb {...data.breadcrumb} />
+
+			<CColumns columns="one" gap="sm">
+				<CHeading level={1} variant="display-3" lines={data.title} />
+				<CText tone="muted">{data.description}</CText>
+			</CColumns>
+		</CColumns>
 	</CGridItem>
 
 	{data.image && (
 		<CGridItem mdSpan={7} align="center">
-		<CMedia>
-			<CImage
-				{...data.image}
-				variant="natural"
-				loading="eager"
-				fetchpriority="high"
-			/>
-		</CMedia>
+			<CMedia>
+				<CImage
+					{...data.image}
+					variant="natural"
+					loading="eager"
+					fetchpriority="high"
+				/>
+			</CMedia>
 		</CGridItem>
 	)}
 </CColumns>
