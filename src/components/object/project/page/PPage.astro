@@ -1,6 +1,6 @@
 ---
 import LPage from "@/components/layout/LPage.astro";
-import LayoutRegion from "@/components/object/project/layout/parts/LayoutRegion.astro";
+import PageStacked from "@/components/object/project/page/templates/PageStacked.astro";
 import PageLeadContent from "@/components/object/project/page/templates/PageLeadContent.astro";
 import PageLeadContentClosing from "@/components/object/project/page/templates/PageLeadContentClosing.astro";
 import PageLeadContentNavigation from "@/components/object/project/page/templates/PageLeadContentNavigation.astro";
@@ -13,19 +13,16 @@ import type {
 const { template, regions } = Astro.props as PPageProps;
 
 const templates = {
+	stacked: PageStacked,
 	"lead-content": PageLeadContent,
 	"lead-content-closing": PageLeadContentClosing,
 	"lead-content-navigation": PageLeadContentNavigation,
 	"lead-navigation-content": PageLeadNavigationContent,
-} satisfies Record<Exclude<PPageTemplate, "stacked">, typeof PageLeadContent>;
+} satisfies Record<PPageTemplate, typeof PageStacked>;
 
-const PageTemplate = template === "stacked" ? undefined : templates[template];
+const PageTemplate = templates[template];
 ---
 
 <LPage data-page-template={template}>
-	{PageTemplate ? (
-		<PageTemplate {regions} />
-	) : (
-		regions.map((region) => <LayoutRegion {region} />)
-	)}
+	<PageTemplate {regions} />
 </LPage>
