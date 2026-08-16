@@ -157,7 +157,7 @@
               "control": "platform",
               "legend": "Platform",
               "name": "product-platform",
-              "type": "checkbox"
+              "type": "radio"
             },
             "price": {
               "id": "product-price",
