@@ -21,6 +21,16 @@
         },
         "content": {
           "id": "labs-hero",
+          "breadcrumb": {
+            "label": "Breadcrumb",
+            "items": [
+              {
+                "label": "Home",
+                "href": "/"
+              }
+            ],
+            "current": "Labs"
+          },
           "eyebrow": "NKT Labs",
           "title": [
             "Experiment. Innovate. Share"
