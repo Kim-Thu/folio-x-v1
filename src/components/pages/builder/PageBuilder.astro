@@ -544,14 +544,14 @@ const isHome = "page" in props && props.page.slug === "/";
 			{region.component === "collection" && (
 				<CColumns
 					columns="one"
-					gap="xl"
+					gap="lg"
 					data-tabbed-collection={region.props.behavior === "tabbed" ? "" : undefined}
 				>
 					{region.props.header && <PSectionHeader {...region.props.header} />}
 					{region.props.tabs && <CTabList {...region.props.tabs} />}
 					<CColumns
 						columns={region.props.template === "split" ? "twelve" : "one"}
-						gap="xl"
+						gap="lg"
 						data-collection-panel={region.props.behavior === "tabbed" ? "" : undefined}
 					>
 						{region.props.cardGroups.map((cards, index) => (
