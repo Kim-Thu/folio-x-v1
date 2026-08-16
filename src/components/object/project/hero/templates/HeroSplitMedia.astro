@@ -18,10 +18,14 @@ const videoDialogId = `${data.id}-video`;
 
 <CColumns columns="twelve" gap="xl" align="center">
 	<CGridItem as="header" lgSpan={6}>
-		<CColumns columns="one" gap="md">
-			<CText variant="body-sm">{data.eyebrow}</CText>
-			<CHeading level={1} variant="display-3" lines={data.title} accent={data.accent} />
-			<CText tone="subtle">{data.description}</CText>
+		<CColumns columns="one" gap="lg">
+			<CColumns columns="one" gap="sm">
+				<CText variant="body-sm">{data.eyebrow}</CText>
+				<CColumns columns="one" gap="xs">
+					<CHeading level={1} variant="display-3" lines={data.title} accent={data.accent} />
+					<CText tone="subtle">{data.description}</CText>
+				</CColumns>
+			</CColumns>
 			<CRow gap="lg" align="center">
 				{data.actions.map((action) => action.icon === "play" ? (
 					<CButton
