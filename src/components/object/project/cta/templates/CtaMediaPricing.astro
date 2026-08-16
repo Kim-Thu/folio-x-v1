@@ -23,10 +23,10 @@ const headingId = `${data.id}-title`;
 	spacing="md"
 	aria-labelledby={headingId}
 >
-	<CColumns columns="twelve" gap="md" align="center">
+	<CColumns columns="twelve" gap="md" align="stretch">
 		{
 			data.image && (
-				<CGridItem lgSpan={2}>
+				<CGridItem lgSpan={2} align="center">
 					<CMedia ratio="natural">
 						<CImage {...data.image} variant="natural" />
 					</CMedia>
@@ -35,18 +35,20 @@ const headingId = `${data.id}-title`;
 		}
 
 		<CGridItem lgSpan={7}>
-			<CColumns columns="one" gap="sm">
-				<CHeading id={headingId} level={2} variant="h3">
-					{data.title}
-				</CHeading>
+			<div class="flex h-full flex-col">
+				<CColumns columns="one" gap="sm">
+					<CHeading id={headingId} level={2} variant="h3">
+						{data.title}
+					</CHeading>
 
-				{data.description && (
-					<CText tone="subtle">{data.description}</CText>
-				)}
+					{data.description && (
+						<CText tone="subtle">{data.description}</CText>
+					)}
+				</CColumns>
 
 				{
 					data.features && (
-						<div class="pt-6 md:pt-8">
+						<div class="pt-6 md:pt-8 lg:mt-auto lg:pt-6">
 							<CRow align="center" gap="md">
 								{data.features.items.map((feature) => (
 									<CFeature {...feature} appearance="body" />
@@ -55,11 +57,11 @@ const headingId = `${data.id}-title`;
 						</div>
 					)
 				}
-			</CColumns>
+			</div>
 		</CGridItem>
 
 		<CGridItem lgSpan={3}>
-			<CColumns columns="one" gap="none">
+			<div class="flex h-full flex-col">
 				{
 					data.action && (
 						<CRow justify="start" class="lg:justify-end">
@@ -77,7 +79,7 @@ const headingId = `${data.id}-title`;
 
 				{
 					data.price && (
-						<div class="pt-6 md:pt-8">
+						<div class="pt-6 md:pt-8 lg:mt-auto lg:pt-6">
 							<CRow
 								align="baseline"
 								justify="start"
@@ -103,7 +105,7 @@ const headingId = `${data.id}-title`;
 						</div>
 					)
 				}
-			</CColumns>
+			</div>
 		</CGridItem>
 	</CColumns>
 </CBox>
