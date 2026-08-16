@@ -6,35 +6,42 @@ import CColumns from "@/components/object/component/CColumns.astro";
 import CFieldset from "@/components/object/component/CFieldset.astro";
 import CRange from "@/components/object/component/CRange.astro";
 import CRating from "@/components/object/component/CRating.astro";
+import CText from "@/components/object/component/CText.astro";
 import type { PFilterPanelProps } from "@/types/components/object/project/filter-panel/PFilterPanel.types";
+import { filterPanelLabelClasses } from "@/variants/components/object/project/filter-panel/PFilterPanel.variants";
 
 const { data } = Astro.props as PFilterPanelProps;
-const primaryGroups = [
-	data.category,
-	data.platform,
-	data.license,
-].filter((group): group is NonNullable<typeof group> => Boolean(group));
-const groups = [...primaryGroups, ...(data.groups ?? [])];
-const showReset = Boolean(data.category && data.platform);
+const platform = data.platform ?? data.groups?.find((group) => group.control === "platform");
+const extraGroups = (data.groups ?? []).filter((group) => group.control !== "platform");
+const showReset = Boolean(
+	data.category ||
+	platform ||
+	data.license ||
+	data.range ||
+	data.ratings ||
+	extraGroups.length,
+);
 ---
 
 <CBox surface="glass" radius="md" spacing="md" data-filter-panel>
 	<CColumns columns="one" gap="sm">
-		{groups.map((group) => (
-			<CChoiceGroup {...group} />
-		))}
+		{data.category && <CChoiceGroup {...data.category} />}
 
-		{showReset && (
-			<CButton
-				label="Reset all"
-				size="sm"
-				tone="light"
-				variant="text-subtle"
-				data-filter-reset
-			/>
+		{data.filterLabel && (
+			<CText as="span" variant="caption" class={filterPanelLabelClasses}>
+				{data.filterLabel}
+			</CText>
 		)}
 
+		{platform && <CChoiceGroup {...platform} />}
+
 		{data.range && <CRange {...data.range} />}
+
+		{data.license && <CChoiceGroup {...data.license} />}
+
+		{extraGroups.map((group) => (
+			<CChoiceGroup {...group} />
+		))}
 
 		{data.ratings && (
 			<CFieldset legend={data.ratings.legend} gap="xs">
@@ -45,8 +52,18 @@ const showReset = Boolean(data.category && data.platform);
 						maximum={5}
 						name={data.ratings?.name ?? "rating"}
 					/>
-			))}
+				))}
 			</CFieldset>
+		)}
+
+		{showReset && (
+			<CButton
+				label="Reset all"
+				size="sm"
+				tone="light"
+				variant="text-subtle"
+				data-filter-reset
+			/>
 		)}
 	</CColumns>
 </CBox>
