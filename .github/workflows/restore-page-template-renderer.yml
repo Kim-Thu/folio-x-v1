@@ -28,7 +28,16 @@ jobs:
         run: |
           set -euo pipefail
           git show origin/agent/ppage-template-fix-runner:.github/scripts/remove-generic-page-renderer.py > /tmp/remove-generic-page-renderer.py
-          sed -i '96s/{l})}}/{l}))}}/' /tmp/remove-generic-page-renderer.py
+          python3 <<'PY'
+          from pathlib import Path
+          path = Path('/tmp/remove-generic-page-renderer.py')
+          text = path.read_text()
+          old = '{l})}}\n{k}</CColumns>\n{k}{{{var}.props.statement'
+          new = '{l}))}}\n{k}</CColumns>\n{k}{{{var}.props.statement'
+          if old not in text:
+              raise SystemExit('Expected cardGroups closure not found in generator')
+          path.write_text(text.replace(old, new))
+          PY
           python3 /tmp/remove-generic-page-renderer.py
 
           test ! -d src/components/object/project/layout/parts
