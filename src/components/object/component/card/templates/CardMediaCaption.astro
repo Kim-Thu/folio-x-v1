@@ -7,11 +7,8 @@ import CLink from "@/components/object/component/CLink.astro";
 import CMedia from "@/components/object/component/CMedia.astro";
 import CMetadata from "@/components/object/component/CMetadata.astro";
 import CText from "@/components/object/component/CText.astro";
-import type {
-	CCardTemplateProps,
-	LabCardPresentation,
-} from "@/types/components/object/component/card/CCard.types";
-import type { Lab } from "@/types/content";
+import type { CCardTemplateProps } from "@/types/components/object/component/card/CCard.types";
+import { getCardSourceContext } from "@/utils/card";
 
 const {
 	data,
@@ -22,10 +19,14 @@ const {
 	source,
 } = Astro.props as CCardTemplateProps;
 
-const lab = source === "labs" ? data as unknown as Lab : undefined;
-const labPresentation = lab
-	? presentation as LabCardPresentation | undefined
-	: undefined;
+const {
+	item: lab,
+	presentation: labPresentation,
+} = getCardSourceContext("labs", {
+	data,
+	source,
+	presentation,
+});
 const href = lab?.href ?? data.href;
 const title = lab?.title ?? data.title.join(" ");
 const excerpt = lab?.summary ?? data.excerpt;
@@ -63,7 +64,11 @@ const inverse = data.appearance === "inverse";
 			)}
 
 			{slots.metadata && metadata && (
-				<CMetadata data={metadata} size="xs" tone={inverse ? "on-dark-subtle" : "on-light"} />
+				<CMetadata
+					data={metadata}
+					size="xs"
+					tone={inverse ? "on-dark-subtle" : "on-light"}
+				/>
 			)}
 
 			{slots.excerpt && excerpt && (
