@@ -154,20 +154,20 @@
           },
           "sidebar": {
             "label": "Product filters",
-            "filterLabel": "Product filters",
+            "filterLabel": "Filter by",
             "category": {
               "appearance": "navigation",
               "control": "category",
-              "legend": "Category",
+              "legend": "Categories",
               "name": "product-category",
               "type": "radio"
             },
             "platform": {
-              "appearance": "navigation",
+              "appearance": "controls",
               "control": "platform",
               "legend": "Platform",
-              "name": "product-platform",
-              "type": "radio"
+              "name": "product-platform-filter",
+              "type": "checkbox"
             },
             "price": {
               "id": "product-price",
