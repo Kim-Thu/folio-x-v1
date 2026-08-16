@@ -74,7 +74,7 @@ export async function getLayoutData(): Promise<LayoutData> {
 				},
 			],
 			contact: {
-				label: site.contactLabel,
+				label: footer.legalLabel,
 				email: site.email,
 				locationLabel: footer.locationLabel,
 				location: site.location,
