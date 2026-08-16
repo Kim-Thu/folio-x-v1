@@ -2,7 +2,6 @@ import CardBoxed from "@/components/object/component/card/templates/CardBoxed.as
 import CardCompactBordered from "@/components/object/component/card/templates/CardCompactBordered.astro";
 import CardCompactMedia from "@/components/object/component/card/templates/CardCompactMedia.astro";
 import CardEditorial from "@/components/object/component/card/templates/CardEditorial.astro";
-import CardEditorialList from "@/components/object/component/card/templates/CardEditorialList.astro";
 import CardFeatured from "@/components/object/component/card/templates/CardFeatured.astro";
 import CardHorizontal from "@/components/object/component/card/templates/CardHorizontal.astro";
 import CardIconPanel from "@/components/object/component/card/templates/CardIconPanel.astro";
@@ -26,7 +25,6 @@ export const cCardTemplates = {
 	"compact-media": CardCompactMedia,
 	"compact-bordered": CardCompactBordered,
 	editorial: CardEditorial,
-	"editorial-list": CardEditorialList,
 	"icon-panel": CardIconPanel,
 	"icon-summary": CardIconSummary,
 	"media-banner": CardMediaBanner,
