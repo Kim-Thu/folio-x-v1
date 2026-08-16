@@ -1,6 +1,7 @@
 ---
 import CCard from "@/components/object/component/card/CCard.astro";
 import CSlider from "@/components/object/component/CSlider.astro";
+import type { CCardData, CCardItemData } from "@/types/components/object/component/card/CCard.types";
 import type { PCardTemplateProps } from "@/types/components/object/project/card/PCard.types";
 import {
 	pCardSliderClasses,
@@ -22,7 +23,11 @@ void template;
 void separator;
 
 const cardConfig = card ?? {};
-const sliderLabel = items.map((item) => item.title.join(" ")).join(", ");
+const itemTitle = (item: CCardItemData) =>
+	Array.isArray(item.title) ? item.title.join(" ") : item.title;
+const itemAriaLabel = (item: CCardItemData) =>
+	"ariaLabel" in item ? (item as CCardData).ariaLabel : itemTitle(item);
+const sliderLabel = items.map(itemTitle).join(", ");
 const sliderControls = slider?.controls ?? "below-left";
 const autoplay = slider?.autoplay ?? true;
 const autoplayInterval = slider?.autoplayInterval ?? 5000;
@@ -51,7 +56,7 @@ const pauseOnHover = slider?.pauseOnHover ?? true;
 	{items.map((item, index) => (
 		<div
 			class={pCardSliderItemClasses[columns]}
-			aria-label={item.ariaLabel}
+			aria-label={itemAriaLabel(item)}
 			data-slide
 		>
 			<CCard {...cardConfig} data={item} index={index} />
