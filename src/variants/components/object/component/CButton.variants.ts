@@ -86,7 +86,7 @@ const buttonAppearanceClasses: Record<
 		primary: "bg-blue-600 text-white hover:bg-blue-400",
 		secondary: "bg-black text-white hover:bg-black/90",
 		outline:
-			"bg-white/80 text-black ring-1 ring-inset ring-gray-10/12 backdrop-blur-sm hover:ring-gray-10/12 hover:text-blue-600",
+			"bg-white/80 text-black ring-1 ring-inset ring-gray-100 backdrop-blur-sm hover:ring-gray-100 hover:text-blue-600",
 		ghost: "bg-transparent text-black hover:bg-gray-10/4",
 		text: "bg-transparent text-black hover:text-blue-400",
 		"text-subtle": "bg-transparent text-gray-500 hover:text-black",
