@@ -88,17 +88,20 @@ const action = project
 			label: "Live site",
 			href: project.detail.liveUrl,
 			icon: "arrowUpRight" as const,
+			iconPosition: "end" as const,
 		}
 		: project.detail?.sourceUrl
 			? {
 				label: "GitHub",
 				href: project.detail.sourceUrl,
 				icon: "github" as const,
+				iconPosition: "end" as const,
 			}
 			: {
 				label: projectPresentation?.actionLabel ?? "Xem dự án",
 				href,
 				icon: projectPresentation?.actionIcon ?? ("arrowRight" as const),
+				iconPosition: "end" as const,
 			}
 	: data.action;
 const filterValue = project?.category ?? data.filterValue;
