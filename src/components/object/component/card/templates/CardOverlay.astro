@@ -30,13 +30,13 @@ const card = resolveProjectOverlayCard({
 });
 
 const desktopRatioClasses: Record<NonNullable<CCardTemplateProps["mediaRatio"]>, string> = {
-	editorial: "lg:aspect-4/3",
-	landscape: "lg:aspect-square",
-	natural: "lg:aspect-4/3",
-	panoramic: "lg:aspect-video",
+	editorial: "lg:aspect-video",
+	landscape: "lg:aspect-4/3",
+	natural: "lg:aspect-video",
+	panoramic: "lg:aspect-3/1",
 	portrait: "lg:aspect-2/3",
 	square: "lg:aspect-square",
-	video: "lg:aspect-4/3",
+	video: "lg:aspect-video",
 };
 ---
 
