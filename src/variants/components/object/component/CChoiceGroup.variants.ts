@@ -24,4 +24,4 @@ export const choiceLabelClasses = "flex-1";
 export const choiceCountClasses = "font-mono text-xs text-gray-500";
 export const choiceNavigationClasses = "grid gap-1";
 export const choiceNavigationTitleClasses =
-	"mb-2 border-b border-gray-100 pb-2 font-mono text-xs uppercase tracking-widest text-black";
+	"mb-2 inline-flex w-full border-b border-gray-100 pb-2 font-mono text-xs uppercase tracking-widest text-black";
