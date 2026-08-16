@@ -2,7 +2,10 @@
 import CCard from "@/components/object/component/card/CCard.astro";
 import CSlider from "@/components/object/component/CSlider.astro";
 import type { PCardTemplateProps } from "@/types/components/object/project/card/PCard.types";
-import { pCardSliderItemClasses } from "@/variants/components/object/project/card/PCard.variants";
+import {
+	pCardSliderClasses,
+	pCardSliderItemClasses,
+} from "@/variants/components/object/project/card/PCard.variants";
 
 const {
 	template,
@@ -23,6 +26,7 @@ const sliderLabel = items.map((item) => item.title.join(" ")).join(", ");
 
 <CSlider
 	{...attributes}
+	class={pCardSliderClasses}
 	itemCount={items.length}
 	label={sliderLabel}
 	previousLabel={sliderLabel}
