@@ -33,7 +33,7 @@ const {
 			{slots.excerpt && data.excerpt && (
 				<CText variant="body-sm" tone="on-dark-muted">{data.excerpt}</CText>
 			)}
-			{slots.action && data.action && (
+			{data.action && (
 				<CButton
 					href={data.action.href}
 					label={data.action.label}
