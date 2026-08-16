@@ -8,13 +8,19 @@ import CSearchField from "@/components/object/component/CSearchField.astro";
 import CSelect from "@/components/object/component/CSelect.astro";
 import CTabList from "@/components/object/component/CTabList.astro";
 import type { PArchiveToolbarProps } from "@/types/components/object/project/archive-toolbar/PArchiveToolbar.types";
-import { archiveToolbarSearchClasses } from "@/variants/components/object/project/archive-toolbar/PArchiveToolbar.variants";
+import {
+	archiveToolbarActionsClasses,
+	archiveToolbarClasses,
+	archiveToolbarGridClasses,
+	archiveToolbarSearchClasses,
+	archiveToolbarViewClasses,
+} from "@/variants/components/object/project/archive-toolbar/PArchiveToolbar.variants";
 
 const { data } = Astro.props as PArchiveToolbarProps;
 ---
 
-<CBox surface="glass" radius="md" spacing="sm">
-	<CColumns columns="twelve" gap="sm">
+<CBox surface="glass" radius="md" spacing="sm" class={archiveToolbarClasses}>
+	<CColumns columns="twelve" gap="sm" class={archiveToolbarGridClasses}>
 		<CGridItem lgSpan={data.search ? 6 : 9}>
 			<CRow align="center" gap="sm" wrap>
 				{data.search && (
@@ -36,54 +42,59 @@ const { data } = Astro.props as PArchiveToolbarProps;
 			</CRow>
 		</CGridItem>
 		<CGridItem lgSpan={data.search ? 6 : 3}>
-		<CRow align="center" justify="end" gap="sm">
-			{data.selects?.map((select) => (
+			<CRow align="center" justify="end" gap="sm" class={archiveToolbarActionsClasses}>
+				{data.selects?.map((select) => (
+					<CSelect
+						appearance={data.search ? "panel" : "pill"}
+						id={select.id}
+						label={select.label}
+						options={select.options}
+						value={select.value}
+						data-category-select={select.control === "category" ? "" : undefined}
+						data-platform-select={select.control === "platform" ? "" : undefined}
+						data-facet-select
+						data-facet-key={select.control}
+					/>
+				))}
+
 				<CSelect
 					appearance={data.search ? "panel" : "pill"}
-					id={select.id}
-					label={select.label}
-					options={select.options}
-					value={select.value}
-					data-category-select={select.control === "category" ? "" : undefined}
-					data-platform-select={select.control === "platform" ? "" : undefined}
-					data-facet-select
-					data-facet-key={select.control}
+					id="archive-sort"
+					label={data.sort.label}
+					options={data.sort.options}
+					value={data.sort.value}
+					data-sort-control
+					data-archive-sort
 				/>
-			))}
 
-			<CSelect
-				appearance={data.search ? "panel" : "pill"}
-				id="archive-sort"
-				label={data.sort.label}
-				options={data.sort.options}
-				value={data.sort.value}
-				data-sort-control
-				data-archive-sort
-			/>
-
-			<CRow gap="xs" role="group" aria-label={data.view.label}>
-				<CButton
-					label={data.view.gridLabel}
-					icon="gridView"
-					iconOnly
-					size="sm"
-					tone="light"
-					variant="view"
-					aria-pressed="true"
-					data-view-control="grid"
-				/>
-				<CButton
-					label={data.view.listLabel}
-					icon="listView"
-					iconOnly
-					size="sm"
-					tone="light"
-					variant="view"
-					aria-pressed="false"
-					data-view-control="list"
-				/>
+				<CRow
+					gap="xs"
+					role="group"
+					aria-label={data.view.label}
+					class={archiveToolbarViewClasses}
+				>
+					<CButton
+						label={data.view.gridLabel}
+						icon="gridView"
+						iconOnly
+						size="sm"
+						tone="light"
+						variant="view"
+						aria-pressed="true"
+						data-view-control="grid"
+					/>
+					<CButton
+						label={data.view.listLabel}
+						icon="listView"
+						iconOnly
+						size="sm"
+						tone="light"
+						variant="view"
+						aria-pressed="false"
+						data-view-control="list"
+					/>
+				</CRow>
 			</CRow>
-		</CRow>
 		</CGridItem>
 	</CColumns>
 </CBox>
