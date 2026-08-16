@@ -3,7 +3,7 @@
 export const selectRootClasses = "relative inline-flex shrink-0";
 
 export const selectTriggerBaseClasses =
-	"inline-flex shrink-0 items-center justify-between gap-4 whitespace-nowrap bg-white/80 px-5 py-3 text-sm text-black ring-1 ring-inset ring-gray-100 backdrop-blur-sm transition-colors duration-300 hover:ring-gray-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gray-100 aria-expanded:ring-gray-100";
+	"inline-flex shrink-0 cursor-pointer items-center justify-between gap-4 whitespace-nowrap bg-white/80 px-5 py-3 text-sm text-black ring-1 ring-inset ring-gray-100 backdrop-blur-sm transition-colors duration-300 hover:ring-gray-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gray-100 aria-expanded:ring-gray-100";
 
 export const selectTriggerAppearanceClasses: Record<CSelectAppearance, string> =
 	{
