@@ -5,9 +5,20 @@ import type {
 	CCardSlotOptions,
 	CCardSlots,
 	CCardSource,
+	InsightCardPresentation,
+	LabCardPresentation,
+	ProductCardPresentation,
 	ProjectCardPresentation,
+	PublicationCardPresentation,
+	PublicationCollectionPresentation,
 } from "@/types/components/object/component/card/CCard.types";
-import type { Project } from "@/types/content";
+import type {
+	Insight,
+	Lab,
+	Product,
+	Project,
+	PublicationEntry,
+} from "@/types/content";
 
 export const DEFAULT_CARD_SLOTS: CCardSlots = {
 	media: true,
@@ -41,6 +52,58 @@ export function getCardItemSize(item: CCardItemData) {
 	return "size" in item ? item.size : undefined;
 }
 
+type DynamicCardSource = Exclude<CCardSource, "static">;
+
+type CardSourceDataMap = {
+	products: Product;
+	projects: Project;
+	labs: Lab;
+	blog: Insight;
+	comics: PublicationEntry;
+	novels: PublicationEntry;
+	publications: PublicationEntry;
+};
+
+type CardSourcePresentationMap = {
+	products: ProductCardPresentation;
+	projects: ProjectCardPresentation;
+	labs: LabCardPresentation;
+	blog: InsightCardPresentation;
+	comics: PublicationCardPresentation;
+	novels: PublicationCardPresentation;
+	publications: PublicationCollectionPresentation;
+};
+
+interface CardSourceContextInput {
+	data: CCardData;
+	source?: CCardSource;
+	presentation?: CCardPresentation;
+}
+
+export function getCardSourceContext<S extends DynamicCardSource>(
+	expectedSource: S,
+	{
+		data,
+		source,
+		presentation,
+	}: CardSourceContextInput,
+): {
+	item: CardSourceDataMap[S] | undefined;
+	presentation: CardSourcePresentationMap[S] | undefined;
+} {
+	if (source !== expectedSource) {
+		return {
+			item: undefined,
+			presentation: undefined,
+		};
+	}
+
+	return {
+		item: data as unknown as CardSourceDataMap[S],
+		presentation: presentation as CardSourcePresentationMap[S] | undefined,
+	};
+}
+
 interface ProjectOverlayCardInput {
 	data: CCardData;
 	source?: CCardSource;
@@ -52,12 +115,14 @@ export function resolveProjectOverlayCard({
 	source,
 	presentation,
 }: ProjectOverlayCardInput) {
-	const project = source === "projects"
-		? data as unknown as Project
-		: undefined;
-	const projectPresentation = project
-		? presentation as ProjectCardPresentation | undefined
-		: undefined;
+	const {
+		item: project,
+		presentation: projectPresentation,
+	} = getCardSourceContext("projects", {
+		data,
+		source,
+		presentation,
+	});
 	const href = project?.href ?? data.href;
 	const title = project?.title ?? data.title.join(" ");
 	const excerpt = project?.summary ?? data.excerpt;
