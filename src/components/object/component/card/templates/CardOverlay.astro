@@ -9,12 +9,9 @@ import CMedia from "@/components/object/component/CMedia.astro";
 import CMetadata from "@/components/object/component/CMetadata.astro";
 import CTags from "@/components/object/component/CTags.astro";
 import CText from "@/components/object/component/CText.astro";
-import type {
-	CCardTemplateProps,
-	ProjectCardPresentation,
-} from "@/types/components/object/component/card/CCard.types";
-import type { Project } from "@/types/content";
+import type { CCardTemplateProps } from "@/types/components/object/component/card/CCard.types";
 import { cn } from "@/utils/cn";
+import { resolveProjectOverlayCard } from "@/utils/card";
 
 const {
 	data,
@@ -26,86 +23,11 @@ const {
 	source,
 } = Astro.props as CCardTemplateProps;
 
-const project = source === "projects" ? data as unknown as Project : undefined;
-const projectPresentation = project
-	? presentation as ProjectCardPresentation | undefined
-	: undefined;
-const href = project?.href ?? data.href;
-const title = project?.title ?? data.title.join(" ");
-const excerpt = project?.summary ?? data.excerpt;
-const appearance = project
-	? project.tone === "dark"
-		? projectPresentation?.darkAppearance
-		: projectPresentation?.lightAppearance
-	: data.appearance;
-const inverse = appearance === "inverse";
-const media = project && projectPresentation
-	? {
-		src: project.image,
-		alt: project.alt || project.title,
-		width: projectPresentation.imageWidth,
-		height: projectPresentation.imageHeight,
-	}
-	: data.media;
-const metadata = project
-	? {
-		separator: projectPresentation?.separator,
-		items: [
-			{
-				type: "index" as const,
-				label: project.number,
-				display: projectPresentation?.metadataDisplay,
-			},
-			{
-				type: "category" as const,
-				label: project.category.toUpperCase(),
-				href: projectPresentation?.routes.categoryBase
-					? `${projectPresentation.routes.categoryBase}${project.categorySlug}`
-					: undefined,
-				display: projectPresentation?.metadataDisplay,
-			},
-			{
-				type: "datetime" as const,
-				label: project.year,
-				datetime: project.year,
-				display: projectPresentation?.metadataDisplay,
-			},
-		],
-	}
-	: data.metadata;
-const tags = project
-	? project.tags.map((tag) => ({
-		label: tag.label,
-		href: projectPresentation?.routes.tagBase
-			? `${projectPresentation.routes.tagBase}${tag.slug}`
-			: undefined,
-	}))
-	: data.tags;
-const tagsLabel = project ? projectPresentation?.tagsLabel : data.tagsLabel;
-const action = project
-	? project.detail?.liveUrl
-		? {
-			label: "Live site",
-			href: project.detail.liveUrl,
-			icon: "arrowUpRight" as const,
-			iconPosition: "end" as const,
-		}
-		: project.detail?.sourceUrl
-			? {
-				label: "GitHub",
-				href: project.detail.sourceUrl,
-				icon: "github" as const,
-				iconPosition: "end" as const,
-			}
-			: {
-				label: projectPresentation?.actionLabel ?? "Xem dự án",
-				href,
-				icon: projectPresentation?.actionIcon ?? ("arrowRight" as const),
-				iconPosition: "end" as const,
-			}
-	: data.action;
-const filterValue = project?.category ?? data.filterValue;
-const sortValue = project?.year ?? data.sortValue;
+const card = resolveProjectOverlayCard({
+	data,
+	source,
+	presentation,
+});
 
 const desktopRatioClasses: Record<NonNullable<CCardTemplateProps["mediaRatio"]>, string> = {
 	editorial: "lg:aspect-video",
@@ -121,55 +43,70 @@ const desktopRatioClasses: Record<NonNullable<CCardTemplateProps["mediaRatio"]>,
 <CBox
 	as="article"
 	class={cn("h-full", desktopRatioClasses[mediaRatio])}
-	surface={inverse ? "dark" : "plain"}
+	surface={card.inverse ? "dark" : "plain"}
 	radius="lg"
 	position="relative"
 	ratio="natural"
 	overflow="hidden"
-	data-tab-card={filterValue ? "" : undefined}
-	data-filter-category={filterValue}
-	data-sort-value={sortValue}
+	data-tab-card={card.filterValue ? "" : undefined}
+	data-filter-category={card.filterValue}
+	data-sort-value={card.sortValue}
 	data-sort-index={index}
 >
-	{slots.media && media && (
-		<CMedia ratio="natural" placement="background" href={href} ariaLabel={title}>
-			<CImage {...media} variant="fill" />
+	{slots.media && card.media && (
+		<CMedia
+			ratio="natural"
+			placement="background"
+			href={card.href}
+			ariaLabel={card.title}
+		>
+			<CImage {...card.media} variant="fill" />
 		</CMedia>
 	)}
 
 	<CBox position="relative" class="h-full p-8">
 		<div class="flex h-full flex-col">
 			<CColumns columns="one" gap="xs">
-				{slots.metadata && metadata && (
-					<CMetadata data={metadata} size="xs" tone={inverse ? "on-dark" : "brand"} />
+				{slots.metadata && card.metadata && (
+					<CMetadata
+						data={card.metadata}
+						size="xs"
+						tone={card.inverse ? "on-dark" : "brand"}
+					/>
 				)}
 
 				{slots.title && (
 					<CHeading level={headingLevel} variant="h3">
-						<CLink href={href}>{title}</CLink>
+						<CLink href={card.href}>{card.title}</CLink>
 					</CHeading>
 				)}
 
-				{slots.excerpt && excerpt && (
-					<CText variant="body-sm" tone={inverse ? "on-dark-muted" : "muted"}>
-						{excerpt}
+				{slots.excerpt && card.excerpt && (
+					<CText
+						variant="body-sm"
+						tone={card.inverse ? "on-dark-muted" : "muted"}
+					>
+						{card.excerpt}
 					</CText>
 				)}
 
-				{slots.tags && tags && tags.length > 0 && (
-					<CTags items={tags} label={tagsLabel ?? `${title} tags`} />
+				{slots.tags && card.tags && card.tags.length > 0 && (
+					<CTags
+						items={card.tags}
+						label={card.tagsLabel ?? `${card.title} tags`}
+					/>
 				)}
 			</CColumns>
 
-			{action && (
+			{card.action && (
 				<div class="mt-auto pt-10">
 					<CButton
-						href={action.href}
-						label={action.label}
-						icon={action.icon}
-						iconPosition={action.iconPosition}
+						href={card.action.href}
+						label={card.action.label}
+						icon={card.action.icon}
+						iconPosition={card.action.iconPosition}
 						variant="outline"
-						tone={inverse ? "dark" : "light"}
+						tone={card.inverse ? "dark" : "light"}
 						size="sm"
 					/>
 				</div>
