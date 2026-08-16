@@ -76,8 +76,8 @@ const inverse = data.appearance === "inverse";
 			</CMedia>
 		)}
 
-		<CBox spacing="sm">
-			<CColumns columns="one" gap="sm">
+		<CBox spacing="sm" class="h-full">
+			<div class="flex h-full flex-col">
 				<CColumns columns="one" gap="xs">
 					{slots.metadata && metadata && (
 						<CMetadata
@@ -106,52 +106,54 @@ const inverse = data.appearance === "inverse";
 					)}
 				</CColumns>
 
-				{product ? (
-					<CRow as="footer" justify="between" align="end" gap="md" wrap={false}>
-						<CRow gap="sm" align="baseline" wrap={false}>
-							<CText as="span" variant="price">${product.price}</CText>
-							{product.oldPrice && (
-								<CText as="span" variant="price-old" tone="subtle">
-									${product.oldPrice}
-								</CText>
-							)}
-						</CRow>
+				<div class="mt-auto pt-4">
+					{product ? (
+						<CRow as="footer" justify="between" align="end" gap="md" wrap={false}>
+							<CRow gap="sm" align="baseline" wrap={false}>
+								<CText as="span" variant="price">${product.price}</CText>
+								{product.oldPrice && (
+									<CText as="span" variant="price-old" tone="subtle">
+										${product.oldPrice}
+									</CText>
+								)}
+							</CRow>
 
-						<CRow gap="sm" align="center" justify="end" wrap={false}>
-							{slots.action && actionLabel && (
-								<CButton
-									label={actionLabel}
-									icon="shoppingBag"
-									iconOnly
-									size="sm"
-									tone="light"
-									variant="view"
-									data-cart-button
-									aria-pressed="false"
+							<CRow gap="sm" align="center" justify="end" wrap={false}>
+								{slots.action && actionLabel && (
+									<CButton
+										label={actionLabel}
+										icon="shoppingBag"
+										iconOnly
+										size="sm"
+										tone="light"
+										variant="view"
+										data-cart-button
+										aria-pressed="false"
+									/>
+								)}
+								<CRating
+									style="compact"
+									value={product.rating}
+									maximum={5}
+									count={product.reviews}
 								/>
-							)}
-							<CRating
-								style="compact"
-								value={product.rating}
-								maximum={5}
-								count={product.reviews}
-							/>
+							</CRow>
 						</CRow>
-					</CRow>
-				) : (
-					slots.action && data.action && (
-						<CButton
-							href={data.action.href}
-							label={data.action.label}
-							icon={data.action.icon}
-							iconPosition={data.action.iconPosition}
-							variant="outline"
-							tone={inverse ? "dark" : "light"}
-							size="sm"
-						/>
-					)
-				)}
-			</CColumns>
+					) : (
+						slots.action && data.action && (
+							<CButton
+								href={data.action.href}
+								label={data.action.label}
+								icon={data.action.icon}
+								iconPosition={data.action.iconPosition}
+								variant="outline"
+								tone={inverse ? "dark" : "light"}
+								size="sm"
+							/>
+						)
+					)}
+				</div>
+			</div>
 		</CBox>
 	</CColumns>
 </CBox>
