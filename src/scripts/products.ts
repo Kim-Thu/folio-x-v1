@@ -22,6 +22,9 @@ function initProductsRoot(root: HTMLElement): void {
 		root.querySelector<HTMLButtonElement>("[data-page-previous]");
 	const next = root.querySelector<HTMLButtonElement>("[data-page-next]");
 	const pageSize = 9;
+	const gridColumnClasses = Array.from(grid?.classList ?? []).filter((className) =>
+		className.includes("grid-cols-"),
+	);
 	let currentPage = 1;
 
 	if (!cards.length || !grid) return;
@@ -59,6 +62,20 @@ function initProductsRoot(root: HTMLElement): void {
 		priceOutput.value = `$${range.value}${
 			range.value === range.max ? "+" : ""
 		}`;
+	};
+
+	const applyView = (view: "grid" | "list"): void => {
+		gridColumnClasses.forEach((className) => {
+			grid.classList.toggle(className, view === "grid");
+		});
+
+		if (view === "list") {
+			grid.classList.add("grid-cols-1");
+		} else if (!gridColumnClasses.includes("grid-cols-1")) {
+			grid.classList.remove("grid-cols-1");
+		}
+
+		grid.dataset.view = view;
 	};
 
 	const render = (): void => {
@@ -187,7 +204,8 @@ function initProductsRoot(root: HTMLElement): void {
 				root.querySelectorAll("[data-view-control]").forEach((item) => {
 					item.setAttribute("aria-pressed", String(item === button));
 				});
-				grid.dataset.view = button.dataset.viewControl;
+
+				applyView(button.dataset.viewControl === "list" ? "list" : "grid");
 			});
 		});
 
@@ -217,6 +235,7 @@ function initProductsRoot(root: HTMLElement): void {
 	});
 
 	syncPriceOutput();
+	applyView("grid");
 	render();
 }
 
