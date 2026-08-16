@@ -20,6 +20,16 @@
         },
         "content": {
           "id": "products-hero",
+          "breadcrumb": {
+            "label": "Breadcrumb",
+            "items": [
+              {
+                "label": "Home",
+                "href": "/"
+              }
+            ],
+            "current": "Products"
+          },
           "eyebrow": "Digital products",
           "title": "Build faster. Create better",
           "accent": ".",
