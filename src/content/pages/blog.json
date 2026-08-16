@@ -188,35 +188,27 @@
         }
       },
       {
-        "id": "insights-newsletter",
+        "id": "insights-closing",
         "type": "cta",
-        "template": "subscription",
+        "template": "callout",
         "settings": {
           "theme": "canvas",
-          "spacing": "compact",
+          "spacing": "closing",
           "container": "site"
         },
         "content": {
-          "id": "insights-newsletter",
-          "title": "Never miss a new article",
-          "description": "Join the newsletter for practical ideas and behind-the-scenes notes.",
+          "id": "contact",
+          "title": "Bạn có ý tưởng dự án?",
+          "description": "Hãy cùng tạo ra một sản phẩm rõ ràng, hữu ích và đáng nhớ.",
           "action": {
-            "label": "Subscribe",
-            "href": "mailto:thunk.work.91@gmail.com"
+            "href": "mailto:hello@nvt.studio",
+            "label": "Liên hệ tôi"
           },
           "image": {
-            "src": "/uploads/ads-1.png",
-            "alt": "",
-            "width": 1402,
-            "height": 1122
-          },
-          "form": {
-            "formName": "insights-newsletter",
-            "inputId": "insights-newsletter-email",
-            "inputLabel": "Email address",
-            "placeholder": "Your email...",
-            "submitLabel": "Subscribe",
-            "tone": "light"
+            "src": "/uploads/cta-banner.webp",
+            "alt": "Nhân vật 3D đang làm việc tại bàn máy tính",
+            "width": 1536,
+            "height": 720
           }
         }
       }
