@@ -15,6 +15,7 @@ function initProductsRoot(root: HTMLElement): void {
 	const count = root.querySelector<HTMLElement>("[data-result-count]");
 	const empty = root.querySelector<HTMLElement>("[data-product-empty]");
 	const pagination = root.querySelector<HTMLElement>("[data-pagination]");
+	const reset = root.querySelector<HTMLButtonElement>("[data-filter-reset]");
 	const pageButtons = Array.from(
 		root.querySelectorAll<HTMLButtonElement>("[data-page]"),
 	);
@@ -81,19 +82,21 @@ function initProductsRoot(root: HTMLElement): void {
 	};
 
 	const syncNavigationFilter = (control: string, value: string): void => {
+		const hasActiveValue = value !== "all";
+
 		navigationFilters
 			.filter((button) => button.dataset.choiceControl === control)
 			.forEach((button) => {
 				button.setAttribute(
 					"aria-pressed",
-					String(button.dataset.choiceValue === value),
+					String(hasActiveValue && button.dataset.choiceValue === value),
 				);
 			});
 
 		navigationLinks
 			.filter((link) => link.dataset.choiceControl === control)
 			.forEach((link) => {
-				if (link.dataset.choiceValue === value) {
+				if (hasActiveValue && link.dataset.choiceValue === value) {
 					link.setAttribute("aria-current", "page");
 				} else {
 					link.removeAttribute("aria-current");
@@ -233,26 +236,74 @@ function initProductsRoot(root: HTMLElement): void {
 		render();
 	};
 
+	const selectExclusiveFilter = (control: string, value: string): void => {
+		if (control === "category") {
+			if (categorySelect) syncSelectDisplay(categorySelect, value);
+			syncNavigationFilter("category", value);
+
+			if (value !== "all") {
+				if (platformSelect) syncSelectDisplay(platformSelect, "all");
+				syncNavigationFilter("platform", "all");
+			}
+
+			syncLocation("category", value);
+		}
+
+		if (control === "platform") {
+			if (platformSelect) syncSelectDisplay(platformSelect, value);
+			syncNavigationFilter("platform", value);
+
+			if (value !== "all") {
+				if (categorySelect) syncSelectDisplay(categorySelect, "all");
+				syncNavigationFilter("category", "all");
+				syncLocation("category", "all");
+			}
+		}
+
+		resetAndRender();
+	};
+
+	const resetAllFilters = (): void => {
+		if (search) search.value = "";
+		if (categorySelect) syncSelectDisplay(categorySelect, "all");
+		if (platformSelect) syncSelectDisplay(platformSelect, "all");
+		if (range) range.value = range.max;
+
+		root
+			.querySelectorAll<HTMLInputElement>(
+				"[data-platform-filter], [data-license-filter], [data-rating-filter]",
+			)
+			.forEach((control) => {
+				control.checked = false;
+			});
+
+		syncNavigationFilter("category", "all");
+		syncNavigationFilter("platform", "all");
+		syncLocation("category", "all");
+		syncPriceOutput();
+		resetAndRender();
+	};
+
 	root
 		.querySelectorAll<HTMLInputElement>('input[name="product-category"]')
 		.forEach((radio) => {
 			radio.addEventListener("change", () => {
-				if (categorySelect) syncSelectDisplay(categorySelect, radio.value);
-				syncNavigationFilter("category", radio.value);
-				syncLocation("category", radio.value);
-				resetAndRender();
+				selectExclusiveFilter("category", radio.value);
 			});
 		});
 
 	[categorySelect, platformSelect, sortSelect].forEach((control) => {
 		control?.addEventListener("change", () => {
 			if (categorySelect && control === categorySelect) {
-				syncNavigationFilter("category", categorySelect.value);
-				syncLocation("category", categorySelect.value);
+				selectExclusiveFilter("category", categorySelect.value);
+				return;
 			}
+
 			if (platformSelect && control === platformSelect) {
-				syncNavigationFilter("platform", platformSelect.value);
+				selectExclusiveFilter("platform", platformSelect.value);
+				return;
 			}
+
 			resetAndRender();
 		});
 	});
@@ -262,16 +313,7 @@ function initProductsRoot(root: HTMLElement): void {
 			const control = button.dataset.choiceControl;
 			const value = button.dataset.choiceValue;
 			if (!control || !value) return;
-
-			syncNavigationFilter(control, value);
-			if (control === "category" && categorySelect) {
-				syncSelectDisplay(categorySelect, value);
-				syncLocation(control, value);
-			}
-			if (control === "platform" && platformSelect) {
-				syncSelectDisplay(platformSelect, value);
-			}
-			resetAndRender();
+			selectExclusiveFilter(control, value);
 		});
 	});
 
@@ -282,17 +324,11 @@ function initProductsRoot(root: HTMLElement): void {
 			if (!control || !value) return;
 
 			event.preventDefault();
-			syncNavigationFilter(control, value);
-			if (control === "category" && categorySelect) {
-				syncSelectDisplay(categorySelect, value);
-			}
-			if (control === "platform" && platformSelect) {
-				syncSelectDisplay(platformSelect, value);
-			}
-			window.history.pushState({}, "", link.href);
-			resetAndRender();
+			selectExclusiveFilter(control, value);
 		});
 	});
+
+	reset?.addEventListener("click", resetAllFilters);
 
 	[search, range].forEach((control) => {
 		control?.addEventListener("input", () => {
@@ -356,15 +392,22 @@ function initProductsRoot(root: HTMLElement): void {
 			return new URL(link.href, window.location.href).pathname === currentPath;
 		});
 		const value = currentLink?.dataset.choiceValue ?? "all";
-		syncNavigationFilter("category", value);
+
 		if (categorySelect) syncSelectDisplay(categorySelect, value);
+		syncNavigationFilter("category", value);
+
+		if (value !== "all") {
+			if (platformSelect) syncSelectDisplay(platformSelect, "all");
+			syncNavigationFilter("platform", "all");
+		}
+
 		resetAndRender();
 	};
 
 	window.addEventListener("popstate", syncCategoryFromLocation);
 
 	syncCategoryFromLocation();
-	if (platformSelect) {
+	if (platformSelect && categorySelect?.value === "all") {
 		syncNavigationFilter("platform", platformSelect.value);
 	}
 	syncPriceOutput();
