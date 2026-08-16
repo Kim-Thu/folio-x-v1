@@ -1,5 +1,6 @@
 ---
 import CBox from "@/components/object/component/CBox.astro";
+import CButton from "@/components/object/component/CButton.astro";
 import CChoiceGroup from "@/components/object/component/CChoiceGroup.astro";
 import CColumns from "@/components/object/component/CColumns.astro";
 import CFieldset from "@/components/object/component/CFieldset.astro";
@@ -14,6 +15,7 @@ const primaryGroups = [
 	data.license,
 ].filter((group): group is NonNullable<typeof group> => Boolean(group));
 const groups = [...primaryGroups, ...(data.groups ?? [])];
+const showReset = Boolean(data.category && data.platform);
 ---
 
 <CBox surface="glass" radius="md" spacing="md" data-filter-panel>
@@ -21,7 +23,19 @@ const groups = [...primaryGroups, ...(data.groups ?? [])];
 		{groups.map((group) => (
 			<CChoiceGroup {...group} />
 		))}
+
+		{showReset && (
+			<CButton
+				label="Reset all"
+				size="sm"
+				tone="light"
+				variant="text-subtle"
+				data-filter-reset
+			/>
+		)}
+
 		{data.range && <CRange {...data.range} />}
+
 		{data.ratings && (
 			<CFieldset legend={data.ratings.legend} gap="xs">
 				{data.ratings.options.map((rating) => (
@@ -31,7 +45,7 @@ const groups = [...primaryGroups, ...(data.groups ?? [])];
 						maximum={5}
 						name={data.ratings?.name ?? "rating"}
 					/>
-				))}
+			))}
 			</CFieldset>
 		)}
 	</CColumns>
