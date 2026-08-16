@@ -440,7 +440,7 @@ const buildBlogArchive = async (section: BlogArchiveSection): Promise<PageArchiv
 						appearance: result.header.appearance as PSectionHeaderProps["appearance"],
 						headingLevel: result.header.headingLevel as PSectionHeaderProps["headingLevel"],
 					}),
-			},
+				},
 			},
 			cards: buildCardProps(cards, visibleInsights.map((insight) => mapInsightToCard(insight, presentation))),
 			emptyLabel,
@@ -583,7 +583,7 @@ const isHome = "page" in props && props.page.slug === "/";
 				</CColumns>
 			)}
 			{region.component === "status" && <PStatus {...region.props} />}
-			{region.component === "tabs" && <CTabList {...region.props.tabs} />}
+			{region.component === "tabs" && <CTabList {...region.props} />}
 			{region.component === "gallery" && <PGallery {...region.props} />}
 			{region.component === "entry-index" && <PEntryIndex {...region.props} />}
 			{region.component === "reader" && <PReader {...region.props} />}
