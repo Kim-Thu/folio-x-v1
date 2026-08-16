@@ -16,16 +16,18 @@ const { data } = Astro.props as { data: PAdvertisementData };
 	surface="glass-dark"
 	radius="md"
 	position="relative"
-	ratio="square"
+	ratio="portrait"
 	overflow="hidden"
 >
-	<CMedia ratio="natural" placement="background" shape="none">
-		<CImage
-			{...data.image}
-			variant="background-contain"
-			class="object-top"
-		/>
-	</CMedia>
+	<div class="absolute inset-x-0 top-0">
+		<CMedia ratio="square" shape="none">
+			<CImage
+				{...data.image}
+				variant="background-contain"
+				class="object-top"
+			/>
+		</CMedia>
+	</div>
 
 	<CBox
 		position="relative"
