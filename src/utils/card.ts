@@ -144,11 +144,6 @@ export function resolveProjectOverlayCard({
 			separator: projectPresentation?.separator,
 			items: [
 				{
-					type: "index" as const,
-					label: project.number,
-					display: projectPresentation?.metadataDisplay,
-				},
-				{
 					type: "category" as const,
 					label: project.category.toUpperCase(),
 					href: projectPresentation?.routes.categoryBase
@@ -157,9 +152,13 @@ export function resolveProjectOverlayCard({
 					display: projectPresentation?.metadataDisplay,
 				},
 				{
+					type: "author" as const,
+					label: project.author,
+					display: projectPresentation?.metadataDisplay,
+				},
+				{
 					type: "datetime" as const,
-					label: project.year,
-					datetime: project.year,
+					label: `Updated ${project.year}`,
 					display: projectPresentation?.metadataDisplay,
 				},
 			],
