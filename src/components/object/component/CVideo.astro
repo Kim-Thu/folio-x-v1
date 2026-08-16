@@ -1,0 +1,69 @@
+---
+import type { CVideoProps } from "@/types/components/object/component/CVideo.types";
+import { cn } from "@/utils/cn";
+import {
+	videoElementClasses,
+	videoEmbedClasses,
+	videoFrameClasses,
+} from "@/variants/components/object/component/CVideo.variants";
+
+const {
+	src,
+	title,
+	class: className,
+	...attributes
+} = Astro.props as CVideoProps;
+
+const getYouTubeId = (value: string): string | undefined => {
+	try {
+		const url = new URL(value);
+		const hostname = url.hostname.replace(/^www\./, "");
+
+		if (hostname === "youtu.be") {
+			return url.pathname.split("/").filter(Boolean)[0];
+		}
+
+		if (hostname === "youtube.com" || hostname === "m.youtube.com") {
+			if (url.pathname === "/watch") return url.searchParams.get("v") ?? undefined;
+			if (url.pathname.startsWith("/embed/")) return url.pathname.split("/")[2];
+			if (url.pathname.startsWith("/shorts/")) return url.pathname.split("/")[2];
+		}
+	} catch {
+		return undefined;
+	}
+
+	return undefined;
+};
+
+const youtubeId = getYouTubeId(src);
+const embedSrc = youtubeId
+	? `https://www.youtube-nocookie.com/embed/${youtubeId}?rel=0`
+	: undefined;
+---
+
+<div class={cn(videoFrameClasses, className)} data-video>
+	{
+		embedSrc ? (
+			<iframe
+				src={embedSrc}
+				title={title}
+				class={videoEmbedClasses}
+				loading="lazy"
+				allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+				allowfullscreen
+				data-video-embed
+			/>
+		) : src.startsWith("#") ? null : (
+			<video
+				{...attributes}
+				src={src}
+				class={videoElementClasses}
+				controls
+				playsinline
+				preload="metadata"
+				aria-label={title}
+				data-video-file
+			/>
+		)
+	}
+</div>
