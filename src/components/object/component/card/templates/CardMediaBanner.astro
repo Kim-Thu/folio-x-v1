@@ -25,7 +25,7 @@ const {
 	)}
 	<CBox position="relative" class="h-full p-8">
 		<div class="flex h-full flex-col">
-			<CColumns columns="one" gap="sm">
+			<CColumns columns="one" gap="xs">
 				{slots.title && (
 					<CHeading level={headingLevel} variant="h3">
 						<CLink href={data.href}>{data.title.join(" ")}</CLink>
@@ -37,7 +37,7 @@ const {
 			</CColumns>
 
 			{data.action && (
-				<div class="mt-auto pt-8">
+				<div class="mt-auto pt-10">
 					<CButton
 						href={data.action.href}
 						label={data.action.label}
