@@ -22,9 +22,9 @@ const { brand, columns, newsletter, socialLabel, copyright } = Astro.props;
 			<CGridItem lgSpan={3}>
 				<CColumns columns="one" gap="sm">
 					<CLogo {...brand.logo} tone="light" size="lg" />
-					<CText variant="body-sm" tone="on-dark-muted"
-						>{brand.description}</CText
-					>
+					<CText variant="body-sm" tone="on-dark-muted">
+						{brand.description}
+					</CText>
 					<CSocialLinks
 						links={brand.socialLinks}
 						label={socialLabel}
@@ -36,51 +36,48 @@ const { brand, columns, newsletter, socialLabel, copyright } = Astro.props;
 			</CGridItem>
 
 			<CGridItem mdSpan={1} lgSpan={5}>
-				<CColumns columns="compact-three">
-					{
-						columns.map((column) => (
-							<CColumns
-								columns="one"
-								gap="sm"
-								aria-labelledby={`${column.id || column.label}-title`}
+				<CColumns columns="compact-three" align="start">
+					{columns.map((column) => (
+						<CColumns
+							columns="one"
+							gap="sm"
+							align="start"
+							aria-labelledby={`${column.id || column.label}-title`}
+						>
+							<CHeading
+								level={2}
+								variant="footer"
+								id={`${column.id || column.label}-title`}
 							>
-								<CHeading
-									level={2}
-									variant="footer"
-									id={`${column.id || column.label}-title`}
-								>
-									{column.label}
-								</CHeading>
-								<CNavigation label={column.label}>
-									<CMenu items={column.items} variant="footer" tone="dark" />
-								</CNavigation>
-							</CColumns>
-						))
-					}
+								{column.label}
+							</CHeading>
+							<CNavigation label={column.label}>
+								<CMenu items={column.items} variant="footer" tone="dark" />
+							</CNavigation>
+						</CColumns>
+					))}
 				</CColumns>
 			</CGridItem>
 
-			{
-				newsletter && (
-					<CGridItem mdSpan={2} lgSpan={4}>
-						<CColumns columns="one" gap="sm">
-							<CHeading level={2} variant="footer">
-								{newsletter.label}
-							</CHeading>
-							<CText variant="body-sm" tone="on-dark-muted">
-								{newsletter.description}
-							</CText>
-							<CSubscriptionForm
-								formName="newsletter"
-								inputId="footer-newsletter-email"
-								inputLabel={newsletter.inputLabel}
-								placeholder={newsletter.placeholder}
-								submitLabel={newsletter.submitLabel}
-							/>
-						</CColumns>
-					</CGridItem>
-				)
-			}
+			{newsletter && (
+				<CGridItem mdSpan={2} lgSpan={4}>
+					<CColumns columns="one" gap="sm">
+						<CHeading level={2} variant="footer">
+							{newsletter.label}
+						</CHeading>
+						<CText variant="body-sm" tone="on-dark-muted">
+							{newsletter.description}
+						</CText>
+						<CSubscriptionForm
+							formName="newsletter"
+							inputId="footer-newsletter-email"
+							inputLabel={newsletter.inputLabel}
+							placeholder={newsletter.placeholder}
+							submitLabel={newsletter.submitLabel}
+						/>
+					</CColumns>
+				</CGridItem>
+			)}
 		</CColumns>
 	</CBox>
 
