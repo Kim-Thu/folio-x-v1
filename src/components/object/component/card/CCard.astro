@@ -1,6 +1,7 @@
 ---
 import { cCardTemplates } from "@/constants/components/object/component/card/CCard.constants";
 import type {
+	CCardData,
 	CCardProps,
 	CCardSlots,
 } from "@/types/components/object/component/card/CCard.types";
@@ -8,6 +9,7 @@ import type {
 const {
 	template = "stacked",
 	slots,
+	data,
 	...props
 } = Astro.props as CCardProps;
 
@@ -26,4 +28,4 @@ const resolvedSlots = { ...defaultSlots, ...slots };
 const Template = cCardTemplates[template];
 ---
 
-<Template {...props} slots={resolvedSlots} />
+<Template {...props} data={data as CCardData} slots={resolvedSlots} />
