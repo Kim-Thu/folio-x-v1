@@ -53,9 +53,12 @@ export function initSliders(): void {
 		let dragPointerId = -1;
 		let frame = 0;
 
+		const getMaxScrollLeft = () =>
+			Math.max(0, viewport.scrollWidth - viewport.clientWidth);
+
 		const updateCurrent = () => {
 			const activeIndex = getActiveIndex(viewport, slides);
-			const maxScrollLeft = Math.max(0, viewport.scrollWidth - viewport.clientWidth);
+			const maxScrollLeft = getMaxScrollLeft();
 			const atStart = viewport.scrollLeft <= 1;
 			const atEnd = viewport.scrollLeft >= maxScrollLeft - 1;
 
@@ -78,10 +81,9 @@ export function initSliders(): void {
 			const slide = slides[index];
 			if (!slide) return;
 
-			const maxScrollLeft = Math.max(0, viewport.scrollWidth - viewport.clientWidth);
 			const targetLeft = Math.min(
 				Math.max(getSlideScrollLeft(viewport, slide), 0),
-				maxScrollLeft,
+				getMaxScrollLeft(),
 			);
 
 			viewport.scrollTo({
@@ -101,9 +103,9 @@ export function initSliders(): void {
 			if (!autoplay || hoverPaused || dragging || document.hidden) return;
 
 			autoplayTimer = window.setTimeout(() => {
+				const atEnd = viewport.scrollLeft >= getMaxScrollLeft() - 1;
 				const current = getActiveIndex(viewport, slides);
-				const target = current >= slides.length - 1 ? 0 : current + 1;
-				scrollToSlide(target);
+				scrollToSlide(atEnd ? 0 : Math.min(current + 1, slides.length - 1));
 				scheduleAutoplay();
 			}, autoplayInterval);
 		};
