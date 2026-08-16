@@ -315,13 +315,12 @@
         "type": "collection",
         "template": "sidebar",
         "settings": {
-          "theme": "dark",
+          "theme": "light",
           "spacing": "compact",
           "container": "site",
           "columns": 4,
-          "gap": "none",
-          "mediaRatio": "landscape",
-          "separator": "dark"
+          "gap": "sm",
+          "mediaRatio": "landscape"
         },
         "content": {
           "heading": {
@@ -360,7 +359,7 @@
           "cards": {
             "template": "media-caption",
             "columns": 4,
-            "gap": "none",
+            "gap": "sm",
             "mediaRatio": "landscape",
             "headingLevel": 3,
             "slots": {
