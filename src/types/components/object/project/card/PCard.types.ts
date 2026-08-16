@@ -2,7 +2,7 @@ import type { HTMLAttributes } from "astro/types";
 
 import type {
 	CCardConfig,
-	CCardData,
+	CCardItemData,
 } from "@/types/components/object/component/card/CCard.types";
 import type {
 	CSliderBehavior,
@@ -35,7 +35,7 @@ export interface PCardProps extends Omit<HTMLAttributes<"div">, "class"> {
 	separator?: PCardSeparator;
 	slider?: PCardSliderSettings;
 	card?: CCardConfig;
-	items: CCardData[];
+	items: CCardItemData[];
 }
 
 export type PCardTemplateProps = Omit<PCardProps, "template"> & {
