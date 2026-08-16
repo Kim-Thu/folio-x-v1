@@ -7,47 +7,149 @@ import CImage from "@/components/object/component/CImage.astro";
 import CLink from "@/components/object/component/CLink.astro";
 import CMedia from "@/components/object/component/CMedia.astro";
 import CMetadata from "@/components/object/component/CMetadata.astro";
+import CRating from "@/components/object/component/CRating.astro";
+import CRow from "@/components/object/component/CRow.astro";
 import CTags from "@/components/object/component/CTags.astro";
 import CText from "@/components/object/component/CText.astro";
 import type { CCardTemplateProps } from "@/types/components/object/component/card/CCard.types";
+import { getCardSourceContext } from "@/utils/card";
 
-const { data, headingLevel = 3, slots } = Astro.props as CCardTemplateProps;
+const {
+	data,
+	headingLevel = 3,
+	presentation,
+	slots,
+	source,
+} = Astro.props as CCardTemplateProps;
+
+const {
+	item: productSource,
+	presentation: productPresentation,
+} = getCardSourceContext("products", {
+	data,
+	source,
+	presentation,
+});
+
+const product = productSource ?? data.product;
+const href = productSource?.href ?? data.href;
+const title = productSource?.title ?? data.title.join(" ");
+const excerpt = productSource?.description ?? data.excerpt;
+const media = productSource && productPresentation
+	? {
+		src: productSource.image,
+		alt: `${productSource.title}${productPresentation.imageAltSuffix}`,
+		width: productPresentation.imageWidth,
+		height: productPresentation.imageHeight,
+	}
+	: data.media;
+const metadata = productSource
+	? {
+		items: [
+			{
+				type: "category" as const,
+				label: productSource.category,
+				href: productPresentation?.routes.categoryBase
+					? `${productPresentation.routes.categoryBase}${productSource.categorySlug}`
+					: undefined,
+				display: productPresentation?.categoryDisplay,
+			},
+		],
+	}
+	: data.metadata;
+const actionLabel = productSource && productPresentation
+	? `${productPresentation.actionLabelPrefix}${productSource.title}`
+	: data.action?.label;
 const inverse = data.appearance === "inverse";
 ---
 
-<CBox as="article" surface={inverse ? "glass-dark" : "plain"} radius="lg" overflow="hidden">
-	<CColumns columns="two" gap="md">
-		{slots.media && data.media && (
-			<CMedia ratio="video" href={data.href} ariaLabel={data.ariaLabel}>
-				<CImage {...data.media} variant="fill" />
+<CBox
+	as="article"
+	surface={inverse ? "glass-dark" : "plain"}
+	radius="lg"
+	overflow="hidden"
+>
+	<CColumns columns="two" gap="sm" align="stretch">
+		{slots.media && media && (
+			<CMedia ratio="video" href={href} ariaLabel={title} shape="none">
+				<CImage {...media} variant="fill" />
 			</CMedia>
 		)}
-		<CBox spacing="md">
+
+		<CBox spacing="sm">
 			<CColumns columns="one" gap="sm">
-				{slots.metadata && data.metadata && (
-					<CMetadata data={data.metadata} tone={inverse ? "on-dark" : "on-light"} />
-				)}
-				{slots.title && (
-					<CHeading level={headingLevel} variant="h3">
-						<CLink href={data.href}>{data.title.join(" ")}</CLink>
-					</CHeading>
-				)}
-				{slots.excerpt && data.excerpt && (
-					<CText tone={inverse ? "on-dark-muted" : "subtle"}>{data.excerpt}</CText>
-				)}
-				{slots.tags && data.tags && data.tags.length > 0 && (
-					<CTags items={data.tags} label={data.tagsLabel ?? `${data.title.join(" ")} tags`} />
-				)}
-				{slots.action && data.action && (
-					<CButton
-						href={data.action.href}
-						label={data.action.label}
-						icon={data.action.icon}
-						iconPosition={data.action.iconPosition}
-						variant="outline"
-						tone={inverse ? "dark" : "light"}
-						size="sm"
-					/>
+				<CColumns columns="one" gap="xs">
+					{slots.metadata && metadata && (
+						<CMetadata
+							data={metadata}
+							tone={inverse ? "on-dark" : product ? "brand" : "on-light"}
+						/>
+					)}
+
+					{slots.title && (
+						<CHeading level={headingLevel} variant="h3">
+							<CLink href={href}>{title}</CLink>
+						</CHeading>
+					)}
+
+					{slots.excerpt && excerpt && (
+						<CText tone={inverse ? "on-dark-muted" : "subtle"}>
+							{excerpt}
+						</CText>
+					)}
+
+					{slots.tags && data.tags && data.tags.length > 0 && (
+						<CTags
+							items={data.tags}
+							label={data.tagsLabel ?? `${title} tags`}
+						/>
+					)}
+				</CColumns>
+
+				{product ? (
+					<CRow as="footer" justify="between" align="end" gap="md" wrap={false}>
+						<CRow gap="sm" align="baseline" wrap={false}>
+							<CText as="span" variant="price">${product.price}</CText>
+							{product.oldPrice && (
+								<CText as="span" variant="price-old" tone="subtle">
+									${product.oldPrice}
+								</CText>
+							)}
+						</CRow>
+
+						<CRow gap="sm" align="center" justify="end" wrap={false}>
+							{slots.action && actionLabel && (
+								<CButton
+									label={actionLabel}
+									icon="shoppingBag"
+									iconOnly
+									size="sm"
+									tone="light"
+									variant="view"
+									data-cart-button
+									aria-pressed="false"
+								/>
+							)}
+							<CRating
+								style="compact"
+								value={product.rating}
+								maximum={5}
+								count={product.reviews}
+							/>
+						</CRow>
+					</CRow>
+				) : (
+					slots.action && data.action && (
+						<CButton
+							href={data.action.href}
+							label={data.action.label}
+							icon={data.action.icon}
+							iconPosition={data.action.iconPosition}
+							variant="outline"
+							tone={inverse ? "dark" : "light"}
+							size="sm"
+						/>
+					)
 				)}
 			</CColumns>
 		</CBox>
