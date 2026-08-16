@@ -137,8 +137,8 @@ const desktopRatioClasses: Record<NonNullable<CCardTemplateProps["mediaRatio"]>,
 		</CMedia>
 	)}
 
-	<CBox position="relative" class="p-8">
-		<CColumns columns="one" gap="lg">
+	<CBox position="relative" class="h-full p-8">
+		<div class="flex h-full flex-col">
 			<CColumns columns="one" gap="xs">
 				{slots.metadata && metadata && (
 					<CMetadata data={metadata} size="xs" tone={inverse ? "on-dark" : "brand"} />
@@ -162,16 +162,18 @@ const desktopRatioClasses: Record<NonNullable<CCardTemplateProps["mediaRatio"]>,
 			</CColumns>
 
 			{action && (
-				<CButton
-					href={action.href}
-					label={action.label}
-					icon={action.icon}
-					iconPosition={action.iconPosition}
-					variant="outline"
-					tone={inverse ? "dark" : "light"}
-					size="sm"
-				/>
+				<div class="mt-auto pt-10">
+					<CButton
+						href={action.href}
+						label={action.label}
+						icon={action.icon}
+						iconPosition={action.iconPosition}
+						variant="outline"
+						tone={inverse ? "dark" : "light"}
+						size="sm"
+					/>
+				</div>
 			)}
-		</CColumns>
+		</div>
 	</CBox>
 </CBox>
