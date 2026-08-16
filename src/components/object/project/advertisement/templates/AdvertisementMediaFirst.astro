@@ -18,24 +18,27 @@ const { data } = Astro.props as { data: PAdvertisementData };
 			<CImage {...data.image} variant="background-contain" />
 		</CMedia>
 		<CBox spacing="md">
-			<CColumns columns="one" gap="sm">
+			<div class="grid gap-2">
 				<CHeading level={3} variant="h5">{data.title}</CHeading>
 				<CText variant="body-sm" tone="on-dark-muted">
 					{data.description}
 				</CText>
-				{data.form ? (
-					<CSubscriptionForm {...data.form} />
-				) : (
+			</div>
+
+			{data.form ? (
+				<CSubscriptionForm {...data.form} />
+			) : (
+				<div class="pt-8">
 					<CButton
 						href={data.action.href}
 						label={data.action.label}
 						icon={data.action.icon ?? "arrowRight"}
-						size="xs"
+						size="sm"
 						tone="dark"
 						variant="outline"
 					/>
-				)}
-			</CColumns>
+				</div>
+			)}
 		</CBox>
 	</CColumns>
 </CBox>
