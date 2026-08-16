@@ -1,28 +1,28 @@
 {
   "navItems": [
     {
-			"href": "/",
-			"label": "Home"
+      "href": "/",
+      "label": "Home"
     },
     {
-			"href": "/products",
-			"label": "Products"
+      "href": "/products",
+      "label": "Products"
     },
     {
-			"href": "/projects",
-			"label": "Works"
+      "href": "/projects",
+      "label": "Works"
     },
     {
-			"href": "/labs",
-			"label": "Lab"
-		},
-		{
-			"href": "/blog",
-			"label": "Stories"
-		},
-		{
-			"href": "/#about",
-			"label": "About"
+      "href": "/labs",
+      "label": "Lab"
+    },
+    {
+      "href": "/blog",
+      "label": "Stories"
+    },
+    {
+      "href": "/#about",
+      "label": "About"
     }
   ],
   "footerNavItems": [
@@ -55,6 +55,14 @@
     {
       "href": "/blog",
       "label": "Blog & Insights"
+    },
+    {
+      "href": "/novels",
+      "label": "Novels"
+    },
+    {
+      "href": "/comics",
+      "label": "Comics"
     },
     {
       "href": "/#qa",
