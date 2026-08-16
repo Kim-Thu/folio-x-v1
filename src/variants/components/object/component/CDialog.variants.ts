@@ -1,5 +1,5 @@
 export const dialogClasses =
-	"w-11/12 overflow-hidden rounded-2xl bg-black p-0 text-white backdrop:bg-black/70 lg:w-3/4";
+	"m-auto w-11/12 overflow-hidden rounded-2xl bg-black p-0 text-white backdrop:bg-black/70 lg:w-3/4";
 
 export const dialogContentClasses = "relative";
 
