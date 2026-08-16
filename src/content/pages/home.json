@@ -385,6 +385,13 @@
           "mediaRatio": "portrait"
         },
         "content": {
+          "heading": {
+            "number": "05",
+            "title": [
+              "Stories"
+            ],
+            "description": "Truyện tranh và tiểu thuyết."
+          },
           "source": {
             "collection": "publications",
             "limit": 5
