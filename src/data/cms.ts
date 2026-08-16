@@ -57,7 +57,10 @@ export async function getProducts(): Promise<Product[]> {
 	entries.forEach((entry) => assertEntrySlug(entry.id, entry.data.slug, "product"));
 	return entries
 		.sort((a, b) => a.data.id - b.data.id)
-		.map(({ data }) => data);
+		.map(({ data }) => ({
+			...data,
+			href: `/products/${data.slug}`,
+		}));
 }
 
 export async function getProductCategories(): Promise<ReadonlyArray<{ value: string; label: string }>> {
@@ -106,7 +109,13 @@ export async function getPublications(collection: "comics" | "novels"): Promise<
 	const entries = await getCollection(collection);
 	assertUnique(entries.map((entry) => entry.data.order), `${collection} order`);
 	entries.forEach((entry) => assertEntrySlug(entry.id, entry.data.slug, collection.slice(0, -1)));
-	return entries.sort((a, b) => a.data.order - b.data.order).map(({ data }) => data);
+	return entries
+		.sort((a, b) => a.data.order - b.data.order)
+		.map(({ data }) => ({
+			...data,
+			href: `/${collection}/${data.slug}`,
+			catalog: collection,
+		}));
 }
 
 function assertEntrySlug(id: string, slug: string, contentType: string): void {
