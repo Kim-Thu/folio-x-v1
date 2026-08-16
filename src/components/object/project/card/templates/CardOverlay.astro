@@ -10,18 +10,30 @@ import CMetadata from "@/components/object/component/CMetadata.astro";
 import CTags from "@/components/object/component/CTags.astro";
 import CText from "@/components/object/component/CText.astro";
 import type { PCardItemProps } from "@/types/components/object/project/card/PCard.types";
+import { cn } from "@/utils/cn";
 
 const { data, headingLevel = 3, index, mediaRatio = "natural", slots } =
 	Astro.props as PCardItemProps;
 const inverse = data.appearance === "inverse";
+
+const desktopRatioClasses: Record<NonNullable<PCardItemProps["mediaRatio"]>, string> = {
+	editorial: "lg:aspect-video",
+	landscape: "lg:aspect-4/3",
+	natural: "",
+	panoramic: "lg:aspect-3/1",
+	portrait: "lg:aspect-2/3",
+	square: "lg:aspect-square",
+	video: "lg:aspect-video",
+};
 ---
 
 <CBox
 	as="article"
-	class="h-full"
+	class={cn("h-full", desktopRatioClasses[mediaRatio])}
+	surface={inverse ? "dark" : "plain"}
 	radius="lg"
 	position="relative"
-	ratio={mediaRatio}
+	ratio="natural"
 	overflow="hidden"
 	data-tab-card={data.filterValue ? "" : undefined}
 	data-filter-category={data.filterValue}
@@ -38,7 +50,16 @@ const inverse = data.appearance === "inverse";
 			<CImage {...data.media} variant="fill" />
 		</CMedia>
 	)}
-	<CBox position="relative" spacing="lg">
+
+	<CBox
+		position="overlay"
+		class={inverse
+			? "bg-linear-to-b from-black/80 via-black/45 to-transparent"
+			: "bg-linear-to-b from-white/90 via-white/60 to-transparent"}
+		aria-hidden="true"
+	/>
+
+	<CBox position="relative" spacing="lg" class="z-20">
 		<CColumns columns="one" gap="sm">
 			{slots.metadata && data.metadata && (
 				<CMetadata data={data.metadata} size="xs" tone={inverse ? "on-dark" : "brand"} />
