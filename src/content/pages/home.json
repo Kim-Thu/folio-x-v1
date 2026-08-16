@@ -390,7 +390,12 @@
             "title": [
               "Stories"
             ],
-            "description": "Truyện tranh và tiểu thuyết."
+            "description": "Truyện tranh và tiểu thuyết.",
+            "action": {
+              "href": "/comics",
+              "label": "Xem tất cả",
+              "icon": "arrowRight"
+            }
           },
           "source": {
             "collection": "publications",
