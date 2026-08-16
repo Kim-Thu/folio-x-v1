@@ -131,6 +131,27 @@ const getTwelveColumnSpan = (size: PCardProps["items"][number]["size"]) =>
 				</CGridItem>
 			)}
 		</>
+	) : layout === "asymmetric" && items.length === 2 ? (
+		<>
+			<CGridItem lgSpan={7} align="stretch">
+				<CardTemplate
+					data={items[0]}
+					headingLevel={headingLevel}
+					index={0}
+					{mediaRatio}
+					slots={resolvedSlots}
+				/>
+			</CGridItem>
+			<CGridItem lgSpan={5} align="center">
+				<CardTemplate
+					data={items[1]}
+					headingLevel={headingLevel}
+					index={1}
+					{mediaRatio}
+					slots={resolvedSlots}
+				/>
+			</CGridItem>
+		</>
 	) : layout === "asymmetric" ? (
 		<>
 			{asymmetricRows.map((row) => (
