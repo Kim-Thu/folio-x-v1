@@ -1,4 +1,8 @@
 import type { productEntrySchema } from "@/content/schemas";
 import type { z } from "astro/zod";
 
-export type Product = z.infer<typeof productEntrySchema>;
+type ProductEntry = z.infer<typeof productEntrySchema>;
+
+export type Product = ProductEntry & {
+	href: string;
+};
