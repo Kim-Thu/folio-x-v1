@@ -37,7 +37,10 @@ export async function getPage(slug: string): Promise<CollectionEntry<"pages">["d
 }
 
 export async function getProjects(): Promise<Project[]> {
-	const entries = await getCollection("projects");
+	const [entries, siteSettings] = await Promise.all([
+		getCollection("projects"),
+		getSiteSettings(),
+	]);
 	assertUnique(entries.map((entry) => entry.data.order), "project order");
 	entries.forEach((entry) => assertEntrySlug(entry.id, entry.data.slug, "project"));
 
@@ -45,6 +48,7 @@ export async function getProjects(): Promise<Project[]> {
 		.sort((a, b) => a.data.order - b.data.order)
 		.map(({ data }, index) => ({
 			...data,
+			author: siteSettings.site.name,
 			number: String(index + 1).padStart(2, "0"),
 			href: `/projects/${data.slug}`,
 		}));
