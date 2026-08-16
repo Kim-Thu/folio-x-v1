@@ -4,7 +4,12 @@ import CLink from "@/components/object/component/CLink.astro";
 import CList from "@/components/object/component/CList.astro";
 import type { CTagsProps } from "@/types/components/object/component/CTags.types";
 
-const { items, label } = Astro.props as CTagsProps;
+const {
+	appearance = "solid",
+	items,
+	label,
+	tone = "neutral",
+} = Astro.props as CTagsProps;
 ---
 
 <CList aria-label={label} gap="xs">
@@ -12,10 +17,10 @@ const { items, label } = Astro.props as CTagsProps;
 		<li>
 			{item.href ? (
 				<CLink href={item.href}>
-					<CBadge tone="neutral">{item.label}</CBadge>
+					<CBadge {appearance} {tone}>{item.label}</CBadge>
 				</CLink>
 			) : (
-				<CBadge tone="neutral">{item.label}</CBadge>
+				<CBadge {appearance} {tone}>{item.label}</CBadge>
 			)}
 		</li>
 	))}
