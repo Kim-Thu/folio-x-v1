@@ -40,20 +40,6 @@ import {
 	getProjects,
 	getPublications,
 } from "@/data/cms";
-import {
-	mapInsightToCard,
-	mapLabToCard,
-	mapProductToCard,
-	mapProjectToCard,
-	mapPublicationToCard,
-} from "@/data/mappers/card";
-import type {
-	InsightCardPresentation,
-	LabCardPresentation,
-	ProductCardPresentation,
-	ProjectCardPresentation,
-	PublicationCardPresentation,
-} from "@/data/mappers/card";
 import type {
 	PageBuilderProps,
 	PageSectionData,
@@ -61,7 +47,13 @@ import type {
 import type { PageArchiveRegion } from "@/types/components/object/project/page/PageArchiveRegion.types";
 import type { PageRegion } from "@/types/components/object/project/page/PageRegion.types";
 import type { CIconName } from "@/types/components/object/component/CIcon.types";
-import type { CCardConfig, CCardData } from "@/types/components/object/component/card/CCard.types";
+import type {
+	CCardConfig,
+	CCardItemData,
+	CCardPresentation,
+	CCardSource,
+	InsightCardPresentation,
+} from "@/types/components/object/component/card/CCard.types";
 import type { PAdvertisementData } from "@/types/components/object/project/advertisement/PAdvertisement.types";
 import type { PCardProps } from "@/types/components/object/project/card/PCard.types";
 import type { PFilterChoiceGroupData } from "@/types/components/object/project/filter-panel/PFilterPanel.types";
@@ -93,6 +85,12 @@ type ProductsArchiveSection = Omit<ArchiveSection, "content"> & { content: Produ
 type BlogArchiveSection = Omit<ArchiveSection, "content"> & { content: BlogArchiveContent };
 type RawCardConfig = NonNullable<CollectionSection["content"]["cards"]>;
 type RawSectionSettings = CollectionSection["settings"];
+
+type ResolvedCollectionItems = {
+	items: CCardItemData[];
+	source: CCardSource;
+	presentation?: CCardPresentation;
+};
 
 type HeroRegionProps = Extract<PageRegion, { component: "hero" }>["props"];
 type PageHeaderRegionProps = Extract<PageRegion, { component: "page-header" }>["props"];
@@ -130,8 +128,10 @@ const resolvePCardTemplate = (
 
 const buildCardProps = (
 	cards: RawCardConfig | undefined,
-	items: CCardData[],
+	items: CCardItemData[],
 	defaults?: RawSectionSettings,
+	source: CCardSource = "static",
+	presentation?: CCardPresentation,
 ): PCardProps => ({
 	template: resolvePCardTemplate(cards?.layout ?? defaults?.layout),
 	columns: (cards?.columns ?? defaults?.columns) as PCardProps["columns"],
@@ -142,57 +142,89 @@ const buildCardProps = (
 		mediaRatio: (cards?.mediaRatio ?? defaults?.mediaRatio) as CCardConfig["mediaRatio"],
 		headingLevel: cards?.headingLevel as CCardConfig["headingLevel"],
 		slots: cards?.slots as CCardConfig["slots"],
+		source,
+		presentation,
 	},
 	items,
 });
 
-const cardConfig = (section: CollectionSection, items: CCardData[]): PCardProps =>
-	buildCardProps(section.content.cards, items, section.settings);
+const cardConfig = (
+	section: CollectionSection,
+	resolved: ResolvedCollectionItems,
+): PCardProps =>
+	buildCardProps(
+		section.content.cards,
+		resolved.items,
+		section.settings,
+		resolved.source,
+		resolved.presentation,
+	);
 
 const take = <T,>(items: T[], limit?: number) =>
 	limit === undefined ? items : items.slice(0, limit);
 
-const resolveCollectionItems = async (section: CollectionSection): Promise<CCardData[]> => {
+const resolveCollectionItems = async (
+	section: CollectionSection,
+): Promise<ResolvedCollectionItems> => {
 	const content = section.content;
-	if ("items" in content) return content.items as unknown as CCardData[];
-	if (!("source" in content)) return [];
+	if ("items" in content) {
+		return {
+			items: content.items as unknown as CCardItemData[],
+			source: "static",
+		};
+	}
+	if (!("source" in content)) {
+		return { items: [], source: "static" };
+	}
 
 	switch (content.source.collection) {
 		case "products": {
 			const typed = content as ProductsCollectionContent;
-			return take(await getProducts(), typed.source.limit).map((item) =>
-				mapProductToCard(item, typed.itemPresentation as ProductCardPresentation),
-			);
+			return {
+				items: take(await getProducts(), typed.source.limit),
+				source: "products",
+				presentation: typed.itemPresentation as CCardPresentation,
+			};
 		}
 		case "projects": {
 			const typed = content as ProjectsCollectionContent;
-			return take(await getProjects(), typed.source.limit).map((item) =>
-				mapProjectToCard(item, typed.itemPresentation as ProjectCardPresentation),
-			);
+			return {
+				items: take(await getProjects(), typed.source.limit),
+				source: "projects",
+				presentation: typed.itemPresentation as CCardPresentation,
+			};
 		}
 		case "labs": {
 			const typed = content as LabsCollectionContent;
-			return take(await getLabs(), typed.source.limit).map((item) =>
-				mapLabToCard(item, typed.itemPresentation as LabCardPresentation),
-			);
+			return {
+				items: take(await getLabs(), typed.source.limit),
+				source: "labs",
+				presentation: typed.itemPresentation as CCardPresentation,
+			};
 		}
 		case "blog": {
 			const typed = content as BlogCollectionContent;
-			return take(await getInsights(), typed.source.limit).map((item) =>
-				mapInsightToCard(item, typed.itemPresentation as InsightCardPresentation),
-			);
+			return {
+				items: take(await getInsights(), typed.source.limit),
+				source: "blog",
+				presentation: typed.itemPresentation as CCardPresentation,
+			};
 		}
 		case "comics": {
 			const typed = content as ComicsCollectionContent;
-			return take(await getPublications("comics"), typed.source.limit).map((item) =>
-				mapPublicationToCard(item, "comics", typed.itemPresentation as PublicationCardPresentation),
-			);
+			return {
+				items: take(await getPublications("comics"), typed.source.limit),
+				source: "comics",
+				presentation: typed.itemPresentation as CCardPresentation,
+			};
 		}
 		case "novels": {
 			const typed = content as NovelsCollectionContent;
-			return take(await getPublications("novels"), typed.source.limit).map((item) =>
-				mapPublicationToCard(item, "novels", typed.itemPresentation as PublicationCardPresentation),
-			);
+			return {
+				items: take(await getPublications("novels"), typed.source.limit),
+				source: "novels",
+				presentation: typed.itemPresentation as CCardPresentation,
+			};
 		}
 		case "publications": {
 			const typed = content as PublicationsCollectionContent;
@@ -200,10 +232,11 @@ const resolveCollectionItems = async (section: CollectionSection): Promise<CCard
 				getPublications("novels"),
 				getPublications("comics"),
 			]);
-			return take([
-				...novels.map((item) => mapPublicationToCard(item, "novels", typed.itemPresentation.novels as PublicationCardPresentation)),
-				...comics.map((item) => mapPublicationToCard(item, "comics", typed.itemPresentation.comics as PublicationCardPresentation)),
-			], typed.source.limit);
+			return {
+				items: take([...novels, ...comics], typed.source.limit),
+				source: "publications",
+				presentation: typed.itemPresentation as CCardPresentation,
+			};
 		}
 	}
 };
@@ -235,7 +268,10 @@ const buildProjectsArchive = async (section: ProjectsArchiveSection): Promise<Pa
 			} },
 			cards: buildCardProps(
 				cards,
-				visibleProjects.map((project) => mapProjectToCard(project, itemPresentation as ProjectCardPresentation)),
+				visibleProjects,
+				undefined,
+				"projects",
+				itemPresentation as CCardPresentation,
 			),
 			emptyLabel,
 			pagination: { ...pagination, totalPages: Math.max(1, Math.ceil(visibleProjects.length / pagination.pageSize)) },
@@ -281,7 +317,10 @@ const buildLabsArchive = async (section: LabsArchiveSection): Promise<PageArchiv
 			result: { count: visibleLabs.length, label: resultLabel },
 			cards: buildCardProps(
 				cards,
-				visibleLabs.map((lab) => mapLabToCard(lab, itemPresentation as LabCardPresentation)),
+				visibleLabs,
+				undefined,
+				"labs",
+				itemPresentation as CCardPresentation,
 			),
 			emptyLabel,
 			pagination: { ...pagination, totalPages: Math.max(1, Math.ceil(visibleLabs.length / pagination.pageSize)) },
@@ -341,7 +380,10 @@ const buildProductsArchive = async (section: ProductsArchiveSection): Promise<Pa
 			result: { count: visibleProducts.length, label: result.label },
 			cards: buildCardProps(
 				cards,
-				visibleProducts.map((product) => mapProductToCard(product, itemPresentation as ProductCardPresentation)),
+				visibleProducts,
+				undefined,
+				"products",
+				itemPresentation as CCardPresentation,
 			),
 			emptyLabel,
 			pagination: { ...pagination, totalPages: Math.max(1, Math.ceil(visibleProducts.length / pagination.pageSize)) },
@@ -429,7 +471,10 @@ const buildBlogArchive = async (section: BlogArchiveSection): Promise<PageArchiv
 				},
 				cards: buildCardProps(
 					sidebar.featured.cards,
-					insights.slice(0, sidebar.featured.limit).map((insight) => mapInsightToCard(insight, presentation)),
+					insights.slice(0, sidebar.featured.limit),
+					undefined,
+					"blog",
+					presentation,
 				),
 				advertisement: { template: sidebar.newsletter.template, data: newsletter },
 			},
@@ -442,7 +487,13 @@ const buildBlogArchive = async (section: BlogArchiveSection): Promise<PageArchiv
 					}),
 				},
 			},
-			cards: buildCardProps(cards, visibleInsights.map((insight) => mapInsightToCard(insight, presentation))),
+			cards: buildCardProps(
+				cards,
+				visibleInsights,
+				undefined,
+				"blog",
+				presentation,
+			),
 			emptyLabel,
 			pagination: { ...pagination, totalPages: Math.max(1, Math.ceil(visibleInsights.length / pagination.pageSize)) },
 		},
@@ -461,8 +512,8 @@ const regions: PageRegion[] = "regions" in props ? props.regions : await Promise
 		case "cta":
 			return { key: section.id, component: "cta", section: frame, props: { template: section.template, data: section.content } as unknown as CtaRegionProps };
 		case "collection": {
-			const items = await resolveCollectionItems(section);
-			return { key: section.id, component: "collection", section: frame, props: { template: section.template as "stack" | "split" | undefined, header: sectionHeader(section), cardGroups: [cardConfig(section, items)] } };
+			const resolved = await resolveCollectionItems(section);
+			return { key: section.id, component: "collection", section: frame, props: { template: section.template as "stack" | "split" | undefined, header: sectionHeader(section), cardGroups: [cardConfig(section, resolved)] } };
 		}
 		case "archive": {
 			const archiveContent = section.content;
