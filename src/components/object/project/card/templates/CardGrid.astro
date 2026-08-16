@@ -19,6 +19,8 @@ const {
 
 const resolvedColumns = pCardTemplateColumnDefaults[template] ?? columns;
 const cardConfig = card ?? {};
+const supportsProductViewSwitch =
+	cardConfig.source === "products" && cardConfig.template === "media-details";
 ---
 
 <CColumns
@@ -27,10 +29,26 @@ const cardConfig = card ?? {};
 	{gap}
 	{separator}
 	data-card-collection
-	data-product-grid={cardConfig.template === "media-details" ? "" : undefined}
+	data-product-grid={supportsProductViewSwitch ? "" : undefined}
 	data-view="grid"
 >
 	{items.map((item, index) => (
-		<CCard {...cardConfig} data={item} index={index} />
+		supportsProductViewSwitch ? (
+			<div data-product-item>
+				<div data-card-view="grid">
+					<CCard {...cardConfig} data={item} index={index} />
+				</div>
+				<div data-card-view="list" hidden>
+					<CCard
+						{...cardConfig}
+						template="horizontal"
+						data={item}
+						index={index}
+					/>
+				</div>
+			</div>
+		) : (
+			<CCard {...cardConfig} data={item} index={index} />
+		)
 	))}
 </CColumns>
