@@ -48,7 +48,7 @@ const headingId = `${data.id}-title`;
 		</CGridItem>
 
 		<CGridItem lgSpan={3}>
-		<CColumns columns="one" gap="sm" align="end">
+		<CColumns columns="one" gap="sm" align="start" class="lg:items-end">
 			{
 				data.action && (
 					<CButton
@@ -63,7 +63,7 @@ const headingId = `${data.id}-title`;
 			}
 			{
 				data.price && (
-					<CRow align="baseline" justify="end" gap="xs">
+					<CRow align="baseline" justify="start" gap="xs" class="lg:justify-end">
 						<CText as="span" variant="price">{data.price.current}</CText>
 						<CText as="small" variant="caption" tone="subtle">
 							{data.price.period}
