@@ -97,7 +97,7 @@
             },
             "actionLabel": "Xem case study",
             "actionIcon": "arrowUpRight",
-            "separator": "",
+            "separator": "·",
             "size": "standard",
             "tagsLabel": "Project tag",
             "lightAppearance": "default",
