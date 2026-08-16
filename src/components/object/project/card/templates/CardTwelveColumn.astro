@@ -2,6 +2,7 @@
 import CCard from "@/components/object/component/card/CCard.astro";
 import CColumns from "@/components/object/component/CColumns.astro";
 import CGridItem from "@/components/object/component/CGridItem.astro";
+import type { CCardItemData, CCardItemSize } from "@/types/components/object/component/card/CCard.types";
 import type { PCardTemplateProps } from "@/types/components/object/project/card/PCard.types";
 
 const {
@@ -13,8 +14,10 @@ const {
 } = Astro.props as PCardTemplateProps;
 
 const cardConfig = card ?? {};
-const getSpan = (size: PCardTemplateProps["items"][number]["size"]) =>
-	size === "wide" ? 6 : 3;
+const getSize = (item: CCardItemData): CCardItemSize | undefined =>
+	"size" in item ? item.size : undefined;
+const getSpan = (item: CCardItemData) =>
+	getSize(item) === "wide" ? 6 : 3;
 ---
 
 <CColumns
@@ -27,7 +30,7 @@ const getSpan = (size: PCardTemplateProps["items"][number]["size"]) =>
 	data-view="grid"
 >
 	{items.map((item, index) => (
-		<CGridItem lgSpan={getSpan(item.size)}>
+		<CGridItem lgSpan={getSpan(item)}>
 			<CCard {...cardConfig} data={item} index={index} />
 		</CGridItem>
 	))}
