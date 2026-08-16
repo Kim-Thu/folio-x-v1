@@ -41,10 +41,6 @@
     {
       "href": "/blog",
       "label": "Blog & Insights"
-    },
-    {
-      "href": "/#qa",
-      "label": "Q&A"
     }
   ],
   "resourceLinks": [
@@ -63,10 +59,6 @@
     {
       "href": "/comics",
       "label": "Comics"
-    },
-    {
-      "href": "/#qa",
-      "label": "Q&A"
     }
   ],
   "legalLinks": [
