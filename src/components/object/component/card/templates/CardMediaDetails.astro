@@ -11,10 +11,55 @@ import CMetadata from "@/components/object/component/CMetadata.astro";
 import CRating from "@/components/object/component/CRating.astro";
 import CRow from "@/components/object/component/CRow.astro";
 import CText from "@/components/object/component/CText.astro";
-import type { CCardTemplateProps } from "@/types/components/object/component/card/CCard.types";
+import type {
+	CCardTemplateProps,
+	ProductCardPresentation,
+} from "@/types/components/object/component/card/CCard.types";
+import type { Product } from "@/types/content";
 
-const { data, headingLevel = 3, index, slots } = Astro.props as CCardTemplateProps;
-const product = data.product;
+const {
+	data,
+	headingLevel = 3,
+	index,
+	presentation,
+	slots,
+	source,
+} = Astro.props as CCardTemplateProps;
+
+const productSource = source === "products" ? data as unknown as Product : undefined;
+const productPresentation = productSource
+	? presentation as ProductCardPresentation | undefined
+	: undefined;
+const product = productSource ?? data.product;
+const href = productSource?.href ?? data.href;
+const title = productSource?.title ?? data.title.join(" ");
+const excerpt = productSource?.description ?? data.excerpt;
+const media = productSource && productPresentation
+	? {
+		src: productSource.image,
+		alt: `${productSource.title}${productPresentation.imageAltSuffix}`,
+		width: productPresentation.imageWidth,
+		height: productPresentation.imageHeight,
+	}
+	: data.media;
+const metadata = productSource
+	? {
+		items: [
+			{
+				type: "category" as const,
+				label: productSource.category,
+				href: productPresentation?.routes.categoryBase
+					? `${productPresentation.routes.categoryBase}${productSource.categorySlug}`
+					: undefined,
+				display: productPresentation?.categoryDisplay,
+			},
+		],
+	}
+	: data.metadata;
+const actionLabel = productSource && productPresentation
+	? `${productPresentation.actionLabelPrefix}${productSource.title}`
+	: data.action?.label;
+const license = productSource ? productPresentation?.license : data.product?.license;
 ---
 
 {product && (
@@ -24,43 +69,53 @@ const product = data.product;
 		radius="md"
 		overflow="hidden"
 		data-product-card
-		data-title={data.title.join(" ").toLowerCase()}
+		data-title={title.toLowerCase()}
 		data-filter-category={product.categorySlug}
-		data-license={product.license}
+		data-license={license}
 		data-platform={product.platform}
 		data-price={product.price}
 		data-rating={product.rating}
 		data-sort-index={index}
 	>
-		{slots.media && data.media && (
-			<CMedia ratio="editorial" href={data.href} ariaLabel={data.ariaLabel}>
-				<CImage {...data.media} variant="fill" />
+		{slots.media && media && (
+			<CMedia ratio="editorial" href={href} ariaLabel={title}>
+				<CImage {...media} variant="fill" />
 				{product.badge && <CBadge placement="top-end">{product.badge}</CBadge>}
 			</CMedia>
 		)}
+
 		<CBox spacing="xs">
 			<CColumns columns="one" gap="none" class="gap-10">
 				<CColumns columns="one" gap="xs">
-					{slots.metadata && data.metadata && (
-						<CMetadata data={data.metadata} slots={{ icons: false }} tone="brand" />
+					{slots.metadata && metadata && (
+						<CMetadata data={metadata} slots={{ icons: false }} tone="brand" />
 					)}
+
 					{slots.title && (
 						<CHeading level={headingLevel} variant="h4">
-							<CLink href={data.href}>{data.title.join(" ")}</CLink>
+							<CLink href={href}>{title}</CLink>
 						</CHeading>
 					)}
-					{slots.excerpt && data.excerpt && <CText variant="body-sm" tone="subtle">{data.excerpt}</CText>}
+
+					{slots.excerpt && excerpt && (
+						<CText variant="body-sm" tone="subtle">{excerpt}</CText>
+					)}
 				</CColumns>
 
 				<CRow as="footer" justify="between" align="end" gap="md" wrap={false}>
 					<CRow gap="sm" align="baseline" wrap={false}>
 						<CText as="span" variant="price">${product.price}</CText>
-						{product.oldPrice && <CText as="span" variant="price-old" tone="subtle">${product.oldPrice}</CText>}
+						{product.oldPrice && (
+							<CText as="span" variant="price-old" tone="subtle">
+								${product.oldPrice}
+							</CText>
+						)}
 					</CRow>
+
 					<CRow gap="sm" align="center" justify="end" wrap={false}>
-						{slots.action && data.action && (
+						{slots.action && actionLabel && (
 							<CButton
-								label={data.action.label}
+								label={actionLabel}
 								icon="shoppingBag"
 								iconOnly
 								size="sm"
