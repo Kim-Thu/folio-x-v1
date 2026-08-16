@@ -43,7 +43,7 @@ const desktopRatioClasses: Record<NonNullable<CCardTemplateProps["mediaRatio"]>,
 <CBox
 	as="article"
 	class={cn("h-full", desktopRatioClasses[mediaRatio])}
-	surface={card.inverse ? "dark" : "plain"}
+	surface="dark"
 	radius="lg"
 	position="relative"
 	ratio="natural"
@@ -66,19 +66,14 @@ const desktopRatioClasses: Record<NonNullable<CCardTemplateProps["mediaRatio"]>,
 
 	<CBox position="relative" class="h-full p-4">
 		<div class="flex h-full flex-col">
-			<CBox
-				surface={card.inverse ? "glass-dark" : "glass"}
-				radius="md"
-				spacing="sm"
-				class="w-full md:w-4/5"
-			>
+			<div class="w-full md:w-4/5">
 				<CColumns columns="one" gap="sm">
 					<CColumns columns="one" gap="xs">
 						{slots.metadata && card.metadata && (
 							<CMetadata
 								data={card.metadata}
 								size="caption"
-								tone={card.inverse ? "on-dark" : "on-light"}
+								tone="on-dark"
 							/>
 						)}
 
@@ -89,10 +84,7 @@ const desktopRatioClasses: Record<NonNullable<CCardTemplateProps["mediaRatio"]>,
 						)}
 
 						{slots.excerpt && card.excerpt && (
-							<CText
-								variant="body-sm"
-								tone={card.inverse ? "on-dark-muted" : "muted"}
-							>
+							<CText variant="body-sm" tone="on-dark">
 								{card.excerpt}
 							</CText>
 						)}
@@ -103,11 +95,11 @@ const desktopRatioClasses: Record<NonNullable<CCardTemplateProps["mediaRatio"]>,
 							appearance="outline"
 							items={card.tags}
 							label={card.tagsLabel ?? `${card.title} tags`}
-							tone={card.inverse ? "inverse" : "neutral"}
+							tone="inverse"
 						/>
 					)}
 				</CColumns>
-			</CBox>
+			</div>
 
 			{card.action && (
 				<div class="mt-auto pt-8">
@@ -117,7 +109,7 @@ const desktopRatioClasses: Record<NonNullable<CCardTemplateProps["mediaRatio"]>,
 						icon={card.action.icon}
 						iconPosition={card.action.iconPosition}
 						variant="outline"
-						tone={card.inverse ? "dark" : "light"}
+						tone="dark"
 						size="sm"
 					/>
 				</div>
