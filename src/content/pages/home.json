@@ -377,10 +377,11 @@
         "template": "cards",
         "settings": {
           "theme": "light",
-          "spacing": "none",
-          "container": "none",
+          "spacing": "compact",
+          "container": "site",
+          "layout": "asymmetric",
           "columns": 2,
-          "gap": "none",
+          "gap": "sm",
           "mediaRatio": "panoramic"
         },
         "content": {
@@ -412,8 +413,9 @@
           },
           "cards": {
             "template": "media-banner",
+            "layout": "asymmetric",
             "columns": 2,
-            "gap": "none",
+            "gap": "sm",
             "mediaRatio": "panoramic",
             "headingLevel": 2,
             "slots": {
