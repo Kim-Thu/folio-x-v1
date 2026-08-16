@@ -21,6 +21,9 @@ function initProductsRoot(root: HTMLElement): void {
 	const previous =
 		root.querySelector<HTMLButtonElement>("[data-page-previous]");
 	const next = root.querySelector<HTMLButtonElement>("[data-page-next]");
+	const navigationFilters = Array.from(
+		root.querySelectorAll<HTMLButtonElement>("[data-choice-filter]"),
+	);
 	const pageSize = 9;
 	let currentPage = 1;
 
@@ -44,6 +47,13 @@ function initProductsRoot(root: HTMLElement): void {
 			(item) => item.value,
 		);
 
+	const selectedNavigationValue = (control: string): string | undefined =>
+		navigationFilters.find(
+			(button) =>
+				button.dataset.choiceControl === control &&
+				button.getAttribute("aria-pressed") === "true",
+		)?.dataset.choiceValue;
+
 	const syncSelectDisplay = (
 		select: HTMLSelectElement,
 		value: string,
@@ -59,6 +69,17 @@ function initProductsRoot(root: HTMLElement): void {
 			?.querySelectorAll<HTMLElement>("[data-select-option]")
 			.forEach((item) => {
 				item.setAttribute("aria-selected", String(item === option));
+			});
+	};
+
+	const syncNavigationFilter = (control: string, value: string): void => {
+		navigationFilters
+			.filter((button) => button.dataset.choiceControl === control)
+			.forEach((button) => {
+				button.setAttribute(
+					"aria-pressed",
+					String(button.dataset.choiceValue === value),
+				);
 			});
 	};
 
@@ -98,7 +119,8 @@ function initProductsRoot(root: HTMLElement): void {
 		const selectedRatings = selectedValues("[data-rating-filter]:checked").map(
 			Number,
 		);
-		const toolbarPlatform = platformSelect?.value ?? "all";
+		const toolbarPlatform =
+			platformSelect?.value ?? selectedNavigationValue("platform") ?? "all";
 		const maxPrice = Number(range?.value ?? 69);
 
 		const visible = cards.filter((card) => {
@@ -196,6 +218,23 @@ function initProductsRoot(root: HTMLElement): void {
 				);
 				if (matchingRadio) matchingRadio.checked = true;
 			}
+			if (platformSelect && control === platformSelect) {
+				syncNavigationFilter("platform", platformSelect.value);
+			}
+			resetAndRender();
+		});
+	});
+
+	navigationFilters.forEach((button) => {
+		button.addEventListener("click", () => {
+			const control = button.dataset.choiceControl;
+			const value = button.dataset.choiceValue;
+			if (!control || !value) return;
+
+			syncNavigationFilter(control, value);
+			if (control === "platform" && platformSelect) {
+				syncSelectDisplay(platformSelect, value);
+			}
 			resetAndRender();
 		});
 	});
@@ -255,6 +294,9 @@ function initProductsRoot(root: HTMLElement): void {
 		render();
 	});
 
+	if (platformSelect) {
+		syncNavigationFilter("platform", platformSelect.value);
+	}
 	syncPriceOutput();
 	applyView("grid");
 	render();
