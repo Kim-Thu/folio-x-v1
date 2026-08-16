@@ -3,6 +3,8 @@ import { mapInsightToCard } from "@/data/mappers/card";
 import type { PageRegion } from "@/types/components/object/project/page/PageRegion.types";
 import type { InsightDetailPageData } from "@/types/components/pages/insight-detail/InsightDetailPage.types";
 import type { PPageHeaderEditorialData } from "@/types/components/object/project/page-header/PPageHeader.types";
+import type { CCardConfig } from "@/types/components/object/component/card/CCard.types";
+import type { PCardProps } from "@/types/components/object/project/card/PCard.types";
 
 export async function getInsightDetailPaths() {
 	const insights = await getInsights();
@@ -100,6 +102,18 @@ export async function getInsightDetailPageData(
 		}),
 	);
 
+	const relatedCardConfig = sidebar.relatedCards.card;
+	const relatedPCard: PCardProps = {
+		template: (relatedCardConfig.layout === "carousel" ? "slider" : relatedCardConfig.layout) as PCardProps["template"],
+		columns: relatedCardConfig.columns as PCardProps["columns"],
+		gap: relatedCardConfig.gap as PCardProps["gap"],
+		card: {
+			template: relatedCardConfig.template as CCardConfig["template"],
+			slots: relatedCardConfig.slots as CCardConfig["slots"],
+		},
+		items: relatedCards,
+	};
+
 	const nestedRegions: PageRegion[] = [
 		{
 			key: "author-profile",
@@ -152,14 +166,7 @@ export async function getInsightDetailPageData(
 								appearance: sidebar.relatedCards.heading.appearance,
 								headingLevel: sidebar.relatedCards.heading.level,
 							},
-							cards: {
-								template: sidebar.relatedCards.card.template,
-								layout: sidebar.relatedCards.card.layout,
-								columns: sidebar.relatedCards.card.columns,
-								gap: sidebar.relatedCards.card.gap,
-								items: relatedCards,
-								slots: sidebar.relatedCards.card.slots,
-							},
+							cards: relatedPCard,
 						},
 					},
 				]
