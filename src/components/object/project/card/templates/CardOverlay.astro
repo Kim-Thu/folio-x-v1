@@ -51,15 +51,7 @@ const desktopRatioClasses: Record<NonNullable<PCardItemProps["mediaRatio"]>, str
 		</CMedia>
 	)}
 
-	<CBox
-		position="overlay"
-		class={inverse
-			? "bg-linear-to-b from-black/80 via-black/45 to-transparent"
-			: "bg-linear-to-b from-white/90 via-white/60 to-transparent"}
-		aria-hidden="true"
-	/>
-
-	<CBox position="relative" spacing="lg" class="z-20">
+	<CBox position="relative" spacing="lg">
 		<CColumns columns="one" gap="sm">
 			{slots.metadata && data.metadata && (
 				<CMetadata data={data.metadata} size="xs" tone={inverse ? "on-dark" : "brand"} />
