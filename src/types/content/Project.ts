@@ -4,6 +4,7 @@ import type { z } from "astro/zod";
 type ProjectEntry = z.infer<typeof projectEntrySchema>;
 
 export type Project = ProjectEntry & {
+	author: string;
 	number: string;
 	href: string;
 };
