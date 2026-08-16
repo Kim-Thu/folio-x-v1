@@ -7,7 +7,7 @@
 export const sliderBaseClasses = "relative min-w-0";
 
 export const sliderViewportClasses =
-	"flex snap-x snap-mandatory overflow-hidden";
+	"flex snap-x snap-mandatory overflow-x-auto overscroll-x-contain scroll-smooth [scrollbar-width:none] [&::-webkit-scrollbar]:hidden";
 
 export const sliderViewportGapClasses: Record<CSliderGap, string> = {
 	none: "gap-0",
@@ -43,3 +43,9 @@ export const sliderTrackClasses =
 	"h-px min-w-8 flex-1 bg-gray-100";
 
 export const sliderButtonsClasses = "flex items-center gap-2";
+
+export const sliderBelowLeftButtonsClasses =
+	"inline-flex items-center gap-1 rounded-full bg-blue-50 p-1";
+
+export const sliderBelowLeftPreviousClasses =
+	"text-blue-600 hover:bg-blue-100 disabled:text-blue-300";
