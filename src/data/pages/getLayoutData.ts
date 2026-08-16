@@ -43,7 +43,7 @@ export async function getLayoutData(): Promise<LayoutData> {
 			},
 			action: {
 				href: `mailto:${site.email}`,
-			label: site.contactLabel,
+				label: site.contactLabel,
 				mobileLabel: site.email,
 			},
 			menuControl: {
@@ -55,8 +55,6 @@ export async function getLayoutData(): Promise<LayoutData> {
 			brand: {
 				logo,
 				description: footer.brandDescription,
-				socialLinks: navigation.socialLinks,
-				socialDisplay: footer.socialDisplay,
 			},
 			columns: [
 				{
@@ -70,13 +68,18 @@ export async function getLayoutData(): Promise<LayoutData> {
 					items: navigation.resourceLinks,
 				},
 				{
-					id: "legal",
-					label: footer.legalLabel,
-					items: navigation.legalLinks,
+					id: "connect",
+					label: interfaceSettings.navigation.footerSocialLabel,
+					items: navigation.socialLinks,
 				},
 			],
-			newsletter: footer.newsletter,
-			socialLabel: interfaceSettings.navigation.footerSocialLabel,
+			contact: {
+				label: site.contactLabel,
+				email: site.email,
+				locationLabel: footer.locationLabel,
+				location: site.location,
+			},
+			legalLinks: navigation.legalLinks,
 			copyright: `${footer.copyrightSymbol} ${new Date().getFullYear()} ${site.name}`,
 		},
 		loadingScreen: {
