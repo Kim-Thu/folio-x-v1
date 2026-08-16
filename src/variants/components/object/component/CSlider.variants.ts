@@ -1,5 +1,6 @@
 ﻿import type {
 	CSliderControls,
+	CSliderGap,
 	CSliderShape,
 } from "@/types/components/object/component/CSlider.types";
 
@@ -7,6 +8,14 @@ export const sliderBaseClasses = "relative min-w-0";
 
 export const sliderViewportClasses =
 	"flex snap-x snap-mandatory overflow-hidden";
+
+export const sliderViewportGapClasses: Record<CSliderGap, string> = {
+	none: "gap-0",
+	sm: "gap-4",
+	md: "gap-6",
+	lg: "gap-8",
+	xl: "gap-12 lg:gap-16",
+};
 
 export const sliderViewportShapeClasses: Record<CSliderShape, string> = {
 	none: "",
@@ -16,6 +25,7 @@ export const sliderViewportShapeClasses: Record<CSliderShape, string> = {
 export const sliderControlsClasses: Record<CSliderControls, string> = {
 	overlay: "absolute bottom-4 right-4 flex items-center gap-2",
 	below: "mt-4 flex items-center gap-4",
+	"below-left": "mt-4 flex items-center",
 	dots: "absolute bottom-6 left-1/2 z-20 flex -translate-x-1/2 items-center gap-2",
 };
 
