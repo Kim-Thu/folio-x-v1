@@ -2,32 +2,69 @@
 import CCard from "@/components/object/component/card/CCard.astro";
 import CColumns from "@/components/object/component/CColumns.astro";
 import CGridItem from "@/components/object/component/CGridItem.astro";
+import type { CCardData } from "@/types/components/object/component/card/CCard.types";
 import type { PCardTemplateProps } from "@/types/components/object/project/card/PCard.types";
 
 const {
 	gap = "lg",
-	separator = "none",
 	card,
 	items,
 	...attributes
 } = Astro.props as PCardTemplateProps;
 
-const spans = [3, 4, 5] as const;
+const featured = items[0];
+const supporting = items.slice(1, 4);
 const cardConfig = card ?? {};
+
+const withIndexMetadata = (item: CCardData, index: number): CCardData => ({
+	...item,
+	metadata: {
+		separator: item.metadata?.separator,
+		items: [
+			{
+				type: "index",
+				label: String(index + 1).padStart(2, "0"),
+				display: "text",
+			},
+			...(item.metadata?.items ?? []),
+		],
+	},
+});
 ---
 
 <CColumns
 	{...attributes}
 	columns="twelve"
-	{gap}
-	{separator}
+	gap={gap}
+	align="start"
 	data-card-collection
 	data-product-grid={cardConfig.template === "media-details" ? "" : undefined}
-	data-view="grid"
+	data-view="content-three-column"
 >
-	{items.map((item, index) => (
-		<CGridItem lgSpan={spans[index] ?? 5}>
-			<CCard {...cardConfig} data={item} index={index} />
+	{featured && (
+		<CGridItem lgSpan={7} align="start">
+			<CCard {...cardConfig} data={featured} index={0} />
 		</CGridItem>
-	))}
+	)}
+
+	<CGridItem lgSpan={5} align="start">
+		<CColumns columns="one" gap="none" separator="light">
+			{supporting.map((item, index) => (
+				<CCard
+					{...cardConfig}
+					template="stacked"
+					data={withIndexMetadata(item, index + 1)}
+					index={index + 1}
+					slots={{
+						...cardConfig.slots,
+						media: false,
+						icon: false,
+						tags: false,
+						metrics: false,
+						action: false,
+					}}
+				/>
+			))}
+		</CColumns>
+	</CGridItem>
 </CColumns>
