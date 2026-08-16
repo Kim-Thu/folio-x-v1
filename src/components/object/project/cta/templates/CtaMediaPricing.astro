@@ -26,19 +26,27 @@ const headingId = `${data.id}-title`;
 	<CColumns columns="twelve" gap="md" align="center">
 		{
 			data.image && (
-				<CGridItem lgSpan={2}><CMedia ratio="natural">
-					<CImage {...data.image} variant="natural" />
-				</CMedia></CGridItem>
+				<CGridItem lgSpan={2}>
+					<CMedia ratio="natural">
+						<CImage {...data.image} variant="natural" />
+					</CMedia>
+				</CGridItem>
 			)
 		}
 
 		<CGridItem lgSpan={7}>
 			<CColumns columns="one" gap="sm">
-				<CHeading id={headingId} level={2} variant="h3">{data.title}</CHeading>
-				{data.description && <CText tone="subtle">{data.description}</CText>}
+				<CHeading id={headingId} level={2} variant="h3">
+					{data.title}
+				</CHeading>
+
+				{data.description && (
+					<CText tone="subtle">{data.description}</CText>
+				)}
+
 				{
 					data.features && (
-						<div class="pt-12">
+						<div class="pt-6 md:pt-8">
 							<CRow align="center" gap="md">
 								{data.features.items.map((feature) => (
 									<CFeature {...feature} appearance="body" />
@@ -66,14 +74,24 @@ const headingId = `${data.id}-title`;
 						</CRow>
 					)
 				}
+
 				{
 					data.price && (
-						<div class="pt-12">
-							<CRow align="baseline" justify="start" gap="xs" class="lg:justify-end">
-								<CText as="span" variant="price-display">{data.price.current}</CText>
+						<div class="pt-6 md:pt-8">
+							<CRow
+								align="baseline"
+								justify="start"
+								gap="xs"
+								class="lg:justify-end"
+							>
+								<CText as="span" variant="price-display">
+									{data.price.current}
+								</CText>
+
 								<CText as="small" variant="caption" tone="subtle">
 									{data.price.period}
 								</CText>
+
 								{
 									data.price.previous && (
 										<CText as="small" variant="price-old" tone="subtle">
