@@ -121,6 +121,28 @@
         }
       },
       {
+        "id": "projects-seo-content",
+        "type": "article",
+        "template": "grouped",
+        "settings": {
+          "theme": "light",
+          "spacing": "closing",
+          "container": "content"
+        },
+        "content": {
+          "blocks": [
+            {
+              "id": "project-work-and-case-studies",
+              "title": "Project work and case studies",
+              "paragraphs": [
+                "Các project tại NKT Studio tập trung vào web application, e-commerce, workflow automation, WordPress, product design và các hệ thống nội dung có cấu trúc. Mỗi case study trình bày bài toán, hướng triển khai, công nghệ sử dụng và kết quả đạt được thay vì chỉ liệt kê giao diện hoặc stack kỹ thuật.",
+                "Danh mục project có thể được duyệt theo category và tag để tìm các case study liên quan đến từng lĩnh vực, nền tảng hoặc năng lực kỹ thuật cụ thể."
+              ]
+            }
+          ]
+        }
+      },
+      {
         "id": "closing",
         "type": "cta",
         "template": "callout",
