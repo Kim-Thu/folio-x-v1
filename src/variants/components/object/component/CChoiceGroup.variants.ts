@@ -1,4 +1,4 @@
-﻿import type { CChoiceGroupAppearance } from "@/types/components/object/component/CChoiceGroup.types";
+import type { CChoiceGroupAppearance } from "@/types/components/object/component/CChoiceGroup.types";
 
 export const choiceOptionClasses: Record<CChoiceGroupAppearance, string> = {
 	controls:
@@ -8,11 +8,11 @@ export const choiceOptionClasses: Record<CChoiceGroupAppearance, string> = {
 };
 
 export const choiceOptionCurrentClasses =
-	"bg-gray-50 font-semibold text-black before:bg-blue-500";
+	"bg-gray-50 font-semibold text-black before:bg-blue-600";
 
 export const choiceControlClasses: Record<CChoiceGroupAppearance, string> = {
 	controls:
-		"peer size-4 cursor-pointer appearance-none rounded-sm bg-white ring-1 ring-inset ring-gray-100 checked:bg-blue-500 checked:ring-gray-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gray-100",
+		"peer size-4 cursor-pointer appearance-none rounded-sm bg-white ring-1 ring-inset ring-gray-100 checked:bg-blue-600 checked:ring-gray-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gray-100",
 	navigation: "sr-only",
 };
 

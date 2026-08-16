@@ -1,4 +1,4 @@
-﻿import type {
+import type {
 	CTextTone,
 	CTextVariant,
 } from "@/types/components/object/component/CText.types";
@@ -20,7 +20,7 @@ export const textVariantClasses: Record<CTextVariant, string> = {
 };
 
 export const textToneClasses: Record<CTextTone, string> = {
-	brand: "text-blue-500",
+	brand: "text-blue-600",
 	inherit: "",
 	muted: "text-gray-600",
 	subtle: "text-gray-500",

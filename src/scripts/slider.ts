@@ -41,7 +41,7 @@ export function initSliders(): void {
 			directButtons.forEach((button, index) => {
 				const current = index === activeIndex;
 				button.setAttribute("aria-current", String(current));
-				button.classList.toggle("bg-blue-500", current);
+				button.classList.toggle("bg-blue-600", current);
 				button.classList.toggle("bg-white/60", !current);
 			});
 		};

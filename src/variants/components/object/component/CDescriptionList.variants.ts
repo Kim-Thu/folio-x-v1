@@ -1,4 +1,4 @@
-﻿import type { CDescriptionListVariant } from "@/types/components/object/component/CDescriptionList.types";
+import type { CDescriptionListVariant } from "@/types/components/object/component/CDescriptionList.types";
 
 export const descriptionListBaseClasses = "";
 
@@ -25,6 +25,6 @@ export const descriptionListItemClasses: Record<CDescriptionListVariant, string>
 };
 
 export const descriptionListIconClasses =
-	"flex size-10 shrink-0 items-center justify-center rounded-full bg-gray-50 text-blue-500 ring-1 ring-inset ring-gray-100";
+	"flex size-10 shrink-0 items-center justify-center rounded-full bg-gray-50 text-blue-600 ring-1 ring-inset ring-gray-100";
 
 export const descriptionListContentClasses = "flex min-w-0 flex-col gap-2";

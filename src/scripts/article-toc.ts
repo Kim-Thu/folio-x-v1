@@ -18,7 +18,7 @@ export function initArticleToc(): void {
 				const panel = link.dataset.tocAppearance === "panel";
 				if (current) link.setAttribute("aria-current", "location");
 				else link.removeAttribute("aria-current");
-				link.classList.toggle("border-blue-500", current && !panel);
+				link.classList.toggle("border-blue-600", current && !panel);
 				link.classList.toggle("bg-gray-50", current && panel);
 				link.classList.toggle("font-medium", current);
 				link.classList.toggle("text-black", current);

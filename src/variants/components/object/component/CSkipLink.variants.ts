@@ -1,4 +1,4 @@
-﻿import { twJoin } from "@/utils/cn";
+import { twJoin } from "@/utils/cn";
 export const skipLinkClasses = twJoin(
 	"sr-only",
 	"focus:not-sr-only",
@@ -7,7 +7,7 @@ export const skipLinkClasses = twJoin(
 	"focus:top-4",
 	"focus:z-50",
 	"focus:rounded-md",
-	"focus:bg-blue-500",
+	"focus:bg-blue-600",
 	"focus:px-4",
 	"focus:py-3",
 	"focus:text-sm",
@@ -15,7 +15,7 @@ export const skipLinkClasses = twJoin(
 	"focus:text-black",
 	"focus:outline-none",
 	"focus:ring-2",
-	"focus:ring-blue-500",
+	"focus:ring-blue-600",
 	"focus:ring-offset-2",
 	"focus:transition-all",
 	"focus:duration-200",

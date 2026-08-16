@@ -1,4 +1,4 @@
-﻿import type {
+import type {
 	CBoxOverflow,
 	CBoxPosition,
 	CBoxRadius,
@@ -23,7 +23,7 @@ export const boxRatioClasses: Record<CMediaRatio, string> = {
 export const boxSurfaceClasses: Record<CBoxSurface, string> = {
 	plain: "",
 	accent:
-		"bg-linear-to-r from-blue-500/10 via-white to-blue-500/10 text-black ring-1 ring-inset ring-gray-100 backdrop-blur-sm",
+		"bg-linear-to-r from-blue-600/10 via-white to-blue-600/10 text-black ring-1 ring-inset ring-gray-100 backdrop-blur-sm",
 	bordered: "bg-white ring-1 ring-inset ring-gray-100 backdrop-blur-sm",
 	canvas:
 		"bg-white text-black ring-1 ring-inset ring-gray-100 backdrop-blur-sm",

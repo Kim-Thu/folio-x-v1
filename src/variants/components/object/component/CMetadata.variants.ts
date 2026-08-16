@@ -1,4 +1,4 @@
-﻿import type {
+import type {
 	CMetadataAlign,
 	CMetadataSize,
 	CMetadataTone,
@@ -17,7 +17,7 @@ export const metadataAlignClasses: Record<CMetadataAlign, string> = {
 };
 
 export const metadataToneClasses: Record<CMetadataTone, string> = {
-	brand: "text-blue-500",
+	brand: "text-blue-600",
 	"on-light": "text-gray-500",
 	"on-dark": "text-white",
 	"on-dark-subtle": "text-gray-400",

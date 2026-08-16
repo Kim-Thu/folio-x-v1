@@ -1,4 +1,4 @@
-﻿import type {
+import type {
 	CButtonSize,
 	CButtonStyleOptions,
 	CButtonTone,
@@ -8,7 +8,7 @@ import type { CIconName } from "@/types/components/object/component/CIcon.types"
 import { twJoin } from "@/utils/cn";
 
 const buttonBaseClasses =
-	"group/button relative z-10 inline-flex cursor-pointer items-center justify-center justify-self-start font-medium leading-none no-underline transition-colors duration-300 disabled:cursor-not-allowed disabled:opacity-50 aria-disabled:pointer-events-none aria-disabled:opacity-50 aria-pressed:bg-blue-500 aria-pressed:text-black";
+	"group/button relative z-10 inline-flex cursor-pointer items-center justify-center justify-self-start font-medium leading-none no-underline transition-colors duration-300 disabled:cursor-not-allowed disabled:opacity-50 aria-disabled:pointer-events-none aria-disabled:opacity-50 aria-pressed:bg-blue-600 aria-pressed:text-black";
 
 const buttonSizeClasses: Record<CButtonSize, string> = {
 	xs: "gap-2 px-3 py-2 text-xs",
@@ -70,7 +70,7 @@ const buttonAppearanceClasses: Record<
 	Record<CButtonVariant, string>
 > = {
 	dark: {
-		primary: "bg-blue-500 text-black hover:bg-blue-400",
+		primary: "bg-blue-600 text-white hover:bg-blue-400",
 		secondary: "bg-white text-black",
 		outline:
 			"ring-1 ring-inset ring-gray-10/12 bg-black/18 backdrop-blur-sm text-white hover:bg-gray-10/4",
@@ -79,20 +79,20 @@ const buttonAppearanceClasses: Record<
 		"text-subtle": "bg-transparent text-gray-400 hover:text-white",
 		pagination:
 			"bg-white/80 text-black ring-1 ring-inset ring-gray-10/12 backdrop-blur-sm hover:ring-gray-10/12 aria-[current=page]:bg-black aria-[current=page]:text-white",
-		tab: "shrink-0 whitespace-nowrap bg-white/80 text-black ring-1 ring-inset ring-gray-10/12 backdrop-blur-sm hover:text-blue-500 hover:ring-gray-10/12 aria-pressed:bg-white aria-pressed:text-black",
+		tab: "shrink-0 whitespace-nowrap bg-white/80 text-black ring-1 ring-inset ring-gray-10/12 backdrop-blur-sm hover:text-blue-600 hover:ring-gray-10/12 aria-pressed:bg-white aria-pressed:text-black",
 		view: "bg-white/80 text-black ring-1 ring-inset ring-gray-10/12 backdrop-blur-sm hover:bg-gray-10/4 hover:ring-gray-10/12 aria-pressed:bg-white aria-pressed:text-black",
 	},
 	light: {
-		primary: "bg-blue-500 text-black hover:bg-blue-400",
+		primary: "bg-blue-600 text-white hover:bg-blue-400",
 		secondary: "bg-black text-white hover:bg-black/90",
 		outline:
-			"bg-white/80 text-black ring-1 ring-inset ring-gray-10/12 backdrop-blur-sm hover:ring-gray-10/12 hover:text-blue-500",
+			"bg-white/80 text-black ring-1 ring-inset ring-gray-10/12 backdrop-blur-sm hover:ring-gray-10/12 hover:text-blue-600",
 		ghost: "bg-transparent text-black hover:bg-gray-10/4",
 		text: "bg-transparent text-black hover:text-blue-400",
 		"text-subtle": "bg-transparent text-gray-500 hover:text-black",
 		pagination:
 			"bg-white/80 text-black ring-1 ring-inset ring-gray-10/12 backdrop-blur-sm hover:ring-gray-10/12 aria-[current=page]:bg-black aria-[current=page]:text-white",
-		tab: "shrink-0 whitespace-nowrap bg-white/80 text-black ring-1 ring-inset ring-gray-10/12 backdrop-blur-sm hover:text-blue-500 hover:ring-gray-10/12 aria-pressed:bg-black aria-pressed:text-white",
+		tab: "shrink-0 whitespace-nowrap bg-white/80 text-black ring-1 ring-inset ring-gray-10/12 backdrop-blur-sm hover:text-blue-600 hover:ring-gray-10/12 aria-pressed:bg-black aria-pressed:text-white",
 		view: "bg-white/80 text-black ring-1 ring-inset ring-gray-10/12 backdrop-blur-sm hover:bg-gray-10/4 hover:ring-gray-10/12 aria-pressed:bg-black aria-pressed:text-white",
 	},
 };

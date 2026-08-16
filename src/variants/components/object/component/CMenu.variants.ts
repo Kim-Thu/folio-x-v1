@@ -1,4 +1,4 @@
-﻿import type {
+import type {
 	CMenuTone,
 	CMenuVariant,
 } from "@/types/components/object/component/CMenu.types";
@@ -22,7 +22,7 @@ export const menuItemClasses: Record<CMenuVariant, string> = {
 };
 
 export const menuLinkClasses: Record<CMenuVariant, string> = {
-	desktop: "transition-colors hover:text-blue-500",
+	desktop: "transition-colors hover:text-blue-600",
 	mobile:
 		"mobile-link flex items-center justify-between py-5 text-4xl font-semibold text-white md:text-5xl",
 	footer: "inline-flex transition-colors hover:text-white",

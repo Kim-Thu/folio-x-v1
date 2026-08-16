@@ -1,4 +1,4 @@
-﻿import type {
+import type {
 	LSectionSpacing,
 	LSectionTheme,
 } from "@/types/components/layout/LSection.types";
@@ -9,7 +9,7 @@ export const sectionThemeClasses: Record<LSectionTheme, string> = {
 	dark: "bg-black text-white",
 	light: "bg-white text-black",
 	canvas: "bg-white text-black",
-	accent: "bg-blue-500 text-black",
+	accent: "bg-blue-600 text-black",
 	none: "",
 };
 

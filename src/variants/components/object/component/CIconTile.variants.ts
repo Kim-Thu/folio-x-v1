@@ -1,4 +1,4 @@
-﻿import type {
+import type {
 	CIconTileSize,
 	CIconTileTone,
 } from "@/types/components/object/component/CIconTile.types";
@@ -12,6 +12,6 @@ export const iconTileSizeClasses: Record<CIconTileSize, string> = {
 };
 
 export const iconTileToneClasses: Record<CIconTileTone, string> = {
-	brand: "bg-gray-50 text-blue-500",
+	brand: "bg-gray-50 text-blue-600",
 	neutral: "bg-gray-50 text-gray-500",
 };

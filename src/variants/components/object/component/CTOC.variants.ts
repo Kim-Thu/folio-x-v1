@@ -1,4 +1,4 @@
-﻿import type { CTOCAppearance } from "@/types/components/object/component/CTOC.types";
+import type { CTOCAppearance } from "@/types/components/object/component/CTOC.types";
 
 export const tocBaseClasses = "self-start";
 
@@ -20,12 +20,12 @@ export const tocListClasses: Record<CTOCAppearance, string> = {
 
 export const tocLinkClasses: Record<CTOCAppearance, string> = {
 	plain:
-		"-ml-px block border-l border-transparent py-2 pl-6 text-sm text-gray-600 transition-colors duration-300 hover:text-blue-500",
+		"-ml-px block border-l border-transparent py-2 pl-6 text-sm text-gray-600 transition-colors duration-300 hover:text-blue-600",
 	panel:
 		"block rounded-lg px-3 py-2 text-sm text-gray-600 transition-colors duration-300 hover:bg-gray-100 hover:text-black",
 };
 
 export const tocLinkCurrentClasses: Record<CTOCAppearance, string> = {
-	plain: "border-blue-500 font-medium text-black",
+	plain: "border-blue-600 font-medium text-black",
 	panel: "bg-gray-50 font-medium text-black",
 };

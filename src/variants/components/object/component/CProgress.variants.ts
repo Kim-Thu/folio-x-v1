@@ -8,11 +8,11 @@ export const progressRadiusClasses: Record<CProgressRadius, string> = {
 };
 
 export const progressToneClasses: Record<CProgressTone, string> = {
-	brand: "fill-blue-500",
+	brand: "fill-blue-600",
 	rating: "fill-yellow-500",
 };
 
 export const progressFillToneClasses: Record<CProgressTone, string> = {
-	brand: "bg-blue-500",
+	brand: "bg-blue-600",
 	rating: "bg-yellow-500",
 };
