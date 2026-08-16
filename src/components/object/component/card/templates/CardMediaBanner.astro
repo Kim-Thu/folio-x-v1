@@ -42,6 +42,8 @@ const action = publication
 	? {
 		label: `${publicationPresentation?.ariaLabelPrefix ?? "Read "}${publication.title}`,
 		href,
+		icon: undefined,
+		iconPosition: undefined,
 	}
 	: data.action;
 ---
