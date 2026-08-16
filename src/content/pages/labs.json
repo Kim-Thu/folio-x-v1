@@ -129,7 +129,7 @@
           },
           "sidebar": {
             "label": "Lab filters",
-            "filterLabel": "Technology",
+            "filterLabel": "Filter by",
             "category": {
               "appearance": "navigation",
               "control": "category",
