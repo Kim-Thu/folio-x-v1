@@ -188,6 +188,24 @@ export function mapPublicationToCard(
 }
 
 export function mapProjectToCard(project: Project, presentation: ProjectCardPresentation): CCardData {
+	const action = project.detail?.liveUrl
+		? {
+				label: presentation.actionLabel ?? "Live site",
+				href: project.detail.liveUrl,
+				icon: presentation.actionIcon ?? ("arrowUpRight" as const),
+			}
+		: project.detail?.sourceUrl
+			? {
+					label: presentation.actionLabel ?? "GitHub",
+					href: project.detail.sourceUrl,
+					icon: presentation.actionIcon ?? ("github" as const),
+				}
+			: {
+					label: presentation.actionLabel ?? "Xem dự án",
+					href: project.href,
+					icon: presentation.actionIcon ?? ("arrowRight" as const),
+				};
+
 	return {
 		href: project.href,
 		ariaLabel: project.title,
@@ -221,11 +239,7 @@ export function mapProjectToCard(project: Project, presentation: ProjectCardPres
 				},
 			],
 		},
-		action: presentation.actionLabel ? {
-			label: presentation.actionLabel,
-			href: project.href,
-			icon: presentation.actionIcon,
-		} : undefined,
+		action,
 		media: project.image ? {
 			src: project.image,
 			alt: project.alt || project.title,
