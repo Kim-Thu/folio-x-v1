@@ -1,0 +1,41 @@
+---
+import CButton from "@/components/object/component/CButton.astro";
+import type { CDialogProps } from "@/types/components/object/component/CDialog.types";
+import { cn } from "@/utils/cn";
+import {
+	dialogClasses,
+	dialogCloseClasses,
+	dialogContentClasses,
+} from "@/variants/components/object/component/CDialog.variants";
+
+const {
+	id,
+	label,
+	closeLabel,
+	class: className,
+	...attributes
+} = Astro.props as CDialogProps;
+---
+
+<dialog
+	{...attributes}
+	id={id}
+	aria-label={label}
+	data-dialog
+	class={cn(dialogClasses, className)}
+>
+	<div class={dialogContentClasses}>
+		<div class={dialogCloseClasses}>
+			<CButton
+				label={closeLabel}
+				icon="xMark"
+				iconOnly
+				size="sm"
+				variant="ghost"
+				tone="dark"
+				data-dialog-close
+			/>
+		</div>
+		<slot />
+	</div>
+</dialog>
