@@ -7,7 +7,7 @@
 export const metadataBaseClasses = "font-mono uppercase tracking-widest";
 
 export const metadataSizeClasses: Record<CMetadataSize, string> = {
-	caption: "text-[10px]",
+	caption: "text-2xs",
 	xs: "text-xs",
 };
 
