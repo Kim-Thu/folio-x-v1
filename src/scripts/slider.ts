@@ -36,6 +36,23 @@ export function initSliders(): void {
 
 		if (!viewport || slides.length < 2) return;
 
+		const autoplay = slider.dataset.sliderAutoplay === "true";
+		const autoplayInterval = Math.max(
+			1000,
+			Number(slider.dataset.sliderAutoplayInterval) || 5000,
+		);
+		const draggable = slider.dataset.sliderDraggable === "true";
+		const pauseOnHover = slider.dataset.sliderPauseOnHover === "true";
+
+		let autoplayTimer = 0;
+		let hoverPaused = false;
+		let dragging = false;
+		let dragMoved = false;
+		let dragStartX = 0;
+		let dragStartScrollLeft = 0;
+		let dragPointerId = -1;
+		let frame = 0;
+
 		const updateCurrent = () => {
 			const activeIndex = getActiveIndex(viewport, slides);
 			const maxScrollLeft = Math.max(0, viewport.scrollWidth - viewport.clientWidth);
@@ -73,6 +90,24 @@ export function initSliders(): void {
 			});
 		};
 
+		const stopAutoplay = () => {
+			if (!autoplayTimer) return;
+			window.clearTimeout(autoplayTimer);
+			autoplayTimer = 0;
+		};
+
+		const scheduleAutoplay = () => {
+			stopAutoplay();
+			if (!autoplay || hoverPaused || dragging || document.hidden) return;
+
+			autoplayTimer = window.setTimeout(() => {
+				const current = getActiveIndex(viewport, slides);
+				const target = current >= slides.length - 1 ? 0 : current + 1;
+				scrollToSlide(target);
+				scheduleAutoplay();
+			}, autoplayInterval);
+		};
+
 		const move = (offset: number) => {
 			const current = getActiveIndex(viewport, slides);
 			const target = Math.min(
@@ -81,6 +116,7 @@ export function initSliders(): void {
 			);
 
 			if (target !== current) scrollToSlide(target);
+			scheduleAutoplay();
 		};
 
 		previous?.addEventListener("click", () => move(-1));
@@ -90,10 +126,72 @@ export function initSliders(): void {
 			button.addEventListener("click", () => {
 				const target = Number(button.dataset.sliderGo);
 				if (Number.isInteger(target)) scrollToSlide(target);
+				scheduleAutoplay();
 			});
 		});
 
-		let frame = 0;
+		if (draggable) {
+			viewport.addEventListener("pointerdown", (event) => {
+				if (event.pointerType === "mouse" && event.button !== 0) return;
+
+				dragging = true;
+				dragMoved = false;
+				dragStartX = event.clientX;
+				dragStartScrollLeft = viewport.scrollLeft;
+				dragPointerId = event.pointerId;
+				viewport.setPointerCapture(event.pointerId);
+				stopAutoplay();
+			});
+
+			viewport.addEventListener("pointermove", (event) => {
+				if (!dragging || event.pointerId !== dragPointerId) return;
+
+				const delta = event.clientX - dragStartX;
+				if (Math.abs(delta) > 4) dragMoved = true;
+				viewport.scrollLeft = dragStartScrollLeft - delta;
+
+				if (dragMoved) event.preventDefault();
+			});
+
+			const finishDrag = (event: PointerEvent) => {
+				if (!dragging || event.pointerId !== dragPointerId) return;
+
+				dragging = false;
+				if (viewport.hasPointerCapture(event.pointerId)) {
+					viewport.releasePointerCapture(event.pointerId);
+				}
+				dragPointerId = -1;
+				scrollToSlide(getActiveIndex(viewport, slides));
+				scheduleAutoplay();
+			};
+
+			viewport.addEventListener("pointerup", finishDrag);
+			viewport.addEventListener("pointercancel", finishDrag);
+
+			viewport.addEventListener(
+				"click",
+				(event) => {
+					if (!dragMoved) return;
+					event.preventDefault();
+					event.stopPropagation();
+					dragMoved = false;
+				},
+				true,
+			);
+		}
+
+		if (pauseOnHover) {
+			slider.addEventListener("mouseenter", () => {
+				hoverPaused = true;
+				stopAutoplay();
+			});
+
+			slider.addEventListener("mouseleave", () => {
+				hoverPaused = false;
+				scheduleAutoplay();
+			});
+		}
+
 		viewport.addEventListener(
 			"scroll",
 			() => {
@@ -104,6 +202,9 @@ export function initSliders(): void {
 		);
 
 		window.addEventListener("resize", updateCurrent, { passive: true });
+		document.addEventListener("visibilitychange", scheduleAutoplay);
+
 		updateCurrent();
+		scheduleAutoplay();
 	});
 }
