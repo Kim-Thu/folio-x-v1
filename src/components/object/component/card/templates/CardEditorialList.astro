@@ -1,0 +1,41 @@
+---
+import CColumns from "@/components/object/component/CColumns.astro";
+import CHeading from "@/components/object/component/CHeading.astro";
+import CLink from "@/components/object/component/CLink.astro";
+import CMetadata from "@/components/object/component/CMetadata.astro";
+import CText from "@/components/object/component/CText.astro";
+import type { CCardTemplateProps } from "@/types/components/object/component/card/CCard.types";
+
+const {
+	data,
+	headingLevel = 3,
+	index = 0,
+	slots,
+} = Astro.props as CCardTemplateProps;
+
+const metadata = {
+	separator: data.metadata?.separator,
+	items: [
+		{
+			type: "index" as const,
+			label: String(index + 1).padStart(2, "0"),
+			display: "text" as const,
+		},
+		...(data.metadata?.items ?? []),
+	],
+};
+---
+
+<article>
+	<CColumns columns="one" gap="sm">
+		{slots.metadata && <CMetadata data={metadata} tone="on-light" />}
+		{slots.title && (
+			<CHeading level={headingLevel} variant="h4">
+				<CLink href={data.href}>{data.title.join(" ")}</CLink>
+			</CHeading>
+		)}
+		{slots.excerpt && data.excerpt && (
+			<CText variant="body-sm" tone="subtle">{data.excerpt}</CText>
+		)}
+	</CColumns>
+</article>
