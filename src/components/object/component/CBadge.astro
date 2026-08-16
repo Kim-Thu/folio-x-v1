@@ -2,13 +2,14 @@
 import type { CBadgeProps } from "@/types/components/object/component/CBadge.types";
 import { cn } from "@/utils/cn";
 import {
+	badgeAppearanceToneClasses,
 	badgeBaseClasses,
 	badgePlacementClasses,
-	badgeToneClasses,
 } from "@/variants/components/object/component/CBadge.variants";
 
 const {
 	as: Element = "span",
+	appearance = "solid",
 	class: className,
 	placement = "flow",
 	tone = "brand",
@@ -20,7 +21,7 @@ const {
 	{...attributes}
 	class={cn(
 		badgeBaseClasses,
-		badgeToneClasses[tone],
+		badgeAppearanceToneClasses[appearance][tone],
 		badgePlacementClasses[placement],
 		className,
 	)}
