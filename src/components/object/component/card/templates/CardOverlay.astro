@@ -9,11 +9,100 @@ import CMedia from "@/components/object/component/CMedia.astro";
 import CMetadata from "@/components/object/component/CMetadata.astro";
 import CTags from "@/components/object/component/CTags.astro";
 import CText from "@/components/object/component/CText.astro";
-import type { CCardTemplateProps } from "@/types/components/object/component/card/CCard.types";
+import type {
+	CCardTemplateProps,
+	ProjectCardPresentation,
+} from "@/types/components/object/component/card/CCard.types";
+import type { Project } from "@/types/content";
 import { cn } from "@/utils/cn";
 
-const { data, headingLevel = 3, index, mediaRatio = "natural", slots } = Astro.props as CCardTemplateProps;
-const inverse = data.appearance === "inverse";
+const {
+	data,
+	headingLevel = 3,
+	index,
+	mediaRatio = "natural",
+	presentation,
+	slots,
+	source,
+} = Astro.props as CCardTemplateProps;
+
+const project = source === "projects" ? data as unknown as Project : undefined;
+const projectPresentation = project
+	? presentation as ProjectCardPresentation | undefined
+	: undefined;
+const href = project?.href ?? data.href;
+const title = project?.title ?? data.title.join(" ");
+const excerpt = project?.summary ?? data.excerpt;
+const appearance = project
+	? project.tone === "dark"
+		? projectPresentation?.darkAppearance
+		: projectPresentation?.lightAppearance
+	: data.appearance;
+const inverse = appearance === "inverse";
+const media = project && projectPresentation
+	? {
+		src: project.image,
+		alt: project.alt || project.title,
+		width: projectPresentation.imageWidth,
+		height: projectPresentation.imageHeight,
+	}
+	: data.media;
+const metadata = project
+	? {
+		separator: projectPresentation?.separator,
+		items: [
+			{
+				type: "index" as const,
+				label: project.number,
+				display: projectPresentation?.metadataDisplay,
+			},
+			{
+				type: "category" as const,
+				label: project.category.toUpperCase(),
+				href: projectPresentation?.routes.categoryBase
+					? `${projectPresentation.routes.categoryBase}${project.categorySlug}`
+					: undefined,
+				display: projectPresentation?.metadataDisplay,
+			},
+			{
+				type: "datetime" as const,
+				label: project.year,
+				datetime: project.year,
+				display: projectPresentation?.metadataDisplay,
+			},
+		],
+	}
+	: data.metadata;
+const tags = project
+	? project.tags.map((tag) => ({
+		label: tag.label,
+		href: projectPresentation?.routes.tagBase
+			? `${projectPresentation.routes.tagBase}${tag.slug}`
+			: undefined,
+	}))
+	: data.tags;
+const tagsLabel = project ? projectPresentation?.tagsLabel : data.tagsLabel;
+const action = project
+	? project.detail?.liveUrl
+		? {
+			label: "Live site",
+			href: project.detail.liveUrl,
+			icon: "arrowUpRight" as const,
+		}
+		: project.detail?.sourceUrl
+			? {
+				label: "GitHub",
+				href: project.detail.sourceUrl,
+				icon: "github" as const,
+			}
+			: {
+				label: projectPresentation?.actionLabel ?? "Xem dự án",
+				href,
+				icon: projectPresentation?.actionIcon ?? ("arrowRight" as const),
+			}
+	: data.action;
+const filterValue = project?.category ?? data.filterValue;
+const sortValue = project?.year ?? data.sortValue;
 
 const desktopRatioClasses: Record<NonNullable<CCardTemplateProps["mediaRatio"]>, string> = {
 	editorial: "lg:aspect-video",
@@ -34,40 +123,47 @@ const desktopRatioClasses: Record<NonNullable<CCardTemplateProps["mediaRatio"]>,
 	position="relative"
 	ratio="natural"
 	overflow="hidden"
-	data-tab-card={data.filterValue ? "" : undefined}
-	data-filter-category={data.filterValue}
-	data-sort-value={data.sortValue}
+	data-tab-card={filterValue ? "" : undefined}
+	data-filter-category={filterValue}
+	data-sort-value={sortValue}
 	data-sort-index={index}
 >
-	{slots.media && data.media && (
-		<CMedia ratio="natural" placement="background" href={data.href} ariaLabel={data.ariaLabel}>
-			<CImage {...data.media} variant="fill" />
+	{slots.media && media && (
+		<CMedia ratio="natural" placement="background" href={href} ariaLabel={title}>
+			<CImage {...media} variant="fill" />
 		</CMedia>
 	)}
+
 	<CBox position="relative" class="p-8">
 		<CColumns columns="one" gap="lg">
 			<CColumns columns="one" gap="xs">
-				{slots.metadata && data.metadata && (
-					<CMetadata data={data.metadata} size="xs" tone={inverse ? "on-dark" : "brand"} />
+				{slots.metadata && metadata && (
+					<CMetadata data={metadata} size="xs" tone={inverse ? "on-dark" : "brand"} />
 				)}
+
 				{slots.title && (
 					<CHeading level={headingLevel} variant="h3">
-						<CLink href={data.href}>{data.title.join(" ")}</CLink>
+						<CLink href={href}>{title}</CLink>
 					</CHeading>
 				)}
-				{slots.excerpt && data.excerpt && (
-					<CText variant="body-sm" tone={inverse ? "on-dark-muted" : "muted"}>{data.excerpt}</CText>
+
+				{slots.excerpt && excerpt && (
+					<CText variant="body-sm" tone={inverse ? "on-dark-muted" : "muted"}>
+						{excerpt}
+					</CText>
 				)}
-				{slots.tags && data.tags && data.tags.length > 0 && (
-					<CTags items={data.tags} label={data.tagsLabel ?? `${data.title.join(" ")} tags`} />
+
+				{slots.tags && tags && tags.length > 0 && (
+					<CTags items={tags} label={tagsLabel ?? `${title} tags`} />
 				)}
 			</CColumns>
-			{data.action && (
+
+			{action && (
 				<CButton
-					href={data.action.href}
-					label={data.action.label}
-					icon={data.action.icon}
-					iconPosition={data.action.iconPosition}
+					href={action.href}
+					label={action.label}
+					icon={action.icon}
+					iconPosition={action.iconPosition}
 					variant="outline"
 					tone={inverse ? "dark" : "light"}
 					size="sm"
