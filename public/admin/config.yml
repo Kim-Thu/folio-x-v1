@@ -123,7 +123,7 @@ collections:
                               - { label: Theme, name: theme, widget: select, options: [dark, light, canvas, accent, none] }
                               - { label: Spacing, name: spacing, widget: select, options: [compact, default, none, lead, body, closing] }
                               - { label: Container, name: container, widget: select, options: [site, content, none] }
-                              - { label: Layout, name: layout, widget: select, required: false, options: [grid, list, three-column, twelve-column, content-three-column, mosaic, asymmetric, showcase] }
+                              - { label: Layout, name: layout, widget: select, required: false, options: [grid, list, three-column, twelve-column, content-three-column, mosaic, asymmetric, showcase, carousel] }
                               - { label: Columns, name: columns, widget: number, required: false, value_type: int, min: 1, max: 5 }
                               - { label: Gap, name: gap, widget: select, required: false, options: [none, sm, md, lg, xl] }
                               - { label: Media ratio, name: mediaRatio, widget: select, required: false, options: [editorial, landscape, natural, panoramic, portrait, square, video] }
@@ -387,7 +387,7 @@ collections:
                                         widget: object
                                         fields:
                                           - { label: Template, name: template, widget: select, options: [stacked, horizontal, overlay, featured, boxed, compact-media, compact-bordered, editorial, icon-panel, icon-summary, media-banner, media-caption, media-details, media-only, media-summary, media-metrics] }
-                                          - { label: Layout, name: layout, widget: select, options: [grid, list, three-column, twelve-column, content-three-column, mosaic, asymmetric, showcase] }
+                                          - { label: Layout, name: layout, widget: select, options: [grid, list, three-column, twelve-column, content-three-column, mosaic, asymmetric, showcase, carousel] }
                                           - { label: Columns, name: columns, widget: number, value_type: int, min: 1, max: 5 }
                                           - { label: Gap, name: gap, widget: select, options: [none, sm, md, lg, xl] }
                                           - { label: Media ratio, name: mediaRatio, widget: select, required: false, options: [editorial, landscape, natural, panoramic, portrait, square, video] }
@@ -455,7 +455,7 @@ collections:
                                 widget: object
                                 fields:
                                   - { label: Template, name: template, widget: select, options: [stacked, horizontal, overlay, featured, boxed, compact-media, compact-bordered, editorial, icon-panel, icon-summary, media-banner, media-caption, media-details, media-only, media-summary, media-metrics] }
-                                  - { label: Layout, name: layout, widget: select, options: [grid, list, three-column, twelve-column, content-three-column, mosaic, asymmetric, showcase] }
+                                  - { label: Layout, name: layout, widget: select, options: [grid, list, three-column, twelve-column, content-three-column, mosaic, asymmetric, showcase, carousel] }
                                   - { label: Columns, name: columns, widget: number, value_type: int, min: 1, max: 5 }
                                   - { label: Gap, name: gap, widget: select, options: [none, sm, md, lg, xl] }
                                   - { label: Media ratio, name: mediaRatio, widget: select, required: false, options: [editorial, landscape, natural, panoramic, portrait, square, video] }
