@@ -17,7 +17,8 @@ export const pCardTemplateColumnDefaults: Partial<Record<PCardTemplate, PCardCol
 	"three-column": 3,
 };
 
-export const pCardSliderClasses = "w-screen";
+export const pCardSliderClasses =
+	"w-[calc(100vw-(100vw-100%)/2)] max-w-none";
 
 export const pCardSliderItemClasses: Record<PCardColumns, string> = {
 	1: "w-full shrink-0 snap-start",
