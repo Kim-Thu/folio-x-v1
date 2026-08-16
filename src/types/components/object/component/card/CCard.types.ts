@@ -5,6 +5,13 @@ import type { CIconName } from "@/types/components/object/component/CIcon.types"
 import type { CImageData } from "@/types/components/object/component/CImage.types";
 import type { CMediaRatio } from "@/types/components/object/component/CMedia.types";
 import type { CMetadataProps } from "@/types/components/object/component/CMetadata.types";
+import type {
+	Insight,
+	Lab,
+	Product,
+	Project,
+	PublicationEntry,
+} from "@/types/content";
 
 export type CCardTemplate =
 	| "stacked"
@@ -26,6 +33,100 @@ export type CCardTemplate =
 
 export type CCardAppearance = "default" | "inverse";
 export type CCardItemSize = "standard" | "wide";
+export type CCardSource =
+	| "static"
+	| "products"
+	| "projects"
+	| "labs"
+	| "blog"
+	| "comics"
+	| "novels"
+	| "publications";
+
+export interface ProductCardPresentation {
+	routes: {
+		base: string;
+		categoryBase?: string;
+	};
+	ariaLabelPrefix: string;
+	imageAltSuffix: string;
+	imageWidth: number;
+	imageHeight: number;
+	categoryDisplay: "text";
+	actionHref: string;
+	actionLabelPrefix: string;
+	actionIcon: CIconName;
+	license: "free" | "pro";
+}
+
+export interface LabCardPresentation {
+	routes: {
+		base: string;
+		categoryBase?: string;
+		technologyBase?: string;
+	};
+	ariaLabelPrefix: string;
+	categoryDisplay: "text";
+	completeBadgeTone: CBadgeTone;
+	activeBadgeTone: CBadgeTone;
+	tagsLabelSuffix: string;
+	metricIcons: [CIconName, CIconName, CIconName];
+}
+
+export interface PublicationCardPresentation {
+	routes: {
+		base: string;
+		categoryBase?: string;
+	};
+	ariaLabelPrefix: string;
+	categoryDisplay: "text";
+	tagsLabelSuffix: string;
+	viewsIcon: CIconName;
+}
+
+export interface PublicationCollectionPresentation {
+	comics: PublicationCardPresentation;
+	novels: PublicationCardPresentation;
+}
+
+export interface ProjectCardPresentation {
+	routes: {
+		base: string;
+		categoryBase?: string;
+		tagBase?: string;
+	};
+	actionLabel?: string;
+	actionIcon?: CIconName;
+	separator?: string;
+	size?: CCardItemSize;
+	tagsLabel?: string;
+	lightAppearance?: CCardAppearance;
+	darkAppearance?: CCardAppearance;
+	metadataDisplay?: "text";
+	imageWidth: number;
+	imageHeight: number;
+}
+
+export interface InsightCardPresentation {
+	routes: {
+		base: string;
+		categoryBase?: string;
+		tagBase?: string;
+	};
+	separator?: string;
+	metadataDisplay?: "text";
+	tagsLabelSuffix?: string;
+	imageWidth: number;
+	imageHeight: number;
+}
+
+export type CCardPresentation =
+	| ProductCardPresentation
+	| LabCardPresentation
+	| PublicationCardPresentation
+	| PublicationCollectionPresentation
+	| ProjectCardPresentation
+	| InsightCardPresentation;
 
 export interface CCardSlots {
 	media: boolean;
@@ -86,18 +187,32 @@ export interface CCardData {
 	};
 }
 
+export type CCardItemData =
+	| CCardData
+	| Product
+	| Project
+	| Lab
+	| Insight
+	| PublicationEntry;
+
 export interface CCardConfig {
 	template?: CCardTemplate;
 	mediaRatio?: CMediaRatio;
 	headingLevel?: CHeadingProps["level"];
 	slots?: CCardSlotOptions;
+	source?: CCardSource;
+	presentation?: CCardPresentation;
 }
 
 export interface CCardProps extends CCardConfig {
-	data: CCardData;
+	data: CCardItemData;
 	index?: number;
 }
 
-export type CCardTemplateProps = Pick<CCardProps, "data" | "headingLevel" | "index" | "mediaRatio"> & {
+export type CCardTemplateProps = Pick<
+	CCardProps,
+	"headingLevel" | "index" | "mediaRatio" | "presentation" | "source"
+> & {
+	data: CCardData;
 	slots: CCardSlots;
 };
