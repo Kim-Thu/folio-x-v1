@@ -32,53 +32,55 @@ const headingId = `${data.id}-title`;
 		}
 
 		<CGridItem lgSpan={7}>
-		<CColumns columns="one" gap="sm">
-			<CHeading id={headingId} level={2} variant="h4">{data.title}</CHeading>
-			{data.description && <CText tone="subtle">{data.description}</CText>}
-			{
-				data.features && (
-					<CRow align="center" gap="md">
-						{data.features.items.map((feature) => (
-							<CFeature {...feature} appearance="body" />
-						))}
-					</CRow>
-				)
-			}
-		</CColumns>
+			<CColumns columns="one" gap="sm">
+				<CHeading id={headingId} level={2} variant="h4">{data.title}</CHeading>
+				{data.description && <CText tone="subtle">{data.description}</CText>}
+				{
+					data.features && (
+						<CRow align="center" gap="md">
+							{data.features.items.map((feature) => (
+								<CFeature {...feature} appearance="body" />
+							))}
+						</CRow>
+					)
+				}
+			</CColumns>
 		</CGridItem>
 
 		<CGridItem lgSpan={3}>
-		<CColumns columns="one" gap="sm" align="start" class="lg:items-end">
-			{
-				data.action && (
-					<CButton
-						href={data.action.href}
-						label={data.action.label}
-						icon="arrowUpRight"
-						size="sm"
-						tone="light"
-						variant="secondary"
-					/>
-				)
-			}
-			{
-				data.price && (
-					<CRow align="baseline" justify="start" gap="xs" class="lg:justify-end">
-						<CText as="span" variant="price">{data.price.current}</CText>
-						<CText as="small" variant="caption" tone="subtle">
-							{data.price.period}
-						</CText>
-						{
-							data.price.previous && (
-								<CText as="small" variant="price-old" tone="subtle">
-									{data.price.previous}
-								</CText>
-							)
-						}
-					</CRow>
-				)
-			}
-		</CColumns>
+			<CColumns columns="one" gap="sm">
+				{
+					data.action && (
+						<CRow justify="start" class="lg:justify-end">
+							<CButton
+								href={data.action.href}
+								label={data.action.label}
+								icon="arrowUpRight"
+								size="sm"
+								tone="light"
+								variant="secondary"
+							/>
+						</CRow>
+					)
+				}
+				{
+					data.price && (
+						<CRow align="baseline" justify="start" gap="xs" class="lg:justify-end">
+							<CText as="span" variant="price">{data.price.current}</CText>
+							<CText as="small" variant="caption" tone="subtle">
+								{data.price.period}
+							</CText>
+							{
+								data.price.previous && (
+									<CText as="small" variant="price-old" tone="subtle">
+										{data.price.previous}
+									</CText>
+								)
+							}
+						</CRow>
+					)
+				}
+			</CColumns>
 		</CGridItem>
 	</CColumns>
 </CBox>
