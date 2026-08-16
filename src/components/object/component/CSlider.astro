@@ -12,12 +12,14 @@ import {
 	sliderStatusClasses,
 	sliderTrackClasses,
 	sliderViewportClasses,
+	sliderViewportGapClasses,
 	sliderViewportShapeClasses,
 } from "@/variants/components/object/component/CSlider.variants";
 
 const {
 	class: className,
 	controls = "overlay",
+	gap = "none",
 	shape = "card",
 	itemCount,
 	label,
@@ -29,7 +31,11 @@ const {
 
 <div {...attributes} class={cn(sliderBaseClasses, className)} data-slider>
 	<div
-	class={cn(sliderViewportClasses, sliderViewportShapeClasses[shape])}
+		class={cn(
+			sliderViewportClasses,
+			sliderViewportGapClasses[gap],
+			sliderViewportShapeClasses[shape],
+		)}
 		aria-label={label}
 		tabindex="0"
 		data-slider-viewport
@@ -60,26 +66,28 @@ const {
 						<span>{String(itemCount).padStart(2, "0")}</span>
 					</p>
 				)}
-				{controls !== "dots" && <div class={sliderButtonsClasses} role="group" aria-label={label}>
-					<CButton
-						label={previousLabel}
-						icon="chevronLeft"
-						iconOnly
-						size="sm"
-						variant="secondary"
-						tone="light"
-						data-slider-previous
-					/>
-					<CButton
-						label={nextLabel}
-						icon="chevronRight"
-						iconOnly
-						size="sm"
-						variant="secondary"
-						tone="light"
-						data-slider-next
-					/>
-				</div>}
+				{controls !== "dots" && (
+					<div class={sliderButtonsClasses} role="group" aria-label={label}>
+						<CButton
+							label={previousLabel}
+							icon="chevronLeft"
+							iconOnly
+							size="sm"
+							variant="secondary"
+							tone="light"
+							data-slider-previous
+						/>
+						<CButton
+							label={nextLabel}
+							icon="chevronRight"
+							iconOnly
+							size="sm"
+							variant="secondary"
+							tone="light"
+							data-slider-next
+						/>
+					</div>
+				)}
 			</div>
 		)
 	}
