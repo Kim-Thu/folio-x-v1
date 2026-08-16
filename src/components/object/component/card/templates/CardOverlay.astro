@@ -78,7 +78,7 @@ const desktopRatioClasses: Record<NonNullable<CCardTemplateProps["mediaRatio"]>,
 							<CMetadata
 								data={card.metadata}
 								size="caption"
-								tone={card.inverse ? "on-dark" : "brand"}
+								tone={card.inverse ? "on-dark" : "on-light"}
 							/>
 						)}
 
@@ -100,8 +100,10 @@ const desktopRatioClasses: Record<NonNullable<CCardTemplateProps["mediaRatio"]>,
 
 					{slots.tags && card.tags && card.tags.length > 0 && (
 						<CTags
+							appearance="outline"
 							items={card.tags}
 							label={card.tagsLabel ?? `${card.title} tags`}
+							tone={card.inverse ? "inverse" : "neutral"}
 						/>
 					)}
 				</CColumns>
