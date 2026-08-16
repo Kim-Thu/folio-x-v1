@@ -2,7 +2,6 @@
 import CCard from "@/components/object/component/card/CCard.astro";
 import CColumns from "@/components/object/component/CColumns.astro";
 import CGridItem from "@/components/object/component/CGridItem.astro";
-import type { CCardData } from "@/types/components/object/component/card/CCard.types";
 import type { PCardTemplateProps } from "@/types/components/object/project/card/PCard.types";
 
 const {
@@ -15,21 +14,6 @@ const {
 const featured = items[0];
 const supporting = items.slice(1, 4);
 const cardConfig = card ?? {};
-
-const withIndexMetadata = (item: CCardData, index: number): CCardData => ({
-	...item,
-	metadata: {
-		separator: item.metadata?.separator,
-		items: [
-			{
-				type: "index",
-				label: String(index + 1).padStart(2, "0"),
-				display: "text",
-			},
-			...(item.metadata?.items ?? []),
-		],
-	},
-});
 ---
 
 <CColumns
@@ -53,7 +37,7 @@ const withIndexMetadata = (item: CCardData, index: number): CCardData => ({
 				<CCard
 					{...cardConfig}
 					template="stacked"
-					data={withIndexMetadata(item, index + 1)}
+					data={item}
 					index={index + 1}
 					slots={{
 						...cardConfig.slots,
