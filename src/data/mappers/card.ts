@@ -1,4 +1,4 @@
-import type { PCardData } from "@/types/components/object/project/card/PCard.types";
+import type { CCardData } from "@/types/components/object/component/card/CCard.types";
 import type { Insight, Lab, Product, Project, PublicationEntry } from "@/types/content";
 
 export interface CardRouteConfig {
@@ -17,21 +17,21 @@ export interface ProductCardPresentation {
 	categoryDisplay: "text";
 	actionHref: string;
 	actionLabelPrefix: string;
-	actionIcon: NonNullable<NonNullable<PCardData["action"]>["icon"]>;
-	license: NonNullable<NonNullable<PCardData["product"]>["license"]>;
+	actionIcon: NonNullable<NonNullable<CCardData["action"]>["icon"]>;
+	license: NonNullable<NonNullable<CCardData["product"]>["license"]>;
 }
 
 export interface LabCardPresentation {
 	routes: CardRouteConfig;
 	ariaLabelPrefix: string;
 	categoryDisplay: "text";
-	completeBadgeTone: NonNullable<NonNullable<PCardData["badge"]>["tone"]>;
-	activeBadgeTone: NonNullable<NonNullable<PCardData["badge"]>["tone"]>;
+	completeBadgeTone: NonNullable<NonNullable<CCardData["badge"]>["tone"]>;
+	activeBadgeTone: NonNullable<NonNullable<CCardData["badge"]>["tone"]>;
 	tagsLabelSuffix: string;
 	metricIcons: [
-		NonNullable<NonNullable<PCardData["metrics"]>[number]["icon"]>,
-		NonNullable<NonNullable<PCardData["metrics"]>[number]["icon"]>,
-		NonNullable<NonNullable<PCardData["metrics"]>[number]["icon"]>,
+		NonNullable<NonNullable<CCardData["metrics"]>[number]["icon"]>,
+		NonNullable<NonNullable<CCardData["metrics"]>[number]["icon"]>,
+		NonNullable<NonNullable<CCardData["metrics"]>[number]["icon"]>,
 	];
 }
 
@@ -40,18 +40,18 @@ export interface PublicationCardPresentation {
 	ariaLabelPrefix: string;
 	categoryDisplay: "text";
 	tagsLabelSuffix: string;
-	viewsIcon: NonNullable<NonNullable<PCardData["metrics"]>[number]["icon"]>;
+	viewsIcon: NonNullable<NonNullable<CCardData["metrics"]>[number]["icon"]>;
 }
 
 export interface ProjectCardPresentation {
 	routes: CardRouteConfig;
 	actionLabel?: string;
-	actionIcon?: NonNullable<NonNullable<PCardData["action"]>["icon"]>;
+	actionIcon?: NonNullable<NonNullable<CCardData["action"]>["icon"]>;
 	separator?: string;
-	size?: PCardData["size"];
+	size?: CCardData["size"];
 	tagsLabel?: string;
-	lightAppearance?: PCardData["appearance"];
-	darkAppearance?: PCardData["appearance"];
+	lightAppearance?: CCardData["appearance"];
+	darkAppearance?: CCardData["appearance"];
 	metadataDisplay?: "text";
 	imageWidth: number;
 	imageHeight: number;
@@ -66,7 +66,7 @@ export interface InsightCardPresentation {
 	imageHeight: number;
 }
 
-export function mapProductToCard(product: Product, presentation: ProductCardPresentation): PCardData {
+export function mapProductToCard(product: Product, presentation: ProductCardPresentation): CCardData {
 	return {
 		href: `${presentation.routes.base}${product.slug}`,
 		ariaLabel: `${presentation.ariaLabelPrefix}${product.title}`,
@@ -107,7 +107,7 @@ export function mapProductToCard(product: Product, presentation: ProductCardPres
 	};
 }
 
-export function mapLabToCard(lab: Lab, presentation: LabCardPresentation): PCardData {
+export function mapLabToCard(lab: Lab, presentation: LabCardPresentation): CCardData {
 	return {
 		href: lab.href,
 		ariaLabel: `${presentation.ariaLabelPrefix}${lab.title}`,
@@ -151,7 +151,7 @@ export function mapPublicationToCard(
 	entry: PublicationEntry,
 	_catalogSlug: "comics" | "novels",
 	presentation: PublicationCardPresentation,
-): PCardData {
+): CCardData {
 	const href = `${presentation.routes.base}${entry.slug}`;
 	return {
 		href,
@@ -183,7 +183,7 @@ export function mapPublicationToCard(
 	};
 }
 
-export function mapProjectToCard(project: Project, presentation: ProjectCardPresentation): PCardData {
+export function mapProjectToCard(project: Project, presentation: ProjectCardPresentation): CCardData {
 	return {
 		href: project.href,
 		ariaLabel: project.title,
@@ -231,7 +231,7 @@ export function mapProjectToCard(project: Project, presentation: ProjectCardPres
 	};
 }
 
-export function mapInsightToCard(insight: Insight, presentation: InsightCardPresentation): PCardData {
+export function mapInsightToCard(insight: Insight, presentation: InsightCardPresentation): CCardData {
 	return {
 		href: insight.href,
 		ariaLabel: insight.title,

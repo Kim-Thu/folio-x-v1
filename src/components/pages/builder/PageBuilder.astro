@@ -61,8 +61,9 @@ import type {
 import type { PageArchiveRegion } from "@/types/components/object/project/page/PageArchiveRegion.types";
 import type { PageRegion } from "@/types/components/object/project/page/PageRegion.types";
 import type { CIconName } from "@/types/components/object/component/CIcon.types";
+import type { CCardConfig, CCardData } from "@/types/components/object/component/card/CCard.types";
 import type { PAdvertisementData } from "@/types/components/object/project/advertisement/PAdvertisement.types";
-import type { PCardData, PCardProps } from "@/types/components/object/project/card/PCard.types";
+import type { PCardProps } from "@/types/components/object/project/card/PCard.types";
 import type { PFilterChoiceGroupData } from "@/types/components/object/project/filter-panel/PFilterPanel.types";
 import type { PSectionHeaderProps } from "@/types/components/object/project/section-header/PSectionHeader.types";
 
@@ -90,6 +91,8 @@ type ProjectsArchiveSection = Omit<ArchiveSection, "content"> & { content: Proje
 type LabsArchiveSection = Omit<ArchiveSection, "content"> & { content: LabsArchiveContent };
 type ProductsArchiveSection = Omit<ArchiveSection, "content"> & { content: ProductsArchiveContent };
 type BlogArchiveSection = Omit<ArchiveSection, "content"> & { content: BlogArchiveContent };
+type RawCardConfig = NonNullable<CollectionSection["content"]["cards"]>;
+type RawSectionSettings = CollectionSection["settings"];
 
 type HeroRegionProps = Extract<PageRegion, { component: "hero" }>["props"];
 type PageHeaderRegionProps = Extract<PageRegion, { component: "page-header" }>["props"];
@@ -118,27 +121,40 @@ const sectionHeader = (section: CollectionSection): PSectionHeaderProps | undefi
 	};
 };
 
-const cardConfig = (section: CollectionSection, items: PCardData[]): PCardProps => {
-	const cards = section.content.cards;
-	return {
-		template: (cards?.template ?? section.template) as PCardProps["template"],
-		layout: (cards?.layout ?? section.settings.layout) as PCardProps["layout"],
-		columns: (cards?.columns ?? section.settings.columns) as PCardProps["columns"],
-		gap: (cards?.gap ?? section.settings.gap) as PCardProps["gap"],
-		mediaRatio: (cards?.mediaRatio ?? section.settings.mediaRatio) as PCardProps["mediaRatio"],
-		separator: (cards?.separator ?? section.settings.separator) as PCardProps["separator"],
-		headingLevel: cards?.headingLevel as PCardProps["headingLevel"],
-		slots: cards?.slots as PCardProps["slots"],
-		items,
-	};
+const resolvePCardTemplate = (
+	template?: RawCardConfig["layout"] | RawSectionSettings["layout"],
+): PCardProps["template"] => {
+	if (template === "carousel") return "slider";
+	return (template ?? "grid") as PCardProps["template"];
 };
+
+const buildCardProps = (
+	cards: RawCardConfig | undefined,
+	items: CCardData[],
+	defaults?: RawSectionSettings,
+): PCardProps => ({
+	template: resolvePCardTemplate(cards?.layout ?? defaults?.layout),
+	columns: (cards?.columns ?? defaults?.columns) as PCardProps["columns"],
+	gap: (cards?.gap ?? defaults?.gap) as PCardProps["gap"],
+	separator: (cards?.separator ?? defaults?.separator) as PCardProps["separator"],
+	card: {
+		template: cards?.template as CCardConfig["template"],
+		mediaRatio: (cards?.mediaRatio ?? defaults?.mediaRatio) as CCardConfig["mediaRatio"],
+		headingLevel: cards?.headingLevel as CCardConfig["headingLevel"],
+		slots: cards?.slots as CCardConfig["slots"],
+	},
+	items,
+});
+
+const cardConfig = (section: CollectionSection, items: CCardData[]): PCardProps =>
+	buildCardProps(section.content.cards, items, section.settings);
 
 const take = <T,>(items: T[], limit?: number) =>
 	limit === undefined ? items : items.slice(0, limit);
 
-const resolveCollectionItems = async (section: CollectionSection): Promise<PCardData[]> => {
+const resolveCollectionItems = async (section: CollectionSection): Promise<CCardData[]> => {
 	const content = section.content;
-	if ("items" in content) return content.items as unknown as PCardData[];
+	if ("items" in content) return content.items as unknown as CCardData[];
 	if (!("source" in content)) return [];
 
 	switch (content.source.collection) {
@@ -217,15 +233,10 @@ const buildProjectsArchive = async (section: ProjectsArchiveSection): Promise<Pa
 				sort: { label: toolbar.sortLabel, value: toolbar.sortValue, options: toolbar.sortOptions },
 				view: { label: toolbar.viewLabel, gridLabel: toolbar.gridViewLabel, listLabel: toolbar.listViewLabel },
 			} },
-			cards: {
-				template: cards.template as PCardProps["template"],
-				layout: cards.layout as PCardProps["layout"],
-				columns: cards.columns as PCardProps["columns"],
-				gap: cards.gap as PCardProps["gap"],
-				items: visibleProjects.map((project) =>
-					mapProjectToCard(project, itemPresentation as ProjectCardPresentation),
-				),
-			},
+			cards: buildCardProps(
+				cards,
+				visibleProjects.map((project) => mapProjectToCard(project, itemPresentation as ProjectCardPresentation)),
+			),
 			emptyLabel,
 			pagination: { ...pagination, totalPages: Math.max(1, Math.ceil(visibleProjects.length / pagination.pageSize)) },
 		},
@@ -268,13 +279,10 @@ const buildLabsArchive = async (section: LabsArchiveSection): Promise<PageArchiv
 				groups: [technologyFilter],
 			} } },
 			result: { count: visibleLabs.length, label: resultLabel },
-			cards: {
-				template: cards.template as PCardProps["template"],
-				layout: cards.layout as PCardProps["layout"],
-				columns: cards.columns as PCardProps["columns"],
-				gap: cards.gap as PCardProps["gap"],
-				items: visibleLabs.map((lab) => mapLabToCard(lab, itemPresentation as LabCardPresentation)),
-			},
+			cards: buildCardProps(
+				cards,
+				visibleLabs.map((lab) => mapLabToCard(lab, itemPresentation as LabCardPresentation)),
+			),
 			emptyLabel,
 			pagination: { ...pagination, totalPages: Math.max(1, Math.ceil(visibleLabs.length / pagination.pageSize)) },
 		},
@@ -331,15 +339,10 @@ const buildProductsArchive = async (section: ProductsArchiveSection): Promise<Pa
 				advertisement: { data: advertisement },
 			},
 			result: { count: visibleProducts.length, label: result.label },
-			cards: {
-				template: cards.template as PCardProps["template"],
-				layout: cards.layout as PCardProps["layout"],
-				columns: cards.columns as PCardProps["columns"],
-				gap: cards.gap as PCardProps["gap"],
-				items: visibleProducts.map((product) =>
-					mapProductToCard(product, itemPresentation as ProductCardPresentation),
-				),
-			},
+			cards: buildCardProps(
+				cards,
+				visibleProducts.map((product) => mapProductToCard(product, itemPresentation as ProductCardPresentation)),
+			),
 			emptyLabel,
 			pagination: { ...pagination, totalPages: Math.max(1, Math.ceil(visibleProducts.length / pagination.pageSize)) },
 		},
@@ -424,16 +427,10 @@ const buildBlogArchive = async (section: BlogArchiveSection): Promise<PageArchiv
 						headingLevel: sidebar.featured.header.headingLevel as PSectionHeaderProps["headingLevel"],
 					}),
 				},
-				cards: {
-					template: sidebar.featured.cards.template as PCardProps["template"],
-					layout: sidebar.featured.cards.layout as PCardProps["layout"],
-					columns: sidebar.featured.cards.columns as PCardProps["columns"],
-					gap: sidebar.featured.cards.gap as PCardProps["gap"],
-					slots: sidebar.featured.cards.slots as PCardProps["slots"],
-					items: insights.slice(0, sidebar.featured.limit).map((insight) =>
-						mapInsightToCard(insight, presentation),
-					),
-				},
+				cards: buildCardProps(
+					sidebar.featured.cards,
+					insights.slice(0, sidebar.featured.limit).map((insight) => mapInsightToCard(insight, presentation)),
+				),
 				advertisement: { template: sidebar.newsletter.template, data: newsletter },
 			},
 			result: {
@@ -443,16 +440,9 @@ const buildBlogArchive = async (section: BlogArchiveSection): Promise<PageArchiv
 						appearance: result.header.appearance as PSectionHeaderProps["appearance"],
 						headingLevel: result.header.headingLevel as PSectionHeaderProps["headingLevel"],
 					}),
-				},
 			},
-			cards: {
-				template: cards.template as PCardProps["template"],
-				layout: cards.layout as PCardProps["layout"],
-				columns: cards.columns as PCardProps["columns"],
-				gap: cards.gap as PCardProps["gap"],
-				slots: cards.slots as PCardProps["slots"],
-				items: visibleInsights.map((insight) => mapInsightToCard(insight, presentation)),
 			},
+			cards: buildCardProps(cards, visibleInsights.map((insight) => mapInsightToCard(insight, presentation))),
 			emptyLabel,
 			pagination: { ...pagination, totalPages: Math.max(1, Math.ceil(visibleInsights.length / pagination.pageSize)) },
 		},
@@ -513,19 +503,12 @@ const isHome = "page" in props && props.page.slug === "/";
 			{region.component === "article" && <PArticle {...region.props} />}
 			{region.component === "reviews" && <PReviews {...region.props} />}
 			{region.component === "cards" && (
-				<CBox
-					surface={region.props.panel ? "glass" : "plain"}
-					radius={region.props.panel ? "md" : "none"}
-					spacing={region.props.panel ? "sm" : "none"}
-				>
+				<CBox surface={region.props.panel ? "glass" : "plain"} radius={region.props.panel ? "md" : "none"} spacing={region.props.panel ? "sm" : "none"}>
 					<CColumns columns="one" gap="md">
 						{region.props.header && region.props.headerAction ? (
 							<CRow justify="between" align="end">
 								<PSectionHeader {...region.props.header} />
-								<CButton
-									{...region.props.headerAction}
-									variant={region.props.headerAction.variant ?? "text"}
-								/>
+								<CButton {...region.props.headerAction} variant={region.props.headerAction.variant ?? "text"} />
 							</CRow>
 						) : (
 							region.props.header && <PSectionHeader {...region.props.header} />
@@ -542,18 +525,10 @@ const isHome = "page" in props && props.page.slug === "/";
 			{region.component === "cta" && <PCta {...region.props} />}
 			{region.component === "post-navigation" && <PPostNavigation {...region.props} />}
 			{region.component === "collection" && (
-				<CColumns
-					columns="one"
-					gap="lg"
-					data-tabbed-collection={region.props.behavior === "tabbed" ? "" : undefined}
-				>
+				<CColumns columns="one" gap="lg" data-tabbed-collection={region.props.behavior === "tabbed" ? "" : undefined}>
 					{region.props.header && <PSectionHeader {...region.props.header} />}
 					{region.props.tabs && <CTabList {...region.props.tabs} />}
-					<CColumns
-						columns={region.props.template === "split" ? "twelve" : "one"}
-						gap="lg"
-						data-collection-panel={region.props.behavior === "tabbed" ? "" : undefined}
-					>
+					<CColumns columns={region.props.template === "split" ? "twelve" : "one"} gap="lg" data-collection-panel={region.props.behavior === "tabbed" ? "" : undefined}>
 						{region.props.cardGroups.map((cards, index) => (
 							<CGridItem lgSpan={region.props.template === "split" ? (index === 0 ? 7 : 5) : "full"}>
 								<PCard {...cards} />
@@ -569,13 +544,7 @@ const isHome = "page" in props && props.page.slug === "/";
 				</CColumns>
 			)}
 			{region.component === "archive" && (
-				<CColumns
-					columns="one"
-					gap="md"
-					data-filter-root={region.props.mode === "taxonomy" ? "" : undefined}
-					data-filter-mode={region.props.mode}
-					data-pagination-page-size={region.props.pagination.pageSize}
-				>
+				<CColumns columns="one" gap="md" data-filter-root={region.props.mode === "taxonomy" ? "" : undefined} data-filter-mode={region.props.mode} data-pagination-page-size={region.props.pagination.pageSize}>
 					<PArchiveToolbar {...region.props.toolbar} />
 					{region.props.mode === "faceted" && region.props.sidebar ? (
 						<LSidebar label={region.props.sidebar.label} sticky>
@@ -584,70 +553,45 @@ const isHome = "page" in props && props.page.slug === "/";
 								{region.props.sidebar.cards && (
 									<CBox surface="glass" radius="md" spacing="sm">
 										<CColumns columns="one" gap="sm">
-											{region.props.sidebar.cardsHeader && (
-												<PSectionHeader {...region.props.sidebar.cardsHeader} />
-											)}
+											{region.props.sidebar.cardsHeader && <PSectionHeader {...region.props.sidebar.cardsHeader} />}
 											<PCard {...region.props.sidebar.cards} />
 										</CColumns>
 									</CBox>
 								)}
-								{region.props.sidebar.advertisement && (
-									<PAdvertisement {...region.props.sidebar.advertisement} />
-								)}
+								{region.props.sidebar.advertisement && <PAdvertisement {...region.props.sidebar.advertisement} />}
 							</CColumns>
 							<CColumns columns="one" gap="md" data-archive-results>
 								{region.props.result?.header && <PSectionHeader {...region.props.result.header} />}
 								{region.props.result?.count !== undefined && region.props.result.label && (
 									<CText variant="caption" tone="subtle">
-										<CText as="span" variant="caption" tone="inherit" data-result-count>
-											{region.props.result.count}
-										</CText>{" "}
+										<CText as="span" variant="caption" tone="inherit" data-result-count>{region.props.result.count}</CText>{" "}
 										{region.props.result.label}
 									</CText>
 								)}
 								<PCard {...region.props.cards} />
-								<CText data-product-empty data-facet-empty hidden tone="muted">
-									{region.props.emptyLabel}
-								</CText>
-								<CPagination
-									label={region.props.pagination.label}
-									previousLabel={region.props.pagination.previousLabel}
-									nextLabel={region.props.pagination.nextLabel}
-									totalPages={region.props.pagination.totalPages}
-								/>
+								<CText data-product-empty data-facet-empty hidden tone="muted">{region.props.emptyLabel}</CText>
+								<CPagination label={region.props.pagination.label} previousLabel={region.props.pagination.previousLabel} nextLabel={region.props.pagination.nextLabel} totalPages={region.props.pagination.totalPages} />
 							</CColumns>
 						</LSidebar>
 					) : (
 						<CColumns columns="one" gap="md">
 							<PCard {...region.props.cards} />
 							<CText data-filter-empty hidden tone="muted">{region.props.emptyLabel}</CText>
-							<CPagination
-								label={region.props.pagination.label}
-								previousLabel={region.props.pagination.previousLabel}
-								nextLabel={region.props.pagination.nextLabel}
-								totalPages={region.props.pagination.totalPages}
-							/>
+							<CPagination label={region.props.pagination.label} previousLabel={region.props.pagination.previousLabel} nextLabel={region.props.pagination.nextLabel} totalPages={region.props.pagination.totalPages} />
 						</CColumns>
 					)}
 				</CColumns>
 			)}
 			{region.component === "status" && <PStatus {...region.props} />}
-			{region.component === "tabs" && <CTabList {...region.props} />}
+			{region.component === "tabs" && <CTabList {...region.props.tabs} />}
 			{region.component === "gallery" && <PGallery {...region.props} />}
 			{region.component === "entry-index" && <PEntryIndex {...region.props} />}
 			{region.component === "reader" && <PReader {...region.props} />}
 			{region.component === "details" && (
-				<CBox
-					surface={region.props.title ? "glass" : "plain"}
-					radius={region.props.title ? "md" : "none"}
-					spacing={region.props.title ? "md" : "none"}
-				>
+				<CBox surface={region.props.title ? "glass" : "plain"} radius={region.props.title ? "md" : "none"} spacing={region.props.title ? "md" : "none"}>
 					<CColumns columns="one" gap="sm">
 						{region.props.title && <CHeading level={2} variant="h5">{region.props.title}</CHeading>}
-						<CDescriptionList
-							{...region.props.list}
-							variant={region.props.title ? "default" : region.props.list.variant}
-						/>
+						<CDescriptionList {...region.props.list} variant={region.props.title ? "default" : region.props.list.variant} />
 						{region.props.tags && (
 							<CColumns columns="one" gap="sm">
 								<CHeading level={3} variant="h6">{region.props.tags.title}</CHeading>
