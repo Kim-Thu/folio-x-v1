@@ -432,12 +432,11 @@
         "type": "collection",
         "template": "split",
         "settings": {
-          "theme": "light",
+          "theme": "canvas",
           "spacing": "compact",
           "container": "site",
-          "layout": "grid",
-          "columns": 4,
-          "gap": "sm"
+          "layout": "content-three-column",
+          "gap": "lg"
         },
         "content": {
           "heading": {
@@ -462,7 +461,7 @@
               "categoryBase": "/blog/category/",
               "tagBase": "/blog/tag/"
             },
-            "separator": "",
+            "separator": " · ",
             "metadataDisplay": "text",
             "tagsLabelSuffix": " tags",
             "imageWidth": 1536,
@@ -470,10 +469,14 @@
           },
           "cards": {
             "template": "stacked",
-            "layout": "grid",
-            "columns": 4,
-            "gap": "sm",
-            "headingLevel": 3
+            "layout": "content-three-column",
+            "gap": "lg",
+            "headingLevel": 3,
+            "slots": {
+              "tags": false,
+              "metrics": false,
+              "action": false
+            }
           }
         }
       },
