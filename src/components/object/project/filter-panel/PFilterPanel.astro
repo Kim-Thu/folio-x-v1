@@ -7,6 +7,7 @@ import CRange from "@/components/object/component/CRange.astro";
 import CRating from "@/components/object/component/CRating.astro";
 import CText from "@/components/object/component/CText.astro";
 import type { PFilterPanelProps } from "@/types/components/object/project/filter-panel/PFilterPanel.types";
+import { filterPanelSectionLabelClasses } from "@/variants/components/object/project/filter-panel/PFilterPanel.variants";
 
 const { data } = Astro.props as PFilterPanelProps;
 const primaryGroups = [
@@ -22,7 +23,13 @@ const groups = [...primaryGroups, ...(data.groups ?? [])];
 		{groups.map((group, index) => (
 			<>
 				{index === 1 && data.filterLabel && (
-					<CText variant="caption" tone="inherit">{data.filterLabel}</CText>
+					<CText
+						variant="caption"
+						tone="inherit"
+						class={filterPanelSectionLabelClasses}
+					>
+						{data.filterLabel}
+					</CText>
 				)}
 				<CChoiceGroup {...group} />
 			</>
