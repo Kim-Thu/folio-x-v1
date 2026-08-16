@@ -11,11 +11,8 @@ import CMetadata from "@/components/object/component/CMetadata.astro";
 import CRating from "@/components/object/component/CRating.astro";
 import CRow from "@/components/object/component/CRow.astro";
 import CText from "@/components/object/component/CText.astro";
-import type {
-	CCardTemplateProps,
-	ProductCardPresentation,
-} from "@/types/components/object/component/card/CCard.types";
-import type { Product } from "@/types/content";
+import type { CCardTemplateProps } from "@/types/components/object/component/card/CCard.types";
+import { getCardSourceContext } from "@/utils/card";
 
 const {
 	data,
@@ -26,10 +23,14 @@ const {
 	source,
 } = Astro.props as CCardTemplateProps;
 
-const productSource = source === "products" ? data as unknown as Product : undefined;
-const productPresentation = productSource
-	? presentation as ProductCardPresentation | undefined
-	: undefined;
+const {
+	item: productSource,
+	presentation: productPresentation,
+} = getCardSourceContext("products", {
+	data,
+	source,
+	presentation,
+});
 const product = productSource ?? data.product;
 const href = productSource?.href ?? data.href;
 const title = productSource?.title ?? data.title.join(" ");
