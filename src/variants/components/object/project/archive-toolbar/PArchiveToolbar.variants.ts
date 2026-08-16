@@ -1,4 +1,4 @@
-export const archiveToolbarClasses = "relative z-40 mb-8";
+export const archiveToolbarClasses = "relative z-40";
 
 export const archiveToolbarGridClasses = "items-center";
 
