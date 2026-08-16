@@ -1,4 +1,4 @@
-import type {
+﻿import type {
 	CSliderControls,
 	CSliderShape,
 } from "@/types/components/object/component/CSlider.types";

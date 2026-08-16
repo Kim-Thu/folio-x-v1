@@ -1,4 +1,4 @@
-import type { CDescriptionListVariant } from "@/types/components/object/component/CDescriptionList.types";
+﻿import type { CDescriptionListVariant } from "@/types/components/object/component/CDescriptionList.types";
 
 export const descriptionListBaseClasses = "";
 

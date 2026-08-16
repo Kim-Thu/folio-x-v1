@@ -1,4 +1,4 @@
-import type {
+﻿import type {
 	CMenuTone,
 	CMenuVariant,
 } from "@/types/components/object/component/CMenu.types";

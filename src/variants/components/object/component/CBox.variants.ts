@@ -1,4 +1,4 @@
-import type {
+﻿import type {
 	CBoxOverflow,
 	CBoxPosition,
 	CBoxRadius,

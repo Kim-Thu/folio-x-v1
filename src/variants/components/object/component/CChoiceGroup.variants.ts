@@ -1,4 +1,4 @@
-import type { CChoiceGroupAppearance } from "@/types/components/object/component/CChoiceGroup.types";
+﻿import type { CChoiceGroupAppearance } from "@/types/components/object/component/CChoiceGroup.types";
 
 export const choiceOptionClasses: Record<CChoiceGroupAppearance, string> = {
 	controls:

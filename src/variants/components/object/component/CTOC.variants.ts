@@ -1,4 +1,4 @@
-import type { CTOCAppearance } from "@/types/components/object/component/CTOC.types";
+﻿import type { CTOCAppearance } from "@/types/components/object/component/CTOC.types";
 
 export const tocBaseClasses = "self-start";
 

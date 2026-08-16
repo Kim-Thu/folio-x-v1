@@ -1,4 +1,4 @@
-import type {
+﻿import type {
 	CIconTileSize,
 	CIconTileTone,
 } from "@/types/components/object/component/CIconTile.types";

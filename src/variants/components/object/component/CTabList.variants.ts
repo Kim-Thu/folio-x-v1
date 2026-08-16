@@ -1,4 +1,4 @@
-export const tabListClasses =
+﻿export const tabListClasses =
 	"flex min-w-0 flex-nowrap items-center overflow-x-auto overscroll-x-contain";
 
 export const tabListAppearanceClasses = {

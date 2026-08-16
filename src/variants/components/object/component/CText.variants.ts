@@ -1,4 +1,4 @@
-import type {
+﻿import type {
 	CTextTone,
 	CTextVariant,
 } from "@/types/components/object/component/CText.types";

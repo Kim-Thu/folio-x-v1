@@ -1,4 +1,4 @@
-export const breadcrumbClasses =
+﻿export const breadcrumbClasses =
 	"text-sm text-gray-500";
 
 export const breadcrumbListClasses = "flex min-w-0 flex-wrap items-center gap-2";

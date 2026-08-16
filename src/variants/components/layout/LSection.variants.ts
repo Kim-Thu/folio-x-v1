@@ -1,4 +1,4 @@
-import type {
+﻿import type {
 	LSectionSpacing,
 	LSectionTheme,
 } from "@/types/components/layout/LSection.types";

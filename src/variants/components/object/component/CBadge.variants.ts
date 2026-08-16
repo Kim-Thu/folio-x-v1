@@ -1,4 +1,4 @@
-import type {
+﻿import type {
 	CBadgePlacement,
 	CBadgeTone,
 } from "@/types/components/object/component/CBadge.types";
