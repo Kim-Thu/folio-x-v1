@@ -75,6 +75,7 @@ export interface PPageHeaderEditorialData {
 
 export interface PPageHeaderSplitBenefitsData {
   id: string;
+  breadcrumb?: CBreadcrumbData;
   eyebrow: string;
   title: string;
   accent: string;
