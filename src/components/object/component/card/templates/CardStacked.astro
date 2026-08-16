@@ -9,11 +9,8 @@ import CMedia from "@/components/object/component/CMedia.astro";
 import CMetadata from "@/components/object/component/CMetadata.astro";
 import CTags from "@/components/object/component/CTags.astro";
 import CText from "@/components/object/component/CText.astro";
-import type {
-	CCardTemplateProps,
-	InsightCardPresentation,
-} from "@/types/components/object/component/card/CCard.types";
-import type { Insight } from "@/types/content";
+import type { CCardTemplateProps } from "@/types/components/object/component/card/CCard.types";
+import { getCardSourceContext } from "@/utils/card";
 
 const {
 	data,
@@ -24,10 +21,14 @@ const {
 	source,
 } = Astro.props as CCardTemplateProps;
 
-const insight = source === "blog" ? data as unknown as Insight : undefined;
-const insightPresentation = insight
-	? presentation as InsightCardPresentation | undefined
-	: undefined;
+const {
+	item: insight,
+	presentation: insightPresentation,
+} = getCardSourceContext("blog", {
+	data,
+	source,
+	presentation,
+});
 const href = insight?.href ?? data.href;
 const title = insight?.title ?? data.title.join(" ");
 const excerpt = insight?.excerpt ?? data.excerpt;
