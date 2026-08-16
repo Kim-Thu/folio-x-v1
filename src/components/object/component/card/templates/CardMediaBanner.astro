@@ -1,5 +1,6 @@
 ---
 import CBox from "@/components/object/component/CBox.astro";
+import CButton from "@/components/object/component/CButton.astro";
 import CColumns from "@/components/object/component/CColumns.astro";
 import CHeading from "@/components/object/component/CHeading.astro";
 import CImage from "@/components/object/component/CImage.astro";
@@ -31,6 +32,17 @@ const {
 			)}
 			{slots.excerpt && data.excerpt && (
 				<CText variant="body-sm" tone="on-dark-muted">{data.excerpt}</CText>
+			)}
+			{slots.action && data.action && (
+				<CButton
+					href={data.action.href}
+					label={data.action.label}
+					icon={data.action.icon}
+					iconPosition={data.action.iconPosition}
+					variant="secondary"
+					tone="dark"
+					size="sm"
+				/>
 			)}
 		</CColumns>
 	</CBox>
