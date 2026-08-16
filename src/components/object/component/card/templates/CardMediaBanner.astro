@@ -23,27 +23,32 @@ const {
 			<CImage {...data.media} variant="fill" />
 		</CMedia>
 	)}
-	<CBox position="relative" spacing="lg">
-		<CColumns columns="one" gap="sm">
-			{slots.title && (
-				<CHeading level={headingLevel} variant="h3">
-					<CLink href={data.href}>{data.title.join(" ")}</CLink>
-				</CHeading>
-			)}
-			{slots.excerpt && data.excerpt && (
-				<CText variant="body-sm" tone="on-dark-muted">{data.excerpt}</CText>
-			)}
+	<CBox position="relative" spacing="lg" class="h-full">
+		<div class="flex h-full flex-col">
+			<CColumns columns="one" gap="sm">
+				{slots.title && (
+					<CHeading level={headingLevel} variant="h3">
+						<CLink href={data.href}>{data.title.join(" ")}</CLink>
+					</CHeading>
+				)}
+				{slots.excerpt && data.excerpt && (
+					<CText variant="body-sm" tone="on-dark-muted">{data.excerpt}</CText>
+				)}
+			</CColumns>
+
 			{data.action && (
-				<CButton
-					href={data.action.href}
-					label={data.action.label}
-					icon={data.action.icon}
-					iconPosition={data.action.iconPosition}
-					variant="secondary"
-					tone="dark"
-					size="sm"
-				/>
+				<div class="mt-auto pt-8">
+					<CButton
+						href={data.action.href}
+						label={data.action.label}
+						icon={data.action.icon}
+						iconPosition={data.action.iconPosition}
+						variant="secondary"
+						tone="dark"
+						size="sm"
+					/>
+				</div>
 			)}
-		</CColumns>
+		</div>
 	</CBox>
 </CBox>
