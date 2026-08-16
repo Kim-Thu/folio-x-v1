@@ -144,7 +144,7 @@ const orderedRegions = [...lead, ...navigation, ...content];
 								<PAdvertisement {...region.props.sidebar.advertisement} />
 							)}
 						</CColumns>
-						<CColumns columns="one" gap="md" data-archive-results>
+						<CColumns columns="one" gap="sm" data-archive-results>
 							{region.props.result?.header && <PSectionHeader {...region.props.result.header} />}
 							{region.props.result?.count !== undefined && region.props.result.label && (
 								<CText variant="caption" tone="subtle">
@@ -315,7 +315,7 @@ const orderedRegions = [...lead, ...navigation, ...content];
 													<PAdvertisement {...item.props.sidebar.advertisement} />
 												)}
 											</CColumns>
-											<CColumns columns="one" gap="md" data-archive-results>
+											<CColumns columns="one" gap="sm" data-archive-results>
 												{item.props.result?.header && <PSectionHeader {...item.props.result.header} />}
 												{item.props.result?.count !== undefined && item.props.result.label && (
 													<CText variant="caption" tone="subtle">
@@ -476,7 +476,7 @@ const orderedRegions = [...lead, ...navigation, ...content];
 													<PAdvertisement {...item.props.sidebar.advertisement} />
 												)}
 											</CColumns>
-											<CColumns columns="one" gap="md" data-archive-results>
+											<CColumns columns="one" gap="sm" data-archive-results>
 												{item.props.result?.header && <PSectionHeader {...item.props.result.header} />}
 												{item.props.result?.count !== undefined && item.props.result.label && (
 													<CText variant="caption" tone="subtle">
