@@ -4,6 +4,8 @@ import type { CSliderProps } from "@/types/components/object/component/CSlider.t
 import { cn } from "@/utils/cn";
 import {
 	sliderBaseClasses,
+	sliderBelowLeftButtonsClasses,
+	sliderBelowLeftPreviousClasses,
 	sliderButtonsClasses,
 	sliderControlsClasses,
 	sliderDotClasses,
@@ -28,7 +30,7 @@ const {
 	...attributes
 } = Astro.props as CSliderProps;
 
-const navigationVariant = controls === "below-left" ? "outline" : "secondary";
+const belowLeft = controls === "below-left";
 ---
 
 <div {...attributes} class={cn(sliderBaseClasses, className)} data-slider>
@@ -61,6 +63,7 @@ const navigationVariant = controls === "below-left" ? "outline" : "secondary";
 						))}
 					</div>
 				)}
+
 				{controls === "below" && (
 					<p class={sliderStatusClasses} aria-live="polite">
 						<span data-slider-current>01</span>
@@ -68,15 +71,22 @@ const navigationVariant = controls === "below-left" ? "outline" : "secondary";
 						<span>{String(itemCount).padStart(2, "0")}</span>
 					</p>
 				)}
+
 				{controls !== "dots" && (
-					<div class={sliderButtonsClasses} role="group" aria-label={label}>
+					<div
+						class={belowLeft ? sliderBelowLeftButtonsClasses : sliderButtonsClasses}
+						role="group"
+						aria-label={label}
+					>
 						<CButton
+							class={belowLeft ? sliderBelowLeftPreviousClasses : undefined}
 							label={previousLabel}
 							icon="chevronLeft"
 							iconOnly
 							size="sm"
-							variant={navigationVariant}
+							variant={belowLeft ? "ghost" : "secondary"}
 							tone="light"
+							disabled={belowLeft}
 							data-slider-previous
 						/>
 						<CButton
@@ -84,7 +94,7 @@ const navigationVariant = controls === "below-left" ? "outline" : "secondary";
 							icon="chevronRight"
 							iconOnly
 							size="sm"
-							variant={navigationVariant}
+							variant={belowLeft ? "primary" : "secondary"}
 							tone="light"
 							data-slider-next
 						/>
