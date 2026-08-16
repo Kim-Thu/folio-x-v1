@@ -24,15 +24,20 @@ const headingId = `${data.id}-title`;
 				</CMedia>
 			</CGridItem>
 		)}
+
 		<CGridItem as="header" lgSpan={5} align="center">
 			<CBox spacing="xl">
 				<CColumns columns="one" gap="md">
 					<CHeading id={headingId} level={2} variant="h2">
 						{data.title}
 					</CHeading>
+
 					{data.description && (
-						<CText variant="body-sm" tone="on-dark-muted">{data.description}</CText>
+						<CText variant="body-sm" tone="on-dark-muted">
+							{data.description}
+						</CText>
 					)}
+
 					{data.action && !data.form && (
 						<CRow>
 							<CButton
@@ -48,6 +53,7 @@ const headingId = `${data.id}-title`;
 				</CColumns>
 			</CBox>
 		</CGridItem>
+
 		{data.form && (
 			<CGridItem lgSpan={data.image ? 5 : 7} align="center">
 				<CBox spacing="lg">
@@ -55,10 +61,11 @@ const headingId = `${data.id}-title`;
 				</CBox>
 			</CGridItem>
 		)}
+
 		{data.image && !data.form && (
 			<CGridItem lgSpan={7}>
 				<CMedia ratio="panoramic" shape="none">
-					<CImage {...data.image} variant="fill" />
+					<CImage {...data.image} variant="background-contain" />
 				</CMedia>
 			</CGridItem>
 		)}
