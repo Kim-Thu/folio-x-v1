@@ -64,10 +64,7 @@ const desktopRatioClasses: Record<NonNullable<CCardTemplateProps["mediaRatio"]>,
 		</CMedia>
 	)}
 
-	<CBox
-		position="relative"
-		class={cn("h-full", source === "projects" ? "p-4" : "p-8")}
-	>
+	<CBox position="relative" class="h-full p-8">
 		<div class="flex h-full flex-col">
 			<CColumns columns="one" gap="xs">
 				{slots.metadata && card.metadata && (
