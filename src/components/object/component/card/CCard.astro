@@ -3,8 +3,8 @@ import { cCardTemplates } from "@/constants/components/object/component/card/CCa
 import type {
 	CCardData,
 	CCardProps,
-	CCardSlots,
 } from "@/types/components/object/component/card/CCard.types";
+import { resolveCardSlots } from "@/utils/card";
 
 const {
 	template = "stacked",
@@ -13,18 +13,7 @@ const {
 	...props
 } = Astro.props as CCardProps;
 
-const defaultSlots: CCardSlots = {
-	media: true,
-	icon: true,
-	metadata: true,
-	tags: true,
-	metrics: true,
-	title: true,
-	excerpt: true,
-	action: true,
-};
-
-const resolvedSlots = { ...defaultSlots, ...slots };
+const resolvedSlots = resolveCardSlots(slots);
 const Template = cCardTemplates[template];
 ---
 
