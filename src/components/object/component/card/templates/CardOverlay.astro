@@ -62,7 +62,7 @@ const desktopRatioClasses: Record<NonNullable<CCardTemplateProps["mediaRatio"]>,
 					<CTags items={data.tags} label={data.tagsLabel ?? `${data.title.join(" ")} tags`} />
 				)}
 			</CColumns>
-			{slots.action && data.action && (
+			{data.action && (
 				<CButton
 					href={data.action.href}
 					label={data.action.label}
