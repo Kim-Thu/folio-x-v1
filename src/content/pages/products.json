@@ -285,6 +285,27 @@
             "previous": "$199"
           }
         }
+      },
+      {
+        "id": "products-seo-content",
+        "type": "article",
+        "template": "grouped",
+        "settings": {
+          "theme": "canvas",
+          "spacing": "closing",
+          "container": "content"
+        },
+        "content": {
+          "blocks": [
+            {
+              "id": "digital-products-for-modern-web-creators",
+              "title": "Digital products for modern web creators",
+              "paragraphs": [
+                "Explore WordPress themes, plugins, UI kits and reusable web templates from NKT Studio, created for modern websites with practical workflows, maintainable structure and ongoing updates."
+              ]
+            }
+          ]
+        }
       }
     ]
   }
