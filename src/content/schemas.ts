@@ -93,6 +93,7 @@ const cardLayoutSchema = z.enum([
 	"mosaic",
 	"asymmetric",
 	"showcase",
+	"carousel",
 ]);
 const cardColumnsSchema = z.number().int().min(1).max(5);
 const cardGapSchema = z.enum(["none", "sm", "md", "lg", "xl"]);
