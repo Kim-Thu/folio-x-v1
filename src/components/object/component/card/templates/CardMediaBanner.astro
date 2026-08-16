@@ -7,42 +7,81 @@ import CImage from "@/components/object/component/CImage.astro";
 import CLink from "@/components/object/component/CLink.astro";
 import CMedia from "@/components/object/component/CMedia.astro";
 import CText from "@/components/object/component/CText.astro";
-import type { CCardTemplateProps } from "@/types/components/object/component/card/CCard.types";
+import type {
+	CCardTemplateProps,
+	PublicationCardPresentation,
+	PublicationCollectionPresentation,
+} from "@/types/components/object/component/card/CCard.types";
+import type { PublicationEntry } from "@/types/content";
 
 const {
 	data,
 	headingLevel = 3,
 	mediaRatio = "panoramic",
+	presentation,
 	slots,
+	source,
 } = Astro.props as CCardTemplateProps;
+
+const publication = source === "comics" || source === "novels" || source === "publications"
+	? data as unknown as PublicationEntry
+	: undefined;
+const publicationPresentation = publication
+	? source === "publications"
+		? (presentation as PublicationCollectionPresentation | undefined)?.[publication.catalog]
+		: presentation as PublicationCardPresentation | undefined
+	: undefined;
+const href = publication?.href ?? data.href;
+const title = publication?.title ?? data.title.join(" ");
+const excerpt = publication?.summary ?? data.excerpt;
+const media = publication?.cover ?? data.media;
+const ariaLabel = publication
+	? `${publicationPresentation?.ariaLabelPrefix ?? ""}${publication.title}`
+	: data.ariaLabel;
+const action = publication
+	? {
+		label: `${publicationPresentation?.ariaLabelPrefix ?? "Read "}${publication.title}`,
+		href,
+	}
+	: data.action;
 ---
 
-<CBox as="article" class="h-full" surface="dark" position="relative" ratio={mediaRatio} radius="lg" overflow="hidden">
-	{slots.media && data.media && (
-		<CMedia ratio="natural" placement="background" href={data.href} ariaLabel={data.ariaLabel}>
-			<CImage {...data.media} variant="fill" />
+<CBox
+	as="article"
+	class="h-full"
+	surface="dark"
+	position="relative"
+	ratio={mediaRatio}
+	radius="lg"
+	overflow="hidden"
+>
+	{slots.media && media && (
+		<CMedia ratio="natural" placement="background" href={href} ariaLabel={ariaLabel}>
+			<CImage {...media} variant="fill" />
 		</CMedia>
 	)}
+
 	<CBox position="relative" class="h-full p-8">
 		<div class="flex h-full flex-col">
 			<CColumns columns="one" gap="xs">
 				{slots.title && (
 					<CHeading level={headingLevel} variant="h3">
-						<CLink href={data.href}>{data.title.join(" ")}</CLink>
+						<CLink href={href}>{title}</CLink>
 					</CHeading>
 				)}
-				{slots.excerpt && data.excerpt && (
-					<CText variant="body-sm" tone="on-dark-muted">{data.excerpt}</CText>
+
+				{slots.excerpt && excerpt && (
+					<CText variant="body-sm" tone="on-dark-muted">{excerpt}</CText>
 				)}
 			</CColumns>
 
-			{data.action && (
+			{action && (
 				<div class="mt-auto pt-10">
 					<CButton
-						href={data.action.href}
-						label={data.action.label}
-						icon={data.action.icon}
-						iconPosition={data.action.iconPosition}
+						href={action.href}
+						label={action.label}
+						icon={action.icon}
+						iconPosition={action.iconPosition}
 						variant="secondary"
 						tone="dark"
 						size="sm"
