@@ -155,15 +155,9 @@ const sortValue = publication
 				{badge && <CBadge placement="top-end" tone={badge.tone}>{badge.label}</CBadge>}
 			</CMedia>
 
-			{lab && ((slots.metadata && metadata) || (slots.tags && tags && tags.length > 0)) && (
+			{lab && slots.tags && tags && tags.length > 0 && (
 				<div class="absolute inset-x-4 bottom-4 z-20 flex flex-wrap items-center gap-2">
-					{slots.metadata && metadata && (
-						<CMetadata data={metadata} slots={{ icons: false }} tone="brand" />
-					)}
-
-					{slots.tags && tags && tags.length > 0 && (
-						<CTags items={tags} label={tagsLabel ?? `${title} tags`} />
-					)}
+					<CTags items={tags} label={tagsLabel ?? `${title} tags`} />
 				</div>
 			)}
 		</div>
@@ -171,7 +165,7 @@ const sortValue = publication
 
 	<CBox spacing="sm">
 		<CColumns columns="one" gap="xs">
-			{!lab && slots.metadata && metadata && (
+			{slots.metadata && metadata && (
 				<CMetadata data={metadata} slots={{ icons: false }} tone="brand" />
 			)}
 
