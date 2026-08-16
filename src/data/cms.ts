@@ -94,7 +94,7 @@ export async function getInsights(): Promise<Insight[]> {
 
 	const dateFormatter = new Intl.DateTimeFormat(
 		interfaceSettings.contentFormatting.dateLocale,
-		{ day: "numeric", month: "long", year: "numeric", timeZone: "UTC" },
+		{ day: "2-digit", month: "2-digit", year: "numeric", timeZone: "UTC" },
 	);
 
 	return entries
