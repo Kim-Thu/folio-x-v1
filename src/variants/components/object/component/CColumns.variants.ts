@@ -42,6 +42,6 @@ export const columnsGapClasses: Record<CColumnsGap, string> = {
 	xs: "gap-1",
 	sm: "gap-4",
 	md: "gap-8",
-	lg: "gap-8 lg:gap-12",
+	lg: "gap-8 lg:gap-10",
 	xl: "gap-12 lg:gap-16",
 };
