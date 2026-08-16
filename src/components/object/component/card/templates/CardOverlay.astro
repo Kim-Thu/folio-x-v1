@@ -64,42 +64,51 @@ const desktopRatioClasses: Record<NonNullable<CCardTemplateProps["mediaRatio"]>,
 		</CMedia>
 	)}
 
-	<CBox position="relative" class="h-full p-8">
+	<CBox position="relative" class="h-full p-4">
 		<div class="flex h-full flex-col">
-			<CColumns columns="one" gap="xs">
-				{slots.metadata && card.metadata && (
-					<CMetadata
-						data={card.metadata}
-						size="caption"
-						tone={card.inverse ? "on-dark" : "brand"}
-					/>
-				)}
+			<CBox
+				surface={card.inverse ? "glass-dark" : "glass"}
+				radius="md"
+				spacing="sm"
+				class="w-full md:w-4/5"
+			>
+				<CColumns columns="one" gap="sm">
+					<CColumns columns="one" gap="xs">
+						{slots.metadata && card.metadata && (
+							<CMetadata
+								data={card.metadata}
+								size="caption"
+								tone={card.inverse ? "on-dark" : "brand"}
+							/>
+						)}
 
-				{slots.title && (
-					<CHeading level={headingLevel} variant="h3">
-						<CLink href={card.href}>{card.title}</CLink>
-					</CHeading>
-				)}
+						{slots.title && (
+							<CHeading level={headingLevel} variant="h4">
+								<CLink href={card.href}>{card.title}</CLink>
+							</CHeading>
+						)}
 
-				{slots.excerpt && card.excerpt && (
-					<CText
-						variant="body-sm"
-						tone={card.inverse ? "on-dark-muted" : "muted"}
-					>
-						{card.excerpt}
-					</CText>
-				)}
+						{slots.excerpt && card.excerpt && (
+							<CText
+								variant="body-sm"
+								tone={card.inverse ? "on-dark-muted" : "muted"}
+							>
+								{card.excerpt}
+							</CText>
+						)}
+					</CColumns>
 
-				{slots.tags && card.tags && card.tags.length > 0 && (
-					<CTags
-						items={card.tags}
-						label={card.tagsLabel ?? `${card.title} tags`}
-					/>
-				)}
-			</CColumns>
+					{slots.tags && card.tags && card.tags.length > 0 && (
+						<CTags
+							items={card.tags}
+							label={card.tagsLabel ?? `${card.title} tags`}
+						/>
+					)}
+				</CColumns>
+			</CBox>
 
 			{card.action && (
-				<div class="mt-auto pt-10">
+				<div class="mt-auto pt-8">
 					<CButton
 						href={card.action.href}
 						label={card.action.label}
