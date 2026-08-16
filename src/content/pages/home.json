@@ -81,12 +81,7 @@
               "Explore",
               "My Universe"
             ],
-            "description": "Chọn một hành tinh để khám phá thế giới của mình.",
-            "action": {
-              "href": "#featured-products",
-              "label": "Xem tất cả",
-              "icon": "arrowRight"
-            }
+            "description": "Chọn một hành tinh để khám phá thế giới của mình."
           },
           "items": [
             {
