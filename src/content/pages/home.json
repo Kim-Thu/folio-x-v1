@@ -387,7 +387,7 @@
         "content": {
           "source": {
             "collection": "publications",
-            "limit": 4
+            "limit": 5
           },
           "itemPresentation": {
             "comics": {
