@@ -434,7 +434,10 @@
         "settings": {
           "theme": "light",
           "spacing": "compact",
-          "container": "site"
+          "container": "site",
+          "layout": "grid",
+          "columns": 4,
+          "gap": "sm"
         },
         "content": {
           "heading": {
@@ -464,6 +467,13 @@
             "tagsLabelSuffix": " tags",
             "imageWidth": 1536,
             "imageHeight": 1536
+          },
+          "cards": {
+            "template": "stacked",
+            "layout": "grid",
+            "columns": 4,
+            "gap": "sm",
+            "headingLevel": 3
           }
         }
       },
