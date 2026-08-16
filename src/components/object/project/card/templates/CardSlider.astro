@@ -12,6 +12,7 @@ const {
 	columns = 4,
 	gap = "lg",
 	separator,
+	slider,
 	card,
 	items,
 	...attributes
@@ -22,6 +23,11 @@ void separator;
 
 const cardConfig = card ?? {};
 const sliderLabel = items.map((item) => item.title.join(" ")).join(", ");
+const sliderControls = slider?.controls ?? "below-left";
+const autoplay = slider?.autoplay ?? true;
+const autoplayInterval = slider?.autoplayInterval ?? 5000;
+const draggable = slider?.draggable ?? true;
+const pauseOnHover = slider?.pauseOnHover ?? true;
 ---
 
 <CSlider
@@ -31,9 +37,13 @@ const sliderLabel = items.map((item) => item.title.join(" ")).join(", ");
 	label={sliderLabel}
 	previousLabel={sliderLabel}
 	nextLabel={sliderLabel}
-	controls="below-left"
+	controls={sliderControls}
 	gap={gap}
 	shape="none"
+	{autoplay}
+	{autoplayInterval}
+	{draggable}
+	{pauseOnHover}
 	data-card-collection
 	data-product-grid={cardConfig.template === "media-details" ? "" : undefined}
 	data-view="carousel"
