@@ -3,39 +3,32 @@ import CBox from "@/components/object/component/CBox.astro";
 import CColumns from "@/components/object/component/CColumns.astro";
 import CGridItem from "@/components/object/component/CGridItem.astro";
 import CHeading from "@/components/object/component/CHeading.astro";
+import CLink from "@/components/object/component/CLink.astro";
 import CLogo from "@/components/object/component/CLogo.astro";
 import CMenu from "@/components/object/component/CMenu.astro";
 import CNavigation from "@/components/object/component/CNavigation.astro";
-import CSocialLinks from "@/components/object/component/CSocialLinks.astro";
-import CSubscriptionForm from "@/components/object/component/CSubscriptionForm.astro";
+import CRow from "@/components/object/component/CRow.astro";
 import CText from "@/components/object/component/CText.astro";
 import type { PFooterProps } from "@/types/components/object/project/footer/PFooter.types";
 
 type Props = PFooterProps;
 
-const { brand, columns, newsletter, socialLabel, copyright } = Astro.props;
+const { brand, columns, contact, legalLinks, copyright } = Astro.props;
 ---
 
 <Fragment>
 	<CBox spacing="lg">
-		<CColumns columns="twelve">
+		<CColumns columns="twelve" align="start">
 			<CGridItem lgSpan={3}>
-				<CColumns columns="one" gap="sm">
+				<CColumns columns="one" gap="sm" align="start">
 					<CLogo {...brand.logo} tone="light" size="lg" />
 					<CText variant="body-sm" tone="on-dark-muted">
 						{brand.description}
 					</CText>
-					<CSocialLinks
-						links={brand.socialLinks}
-						label={socialLabel}
-						display={brand.socialDisplay}
-						size="lg"
-						gap="lg"
-					/>
 				</CColumns>
 			</CGridItem>
 
-			<CGridItem mdSpan={1} lgSpan={5}>
+			<CGridItem mdSpan={1} lgSpan={6}>
 				<CColumns columns="compact-three" align="start">
 					{columns.map((column) => (
 						<CColumns
@@ -59,29 +52,35 @@ const { brand, columns, newsletter, socialLabel, copyright } = Astro.props;
 				</CColumns>
 			</CGridItem>
 
-			{newsletter && (
-				<CGridItem mdSpan={2} lgSpan={4}>
-					<CColumns columns="one" gap="sm">
-						<CHeading level={2} variant="footer">
-							{newsletter.label}
-						</CHeading>
-						<CText variant="body-sm" tone="on-dark-muted">
-							{newsletter.description}
+			<CGridItem mdSpan={2} lgSpan={3}>
+				<CColumns columns="one" gap="sm" align="start">
+					<CHeading level={2} variant="footer">
+						{contact.label}
+					</CHeading>
+					<CLink href={`mailto:${contact.email}`}>
+						{contact.email}
+					</CLink>
+					<CColumns columns="one" gap="xs" align="start">
+						<CText variant="caption" tone="on-dark-subtle">
+							{contact.locationLabel}
 						</CText>
-						<CSubscriptionForm
-							formName="newsletter"
-							inputId="footer-newsletter-email"
-							inputLabel={newsletter.inputLabel}
-							placeholder={newsletter.placeholder}
-							submitLabel={newsletter.submitLabel}
-						/>
+						<CText variant="body-sm" tone="on-dark-muted">
+							{contact.location}
+						</CText>
 					</CColumns>
-				</CGridItem>
-			)}
+				</CColumns>
+			</CGridItem>
 		</CColumns>
 	</CBox>
 
-	<CBox spacing="md">
-		<CText variant="label" tone="on-dark-subtle">{copyright}</CText>
+	<CBox spacing="md" class="border-t border-white/10">
+		<CRow justify="between" align="center" gap="sm" wrap>
+			<CText variant="label" tone="on-dark-subtle">{copyright}</CText>
+			<CRow gap="md" wrap>
+				{legalLinks.map((item) => (
+					<CLink href={item.href}>{item.label}</CLink>
+				))}
+			</CRow>
+		</CRow>
 	</CBox>
 </Fragment>
