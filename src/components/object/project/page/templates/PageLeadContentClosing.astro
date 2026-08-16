@@ -68,18 +68,20 @@ const orderedRegions = [...lead, ...content, ...closing];
 				spacing={region.props.panel ? "sm" : "none"}
 			>
 				<CColumns columns="one" gap="md">
-					{region.props.header && region.props.headerAction ? (
-						<CRow justify="between" align="end">
-							<PSectionHeader {...region.props.header} />
-							<CButton
-								{...region.props.headerAction}
-								variant={region.props.headerAction.variant ?? "text"}
-							/>
-						</CRow>
-					) : (
-						region.props.header && <PSectionHeader {...region.props.header} />
-					)}
-					<PCard {...region.props.cards} />
+					<CColumns columns="one" gap="lg">
+						{region.props.header && region.props.headerAction ? (
+							<CRow justify="between" align="end">
+								<PSectionHeader {...region.props.header} />
+								<CButton
+									{...region.props.headerAction}
+									variant={region.props.headerAction.variant ?? "text"}
+								/>
+							</CRow>
+						) : (
+							region.props.header && <PSectionHeader {...region.props.header} />
+						)}
+						<PCard {...region.props.cards} />
+					</CColumns>
 					{region.props.action && (
 						<CRow justify="center">
 							<CButton {...region.props.action} />
@@ -93,21 +95,27 @@ const orderedRegions = [...lead, ...content, ...closing];
 		{region.component === "collection" && (
 			<CColumns
 				columns="one"
-				gap="xl"
+				gap="md"
 				data-tabbed-collection={region.props.behavior === "tabbed" ? "" : undefined}
 			>
-				{region.props.header && <PSectionHeader {...region.props.header} />}
-				{region.props.tabs && <CTabList {...region.props.tabs} />}
-				<CColumns
-					columns={region.props.template === "split" ? "twelve" : "one"}
-					gap="xl"
-					data-collection-panel={region.props.behavior === "tabbed" ? "" : undefined}
-				>
-					{region.props.cardGroups.map((cards, index) => (
-						<CGridItem lgSpan={region.props.template === "split" ? (index === 0 ? 7 : 5) : "full"}>
-							<PCard {...cards} />
-						</CGridItem>
-					))}
+				<CColumns columns="one" gap="lg">
+					{(region.props.header || region.props.tabs) && (
+						<CColumns columns="one" gap="sm">
+							{region.props.header && <PSectionHeader {...region.props.header} />}
+							{region.props.tabs && <CTabList {...region.props.tabs} />}
+						</CColumns>
+					)}
+					<CColumns
+						columns={region.props.template === "split" ? "twelve" : "one"}
+						gap="lg"
+						data-collection-panel={region.props.behavior === "tabbed" ? "" : undefined}
+					>
+						{region.props.cardGroups.map((cards, index) => (
+							<CGridItem lgSpan={region.props.template === "split" ? (index === 0 ? 7 : 5) : "full"}>
+								<PCard {...cards} />
+							</CGridItem>
+						))}
+					</CColumns>
 				</CColumns>
 				{region.props.statement && <PStatement {...region.props.statement} />}
 				{region.props.action && (
@@ -120,7 +128,7 @@ const orderedRegions = [...lead, ...content, ...closing];
 		{region.component === "archive" && (
 			<CColumns
 				columns="one"
-				gap="md"
+				gap="sm"
 				data-filter-root={region.props.mode === "taxonomy" ? "" : undefined}
 				data-filter-mode={region.props.mode}
 				data-pagination-page-size={region.props.pagination.pageSize}
@@ -128,7 +136,7 @@ const orderedRegions = [...lead, ...content, ...closing];
 				<PArchiveToolbar {...region.props.toolbar} />
 				{region.props.mode === "faceted" && region.props.sidebar ? (
 					<LSidebar label={region.props.sidebar.label} sticky>
-						<CColumns slot="sidebar" columns="one" gap="md">
+						<CColumns slot="sidebar" columns="one" gap="lg">
 							<PFilterPanel {...region.props.sidebar.filter} />
 							{region.props.sidebar.cards && (
 								<CBox surface="glass" radius="md" spacing="sm">
@@ -144,20 +152,26 @@ const orderedRegions = [...lead, ...content, ...closing];
 								<PAdvertisement {...region.props.sidebar.advertisement} />
 							)}
 						</CColumns>
-						<CColumns columns="one" gap="none" class="gap-6" data-archive-results>
-							{region.props.result?.header && <PSectionHeader {...region.props.result.header} />}
-							{region.props.result?.count !== undefined && region.props.result.label && (
-								<CText variant="caption" tone="subtle">
-									<CText as="span" variant="caption" tone="inherit" data-result-count>
-										{region.props.result.count}
-									</CText>{" "}
-									{region.props.result.label}
+						<CColumns columns="one" gap="lg" data-archive-results>
+							<CColumns columns="one" gap="none" class="gap-6">
+								{(region.props.result?.header || (region.props.result?.count !== undefined && region.props.result.label)) && (
+									<CColumns columns="one" gap="sm">
+										{region.props.result?.header && <PSectionHeader {...region.props.result.header} />}
+										{region.props.result?.count !== undefined && region.props.result.label && (
+											<CText variant="caption" tone="subtle">
+												<CText as="span" variant="caption" tone="inherit" data-result-count>
+													{region.props.result.count}
+												</CText>{" "}
+												{region.props.result.label}
+											</CText>
+										)}
+									</CColumns>
+								)}
+								<PCard {...region.props.cards} />
+								<CText data-product-empty data-facet-empty hidden tone="muted">
+									{region.props.emptyLabel}
 								</CText>
-							)}
-							<PCard {...region.props.cards} />
-							<CText data-product-empty data-facet-empty hidden tone="muted">
-								{region.props.emptyLabel}
-							</CText>
+							</CColumns>
 							<CPagination
 								label={region.props.pagination.label}
 								previousLabel={region.props.pagination.previousLabel}
@@ -167,9 +181,11 @@ const orderedRegions = [...lead, ...content, ...closing];
 						</CColumns>
 					</LSidebar>
 				) : (
-					<CColumns columns="one" gap="md">
-						<PCard {...region.props.cards} />
-						<CText data-filter-empty hidden tone="muted">{region.props.emptyLabel}</CText>
+					<CColumns columns="one" gap="lg">
+						<CColumns columns="one" gap="sm">
+							<PCard {...region.props.cards} />
+							<CText data-filter-empty hidden tone="muted">{region.props.emptyLabel}</CText>
+						</CColumns>
 						<CPagination
 							label={region.props.pagination.label}
 							previousLabel={region.props.pagination.previousLabel}
@@ -215,14 +231,14 @@ const orderedRegions = [...lead, ...content, ...closing];
 				radius={region.props.panel ? "md" : "none"}
 				spacing={region.props.panel ? "sm" : "none"}
 			>
-				<CColumns columns="one" gap="md">
+				<CColumns columns="one" gap="sm">
 					{region.props.toolbar && <PArchiveToolbar {...region.props.toolbar} />}
 					<LSidebar
 						label={region.props.asideLabel}
 						position={region.props.asidePosition}
 						sticky={region.props.stickyAside}
 					>
-						<CColumns slot="sidebar" columns="one" gap={region.props.asideGap ?? "md"}>
+						<CColumns slot="sidebar" columns="one" gap={region.props.asideGap ?? "lg"}>
 							{region.props.regions
 								.filter((item) => item.enabled !== false && item.placement === "aside")
 								.map((item) => (
@@ -239,18 +255,20 @@ const orderedRegions = [...lead, ...content, ...closing];
 									spacing={item.props.panel ? "sm" : "none"}
 								>
 									<CColumns columns="one" gap="md">
-										{item.props.header && item.props.headerAction ? (
-											<CRow justify="between" align="end">
-												<PSectionHeader {...item.props.header} />
-												<CButton
-													{...item.props.headerAction}
-													variant={item.props.headerAction.variant ?? "text"}
-												/>
-											</CRow>
-										) : (
-											item.props.header && <PSectionHeader {...item.props.header} />
-										)}
-										<PCard {...item.props.cards} />
+										<CColumns columns="one" gap="lg">
+											{item.props.header && item.props.headerAction ? (
+												<CRow justify="between" align="end">
+													<PSectionHeader {...item.props.header} />
+													<CButton
+														{...item.props.headerAction}
+														variant={item.props.headerAction.variant ?? "text"}
+													/>
+												</CRow>
+											) : (
+												item.props.header && <PSectionHeader {...item.props.header} />
+											)}
+											<PCard {...item.props.cards} />
+										</CColumns>
 										{item.props.action && (
 											<CRow justify="center">
 												<CButton {...item.props.action} />
@@ -264,21 +282,27 @@ const orderedRegions = [...lead, ...content, ...closing];
 							{item.component === "collection" && (
 								<CColumns
 									columns="one"
-									gap="xl"
+									gap="md"
 									data-tabbed-collection={item.props.behavior === "tabbed" ? "" : undefined}
 								>
-									{item.props.header && <PSectionHeader {...item.props.header} />}
-									{item.props.tabs && <CTabList {...item.props.tabs} />}
-									<CColumns
-										columns={item.props.template === "split" ? "twelve" : "one"}
-										gap="xl"
-										data-collection-panel={item.props.behavior === "tabbed" ? "" : undefined}
-									>
-										{item.props.cardGroups.map((cards, index) => (
-											<CGridItem lgSpan={item.props.template === "split" ? (index === 0 ? 7 : 5) : "full"}>
-												<PCard {...cards} />
-											</CGridItem>
-										))}
+									<CColumns columns="one" gap="lg">
+										{(item.props.header || item.props.tabs) && (
+											<CColumns columns="one" gap="sm">
+												{item.props.header && <PSectionHeader {...item.props.header} />}
+												{item.props.tabs && <CTabList {...item.props.tabs} />}
+											</CColumns>
+										)}
+										<CColumns
+											columns={item.props.template === "split" ? "twelve" : "one"}
+											gap="lg"
+											data-collection-panel={item.props.behavior === "tabbed" ? "" : undefined}
+										>
+											{item.props.cardGroups.map((cards, index) => (
+												<CGridItem lgSpan={item.props.template === "split" ? (index === 0 ? 7 : 5) : "full"}>
+													<PCard {...cards} />
+												</CGridItem>
+											))}
+										</CColumns>
 									</CColumns>
 									{item.props.statement && <PStatement {...item.props.statement} />}
 									{item.props.action && (
@@ -291,7 +315,7 @@ const orderedRegions = [...lead, ...content, ...closing];
 							{item.component === "archive" && (
 								<CColumns
 									columns="one"
-									gap="md"
+									gap="sm"
 									data-filter-root={item.props.mode === "taxonomy" ? "" : undefined}
 									data-filter-mode={item.props.mode}
 									data-pagination-page-size={item.props.pagination.pageSize}
@@ -299,7 +323,7 @@ const orderedRegions = [...lead, ...content, ...closing];
 									<PArchiveToolbar {...item.props.toolbar} />
 									{item.props.mode === "faceted" && item.props.sidebar ? (
 										<LSidebar label={item.props.sidebar.label} sticky>
-											<CColumns slot="sidebar" columns="one" gap="md">
+											<CColumns slot="sidebar" columns="one" gap="lg">
 												<PFilterPanel {...item.props.sidebar.filter} />
 												{item.props.sidebar.cards && (
 													<CBox surface="glass" radius="md" spacing="sm">
@@ -315,20 +339,26 @@ const orderedRegions = [...lead, ...content, ...closing];
 													<PAdvertisement {...item.props.sidebar.advertisement} />
 												)}
 											</CColumns>
-											<CColumns columns="one" gap="none" class="gap-6" data-archive-results>
-												{item.props.result?.header && <PSectionHeader {...item.props.result.header} />}
-												{item.props.result?.count !== undefined && item.props.result.label && (
-													<CText variant="caption" tone="subtle">
-														<CText as="span" variant="caption" tone="inherit" data-result-count>
-															{item.props.result.count}
-														</CText>{" "}
-														{item.props.result.label}
+											<CColumns columns="one" gap="lg" data-archive-results>
+												<CColumns columns="one" gap="none" class="gap-6">
+													{(item.props.result?.header || (item.props.result?.count !== undefined && item.props.result.label)) && (
+														<CColumns columns="one" gap="sm">
+															{item.props.result?.header && <PSectionHeader {...item.props.result.header} />}
+															{item.props.result?.count !== undefined && item.props.result.label && (
+																<CText variant="caption" tone="subtle">
+																	<CText as="span" variant="caption" tone="inherit" data-result-count>
+																		{item.props.result.count}
+																	</CText>{" "}
+																	{item.props.result.label}
+																</CText>
+															)}
+														</CColumns>
+													)}
+													<PCard {...item.props.cards} />
+													<CText data-product-empty data-facet-empty hidden tone="muted">
+														{item.props.emptyLabel}
 													</CText>
-												)}
-												<PCard {...item.props.cards} />
-												<CText data-product-empty data-facet-empty hidden tone="muted">
-													{item.props.emptyLabel}
-												</CText>
+												</CColumns>
 												<CPagination
 													label={item.props.pagination.label}
 													previousLabel={item.props.pagination.previousLabel}
@@ -338,9 +368,11 @@ const orderedRegions = [...lead, ...content, ...closing];
 											</CColumns>
 										</LSidebar>
 									) : (
-										<CColumns columns="one" gap="md">
-											<PCard {...item.props.cards} />
-											<CText data-filter-empty hidden tone="muted">{item.props.emptyLabel}</CText>
+										<CColumns columns="one" gap="lg">
+											<CColumns columns="one" gap="sm">
+												<PCard {...item.props.cards} />
+												<CText data-filter-empty hidden tone="muted">{item.props.emptyLabel}</CText>
+											</CColumns>
 											<CPagination
 												label={item.props.pagination.label}
 												previousLabel={item.props.pagination.previousLabel}
@@ -400,18 +432,20 @@ const orderedRegions = [...lead, ...content, ...closing];
 									spacing={item.props.panel ? "sm" : "none"}
 								>
 									<CColumns columns="one" gap="md">
-										{item.props.header && item.props.headerAction ? (
-											<CRow justify="between" align="end">
-												<PSectionHeader {...item.props.header} />
-												<CButton
-													{...item.props.headerAction}
-													variant={item.props.headerAction.variant ?? "text"}
-												/>
-											</CRow>
-										) : (
-											item.props.header && <PSectionHeader {...item.props.header} />
-										)}
-										<PCard {...item.props.cards} />
+										<CColumns columns="one" gap="lg">
+											{item.props.header && item.props.headerAction ? (
+												<CRow justify="between" align="end">
+													<PSectionHeader {...item.props.header} />
+													<CButton
+														{...item.props.headerAction}
+														variant={item.props.headerAction.variant ?? "text"}
+													/>
+												</CRow>
+											) : (
+												item.props.header && <PSectionHeader {...item.props.header} />
+											)}
+											<PCard {...item.props.cards} />
+										</CColumns>
 										{item.props.action && (
 											<CRow justify="center">
 												<CButton {...item.props.action} />
@@ -425,21 +459,27 @@ const orderedRegions = [...lead, ...content, ...closing];
 							{item.component === "collection" && (
 								<CColumns
 									columns="one"
-									gap="xl"
+									gap="md"
 									data-tabbed-collection={item.props.behavior === "tabbed" ? "" : undefined}
 								>
-									{item.props.header && <PSectionHeader {...item.props.header} />}
-									{item.props.tabs && <CTabList {...item.props.tabs} />}
-									<CColumns
-										columns={item.props.template === "split" ? "twelve" : "one"}
-										gap="xl"
-										data-collection-panel={item.props.behavior === "tabbed" ? "" : undefined}
-									>
-										{item.props.cardGroups.map((cards, index) => (
-											<CGridItem lgSpan={item.props.template === "split" ? (index === 0 ? 7 : 5) : "full"}>
-												<PCard {...cards} />
-											</CGridItem>
-										))}
+									<CColumns columns="one" gap="lg">
+										{(item.props.header || item.props.tabs) && (
+											<CColumns columns="one" gap="sm">
+												{item.props.header && <PSectionHeader {...item.props.header} />}
+												{item.props.tabs && <CTabList {...item.props.tabs} />}
+											</CColumns>
+										)}
+										<CColumns
+											columns={item.props.template === "split" ? "twelve" : "one"}
+											gap="lg"
+											data-collection-panel={item.props.behavior === "tabbed" ? "" : undefined}
+										>
+											{item.props.cardGroups.map((cards, index) => (
+												<CGridItem lgSpan={item.props.template === "split" ? (index === 0 ? 7 : 5) : "full"}>
+													<PCard {...cards} />
+												</CGridItem>
+											))}
+										</CColumns>
 									</CColumns>
 									{item.props.statement && <PStatement {...item.props.statement} />}
 									{item.props.action && (
@@ -452,7 +492,7 @@ const orderedRegions = [...lead, ...content, ...closing];
 							{item.component === "archive" && (
 								<CColumns
 									columns="one"
-									gap="md"
+									gap="sm"
 									data-filter-root={item.props.mode === "taxonomy" ? "" : undefined}
 									data-filter-mode={item.props.mode}
 									data-pagination-page-size={item.props.pagination.pageSize}
@@ -460,7 +500,7 @@ const orderedRegions = [...lead, ...content, ...closing];
 									<PArchiveToolbar {...item.props.toolbar} />
 									{item.props.mode === "faceted" && item.props.sidebar ? (
 										<LSidebar label={item.props.sidebar.label} sticky>
-											<CColumns slot="sidebar" columns="one" gap="md">
+											<CColumns slot="sidebar" columns="one" gap="lg">
 												<PFilterPanel {...item.props.sidebar.filter} />
 												{item.props.sidebar.cards && (
 													<CBox surface="glass" radius="md" spacing="sm">
@@ -476,20 +516,26 @@ const orderedRegions = [...lead, ...content, ...closing];
 													<PAdvertisement {...item.props.sidebar.advertisement} />
 												)}
 											</CColumns>
-											<CColumns columns="one" gap="none" class="gap-6" data-archive-results>
-												{item.props.result?.header && <PSectionHeader {...item.props.result.header} />}
-												{item.props.result?.count !== undefined && item.props.result.label && (
-													<CText variant="caption" tone="subtle">
-														<CText as="span" variant="caption" tone="inherit" data-result-count>
-															{item.props.result.count}
-														</CText>{" "}
-														{item.props.result.label}
+											<CColumns columns="one" gap="lg" data-archive-results>
+												<CColumns columns="one" gap="none" class="gap-6">
+													{(item.props.result?.header || (item.props.result?.count !== undefined && item.props.result.label)) && (
+														<CColumns columns="one" gap="sm">
+															{item.props.result?.header && <PSectionHeader {...item.props.result.header} />}
+															{item.props.result?.count !== undefined && item.props.result.label && (
+																<CText variant="caption" tone="subtle">
+																	<CText as="span" variant="caption" tone="inherit" data-result-count>
+																		{item.props.result.count}
+																	</CText>{" "}
+																	{item.props.result.label}
+																</CText>
+															)}
+														</CColumns>
+													)}
+													<PCard {...item.props.cards} />
+													<CText data-product-empty data-facet-empty hidden tone="muted">
+														{item.props.emptyLabel}
 													</CText>
-												)}
-												<PCard {...item.props.cards} />
-												<CText data-product-empty data-facet-empty hidden tone="muted">
-													{item.props.emptyLabel}
-												</CText>
+												</CColumns>
 												<CPagination
 													label={item.props.pagination.label}
 													previousLabel={item.props.pagination.previousLabel}
@@ -499,9 +545,11 @@ const orderedRegions = [...lead, ...content, ...closing];
 											</CColumns>
 										</LSidebar>
 									) : (
-										<CColumns columns="one" gap="md">
-											<PCard {...item.props.cards} />
-											<CText data-filter-empty hidden tone="muted">{item.props.emptyLabel}</CText>
+										<CColumns columns="one" gap="lg">
+											<CColumns columns="one" gap="sm">
+												<PCard {...item.props.cards} />
+												<CText data-filter-empty hidden tone="muted">{item.props.emptyLabel}</CText>
+											</CColumns>
 											<CPagination
 												label={item.props.pagination.label}
 												previousLabel={item.props.pagination.previousLabel}
