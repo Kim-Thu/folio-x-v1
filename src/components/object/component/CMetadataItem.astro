@@ -2,7 +2,11 @@
 import CIcon from "@/components/object/component/CIcon.astro";
 import CLink from "@/components/object/component/CLink.astro";
 import type { CMetadataItem } from "@/types/components/object/component/CMetadata.types";
-import { metadataItemContentClasses } from "@/variants/components/object/component/CMetadata.variants";
+import { cn } from "@/utils/cn";
+import {
+	metadataCategoryLinkClasses,
+	metadataItemContentClasses,
+} from "@/variants/components/object/component/CMetadata.variants";
 
 type Props = {
 	icons: boolean;
@@ -12,12 +16,16 @@ type Props = {
 const { icons, item } = Astro.props as Props;
 const showIcon = icons && item.icon && item.display !== "text";
 const showLabel = item.display !== "icon";
+const linkClasses = cn(
+	metadataItemContentClasses,
+	item.type === "category" && metadataCategoryLinkClasses,
+);
 ---
 
 <li>
 	{
 		item.href ? (
-			<CLink href={item.href} class={metadataItemContentClasses}>
+			<CLink href={item.href} class={linkClasses}>
 				{showIcon && <CIcon name={item.icon!} size="sm" />}
 				{showLabel && <span>{item.label}</span>}
 			</CLink>
