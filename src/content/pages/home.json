@@ -282,7 +282,7 @@
               "categoryBase": "/projects/category/",
               "tagBase": "/projects/tag/"
             },
-            "separator": "",
+            "separator": " · ",
             "lightAppearance": "default",
             "darkAppearance": "inverse",
             "metadataDisplay": "text",
@@ -297,7 +297,7 @@
             "mediaRatio": "video",
             "headingLevel": 3,
             "slots": {
-              "metadata": false,
+              "metadata": true,
               "tags": false,
               "metrics": false,
               "action": false
@@ -426,7 +426,7 @@
             "mediaRatio": "portrait",
             "headingLevel": 2,
             "slots": {
-              "metadata": false,
+              "metadata": true,
               "tags": false,
               "metrics": false,
               "action": false
