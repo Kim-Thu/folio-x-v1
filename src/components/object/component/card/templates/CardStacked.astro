@@ -9,9 +9,66 @@ import CMedia from "@/components/object/component/CMedia.astro";
 import CMetadata from "@/components/object/component/CMetadata.astro";
 import CTags from "@/components/object/component/CTags.astro";
 import CText from "@/components/object/component/CText.astro";
-import type { CCardTemplateProps } from "@/types/components/object/component/card/CCard.types";
+import type {
+	CCardTemplateProps,
+	InsightCardPresentation,
+} from "@/types/components/object/component/card/CCard.types";
+import type { Insight } from "@/types/content";
 
-const { data, headingLevel = 3, slots } = Astro.props as CCardTemplateProps;
+const {
+	data,
+	headingLevel = 3,
+	presentation,
+	slots,
+	source,
+} = Astro.props as CCardTemplateProps;
+
+const insight = source === "blog" ? data as unknown as Insight : undefined;
+const insightPresentation = insight
+	? presentation as InsightCardPresentation | undefined
+	: undefined;
+const href = insight?.href ?? data.href;
+const title = insight?.title ?? data.title.join(" ");
+const excerpt = insight?.excerpt ?? data.excerpt;
+const media = insight && insightPresentation && insight.image && insight.imageAlt
+	? {
+		src: insight.image,
+		alt: insight.imageAlt,
+		width: insightPresentation.imageWidth,
+		height: insightPresentation.imageHeight,
+	}
+	: data.media;
+const metadata = insight
+	? {
+		separator: insightPresentation?.separator,
+		items: [
+			{
+				type: "category" as const,
+				label: insight.category,
+				href: insightPresentation?.routes.categoryBase
+					? `${insightPresentation.routes.categoryBase}${insight.categorySlug}`
+					: undefined,
+				display: insightPresentation?.metadataDisplay,
+			},
+			{
+				type: "reading-time" as const,
+				label: insight.readTime,
+				display: insightPresentation?.metadataDisplay,
+			},
+		],
+	}
+	: data.metadata;
+const tags = insight
+	? insight.tags.map((tag) => ({
+		label: tag.label,
+		href: insightPresentation?.routes.tagBase
+			? `${insightPresentation.routes.tagBase}${tag.slug}`
+			: undefined,
+	}))
+	: data.tags;
+const tagsLabel = insight && insightPresentation?.tagsLabelSuffix
+	? `${insight.title}${insightPresentation.tagsLabelSuffix}`
+	: data.tagsLabel;
 const inverse = data.appearance === "inverse";
 ---
 
@@ -21,29 +78,34 @@ const inverse = data.appearance === "inverse";
 	radius="lg"
 	overflow="hidden"
 >
-	{slots.media && data.media && (
+	{slots.media && media && (
 		<CBox radius="lg" overflow="hidden">
-			<CMedia ratio="editorial" shape="none" href={data.href} ariaLabel={data.ariaLabel}>
-				<CImage {...data.media} variant="fill" />
+			<CMedia ratio="editorial" shape="none" href={href} ariaLabel={title}>
+				<CImage {...media} variant="fill" />
 			</CMedia>
 		</CBox>
 	)}
+
 	<CBox spacing="sm">
 		<CColumns columns="one" gap="xs">
-			{slots.metadata && data.metadata && (
-				<CMetadata data={data.metadata} tone={inverse ? "on-dark" : "on-light"} />
+			{slots.metadata && metadata && (
+				<CMetadata data={metadata} tone={inverse ? "on-dark" : "on-light"} />
 			)}
+
 			{slots.title && (
 				<CHeading level={headingLevel} variant="h3">
-					<CLink href={data.href}>{data.title.join(" ")}</CLink>
+					<CLink href={href}>{title}</CLink>
 				</CHeading>
 			)}
-			{slots.excerpt && data.excerpt && (
-				<CText tone={inverse ? "on-dark-muted" : "subtle"}>{data.excerpt}</CText>
+
+			{slots.excerpt && excerpt && (
+				<CText tone={inverse ? "on-dark-muted" : "subtle"}>{excerpt}</CText>
 			)}
-			{slots.tags && data.tags && data.tags.length > 0 && (
-				<CTags items={data.tags} label={data.tagsLabel ?? `${data.title.join(" ")} tags`} />
+
+			{slots.tags && tags && tags.length > 0 && (
+				<CTags items={tags} label={tagsLabel ?? `${title} tags`} />
 			)}
+
 			{slots.action && data.action && (
 				<CButton
 					href={data.action.href}
