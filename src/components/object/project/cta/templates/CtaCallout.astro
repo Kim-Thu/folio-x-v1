@@ -27,16 +27,18 @@ const headingId = `${data.id}-title`;
 
 		<CGridItem as="header" lgSpan={5} align="center">
 			<CBox spacing="xl">
-				<CColumns columns="one" gap="md">
-					<CHeading id={headingId} level={2} variant="h2">
-						{data.title}
-					</CHeading>
+				<CColumns columns="one" gap="lg">
+					<CColumns columns="one" gap="sm">
+						<CHeading id={headingId} level={2} variant="h2">
+							{data.title}
+						</CHeading>
 
-					{data.description && (
-						<CText variant="body-sm" tone="on-dark-muted">
-							{data.description}
-						</CText>
-					)}
+						{data.description && (
+							<CText variant="body-sm" tone="on-dark-muted">
+								{data.description}
+							</CText>
+						)}
+					</CColumns>
 
 					{data.action && !data.form && (
 						<CRow>
