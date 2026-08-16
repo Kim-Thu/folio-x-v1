@@ -167,6 +167,10 @@ export function mapPublicationToCard(
 				display: presentation.categoryDisplay,
 			})),
 		},
+		action: {
+			href,
+			label: `${presentation.ariaLabelPrefix}${entry.title}`,
+		},
 		tags: entry.genres.map((genre) => ({
 			label: genre.label,
 			href: presentation.routes.categoryBase ? `${presentation.routes.categoryBase}${genre.slug}` : undefined,
