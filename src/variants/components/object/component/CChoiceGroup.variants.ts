@@ -15,7 +15,7 @@ export const choiceControlClasses: Record<CChoiceGroupAppearance, string> = {
 
 export const choiceControlWrapClasses = "relative inline-flex size-5 shrink-0";
 export const choiceControlIconClasses =
-	"pointer-events-none absolute inset-0 text-white opacity-0 transition-opacity duration-300 peer-checked:opacity-100";
+	"pointer-events-none absolute inset-0 m-auto text-white opacity-0 transition-opacity duration-300 peer-checked:opacity-100";
 
 export const choiceLabelClasses = "flex-1";
 export const choiceCountClasses = "font-mono text-xs text-gray-500";
