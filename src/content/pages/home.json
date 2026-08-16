@@ -379,15 +379,15 @@
           "theme": "light",
           "spacing": "compact",
           "container": "site",
-          "layout": "asymmetric",
-          "columns": 2,
+          "layout": "carousel",
+          "columns": 4,
           "gap": "sm",
-          "mediaRatio": "panoramic"
+          "mediaRatio": "portrait"
         },
         "content": {
           "source": {
             "collection": "publications",
-            "limit": 2
+            "limit": 4
           },
           "itemPresentation": {
             "comics": {
@@ -413,10 +413,10 @@
           },
           "cards": {
             "template": "media-banner",
-            "layout": "asymmetric",
-            "columns": 2,
+            "layout": "carousel",
+            "columns": 4,
             "gap": "sm",
-            "mediaRatio": "panoramic",
+            "mediaRatio": "portrait",
             "headingLevel": 2,
             "slots": {
               "metadata": false,
