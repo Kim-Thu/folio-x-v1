@@ -7,12 +7,13 @@ import type { CBadgeTone } from "@/types/components/object/component/CBadge.type
 import type { CFeatureData } from "@/types/components/object/component/CFeature.types";
 import type { CIconName } from "@/types/components/object/component/CIcon.types";
 import type { CMediaRatio } from "@/types/components/object/component/CMedia.types";
+import type { CColumnsTemplate } from "@/types/components/object/component/CColumns.types";
 
 export type PCardTemplate =
   "stacked" | "horizontal" | "overlay" | "featured" | "boxed" | "compact-media" | "compact-bordered" | "editorial" | "icon-panel" | "icon-summary" | "media-banner" | "media-caption" | "media-details" | "media-only" | "media-summary" | "media-metrics";
 
 export type PCardLayout =
-  "grid" | "list" | "three-column" | "twelve-column" | "content-three-column" | "mosaic" | "asymmetric" | "showcase";
+  "grid" | "list" | "three-column" | "twelve-column" | "content-three-column" | "mosaic" | "asymmetric" | "showcase" | "carousel";
 
 export type PCardColumns = 1 | 2 | 3 | 4 | 5;
 
@@ -99,3 +100,18 @@ export type PCardItemProps = Pick<PCardProps, "headingLevel" | "mediaRatio"> & {
   index?: number;
   slots: PCardSlots;
 };
+
+export type PCardItemTemplateComponent = typeof import("@/components/object/project/card/templates/CardStacked.astro").default;
+
+export interface PCardCollectionTemplateProps extends Omit<HTMLAttributes<"div">, "class"> {
+  CardTemplate: PCardItemTemplateComponent;
+  items: PCardData[];
+  columns: PCardColumns;
+  columnsTemplate?: CColumnsTemplate;
+  gap: PCardGap;
+  mediaRatio?: CMediaRatio;
+  headingLevel: CHeadingProps["level"];
+  separator: PCardSeparator;
+  slots: PCardSlots;
+  productGrid?: boolean;
+}
