@@ -430,7 +430,7 @@
       {
         "id": "insights",
         "type": "collection",
-        "template": "split",
+        "template": "cards",
         "settings": {
           "theme": "canvas",
           "spacing": "compact",
