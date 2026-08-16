@@ -7,35 +7,69 @@ import CLink from "@/components/object/component/CLink.astro";
 import CMedia from "@/components/object/component/CMedia.astro";
 import CMetadata from "@/components/object/component/CMetadata.astro";
 import CText from "@/components/object/component/CText.astro";
-import type { CCardTemplateProps } from "@/types/components/object/component/card/CCard.types";
+import type {
+	CCardTemplateProps,
+	LabCardPresentation,
+} from "@/types/components/object/component/card/CCard.types";
+import type { Lab } from "@/types/content";
 
 const {
 	data,
 	headingLevel = 3,
 	mediaRatio = "landscape",
+	presentation,
 	slots,
+	source,
 } = Astro.props as CCardTemplateProps;
+
+const lab = source === "labs" ? data as unknown as Lab : undefined;
+const labPresentation = lab
+	? presentation as LabCardPresentation | undefined
+	: undefined;
+const href = lab?.href ?? data.href;
+const title = lab?.title ?? data.title.join(" ");
+const excerpt = lab?.summary ?? data.excerpt;
+const media = lab?.image ?? data.media;
+const metadata = lab
+	? {
+		items: [
+			{
+				type: "category" as const,
+				label: lab.category.label,
+				href: labPresentation?.routes.categoryBase
+					? `${labPresentation.routes.categoryBase}${lab.category.slug}`
+					: undefined,
+				display: labPresentation?.categoryDisplay,
+			},
+		],
+	}
+	: data.metadata;
 const inverse = data.appearance === "inverse";
 ---
 
 <CBox as="article">
-	{slots.media && data.media && (
-		<CMedia ratio={mediaRatio} href={data.href} ariaLabel={data.ariaLabel} shape="none">
-			<CImage {...data.media} variant="fill" />
+	{slots.media && media && (
+		<CMedia ratio={mediaRatio} href={href} ariaLabel={title} shape="none">
+			<CImage {...media} variant="fill" />
 		</CMedia>
 	)}
+
 	<CBox class="py-4">
 		<CColumns columns="one" gap="xs">
 			{slots.title && (
 				<CHeading level={headingLevel} variant="h5">
-					<CLink href={data.href}>{data.title.join(" ")}</CLink>
+					<CLink href={href}>{title}</CLink>
 				</CHeading>
 			)}
-			{slots.metadata && data.metadata && (
-				<CMetadata data={data.metadata} size="xs" tone={inverse ? "on-dark-subtle" : "on-light"} />
+
+			{slots.metadata && metadata && (
+				<CMetadata data={metadata} size="xs" tone={inverse ? "on-dark-subtle" : "on-light"} />
 			)}
-			{slots.excerpt && data.excerpt && (
-				<CText variant="body-sm" tone={inverse ? "on-dark-muted" : "muted"}>{data.excerpt}</CText>
+
+			{slots.excerpt && excerpt && (
+				<CText variant="body-sm" tone={inverse ? "on-dark-muted" : "muted"}>
+					{excerpt}
+				</CText>
 			)}
 		</CColumns>
 	</CBox>
