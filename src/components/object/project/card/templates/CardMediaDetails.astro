@@ -13,8 +13,7 @@ import CRow from "@/components/object/component/CRow.astro";
 import CText from "@/components/object/component/CText.astro";
 import type { PCardItemProps } from "@/types/components/object/project/card/PCard.types";
 
-const { data, headingLevel = 3, index, slots } =
-	Astro.props as PCardItemProps;
+const { data, headingLevel = 3, index, slots } = Astro.props as PCardItemProps;
 const product = data.product;
 ---
 
@@ -35,11 +34,7 @@ const product = data.product;
 			data-sort-index={index}
 		>
 			{slots.media && data.media && (
-				<CMedia
-					ratio="editorial"
-					href={data.href}
-					ariaLabel={data.ariaLabel}
-				>
+				<CMedia ratio="editorial" href={data.href} ariaLabel={data.ariaLabel}>
 					<CImage {...data.media} variant="fill" />
 					{product.badge && (
 						<CBadge placement="top-end">{product.badge}</CBadge>
@@ -47,7 +42,7 @@ const product = data.product;
 				</CMedia>
 			)}
 			<CBox spacing="xs">
-				<CColumns columns="one" gap="none" class="gap-16">
+				<CColumns columns="one" gap="none" class="gap-10">
 					<CColumns columns="one" gap="xs">
 						{slots.metadata && data.metadata && (
 							<CMetadata
