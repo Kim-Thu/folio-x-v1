@@ -11,7 +11,7 @@ export const textVariantClasses: Record<CTextVariant, string> = {
 	caption: "font-mono text-xs uppercase tracking-widest",
 	label: "font-mono text-xs uppercase tracking-widest",
 	lead: "text-2xl leading-snug md:text-3xl",
-	price: "text-xl font-semibold leading-none",
+	price: "text-2xl font-semibold leading-none",
 	"price-display": "text-4xl font-semibold leading-none",
 	"price-old": "text-xs line-through",
 	reader: "text-lg leading-loose",
