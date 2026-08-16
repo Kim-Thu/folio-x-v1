@@ -63,7 +63,7 @@ const metadata = publication
 			},
 			{
 				type: "datetime" as const,
-				label: `Updated ${publication.updatedLabel}`,
+				label: publication.updatedLabel,
 				display: publicationPresentation?.categoryDisplay,
 			},
 		],
@@ -98,7 +98,7 @@ const action = publication
 		<div class="flex h-full flex-col">
 			<CColumns columns="one" gap="xs">
 				{slots.metadata && metadata && (
-					<CMetadata data={metadata} size="xs" tone="on-dark" />
+					<CMetadata data={metadata} size="caption" tone="on-dark" />
 				)}
 
 				{slots.title && (
