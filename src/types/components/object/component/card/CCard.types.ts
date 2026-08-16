@@ -15,6 +15,7 @@ export type CCardTemplate =
 	| "compact-media"
 	| "compact-bordered"
 	| "editorial"
+	| "editorial-list"
 	| "icon-panel"
 	| "icon-summary"
 	| "media-banner"
