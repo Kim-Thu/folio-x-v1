@@ -141,7 +141,7 @@
               "allHref": "/labs"
             },
             "technology": {
-              "appearance": "navigation",
+              "appearance": "controls",
               "control": "technology",
               "legend": "Tech stack",
               "name": "labs-technology",
