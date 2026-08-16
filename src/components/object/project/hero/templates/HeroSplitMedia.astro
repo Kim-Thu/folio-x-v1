@@ -1,51 +1,72 @@
 ---
 import CButton from "@/components/object/component/CButton.astro";
 import CColumns from "@/components/object/component/CColumns.astro";
+import CDialog from "@/components/object/component/CDialog.astro";
 import CHeading from "@/components/object/component/CHeading.astro";
 import CGridItem from "@/components/object/component/CGridItem.astro";
 import CImage from "@/components/object/component/CImage.astro";
 import CMedia from "@/components/object/component/CMedia.astro";
 import CRow from "@/components/object/component/CRow.astro";
 import CText from "@/components/object/component/CText.astro";
+import CVideo from "@/components/object/component/CVideo.astro";
 import type { PHeroData } from "@/types/components/object/project/hero/PHero.types";
 
 const { data } = Astro.props as { data: PHeroData };
+const videoAction = data.actions.find((action) => action.icon === "play");
+const videoDialogId = `${data.id}-video`;
 ---
 
-		<CColumns columns="twelve" gap="xl">
-			<CGridItem as="header" lgSpan={6}>
-				<CColumns columns="one" gap="md">
-					<CText variant="body-sm">{data.eyebrow}</CText>
-					<CHeading level={1} variant="display-3" lines={data.title} accent={data.accent} />
-					<CText tone="subtle">{data.description}</CText>
-					<CRow gap="lg" align="center">
-						{data.actions.map((action) => <CButton {...action} />)}
-					</CRow>
-					{data.socialLinks && (
-						<CRow gap="sm" align="center">
-							{data.socialLinks.map((link) => (
-								<CButton
-									href={link.href}
-									label={link.label}
-									icon={link.icon}
-									iconOnly
-									variant="text-subtle"
-									tone="light"
-									size="sm"
-								/>
-							))}
-						</CRow>
-					)}
-				</CColumns>
-			</CGridItem>
-			<CGridItem lgSpan={6}>
-				<CMedia ratio="natural" shape="none">
-					<CImage {...data.image} variant="natural" loading="eager" fetchpriority="high" />
-				</CMedia>
-			</CGridItem>
-		</CColumns>
-		{data.scrollLabel && (
-			<CRow justify="end">
-				<CText variant="caption" tone="subtle">{data.scrollLabel}</CText>
+<CColumns columns="twelve" gap="xl" align="center">
+	<CGridItem as="header" lgSpan={6}>
+		<CColumns columns="one" gap="md">
+			<CText variant="body-sm">{data.eyebrow}</CText>
+			<CHeading level={1} variant="display-3" lines={data.title} accent={data.accent} />
+			<CText tone="subtle">{data.description}</CText>
+			<CRow gap="lg" align="center">
+				{data.actions.map((action) => action.icon === "play" ? (
+					<CButton
+						label={action.label}
+						icon={action.icon}
+						iconPosition={action.iconPosition}
+						variant="outline"
+						tone={action.tone}
+						size={action.size}
+						data-dialog-open={videoDialogId}
+					/>
+				) : (
+					<CButton {...action} />
+				))}
 			</CRow>
-		)}
+			{data.socialLinks && (
+				<CRow gap="sm" align="center">
+					{data.socialLinks.map((link) => (
+						<CButton
+							href={link.href}
+							label={link.label}
+							icon={link.icon}
+							iconOnly
+							variant="text-subtle"
+							tone="light"
+							size="sm"
+						/>
+					))}
+				</CRow>
+			)}
+		</CColumns>
+	</CGridItem>
+	<CGridItem lgSpan={6}>
+		<CMedia ratio="natural" shape="none">
+			<CImage {...data.image} variant="natural" loading="eager" fetchpriority="high" />
+		</CMedia>
+	</CGridItem>
+</CColumns>
+
+{videoAction && (
+	<CDialog
+		id={videoDialogId}
+		label={videoAction.label}
+		closeLabel={`Đóng ${videoAction.label}`}
+	>
+		<CVideo src={videoAction.href} title={videoAction.label} />
+	</CDialog>
+)}
