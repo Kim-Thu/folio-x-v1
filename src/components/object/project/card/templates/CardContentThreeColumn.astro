@@ -1,0 +1,33 @@
+---
+import CCard from "@/components/object/component/card/CCard.astro";
+import CColumns from "@/components/object/component/CColumns.astro";
+import CGridItem from "@/components/object/component/CGridItem.astro";
+import type { PCardTemplateProps } from "@/types/components/object/project/card/PCard.types";
+
+const {
+	gap = "lg",
+	separator = "none",
+	card,
+	items,
+	...attributes
+} = Astro.props as PCardTemplateProps;
+
+const spans = [3, 4, 5] as const;
+const cardConfig = card ?? {};
+---
+
+<CColumns
+	{...attributes}
+	columns="twelve"
+	{gap}
+	{separator}
+	data-card-collection
+	data-product-grid={cardConfig.template === "media-details" ? "" : undefined}
+	data-view="grid"
+>
+	{items.map((item, index) => (
+		<CGridItem lgSpan={spans[index] ?? 5}>
+			<CCard {...cardConfig} data={item} index={index} />
+		</CGridItem>
+	))}
+</CColumns>

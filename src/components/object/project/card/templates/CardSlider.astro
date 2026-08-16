@@ -1,0 +1,33 @@
+---
+import CCard from "@/components/object/component/card/CCard.astro";
+import type { PCardTemplateProps } from "@/types/components/object/project/card/PCard.types";
+import { cn } from "@/utils/cn";
+import {
+	cardSliderClasses,
+	cardSliderGapClasses,
+	cardSliderItemClasses,
+} from "@/variants/components/object/project/card/PCard.variants";
+
+const {
+	gap = "lg",
+	card,
+	items,
+	...attributes
+} = Astro.props as PCardTemplateProps;
+
+const cardConfig = card ?? {};
+---
+
+<div
+	{...attributes}
+	class={cn(cardSliderClasses, cardSliderGapClasses[gap])}
+	data-card-collection
+	data-product-grid={cardConfig.template === "media-details" ? "" : undefined}
+	data-view="carousel"
+>
+	{items.map((item, index) => (
+		<div class={cardSliderItemClasses}>
+			<CCard {...cardConfig} data={item} index={index} />
+		</div>
+	))}
+</div>

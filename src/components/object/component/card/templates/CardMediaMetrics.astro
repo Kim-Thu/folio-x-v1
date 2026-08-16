@@ -1,0 +1,60 @@
+---
+import CBadge from "@/components/object/component/CBadge.astro";
+import CBox from "@/components/object/component/CBox.astro";
+import CColumns from "@/components/object/component/CColumns.astro";
+import CFeature from "@/components/object/component/CFeature.astro";
+import CHeading from "@/components/object/component/CHeading.astro";
+import CImage from "@/components/object/component/CImage.astro";
+import CLink from "@/components/object/component/CLink.astro";
+import CMedia from "@/components/object/component/CMedia.astro";
+import CMetadata from "@/components/object/component/CMetadata.astro";
+import CRating from "@/components/object/component/CRating.astro";
+import CRow from "@/components/object/component/CRow.astro";
+import CTags from "@/components/object/component/CTags.astro";
+import CText from "@/components/object/component/CText.astro";
+import type { CCardTemplateProps } from "@/types/components/object/component/card/CCard.types";
+
+const {
+	data,
+	headingLevel = 3,
+	index,
+	mediaRatio = "video",
+	slots,
+} = Astro.props as CCardTemplateProps;
+---
+
+<CBox
+	as="article"
+	surface="glass"
+	radius="md"
+	overflow="hidden"
+	data-facet-card={data.facets ? "" : undefined}
+	data-facets={data.facets ? JSON.stringify(data.facets) : undefined}
+	data-search-value={(data.searchValue ?? data.title.join(" ")).toLowerCase()}
+	data-sort-index={index}
+>
+	{slots.media && data.media && (
+		<CMedia ratio={mediaRatio} href={data.href} ariaLabel={data.ariaLabel}>
+			<CImage {...data.media} variant="fill" />
+			{data.badge && <CBadge placement="top-end" tone={data.badge.tone}>{data.badge.label}</CBadge>}
+		</CMedia>
+	)}
+	<CBox spacing="sm">
+		<CColumns columns="one" gap="xs">
+			{slots.metadata && data.metadata && <CMetadata data={data.metadata} slots={{ icons: false }} tone="brand" />}
+			{slots.title && (
+				<CHeading level={headingLevel} variant="h4">
+					<CLink href={data.href}>{data.title.join(" ")}</CLink>
+				</CHeading>
+			)}
+			{slots.excerpt && data.excerpt && <CText variant="body-sm" tone="subtle">{data.excerpt}</CText>}
+			{slots.tags && data.tags && data.tags.length > 0 && (
+				<CTags items={data.tags} label={data.tagsLabel ?? `${data.title.join(" ")} tags`} />
+			)}
+			{slots.metrics && data.metrics && data.metrics.length > 0 && (
+				<CRow gap="md">{data.metrics.map((metric) => <CFeature {...metric} appearance="caption" />)}</CRow>
+			)}
+			{data.rating && <CRating style="compact" value={data.rating.value} maximum={5} count={data.rating.count} />}
+		</CColumns>
+	</CBox>
+</CBox>

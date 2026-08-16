@@ -1,0 +1,70 @@
+---
+import CBox from "@/components/object/component/CBox.astro";
+import CButton from "@/components/object/component/CButton.astro";
+import CColumns from "@/components/object/component/CColumns.astro";
+import CHeading from "@/components/object/component/CHeading.astro";
+import CImage from "@/components/object/component/CImage.astro";
+import CLink from "@/components/object/component/CLink.astro";
+import CMedia from "@/components/object/component/CMedia.astro";
+import CMetadata from "@/components/object/component/CMetadata.astro";
+import CRow from "@/components/object/component/CRow.astro";
+import CTags from "@/components/object/component/CTags.astro";
+import CText from "@/components/object/component/CText.astro";
+import type { CCardTemplateProps } from "@/types/components/object/component/card/CCard.types";
+
+const { data, headingLevel = 3, index, slots } = Astro.props as CCardTemplateProps;
+const inverse = data.appearance === "inverse";
+---
+
+<CBox
+	as="article"
+	surface={inverse ? "glass-dark" : "glass"}
+	radius="lg"
+	overflow="hidden"
+	data-tab-card={data.filterValue ? "" : undefined}
+	data-filter-category={data.filterValue}
+	data-sort-value={data.sortValue}
+	data-sort-index={index}
+>
+	{slots.media && data.media && (
+		<CMedia ratio="video" href={data.href} ariaLabel={data.ariaLabel}>
+			<CImage {...data.media} variant="fill" />
+		</CMedia>
+	)}
+	<CBox spacing="md">
+		<CColumns columns="one" gap="sm">
+			{slots.metadata && data.metadata && (
+				<CMetadata data={data.metadata} tone={inverse ? "on-dark-subtle" : "on-light"} />
+			)}
+			{slots.title && (
+				<CHeading level={headingLevel} variant="h3">
+					<CLink href={data.href}>{data.title.join(" ")}</CLink>
+				</CHeading>
+			)}
+			{slots.excerpt && data.excerpt && (
+				<CText tone={inverse ? "on-dark-muted" : "subtle"}>{data.excerpt}</CText>
+			)}
+			{slots.tags && data.tags && data.tags.length > 0 && (
+				<CTags items={data.tags} label={data.tagsLabel ?? `${data.title.join(" ")} tags`} />
+			)}
+			{slots.action && data.action && (
+				<CRow justify="between">
+					{data.supportingLabel && (
+						<CText variant="caption" tone={inverse ? "on-dark-subtle" : "subtle"}>
+							{data.supportingLabel}
+						</CText>
+					)}
+					<CButton
+						href={data.action.href}
+						label={data.action.label}
+						icon={data.action.icon}
+						iconPosition={data.action.iconPosition}
+						variant="text-subtle"
+						tone={inverse ? "dark" : "light"}
+						size="xs"
+					/>
+				</CRow>
+			)}
+		</CColumns>
+	</CBox>
+</CBox>

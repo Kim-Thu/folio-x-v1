@@ -1,0 +1,47 @@
+---
+import CBox from "@/components/object/component/CBox.astro";
+import CColumns from "@/components/object/component/CColumns.astro";
+import CHeading from "@/components/object/component/CHeading.astro";
+import CImage from "@/components/object/component/CImage.astro";
+import CLink from "@/components/object/component/CLink.astro";
+import CMedia from "@/components/object/component/CMedia.astro";
+import CMetadata from "@/components/object/component/CMetadata.astro";
+import CText from "@/components/object/component/CText.astro";
+import type { CCardTemplateProps } from "@/types/components/object/component/card/CCard.types";
+
+const { data, headingLevel = 3, index, slots } = Astro.props as CCardTemplateProps;
+---
+
+<CBox
+	as="article"
+	surface="glass"
+	radius="md"
+	overflow="hidden"
+	data-facet-card
+	data-facets={JSON.stringify(data.facets ?? {})}
+	data-search-value={data.searchValue?.toLowerCase()}
+	data-sort-value={data.sortValue}
+	data-sort-index={index}
+>
+	{slots.media && data.media && (
+		<CMedia ratio="video" href={data.href} ariaLabel={data.ariaLabel}>
+			<CImage {...data.media} variant="fill" />
+		</CMedia>
+	)}
+	<CBox spacing="sm">
+		<CColumns columns="one" gap="xs">
+			{slots.metadata && data.metadata && <CMetadata data={data.metadata} tone="brand" />}
+			{slots.title && (
+				<CHeading level={headingLevel} variant="h4">
+					<CLink href={data.href}>{data.title.join(" ")}</CLink>
+				</CHeading>
+			)}
+			{slots.excerpt && data.excerpt && (
+				<CText variant="body-sm" tone="subtle">{data.excerpt}</CText>
+			)}
+			{slots.metadata && data.secondaryMetadata && (
+				<CMetadata data={data.secondaryMetadata} tone="on-light" />
+			)}
+		</CColumns>
+	</CBox>
+</CBox>

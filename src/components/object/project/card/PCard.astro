@@ -1,56 +1,13 @@
 ---
-import {
-	pCardColumnTemplates,
-	pCardLayoutColumnTemplates,
-	pCardLayouts,
-	pCardProductGridTemplates,
-	pCardTemplates,
-} from "@/constants/components/object/project/card/PCard.constants";
-import type {
-	PCardProps,
-	PCardSlots,
-} from "@/types/components/object/project/card/PCard.types";
+import { pCardTemplates } from "@/constants/components/object/project/card/PCard.constants";
+import type { PCardProps } from "@/types/components/object/project/card/PCard.types";
 
 const {
-	template = "stacked",
-	layout = "grid",
-	columns = 3,
-	gap = "lg",
-	mediaRatio,
-	items,
-	headingLevel = 3,
-	separator = "none",
-	slots,
-	...attributes
+	template = "grid",
+	...props
 } = Astro.props as PCardProps;
 
-const defaultSlots: PCardSlots = {
-	media: true,
-	icon: true,
-	metadata: true,
-	tags: true,
-	metrics: true,
-	title: true,
-	excerpt: true,
-	action: true,
-};
-
-const CardTemplate = pCardTemplates[template];
-const CollectionTemplate = pCardLayouts[layout];
-const columnsTemplate = pCardLayoutColumnTemplates[layout] ?? pCardColumnTemplates[columns];
-const resolvedSlots = { ...defaultSlots, ...slots };
+const Template = pCardTemplates[template];
 ---
 
-<CollectionTemplate
-	{...attributes}
-	CardTemplate={CardTemplate}
-	items={items}
-	columns={columns}
-	{columnsTemplate}
-	{gap}
-	{mediaRatio}
-	{headingLevel}
-	{separator}
-	slots={resolvedSlots}
-	productGrid={pCardProductGridTemplates.has(template)}
-/>
+<Template {...props} template={template} />
