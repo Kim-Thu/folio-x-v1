@@ -9,6 +9,9 @@ export const sliderBaseClasses = "relative min-w-0";
 export const sliderViewportClasses =
 	"flex snap-x snap-mandatory overflow-x-auto overscroll-x-contain scroll-smooth [scrollbar-width:none] [&::-webkit-scrollbar]:hidden";
 
+export const sliderViewportDraggableClasses =
+	"cursor-grab touch-pan-y select-none active:cursor-grabbing";
+
 export const sliderViewportGapClasses: Record<CSliderGap, string> = {
 	none: "gap-0",
 	sm: "gap-4",
@@ -25,7 +28,7 @@ export const sliderViewportShapeClasses: Record<CSliderShape, string> = {
 export const sliderControlsClasses: Record<CSliderControls, string> = {
 	overlay: "absolute bottom-4 right-4 flex items-center gap-2",
 	below: "mt-4 flex items-center gap-4",
-	"below-left": "mt-12 flex items-center",
+	"below-left": "mt-10 flex items-center",
 	dots: "absolute bottom-6 left-1/2 z-20 flex -translate-x-1/2 items-center gap-2",
 };
 
