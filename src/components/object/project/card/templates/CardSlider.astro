@@ -5,10 +5,19 @@ import CSlider from "@/components/object/component/CSlider.astro";
 import type { PCardTemplateProps } from "@/types/components/object/project/card/PCard.types";
 
 const {
+	template,
+	columns,
+	gap,
+	separator,
 	card,
 	items,
 	...attributes
 } = Astro.props as PCardTemplateProps;
+
+void template;
+void columns;
+void gap;
+void separator;
 
 const cardConfig = card ?? {};
 const sliderLabel = items.map((item) => item.title.join(" ")).join(", ");
