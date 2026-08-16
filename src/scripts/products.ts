@@ -24,6 +24,9 @@ function initProductsRoot(root: HTMLElement): void {
 	const navigationFilters = Array.from(
 		root.querySelectorAll<HTMLButtonElement>("[data-choice-filter]"),
 	);
+	const navigationLinks = Array.from(
+		root.querySelectorAll<HTMLAnchorElement>("[data-choice-link]"),
+	);
 	const pageSize = 9;
 	let currentPage = 1;
 
@@ -52,6 +55,11 @@ function initProductsRoot(root: HTMLElement): void {
 			(button) =>
 				button.dataset.choiceControl === control &&
 				button.getAttribute("aria-pressed") === "true",
+		)?.dataset.choiceValue ??
+		navigationLinks.find(
+			(link) =>
+				link.dataset.choiceControl === control &&
+				link.getAttribute("aria-current") === "page",
 		)?.dataset.choiceValue;
 
 	const syncSelectDisplay = (
@@ -81,6 +89,29 @@ function initProductsRoot(root: HTMLElement): void {
 					String(button.dataset.choiceValue === value),
 				);
 			});
+
+		navigationLinks
+			.filter((link) => link.dataset.choiceControl === control)
+			.forEach((link) => {
+				if (link.dataset.choiceValue === value) {
+					link.setAttribute("aria-current", "page");
+				} else {
+					link.removeAttribute("aria-current");
+				}
+			});
+	};
+
+	const navigationHref = (control: string, value: string): string | undefined =>
+		navigationLinks.find(
+			(link) =>
+				link.dataset.choiceControl === control &&
+				link.dataset.choiceValue === value,
+		)?.href;
+
+	const syncLocation = (control: string, value: string): void => {
+		const href = navigationHref(control, value);
+		if (!href) return;
+		window.history.pushState({}, "", href);
 	};
 
 	const syncPriceOutput = (): void => {
@@ -113,7 +144,8 @@ function initProductsRoot(root: HTMLElement): void {
 
 	const render = (): void => {
 		const term = search?.value.trim().toLowerCase() ?? "";
-		const category = categorySelect?.value ?? selectedCategory();
+		const category =
+			categorySelect?.value ?? selectedNavigationValue("category") ?? selectedCategory();
 		const selectedPlatforms = selectedValues("[data-platform-filter]:checked");
 		const selectedLicenses = selectedValues("[data-license-filter]:checked");
 		const selectedRatings = selectedValues("[data-rating-filter]:checked").map(
@@ -206,6 +238,8 @@ function initProductsRoot(root: HTMLElement): void {
 		.forEach((radio) => {
 			radio.addEventListener("change", () => {
 				if (categorySelect) syncSelectDisplay(categorySelect, radio.value);
+				syncNavigationFilter("category", radio.value);
+				syncLocation("category", radio.value);
 				resetAndRender();
 			});
 		});
@@ -213,10 +247,8 @@ function initProductsRoot(root: HTMLElement): void {
 	[categorySelect, platformSelect, sortSelect].forEach((control) => {
 		control?.addEventListener("change", () => {
 			if (categorySelect && control === categorySelect) {
-				const matchingRadio = root.querySelector<HTMLInputElement>(
-					`input[name="product-category"][value="${categorySelect.value}"]`,
-				);
-				if (matchingRadio) matchingRadio.checked = true;
+				syncNavigationFilter("category", categorySelect.value);
+				syncLocation("category", categorySelect.value);
 			}
 			if (platformSelect && control === platformSelect) {
 				syncNavigationFilter("platform", platformSelect.value);
@@ -232,9 +264,32 @@ function initProductsRoot(root: HTMLElement): void {
 			if (!control || !value) return;
 
 			syncNavigationFilter(control, value);
+			if (control === "category" && categorySelect) {
+				syncSelectDisplay(categorySelect, value);
+				syncLocation(control, value);
+			}
 			if (control === "platform" && platformSelect) {
 				syncSelectDisplay(platformSelect, value);
 			}
+			resetAndRender();
+		});
+	});
+
+	navigationLinks.forEach((link) => {
+		link.addEventListener("click", (event) => {
+			const control = link.dataset.choiceControl;
+			const value = link.dataset.choiceValue;
+			if (!control || !value) return;
+
+			event.preventDefault();
+			syncNavigationFilter(control, value);
+			if (control === "category" && categorySelect) {
+				syncSelectDisplay(categorySelect, value);
+			}
+			if (control === "platform" && platformSelect) {
+				syncSelectDisplay(platformSelect, value);
+			}
+			window.history.pushState({}, "", link.href);
 			resetAndRender();
 		});
 	});
@@ -294,6 +349,21 @@ function initProductsRoot(root: HTMLElement): void {
 		render();
 	});
 
+	const syncCategoryFromLocation = (): void => {
+		const currentPath = window.location.pathname;
+		const currentLink = navigationLinks.find((link) => {
+			if (link.dataset.choiceControl !== "category") return false;
+			return new URL(link.href, window.location.href).pathname === currentPath;
+		});
+		const value = currentLink?.dataset.choiceValue ?? "all";
+		syncNavigationFilter("category", value);
+		if (categorySelect) syncSelectDisplay(categorySelect, value);
+		resetAndRender();
+	};
+
+	window.addEventListener("popstate", syncCategoryFromLocation);
+
+	syncCategoryFromLocation();
 	if (platformSelect) {
 		syncNavigationFilter("platform", platformSelect.value);
 	}
