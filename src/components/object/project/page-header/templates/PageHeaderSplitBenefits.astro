@@ -20,7 +20,7 @@ const benefits = data.benefits?.items ?? [];
 		<CColumns columns="one" gap="lg">
 			{data.breadcrumb && <CBreadcrumb {...data.breadcrumb} />}
 
-			<CColumns columns="one" gap="sm">
+			<CColumns columns="one" gap="none" class="gap-2">
 				<CText variant="label" tone="brand">{data.eyebrow}</CText>
 
 				<CHeading id={titleId} level={1} variant="display-3">
