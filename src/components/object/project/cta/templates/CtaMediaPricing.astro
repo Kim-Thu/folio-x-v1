@@ -27,7 +27,7 @@ const headingId = `${data.id}-title`;
 		{
 			data.image && (
 				<CGridItem lgSpan={2} align="center">
-					<CMedia ratio="natural">
+					<CMedia ratio="natural" class="scale-105 md:scale-110">
 						<CImage {...data.image} variant="natural" />
 					</CMedia>
 				</CGridItem>
@@ -35,7 +35,7 @@ const headingId = `${data.id}-title`;
 		}
 
 		<CGridItem lgSpan={7}>
-			<div class="flex h-full flex-col">
+			<div class="flex h-full flex-col md:py-4 lg:py-6">
 				<CColumns columns="one" gap="sm">
 					<CHeading id={headingId} level={2} variant="h3">
 						{data.title}
@@ -61,7 +61,7 @@ const headingId = `${data.id}-title`;
 		</CGridItem>
 
 		<CGridItem lgSpan={3}>
-			<div class="flex h-full flex-col">
+			<div class="flex h-full flex-col md:py-4 lg:py-6">
 				{
 					data.action && (
 						<CRow justify="start" class="lg:justify-end">
