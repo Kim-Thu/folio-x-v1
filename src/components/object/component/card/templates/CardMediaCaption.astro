@@ -32,7 +32,7 @@ const inverse = data.appearance === "inverse";
 				</CHeading>
 			)}
 			{slots.metadata && data.metadata && (
-				<CMetadata data={data.metadata} size="xs" tone={inverse ? "on-dark-subtle" : "subtle"} />
+				<CMetadata data={data.metadata} size="xs" tone={inverse ? "on-dark-subtle" : "on-light"} />
 			)}
 			{slots.excerpt && data.excerpt && (
 				<CText variant="body-sm" tone={inverse ? "on-dark-muted" : "muted"}>{data.excerpt}</CText>
