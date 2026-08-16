@@ -14,6 +14,7 @@ import {
 	sliderStatusClasses,
 	sliderTrackClasses,
 	sliderViewportClasses,
+	sliderViewportDraggableClasses,
 	sliderViewportGapClasses,
 	sliderViewportShapeClasses,
 } from "@/variants/components/object/component/CSlider.variants";
@@ -23,6 +24,10 @@ const {
 	controls = "overlay",
 	gap = "none",
 	shape = "card",
+	autoplay = false,
+	autoplayInterval = 5000,
+	draggable = true,
+	pauseOnHover = true,
 	itemCount,
 	label,
 	previousLabel,
@@ -33,10 +38,19 @@ const {
 const belowLeft = controls === "below-left";
 ---
 
-<div {...attributes} class={cn(sliderBaseClasses, className)} data-slider>
+<div
+	{...attributes}
+	class={cn(sliderBaseClasses, className)}
+	data-slider
+	data-slider-autoplay={autoplay ? "true" : "false"}
+	data-slider-autoplay-interval={String(autoplayInterval)}
+	data-slider-draggable={draggable ? "true" : "false"}
+	data-slider-pause-on-hover={pauseOnHover ? "true" : "false"}
+>
 	<div
 		class={cn(
 			sliderViewportClasses,
+			draggable && sliderViewportDraggableClasses,
 			sliderViewportGapClasses[gap],
 			sliderViewportShapeClasses[shape],
 		)}
@@ -83,7 +97,7 @@ const belowLeft = controls === "below-left";
 							label={previousLabel}
 							icon="chevronLeft"
 							iconOnly
-							size="sm"
+							size={belowLeft ? "md" : "sm"}
 							variant={belowLeft ? "ghost" : "secondary"}
 							tone="light"
 							disabled={belowLeft}
@@ -93,7 +107,7 @@ const belowLeft = controls === "below-left";
 							label={nextLabel}
 							icon="chevronRight"
 							iconOnly
-							size="sm"
+							size={belowLeft ? "md" : "sm"}
 							variant={belowLeft ? "primary" : "secondary"}
 							tone="light"
 							data-slider-next
