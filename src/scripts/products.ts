@@ -1,8 +1,8 @@
 function initProductsRoot(root: HTMLElement): void {
-	const cards = Array.from(
-		root.querySelectorAll<HTMLElement>("[data-product-card]"),
-	);
 	const grid = root.querySelector<HTMLElement>("[data-product-grid]");
+	const cards = Array.from(
+		root.querySelectorAll<HTMLElement>("[data-product-item]"),
+	);
 	const search = root.querySelector<HTMLInputElement>("[data-product-search]");
 	const categorySelect =
 		root.querySelector<HTMLSelectElement>("[data-category-select]");
@@ -22,12 +22,17 @@ function initProductsRoot(root: HTMLElement): void {
 		root.querySelector<HTMLButtonElement>("[data-page-previous]");
 	const next = root.querySelector<HTMLButtonElement>("[data-page-next]");
 	const pageSize = 9;
-	const gridColumnClasses = Array.from(grid?.classList ?? []).filter((className) =>
-		className.includes("grid-cols-"),
-	);
 	let currentPage = 1;
 
 	if (!cards.length || !grid) return;
+
+	const gridColumnClasses = Array.from(grid.classList).filter((className) =>
+		className.includes("grid-cols-"),
+	);
+
+	const cardData = (card: HTMLElement): HTMLElement =>
+		card.querySelector<HTMLElement>("[data-card-view='grid'] [data-product-card]") ??
+		card;
 
 	const selectedCategory = (): string =>
 		root.querySelector<HTMLInputElement>(
@@ -75,6 +80,13 @@ function initProductsRoot(root: HTMLElement): void {
 			grid.classList.remove("grid-cols-1");
 		}
 
+		cards.forEach((card) => {
+			const gridCard = card.querySelector<HTMLElement>("[data-card-view='grid']");
+			const listCard = card.querySelector<HTMLElement>("[data-card-view='list']");
+			if (gridCard) gridCard.hidden = view !== "grid";
+			if (listCard) listCard.hidden = view !== "list";
+		});
+
 		grid.dataset.view = view;
 	};
 
@@ -90,20 +102,21 @@ function initProductsRoot(root: HTMLElement): void {
 		const maxPrice = Number(range?.value ?? 69);
 
 		const visible = cards.filter((card) => {
-			const matchesTerm = !term || (card.dataset.title ?? "").includes(term);
+			const data = cardData(card).dataset;
+			const matchesTerm = !term || (data.title ?? "").includes(term);
 			const matchesCategory =
-				category === "all" || card.dataset.filterCategory === category;
+				category === "all" || data.filterCategory === category;
 			const matchesPlatforms =
 				!selectedPlatforms.length ||
-				selectedPlatforms.includes(card.dataset.platform ?? "");
+				selectedPlatforms.includes(data.platform ?? "");
 			const matchesLicense =
 				!selectedLicenses.length ||
-				selectedLicenses.includes(card.dataset.license ?? "");
+				selectedLicenses.includes(data.license ?? "");
 			const matchesRating =
 				!selectedRatings.length ||
-				selectedRatings.some((rating) => Number(card.dataset.rating) >= rating);
+				selectedRatings.some((rating) => Number(data.rating) >= rating);
 			const matchesToolbarPlatform =
-				toolbarPlatform === "all" || card.dataset.platform === toolbarPlatform;
+				toolbarPlatform === "all" || data.platform === toolbarPlatform;
 
 			return (
 				matchesTerm &&
@@ -112,24 +125,27 @@ function initProductsRoot(root: HTMLElement): void {
 				matchesLicense &&
 				matchesRating &&
 				matchesToolbarPlatform &&
-				Number(card.dataset.price) <= maxPrice
+				Number(data.price) <= maxPrice
 			);
 		});
 
 		const sort = sortSelect?.value;
 		visible.sort((first, second) => {
+			const firstData = cardData(first).dataset;
+			const secondData = cardData(second).dataset;
+
 			if (sort === "price-low") {
-				return Number(first.dataset.price) - Number(second.dataset.price);
+				return Number(firstData.price) - Number(secondData.price);
 			}
 			if (sort === "price-high") {
-				return Number(second.dataset.price) - Number(first.dataset.price);
+				return Number(secondData.price) - Number(firstData.price);
 			}
 			if (sort === "rating") {
-				return Number(second.dataset.rating) - Number(first.dataset.rating);
+				return Number(secondData.rating) - Number(firstData.rating);
 			}
 			return (
-				Number(first.dataset.sortIndex ?? 0) -
-				Number(second.dataset.sortIndex ?? 0)
+				Number(firstData.sortIndex ?? 0) -
+				Number(secondData.sortIndex ?? 0)
 			);
 		});
 		visible.forEach((card) => grid.append(card));
@@ -204,7 +220,6 @@ function initProductsRoot(root: HTMLElement): void {
 				root.querySelectorAll("[data-view-control]").forEach((item) => {
 					item.setAttribute("aria-pressed", String(item === button));
 				});
-
 				applyView(button.dataset.viewControl === "list" ? "list" : "grid");
 			});
 		});
@@ -214,7 +229,13 @@ function initProductsRoot(root: HTMLElement): void {
 		.forEach((button) => {
 			button.addEventListener("click", () => {
 				const active = button.getAttribute("aria-pressed") === "true";
-				button.setAttribute("aria-pressed", String(!active));
+				const item = button.closest<HTMLElement>("[data-product-item]");
+				const nextValue = String(!active);
+				(item ?? root)
+					.querySelectorAll<HTMLButtonElement>("[data-cart-button]")
+					.forEach((cartButton) => {
+						cartButton.setAttribute("aria-pressed", nextValue);
+					});
 			});
 		});
 
@@ -243,7 +264,7 @@ export function initProducts(scope: ParentNode = document): void {
 	scope
 		.querySelectorAll<HTMLElement>('[data-filter-mode="faceted"]')
 		.forEach((root) => {
-			if (!root.querySelector("[data-product-card]")) return;
+			if (!root.querySelector("[data-product-item]")) return;
 			initProductsRoot(root);
 		});
 }
