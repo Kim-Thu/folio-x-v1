@@ -45,21 +45,23 @@ const desktopRatioClasses: Record<NonNullable<CCardTemplateProps["mediaRatio"]>,
 		</CMedia>
 	)}
 	<CBox position="relative" class="p-8">
-		<CColumns columns="one" gap="sm">
-			{slots.metadata && data.metadata && (
-				<CMetadata data={data.metadata} size="xs" tone={inverse ? "on-dark" : "brand"} />
-			)}
-			{slots.title && (
-				<CHeading level={headingLevel} variant="h3">
-					<CLink href={data.href}>{data.title.join(" ")}</CLink>
-				</CHeading>
-			)}
-			{slots.excerpt && data.excerpt && (
-				<CText variant="body-sm" tone={inverse ? "on-dark-muted" : "muted"}>{data.excerpt}</CText>
-			)}
-			{slots.tags && data.tags && data.tags.length > 0 && (
-				<CTags items={data.tags} label={data.tagsLabel ?? `${data.title.join(" ")} tags`} />
-			)}
+		<CColumns columns="one" gap="lg">
+			<CColumns columns="one" gap="xs">
+				{slots.metadata && data.metadata && (
+					<CMetadata data={data.metadata} size="xs" tone={inverse ? "on-dark" : "brand"} />
+				)}
+				{slots.title && (
+					<CHeading level={headingLevel} variant="h3">
+						<CLink href={data.href}>{data.title.join(" ")}</CLink>
+					</CHeading>
+				)}
+				{slots.excerpt && data.excerpt && (
+					<CText variant="body-sm" tone={inverse ? "on-dark-muted" : "muted"}>{data.excerpt}</CText>
+				)}
+				{slots.tags && data.tags && data.tags.length > 0 && (
+					<CTags items={data.tags} label={data.tagsLabel ?? `${data.title.join(" ")} tags`} />
+				)}
+			</CColumns>
 			{slots.action && data.action && (
 				<CButton
 					href={data.action.href}
