@@ -6,6 +6,7 @@ import CHeading from "@/components/object/component/CHeading.astro";
 import CImage from "@/components/object/component/CImage.astro";
 import CLink from "@/components/object/component/CLink.astro";
 import CMedia from "@/components/object/component/CMedia.astro";
+import CMetadata from "@/components/object/component/CMetadata.astro";
 import CText from "@/components/object/component/CText.astro";
 import type {
 	CCardTemplateProps,
@@ -43,6 +44,30 @@ const media = publication?.cover ?? data.media;
 const ariaLabel = publication
 	? `${publicationPresentation?.ariaLabelPrefix ?? ""}${publication.title}`
 	: data.ariaLabel;
+const metadata = publication
+	? {
+		items: [
+			{
+				type: "category" as const,
+				label: publication.genres[0].label.toUpperCase(),
+				href: publicationPresentation?.routes.categoryBase
+					? `${publicationPresentation.routes.categoryBase}${publication.genres[0].slug}`
+					: undefined,
+				display: publicationPresentation?.categoryDisplay,
+			},
+			{
+				type: "author" as const,
+				label: publication.author,
+				display: publicationPresentation?.categoryDisplay,
+			},
+			{
+				type: "datetime" as const,
+				label: `Updated ${publication.updatedLabel}`,
+				display: publicationPresentation?.categoryDisplay,
+			},
+		],
+	}
+	: data.metadata;
 const action = publication
 	? {
 		label: `${publicationPresentation?.ariaLabelPrefix ?? "Read "}${publication.title}`,
@@ -71,6 +96,10 @@ const action = publication
 	<CBox position="relative" class="h-full p-8">
 		<div class="flex h-full flex-col">
 			<CColumns columns="one" gap="xs">
+				{slots.metadata && metadata && (
+					<CMetadata data={metadata} size="xs" tone="on-dark" />
+				)}
+
 				{slots.title && (
 					<CHeading level={headingLevel} variant="h3">
 						<CLink href={href}>{title}</CLink>
