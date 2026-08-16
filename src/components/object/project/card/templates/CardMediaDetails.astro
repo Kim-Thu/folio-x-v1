@@ -48,7 +48,7 @@ const product = data.product;
 			)}
 			<CBox spacing="xs">
 				<CColumns columns="one" gap="sm">
-					<CColumns columns="one" gap="xs">
+					<CColumns columns="one" gap="sm">
 						{slots.metadata && data.metadata && (
 							<CMetadata
 								data={data.metadata}
@@ -69,7 +69,7 @@ const product = data.product;
 					</CColumns>
 
 					<CRow as="footer" justify="between" align="end" gap="md" wrap={false}>
-						<CRow gap="sm" align="baseline" wrap={false}>
+						<CRow gap="md" align="baseline" wrap={false}>
 							<CText as="span" variant="price">
 								${product.price}
 							</CText>
@@ -80,7 +80,7 @@ const product = data.product;
 							)}
 						</CRow>
 
-						<CRow gap="sm" align="center" justify="end" wrap={false}>
+						<CRow gap="md" align="center" justify="end" wrap={false}>
 							{slots.action && data.action && (
 								<CButton
 									label={data.action.label}
