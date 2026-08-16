@@ -9,11 +9,11 @@ export const choiceOptionClasses: Record<CChoiceGroupAppearance, string> = {
 
 export const choiceControlClasses: Record<CChoiceGroupAppearance, string> = {
 	controls:
-		"peer size-4 cursor-pointer appearance-none rounded-sm bg-white ring-1 ring-inset ring-gray-100 checked:bg-blue-600 checked:ring-gray-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gray-100",
+		"peer size-5 cursor-pointer appearance-none rounded-sm bg-white ring-1 ring-inset ring-gray-300 checked:bg-blue-600 checked:ring-blue-600 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-600",
 	navigation: "sr-only",
 };
 
-export const choiceControlWrapClasses = "relative inline-flex size-4 shrink-0";
+export const choiceControlWrapClasses = "relative inline-flex size-5 shrink-0";
 export const choiceControlIconClasses =
 	"pointer-events-none absolute inset-0 text-white opacity-0 transition-opacity duration-300 peer-checked:opacity-100";
 
