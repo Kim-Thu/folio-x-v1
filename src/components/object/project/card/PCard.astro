@@ -24,6 +24,12 @@ import type {
 	PCardSlots,
 } from "@/types/components/object/project/card/PCard.types";
 import type { CColumnsTemplate } from "@/types/components/object/component/CColumns.types";
+import {
+	cardMediaBannerRailClasses,
+	cardMediaBannerRailGapClasses,
+	cardMediaBannerRailItemClasses,
+} from "@/variants/components/object/project/card/PCard.variants";
+import { cn } from "@/utils/cn";
 
 const {
 	template = "stacked",
@@ -100,104 +106,126 @@ const asymmetricRows = [
 ] as const;
 const getTwelveColumnSpan = (size: PCardProps["items"][number]["size"]) =>
 	size === "wide" ? 6 : 3;
+const isMediaBannerRail = template === "media-banner" && layout === "asymmetric";
 ---
 
-<CColumns
-	{...attributes}
-	columns={collectionColumns}
-	{gap}
-	{separator}
-	data-card-collection
-	data-product-grid={template === "media-details" ? "" : undefined}
-	data-view="grid"
->
-	{layout === "showcase" ? (
-		<>
-			{items[0] && (
-				<CGridItem lgSpan={5} align="stretch">
-					<CardTemplate data={items[0]} headingLevel={headingLevel} index={0} mediaRatio="natural" slots={resolvedSlots} />
-				</CGridItem>
-			)}
-			<CGridItem lgSpan={4} align="stretch">
-				<CColumns columns="one" gap={gap}>
-					{items.slice(1, 3).map((item, index) => (
-						<CardTemplate data={item} headingLevel={headingLevel} index={index + 1} {mediaRatio} slots={resolvedSlots} />
-					))}
-				</CColumns>
-			</CGridItem>
-			{items[3] && (
-				<CGridItem lgSpan={3} align="stretch">
-					<CardTemplate data={items[3]} headingLevel={headingLevel} index={3} mediaRatio="natural" slots={resolvedSlots} />
-				</CGridItem>
-			)}
-		</>
-	) : layout === "asymmetric" && items.length === 2 ? (
-		<>
-			<CGridItem lgSpan={7} align="stretch">
+{isMediaBannerRail ? (
+	<div
+		{...attributes}
+		class={cn(cardMediaBannerRailClasses, cardMediaBannerRailGapClasses[gap])}
+		data-card-collection
+		data-view="carousel"
+	>
+		{items.map((item, index) => (
+			<div class={cardMediaBannerRailItemClasses}>
 				<CardTemplate
-					data={items[0]}
+					data={item}
 					headingLevel={headingLevel}
-					index={0}
-					{mediaRatio}
+					index={index}
+					mediaRatio="portrait"
 					slots={resolvedSlots}
 				/>
-			</CGridItem>
-			<CGridItem lgSpan={5} align="stretch">
-				<CardTemplate
-					data={items[1]}
-					headingLevel={headingLevel}
-					index={1}
-					{mediaRatio}
-					slots={resolvedSlots}
-				/>
-			</CGridItem>
-		</>
-	) : layout === "asymmetric" ? (
-		<>
-			{asymmetricRows.map((row) => (
-				<CGridItem lgSpan={12} align="stretch">
-					<CColumns columns="twelve" gap={gap}>
-						{items[row.start] && (
-							<CGridItem lgSpan={row.firstSpan} align="stretch">
-								<CardTemplate
-									data={items[row.start]}
-									headingLevel={headingLevel}
-									index={row.start}
-									mediaRatio={row.ratioItem === 0 ? mediaRatio : "natural"}
-									slots={resolvedSlots}
-								/>
-							</CGridItem>
-						)}
-						{items[row.start + 1] && (
-							<CGridItem lgSpan={row.secondSpan} align="stretch">
-								<CardTemplate
-									data={items[row.start + 1]}
-									headingLevel={headingLevel}
-									index={row.start + 1}
-									mediaRatio={row.ratioItem === 1 ? mediaRatio : "natural"}
-									slots={resolvedSlots}
-								/>
-							</CGridItem>
-						)}
+			</div>
+		))}
+	</div>
+) : (
+	<CColumns
+		{...attributes}
+		columns={collectionColumns}
+		{gap}
+		{separator}
+		data-card-collection
+		data-product-grid={template === "media-details" ? "" : undefined}
+		data-view="grid"
+	>
+		{layout === "showcase" ? (
+			<>
+				{items[0] && (
+					<CGridItem lgSpan={5} align="stretch">
+						<CardTemplate data={items[0]} headingLevel={headingLevel} index={0} mediaRatio="natural" slots={resolvedSlots} />
+					</CGridItem>
+				)}
+				<CGridItem lgSpan={4} align="stretch">
+					<CColumns columns="one" gap={gap}>
+						{items.slice(1, 3).map((item, index) => (
+							<CardTemplate data={item} headingLevel={headingLevel} index={index + 1} {mediaRatio} slots={resolvedSlots} />
+						))}
 					</CColumns>
 				</CGridItem>
-			))}
-		</>
-	) : items.map((item, index) => (
-		layout === "content-three-column" ? (
-			<CGridItem lgSpan={contentSpans[index] ?? 5}>
+				{items[3] && (
+					<CGridItem lgSpan={3} align="stretch">
+						<CardTemplate data={items[3]} headingLevel={headingLevel} index={3} mediaRatio="natural" slots={resolvedSlots} />
+					</CGridItem>
+				)}
+			</>
+		) : layout === "asymmetric" && items.length === 2 ? (
+			<>
+				<CGridItem lgSpan={7} align="stretch">
+					<CardTemplate
+						data={items[0]}
+						headingLevel={headingLevel}
+						index={0}
+						{mediaRatio}
+						slots={resolvedSlots}
+					/>
+				</CGridItem>
+				<CGridItem lgSpan={5} align="stretch">
+					<CardTemplate
+						data={items[1]}
+						headingLevel={headingLevel}
+						index={1}
+						{mediaRatio}
+						slots={resolvedSlots}
+					/>
+				</CGridItem>
+			</>
+		) : layout === "asymmetric" ? (
+			<>
+				{asymmetricRows.map((row) => (
+					<CGridItem lgSpan={12} align="stretch">
+						<CColumns columns="twelve" gap={gap}>
+							{items[row.start] && (
+								<CGridItem lgSpan={row.firstSpan} align="stretch">
+									<CardTemplate
+										data={items[row.start]}
+										headingLevel={headingLevel}
+										index={row.start}
+										mediaRatio={row.ratioItem === 0 ? mediaRatio : "natural"}
+										slots={resolvedSlots}
+									/>
+								</CGridItem>
+							)}
+							{items[row.start + 1] && (
+								<CGridItem lgSpan={row.secondSpan} align="stretch">
+									<CardTemplate
+										data={items[row.start + 1]}
+										headingLevel={headingLevel}
+										index={row.start + 1}
+										mediaRatio={row.ratioItem === 1 ? mediaRatio : "natural"}
+										slots={resolvedSlots}
+									/>
+								</CGridItem>
+							)}
+						</CColumns>
+					</CGridItem>
+				))}
+			</>
+		) : items.map((item, index) => (
+			layout === "content-three-column" ? (
+				<CGridItem lgSpan={contentSpans[index] ?? 5}>
+					<CardTemplate data={item} headingLevel={headingLevel} index={index} {mediaRatio} slots={resolvedSlots} />
+				</CGridItem>
+			) : layout === "mosaic" ? (
+				<CGridItem lgSpan={mosaicSpans[index] ?? 12}>
+					<CardTemplate data={item} headingLevel={headingLevel} index={index} {mediaRatio} slots={resolvedSlots} />
+				</CGridItem>
+			) : layout === "twelve-column" ? (
+				<CGridItem lgSpan={getTwelveColumnSpan(item.size)}>
+					<CardTemplate data={item} headingLevel={headingLevel} index={index} {mediaRatio} slots={resolvedSlots} />
+				</CGridItem>
+			) : (
 				<CardTemplate data={item} headingLevel={headingLevel} index={index} {mediaRatio} slots={resolvedSlots} />
-			</CGridItem>
-		) : layout === "mosaic" ? (
-			<CGridItem lgSpan={mosaicSpans[index] ?? 12}>
-				<CardTemplate data={item} headingLevel={headingLevel} index={index} {mediaRatio} slots={resolvedSlots} />
-			</CGridItem>
-		) : layout === "twelve-column" ? (
-			<CGridItem lgSpan={getTwelveColumnSpan(item.size)}>
-				<CardTemplate data={item} headingLevel={headingLevel} index={index} {mediaRatio} slots={resolvedSlots} />
-			</CGridItem>
-		) : (
-			<CardTemplate data={item} headingLevel={headingLevel} index={index} {mediaRatio} slots={resolvedSlots} />
-		)
-	))}
-</CColumns>
+			)
+		))}
+	</CColumns>
+)}
