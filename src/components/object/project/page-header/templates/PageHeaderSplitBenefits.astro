@@ -1,4 +1,5 @@
 ---
+import CBreadcrumb from "@/components/object/component/CBreadcrumb.astro";
 import CColumns from "@/components/object/component/CColumns.astro";
 import CFeature from "@/components/object/component/CFeature.astro";
 import CGridItem from "@/components/object/component/CGridItem.astro";
@@ -14,9 +15,10 @@ const titleId = `${data.id}-title`;
 const benefits = data.benefits?.items ?? [];
 ---
 
-<CColumns columns="twelve" gap="lg">
+<CColumns columns="twelve" gap="lg" align="center">
 	<CGridItem as="header" lgSpan={6}>
 		<CColumns columns="one" gap="md">
+			{data.breadcrumb && <CBreadcrumb {...data.breadcrumb} />}
 			<CText variant="label" tone="brand">{data.eyebrow}</CText>
 			<CHeading id={titleId} level={1} variant="display-3">
 				{data.title}<CText as="span" variant="inherit" tone="brand">
@@ -35,7 +37,7 @@ const benefits = data.benefits?.items ?? [];
 			)}
 		</CColumns>
 	</CGridItem>
-	<CGridItem lgSpan={6}>
+	<CGridItem lgSpan={6} align="center">
 		<CMedia ratio="natural">
 			<CImage
 				{...data.image}
