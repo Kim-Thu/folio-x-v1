@@ -17,13 +17,10 @@ export const pCardTemplateColumnDefaults: Partial<Record<PCardTemplate, PCardCol
 	"three-column": 3,
 };
 
-export const pCardSliderClasses =
-	"w-[calc(100vw-(100vw-100%)/2)] max-w-none";
-
 export const pCardSliderItemClasses: Record<PCardColumns, string> = {
-	1: "w-full shrink-0 snap-start",
-	2: "w-5/6 shrink-0 snap-start sm:w-1/2",
-	3: "w-5/6 shrink-0 snap-start sm:w-1/2 lg:w-1/3",
-	4: "w-5/6 shrink-0 snap-start sm:w-1/2 lg:w-1/4",
-	5: "w-5/6 shrink-0 snap-start sm:w-1/2 lg:w-1/5",
+	1: "basis-full shrink-0 snap-start",
+	2: "basis-5/6 shrink-0 snap-start sm:basis-1/2",
+	3: "basis-5/6 shrink-0 snap-start sm:basis-1/2 lg:basis-1/3",
+	4: "basis-5/6 shrink-0 snap-start sm:basis-1/2 lg:basis-1/4",
+	5: "basis-5/6 shrink-0 snap-start sm:basis-1/2 lg:basis-1/5",
 };
