@@ -5,23 +5,34 @@ import CMedia from "@/components/object/component/CMedia.astro";
 import CSlide from "@/components/object/component/CSlide.astro";
 import CSlider from "@/components/object/component/CSlider.astro";
 import type { PGalleryProps } from "@/types/components/object/project/gallery/PGallery.types";
+import {
+	gallerySliderThumbnailClasses,
+	gallerySliderThumbnailsClasses,
+} from "@/variants/components/object/project/gallery/PGallery.variants";
 
 type Props = Pick<
 	PGalleryProps,
-	"items" | "label" | "previousLabel" | "nextLabel" | "sliderControls"
+	| "items"
+	| "label"
+	| "previousLabel"
+	| "nextLabel"
+	| "sliderControls"
+	| "thumbnailLabel"
 >;
+
 const {
 	items,
 	label,
 	previousLabel,
 	nextLabel,
 	sliderControls,
+	thumbnailLabel = label,
 } = Astro.props as Props;
 ---
 
 <CSlider
 	itemCount={items.length}
-	{label}
+	label={label}
 	controls={sliderControls}
 	previousLabel={previousLabel ?? label}
 	nextLabel={nextLabel ?? label}
@@ -30,11 +41,41 @@ const {
 		items.map((item, index) => (
 			<CSlide aria-label={`${index + 1} / ${items.length}`}>
 				<CBox radius="md" overflow="hidden">
-					<CMedia ratio="video">
-						<CImage {...item} variant="fill" loading={index === 0 ? "eager" : "lazy"} fetchpriority={index === 0 ? "high" : "auto"} />
+					<CMedia ratio="natural" shape="none">
+						<CImage
+							{...item}
+							variant="natural"
+							loading={index === 0 ? "eager" : "lazy"}
+							fetchpriority={index === 0 ? "high" : "auto"}
+						/>
 					</CMedia>
 				</CBox>
 			</CSlide>
 		))
 	}
+
+	<Fragment slot="navigation">
+		{
+			items.length > 1 && (
+				<div
+					class={gallerySliderThumbnailsClasses}
+					role="group"
+					aria-label={thumbnailLabel}
+				>
+					{items.map((item, index) => (
+						<button
+							type="button"
+							class={gallerySliderThumbnailClasses}
+							aria-label={`${thumbnailLabel} ${index + 1}`}
+							aria-current={index === 0 ? "true" : "false"}
+							data-current={index === 0 ? "true" : "false"}
+							data-slider-go={index}
+						>
+							<CImage {...item} alt="" variant="fill" />
+						</button>
+					))}
+				</div>
+			)
+		}
+	</Fragment>
 </CSlider>
