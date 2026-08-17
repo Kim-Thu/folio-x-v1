@@ -32,6 +32,7 @@ const sliderControls = slider?.controls ?? "below-left";
 const autoplay = slider?.autoplay ?? true;
 const autoplayInterval = slider?.autoplayInterval ?? 5000;
 const draggable = slider?.draggable ?? true;
+const loop = slider?.loop ?? true;
 const pauseOnHover = slider?.pauseOnHover ?? true;
 ---
 
@@ -47,6 +48,7 @@ const pauseOnHover = slider?.pauseOnHover ?? true;
 	{autoplay}
 	{autoplayInterval}
 	{draggable}
+	{loop}
 	{pauseOnHover}
 	data-card-collection
 	data-product-grid={cardConfig.template === "media-details" ? "" : undefined}
