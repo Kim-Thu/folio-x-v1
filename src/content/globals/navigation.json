@@ -19,20 +19,12 @@
     {
       "href": "/blog",
       "label": "Stories"
-    },
-    {
-      "href": "/#about",
-      "label": "About"
     }
   ],
   "footerNavItems": [
     {
       "href": "/",
       "label": "Home"
-    },
-    {
-      "href": "/#about",
-      "label": "About"
     },
     {
       "href": "/products",
