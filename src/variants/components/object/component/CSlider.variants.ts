@@ -9,7 +9,7 @@ export const sliderBaseClasses = "relative min-w-0";
 export const sliderViewportClasses = "overflow-hidden";
 
 export const sliderContainerClasses =
-	"flex min-w-0 touch-pan-y touch-pinch-zoom";
+	"min-w-0 touch-pan-y touch-pinch-zoom";
 
 export const sliderViewportDraggableClasses =
 	"cursor-grab select-none active:cursor-grabbing";
