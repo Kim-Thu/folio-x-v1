@@ -5,13 +5,13 @@
   "category": "WordPress Theme",
   "categorySlug": "themes",
   "platform": "WordPress",
-  "description": "WordPress theme for SaaS, startup and digital products.",
+  "description": "Modern WordPress theme for SaaS, startups and digital products. Fast, flexible and beautifully crafted.",
   "price": 59,
   "oldPrice": 79,
   "rating": 4.9,
   "reviews": 128,
   "badge": "v1.3.0",
-  "image": "https://images.unsplash.com/photo-1558655146-d09347e92766?auto=format&fit=crop&w=900&q=88",
+  "image": "/uploads/page-header-products.png",
   "detail": {
     "page": {
       "template": "lead-content",
@@ -30,6 +30,38 @@
             "productsLabel": "Products",
             "galleryLabel": "Nebula Theme gallery",
             "thumbnailLabel": "Select preview",
+            "images": [
+              {
+                "src": "/uploads/page-header-products.png",
+                "alt": "Nebula Theme product preview",
+                "width": 1372,
+                "height": 1147
+              },
+              {
+                "src": "/uploads/page-header-projects.png",
+                "alt": "Nebula Theme portfolio layout preview",
+                "width": 1372,
+                "height": 1147
+              },
+              {
+                "src": "/uploads/page-header-insight.png",
+                "alt": "Nebula Theme editorial layout preview",
+                "width": 1372,
+                "height": 1147
+              },
+              {
+                "src": "/uploads/lab-ai-image-generator.png",
+                "alt": "Nebula Theme dashboard layout preview",
+                "width": 1600,
+                "height": 1000
+              },
+              {
+                "src": "/uploads/labs-hero.png",
+                "alt": "Nebula Theme landing page preview",
+                "width": 1600,
+                "height": 1000
+              }
+            ],
             "salesLabel": "1,248 sales",
             "features": [
               {
@@ -52,42 +84,72 @@
             "facts": [
               {
                 "label": "Last updated",
-                "value": "20 Apr, 2024"
+                "value": "20 Apr, 2024",
+                "icon": "clock01"
               },
               {
                 "label": "Compatible",
-                "value": "WordPress 6.4+"
+                "value": "WordPress 6.4+",
+                "icon": "globeAlt"
               },
               {
                 "label": "Memory usage",
-                "value": "12.5 MB"
+                "value": "12.5 MB",
+                "icon": "archiveBox"
               },
               {
                 "label": "Performance",
-                "value": "98%"
+                "value": "98%",
+                "icon": "bolt"
               },
               {
                 "label": "Support",
-                "value": "6 months"
+                "value": "6 months",
+                "icon": "questionMarkCircle"
               }
             ],
             "actionsLabel": "Nebula Theme actions",
             "actions": [
               {
-                "label": "Contact to purchase",
+                "label": "Add to cart",
                 "href": "mailto:hello@nkt.studio?subject=Nebula%20Theme",
                 "icon": "shoppingBag",
                 "variant": "primary"
               },
               {
-                "label": "View preview",
-                "href": "https://images.unsplash.com/photo-1558655146-d09347e92766?auto=format&fit=crop&w=900&q=88",
+                "label": "Live preview",
+                "href": "/uploads/page-header-products.png",
                 "icon": "arrowUpRight",
                 "variant": "outline"
               }
             ],
             "paymentLabel": "Secure checkout",
-            "paymentMethods": []
+            "paymentMethods": [
+              {
+                "src": "/uploads/payment-visa.svg",
+                "alt": "Visa",
+                "width": 48,
+                "height": 32
+              },
+              {
+                "src": "/uploads/payment-mastercard.svg",
+                "alt": "Mastercard",
+                "width": 48,
+                "height": 32
+              },
+              {
+                "src": "/uploads/payment-paypal.svg",
+                "alt": "PayPal",
+                "width": 48,
+                "height": 32
+              },
+              {
+                "src": "/uploads/payment-apple-pay.svg",
+                "alt": "Apple Pay",
+                "width": 48,
+                "height": 32
+              }
+            ]
           }
         },
         {
