@@ -2,6 +2,7 @@
 import CBox from "@/components/object/component/CBox.astro";
 import CButton from "@/components/object/component/CButton.astro";
 import CColumns from "@/components/object/component/CColumns.astro";
+import CGridItem from "@/components/object/component/CGridItem.astro";
 import CHeading from "@/components/object/component/CHeading.astro";
 import CIcon from "@/components/object/component/CIcon.astro";
 import CIconTile from "@/components/object/component/CIconTile.astro";
@@ -31,49 +32,60 @@ const slides = data.slides?.length ? data.slides : [data];
 	>
 		{slides.map((slide, index) => (
 			<CSlide>
-			<CBox position="relative" overflow="hidden">
-				<CBox as="header" position="overlay-start" spacing="lg">
-					<CColumns columns="one" gap="md">
-						<CRow align="center" gap="xs">
-							<CIcon name="archiveBox" size="sm" />
-							<CText variant="label" tone="brand">{data.eyebrow}</CText>
-						</CRow>
-						<CHeading id={index === 0 ? headingId : undefined} level={index === 0 ? 1 : 2} variant="display-3">
-							{slide.title}{" "}<CText as="span" variant="inherit" tone="brand">
-								{slide.accent}
-							</CText>
-						</CHeading>
-						<CText variant="body-responsive" tone="subtle">
-							{slide.description}
-						</CText>
-						<CRow gap="sm" role="group" aria-label={data.actionsLabel}>
-							{slide.actions.map((action) => <CButton {...action} />)}
-						</CRow>
-					</CColumns>
-				</CBox>
-
-				<CMedia ratio="video" shape="none">
-					<CImage
-						{...slide.image}
-						variant="fill"
-						loading={index === 0 ? "eager" : "lazy"}
-						fetchpriority={index === 0 ? "high" : "auto"}
-					/>
-				</CMedia>
-
-				{slide.quote && (
-					<CBox position="overlay-end" surface="glass-dark" radius="md" spacing="md">
-						<CColumns columns="one" gap="xs">
-							<CText variant="lead" tone="on-dark">{slide.quote}</CText>
-							{slide.quoteCredit && (
-								<CText variant="caption" tone="on-dark-subtle">
-									{slide.quoteCredit}
+				<CColumns columns="twelve" gap="none" align="stretch">
+					<CGridItem as="header" lgSpan={6} align="center">
+						<CBox spacing="lg">
+							<CColumns columns="one" gap="md">
+								<CRow align="center" gap="xs">
+									<CIcon name="archiveBox" size="sm" />
+									<CText variant="label" tone="brand">{data.eyebrow}</CText>
+								</CRow>
+								<CHeading
+									id={index === 0 ? headingId : undefined}
+									level={index === 0 ? 1 : 2}
+									variant="display-3"
+								>
+									{slide.title}{" "}
+									<CText as="span" variant="inherit" tone="brand">
+										{slide.accent}
+									</CText>
+								</CHeading>
+								<CText variant="body-responsive" tone="subtle">
+									{slide.description}
 								</CText>
+								<CRow gap="sm" role="group" aria-label={data.actionsLabel}>
+									{slide.actions.map((action) => <CButton {...action} />)}
+								</CRow>
+							</CColumns>
+						</CBox>
+					</CGridItem>
+
+					<CGridItem lgSpan={6} align="stretch">
+						<CBox position="relative" overflow="hidden">
+							<CMedia ratio="video" shape="none">
+								<CImage
+									{...slide.image}
+									variant="fill"
+									loading={index === 0 ? "eager" : "lazy"}
+									fetchpriority={index === 0 ? "high" : "auto"}
+								/>
+							</CMedia>
+
+							{slide.quote && (
+								<CBox position="overlay-end" surface="glass-dark" radius="md" spacing="md">
+									<CColumns columns="one" gap="xs">
+										<CText variant="lead" tone="on-dark">{slide.quote}</CText>
+										{slide.quoteCredit && (
+											<CText variant="caption" tone="on-dark-subtle">
+												{slide.quoteCredit}
+											</CText>
+										)}
+									</CColumns>
+								</CBox>
 							)}
-						</CColumns>
-					</CBox>
-				)}
-			</CBox>
+						</CBox>
+					</CGridItem>
+				</CColumns>
 			</CSlide>
 		))}
 	</CSlider>
