@@ -2,18 +2,15 @@
 import LContainer from "@/components/layout/LContainer.astro";
 import LPage from "@/components/layout/LPage.astro";
 import LSection from "@/components/layout/LSection.astro";
-import CColumns from "@/components/object/component/CColumns.astro";
 import PPageHeader from "@/components/object/project/page-header/PPageHeader.astro";
-import PSectionHeader from "@/components/object/project/section-header/PSectionHeader.astro";
 import PublicationCatalogContent from "@/components/pages/catalog/PublicationCatalogContent.astro";
 import { getPublications } from "@/data/cms";
 import type {
 	PublicationCardPresentation,
 } from "@/types/components/object/component/card/CCard.types";
-import type { PPageHeaderProps } from "@/types/components/object/project/page-header/PPageHeader.types";
-import type { PSectionHeaderProps } from "@/types/components/object/project/section-header/PSectionHeader.types";
 import type { CatalogPageProps } from "@/types/components/pages/catalog/CatalogPage.types";
 import type { PageSectionData } from "@/types/components/pages/builder/PageBuilder.types";
+import type { PPageHeaderProps } from "@/types/components/object/project/page-header/PPageHeader.types";
 
 const { data } = Astro.props as CatalogPageProps;
 const catalog = data.page.slug === "/comics" ? "comics" : "novels";
@@ -47,19 +44,6 @@ const catalogSection = data.page.content.sections.find(
 const newsletter = data.page.content.sections.find(
 	(section): section is CtaSection => section.type === "cta",
 );
-
-const catalogHeading = catalogSection?.content.heading
-	? {
-		data: {
-			number: catalogSection.content.heading.number,
-			label: catalogSection.content.heading.label,
-			title: catalogSection.content.heading.title,
-			description: catalogSection.content.heading.description,
-		},
-		action: catalogSection.content.heading.action as PSectionHeaderProps["action"],
-		headingLevel: 2 as const,
-	}
-	: undefined;
 ---
 
 <LPage {...data.page.content.layout} id="main-content" tabindex="-1">
@@ -94,15 +78,12 @@ const catalogHeading = catalogSection?.content.heading
 					? "site"
 					: catalogSection.settings.container}
 			>
-				<CColumns columns="one" gap="lg">
-					{catalogHeading && <PSectionHeader {...catalogHeading} />}
-					<PublicationCatalogContent
-						{catalog}
-						{entries}
-						presentation={catalogSection.content.itemPresentation}
-						closing={newsletter}
-					/>
-				</CColumns>
+				<PublicationCatalogContent
+					{catalog}
+					{entries}
+					presentation={catalogSection.content.itemPresentation}
+					closing={newsletter}
+				/>
 			</LContainer>
 		</LSection>
 	)}
