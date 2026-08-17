@@ -1,7 +1,7 @@
 import type { CImageData } from "@/types/components/object/component/CImage.types";
 import type { CSliderControls } from "@/types/components/object/component/CSlider.types";
 
-export type PGalleryTemplate = "grid" | "preview-strip" | "slider";
+export type PGalleryTemplate = "grid" | "slider";
 
 export interface PGalleryItem extends CImageData {}
 
