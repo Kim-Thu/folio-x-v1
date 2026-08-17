@@ -9,11 +9,11 @@ import CGridItem from "@/components/object/component/CGridItem.astro";
 import CHeading from "@/components/object/component/CHeading.astro";
 import CIconTile from "@/components/object/component/CIconTile.astro";
 import CImage from "@/components/object/component/CImage.astro";
-import CImageGallery from "@/components/object/component/CImageGallery.astro";
 import CLink from "@/components/object/component/CLink.astro";
 import CRating from "@/components/object/component/CRating.astro";
 import CRow from "@/components/object/component/CRow.astro";
 import CText from "@/components/object/component/CText.astro";
+import PGallery from "@/components/object/project/gallery/PGallery.astro";
 import type { CColumnsTemplate } from "@/types/components/object/component/CColumns.types";
 import type { PPageHeaderGallerySummaryData } from "@/types/components/object/project/page-header/PPageHeader.types";
 import {
@@ -53,8 +53,9 @@ const factsColumns: CColumnsTemplate =
 
 	<CColumns columns="twelve" gap="lg" align="start">
 		<CGridItem lgSpan={7}>
-			<CImageGallery
-				images={data.images}
+			<PGallery
+				template="preview-strip"
+				items={data.images}
 				label={data.galleryLabel}
 				thumbnailLabel={data.thumbnailLabel}
 			/>
