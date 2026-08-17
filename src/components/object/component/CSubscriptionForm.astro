@@ -2,7 +2,11 @@
 import CButton from "@/components/object/component/CButton.astro";
 import CInput from "@/components/object/component/CInput.astro";
 import type { CSubscriptionFormProps } from "@/types/components/object/component/CSubscriptionForm.types";
-import { subscriptionFormClasses } from "@/variants/components/object/component/CSubscriptionForm.variants";
+import { cn } from "@/utils/cn";
+import {
+	subscriptionFormBaseClasses,
+	subscriptionFormToneClasses,
+} from "@/variants/components/object/component/CSubscriptionForm.variants";
 
 const {
 	formName,
@@ -15,7 +19,7 @@ const {
 ---
 
 <form
-	class={subscriptionFormClasses}
+	class={cn(subscriptionFormBaseClasses, subscriptionFormToneClasses[tone])}
 	name={formName}
 	method="post"
 	data-netlify="true"
