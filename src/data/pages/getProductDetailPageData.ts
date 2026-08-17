@@ -124,13 +124,25 @@ export async function getProductDetailPageData(
 			};
 		}
 
+		const blocks = section.content.blocks;
+
 		return {
 			key: section.id,
 			component: "article",
 			section: frame,
 			props: {
 				template: section.template,
-				blocks: section.content.blocks,
+				blocks,
+				toc: {
+					label: "On this page",
+					position: "start",
+					appearance: "panel",
+					sticky: true,
+					items: blocks.map((block) => ({
+						label: block.title,
+						href: `#${block.id}`,
+					})),
+				},
 			},
 		};
 	});
