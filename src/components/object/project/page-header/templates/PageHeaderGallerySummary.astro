@@ -32,10 +32,10 @@ const factsColumns: CColumnsTemplate =
 					: "one";
 ---
 
-<CColumns columns="one" gap="xl">
+<CColumns columns="one" gap="lg">
 	<CBreadcrumb {...data.breadcrumb} />
 
-	<CColumns columns="twelve" gap="xl" align="start">
+	<CColumns columns="twelve" gap="lg" align="start">
 		<CGridItem lgSpan={7}>
 			<CImageGallery
 				images={data.images}
@@ -55,7 +55,7 @@ const factsColumns: CColumnsTemplate =
 				</CRow>
 
 				<CRow align="center" gap="sm">
-					<CHeading level={1} variant="h2">{data.title}</CHeading>
+					<CHeading level={1} variant="h3">{data.title}</CHeading>
 					{data.badge && <CBadge tone="neutral">{data.badge}</CBadge>}
 				</CRow>
 
@@ -94,7 +94,7 @@ const factsColumns: CColumnsTemplate =
 					</CColumns>
 				)}
 
-				<CRow gap="sm" role="group" aria-label={data.actionsLabel}>
+				<CColumns columns="two" gap="sm" role="group" aria-label={data.actionsLabel}>
 					{data.actions.map((action) => (
 						<CButton
 							href={action.href}
@@ -103,9 +103,10 @@ const factsColumns: CColumnsTemplate =
 							variant={action.variant}
 							tone="light"
 							size="md"
+							wide
 						/>
 					))}
-				</CRow>
+				</CColumns>
 
 				{(data.paymentLabel || data.paymentMethods.length > 0) && (
 					<CRow align="center" gap="sm">
