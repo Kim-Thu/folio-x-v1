@@ -4,11 +4,7 @@ import tailwindcss from '@tailwindcss/vite';
 
 export default defineConfig({
   site: 'https://folio-x-v1.netlify.app',
-  integrations: [
-    react({
-      experimentalReactChildren: true,
-    }),
-  ],
+  integrations: [react()],
   build: {
     // CSS must remain external in production. The project does not allow
     // generated <style> blocks or inline/internal CSS in built HTML.
