@@ -205,12 +205,14 @@ const genreStoryCardConfig: CatalogCardConfig = {
 										{
 											label: settings.sidebar.allGenresShortLabel,
 											value: "all",
+											href: `/${catalog}`,
 											count: entries.length,
 											checked: true,
 										},
 										...genres.map((genre) => ({
 											label: genre.label,
 											value: genre.slug,
+											href: `${presentation.routes.categoryBase}${genre.slug}`,
 											count: genre.count,
 										})),
 									],
