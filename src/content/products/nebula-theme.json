@@ -30,16 +30,45 @@
             "productsLabel": "Products",
             "galleryLabel": "Nebula Theme gallery",
             "thumbnailLabel": "Select preview",
-            "salesLabel": "128 reviews",
-            "features": [],
-            "facts": [
+            "salesLabel": "1,248 sales",
+            "features": [
               {
-                "label": "Platform",
-                "value": "WordPress"
+                "label": "High performance & optimized",
+                "icon": "check"
               },
               {
-                "label": "Category",
-                "value": "WordPress Theme"
+                "label": "Easy to customize",
+                "icon": "check"
+              },
+              {
+                "label": "Lifetime free updates",
+                "icon": "check"
+              },
+              {
+                "label": "6 months premium support",
+                "icon": "check"
+              }
+            ],
+            "facts": [
+              {
+                "label": "Last updated",
+                "value": "20 Apr, 2024"
+              },
+              {
+                "label": "Compatible",
+                "value": "WordPress 6.4+"
+              },
+              {
+                "label": "Memory usage",
+                "value": "12.5 MB"
+              },
+              {
+                "label": "Performance",
+                "value": "98%"
+              },
+              {
+                "label": "Support",
+                "value": "6 months"
               }
             ],
             "actionsLabel": "Nebula Theme actions",
@@ -57,7 +86,7 @@
                 "variant": "outline"
               }
             ],
-            "paymentLabel": "Payment methods",
+            "paymentLabel": "Secure checkout",
             "paymentMethods": []
           }
         },
