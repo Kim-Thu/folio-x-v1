@@ -4,6 +4,7 @@ import CColumns from "@/components/object/component/CColumns.astro";
 import CHeading from "@/components/object/component/CHeading.astro";
 import CText from "@/components/object/component/CText.astro";
 import type { PSectionHeaderProps } from "@/types/components/object/project/section-header/PSectionHeader.types";
+import { sectionHeaderHeadingClasses } from "@/variants/components/object/project/section-header/PSectionHeader.variants";
 
 const {
 	appearance = "default",
@@ -25,7 +26,7 @@ const headingId = data.id ? `${data.id}-title` : undefined;
 				id={headingId}
 				level={headingLevel}
 				variant={appearance === "compact" ? "h4" : "h2"}
-				class={appearance === "catalog" ? "lg:text-4xl" : undefined}
+				class={sectionHeaderHeadingClasses[appearance]}
 				lines={Array.isArray(data.title) ? data.title : undefined}
 			>
 				{Array.isArray(data.title) ? undefined : data.title}
