@@ -1,11 +1,13 @@
 ---
+import CBox from "@/components/object/component/CBox.astro";
 import CButton from "@/components/object/component/CButton.astro";
 import CColumns from "@/components/object/component/CColumns.astro";
-import CDescriptionList from "@/components/object/component/CDescriptionList.astro";
 import CHeading from "@/components/object/component/CHeading.astro";
+import CIconTile from "@/components/object/component/CIconTile.astro";
 import CGridItem from "@/components/object/component/CGridItem.astro";
 import CImage from "@/components/object/component/CImage.astro";
 import CLink from "@/components/object/component/CLink.astro";
+import CList from "@/components/object/component/CList.astro";
 import CMedia from "@/components/object/component/CMedia.astro";
 import CRow from "@/components/object/component/CRow.astro";
 import CSlide from "@/components/object/component/CSlide.astro";
@@ -19,97 +21,59 @@ const { data } = Astro.props as Props;
 
 <CColumns columns="one" gap="xl">
 	{data.backAction && (
-		<CButton
-			href={data.backAction.href}
-			label={data.backAction.label}
-			icon="arrowLeft"
-			iconPosition="start"
-			variant="text-subtle"
-			tone="light"
-			size="xs"
-		/>
+		<CButton href={data.backAction.href} label={data.backAction.label} icon="arrowLeft" iconPosition="start" variant="text-subtle" tone="light" size="xs" />
 	)}
 
 	<CColumns columns="twelve" gap="md" align="start">
 		<CGridItem as="header" lgSpan={3}>
-		<CColumns columns="one" gap="md">
-			<CLink href={data.category.href}>
-				<CText as="span" variant="caption" tone="brand">
-					{data.category.label}
-				</CText>
-			</CLink>
-			<CHeading level={1} variant="page-title">
-				{data.title}
-			</CHeading>
-			<CText tone="muted">{data.description}</CText>
-
-			<CRow gap="xs" aria-label={data.tagsLabel}>
-				{data.tags.map((tag) => (
-					<CButton
-						href={tag.href}
-						label={tag.label}
-						variant="outline"
-						tone="light"
-						size="xs"
-					/>
-				))}
-			</CRow>
-
-			{data.actions.length > 0 && (
-				<CRow
-					gap="xs"
-					role="group"
-					aria-label={data.actionsLabel}
-				>
-					{data.actions.map((action) => (
-						<CButton
-							href={action.href}
-							label={action.label}
-							icon={action.icon}
-							variant={action.kind === "live" ? "secondary" : "outline"}
-							tone="light"
-							size="sm"
-						/>
-					))}
+			<CColumns columns="one" gap="md">
+				<CLink href={data.category.href}><CText as="span" variant="caption" tone="brand">{data.category.label}</CText></CLink>
+				<CHeading level={1} variant="page-title">{data.title}</CHeading>
+				<CText tone="muted">{data.description}</CText>
+				<CRow gap="xs" aria-label={data.tagsLabel}>
+					{data.tags.map((tag) => <CButton href={tag.href} label={tag.label} variant="outline" tone="light" size="xs" />)}
 				</CRow>
-			)}
-		</CColumns>
+				{data.actions.length > 0 && (
+					<CRow gap="xs" role="group" aria-label={data.actionsLabel}>
+						{data.actions.map((action) => (
+							<CButton href={action.href} label={action.label} icon={action.icon} variant={action.kind === "live" ? "secondary" : "outline"} tone="light" size="sm" />
+						))}
+					</CRow>
+				)}
+			</CColumns>
 		</CGridItem>
 
 		<CGridItem lgSpan={6}>
-		<CColumns columns="one" gap="none">
-			{data.images.length > 1 ? (
-				<CSlider
-					itemCount={data.images.length}
-					label={data.galleryLabel}
-					previousLabel={data.previousImageLabel}
-					nextLabel={data.nextImageLabel}
-					controls="below"
-				>
-					{data.images.map((image) => (
-						<CSlide><CMedia ratio="editorial"><CImage {...image} variant="fill" /></CMedia></CSlide>
-					))}
-				</CSlider>
-			) : (
-				data.images[0] && (
-					<CMedia ratio="editorial">
-						<CImage {...data.images[0]} variant="fill" />
-					</CMedia>
-				)
-			)}
-		</CColumns>
+			<CColumns columns="one" gap="none">
+				{data.images.length > 1 ? (
+					<CSlider itemCount={data.images.length} label={data.galleryLabel} previousLabel={data.previousImageLabel} nextLabel={data.nextImageLabel} controls="below">
+						{data.images.map((image) => <CSlide><CMedia ratio="editorial"><CImage {...image} variant="fill" /></CMedia></CSlide>)}
+					</CSlider>
+				) : data.images[0] && (
+					<CMedia ratio="editorial"><CImage {...data.images[0]} variant="fill" /></CMedia>
+				)}
+			</CColumns>
 		</CGridItem>
 
 		<CGridItem as="aside" lgSpan={3}>
-		<CColumns columns="one" gap="md">
-			<CImage
-				{...data.asideDecoration}
-				alt=""
-				variant="natural"
-				aria-hidden="true"
-			/>
-			<CDescriptionList items={data.facts} variant="panel" />
-		</CColumns>
+			<CColumns columns="one" gap="md">
+				<CImage {...data.asideDecoration} alt="" variant="natural" aria-hidden="true" />
+				<CBox surface="glass" radius="md" spacing="md">
+					<CList direction="column" gap="sm">
+						{data.facts.map((item) => (
+							<li>
+								<CRow align="center" justify="between" gap="sm">
+									<CRow align="center" gap="sm">
+										{item.icon && <CIconTile icon={item.icon} size="sm" iconSize="md" />}
+										<CText variant="caption" tone="subtle">{item.label}</CText>
+									</CRow>
+									{item.href ? <CLink href={item.href}>{item.value}</CLink> : <CText variant="body-sm">{item.value}</CText>}
+								</CRow>
+							</li>
+						))}
+					</CList>
+				</CBox>
+			</CColumns>
 		</CGridItem>
 	</CColumns>
 </CColumns>

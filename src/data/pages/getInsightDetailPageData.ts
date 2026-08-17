@@ -104,7 +104,7 @@ export async function getInsightDetailPageData(
 
 	const relatedCardConfig = sidebar.relatedCards.card;
 	const relatedPCard: PCardProps = {
-		template: (relatedCardConfig.layout === "carousel" ? "slider" : relatedCardConfig.layout) as PCardProps["template"],
+		template: relatedCardConfig.layout as PCardProps["template"],
 		columns: relatedCardConfig.columns as PCardProps["columns"],
 		gap: relatedCardConfig.gap as PCardProps["gap"],
 		card: {

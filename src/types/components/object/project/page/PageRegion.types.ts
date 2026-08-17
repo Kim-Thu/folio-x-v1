@@ -4,7 +4,7 @@ import type {
 	LSectionTheme,
 } from "@/types/components/layout/LSection.types";
 import type { CButtonLinkProps } from "@/types/components/object/component/CButton.types";
-import type { CDescriptionListProps } from "@/types/components/object/component/CDescriptionList.types";
+import type { CIconName } from "@/types/components/object/component/CIcon.types";
 import type { CProfileProps } from "@/types/components/object/component/CProfile.types";
 import type { CTabListProps } from "@/types/components/object/component/CTabList.types";
 import type { CTagsProps } from "@/types/components/object/component/CTags.types";
@@ -113,11 +113,32 @@ export interface ReaderRegion extends PageRegionBase {
 	props: PReaderProps;
 }
 
+export interface PageDetailsItem {
+	label: string;
+	value: string;
+	href?: string;
+	icon?: CIconName;
+}
+
+export type PageDetailsListVariant =
+	| "default"
+	| "panel"
+	| "facts"
+	| "metrics"
+	| "highlights"
+	| "compact";
+
+export interface PageDetailsListData {
+	items: PageDetailsItem[];
+	variant?: PageDetailsListVariant;
+	tone?: "on-light" | "on-dark";
+}
+
 export interface DetailsRegion extends PageRegionBase {
 	component: "details";
 	props: {
 		title?: string;
-		list: CDescriptionListProps;
+		list: PageDetailsListData;
 		tags?: {
 			title: string;
 			list: CTagsProps;

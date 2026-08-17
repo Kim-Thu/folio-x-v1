@@ -1,0 +1,93 @@
+---
+import CBox from "@/components/object/component/CBox.astro";
+import CColumns from "@/components/object/component/CColumns.astro";
+import CHeading from "@/components/object/component/CHeading.astro";
+import CIconTile from "@/components/object/component/CIconTile.astro";
+import CLink from "@/components/object/component/CLink.astro";
+import CList from "@/components/object/component/CList.astro";
+import CRow from "@/components/object/component/CRow.astro";
+import CTags from "@/components/object/component/CTags.astro";
+import CText from "@/components/object/component/CText.astro";
+import type { DetailsRegion } from "@/types/components/object/project/page/PageRegion.types";
+
+type Props = DetailsRegion["props"];
+
+const { title, list, tags } = Astro.props as Props;
+const variant = title ? "default" : (list.variant ?? "default");
+const horizontal = variant === "facts" || variant === "metrics" || variant === "highlights";
+const onDark = list.tone === "on-dark";
+---
+
+<CBox
+	surface={title ? "glass" : "plain"}
+	radius={title ? "md" : "none"}
+	spacing={title ? "md" : "none"}
+>
+	<CColumns columns="one" gap="sm">
+		{title && <CHeading level={2} variant="h5">{title}</CHeading>}
+
+		<CList
+			direction={horizontal ? "row" : "column"}
+			gap={variant === "compact" ? "xs" : "md"}
+		>
+			{list.items.map((item) => (
+				<li>
+					{variant === "compact" ? (
+						<CRow align="center" justify="between" gap="sm" wrap={false}>
+							<CRow align="center" gap="sm" wrap={false}>
+								{item.icon && <CIconTile icon={item.icon} size="sm" />}
+								<CText
+									as="span"
+									variant="caption"
+									tone={onDark ? "on-dark-subtle" : "subtle"}
+								>
+									{item.label}
+								</CText>
+							</CRow>
+
+							{item.href ? (
+								<CLink href={item.href}>{item.value}</CLink>
+							) : (
+								<CText as="span" variant="body-sm" tone={onDark ? "on-dark" : "inherit"}>
+									{item.value}
+								</CText>
+							)}
+						</CRow>
+					) : (
+						<CRow align="center" gap="sm">
+							{item.icon && <CIconTile icon={item.icon} size="sm" />}
+							<CColumns columns="one" gap="xs">
+								<CText
+									as="span"
+									variant="caption"
+									tone={onDark ? "on-dark-subtle" : "subtle"}
+								>
+									{item.label}
+								</CText>
+
+								{item.href ? (
+									<CLink href={item.href}>{item.value}</CLink>
+								) : (
+									<CText
+										as="span"
+										variant={variant === "metrics" ? "price" : "body-sm"}
+										tone={onDark ? "on-dark" : "inherit"}
+									>
+										{item.value}
+									</CText>
+								)}
+							</CColumns>
+						</CRow>
+					)}
+				</li>
+			))}
+		</CList>
+
+		{tags && (
+			<CColumns columns="one" gap="sm">
+				<CHeading level={3} variant="h6">{tags.title}</CHeading>
+				<CTags {...tags.list} />
+			</CColumns>
+		)}
+	</CColumns>
+</CBox>

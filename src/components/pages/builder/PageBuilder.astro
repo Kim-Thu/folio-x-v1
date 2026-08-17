@@ -5,14 +5,11 @@ import LSidebar from "@/components/layout/LSidebar.astro";
 import CBox from "@/components/object/component/CBox.astro";
 import CButton from "@/components/object/component/CButton.astro";
 import CColumns from "@/components/object/component/CColumns.astro";
-import CDescriptionList from "@/components/object/component/CDescriptionList.astro";
 import CGridItem from "@/components/object/component/CGridItem.astro";
-import CHeading from "@/components/object/component/CHeading.astro";
 import CPagination from "@/components/object/component/CPagination.astro";
 import CProfile from "@/components/object/component/CProfile.astro";
 import CRow from "@/components/object/component/CRow.astro";
 import CTabList from "@/components/object/component/CTabList.astro";
-import CTags from "@/components/object/component/CTags.astro";
 import CText from "@/components/object/component/CText.astro";
 import CTOC from "@/components/object/component/CTOC.astro";
 import PAdvertisement from "@/components/object/project/advertisement/PAdvertisement.astro";
@@ -24,6 +21,8 @@ import PEntryIndex from "@/components/object/project/entry-index/PEntryIndex.ast
 import PFilterPanel from "@/components/object/project/filter-panel/PFilterPanel.astro";
 import PGallery from "@/components/object/project/gallery/PGallery.astro";
 import PHero from "@/components/object/project/hero/PHero.astro";
+import PPage from "@/components/object/project/page/PPage.astro";
+import PPageDetails from "@/components/object/project/page/PPageDetails.astro";
 import PPageHeader from "@/components/object/project/page-header/PPageHeader.astro";
 import PPostNavigation from "@/components/object/project/post-navigation/PPostNavigation.astro";
 import PReader from "@/components/object/project/reader/PReader.astro";
@@ -31,7 +30,6 @@ import PReviews from "@/components/object/project/reviews/PReviews.astro";
 import PSectionHeader from "@/components/object/project/section-header/PSectionHeader.astro";
 import PStatement from "@/components/object/project/statement/PStatement.astro";
 import PStatus from "@/components/object/project/status/PStatus.astro";
-import PPage from "@/components/object/project/page/PPage.astro";
 import {
 	getInsights,
 	getLabs,
@@ -707,20 +705,7 @@ const isHome = "page" in props && props.page.slug === "/";
 			{region.component === "gallery" && <PGallery {...region.props} />}
 			{region.component === "entry-index" && <PEntryIndex {...region.props} />}
 			{region.component === "reader" && <PReader {...region.props} />}
-			{region.component === "details" && (
-				<CBox surface={region.props.title ? "glass" : "plain"} radius={region.props.title ? "md" : "none"} spacing={region.props.title ? "md" : "none"}>
-					<CColumns columns="one" gap="sm">
-						{region.props.title && <CHeading level={2} variant="h5">{region.props.title}</CHeading>}
-						<CDescriptionList {...region.props.list} variant={region.props.title ? "default" : region.props.list.variant} />
-						{region.props.tags && (
-							<CColumns columns="one" gap="sm">
-								<CHeading level={3} variant="h6">{region.props.tags.title}</CHeading>
-								<CTags {...region.props.tags.list} />
-							</CColumns>
-						)}
-					</CColumns>
-				</CBox>
-			)}
+			{region.component === "details" && <PPageDetails {...region.props} />}
 			{region.component === "profile" && <CProfile {...region.props} />}
 			{region.component === "toc" && <CTOC {...region.props} />}
 			{region.component === "advertisement" && <PAdvertisement {...region.props} />}

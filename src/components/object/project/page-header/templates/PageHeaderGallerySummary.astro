@@ -3,13 +3,14 @@ import CBadge from "@/components/object/component/CBadge.astro";
 import CBreadcrumb from "@/components/object/component/CBreadcrumb.astro";
 import CButton from "@/components/object/component/CButton.astro";
 import CColumns from "@/components/object/component/CColumns.astro";
-import CDescriptionList from "@/components/object/component/CDescriptionList.astro";
 import CFeature from "@/components/object/component/CFeature.astro";
 import CHeading from "@/components/object/component/CHeading.astro";
+import CIconTile from "@/components/object/component/CIconTile.astro";
 import CImageGallery from "@/components/object/component/CImageGallery.astro";
 import CImage from "@/components/object/component/CImage.astro";
 import CGridItem from "@/components/object/component/CGridItem.astro";
 import CLink from "@/components/object/component/CLink.astro";
+import CList from "@/components/object/component/CList.astro";
 import CRating from "@/components/object/component/CRating.astro";
 import CRow from "@/components/object/component/CRow.astro";
 import CText from "@/components/object/component/CText.astro";
@@ -24,93 +25,53 @@ const { data } = Astro.props as Props;
 
 	<CColumns columns="twelve" gap="xl" align="start">
 		<CGridItem lgSpan={7}>
-			<CImageGallery
-				images={data.images}
-				label={data.galleryLabel}
-				thumbnailLabel={data.thumbnailLabel}
-			/>
+			<CImageGallery images={data.images} label={data.galleryLabel} thumbnailLabel={data.thumbnailLabel} />
 		</CGridItem>
 
 		<CGridItem as="header" lgSpan={5}>
-		<CColumns columns="one" gap="md">
-			<CRow align="center" gap="sm">
-				<CLink href={data.category.href}>
-					<CText as="span" variant="caption" tone="brand">
-						{data.category.label}
-					</CText>
-				</CLink>
-			</CRow>
-
-			<CRow align="center" gap="sm">
-			<CHeading level={1} variant="h3">
-					{data.title}
-				</CHeading>
-				{data.badge && <CBadge tone="neutral">{data.badge}</CBadge>}
-			</CRow>
-			<CText tone="muted">{data.description}</CText>
-			<CRow align="center" gap="sm">
-				<CRating
-					style="stars"
-					value={data.rating.value}
-					maximum={data.rating.maximum}
-					count={data.rating.count}
-					slots={{ count: true, value: true }}
-				/>
-				<CText as="span" variant="caption" tone="subtle">
-					{data.rating.salesLabel}
-				</CText>
-			</CRow>
-
-			<CRow align="baseline" gap="sm">
-				<CText as="span" variant="price-display">{data.price.current}</CText>
-				{data.price.previous && (
-					<CText as="span" variant="price-old" tone="subtle">
-						{data.price.previous}
-					</CText>
-				)}
-				{data.price.discount && (
-					<CBadge tone="brand">{data.price.discount}</CBadge>
-				)}
-			</CRow>
-
-			<CColumns columns="one" gap="xs">
-				{data.features.map((feature) => <CFeature {...feature} />)}
+			<CColumns columns="one" gap="md">
+				<CRow align="center" gap="sm">
+					<CLink href={data.category.href}><CText as="span" variant="caption" tone="brand">{data.category.label}</CText></CLink>
+				</CRow>
+				<CRow align="center" gap="sm">
+					<CHeading level={1} variant="h3">{data.title}</CHeading>
+					{data.badge && <CBadge tone="neutral">{data.badge}</CBadge>}
+				</CRow>
+				<CText tone="muted">{data.description}</CText>
+				<CRow align="center" gap="sm">
+					<CRating style="stars" value={data.rating.value} maximum={data.rating.maximum} count={data.rating.count} slots={{ count: true, value: true }} />
+					<CText as="span" variant="caption" tone="subtle">{data.rating.salesLabel}</CText>
+				</CRow>
+				<CRow align="baseline" gap="sm">
+					<CText as="span" variant="price-display">{data.price.current}</CText>
+					{data.price.previous && <CText as="span" variant="price-old" tone="subtle">{data.price.previous}</CText>}
+					{data.price.discount && <CBadge tone="brand">{data.price.discount}</CBadge>}
+				</CRow>
+				<CColumns columns="one" gap="xs">
+					{data.features.map((feature) => <CFeature {...feature} />)}
+				</CColumns>
+				<CRow gap="sm" role="group" aria-label={data.actionsLabel}>
+					{data.actions.map((action) => <CButton href={action.href} label={action.label} icon={action.icon} variant={action.variant} tone="light" size="md" />)}
+				</CRow>
+				<CRow align="center" gap="sm">
+					<CText as="span" variant="caption" tone="subtle">{data.paymentLabel}</CText>
+					{data.paymentMethods.map((method) => <CImage {...method} variant="payment-logo" />)}
+				</CRow>
 			</CColumns>
-
-			<CRow
-				gap="sm"
-				role="group"
-				aria-label={data.actionsLabel}
-			>
-				{data.actions.map((action) => (
-					<CButton
-						href={action.href}
-						label={action.label}
-						icon={action.icon}
-						variant={action.variant}
-						tone="light"
-						size="md"
-					/>
-				))}
-			</CRow>
-
-			<CRow align="center" gap="sm">
-				<CText as="span" variant="caption" tone="subtle">
-					{data.paymentLabel}
-				</CText>
-				{data.paymentMethods.map((method) => (
-					<CImage
-						{...method}
-						variant="payment-logo"
-					/>
-				))}
-			</CRow>
-		</CColumns>
 		</CGridItem>
 	</CColumns>
 
-	<CDescriptionList
-		items={data.facts}
-		variant="facts"
-	/>
+	<CList direction="row" gap="md">
+		{data.facts.map((item) => (
+			<li>
+				<CRow align="center" gap="sm">
+					{item.icon && <CIconTile icon={item.icon} size="sm" iconSize="md" />}
+					<CColumns columns="one" gap="xs">
+						<CText variant="caption" tone="subtle">{item.label}</CText>
+						{item.href ? <CLink href={item.href}>{item.value}</CLink> : <CText variant="body-sm">{item.value}</CText>}
+					</CColumns>
+				</CRow>
+			</li>
+		))}
+	</CList>
 </CColumns>

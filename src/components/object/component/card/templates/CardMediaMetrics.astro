@@ -183,13 +183,14 @@ const sortValue = publication
 				<CTags items={tags} label={tagsLabel ?? `${title} tags`} />
 			)}
 
-			{slots.metrics && metrics && metrics.length > 0 && (
-				<CRow gap="lg" class="mt-8">
-					{metrics.map((metric) => <CFeature {...metric} appearance="caption" />)}
+			{((slots.metrics && metrics && metrics.length > 0) || rating) && (
+				<CRow align="center" justify="between" gap="md" wrap={false} class="mt-8">
+					<CRow align="center" gap="md" wrap={false}>
+						{slots.metrics && metrics?.map((metric) => <CFeature {...metric} appearance="caption" />)}
+					</CRow>
+					{rating && <CRating style="compact" value={rating.value} maximum={5} count={rating.count} />}
 				</CRow>
 			)}
-
-			{rating && <CRating style="compact" value={rating.value} maximum={5} count={rating.count} />}
 		</CColumns>
 	</CBox>
 </CBox>

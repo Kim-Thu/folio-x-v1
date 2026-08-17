@@ -24,6 +24,6 @@ export const pCardSliderItemClasses: Record<PCardColumns, string> = {
 	1: "w-full shrink-0 snap-start",
 	2: "w-5/6 shrink-0 snap-start sm:w-1/2",
 	3: "w-5/6 shrink-0 snap-start sm:w-1/2 lg:w-1/3",
-	4: "w-5/6 shrink-0 snap-start sm:w-1/2 lg:w-1/3 xl:w-1/4",
-	5: "w-5/6 shrink-0 snap-start sm:w-1/2 lg:w-1/3 xl:w-1/5",
+	4: "w-5/6 shrink-0 snap-start sm:w-1/2 lg:w-1/4",
+	5: "w-5/6 shrink-0 snap-start sm:w-1/2 lg:w-1/5",
 };
