@@ -2,6 +2,8 @@ import EmblaCarousel from "embla-carousel";
 
 const sliderSelector = "[data-slider]";
 const viewportSelector = "[data-slider-viewport]";
+const containerSelector = "[data-slider-container]";
+const slideSelector = "[data-slide]";
 const previousSelector = "[data-slider-previous]";
 const nextSelector = "[data-slider-next]";
 const currentSelector = "[data-slider-current]";
@@ -23,7 +25,12 @@ const initSlider = (root: HTMLElement) => {
 	if (root.dataset.sliderInitialized === "true") return;
 
 	const viewport = root.querySelector<HTMLElement>(viewportSelector);
-	if (!viewport) return;
+	const container = viewport?.querySelector<HTMLElement>(containerSelector);
+	const slides = container
+		? Array.from(container.querySelectorAll<HTMLElement>(`:scope > ${slideSelector}`))
+		: [];
+
+	if (!viewport || !container || slides.length === 0) return;
 
 	const autoplay = toBoolean(root.dataset.sliderAutoplay, false);
 	const autoplayInterval = toInterval(root.dataset.sliderAutoplayInterval);
@@ -33,8 +40,10 @@ const initSlider = (root: HTMLElement) => {
 
 	const embla = EmblaCarousel(viewport, {
 		align: "start",
+		container,
 		containScroll: "trimSnaps",
 		loop,
+		slides,
 		watchDrag: draggable,
 	});
 
@@ -62,7 +71,11 @@ const initSlider = (root: HTMLElement) => {
 		if (!autoplay || hoverPaused || document.hidden) return;
 
 		autoplayTimer = window.setTimeout(() => {
-			embla.scrollNext();
+			if (embla.canScrollNext()) {
+				embla.scrollNext();
+			} else {
+				embla.scrollTo(0);
+			}
 		}, autoplayInterval);
 	};
 
