@@ -1,7 +1,7 @@
 import type { CButtonLinkProps } from "@/types/components/object/component/CButton.types";
 
 export type PSectionHeaderTemplate = "default" | "split" | "action-right";
-export type PSectionHeaderAppearance = "default" | "compact";
+export type PSectionHeaderAppearance = "default" | "compact" | "catalog";
 
 export interface PSectionHeaderData {
 	id?: string;
