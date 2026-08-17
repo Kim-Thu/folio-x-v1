@@ -65,8 +65,8 @@
     "popularGenresLimit": 8,
     "featuredCards": {
       "template": "media-metrics",
-      "layout": "grid",
-      "columns": 5,
+      "layout": "slider",
+      "columns": 4,
       "gap": "sm",
       "mediaRatio": "portrait",
       "slots": {
