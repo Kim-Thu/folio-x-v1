@@ -1,9 +1,11 @@
 import { getBlogDetailSettings, getInsights } from "@/data/cms";
-import { mapInsightToCard } from "@/data/mappers/card";
 import type { PageRegion } from "@/types/components/object/project/page/PageRegion.types";
 import type { InsightDetailPageData } from "@/types/components/pages/insight-detail/InsightDetailPage.types";
 import type { PPageHeaderEditorialData } from "@/types/components/object/project/page-header/PPageHeader.types";
-import type { CCardConfig } from "@/types/components/object/component/card/CCard.types";
+import type {
+	CCardConfig,
+	InsightCardPresentation,
+} from "@/types/components/object/component/card/CCard.types";
 import type { PCardProps } from "@/types/components/object/project/card/PCard.types";
 
 export async function getInsightDetailPaths() {
@@ -92,15 +94,13 @@ export async function getInsightDetailPageData(
 		.filter((node) => node.type === "heading")
 		.map((node) => ({ label: node.text, href: `#${node.id}` }));
 
-	const relatedCards = relatedPosts.map((insight) =>
-		mapInsightToCard(insight, {
-			routes: header.routes,
-			separator: sidebar.relatedCards.separator,
-			metadataDisplay: sidebar.relatedCards.metadataDisplay,
-			imageWidth: sidebar.relatedCards.imageWidth,
-			imageHeight: sidebar.relatedCards.imageHeight,
-		}),
-	);
+	const relatedPresentation: InsightCardPresentation = {
+		routes: header.routes,
+		separator: sidebar.relatedCards.separator,
+		metadataDisplay: sidebar.relatedCards.metadataDisplay,
+		imageWidth: sidebar.relatedCards.imageWidth,
+		imageHeight: sidebar.relatedCards.imageHeight,
+	};
 
 	const relatedCardConfig = sidebar.relatedCards.card;
 	const relatedPCard: PCardProps = {
@@ -110,8 +110,10 @@ export async function getInsightDetailPageData(
 		card: {
 			template: relatedCardConfig.template as CCardConfig["template"],
 			slots: relatedCardConfig.slots as CCardConfig["slots"],
+			source: "blog",
+			presentation: relatedPresentation,
 		},
-		items: relatedCards,
+		items: relatedPosts,
 	};
 
 	const nestedRegions: PageRegion[] = [
@@ -152,7 +154,7 @@ export async function getInsightDetailPageData(
 					},
 				]
 			: []),
-		...(relatedCards.length
+		...(relatedPosts.length
 			? [
 					{
 						key: "related-posts",
@@ -203,7 +205,7 @@ export async function getInsightDetailPageData(
 
 	return {
 		post,
-		pageTemplate: presentation.page.template ,
+		pageTemplate: presentation.page.template,
 		regions: [
 			{
 				key: presentation.section.id,
