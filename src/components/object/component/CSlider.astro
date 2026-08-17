@@ -1,5 +1,6 @@
 ---
 import CButton from "@/components/object/component/CButton.astro";
+import CSliderEmbla from "@/components/object/component/CSliderEmbla";
 import type { CSliderProps } from "@/types/components/object/component/CSlider.types";
 import { cn } from "@/utils/cn";
 import {
@@ -7,6 +8,8 @@ import {
 	sliderBelowLeftButtonsClasses,
 	sliderBelowLeftPreviousClasses,
 	sliderButtonsClasses,
+	sliderContainerClasses,
+	sliderContainerGapClasses,
 	sliderControlsClasses,
 	sliderDotClasses,
 	sliderDotCurrentClasses,
@@ -15,7 +18,6 @@ import {
 	sliderTrackClasses,
 	sliderViewportClasses,
 	sliderViewportDraggableClasses,
-	sliderViewportGapClasses,
 	sliderViewportShapeClasses,
 } from "@/variants/components/object/component/CSlider.variants";
 
@@ -36,30 +38,30 @@ const {
 } = Astro.props as CSliderProps;
 
 const belowLeft = controls === "below-left";
+const viewportClassName = cn(
+	sliderViewportClasses,
+	draggable && sliderViewportDraggableClasses,
+	sliderViewportShapeClasses[shape],
+);
+const containerClassName = cn(
+	sliderContainerClasses,
+	sliderContainerGapClasses[gap],
+);
 ---
 
-<div
-	{...attributes}
-	class={cn(sliderBaseClasses, className)}
-	data-slider
-	data-slider-autoplay={autoplay ? "true" : "false"}
-	data-slider-autoplay-interval={String(autoplayInterval)}
-	data-slider-draggable={draggable ? "true" : "false"}
-	data-slider-pause-on-hover={pauseOnHover ? "true" : "false"}
->
-	<div
-		class={cn(
-			sliderViewportClasses,
-			draggable && sliderViewportDraggableClasses,
-			sliderViewportGapClasses[gap],
-			sliderViewportShapeClasses[shape],
-		)}
-		aria-label={label}
-		tabindex="0"
-		data-slider-viewport
+<div {...attributes} class={cn(sliderBaseClasses, className)} data-slider>
+	<CSliderEmbla
+		client:load
+		{viewportClassName}
+		{containerClassName}
+		{label}
+		{autoplay}
+		{autoplayInterval}
+		{draggable}
+		{pauseOnHover}
 	>
 		<slot />
-	</div>
+	</CSliderEmbla>
 
 	{
 		itemCount > 1 && (
@@ -72,6 +74,7 @@ const belowLeft = controls === "below-left";
 								class={cn(sliderDotClasses, index === 0 && sliderDotCurrentClasses)}
 								aria-label={`${label} ${index + 1}`}
 								aria-current={index === 0 ? "true" : "false"}
+								data-current={index === 0 ? "true" : "false"}
 								data-slider-go={index}
 							/>
 						))}
@@ -82,7 +85,7 @@ const belowLeft = controls === "below-left";
 					<p class={sliderStatusClasses} aria-live="polite">
 						<span data-slider-current>01</span>
 						<span class={sliderTrackClasses} aria-hidden="true" />
-						<span>{String(itemCount).padStart(2, "0")}</span>
+						<span data-slider-total>{String(itemCount).padStart(2, "0")}</span>
 					</p>
 				)}
 
@@ -100,7 +103,7 @@ const belowLeft = controls === "below-left";
 							size={belowLeft ? "md" : "sm"}
 							variant={belowLeft ? "ghost" : "secondary"}
 							tone="light"
-							disabled={belowLeft}
+							disabled
 							data-slider-previous
 						/>
 						<CButton
