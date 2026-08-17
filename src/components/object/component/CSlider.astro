@@ -12,7 +12,6 @@ import {
 	sliderContainerGapClasses,
 	sliderControlsClasses,
 	sliderDotClasses,
-	sliderDotCurrentClasses,
 	sliderDotsClasses,
 	sliderStatusClasses,
 	sliderTrackClasses,
@@ -71,7 +70,7 @@ const containerClassName = cn(
 						{Array.from({ length: itemCount }, (_, index) => (
 							<button
 								type="button"
-								class={cn(sliderDotClasses, index === 0 && sliderDotCurrentClasses)}
+								class={sliderDotClasses}
 								aria-label={`${label} ${index + 1}`}
 								aria-current={index === 0 ? "true" : "false"}
 								data-current={index === 0 ? "true" : "false"}
