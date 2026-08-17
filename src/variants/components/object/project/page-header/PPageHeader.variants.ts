@@ -38,5 +38,7 @@ export const pageHeaderGallerySummaryActionClasses = "min-h-12 rounded-xl";
 export const pageHeaderGallerySummaryPaymentClasses =
 	"mt-4 gap-2.5 text-gray-400";
 
+export const pageHeaderGallerySummaryFactsClasses = "mt-8 lg:mt-10";
+
 export const pageHeaderGallerySummaryFactClasses =
 	"py-1 lg:border-r lg:border-gray-100 lg:px-5 lg:first:pl-0 lg:last:border-r-0 lg:last:pr-0";
