@@ -25,6 +25,8 @@ import {
 	pageHeaderGallerySummaryFactClasses,
 	pageHeaderGallerySummaryFeatureClasses,
 	pageHeaderGallerySummaryFeaturesClasses,
+	pageHeaderGallerySummaryFooterClasses,
+	pageHeaderGallerySummaryGalleryClasses,
 	pageHeaderGallerySummaryIdentityClasses,
 	pageHeaderGallerySummaryPaymentClasses,
 	pageHeaderGallerySummaryPriceClasses,
@@ -32,6 +34,7 @@ import {
 	pageHeaderGallerySummarySocialClasses,
 	pageHeaderGallerySummarySocialDividerClasses,
 	pageHeaderGallerySummaryTitleRowClasses,
+	pageHeaderGallerySummaryTopClasses,
 } from "@/variants/components/object/project/page-header/PPageHeader.variants";
 
 type Props = { data: PPageHeaderGallerySummaryData };
@@ -52,91 +55,100 @@ const factsColumns: CColumnsTemplate =
 <div class={pageHeaderGallerySummaryRootClasses}>
 	<CBreadcrumb {...data.breadcrumb} />
 
-	<CColumns columns="twelve" gap="lg" align="start">
-		<CGridItem lgSpan={7}>
-			<PGallery
-				template="slider"
-				items={data.images}
-				label={data.galleryLabel}
-				thumbnailLabel={data.thumbnailLabel}
-			/>
+	<CColumns columns="twelve" gap="lg" align="stretch">
+		<CGridItem lgSpan={6}>
+			<div class={pageHeaderGallerySummaryGalleryClasses}>
+				<PGallery
+					template="slider"
+					items={data.images}
+					label={data.galleryLabel}
+					thumbnailLabel={data.thumbnailLabel}
+				/>
+			</div>
 		</CGridItem>
 
-		<CGridItem as="header" lgSpan={5}>
+		<CGridItem as="header" lgSpan={6}>
 			<div class={pageHeaderGallerySummaryContentClasses}>
-				<div class={pageHeaderGallerySummaryIdentityClasses}>
-					<CLink href={data.category.href}>
-						<CText as="span" variant="caption" tone="brand">
-							{data.category.label}
-						</CText>
-					</CLink>
+				<div class={pageHeaderGallerySummaryTopClasses}>
+					<div class={pageHeaderGallerySummaryIdentityClasses}>
+						<CLink href={data.category.href}>
+							<CText as="span" variant="caption" tone="brand">
+								{data.category.label}
+							</CText>
+						</CLink>
 
-					<div class={pageHeaderGallerySummaryTitleRowClasses}>
+						<div class={pageHeaderGallerySummaryTitleRowClasses}>
+							<CRow align="center" gap="sm" wrap={false}>
+								<CHeading level={1} variant="h3">{data.title}</CHeading>
+								{data.badge && <CBadge tone="neutral">{data.badge}</CBadge>}
+							</CRow>
+						</div>
+
+						<div class={pageHeaderGallerySummaryDescriptionClasses}>
+							<CText tone="muted">{data.description}</CText>
+						</div>
+					</div>
+
+					<div class={pageHeaderGallerySummarySocialClasses}>
 						<CRow align="center" gap="sm" wrap={false}>
-							<CHeading level={1} variant="h3">{data.title}</CHeading>
-							{data.badge && <CBadge tone="neutral">{data.badge}</CBadge>}
-						</CRow>
-					</div>
+							<CRating
+								style="stars"
+								value={data.rating.value}
+								maximum={data.rating.maximum}
+								slots={{ count: false, maximum: false, value: false }}
+							/>
 
-					<div class={pageHeaderGallerySummaryDescriptionClasses}>
-						<CText tone="muted">{data.description}</CText>
-					</div>
-				</div>
-
-				<div class={pageHeaderGallerySummarySocialClasses}>
-					<CRow align="center" gap="sm" wrap={false}>
-						<CRating
-							style="stars"
-							value={data.rating.value}
-							maximum={data.rating.maximum}
-							slots={{ count: false, maximum: false, value: false }}
-						/>
-
-						<CText as="span" variant="caption" tone="subtle">
-							{data.rating.value} ({data.rating.count} reviews)
-						</CText>
-
-						<span
-							class={pageHeaderGallerySummarySocialDividerClasses}
-							aria-hidden="true"
-						></span>
-
-						<CText as="span" variant="caption" tone="subtle">
-							{data.rating.salesLabel}
-						</CText>
-					</CRow>
-				</div>
-
-				<div class={pageHeaderGallerySummaryCommerceClasses}>
-					<div class={pageHeaderGallerySummaryPriceClasses}>
-						<CRow align="baseline" gap="sm" wrap={false}>
-							<CText as="span" variant="price-display">
-								{data.price.current}
+							<CText as="span" variant="caption" tone="subtle">
+								{data.rating.value} ({data.rating.count} reviews)
 							</CText>
 
-							{data.price.previous && (
-								<CText as="span" variant="price-old" tone="subtle">
-									{data.price.previous}
-								</CText>
-							)}
+							<span
+								class={pageHeaderGallerySummarySocialDividerClasses}
+								aria-hidden="true"
+							></span>
 
-							{data.price.discount && (
-								<CBadge tone="brand">{data.price.discount}</CBadge>
-							)}
+							<CText as="span" variant="caption" tone="subtle">
+								{data.rating.salesLabel}
+							</CText>
 						</CRow>
 					</div>
 
-					{data.features.length > 0 && (
-						<div class={pageHeaderGallerySummaryFeaturesClasses}>
-							{data.features.map((feature) => (
-								<CFeature {...feature} class={pageHeaderGallerySummaryFeatureClasses} />
-							))}
-						</div>
-					)}
+					<div class={pageHeaderGallerySummaryCommerceClasses}>
+						<div class={pageHeaderGallerySummaryPriceClasses}>
+							<CRow align="baseline" gap="sm" wrap={false}>
+								<CText as="span" variant="price-display">
+									{data.price.current}
+								</CText>
 
-					<CColumns
-						columns="two"
+								{data.price.previous && (
+									<CText as="span" variant="price-old" tone="subtle">
+										{data.price.previous}
+									</CText>
+								)}
+
+								{data.price.discount && (
+									<CBadge tone="brand">{data.price.discount}</CBadge>
+								)}
+							</CRow>
+						</div>
+
+						{data.features.length > 0 && (
+							<div class={pageHeaderGallerySummaryFeaturesClasses}>
+								{data.features.map((feature) => (
+									<CFeature
+										{...feature}
+										class={pageHeaderGallerySummaryFeatureClasses}
+									/>
+								))}
+							</div>
+						)}
+					</div>
+				</div>
+
+				<div class={pageHeaderGallerySummaryFooterClasses}>
+					<CRow
 						gap="sm"
+						wrap={true}
 						class={pageHeaderGallerySummaryActionsClasses}
 						role="group"
 						aria-label={data.actionsLabel}
@@ -149,17 +161,16 @@ const factsColumns: CColumnsTemplate =
 								variant={action.variant}
 								tone="light"
 								size="md"
-								wide
 								class={pageHeaderGallerySummaryActionClasses}
 							/>
 						))}
-					</CColumns>
+					</CRow>
 
 					{(data.paymentLabel || data.paymentMethods.length > 0) && (
 						<CRow
 							align="center"
 							gap="sm"
-							wrap={false}
+							wrap={true}
 							class={pageHeaderGallerySummaryPaymentClasses}
 						>
 							<CText as="span" variant="caption" tone="subtle">
