@@ -15,8 +15,8 @@
         "template": "immersive",
         "settings": {
           "theme": "canvas",
-          "spacing": "none",
-          "container": "none"
+          "spacing": "lead",
+          "container": "site"
         },
         "content": {
           "id": "novels-hero",
