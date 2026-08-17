@@ -130,6 +130,7 @@ const initSlider = (root: HTMLElement) => {
 		updateControls();
 		scheduleAutoplay();
 	};
+	const handleExternalReInit = () => embla.reInit();
 
 	const directHandlers = directButtons.map((button, index) => {
 		const handler = () => embla.scrollTo(index);
@@ -139,6 +140,7 @@ const initSlider = (root: HTMLElement) => {
 
 	previous?.addEventListener("click", handlePrevious);
 	next?.addEventListener("click", handleNext);
+	root.addEventListener("slider:reinit", handleExternalReInit);
 	document.addEventListener("visibilitychange", handleVisibilityChange);
 
 	if (pauseOnHover) {
@@ -160,6 +162,7 @@ const initSlider = (root: HTMLElement) => {
 			stopAutoplay();
 			previous?.removeEventListener("click", handlePrevious);
 			next?.removeEventListener("click", handleNext);
+			root.removeEventListener("slider:reinit", handleExternalReInit);
 			document.removeEventListener("visibilitychange", handleVisibilityChange);
 
 			if (pauseOnHover) {
