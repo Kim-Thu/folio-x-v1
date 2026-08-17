@@ -2,22 +2,26 @@ export const pageHeaderGallerySummaryRootClasses = "flex flex-col gap-6";
 
 export const pageHeaderGallerySummaryContentClasses = "flex flex-col";
 
-export const pageHeaderGallerySummaryIdentityClasses = "flex flex-col gap-3";
+export const pageHeaderGallerySummaryIdentityClasses = "flex flex-col";
 
-export const pageHeaderGallerySummaryTitleRowClasses = "mt-1";
+export const pageHeaderGallerySummaryTitleRowClasses = "mt-2";
+
+export const pageHeaderGallerySummaryDescriptionClasses = "mt-3";
 
 export const pageHeaderGallerySummarySocialClasses = "mt-4";
 
 export const pageHeaderGallerySummarySocialDividerClasses =
 	"h-4 w-px shrink-0 bg-gray-100";
 
-export const pageHeaderGallerySummaryCommerceClasses = "mt-4 flex flex-col";
+export const pageHeaderGallerySummaryCommerceClasses = "mt-3 flex flex-col";
 
-export const pageHeaderGallerySummaryPriceClasses = "mb-5";
+export const pageHeaderGallerySummaryPriceClasses = "mb-4";
 
 export const pageHeaderGallerySummaryFeaturesClasses = "flex flex-col gap-2";
 
 export const pageHeaderGallerySummaryActionsClasses = "mt-5";
+
+export const pageHeaderGallerySummaryActionClasses = "rounded-xl";
 
 export const pageHeaderGallerySummaryPaymentClasses = "mt-3";
 
