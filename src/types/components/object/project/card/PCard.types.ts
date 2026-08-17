@@ -12,7 +12,7 @@ export type PCardTemplate =
   "stacked" | "horizontal" | "overlay" | "featured" | "boxed" | "compact-media" | "compact-bordered" | "editorial" | "icon-panel" | "icon-summary" | "media-banner" | "media-caption" | "media-details" | "media-only" | "media-summary" | "media-metrics";
 
 export type PCardLayout =
-  "grid" | "list" | "three-column" | "twelve-column" | "content-three-column" | "mosaic" | "asymmetric" | "showcase";
+  "grid" | "list" | "slider" | "three-column" | "twelve-column" | "content-three-column" | "mosaic" | "asymmetric" | "showcase";
 
 export type PCardColumns = 1 | 2 | 3 | 4 | 5;
 
