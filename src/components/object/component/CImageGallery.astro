@@ -29,8 +29,8 @@ const hasThumbnails = images.length > 1;
 >
 	<div class={imageGalleryMainClasses}>
 		{images.map((image, index) => (
-			<CMedia ratio="video" hidden={index > 0} data-gallery-panel>
-				<CImage {...image} variant="fill" />
+			<CMedia ratio="natural" hidden={index > 0} data-gallery-panel>
+				<CImage {...image} variant="natural" />
 			</CMedia>
 		))}
 	</div>
