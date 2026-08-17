@@ -16,7 +16,7 @@
         "settings": {
           "theme": "canvas",
           "spacing": "lead",
-          "container": "site"
+          "container": "none"
         },
         "content": {
           "id": "comics-hero",
@@ -137,7 +137,7 @@
         "settings": {
           "theme": "canvas",
           "spacing": "closing",
-          "container": "site"
+          "container": "none"
         },
         "content": {
           "id": "comics-newsletter",
