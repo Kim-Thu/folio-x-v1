@@ -3,6 +3,7 @@ import CBox from "@/components/object/component/CBox.astro";
 import CButton from "@/components/object/component/CButton.astro";
 import CColumns from "@/components/object/component/CColumns.astro";
 import CDescriptionList from "@/components/object/component/CDescriptionList.astro";
+import CGridItem from "@/components/object/component/CGridItem.astro";
 import CHeading from "@/components/object/component/CHeading.astro";
 import CIcon from "@/components/object/component/CIcon.astro";
 import CImage from "@/components/object/component/CImage.astro";
@@ -18,19 +19,19 @@ const headingId = `${data.id}-title`;
 const slides = data.slides?.length ? data.slides : [data];
 ---
 
-<CColumns columns="one" gap="md">
-	<CSlider
-		controls="dots"
-		shape="none"
-		itemCount={slides.length}
-		label={`${data.eyebrow} featured titles`}
-		previousLabel="Previous featured title"
-		nextLabel="Next featured title"
-	>
-		{slides.map((slide, index) => (
-			<CSlide>
-				<CBox position="relative" overflow="hidden">
-					<CBox as="header" position="overlay-start" spacing="lg">
+<CSlider
+	controls="dots"
+	shape="none"
+	itemCount={slides.length}
+	label={`${data.eyebrow} featured titles`}
+	previousLabel="Previous featured title"
+	nextLabel="Next featured title"
+>
+	{slides.map((slide, index) => (
+		<CSlide>
+			<CColumns columns="twelve" gap="lg" align="center">
+				<CGridItem lgSpan={4}>
+					<CBox as="header">
 						<CColumns columns="one" gap="lg">
 							<CColumns columns="one" gap="sm">
 								<CRow align="center" gap="xs">
@@ -43,7 +44,8 @@ const slides = data.slides?.length ? data.slides : [data];
 									level={index === 0 ? 1 : 2}
 									variant="display-3"
 								>
-									{slide.title}{" "}<CText as="span" variant="inherit" tone="brand">
+									{slide.title}{" "}
+									<CText as="span" variant="inherit" tone="brand">
 										{slide.accent}
 									</CText>
 								</CHeading>
@@ -56,34 +58,45 @@ const slides = data.slides?.length ? data.slides : [data];
 							<CRow gap="sm" role="group" aria-label={data.actionsLabel}>
 								{slide.actions.map((action) => <CButton {...action} />)}
 							</CRow>
+
+							<CDescriptionList items={data.metrics} variant="metrics" />
 						</CColumns>
 					</CBox>
+				</CGridItem>
 
-					<CMedia ratio="video" shape="none">
-						<CImage
-							{...slide.image}
-							variant="fill"
-							loading={index === 0 ? "eager" : "lazy"}
-							fetchpriority={index === 0 ? "high" : "auto"}
-						/>
-					</CMedia>
+				<CGridItem lgSpan={8}>
+					<CBox position="relative" radius="md" overflow="hidden">
+						<CMedia ratio="video" shape="none">
+							<CImage
+								{...slide.image}
+								variant="fill"
+								loading={index === 0 ? "eager" : "lazy"}
+								fetchpriority={index === 0 ? "high" : "auto"}
+							/>
+						</CMedia>
 
-					{slide.quote && (
-						<CBox position="overlay-end" surface="glass-dark" radius="md" spacing="md">
-							<CColumns columns="one" gap="xs">
-								<CText variant="lead" tone="on-dark">{slide.quote}</CText>
-								{slide.quoteCredit && (
-									<CText variant="caption" tone="on-dark-subtle">
-										{slide.quoteCredit}
+						{slide.quote && (
+							<CBox
+								position="overlay-end"
+								surface="glass-dark"
+								radius="md"
+								spacing="md"
+							>
+								<CColumns columns="one" gap="xs">
+									<CText variant="lead" tone="on-dark">
+										{slide.quote}
 									</CText>
-								)}
-							</CColumns>
-						</CBox>
-					)}
-				</CBox>
-			</CSlide>
-		))}
-	</CSlider>
-
-	<CDescriptionList items={data.metrics} variant="metrics" />
-</CColumns>
+									{slide.quoteCredit && (
+										<CText variant="caption" tone="on-dark-subtle">
+											{slide.quoteCredit}
+										</CText>
+									)}
+								</CColumns>
+							</CBox>
+						)}
+					</CBox>
+				</CGridItem>
+			</CColumns>
+		</CSlide>
+	))}
+</CSlider>
