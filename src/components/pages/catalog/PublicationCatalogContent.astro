@@ -7,13 +7,13 @@ import PCard from "@/components/object/project/card/PCard.astro";
 import PFilterPanel from "@/components/object/project/filter-panel/PFilterPanel.astro";
 import PSectionHeader from "@/components/object/project/section-header/PSectionHeader.astro";
 import { getPublicationCatalogSettings } from "@/data/cms";
-import { mapPublicationToCard } from "@/data/mappers/card";
-import type { PublicationCardPresentation } from "@/data/mappers/card";
 import type { PublicationEntry } from "@/types/content";
 import type {
 	CCardConfig,
 	CCardData,
+	CCardItemData,
 	CCardSlotOptions,
+	PublicationCardPresentation,
 } from "@/types/components/object/component/card/CCard.types";
 import type { PCardProps } from "@/types/components/object/project/card/PCard.types";
 import type { CIconName } from "@/types/components/object/component/CIcon.types";
@@ -26,12 +26,9 @@ type Props = {
 
 const { catalog, entries, presentation } = Astro.props as Props;
 const settings = await getPublicationCatalogSettings();
-const cards = entries.map((entry) =>
-	mapPublicationToCard(entry, catalog, presentation),
-);
-const featuredCards = cards.slice(0, settings.main.featuredLimit);
-const latestCards = cards.slice(0, settings.main.latestLimit);
-const trendingCards = cards.slice(0, settings.sidebar.trendingLimit);
+const featuredCards = entries.slice(0, settings.main.featuredLimit);
+const latestCards = entries.slice(0, settings.main.latestLimit);
+const trendingCards = entries.slice(0, settings.sidebar.trendingLimit);
 
 const genreMap = new Map<string, { label: string; slug: string; count: number }>();
 for (const entry of entries) {
@@ -120,14 +117,16 @@ const toolbar = {
 };
 
 type CatalogCardConfig = typeof settings.main.featuredCards;
+type CardSourceConfig = Pick<CCardConfig, "source" | "presentation">;
 
 const resolveTemplate = (layout: string): PCardProps["template"] =>
 	(layout === "carousel" ? "slider" : layout) as PCardProps["template"];
 
 const cardProps = (
 	config: CatalogCardConfig,
-	items: CCardData[],
+	items: CCardItemData[],
 	slots?: CCardSlotOptions,
+	sourceConfig?: CardSourceConfig,
 ): PCardProps => ({
 	template: resolveTemplate(config.layout),
 	columns: config.columns as PCardProps["columns"],
@@ -136,9 +135,15 @@ const cardProps = (
 		template: config.template as CCardConfig["template"],
 		mediaRatio: config.mediaRatio as CCardConfig["mediaRatio"],
 		slots: { ...config.slots, ...slots },
+		...sourceConfig,
 	},
 	items,
 });
+
+const publicationSource: CardSourceConfig = {
+	source: catalog,
+	presentation,
+};
 ---
 
 <CBox data-collection-filter-root>
@@ -178,7 +183,7 @@ const cardProps = (
 				<CBox surface={settings.sidebar.panel.surface} radius={settings.sidebar.panel.radius} spacing={settings.sidebar.panel.spacing}>
 					<CColumns columns="one" gap="sm">
 						<PSectionHeader data={{ title: settings.sidebar.trendingTitle }} appearance="compact" headingLevel={2} />
-						<PCard {...cardProps(settings.sidebar.listCards, trendingCards)} />
+						<PCard {...cardProps(settings.sidebar.listCards, trendingCards, undefined, publicationSource)} />
 					</CColumns>
 				</CBox>
 
@@ -200,12 +205,12 @@ const cardProps = (
 			<CColumns columns="one" gap="lg">
 				<CColumns columns="one" gap="sm">
 					<PSectionHeader data={{ title: settings.main.featuredTitle }} appearance="compact" headingLevel={2} />
-					<PCard {...cardProps(settings.main.featuredCards, featuredCards)} />
+					<PCard {...cardProps(settings.main.featuredCards, featuredCards, undefined, publicationSource)} />
 				</CColumns>
 
 				<CColumns columns="one" gap="sm">
 					<PSectionHeader data={{ title: settings.main.latestTitle }} appearance="compact" headingLevel={2} />
-					<PCard {...cardProps(settings.main.latestCards, latestCards)} />
+					<PCard {...cardProps(settings.main.latestCards, latestCards, undefined, publicationSource)} />
 				</CColumns>
 
 				<CBox surface={settings.sidebar.panel.surface} radius={settings.sidebar.panel.radius} spacing={settings.sidebar.panel.spacing}>
