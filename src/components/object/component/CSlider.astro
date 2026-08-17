@@ -76,6 +76,8 @@ const containerClassName = cn(
 		</CRow>
 	</div>
 
+	<slot name="navigation" />
+
 	{
 		itemCount > 1 && (
 			<div class={sliderControlsClasses[controls]}>
