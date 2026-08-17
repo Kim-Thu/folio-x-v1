@@ -23,6 +23,7 @@ import {
 	pageHeaderGallerySummaryContentClasses,
 	pageHeaderGallerySummaryDescriptionClasses,
 	pageHeaderGallerySummaryFactClasses,
+	pageHeaderGallerySummaryFeatureClasses,
 	pageHeaderGallerySummaryFeaturesClasses,
 	pageHeaderGallerySummaryIdentityClasses,
 	pageHeaderGallerySummaryPaymentClasses,
@@ -127,7 +128,9 @@ const factsColumns: CColumnsTemplate =
 
 					{data.features.length > 0 && (
 						<div class={pageHeaderGallerySummaryFeaturesClasses}>
-							{data.features.map((feature) => <CFeature {...feature} />)}
+							{data.features.map((feature) => (
+								<CFeature {...feature} class={pageHeaderGallerySummaryFeatureClasses} />
+							))}
 						</div>
 					)}
 
