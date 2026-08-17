@@ -1,25 +1,36 @@
-import { createElement, useEffect } from "react";
+import { createElement, useEffect, useRef } from "react";
 import useEmblaCarousel from "embla-carousel-react";
 
 import type { CSliderEmblaProps } from "@/types/components/object/component/CSliderEmbla.types";
 
 export default function CSliderEmbla({
-	children,
-	containerClassName,
-	label,
-	viewportClassName,
 	autoplay,
 	autoplayInterval,
 	draggable,
 	loop,
 	pauseOnHover,
 }: CSliderEmblaProps) {
+	const controllerRef = useRef<HTMLSpanElement | null>(null);
 	const [emblaRef, emblaApi] = useEmblaCarousel({
 		align: "start",
 		containScroll: "trimSnaps",
 		loop,
 		watchDrag: draggable,
 	});
+
+	useEffect(() => {
+		const controller = controllerRef.current;
+		const root = controller?.closest("[data-slider]") as HTMLElement | null;
+		const viewport = root?.querySelector("[data-slider-viewport]") as HTMLElement | null;
+
+		if (!viewport) return;
+
+		emblaRef(viewport);
+
+		return () => {
+			emblaRef(null);
+		};
+	}, [emblaRef]);
 
 	useEffect(() => {
 		if (!emblaApi) return;
@@ -51,8 +62,8 @@ export default function CSliderEmbla({
 				totalLabel.textContent = String(snapCount).padStart(2, "0");
 			}
 
-			if (previous) previous.disabled = !loop && !emblaApi.canScrollPrev();
-			if (next) next.disabled = !loop && !emblaApi.canScrollNext();
+			if (previous) previous.disabled = loop ? false : !emblaApi.canScrollPrev();
+			if (next) next.disabled = loop ? false : !emblaApi.canScrollNext();
 
 			directButtons.forEach((button, index) => {
 				const available = index < snapCount;
@@ -156,15 +167,9 @@ export default function CSliderEmbla({
 		};
 	}, [emblaApi, autoplay, autoplayInterval, loop, pauseOnHover]);
 
-	return createElement(
-		"div",
-		{
-			ref: emblaRef,
-			className: viewportClassName,
-			"aria-label": label,
-			tabIndex: 0,
-			"data-slider-viewport": "",
-		},
-		createElement("div", { className: containerClassName }, children),
-	);
+	return createElement("span", {
+		ref: controllerRef,
+		hidden: true,
+		"data-slider-controller": "",
+	});
 }
