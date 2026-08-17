@@ -18,7 +18,6 @@ import type {
 } from "@/types/components/object/component/card/CCard.types";
 import type { PCardProps } from "@/types/components/object/project/card/PCard.types";
 import type { PCtaProps } from "@/types/components/object/project/cta/PCta.types";
-import type { PSectionHeaderProps } from "@/types/components/object/project/section-header/PSectionHeader.types";
 import type { CIconName } from "@/types/components/object/component/CIcon.types";
 import type { PageSectionData } from "@/types/components/pages/builder/PageBuilder.types";
 
@@ -28,17 +27,10 @@ type Props = {
 	catalog: "novels" | "comics";
 	entries: PublicationEntry[];
 	presentation: PublicationCardPresentation;
-	sectionAction?: PSectionHeaderProps["action"];
 	closing?: CtaSection;
 };
 
-const {
-	catalog,
-	entries,
-	presentation,
-	sectionAction,
-	closing,
-} = Astro.props as Props;
+const { catalog, entries, presentation, closing } = Astro.props as Props;
 const settings = await getPublicationCatalogSettings();
 const featuredCards = entries.slice(0, settings.main.featuredLimit);
 const latestCards = entries.slice(0, settings.main.latestLimit);
@@ -269,16 +261,14 @@ const genreStoryCardConfig: CatalogCardConfig = {
 								action: false,
 							})}
 						/>
-					</CColumns>
 				</CBox>
 			</CColumns>
 
 			<CColumns columns="one" gap="lg">
 				<CColumns columns="one" gap="sm">
 					<PSectionHeader
-						data={{ number: "01", title: settings.main.featuredTitle }}
-						template="action-right"
-						action={sectionAction}
+						data={{ title: settings.main.featuredTitle }}
+						appearance="catalog"
 						headingLevel={2}
 					/>
 					<PCard
@@ -293,9 +283,8 @@ const genreStoryCardConfig: CatalogCardConfig = {
 
 				<CColumns columns="one" gap="sm">
 					<PSectionHeader
-						data={{ number: "02", title: settings.main.latestTitle }}
-						template="action-right"
-						action={sectionAction}
+						data={{ title: settings.main.latestTitle }}
+						appearance="catalog"
 						headingLevel={2}
 					/>
 					<PCard
@@ -315,9 +304,8 @@ const genreStoryCardConfig: CatalogCardConfig = {
 				>
 					<CColumns columns="one" gap="sm">
 						<PSectionHeader
-							data={{ number: "03", title: settings.main.popularGenresTitle }}
-							template="action-right"
-							action={sectionAction}
+							data={{ title: settings.main.popularGenresTitle }}
+							appearance="catalog"
 							headingLevel={2}
 						/>
 						<PCard
@@ -326,20 +314,11 @@ const genreStoryCardConfig: CatalogCardConfig = {
 					</CColumns>
 				</CBox>
 
-				{genreStoryGroups.map(({ genre, items }, index) => (
+				{genreStoryGroups.map(({ genre, items }) => (
 					<CColumns columns="one" gap="sm">
 						<PSectionHeader
-							data={{
-								number: String(index + 4).padStart(2, "0"),
-								title: genre.label,
-							}}
-							template="action-right"
-							action={sectionAction
-								? {
-									...sectionAction,
-									href: `${presentation.routes.categoryBase}${genre.slug}`,
-								}
-								: undefined}
+							data={{ title: genre.label }}
+							appearance="catalog"
 							headingLevel={2}
 						/>
 						<PCard
