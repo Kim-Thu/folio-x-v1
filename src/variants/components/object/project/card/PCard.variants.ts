@@ -1,6 +1,7 @@
 import type { CColumnsTemplate } from "@/types/components/object/component/CColumns.types";
 import type {
 	PCardColumns,
+	PCardGap,
 	PCardTemplate,
 } from "@/types/components/object/project/card/PCard.types";
 
@@ -18,9 +19,17 @@ export const pCardTemplateColumnDefaults: Partial<Record<PCardTemplate, PCardCol
 };
 
 export const pCardSliderItemClasses: Record<PCardColumns, string> = {
-	1: "basis-full shrink-0 snap-start",
-	2: "basis-5/6 shrink-0 snap-start sm:basis-1/2",
-	3: "basis-5/6 shrink-0 snap-start sm:basis-1/2 lg:basis-1/3",
-	4: "basis-5/6 shrink-0 snap-start sm:basis-1/2 lg:basis-1/4",
-	5: "basis-5/6 shrink-0 snap-start sm:basis-1/2 lg:basis-1/5",
+	1: "min-w-0 basis-full shrink-0 snap-start",
+	2: "min-w-0 basis-5/6 shrink-0 snap-start sm:basis-1/2",
+	3: "min-w-0 basis-5/6 shrink-0 snap-start sm:basis-1/2 lg:basis-1/3",
+	4: "min-w-0 basis-5/6 shrink-0 snap-start sm:basis-1/2 lg:basis-1/4",
+	5: "min-w-0 basis-5/6 shrink-0 snap-start sm:basis-1/2 lg:basis-1/5",
+};
+
+export const pCardSliderItemGapClasses: Record<PCardGap, string> = {
+	none: "",
+	sm: "pr-4",
+	md: "pr-6",
+	lg: "pr-8",
+	xl: "pr-12 lg:pr-16",
 };
