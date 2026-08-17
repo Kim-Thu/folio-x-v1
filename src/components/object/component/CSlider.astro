@@ -50,7 +50,7 @@ const containerClassName = cn(
 
 <div {...attributes} class={cn(sliderBaseClasses, className)} data-slider>
 	<CSliderEmbla
-		client:load
+		client:only="react"
 		{viewportClassName}
 		{containerClassName}
 		{label}
