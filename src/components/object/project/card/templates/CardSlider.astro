@@ -2,11 +2,15 @@
 import CCard from "@/components/object/component/card/CCard.astro";
 import CSlider from "@/components/object/component/CSlider.astro";
 import type { PCardTemplateProps } from "@/types/components/object/project/card/PCard.types";
+import { cn } from "@/utils/cn";
 import {
 	getCardItemAriaLabel,
 	getCardItemTitle,
 } from "@/utils/card";
-import { pCardSliderItemClasses } from "@/variants/components/object/project/card/PCard.variants";
+import {
+	pCardSliderItemClasses,
+	pCardSliderItemGapClasses,
+} from "@/variants/components/object/project/card/PCard.variants";
 
 const {
 	template,
@@ -38,7 +42,7 @@ const pauseOnHover = slider?.pauseOnHover ?? true;
 	previousLabel={sliderLabel}
 	nextLabel={sliderLabel}
 	controls={sliderControls}
-	gap={gap}
+	gap="none"
 	shape="none"
 	{autoplay}
 	{autoplayInterval}
@@ -50,7 +54,10 @@ const pauseOnHover = slider?.pauseOnHover ?? true;
 >
 	{items.map((item, index) => (
 		<div
-			class={pCardSliderItemClasses[columns]}
+			class={cn(
+				pCardSliderItemClasses[columns],
+				pCardSliderItemGapClasses[gap],
+			)}
 			aria-label={getCardItemAriaLabel(item)}
 			data-slide
 		>
