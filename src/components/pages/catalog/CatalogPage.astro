@@ -2,14 +2,14 @@
 import LContainer from "@/components/layout/LContainer.astro";
 import LPage from "@/components/layout/LPage.astro";
 import LSection from "@/components/layout/LSection.astro";
-import PCta from "@/components/object/project/cta/PCta.astro";
 import PPageHeader from "@/components/object/project/page-header/PPageHeader.astro";
 import PublicationCatalogContent from "@/components/pages/catalog/PublicationCatalogContent.astro";
 import { getPublications } from "@/data/cms";
-import type { PublicationCardPresentation } from "@/data/mappers/card";
+import type {
+	PublicationCardPresentation,
+} from "@/types/components/object/component/card/CCard.types";
 import type { CatalogPageProps } from "@/types/components/pages/catalog/CatalogPage.types";
 import type { PageSectionData } from "@/types/components/pages/builder/PageBuilder.types";
-import type { PCtaProps } from "@/types/components/object/project/cta/PCta.types";
 import type { PPageHeaderProps } from "@/types/components/object/project/page-header/PPageHeader.types";
 
 const { data } = Astro.props as CatalogPageProps;
@@ -23,6 +23,8 @@ type PublicationCatalogSection = CollectionSection & {
 		itemPresentation: PublicationCardPresentation;
 	};
 };
+
+type CtaSection = Extract<PageSectionData, { type: "cta" }>;
 
 const isPublicationCatalogSection = (
 	section: PageSectionData,
@@ -39,7 +41,9 @@ const catalogSection = data.page.content.sections.find(
 		isPublicationCatalogSection(section) &&
 		section.content.source.collection === catalog,
 );
-const newsletter = data.page.content.sections.find((section) => section.type === "cta");
+const newsletter = data.page.content.sections.find(
+	(section): section is CtaSection => section.type === "cta",
+);
 ---
 
 <LPage {...data.page.content.layout} id="main-content" tabindex="-1">
@@ -69,33 +73,18 @@ const newsletter = data.page.content.sections.find((section) => section.type ===
 			theme={catalogSection.settings.theme}
 			spacing={catalogSection.settings.spacing}
 		>
-			<LContainer size={catalogSection.settings.container === "none" ? "site" : catalogSection.settings.container}>
+			<LContainer
+				size={catalogSection.settings.container === "none"
+					? "site"
+					: catalogSection.settings.container}
+			>
 				<PublicationCatalogContent
 					{catalog}
 					{entries}
 					presentation={catalogSection.content.itemPresentation}
+					closing={newsletter}
 				/>
 			</LContainer>
-		</LSection>
-	)}
-
-	{newsletter && (
-		<LSection
-			id={newsletter.id}
-			theme={newsletter.settings.theme}
-			spacing={newsletter.settings.spacing}
-		>
-			{newsletter.settings.container === "none" ? (
-				<PCta
-					{...({ template: newsletter.template, data: newsletter.content } as unknown as PCtaProps)}
-				/>
-			) : (
-				<LContainer size={newsletter.settings.container}>
-					<PCta
-						{...({ template: newsletter.template, data: newsletter.content } as unknown as PCtaProps)}
-					/>
-				</LContainer>
-			)}
 		</LSection>
 	)}
 </LPage>
