@@ -11,12 +11,13 @@ export default function CSliderEmbla({
 	autoplay,
 	autoplayInterval,
 	draggable,
+	loop,
 	pauseOnHover,
 }: CSliderEmblaProps) {
 	const [emblaRef, emblaApi] = useEmblaCarousel({
 		align: "start",
 		containScroll: "trimSnaps",
-		loop: false,
+		loop,
 		watchDrag: draggable,
 	});
 
@@ -50,8 +51,8 @@ export default function CSliderEmbla({
 				totalLabel.textContent = String(snapCount).padStart(2, "0");
 			}
 
-			if (previous) previous.disabled = !emblaApi.canScrollPrev();
-			if (next) next.disabled = !emblaApi.canScrollNext();
+			if (previous) previous.disabled = !loop && !emblaApi.canScrollPrev();
+			if (next) next.disabled = !loop && !emblaApi.canScrollNext();
 
 			directButtons.forEach((button, index) => {
 				const available = index < snapCount;
@@ -74,7 +75,7 @@ export default function CSliderEmbla({
 			if (!autoplay || hoverPaused || document.hidden) return;
 
 			autoplayTimer = window.setTimeout(() => {
-				if (emblaApi.canScrollNext()) {
+				if (loop || emblaApi.canScrollNext()) {
 					emblaApi.scrollNext();
 				} else {
 					emblaApi.scrollTo(0);
@@ -153,7 +154,7 @@ export default function CSliderEmbla({
 			emblaApi.off("select", updateControls);
 			emblaApi.off("reInit", updateControls);
 		};
-	}, [emblaApi, autoplay, autoplayInterval, pauseOnHover]);
+	}, [emblaApi, autoplay, autoplayInterval, loop, pauseOnHover]);
 
 	return createElement(
 		"div",
