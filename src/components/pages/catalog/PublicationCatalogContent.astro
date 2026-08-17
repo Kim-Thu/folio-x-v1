@@ -48,18 +48,23 @@ for (const entry of entries) {
 	}
 }
 const genres = [...genreMap.values()].sort((a, b) => b.count - a.count);
+const popularGenres = genres.slice(0, settings.main.popularGenresLimit);
 const genreIcons = settings.main.genreIcons as CIconName[];
 const formatCount = (template: string, count: number) =>
 	template.replace("{count}", String(count));
-const popularGenreCards: CCardData[] = genres
-	.slice(0, settings.main.popularGenresLimit)
-	.map((genre, index) => ({
-		href: `${presentation.routes.categoryBase}${genre.slug}`,
-		ariaLabel: genre.label,
-		title: [genre.label],
-		excerpt: formatCount(settings.main.genreWorksTemplate, genre.count),
-		icon: genreIcons[index % genreIcons.length],
-	}));
+const popularGenreCards: CCardData[] = popularGenres.map((genre, index) => ({
+	href: `${presentation.routes.categoryBase}${genre.slug}`,
+	ariaLabel: genre.label,
+	title: [genre.label],
+	excerpt: formatCount(settings.main.genreWorksTemplate, genre.count),
+	icon: genreIcons[index % genreIcons.length],
+}));
+const genreStoryGroups = popularGenres.map((genre) => ({
+	genre,
+	items: entries.filter((entry) =>
+		entry.genres.some((entryGenre) => entryGenre.slug === genre.slug),
+	),
+}));
 
 const authorCounts = new Map<string, number>();
 for (const entry of entries) {
@@ -292,6 +297,24 @@ const publicationSource: CardSourceConfig = {
 						/>
 					</CColumns>
 				</CBox>
+
+				{genreStoryGroups.map(({ genre, items }) => (
+					<CColumns columns="one" gap="sm">
+						<PSectionHeader
+							data={{ title: genre.label }}
+							appearance="compact"
+							headingLevel={2}
+						/>
+						<PCard
+							{...cardProps(
+								settings.main.latestCards,
+								items,
+								undefined,
+								publicationSource,
+							)}
+						/>
+					</CColumns>
+				))}
 
 				{closing && (
 					<PCta
