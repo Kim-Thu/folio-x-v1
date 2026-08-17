@@ -13,6 +13,8 @@ import {
 	sliderControlsClasses,
 	sliderDotClasses,
 	sliderDotsClasses,
+	sliderOverlayButtonClasses,
+	sliderOverlayButtonsClasses,
 	sliderStatusClasses,
 	sliderTrackClasses,
 	sliderViewportClasses,
@@ -38,6 +40,7 @@ const {
 } = Astro.props as CSliderProps;
 
 const belowLeft = controls === "below-left";
+const overlay = controls === "overlay";
 const viewportClassName = cn(
 	sliderViewportClasses,
 	draggable && sliderViewportDraggableClasses,
@@ -47,6 +50,16 @@ const containerClassName = cn(
 	sliderContainerClasses,
 	sliderContainerGapClasses[gap],
 );
+const buttonsClassName = belowLeft
+	? sliderBelowLeftButtonsClasses
+	: overlay
+		? sliderOverlayButtonsClasses
+		: sliderButtonsClasses;
+const previousClassName = cn(
+	belowLeft && sliderBelowLeftPreviousClasses,
+	overlay && sliderOverlayButtonClasses,
+);
+const nextClassName = overlay ? sliderOverlayButtonClasses : undefined;
 ---
 
 <div
@@ -106,12 +119,12 @@ const containerClassName = cn(
 
 				{controls !== "dots" && (
 					<div
-						class={belowLeft ? sliderBelowLeftButtonsClasses : sliderButtonsClasses}
+						class={buttonsClassName}
 						role="group"
 						aria-label={label}
 					>
 						<CButton
-							class={belowLeft ? sliderBelowLeftPreviousClasses : undefined}
+							class={previousClassName}
 							label={previousLabel}
 							icon="chevronLeft"
 							iconOnly
@@ -122,6 +135,7 @@ const containerClassName = cn(
 							data-slider-previous
 						/>
 						<CButton
+							class={nextClassName}
 							label={nextLabel}
 							icon="chevronRight"
 							iconOnly
