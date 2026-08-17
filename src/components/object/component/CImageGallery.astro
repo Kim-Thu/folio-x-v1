@@ -17,6 +17,8 @@ const {
 	thumbnailLabel,
 	...attributes
 } = Astro.props as CImageGalleryProps;
+
+const hasThumbnails = images.length > 1;
 ---
 
 <div
@@ -33,18 +35,24 @@ const {
 		))}
 	</div>
 
-	<div class={imageGalleryThumbnailsClasses} role="group" aria-label={thumbnailLabel}>
-		{images.map((image, index) => (
-			<button
-				type="button"
-				class={imageGalleryThumbnailClasses}
-				aria-label={`${thumbnailLabel} ${index + 1}`}
-				aria-pressed={index === 0}
-				data-gallery-thumbnail
-				data-gallery-index={index}
-			>
-				<CImage {...image} alt="" variant="fill" />
-			</button>
-		))}
-	</div>
+	{hasThumbnails && (
+		<div
+			class={imageGalleryThumbnailsClasses}
+			role="group"
+			aria-label={thumbnailLabel}
+		>
+			{images.map((image, index) => (
+				<button
+					type="button"
+					class={imageGalleryThumbnailClasses}
+					aria-label={`${thumbnailLabel} ${index + 1}`}
+					aria-pressed={index === 0}
+					data-gallery-thumbnail
+					data-gallery-index={index}
+				>
+					<CImage {...image} alt="" variant="fill" />
+				</button>
+			))}
+		</div>
+	)}
 </div>
