@@ -1,6 +1,5 @@
 ---
 import CButton from "@/components/object/component/CButton.astro";
-import CSliderEmbla from "@/components/object/component/CSliderEmbla";
 import type { CSliderProps } from "@/types/components/object/component/CSlider.types";
 import { cn } from "@/utils/cn";
 import {
@@ -49,7 +48,16 @@ const containerClassName = cn(
 );
 ---
 
-<div {...attributes} class={cn(sliderBaseClasses, className)} data-slider>
+<div
+	{...attributes}
+	class={cn(sliderBaseClasses, className)}
+	data-slider
+	data-slider-autoplay={String(autoplay)}
+	data-slider-autoplay-interval={String(autoplayInterval)}
+	data-slider-draggable={String(draggable)}
+	data-slider-loop={String(loop)}
+	data-slider-pause-on-hover={String(pauseOnHover)}
+>
 	<div
 		class={viewportClassName}
 		aria-label={label}
@@ -60,15 +68,6 @@ const containerClassName = cn(
 			<slot />
 		</div>
 	</div>
-
-	<CSliderEmbla
-		client:load
-		{autoplay}
-		{autoplayInterval}
-		{draggable}
-		{loop}
-		{pauseOnHover}
-	/>
 
 	{
 		itemCount > 1 && (
