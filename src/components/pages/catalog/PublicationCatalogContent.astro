@@ -4,7 +4,6 @@ import CBox from "@/components/object/component/CBox.astro";
 import CColumns from "@/components/object/component/CColumns.astro";
 import PArchiveToolbar from "@/components/object/project/archive-toolbar/PArchiveToolbar.astro";
 import PCard from "@/components/object/project/card/PCard.astro";
-import PCta from "@/components/object/project/cta/PCta.astro";
 import PFilterPanel from "@/components/object/project/filter-panel/PFilterPanel.astro";
 import PSectionHeader from "@/components/object/project/section-header/PSectionHeader.astro";
 import { getPublicationCatalogSettings } from "@/data/cms";
@@ -17,20 +16,15 @@ import type {
 	PublicationCardPresentation,
 } from "@/types/components/object/component/card/CCard.types";
 import type { PCardProps } from "@/types/components/object/project/card/PCard.types";
-import type { PCtaProps } from "@/types/components/object/project/cta/PCta.types";
 import type { CIconName } from "@/types/components/object/component/CIcon.types";
-import type { PageSectionData } from "@/types/components/pages/builder/PageBuilder.types";
-
-type CtaSection = Extract<PageSectionData, { type: "cta" }>;
 
 type Props = {
 	catalog: "novels" | "comics";
 	entries: PublicationEntry[];
 	presentation: PublicationCardPresentation;
-	closing?: CtaSection;
 };
 
-const { catalog, entries, presentation, closing } = Astro.props as Props;
+const { catalog, entries, presentation } = Astro.props as Props;
 const settings = await getPublicationCatalogSettings();
 const featuredCards = entries.slice(0, settings.main.featuredLimit);
 const latestCards = entries.slice(0, settings.main.latestLimit);
@@ -336,14 +330,5 @@ const genreStoryCardConfig: CatalogCardConfig = {
 				))}
 			</CColumns>
 		</LSidebar>
-
-		{closing && (
-			<PCta
-				{...({
-					template: closing.template,
-					data: closing.content,
-				} as unknown as PCtaProps)}
-			/>
-		)}
 	</CColumns>
 </CBox>
