@@ -8,6 +8,7 @@ export interface CSliderBehavior {
 	autoplay?: boolean;
 	autoplayInterval?: number;
 	draggable?: boolean;
+	loop?: boolean;
 	pauseOnHover?: boolean;
 }
 
