@@ -5,17 +5,29 @@ import CBox from "@/components/object/component/CBox.astro";
 import CButton from "@/components/object/component/CButton.astro";
 import CColumns from "@/components/object/component/CColumns.astro";
 import CFeature from "@/components/object/component/CFeature.astro";
+import CGridItem from "@/components/object/component/CGridItem.astro";
 import CHeading from "@/components/object/component/CHeading.astro";
 import CIconTile from "@/components/object/component/CIconTile.astro";
-import CImageGallery from "@/components/object/component/CImageGallery.astro";
 import CImage from "@/components/object/component/CImage.astro";
-import CGridItem from "@/components/object/component/CGridItem.astro";
+import CImageGallery from "@/components/object/component/CImageGallery.astro";
 import CLink from "@/components/object/component/CLink.astro";
 import CRating from "@/components/object/component/CRating.astro";
 import CRow from "@/components/object/component/CRow.astro";
 import CText from "@/components/object/component/CText.astro";
 import type { CColumnsTemplate } from "@/types/components/object/component/CColumns.types";
 import type { PPageHeaderGallerySummaryData } from "@/types/components/object/project/page-header/PPageHeader.types";
+import {
+	pageHeaderGallerySummaryActionsClasses,
+	pageHeaderGallerySummaryContentClasses,
+	pageHeaderGallerySummaryDescriptionClasses,
+	pageHeaderGallerySummaryFactClasses,
+	pageHeaderGallerySummaryFeaturesClasses,
+	pageHeaderGallerySummaryPaymentClasses,
+	pageHeaderGallerySummaryPriceClasses,
+	pageHeaderGallerySummaryRatingClasses,
+	pageHeaderGallerySummaryRootClasses,
+	pageHeaderGallerySummaryTitleClasses,
+} from "@/variants/components/object/project/page-header/PPageHeader.variants";
 
 type Props = { data: PPageHeaderGallerySummaryData };
 const { data } = Astro.props as Props;
@@ -32,7 +44,7 @@ const factsColumns: CColumnsTemplate =
 					: "one";
 ---
 
-<CColumns columns="one" gap="lg">
+<div class={pageHeaderGallerySummaryRootClasses}>
 	<CBreadcrumb {...data.breadcrumb} />
 
 	<CColumns columns="twelve" gap="lg" align="start">
@@ -45,56 +57,68 @@ const factsColumns: CColumnsTemplate =
 		</CGridItem>
 
 		<CGridItem as="header" lgSpan={5}>
-			<CColumns columns="one" gap="md">
-				<CRow align="center" gap="sm">
-					<CLink href={data.category.href}>
-						<CText as="span" variant="caption" tone="brand">
-							{data.category.label}
-						</CText>
-					</CLink>
-				</CRow>
-
-				<CRow align="center" gap="sm">
-					<CHeading level={1} variant="h3">{data.title}</CHeading>
-					{data.badge && <CBadge tone="neutral">{data.badge}</CBadge>}
-				</CRow>
-
-				<CText tone="muted">{data.description}</CText>
-
-				<CRow align="center" gap="sm">
-					<CRating
-						style="stars"
-						value={data.rating.value}
-						maximum={data.rating.maximum}
-						count={data.rating.count}
-						slots={{ count: true, value: true }}
-					/>
-					<CText as="span" variant="caption" tone="subtle">
-						{data.rating.salesLabel}
+			<div class={pageHeaderGallerySummaryContentClasses}>
+				<CLink href={data.category.href}>
+					<CText as="span" variant="caption" tone="brand">
+						{data.category.label}
 					</CText>
-				</CRow>
+				</CLink>
 
-				<CRow align="baseline" gap="sm">
-					<CText as="span" variant="price-display">
-						{data.price.current}
-					</CText>
-					{data.price.previous && (
-						<CText as="span" variant="price-old" tone="subtle">
-							{data.price.previous}
+				<div class={pageHeaderGallerySummaryTitleClasses}>
+					<CRow align="center" gap="sm" wrap={false}>
+						<CHeading level={1} variant="h3">{data.title}</CHeading>
+						{data.badge && <CBadge tone="neutral">{data.badge}</CBadge>}
+					</CRow>
+				</div>
+
+				<div class={pageHeaderGallerySummaryDescriptionClasses}>
+					<CText tone="muted">{data.description}</CText>
+				</div>
+
+				<div class={pageHeaderGallerySummaryRatingClasses}>
+					<CRow align="center" gap="sm">
+						<CRating
+							style="stars"
+							value={data.rating.value}
+							maximum={data.rating.maximum}
+							count={data.rating.count}
+							slots={{ count: true, value: true }}
+						/>
+						<CText as="span" variant="caption" tone="subtle">
+							{data.rating.salesLabel}
 						</CText>
-					)}
-					{data.price.discount && (
-						<CBadge tone="brand">{data.price.discount}</CBadge>
-					)}
-				</CRow>
+					</CRow>
+				</div>
+
+				<div class={pageHeaderGallerySummaryPriceClasses}>
+					<CRow align="baseline" gap="sm">
+						<CText as="span" variant="price-display">
+							{data.price.current}
+						</CText>
+						{data.price.previous && (
+							<CText as="span" variant="price-old" tone="subtle">
+								{data.price.previous}
+							</CText>
+						)}
+						{data.price.discount && (
+							<CBadge tone="brand">{data.price.discount}</CBadge>
+						)}
+					</CRow>
+				</div>
 
 				{data.features.length > 0 && (
-					<CColumns columns="one" gap="xs">
+					<div class={pageHeaderGallerySummaryFeaturesClasses}>
 						{data.features.map((feature) => <CFeature {...feature} />)}
-					</CColumns>
+					</div>
 				)}
 
-				<CColumns columns="two" gap="sm" role="group" aria-label={data.actionsLabel}>
+				<CColumns
+					columns="two"
+					gap="sm"
+					class={pageHeaderGallerySummaryActionsClasses}
+					role="group"
+					aria-label={data.actionsLabel}
+				>
 					{data.actions.map((action) => (
 						<CButton
 							href={action.href}
@@ -109,7 +133,11 @@ const factsColumns: CColumnsTemplate =
 				</CColumns>
 
 				{(data.paymentLabel || data.paymentMethods.length > 0) && (
-					<CRow align="center" gap="sm">
+					<CRow
+						align="center"
+						gap="sm"
+						class={pageHeaderGallerySummaryPaymentClasses}
+					>
 						<CText as="span" variant="caption" tone="subtle">
 							{data.paymentLabel}
 						</CText>
@@ -118,16 +146,16 @@ const factsColumns: CColumnsTemplate =
 						))}
 					</CRow>
 				)}
-			</CColumns>
+			</div>
 		</CGridItem>
 	</CColumns>
 
 	{data.facts.length > 0 && (
-		<CBox surface="bordered" radius="md" spacing="md">
-			<CColumns as="ul" columns={factsColumns} gap="md" align="center">
+		<CBox surface="bordered" radius="md" spacing="sm">
+			<CColumns as="ul" columns={factsColumns} gap="none" align="center">
 				{data.facts.map((item) => (
-					<li>
-						<CRow align="center" gap="sm">
+					<li class={pageHeaderGallerySummaryFactClasses}>
+						<CRow align="center" gap="sm" wrap={false}>
 							{item.icon && (
 								<CIconTile icon={item.icon} size="sm" iconSize="md" />
 							)}
@@ -147,4 +175,4 @@ const factsColumns: CColumnsTemplate =
 			</CColumns>
 		</CBox>
 	)}
-</CColumns>
+</div>
