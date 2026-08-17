@@ -1,11 +1,13 @@
 ---
+import CBox from "@/components/object/component/CBox.astro";
 import CButton from "@/components/object/component/CButton.astro";
 import CColumns from "@/components/object/component/CColumns.astro";
-import CDescriptionList from "@/components/object/component/CDescriptionList.astro";
 import CHeading from "@/components/object/component/CHeading.astro";
+import CIconTile from "@/components/object/component/CIconTile.astro";
 import CGridItem from "@/components/object/component/CGridItem.astro";
 import CImage from "@/components/object/component/CImage.astro";
 import CLink from "@/components/object/component/CLink.astro";
+import CList from "@/components/object/component/CList.astro";
 import CMedia from "@/components/object/component/CMedia.astro";
 import CRow from "@/components/object/component/CRow.astro";
 import CSlide from "@/components/object/component/CSlide.astro";
@@ -108,7 +110,25 @@ const { data } = Astro.props as Props;
 				variant="natural"
 				aria-hidden="true"
 			/>
-			<CDescriptionList items={data.facts} variant="panel" />
+			<CBox surface="glass" radius="md" spacing="md">
+				<CList direction="column" gap="sm">
+					{data.facts.map((item) => (
+						<li>
+							<CRow align="center" justify="between" gap="sm">
+								<CRow align="center" gap="sm">
+									{item.icon && <CIconTile icon={item.icon} size="sm" iconSize="md" />}
+									<CText variant="caption" tone="subtle">{item.label}</CText>
+								</CRow>
+								{item.href ? (
+									<CLink href={item.href}>{item.value}</CLink>
+								) : (
+									<CText variant="body-sm">{item.value}</CText>
+								)}
+							</CRow>
+						</li>
+					))}
+				</CList>
+			</CBox>
 		</CColumns>
 		</CGridItem>
 	</CColumns>
