@@ -167,6 +167,7 @@
         {
           "id": "product-overview",
           "type": "article",
+          "template": "grouped",
           "settings": {
             "theme": "canvas",
             "spacing": "body",
@@ -175,10 +176,52 @@
           "content": {
             "blocks": [
               {
-                "id": "product-overview",
+                "id": "overview",
                 "title": "Overview",
                 "paragraphs": [
-                  "WordPress theme for SaaS, startup and digital products."
+                  "Nebula is a modern, highly customizable WordPress theme built for SaaS, startups and digital products. It provides a flexible foundation for product pages, marketing sites and content-driven experiences."
+                ]
+              },
+              {
+                "id": "key-features",
+                "title": "Key features",
+                "paragraphs": [
+                  "Reusable page structures, responsive presentation and configurable theme options keep product experiences consistent while remaining easy to adapt."
+                ]
+              },
+              {
+                "id": "live-demos",
+                "title": "Live demos",
+                "paragraphs": [
+                  "Preview the supplied layouts to compare landing pages, dashboards, commerce screens and documentation-focused compositions."
+                ]
+              },
+              {
+                "id": "whats-included",
+                "title": "What's included",
+                "paragraphs": [
+                  "The package includes the theme, reusable layout patterns, demo content and supporting assets used to reproduce the preview experience."
+                ]
+              },
+              {
+                "id": "reviews",
+                "title": "Reviews",
+                "paragraphs": [
+                  "Customer feedback focuses on ease of customization, visual consistency and the speed of assembling product and marketing pages."
+                ]
+              },
+              {
+                "id": "documentation",
+                "title": "Documentation",
+                "paragraphs": [
+                  "Documentation covers setup, customization, layout configuration and common workflows for maintaining the theme."
+                ]
+              },
+              {
+                "id": "support",
+                "title": "Support",
+                "paragraphs": [
+                  "Support is available for installation questions, theme configuration and issues related to the supplied product files."
                 ]
               }
             ]
