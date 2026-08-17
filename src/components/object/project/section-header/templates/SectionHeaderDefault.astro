@@ -25,6 +25,7 @@ const headingId = data.id ? `${data.id}-title` : undefined;
 				id={headingId}
 				level={headingLevel}
 				variant={appearance === "compact" ? "h4" : "h2"}
+				class={appearance === "catalog" ? "lg:text-4xl" : undefined}
 				lines={Array.isArray(data.title) ? data.title : undefined}
 			>
 				{Array.isArray(data.title) ? undefined : data.title}
