@@ -18,15 +18,17 @@ import type { CColumnsTemplate } from "@/types/components/object/component/CColu
 import type { PPageHeaderGallerySummaryData } from "@/types/components/object/project/page-header/PPageHeader.types";
 import {
 	pageHeaderGallerySummaryActionsClasses,
+	pageHeaderGallerySummaryCommerceClasses,
 	pageHeaderGallerySummaryContentClasses,
-	pageHeaderGallerySummaryDescriptionClasses,
 	pageHeaderGallerySummaryFactClasses,
 	pageHeaderGallerySummaryFeaturesClasses,
+	pageHeaderGallerySummaryIdentityClasses,
 	pageHeaderGallerySummaryPaymentClasses,
 	pageHeaderGallerySummaryPriceClasses,
-	pageHeaderGallerySummaryRatingClasses,
 	pageHeaderGallerySummaryRootClasses,
-	pageHeaderGallerySummaryTitleClasses,
+	pageHeaderGallerySummarySocialClasses,
+	pageHeaderGallerySummarySocialDividerClasses,
+	pageHeaderGallerySummaryTitleRowClasses,
 } from "@/variants/components/object/project/page-header/PPageHeader.variants";
 
 type Props = { data: PPageHeaderGallerySummaryData };
@@ -58,25 +60,25 @@ const factsColumns: CColumnsTemplate =
 
 		<CGridItem as="header" lgSpan={5}>
 			<div class={pageHeaderGallerySummaryContentClasses}>
-				<CLink href={data.category.href}>
-					<CText as="span" variant="caption" tone="brand">
-						{data.category.label}
-					</CText>
-				</CLink>
+				<div class={pageHeaderGallerySummaryIdentityClasses}>
+					<CLink href={data.category.href}>
+						<CText as="span" variant="caption" tone="brand">
+							{data.category.label}
+						</CText>
+					</CLink>
 
-				<div class={pageHeaderGallerySummaryTitleClasses}>
-					<CRow align="center" gap="sm" wrap={false}>
-						<CHeading level={1} variant="h3">{data.title}</CHeading>
-						{data.badge && <CBadge tone="neutral">{data.badge}</CBadge>}
-					</CRow>
-				</div>
+					<div class={pageHeaderGallerySummaryTitleRowClasses}>
+						<CRow align="center" gap="sm" wrap={false}>
+							<CHeading level={1} variant="h3">{data.title}</CHeading>
+							{data.badge && <CBadge tone="neutral">{data.badge}</CBadge>}
+						</CRow>
+					</div>
 
-				<div class={pageHeaderGallerySummaryDescriptionClasses}>
 					<CText tone="muted">{data.description}</CText>
 				</div>
 
-				<div class={pageHeaderGallerySummaryRatingClasses}>
-					<CRow align="center" gap="sm">
+				<div class={pageHeaderGallerySummarySocialClasses}>
+					<CRow align="center" gap="sm" wrap={false}>
 						<CRating
 							style="stars"
 							value={data.rating.value}
@@ -84,68 +86,80 @@ const factsColumns: CColumnsTemplate =
 							count={data.rating.count}
 							slots={{ count: true, value: true }}
 						/>
+
+						<span
+							class={pageHeaderGallerySummarySocialDividerClasses}
+							aria-hidden="true"
+						></span>
+
 						<CText as="span" variant="caption" tone="subtle">
 							{data.rating.salesLabel}
 						</CText>
 					</CRow>
 				</div>
 
-				<div class={pageHeaderGallerySummaryPriceClasses}>
-					<CRow align="baseline" gap="sm">
-						<CText as="span" variant="price-display">
-							{data.price.current}
-						</CText>
-						{data.price.previous && (
-							<CText as="span" variant="price-old" tone="subtle">
-								{data.price.previous}
+				<div class={pageHeaderGallerySummaryCommerceClasses}>
+					<div class={pageHeaderGallerySummaryPriceClasses}>
+						<CRow align="baseline" gap="sm" wrap={false}>
+							<CText as="span" variant="price-display">
+								{data.price.current}
 							</CText>
-						)}
-						{data.price.discount && (
-							<CBadge tone="brand">{data.price.discount}</CBadge>
-						)}
-					</CRow>
-				</div>
 
-				{data.features.length > 0 && (
-					<div class={pageHeaderGallerySummaryFeaturesClasses}>
-						{data.features.map((feature) => <CFeature {...feature} />)}
+							{data.price.previous && (
+								<CText as="span" variant="price-old" tone="subtle">
+									{data.price.previous}
+								</CText>
+							)}
+
+							{data.price.discount && (
+								<CBadge tone="brand">{data.price.discount}</CBadge>
+							)}
+						</CRow>
 					</div>
-				)}
 
-				<CColumns
-					columns="two"
-					gap="sm"
-					class={pageHeaderGallerySummaryActionsClasses}
-					role="group"
-					aria-label={data.actionsLabel}
-				>
-					{data.actions.map((action) => (
-						<CButton
-							href={action.href}
-							label={action.label}
-							icon={action.icon}
-							variant={action.variant}
-							tone="light"
-							size="md"
-							wide
-						/>
-					))}
-				</CColumns>
+					{data.features.length > 0 && (
+						<div class={pageHeaderGallerySummaryFeaturesClasses}>
+							{data.features.map((feature) => <CFeature {...feature} />)}
+						</div>
+					)}
 
-				{(data.paymentLabel || data.paymentMethods.length > 0) && (
-					<CRow
-						align="center"
+					<CColumns
+						columns="two"
 						gap="sm"
-						class={pageHeaderGallerySummaryPaymentClasses}
+						class={pageHeaderGallerySummaryActionsClasses}
+						role="group"
+						aria-label={data.actionsLabel}
 					>
-						<CText as="span" variant="caption" tone="subtle">
-							{data.paymentLabel}
-						</CText>
-						{data.paymentMethods.map((method) => (
-							<CImage {...method} variant="payment-logo" />
+						{data.actions.map((action) => (
+							<CButton
+								href={action.href}
+								label={action.label}
+								icon={action.icon}
+								variant={action.variant}
+								tone="light"
+								size="md"
+								wide
+							/>
 						))}
-					</CRow>
-				)}
+					</CColumns>
+
+					{(data.paymentLabel || data.paymentMethods.length > 0) && (
+						<CRow
+							align="center"
+							gap="sm"
+							wrap={false}
+							class={pageHeaderGallerySummaryPaymentClasses}
+						>
+							<CText as="span" variant="caption" tone="subtle">
+								{data.paymentLabel}
+							</CText>
+
+							{data.paymentMethods.map((method) => (
+								<CImage {...method} variant="payment-logo" />
+							))}
+						</CRow>
+					)}
+				</div>
 			</div>
 		</CGridItem>
 	</CColumns>
@@ -159,10 +173,12 @@ const factsColumns: CColumnsTemplate =
 							{item.icon && (
 								<CIconTile icon={item.icon} size="sm" iconSize="md" />
 							)}
+
 							<CColumns columns="one" gap="xs">
 								<CText variant="caption" tone="subtle">
 									{item.label}
 								</CText>
+
 								{item.href ? (
 									<CLink href={item.href}>{item.value}</CLink>
 								) : (
