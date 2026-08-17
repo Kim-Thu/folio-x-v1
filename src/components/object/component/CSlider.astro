@@ -28,6 +28,7 @@ const {
 	autoplay = false,
 	autoplayInterval = 5000,
 	draggable = true,
+	loop = false,
 	pauseOnHover = true,
 	itemCount,
 	label,
@@ -50,13 +51,14 @@ const containerClassName = cn(
 
 <div {...attributes} class={cn(sliderBaseClasses, className)} data-slider>
 	<CSliderEmbla
-		client:only="react"
+		client:load
 		{viewportClassName}
 		{containerClassName}
 		{label}
 		{autoplay}
 		{autoplayInterval}
 		{draggable}
+		{loop}
 		{pauseOnHover}
 	>
 		<slot />
@@ -102,7 +104,7 @@ const containerClassName = cn(
 							size={belowLeft ? "md" : "sm"}
 							variant={belowLeft ? "ghost" : "secondary"}
 							tone="light"
-							disabled
+							disabled={!loop}
 							data-slider-previous
 						/>
 						<CButton
