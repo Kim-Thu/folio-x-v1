@@ -133,7 +133,7 @@
       {
         "id": "comics-newsletter",
         "type": "cta",
-        "template": "subscription",
+        "template": "callout",
         "settings": {
           "theme": "canvas",
           "spacing": "closing",
