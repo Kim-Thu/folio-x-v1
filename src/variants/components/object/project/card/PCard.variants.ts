@@ -19,11 +19,11 @@ export const pCardTemplateColumnDefaults: Partial<Record<PCardTemplate, PCardCol
 };
 
 export const pCardSliderItemClasses: Record<PCardColumns, string> = {
-	1: "min-w-0 basis-full shrink-0 snap-start",
-	2: "min-w-0 basis-5/6 shrink-0 snap-start sm:basis-1/2",
-	3: "min-w-0 basis-5/6 shrink-0 snap-start sm:basis-1/2 lg:basis-1/3",
-	4: "min-w-0 basis-5/6 shrink-0 snap-start sm:basis-1/2 lg:basis-1/4",
-	5: "min-w-0 basis-5/6 shrink-0 snap-start sm:basis-1/2 lg:basis-1/5",
+	1: "min-w-0 w-full shrink-0 snap-start",
+	2: "min-w-0 w-5/6 shrink-0 snap-start sm:w-1/2",
+	3: "min-w-0 w-5/6 shrink-0 snap-start sm:w-1/2 lg:w-1/3",
+	4: "min-w-0 w-5/6 shrink-0 snap-start sm:w-1/2 lg:w-1/4",
+	5: "min-w-0 w-5/6 shrink-0 snap-start sm:w-1/2 lg:w-1/5",
 };
 
 export const pCardSliderItemGapClasses: Record<PCardGap, string> = {
