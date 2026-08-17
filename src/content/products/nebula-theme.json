@@ -60,6 +60,12 @@
                 "alt": "Nebula Theme landing page preview",
                 "width": 1600,
                 "height": 1000
+              },
+              {
+                "src": "/uploads/cta-banner.webp",
+                "alt": "Nebula Theme checkout layout preview",
+                "width": 1600,
+                "height": 1000
               }
             ],
             "salesLabel": "1,248 sales",
