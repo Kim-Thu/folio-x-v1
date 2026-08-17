@@ -158,6 +158,23 @@ const publicationSource: CardSourceConfig = {
 	source: catalog,
 	presentation,
 };
+
+const genreStoryCardConfig: CatalogCardConfig = {
+	template: "media-banner",
+	layout: "grid",
+	columns: 4,
+	gap: "sm",
+	mediaRatio: "portrait",
+	slots: {
+		media: true,
+		metadata: true,
+		title: true,
+		excerpt: true,
+		tags: false,
+		metrics: false,
+		action: true,
+	},
+};
 ---
 
 <CBox data-collection-filter-root>
@@ -307,7 +324,7 @@ const publicationSource: CardSourceConfig = {
 						/>
 						<PCard
 							{...cardProps(
-								settings.main.latestCards,
+								genreStoryCardConfig,
 								items,
 								undefined,
 								publicationSource,
