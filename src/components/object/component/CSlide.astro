@@ -1,9 +1,18 @@
 ---
 import type { HTMLAttributes } from "astro/types";
 
-const attributes = Astro.props as HTMLAttributes<"div">;
+import { cn } from "@/utils/cn";
+
+const {
+	class: className,
+	...attributes
+} = Astro.props as HTMLAttributes<"div">;
 ---
 
-<div {...attributes} class="w-full shrink-0 snap-center" data-slide>
+<div
+	{...attributes}
+	class={cn("w-full shrink-0 snap-center", className)}
+	data-slide
+>
 	<slot />
 </div>
