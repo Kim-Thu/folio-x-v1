@@ -23,6 +23,7 @@ import {
 	pageHeaderGallerySummaryContentClasses,
 	pageHeaderGallerySummaryDescriptionClasses,
 	pageHeaderGallerySummaryFactClasses,
+	pageHeaderGallerySummaryFactsClasses,
 	pageHeaderGallerySummaryFeatureClasses,
 	pageHeaderGallerySummaryFeaturesClasses,
 	pageHeaderGallerySummaryFooterClasses,
@@ -188,30 +189,32 @@ const factsColumns: CColumnsTemplate =
 	</CColumns>
 
 	{data.facts.length > 0 && (
-		<CBox surface="bordered" radius="md" spacing="sm">
-			<CColumns as="ul" columns={factsColumns} gap="none" align="center">
-				{data.facts.map((item) => (
-					<li class={pageHeaderGallerySummaryFactClasses}>
-						<CRow align="center" gap="sm" wrap={false}>
-							{item.icon && (
-								<CIconTile icon={item.icon} size="sm" iconSize="sm" />
-							)}
-
-							<CColumns columns="one" gap="xs">
-								<CText variant="caption" tone="subtle">
-									{item.label}
-								</CText>
-
-								{item.href ? (
-									<CLink href={item.href}>{item.value}</CLink>
-								) : (
-									<CText variant="body-sm">{item.value}</CText>
+		<div class={pageHeaderGallerySummaryFactsClasses}>
+			<CBox surface="bordered" radius="md" spacing="sm">
+				<CColumns as="ul" columns={factsColumns} gap="none" align="center">
+					{data.facts.map((item) => (
+						<li class={pageHeaderGallerySummaryFactClasses}>
+							<CRow align="center" gap="sm" wrap={false}>
+								{item.icon && (
+									<CIconTile icon={item.icon} size="sm" iconSize="sm" />
 								)}
-							</CColumns>
-						</CRow>
-					</li>
-				))}
-			</CColumns>
-		</CBox>
+
+								<CColumns columns="one" gap="xs">
+									<CText variant="caption" tone="subtle">
+										{item.label}
+									</CText>
+
+									{item.href ? (
+										<CLink href={item.href}>{item.value}</CLink>
+									) : (
+										<CText variant="body-sm">{item.value}</CText>
+									)}
+								</CColumns>
+							</CRow>
+						</li>
+					))}
+				</CColumns>
+			</CBox>
+		</div>
 	)}
 </div>
