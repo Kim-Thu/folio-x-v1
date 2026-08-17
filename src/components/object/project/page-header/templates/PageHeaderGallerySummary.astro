@@ -17,9 +17,11 @@ import CText from "@/components/object/component/CText.astro";
 import type { CColumnsTemplate } from "@/types/components/object/component/CColumns.types";
 import type { PPageHeaderGallerySummaryData } from "@/types/components/object/project/page-header/PPageHeader.types";
 import {
+	pageHeaderGallerySummaryActionClasses,
 	pageHeaderGallerySummaryActionsClasses,
 	pageHeaderGallerySummaryCommerceClasses,
 	pageHeaderGallerySummaryContentClasses,
+	pageHeaderGallerySummaryDescriptionClasses,
 	pageHeaderGallerySummaryFactClasses,
 	pageHeaderGallerySummaryFeaturesClasses,
 	pageHeaderGallerySummaryIdentityClasses,
@@ -74,7 +76,9 @@ const factsColumns: CColumnsTemplate =
 						</CRow>
 					</div>
 
-					<CText tone="muted">{data.description}</CText>
+					<div class={pageHeaderGallerySummaryDescriptionClasses}>
+						<CText tone="muted">{data.description}</CText>
+					</div>
 				</div>
 
 				<div class={pageHeaderGallerySummarySocialClasses}>
@@ -83,9 +87,12 @@ const factsColumns: CColumnsTemplate =
 							style="stars"
 							value={data.rating.value}
 							maximum={data.rating.maximum}
-							count={data.rating.count}
-							slots={{ count: true, value: true }}
+							slots={{ count: false, maximum: false, value: false }}
 						/>
+
+						<CText as="span" variant="caption" tone="subtle">
+							{data.rating.value} ({data.rating.count} reviews)
+						</CText>
 
 						<span
 							class={pageHeaderGallerySummarySocialDividerClasses}
@@ -139,6 +146,7 @@ const factsColumns: CColumnsTemplate =
 								tone="light"
 								size="md"
 								wide
+								class={pageHeaderGallerySummaryActionClasses}
 							/>
 						))}
 					</CColumns>
@@ -171,7 +179,7 @@ const factsColumns: CColumnsTemplate =
 					<li class={pageHeaderGallerySummaryFactClasses}>
 						<CRow align="center" gap="sm" wrap={false}>
 							{item.icon && (
-								<CIconTile icon={item.icon} size="sm" iconSize="md" />
+								<CIconTile icon={item.icon} size="sm" iconSize="sm" />
 							)}
 
 							<CColumns columns="one" gap="xs">
