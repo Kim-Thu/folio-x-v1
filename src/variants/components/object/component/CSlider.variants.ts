@@ -6,13 +6,15 @@
 
 export const sliderBaseClasses = "relative min-w-0";
 
-export const sliderViewportClasses =
-	"flex snap-x snap-mandatory overflow-x-auto overscroll-x-contain scroll-smooth [scrollbar-width:none] [&::-webkit-scrollbar]:hidden";
+export const sliderViewportClasses = "overflow-hidden";
+
+export const sliderContainerClasses =
+	"flex min-w-0 touch-pan-y touch-pinch-zoom";
 
 export const sliderViewportDraggableClasses =
-	"cursor-grab touch-pan-y select-none active:cursor-grabbing";
+	"cursor-grab select-none active:cursor-grabbing";
 
-export const sliderViewportGapClasses: Record<CSliderGap, string> = {
+export const sliderContainerGapClasses: Record<CSliderGap, string> = {
 	none: "gap-0",
 	sm: "gap-4",
 	md: "gap-6",
@@ -35,7 +37,7 @@ export const sliderControlsClasses: Record<CSliderControls, string> = {
 export const sliderDotsClasses = "flex items-center gap-2";
 
 export const sliderDotClasses =
-	"size-2 cursor-pointer rounded-full bg-white/60 transition-colors duration-300 hover:bg-white";
+	"size-2 cursor-pointer rounded-full bg-white/60 transition-colors duration-300 hover:bg-white data-[current=true]:bg-blue-600";
 
 export const sliderDotCurrentClasses = "bg-blue-600";
 
