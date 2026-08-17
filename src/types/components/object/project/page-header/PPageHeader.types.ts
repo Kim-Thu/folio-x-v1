@@ -1,5 +1,4 @@
 import type { CBreadcrumbData } from "@/types/components/object/component/CBreadcrumb.types";
-import type { CDescriptionListItem } from "@/types/components/object/component/CDescriptionList.types";
 import type { CFeatureData } from "@/types/components/object/component/CFeature.types";
 import type { CIconName } from "@/types/components/object/component/CIcon.types";
 import type { CImageData } from "@/types/components/object/component/CImage.types";
@@ -16,6 +15,13 @@ export type PPageHeaderTemplate =
   | "media-aside"
   | "cover-summary";
 
+export interface PPageHeaderDetailItem {
+  label: string;
+  value: string;
+  href?: string;
+  icon?: CIconName;
+}
+
 export interface PPageHeaderCoverSummaryData {
   breadcrumb: CBreadcrumbData;
   cover: CImageData;
@@ -25,11 +31,11 @@ export interface PPageHeaderCoverSummaryData {
   title: string;
   badge?: string;
   author: { label: string; name: string; href?: string };
-  metrics: CDescriptionListItem[];
+  metrics: PPageHeaderDetailItem[];
   actionsLabel: string;
   actions: CButtonLinkProps[];
   description: string[];
-  facts: { title: string; items: CDescriptionListItem[] };
+  facts: { title: string; items: PPageHeaderDetailItem[] };
   share?: CShareLinksProps;
 }
 
@@ -44,7 +50,7 @@ export interface PPageHeaderImmersiveData {
   image: CImageData;
   quote?: string;
   quoteCredit?: string;
-  metrics: CDescriptionListItem[];
+  metrics: PPageHeaderDetailItem[];
   slides?: Array<{
     title: string;
     accent: string;
@@ -121,11 +127,7 @@ export interface PPageHeaderSliderAsideData {
     icon: CIconName;
   }>;
   asideDecoration: CImageData;
-  facts: Array<{
-    label: string;
-    value: string;
-    href?: string;
-  }>;
+  facts: PPageHeaderDetailItem[];
 }
 
 export interface PPageHeaderGallerySummaryData {
@@ -152,7 +154,7 @@ export interface PPageHeaderGallerySummaryData {
     discount?: string;
   };
   features: CFeatureData[];
-  facts: CDescriptionListItem[];
+  facts: PPageHeaderDetailItem[];
   actionsLabel: string;
   actions: Array<{
     label: string;
