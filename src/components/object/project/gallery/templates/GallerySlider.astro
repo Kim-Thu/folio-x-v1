@@ -25,7 +25,7 @@ const {
 	label,
 	previousLabel,
 	nextLabel,
-	sliderControls,
+	sliderControls = "overlay",
 	thumbnailLabel = label,
 } = Astro.props as Props;
 ---
@@ -41,10 +41,10 @@ const {
 		items.map((item, index) => (
 			<CSlide aria-label={`${index + 1} / ${items.length}`}>
 				<CBox radius="md" overflow="hidden">
-					<CMedia ratio="natural" shape="none">
+					<CMedia ratio="video" shape="none">
 						<CImage
 							{...item}
-							variant="natural"
+							variant="fill"
 							loading={index === 0 ? "eager" : "lazy"}
 							fetchpriority={index === 0 ? "high" : "auto"}
 						/>
