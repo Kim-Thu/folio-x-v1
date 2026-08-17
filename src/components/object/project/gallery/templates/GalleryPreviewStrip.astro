@@ -1,0 +1,51 @@
+---
+import CImage from "@/components/object/component/CImage.astro";
+import CMedia from "@/components/object/component/CMedia.astro";
+import type { PGalleryProps } from "@/types/components/object/project/gallery/PGallery.types";
+import {
+	galleryPreviewStripClasses,
+	galleryPreviewStripMainClasses,
+	galleryPreviewStripThumbnailClasses,
+	galleryPreviewStripThumbnailsClasses,
+} from "@/variants/components/object/project/gallery/PGallery.variants";
+
+type Props = Pick<PGalleryProps, "items" | "label" | "thumbnailLabel">;
+
+const { items, label, thumbnailLabel = label } = Astro.props as Props;
+const hasThumbnails = items.length > 1;
+---
+
+<div
+	class={galleryPreviewStripClasses}
+	aria-label={label}
+	data-image-gallery
+>
+	<div class={galleryPreviewStripMainClasses}>
+		{items.map((item, index) => (
+			<CMedia ratio="natural" shape="none" hidden={index > 0} data-gallery-panel>
+				<CImage {...item} variant="natural" />
+			</CMedia>
+		))}
+	</div>
+
+	{hasThumbnails && (
+		<div
+			class={galleryPreviewStripThumbnailsClasses}
+			role="group"
+			aria-label={thumbnailLabel}
+		>
+			{items.map((item, index) => (
+				<button
+					type="button"
+					class={galleryPreviewStripThumbnailClasses}
+					aria-label={`${thumbnailLabel} ${index + 1}`}
+					aria-pressed={index === 0}
+					data-gallery-thumbnail
+					data-gallery-index={index}
+				>
+					<CImage {...item} alt="" variant="fill" />
+				</button>
+			))}
+		</div>
+	)}
+</div>
