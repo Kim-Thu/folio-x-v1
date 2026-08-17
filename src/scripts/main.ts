@@ -15,7 +15,6 @@ import { initReveal } from "@/scripts/reveal";
 import { initScrollProgress } from "@/scripts/scroll-progress";
 import { initSelect } from "@/scripts/select";
 import { initSelectedWorkTabs } from "@/scripts/selected-work-tabs";
-import { initSliders } from "@/scripts/slider";
 
 const initializers: ReadonlyArray<() => void> = [
 	initLoadingScreen,
@@ -33,7 +32,6 @@ const initializers: ReadonlyArray<() => void> = [
 	initReader,
 	initSelect,
 	initFooterReveal,
-	initSliders,
 	initReveal,
 	initSelectedWorkTabs,
 ];
