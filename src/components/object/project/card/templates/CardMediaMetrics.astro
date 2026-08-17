@@ -72,20 +72,24 @@ const {
 				<CTags items={data.tags} label={data.tagsLabel ?? `${data.title.join(" ")} tags`} />
 			)}
 
-			{slots.metrics && data.metrics && data.metrics.length > 0 && (
-				<CRow gap="md">
-					{data.metrics.map((metric) => (
-						<CFeature {...metric} appearance="caption" />
-					))}
+			{((slots.metrics && data.metrics && data.metrics.length > 0) || data.rating) && (
+				<CRow align="center" justify="between" gap="md" wrap={false}>
+					{slots.metrics && data.metrics && data.metrics.length > 0 && (
+						<CRow align="center" gap="md">
+							{data.metrics.map((metric) => (
+								<CFeature {...metric} appearance="caption" />
+							))}
+						</CRow>
+					)}
+					{data.rating && (
+						<CRating
+							style="compact"
+							value={data.rating.value}
+							maximum={5}
+							count={data.rating.count}
+						/>
+					)}
 				</CRow>
-			)}
-			{data.rating && (
-				<CRating
-					style="compact"
-					value={data.rating.value}
-					maximum={5}
-					count={data.rating.count}
-				/>
 			)}
 		</CColumns>
 	</CBox>
