@@ -11,7 +11,7 @@
   "rating": 4.9,
   "reviews": 128,
   "badge": "v1.3.0",
-  "image": "/uploads/page-header-products.png",
+  "image": "/uploads/nebula-preview-01.svg",
   "detail": {
     "page": {
       "template": "lead-content",
@@ -32,40 +32,40 @@
             "thumbnailLabel": "Select preview",
             "images": [
               {
-                "src": "/uploads/page-header-products.png",
-                "alt": "Nebula Theme product preview",
-                "width": 1372,
-                "height": 1147
+                "src": "/uploads/nebula-preview-01.svg",
+                "alt": "Nebula Theme homepage preview",
+                "width": 1440,
+                "height": 900
               },
               {
-                "src": "/uploads/page-header-projects.png",
-                "alt": "Nebula Theme portfolio layout preview",
-                "width": 1372,
-                "height": 1147
+                "src": "/uploads/nebula-preview-02.svg",
+                "alt": "Nebula Theme dashboard preview",
+                "width": 1440,
+                "height": 900
               },
               {
-                "src": "/uploads/page-header-insight.png",
-                "alt": "Nebula Theme editorial layout preview",
-                "width": 1372,
-                "height": 1147
+                "src": "/uploads/nebula-preview-03.svg",
+                "alt": "Nebula Theme visual builder preview",
+                "width": 1440,
+                "height": 900
               },
               {
-                "src": "/uploads/lab-ai-image-generator.png",
-                "alt": "Nebula Theme dashboard layout preview",
-                "width": 1600,
-                "height": 1000
+                "src": "/uploads/nebula-preview-04.svg",
+                "alt": "Nebula Theme options preview",
+                "width": 1440,
+                "height": 900
               },
               {
-                "src": "/uploads/labs-hero.png",
-                "alt": "Nebula Theme landing page preview",
-                "width": 1600,
-                "height": 1000
+                "src": "/uploads/nebula-preview-05.svg",
+                "alt": "Nebula Theme commerce preview",
+                "width": 1440,
+                "height": 900
               },
               {
-                "src": "/uploads/cta-banner.webp",
-                "alt": "Nebula Theme checkout layout preview",
-                "width": 1600,
-                "height": 1000
+                "src": "/uploads/nebula-preview-06.svg",
+                "alt": "Nebula Theme documentation preview",
+                "width": 1440,
+                "height": 900
               }
             ],
             "salesLabel": "1,248 sales",
@@ -124,7 +124,7 @@
               },
               {
                 "label": "Live preview",
-                "href": "/uploads/page-header-products.png",
+                "href": "/uploads/nebula-preview-01.svg",
                 "icon": "arrowUpRight",
                 "variant": "outline"
               }
@@ -152,6 +152,12 @@
               {
                 "src": "/uploads/payment-apple-pay.svg",
                 "alt": "Apple Pay",
+                "width": 48,
+                "height": 32
+              },
+              {
+                "src": "/uploads/payment-more.svg",
+                "alt": "More payment methods",
                 "width": 48,
                 "height": 32
               }
