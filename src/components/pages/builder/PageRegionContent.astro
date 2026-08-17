@@ -2,12 +2,15 @@
 import CBox from "@/components/object/component/CBox.astro";
 import CButton from "@/components/object/component/CButton.astro";
 import CColumns from "@/components/object/component/CColumns.astro";
-import CDescriptionList from "@/components/object/component/CDescriptionList.astro";
 import CHeading from "@/components/object/component/CHeading.astro";
+import CIconTile from "@/components/object/component/CIconTile.astro";
+import CLink from "@/components/object/component/CLink.astro";
+import CList from "@/components/object/component/CList.astro";
 import CProfile from "@/components/object/component/CProfile.astro";
 import CRow from "@/components/object/component/CRow.astro";
 import CTabList from "@/components/object/component/CTabList.astro";
 import CTags from "@/components/object/component/CTags.astro";
+import CText from "@/components/object/component/CText.astro";
 import CTOC from "@/components/object/component/CTOC.astro";
 import PAdvertisement from "@/components/object/project/advertisement/PAdvertisement.astro";
 import PArticle from "@/components/object/project/article/PArticle.astro";
@@ -29,6 +32,18 @@ import type { PageRegion } from "@/types/components/pages/builder/PageRegion.typ
 
 type Props = { region: PageRegion };
 const { region } = Astro.props as Props;
+
+const detailsVariant = region.component === "details"
+	? (region.props.list.variant ?? "default")
+	: "default";
+const detailsHorizontal =
+	detailsVariant === "facts" ||
+	detailsVariant === "metrics" ||
+	detailsVariant === "highlights";
+const detailsPanel =
+	detailsVariant === "panel" ||
+	detailsVariant === "facts" ||
+	detailsVariant === "highlights";
 ---
 
 {region.component === "page-header" && <PPageHeader {...region.props} />}
@@ -60,10 +75,40 @@ const { region } = Astro.props as Props;
 {region.component === "entry-index" && <PEntryIndex {...region.props} />}
 {region.component === "reader" && <PReader {...region.props} />}
 {region.component === "details" && (
-	<CBox surface={region.props.title ? "glass" : "plain"} radius={region.props.title ? "md" : "none"} spacing={region.props.title ? "md" : "none"}>
+	<CBox
+		surface={region.props.title || detailsPanel ? "glass" : "plain"}
+		radius={region.props.title || detailsPanel ? "md" : "none"}
+		spacing={region.props.title || detailsPanel ? "md" : "none"}
+	>
 		<CColumns columns="one" gap="sm">
 			{region.props.title && <CHeading level={2} variant="h5">{region.props.title}</CHeading>}
-			<CDescriptionList {...region.props.list} variant={region.props.title ? "default" : region.props.list.variant} />
+			<CList direction={detailsHorizontal ? "row" : "column"} gap={detailsVariant === "compact" ? "xs" : "md"}>
+				{region.props.list.items.map((item) => (
+					<li>
+						<CRow align="center" justify={detailsHorizontal ? "start" : "between"} gap="sm">
+							<CRow align="center" gap="sm">
+								{item.icon && <CIconTile icon={item.icon} size="sm" iconSize="md" />}
+								<CText
+									variant="caption"
+									tone={region.props.list.tone === "on-dark" ? "on-dark-subtle" : "subtle"}
+								>
+									{item.label}
+								</CText>
+							</CRow>
+							{item.href ? (
+								<CLink href={item.href}>{item.value}</CLink>
+							) : (
+								<CText
+									variant={detailsVariant === "metrics" ? "price" : "body-sm"}
+									tone={region.props.list.tone === "on-dark" ? "on-dark" : "inherit"}
+								>
+									{item.value}
+								</CText>
+							)}
+						</CRow>
+					</li>
+				))}
+			</CList>
 			{region.props.tags && (
 				<CColumns columns="one" gap="sm">
 					<CHeading level={3} variant="h6">{region.props.tags.title}</CHeading>
