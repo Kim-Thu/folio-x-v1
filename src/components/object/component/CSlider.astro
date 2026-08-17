@@ -50,19 +50,25 @@ const containerClassName = cn(
 ---
 
 <div {...attributes} class={cn(sliderBaseClasses, className)} data-slider>
+	<div
+		class={viewportClassName}
+		aria-label={label}
+		tabindex="0"
+		data-slider-viewport
+	>
+		<div class={containerClassName}>
+			<slot />
+		</div>
+	</div>
+
 	<CSliderEmbla
 		client:load
-		{viewportClassName}
-		{containerClassName}
-		{label}
 		{autoplay}
 		{autoplayInterval}
 		{draggable}
 		{loop}
 		{pauseOnHover}
-	>
-		<slot />
-	</CSliderEmbla>
+	/>
 
 	{
 		itemCount > 1 && (
