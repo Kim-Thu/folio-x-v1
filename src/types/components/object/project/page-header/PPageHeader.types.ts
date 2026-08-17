@@ -147,6 +147,7 @@ export interface PPageHeaderGallerySummaryData {
     value: number;
     maximum: number;
     count: number;
+    reviewsLabel: string;
     salesLabel: string;
   };
   price: {
