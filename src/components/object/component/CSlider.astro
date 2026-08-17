@@ -1,5 +1,6 @@
 ---
 import CButton from "@/components/object/component/CButton.astro";
+import CRow from "@/components/object/component/CRow.astro";
 import type { CSliderProps } from "@/types/components/object/component/CSlider.types";
 import { cn } from "@/utils/cn";
 import {
@@ -64,9 +65,15 @@ const containerClassName = cn(
 		tabindex="0"
 		data-slider-viewport
 	>
-		<div class={containerClassName} data-slider-container>
+		<CRow
+			align="stretch"
+			gap="none"
+			wrap={false}
+			class={containerClassName}
+			data-slider-container
+		>
 			<slot />
-		</div>
+		</CRow>
 	</div>
 
 	{
