@@ -13,7 +13,7 @@ const { data } = Astro.props as { data: PCtaData };
 const headingId = `${data.id}-title`;
 ---
 
-<CBox surface="glass" radius="md" overflow="hidden">
+<CBox surface="glass" radius="lg" spacing="md" overflow="hidden">
 	<CColumns columns="twelve" gap="none">
 		{data.image && (
 			<CGridItem mdSpan={2}>
@@ -23,20 +23,20 @@ const headingId = `${data.id}-title`;
 			</CGridItem>
 		)}
 		<CGridItem as="header" mdSpan={data.image ? 5 : 7}>
-		<CBox spacing="md">
-			<CColumns columns="one" gap="xs">
-				<CHeading id={headingId} level={2} variant="h4">
-					{data.title}
-				</CHeading>
-				{data.description && <CText tone="subtle">{data.description}</CText>}
-			</CColumns>
-		</CBox>
+			<CBox spacing="md">
+				<CColumns columns="one" gap="xs">
+					<CHeading id={headingId} level={2} variant="h4">
+						{data.title}
+					</CHeading>
+					{data.description && <CText tone="subtle">{data.description}</CText>}
+				</CColumns>
+			</CBox>
 		</CGridItem>
 		{data.form && (
 			<CGridItem mdSpan={5}>
-			<CBox spacing="md">
-				<CSubscriptionForm {...data.form} tone="light" />
-			</CBox>
+				<CBox spacing="md">
+					<CSubscriptionForm {...data.form} tone="light" />
+				</CBox>
 			</CGridItem>
 		)}
 	</CColumns>
