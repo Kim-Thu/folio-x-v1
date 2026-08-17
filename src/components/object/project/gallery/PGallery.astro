@@ -1,5 +1,6 @@
 ---
 import GalleryGrid from "@/components/object/project/gallery/templates/GalleryGrid.astro";
+import GalleryPreviewStrip from "@/components/object/project/gallery/templates/GalleryPreviewStrip.astro";
 import GallerySlider from "@/components/object/project/gallery/templates/GallerySlider.astro";
 import type { PGalleryProps } from "@/types/components/object/project/gallery/PGallery.types";
 
@@ -9,6 +10,7 @@ const {
 	previousLabel,
 	nextLabel,
 	sliderControls,
+	thumbnailLabel,
 	template = "grid",
 } = Astro.props as PGalleryProps;
 ---
@@ -21,6 +23,12 @@ const {
 			{previousLabel}
 			{nextLabel}
 			{sliderControls}
+		/>
+	) : template === "preview-strip" ? (
+		<GalleryPreviewStrip
+			{items}
+			{label}
+			{thumbnailLabel}
 		/>
 	) : (
 		<GalleryGrid {items} {label} />
