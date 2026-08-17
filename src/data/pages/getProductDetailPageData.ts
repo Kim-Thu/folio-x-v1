@@ -70,6 +70,17 @@ export async function getProductDetailPageData(
 		};
 
 		if (section.type === "page-header") {
+			const images = section.content.images?.length
+				? section.content.images
+				: [
+					{
+						src: product.image,
+						alt: section.content.galleryLabel,
+						width: archive.content.itemPresentation.imageWidth,
+						height: archive.content.itemPresentation.imageHeight,
+					},
+				];
+
 			return {
 				key: section.id,
 				component: "page-header",
@@ -92,14 +103,7 @@ export async function getProductDetailPageData(
 						title: product.title,
 						description: product.description,
 						badge: product.badge,
-						images: [
-							{
-								src: product.image,
-								alt: section.content.galleryLabel,
-								width: archive.content.itemPresentation.imageWidth,
-								height: archive.content.itemPresentation.imageHeight,
-							},
-						],
+						images,
 						galleryLabel: section.content.galleryLabel,
 						thumbnailLabel: section.content.thumbnailLabel,
 						rating: {
@@ -133,7 +137,7 @@ export async function getProductDetailPageData(
 
 	return {
 		product,
-		pageTemplate: page.template ,
+		pageTemplate: page.template,
 		regions,
 	};
 }
