@@ -6,10 +6,7 @@ import {
 	getCardItemAriaLabel,
 	getCardItemTitle,
 } from "@/utils/card";
-import {
-	pCardSliderClasses,
-	pCardSliderItemClasses,
-} from "@/variants/components/object/project/card/PCard.variants";
+import { pCardSliderItemClasses } from "@/variants/components/object/project/card/PCard.variants";
 
 const {
 	template,
@@ -36,7 +33,6 @@ const pauseOnHover = slider?.pauseOnHover ?? true;
 
 <CSlider
 	{...attributes}
-	class={pCardSliderClasses}
 	itemCount={items.length}
 	label={sliderLabel}
 	previousLabel={sliderLabel}
