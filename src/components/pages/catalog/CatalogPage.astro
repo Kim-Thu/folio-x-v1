@@ -8,10 +8,9 @@ import { getPublications } from "@/data/cms";
 import type {
 	PublicationCardPresentation,
 } from "@/types/components/object/component/card/CCard.types";
-import type { PPageHeaderProps } from "@/types/components/object/project/page-header/PPageHeader.types";
-import type { PSectionHeaderProps } from "@/types/components/object/project/section-header/PSectionHeader.types";
 import type { CatalogPageProps } from "@/types/components/pages/catalog/CatalogPage.types";
 import type { PageSectionData } from "@/types/components/pages/builder/PageBuilder.types";
+import type { PPageHeaderProps } from "@/types/components/object/project/page-header/PPageHeader.types";
 
 const { data } = Astro.props as CatalogPageProps;
 const catalog = data.page.slug === "/comics" ? "comics" : "novels";
@@ -83,7 +82,6 @@ const newsletter = data.page.content.sections.find(
 					{catalog}
 					{entries}
 					presentation={catalogSection.content.itemPresentation}
-					sectionAction={catalogSection.content.heading?.action as PSectionHeaderProps["action"]}
 					closing={newsletter}
 				/>
 			</LContainer>
