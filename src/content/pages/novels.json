@@ -133,7 +133,7 @@
       {
         "id": "novels-newsletter",
         "type": "cta",
-        "template": "callout",
+        "template": "subscription",
         "settings": {
           "theme": "canvas",
           "spacing": "closing",
