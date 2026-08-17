@@ -137,7 +137,7 @@
         "settings": {
           "theme": "canvas",
           "spacing": "closing",
-          "container": "none"
+          "container": "site"
         },
         "content": {
           "id": "novels-newsletter",
