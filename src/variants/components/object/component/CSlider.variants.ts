@@ -39,8 +39,6 @@ export const sliderDotsClasses = "flex items-center gap-2";
 export const sliderDotClasses =
 	"size-2 cursor-pointer rounded-full bg-white/60 transition-colors duration-300 hover:bg-white data-[current=true]:bg-blue-600";
 
-export const sliderDotCurrentClasses = "bg-blue-600";
-
 export const sliderStatusClasses =
 	"flex min-w-0 flex-1 items-center gap-3 font-mono text-xs text-gray-500";
 
