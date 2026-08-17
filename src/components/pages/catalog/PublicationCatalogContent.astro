@@ -334,16 +334,16 @@ const genreStoryCardConfig: CatalogCardConfig = {
 						/>
 					</CColumns>
 				))}
-
-				{closing && (
-					<PCta
-						{...({
-							template: closing.template,
-							data: closing.content,
-						} as unknown as PCtaProps)}
-					/>
-				)}
 			</CColumns>
 		</LSidebar>
+
+		{closing && (
+			<PCta
+				{...({
+					template: closing.template,
+					data: closing.content,
+				} as unknown as PCtaProps)}
+			/>
+		)}
 	</CColumns>
 </CBox>
