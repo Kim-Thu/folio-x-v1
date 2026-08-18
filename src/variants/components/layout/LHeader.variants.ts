@@ -8,6 +8,11 @@ export const headerPositionClasses = {
 
 export const headerSolidClasses = "backdrop-blur-xs";
 
+export const headerSolidToneClasses = {
+	dark: "bg-black/80",
+	light: "bg-white/90",
+} as const;
+
 export const headerToneClasses = {
 	dark: "text-white",
 	light: "text-black",
