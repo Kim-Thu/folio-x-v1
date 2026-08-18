@@ -1,4 +1,5 @@
 ---
+import CBreadcrumb from "@/components/object/component/CBreadcrumb.astro";
 import CColumns from "@/components/object/component/CColumns.astro";
 import CHeading from "@/components/object/component/CHeading.astro";
 import CGridItem from "@/components/object/component/CGridItem.astro";
@@ -14,6 +15,8 @@ const { data } = Astro.props as Props;
 <CColumns columns="twelve" gap="lg" align="center">
 	<CGridItem as="header" lgSpan={6}>
 		<CColumns columns="one" gap="lg">
+			<CBreadcrumb {...data.breadcrumb} />
+
 			<CColumns columns="one" gap="sm">
 				<CHeading level={1} variant="display-3" lines={data.title} />
 				<CText tone="muted">{data.description}</CText>
