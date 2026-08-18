@@ -67,13 +67,21 @@ export const labDetailSettingsSchema = z.object({
         variant: z.enum(["primary", "outline"]),
       }),
     }),
-    share: z.object({
-      label: z.string().min(1),
-      twitterLabel: z.string().min(1),
-      facebookLabel: z.string().min(1),
-      linkedinLabel: z.string().min(1),
-      copyLabel: z.string().min(1),
-    }),
+    share: z
+      .object({
+        label: z.string().min(1),
+        twitterLabel: z.string().min(1),
+        facebookLabel: z.string().min(1),
+        linkedinLabel: z.string().min(1),
+        copyLabel: z.string().min(1),
+      })
+      .default({
+        label: "Share project",
+        twitterLabel: "Share on Twitter",
+        facebookLabel: "Share on Facebook",
+        linkedinLabel: "Share on LinkedIn",
+        copyLabel: "Open project link",
+      }),
   }),
   navigation: z.object({
     labelTemplate: z.string().includes("{title}"),
