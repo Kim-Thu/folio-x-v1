@@ -6,6 +6,9 @@ import type { PGalleryProps } from "@/types/components/object/project/gallery/PG
 const {
 	items,
 	label,
+	columns,
+	visibleCount,
+	viewMoreLabel,
 	previousLabel,
 	nextLabel,
 	sliderControls,
@@ -25,6 +28,12 @@ const {
 			{thumbnailLabel}
 		/>
 	) : (
-		<GalleryGrid {items} {label} />
+		<GalleryGrid
+			{items}
+			{label}
+			{columns}
+			{visibleCount}
+			{viewMoreLabel}
+		/>
 	)
 }
