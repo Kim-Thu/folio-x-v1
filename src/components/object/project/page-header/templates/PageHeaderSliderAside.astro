@@ -15,12 +15,13 @@ import CSlide from "@/components/object/component/CSlide.astro";
 import CSlider from "@/components/object/component/CSlider.astro";
 import CText from "@/components/object/component/CText.astro";
 import type { PPageHeaderSliderAsideData } from "@/types/components/object/project/page-header/PPageHeader.types";
+import { pageHeaderSliderAsideRootClasses } from "@/variants/components/object/project/page-header/PPageHeader.variants";
 
 type Props = { data: PPageHeaderSliderAsideData };
 const { data } = Astro.props as Props;
 ---
 
-<CColumns columns="one" gap="xl">
+<CColumns columns="one" gap="none" class={pageHeaderSliderAsideRootClasses}>
 	<CBreadcrumb {...data.breadcrumb} />
 
 	{data.backAction && (
