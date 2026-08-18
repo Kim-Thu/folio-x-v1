@@ -52,9 +52,9 @@
       "appearance": "panel"
     },
     "relatedTitle": "Related articles",
-    "relatedLimit": 4,
+    "relatedLimit": 5,
     "relatedCards": {
-      "separator": "dot",
+      "separator": "·",
       "metadataDisplay": "text",
       "imageWidth": 640,
       "imageHeight": 420,
@@ -82,6 +82,10 @@
           "metrics": false,
           "action": false
         }
+      },
+      "action": {
+        "href": "/",
+        "label": "View all articles"
       }
     },
     "newsletter": {
