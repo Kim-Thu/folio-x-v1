@@ -4,11 +4,19 @@ import CButton from "@/components/object/component/CButton.astro";
 import CChoiceGroup from "@/components/object/component/CChoiceGroup.astro";
 import CColumns from "@/components/object/component/CColumns.astro";
 import CFieldset from "@/components/object/component/CFieldset.astro";
+import CIcon from "@/components/object/component/CIcon.astro";
 import CRange from "@/components/object/component/CRange.astro";
 import CRating from "@/components/object/component/CRating.astro";
 import CText from "@/components/object/component/CText.astro";
 import type { PFilterPanelProps } from "@/types/components/object/project/filter-panel/PFilterPanel.types";
-import { filterPanelLabelClasses } from "@/variants/components/object/project/filter-panel/PFilterPanel.variants";
+import {
+	filterPanelGroupClasses,
+	filterPanelGroupContentClasses,
+	filterPanelGroupIconClasses,
+	filterPanelGroupSummaryClasses,
+	filterPanelLabelClasses,
+	filterPanelRatingContentClasses,
+} from "@/variants/components/object/project/filter-panel/PFilterPanel.variants";
 
 const { data } = Astro.props as PFilterPanelProps;
 const platform = data.platform ?? data.groups?.find((group) => group.control === "platform");
@@ -21,11 +29,25 @@ const showReset = Boolean(
 	data.ratings ||
 	extraGroups.length,
 );
+
+const hasCheckedOption = (options: Array<{ checked?: boolean }>) =>
+	options.some((option) => option.checked);
 ---
 
 <CBox surface="glass" radius="md" spacing="md" data-filter-panel>
 	<CColumns columns="one" gap="sm">
-		{data.category && <CChoiceGroup {...data.category} />}
+		{data.category && (
+			<details
+				class={filterPanelGroupClasses}
+				open={hasCheckedOption(data.category.options)}
+			>
+				<summary class={filterPanelGroupSummaryClasses}>
+					<span>{data.category.legend}</span>
+					<CIcon name="chevronDown" size="sm" class={filterPanelGroupIconClasses} />
+				</summary>
+				<CChoiceGroup {...data.category} class={filterPanelGroupContentClasses} />
+			</details>
+		)}
 
 		{data.filterLabel && (
 			<CText as="span" variant="caption" class={filterPanelLabelClasses}>
@@ -33,27 +55,82 @@ const showReset = Boolean(
 			</CText>
 		)}
 
-		{platform && <CChoiceGroup {...platform} />}
+		{platform && (
+			<details
+				class={filterPanelGroupClasses}
+				open={hasCheckedOption(platform.options)}
+			>
+				<summary class={filterPanelGroupSummaryClasses}>
+					<span>{platform.legend}</span>
+					<CIcon name="chevronDown" size="sm" class={filterPanelGroupIconClasses} />
+				</summary>
+				<CChoiceGroup {...platform} class={filterPanelGroupContentClasses} />
+			</details>
+		)}
 
-		{data.range && <CRange {...data.range} />}
+		{data.range && (
+			<details
+				class={filterPanelGroupClasses}
+				open={data.range.value !== data.range.max}
+			>
+				<summary class={filterPanelGroupSummaryClasses}>
+					<span>{data.range.label}</span>
+					<CIcon name="chevronDown" size="sm" class={filterPanelGroupIconClasses} />
+				</summary>
+				<CRange {...data.range} class={filterPanelGroupContentClasses} />
+			</details>
+		)}
 
-		{data.license && <CChoiceGroup {...data.license} />}
+		{data.license && (
+			<details
+				class={filterPanelGroupClasses}
+				open={hasCheckedOption(data.license.options)}
+			>
+				<summary class={filterPanelGroupSummaryClasses}>
+					<span>{data.license.legend}</span>
+					<CIcon name="chevronDown" size="sm" class={filterPanelGroupIconClasses} />
+				</summary>
+				<CChoiceGroup {...data.license} class={filterPanelGroupContentClasses} />
+			</details>
+		)}
 
 		{extraGroups.map((group) => (
-			<CChoiceGroup {...group} />
+			<details
+				class={filterPanelGroupClasses}
+				open={hasCheckedOption(group.options)}
+			>
+				<summary class={filterPanelGroupSummaryClasses}>
+					<span>{group.legend}</span>
+					<CIcon name="chevronDown" size="sm" class={filterPanelGroupIconClasses} />
+				</summary>
+				<CChoiceGroup {...group} class={filterPanelGroupContentClasses} />
+			</details>
 		))}
 
 		{data.ratings && (
-			<CFieldset legend={data.ratings.legend} gap="xs">
-				{data.ratings.options.map((rating) => (
-					<CRating
-						{...rating}
-						style="filter"
-						maximum={5}
-						name={data.ratings?.name ?? "rating"}
-					/>
-				))}
-			</CFieldset>
+			<details
+				class={filterPanelGroupClasses}
+				open={data.ratings.options.some((rating) => rating.checked)}
+			>
+				<summary class={filterPanelGroupSummaryClasses}>
+					<span>{data.ratings.legend}</span>
+					<CIcon name="chevronDown" size="sm" class={filterPanelGroupIconClasses} />
+				</summary>
+				<CFieldset
+					legend={data.ratings.legend}
+					gap="xs"
+					class={filterPanelRatingContentClasses}
+				>
+					{data.ratings.options.map((rating) => (
+						<CRating
+							{...rating}
+							style="filter"
+							maximum={5}
+							name={data.ratings?.name ?? "rating"}
+						/>
+					))}
+				</CFieldset>
+			</details>
 		)}
 
 		{showReset && (
