@@ -11,8 +11,15 @@ import {
 	choiceCountClasses,
 	choiceLabelClasses,
 	choiceNavigationClasses,
+	choiceNavigationOverflowContentClasses,
 	choiceNavigationTitleClasses,
 	choiceOptionClasses,
+	choiceOverflowClasses,
+	choiceOverflowContentClasses,
+	choiceOverflowShowLessClasses,
+	choiceOverflowShowMoreClasses,
+	choiceOverflowSummaryClasses,
+	choiceVisibleOptionCount,
 } from "@/variants/components/object/component/CChoiceGroup.variants";
 
 const {
@@ -25,6 +32,11 @@ const {
 	type = "checkbox",
 	...attributes
 } = Astro.props as CChoiceGroupProps;
+
+const visibleOptions = options.slice(0, choiceVisibleOptionCount);
+const overflowOptions = options.slice(choiceVisibleOptionCount);
+const hasOverflow = overflowOptions.length > 0;
+const overflowOpen = overflowOptions.some((option) => option.checked);
 ---
 
 {appearance === "navigation" ? (
@@ -39,7 +51,7 @@ const {
 			{legend}
 		</CText>
 		<div class={choiceNavigationClasses}>
-			{options.map((option) => (
+			{visibleOptions.map((option) => (
 				option.href ? (
 					<CLink
 						href={option.href}
@@ -70,11 +82,53 @@ const {
 					</button>
 				)
 			))}
+
+			{hasOverflow && (
+				<details class={choiceOverflowClasses} open={overflowOpen}>
+					<summary class={choiceOverflowSummaryClasses}>
+						<span class={choiceOverflowShowMoreClasses}>Show more</span>
+						<span class={choiceOverflowShowLessClasses}>Show less</span>
+					</summary>
+					<div class={choiceNavigationOverflowContentClasses}>
+						{overflowOptions.map((option) => (
+							option.href ? (
+								<CLink
+									href={option.href}
+									class={choiceOptionClasses.navigation}
+									aria-current={option.checked ? "true" : undefined}
+									data-choice-link
+									data-choice-control={control}
+									data-choice-value={option.value}
+								>
+									<span class={choiceLabelClasses}>{option.label}</span>
+									{typeof option.count === "number" && (
+										<small class={choiceCountClasses}>{option.count}</small>
+									)}
+								</CLink>
+							) : (
+								<button
+									type="button"
+									class={choiceOptionClasses.navigation}
+									aria-pressed={option.checked ? "true" : "false"}
+									data-choice-filter
+									data-choice-control={control}
+									data-choice-value={option.value}
+								>
+									<span class={choiceLabelClasses}>{option.label}</span>
+									{typeof option.count === "number" && (
+										<small class={choiceCountClasses}>{option.count}</small>
+									)}
+								</button>
+							)
+						))}
+					</div>
+				</details>
+			)}
 		</div>
 	</nav>
 ) : (
 	<CFieldset {...attributes} class={className} {legend} gap="sm">
-		{options.map((option) => (
+		{visibleOptions.map((option) => (
 			<label class={choiceOptionClasses.controls}>
 				<span class={choiceControlWrapClasses}>
 					<input
@@ -101,5 +155,43 @@ const {
 				)}
 			</label>
 		))}
+
+		{hasOverflow && (
+			<details class={choiceOverflowClasses} open={overflowOpen}>
+				<summary class={choiceOverflowSummaryClasses}>
+					<span class={choiceOverflowShowMoreClasses}>Show more</span>
+					<span class={choiceOverflowShowLessClasses}>Show less</span>
+				</summary>
+				<div class={choiceOverflowContentClasses}>
+					{overflowOptions.map((option) => (
+						<label class={choiceOptionClasses.controls}>
+							<span class={choiceControlWrapClasses}>
+								<input
+									class={choiceControlClasses.controls}
+									type={type}
+									name={name}
+									value={option.value}
+									checked={option.checked}
+									data-category-filter={control === "category" ? "" : undefined}
+									data-license-filter={control === "license" ? "" : undefined}
+									data-platform-filter={control === "platform" ? "" : undefined}
+									data-facet-filter
+									data-facet-key={control}
+								/>
+								<CIcon
+									name="check"
+									size="sm"
+									class={choiceControlIconClasses}
+								/>
+							</span>
+							<span class={choiceLabelClasses}>{option.label}</span>
+							{typeof option.count === "number" && (
+								<small class={choiceCountClasses}>{option.count}</small>
+							)}
+						</label>
+					))}
+				</div>
+			</details>
+		)}
 	</CFieldset>
 )}
