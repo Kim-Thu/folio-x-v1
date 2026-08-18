@@ -24,6 +24,19 @@ export function writeCommaSeparatedParam(
 	params.delete(name);
 }
 
+export function writeOptionalParam(
+	params: URLSearchParams,
+	name: string,
+	value: string | undefined,
+): void {
+	if (value) {
+		params.set(name, value);
+		return;
+	}
+
+	params.delete(name);
+}
+
 export function buildUrlWithSearchParams(
 	pathname: string,
 	params: URLSearchParams,
