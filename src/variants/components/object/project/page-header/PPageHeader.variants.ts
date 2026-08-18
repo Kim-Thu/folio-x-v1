@@ -49,4 +49,8 @@ export const pageHeaderMediaAsideContentClasses = "flex h-full flex-col";
 
 export const pageHeaderMediaAsideMainClasses = "flex flex-col gap-2";
 
+export const pageHeaderMediaAsideMetricsClasses = "py-4";
+
+export const pageHeaderMediaAsideActionsClasses = "mt-8";
+
 export const pageHeaderMediaAsideShareClasses = "mt-auto pt-6";
