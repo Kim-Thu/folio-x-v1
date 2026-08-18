@@ -11,10 +11,17 @@ html {
 }
 
 body {
-    font-family:"Google Sans Flex Variable", ui-sans-serif, system-ui, sans-serif;
+    font-family:var(--font-sans);
     -webkit-font-smoothing:antialiased;
     margin:0;
     overflow-x:hidden;
+}
+
+code,
+kbd,
+samp,
+pre {
+    font-family:inherit;
 }
 
 a,
