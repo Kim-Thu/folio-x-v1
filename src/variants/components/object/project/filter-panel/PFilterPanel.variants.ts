@@ -3,6 +3,9 @@ export const filterPanelSectionClasses = "group/filter-section";
 export const filterPanelSectionSummaryClasses =
 	"flex cursor-pointer list-none items-center justify-between gap-3 border-b border-gray-100 pb-2 font-mono text-xs uppercase tracking-widest text-black marker:hidden [&::-webkit-details-marker]:hidden";
 
+export const filterPanelSectionLabelClasses =
+	"border-b border-gray-100 pb-2 font-mono text-xs uppercase tracking-widest text-black";
+
 export const filterPanelSectionIconClasses =
 	"shrink-0 transition-transform duration-200 group-open/filter-section:rotate-180";
 
