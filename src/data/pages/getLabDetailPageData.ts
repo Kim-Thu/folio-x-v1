@@ -89,6 +89,31 @@ export async function getLabDetailPageData(
 					]
 				: []),
 		],
+		share: {
+			label: presentation.header.share.label,
+			links: [
+				{
+					label: presentation.header.share.twitterLabel,
+					href: `https://twitter.com/intent/tweet?url=${encodeURIComponent(lab.href)}`,
+					icon: "twitter",
+				},
+				{
+					label: presentation.header.share.facebookLabel,
+					href: `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(lab.href)}`,
+					icon: "facebook",
+				},
+				{
+					label: presentation.header.share.linkedinLabel,
+					href: `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(lab.href)}`,
+					icon: "linkedin",
+				},
+				{
+					label: presentation.header.share.copyLabel,
+					href: lab.href,
+					icon: "link",
+				},
+			],
+		},
 	};
 
 	const contentTabs = lab.content.flatMap((block) => {
@@ -345,7 +370,7 @@ export async function getLabDetailPageData(
 
 	return {
 		lab,
-		pageTemplate: presentation.page.template ,
+		pageTemplate: presentation.page.template,
 		regions,
 	};
 }
