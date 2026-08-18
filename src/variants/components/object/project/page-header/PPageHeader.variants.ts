@@ -1,3 +1,5 @@
+export const pageHeaderBreadcrumbOffsetClasses = "pt-16";
+
 export const pageHeaderGallerySummaryRootClasses = "flex flex-col gap-6";
 
 export const pageHeaderGallerySummaryGalleryClasses = "h-full";
