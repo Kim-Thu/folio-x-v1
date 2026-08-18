@@ -57,7 +57,7 @@ const { data } = Astro.props as Props;
 
 		<CGridItem as="aside" lgSpan={3}>
 			<CColumns columns="one" gap="md">
-				<CImage {...data.asideDecoration} alt="" variant="natural" aria-hidden="true" />
+				<CImage {...data.asideDecoration} alt="" variant="natural" class="mx-auto w-4/5" aria-hidden="true" />
 				<CBox surface="glass" radius="md" spacing="md">
 					<CList direction="column" gap="sm">
 						{data.facts.map((item) => (
