@@ -1,6 +1,6 @@
 ﻿export const baseLayoutBodyClasses = {
 	overlayHeader: "",
-	solidHeader: "pt-16",
+	solidHeader: "",
 } as const;
 
 export const baseLayoutToneClasses = {
