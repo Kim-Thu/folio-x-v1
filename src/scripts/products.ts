@@ -15,7 +15,7 @@ function initProductsRoot(root: HTMLElement): void {
 		root.querySelector<HTMLSelectElement>("[data-category-select]");
 	const platformSelect =
 		root.querySelector<HTMLSelectElement>("[data-platform-select]");
-	const sortSelect = root.querySelector<HTMLSelectElement>("[data-product-sort]");
+	const sortSelect = root.querySelector<HTMLSelectElement>("[data-archive-sort]");
 	const range = root.querySelector<HTMLInputElement>("[data-price-filter]");
 	const priceOutput =
 		root.querySelector<HTMLOutputElement>("[data-price-output]");
@@ -63,14 +63,9 @@ function initProductsRoot(root: HTMLElement): void {
 		card.querySelector<HTMLElement>("[data-card-view='grid'] [data-product-card]") ??
 		card;
 
-	const selectedCategory = (): string =>
-		root.querySelector<HTMLInputElement>(
-			'input[name="product-category"]:checked',
-		)?.value ?? "all";
-
 	const selectedValues = (selector: string): string[] =>
 		Array.from(root.querySelectorAll<HTMLInputElement>(selector)).map(
-			(item) => item.value,
+			(control) => control.value,
 		);
 
 	const selectedNavigationValue = (control: string): string | undefined =>
@@ -104,21 +99,21 @@ function initProductsRoot(root: HTMLElement): void {
 	};
 
 	const syncNavigationFilter = (control: string, value: string): void => {
-		const hasActiveValue = value !== "all";
+		const active = value !== "all";
 
 		navigationFilters
 			.filter((button) => button.dataset.choiceControl === control)
 			.forEach((button) => {
 				button.setAttribute(
 					"aria-pressed",
-					String(hasActiveValue && button.dataset.choiceValue === value),
+					String(active && button.dataset.choiceValue === value),
 				);
 			});
 
 		navigationLinks
 			.filter((link) => link.dataset.choiceControl === control)
 			.forEach((link) => {
-				if (hasActiveValue && link.dataset.choiceValue === value) {
+				if (active && link.dataset.choiceValue === value) {
 					link.setAttribute("aria-current", "page");
 				} else {
 					link.removeAttribute("aria-current");
@@ -150,11 +145,14 @@ function initProductsRoot(root: HTMLElement): void {
 			});
 	};
 
-	const syncPriceOutput = (): void => {
-		if (!range || !priceOutput) return;
-		priceOutput.value = `$${range.value}${
-			range.value === range.max ? "+" : ""
-		}`;
+	const categoryFromPath = (): string => {
+		if (!isProductCategoryRoute()) return "all";
+		const path = normalizedPath();
+		const current = navigationLinks.find((link) => {
+			if (link.dataset.choiceControl !== "category") return false;
+			return new URL(link.href, window.location.href).pathname.replace(/\/+$/, "") === path;
+		});
+		return current?.dataset.choiceValue ?? categorySelect?.value ?? "all";
 	};
 
 	const syncPlatformControls = (values: string[]): void => {
@@ -181,14 +179,44 @@ function initProductsRoot(root: HTMLElement): void {
 		});
 	};
 
-	const categoryFromPath = (): string => {
-		if (!isProductCategoryRoute()) return "all";
-		const currentPath = normalizedPath();
-		const currentLink = navigationLinks.find((link) => {
-			if (link.dataset.choiceControl !== "category") return false;
-			return new URL(link.href, window.location.href).pathname.replace(/\/+$/, "") === currentPath;
-		});
-		return currentLink?.dataset.choiceValue ?? "all";
+	const syncPriceOutput = (): void => {
+		if (!range || !priceOutput) return;
+		priceOutput.value = `$${range.value}${range.value === range.max ? "+" : ""}`;
+	};
+
+	const syncFiltersFromLocation = (): void => {
+		const params = new URLSearchParams(window.location.search);
+		const category = isProductCategoryRoute()
+			? categoryFromPath()
+			: params.get("categories") ?? "all";
+
+		if (categorySelect) syncSelectDisplay(categorySelect, category);
+		syncNavigationFilter("category", category);
+
+		const platforms = readCommaSeparatedParam(params, "platform");
+		syncPlatformControls(platforms);
+		syncPlatformSelectFromControls();
+		setCheckedValues(
+			licenseControls,
+			readCommaSeparatedParam(params, "license"),
+		);
+		setCheckedValues(
+			ratingControls,
+			readCommaSeparatedParam(params, "rating"),
+		);
+
+		if (range) {
+			const rawPrice = params.get("price");
+			const price = rawPrice === null ? Number.NaN : Number(rawPrice);
+			range.value =
+				Number.isFinite(price) &&
+				price >= Number(range.min) &&
+				price <= Number(range.max)
+					? String(price)
+					: range.max;
+		}
+
+		syncPriceOutput();
 	};
 
 	const syncLocationFromFilters = (): void => {
@@ -234,40 +262,6 @@ function initProductsRoot(root: HTMLElement): void {
 		rewriteProductsIndexCategoryLinks();
 	};
 
-	const syncFiltersFromLocation = (): void => {
-		const params = new URLSearchParams(window.location.search);
-		const category = isProductCategoryRoute()
-			? categoryFromPath()
-			: params.get("categories") ?? "all";
-
-		if (categorySelect) syncSelectDisplay(categorySelect, category);
-		syncNavigationFilter("category", category);
-
-		const platforms = readCommaSeparatedParam(params, "platform");
-		syncPlatformControls(platforms);
-		syncPlatformSelectFromControls();
-		setCheckedValues(
-			licenseControls,
-			readCommaSeparatedParam(params, "license"),
-		);
-		setCheckedValues(
-			ratingControls,
-			readCommaSeparatedParam(params, "rating"),
-		);
-
-		if (range) {
-			const price = Number(params.get("price"));
-			range.value =
-				Number.isFinite(price) &&
-				price >= Number(range.min) &&
-				price <= Number(range.max)
-					? String(price)
-					: range.max;
-		}
-
-		syncPriceOutput();
-	};
-
 	const applyView = (view: "grid" | "list"): void => {
 		gridColumnClasses.forEach((className) => {
 			grid.classList.toggle(className, view === "grid");
@@ -292,12 +286,10 @@ function initProductsRoot(root: HTMLElement): void {
 	const render = (): void => {
 		const term = search?.value.trim().toLowerCase() ?? "";
 		const category =
-			categorySelect?.value ?? selectedNavigationValue("category") ?? selectedCategory();
+			categorySelect?.value ?? selectedNavigationValue("category") ?? "all";
 		const selectedPlatforms = selectedValues("[data-platform-filter]:checked");
 		const selectedLicenses = selectedValues("[data-license-filter]:checked");
-		const selectedRatings = selectedValues("[data-rating-filter]:checked").map(
-			Number,
-		);
+		const selectedRatings = selectedValues("[data-rating-filter]:checked").map(Number);
 		const toolbarPlatform = platformSelect?.value ?? "all";
 		const activePlatforms = selectedPlatforms.length
 			? selectedPlatforms
@@ -311,69 +303,62 @@ function initProductsRoot(root: HTMLElement): void {
 			const matchesTerm = !term || (data.title ?? "").includes(term);
 			const matchesCategory =
 				category === "all" || data.filterCategory === category;
-			const matchesPlatforms =
-				!activePlatforms.length ||
-				activePlatforms.includes(data.platform ?? "");
+			const matchesPlatform =
+				!activePlatforms.length || activePlatforms.includes(data.platform ?? "");
 			const matchesLicense =
-				!selectedLicenses.length ||
-				selectedLicenses.includes(data.license ?? "");
+				!selectedLicenses.length || selectedLicenses.includes(data.license ?? "");
 			const matchesRating =
 				!selectedRatings.length ||
 				selectedRatings.some((rating) => Number(data.rating) >= rating);
+			const matchesPrice = Number(data.price) <= maxPrice;
 
 			return (
 				matchesTerm &&
 				matchesCategory &&
-				matchesPlatforms &&
+				matchesPlatform &&
 				matchesLicense &&
 				matchesRating &&
-				Number(data.price) <= maxPrice
+				matchesPrice
 			);
 		});
 
-		const sort = sortSelect?.value;
 		visible.sort((first, second) => {
 			const firstData = cardData(first).dataset;
 			const secondData = cardData(second).dataset;
-
-			if (sort === "price-low") {
+			if (sortSelect?.value === "price-low") {
 				return Number(firstData.price) - Number(secondData.price);
 			}
-			if (sort === "price-high") {
+			if (sortSelect?.value === "price-high") {
 				return Number(secondData.price) - Number(firstData.price);
 			}
-			if (sort === "rating") {
+			if (sortSelect?.value === "rating") {
 				return Number(secondData.rating) - Number(firstData.rating);
 			}
-			return (
-				Number(firstData.sortIndex ?? 0) -
-				Number(secondData.sortIndex ?? 0)
-			);
+			return Number(firstData.sortIndex ?? 0) - Number(secondData.sortIndex ?? 0);
 		});
+
 		visible.forEach((card) => grid.append(card));
 
-		const pages = Math.max(1, Math.ceil(visible.length / pageSize));
-		currentPage = Math.min(currentPage, pages);
+		const totalPages = Math.max(1, Math.ceil(visible.length / pageSize));
+		currentPage = Math.min(currentPage, totalPages);
+		const pageStart = (currentPage - 1) * pageSize;
+		const currentCards = new Set(visible.slice(pageStart, pageStart + pageSize));
+
 		cards.forEach((card) => {
-			card.hidden = true;
+			card.hidden = !currentCards.has(card);
 		});
-		visible
-			.slice((currentPage - 1) * pageSize, currentPage * pageSize)
-			.forEach((card) => {
-				card.hidden = false;
-			});
 
 		if (count) count.textContent = String(visible.length);
 		if (empty) empty.hidden = visible.length > 0;
 		if (pagination) pagination.hidden = visible.length === 0;
 		pageButtons.forEach((button) => {
 			const page = Number(button.dataset.page);
-			button.parentElement?.toggleAttribute("hidden", page > pages);
+			button.parentElement?.toggleAttribute("hidden", page > totalPages);
 			if (page === currentPage) button.setAttribute("aria-current", "page");
 			else button.removeAttribute("aria-current");
 		});
 		if (previous) previous.disabled = currentPage === 1;
-		if (next) next.disabled = currentPage === pages;
+		if (next) next.disabled = currentPage === totalPages;
 	};
 
 	const resetAndRender = (): void => {
@@ -382,9 +367,8 @@ function initProductsRoot(root: HTMLElement): void {
 	};
 
 	const selectCategory = (value: string): void => {
-		if (!isProductsIndex()) {
-			const href =
-				value === "all" ? "/products" : navigationHref("category", value);
+		if (isProductCategoryRoute()) {
+			const href = value === "all" ? "/products" : navigationHref("category", value);
 			if (href) window.location.assign(href);
 			return;
 		}
@@ -429,14 +413,6 @@ function initProductsRoot(root: HTMLElement): void {
 
 	rewriteProductsIndexCategoryLinks();
 
-	root
-		.querySelectorAll<HTMLInputElement>('input[name="product-category"]')
-		.forEach((radio) => {
-			radio.addEventListener("change", () => {
-				selectCategory(radio.value);
-			});
-		});
-
 	categorySelect?.addEventListener("change", () => {
 		selectCategory(categorySelect.value);
 	});
@@ -451,8 +427,7 @@ function initProductsRoot(root: HTMLElement): void {
 		button.addEventListener("click", () => {
 			const control = button.dataset.choiceControl;
 			const value = button.dataset.choiceValue;
-			if (!control || !value) return;
-			if (control === "category") selectCategory(value);
+			if (control === "category" && value) selectCategory(value);
 		});
 	});
 
@@ -460,8 +435,7 @@ function initProductsRoot(root: HTMLElement): void {
 		link.addEventListener("click", (event) => {
 			const control = link.dataset.choiceControl;
 			const value = link.dataset.choiceValue;
-			if (!control || !value || control !== "category") return;
-			if (!isProductsIndex()) return;
+			if (control !== "category" || !value || !isProductsIndex()) return;
 
 			event.preventDefault();
 			selectCategory(value);
@@ -469,7 +443,6 @@ function initProductsRoot(root: HTMLElement): void {
 	});
 
 	reset?.addEventListener("click", resetAllFilters);
-
 	search?.addEventListener("input", resetAndRender);
 
 	range?.addEventListener("input", () => {
@@ -525,11 +498,13 @@ function initProductsRoot(root: HTMLElement): void {
 			render();
 		});
 	});
+
 	previous?.addEventListener("click", () => {
 		if (currentPage <= 1) return;
 		currentPage -= 1;
 		render();
 	});
+
 	next?.addEventListener("click", () => {
 		currentPage += 1;
 		render();
