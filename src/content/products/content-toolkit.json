@@ -67,17 +67,7 @@
             "spacing": "body",
             "container": "content"
           },
-          "content": {
-            "blocks": [
-              {
-                "id": "product-overview",
-                "title": "Overview",
-                "paragraphs": [
-                  "Workflow utilities for growing editorial teams."
-                ]
-              }
-            ]
-          }
+          "content": "<h2 id=\"overview\">Overview</h2><p>Workflow utilities for growing editorial teams.</p>"
         }
       ]
     }
