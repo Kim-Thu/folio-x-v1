@@ -23,9 +23,12 @@ export async function getInsightDetailPageData(
 		getInsights(),
 		getBlogDetailSettings(),
 	]);
-	const post = insights.find((insight) => insight.slug === slug);
+	const postIndex = insights.findIndex((insight) => insight.slug === slug);
+	const post = insights[postIndex];
 	if (!post) throw new Error(`Unknown insight slug: ${slug}`);
 
+	const previousPost = postIndex > 0 ? insights[postIndex - 1] : undefined;
+	const nextPost = postIndex < insights.length - 1 ? insights[postIndex + 1] : undefined;
 	const relatedPosts = insights
 		.filter((insight) => insight.slug !== slug)
 		.sort((a, b) => {
@@ -203,27 +206,76 @@ export async function getInsightDetailPageData(
 		},
 	];
 
+	const regions: PageRegion[] = [
+		{
+			key: presentation.section.id,
+			component: "group",
+			section: {
+				id: presentation.section.id,
+				...presentation.section.settings,
+			},
+			props: {
+				template: "sidebar",
+				asideLabel: sidebar.label,
+				asidePosition: sidebar.position,
+				stickyAside: sidebar.sticky,
+				asideGap: sidebar.columns.gap,
+				gap: presentation.content.columns.gap,
+				regions: nestedRegions,
+			},
+		},
+	];
+
+	const navigationItems = [
+		...(previousPost
+			? [
+					{
+						title: previousPost.title,
+						href: previousPost.href,
+						image: previousPost.image,
+						alt: previousPost.imageAlt,
+						label: "Previous",
+						icon: "arrowLeft" as const,
+						summary: previousPost.excerpt,
+					},
+				]
+			: []),
+		...(nextPost
+			? [
+					{
+						title: nextPost.title,
+						href: nextPost.href,
+						image: nextPost.image,
+						alt: nextPost.imageAlt,
+						label: "Next",
+						icon: "arrowRight" as const,
+						summary: nextPost.excerpt,
+					},
+				]
+			: []),
+	];
+
+	if (navigationItems.length > 0) {
+		regions.push({
+			key: "insight-post-navigation",
+			component: "post-navigation",
+			section: {
+				id: "insight-post-navigation",
+				theme: "canvas",
+				spacing: "closing",
+				container: "site",
+			},
+			props: {
+				template: "split",
+				label: "Previous / Next",
+				items: navigationItems,
+			},
+		});
+	}
+
 	return {
 		post,
 		pageTemplate: presentation.page.template,
-		regions: [
-			{
-				key: presentation.section.id,
-				component: "group",
-				section: {
-					id: presentation.section.id,
-					...presentation.section.settings,
-				},
-				props: {
-					template: "sidebar",
-					asideLabel: sidebar.label,
-					asidePosition: sidebar.position,
-					stickyAside: sidebar.sticky,
-					asideGap: sidebar.columns.gap,
-					gap: presentation.content.columns.gap,
-					regions: nestedRegions,
-				},
-			},
-		],
+		regions,
 	};
 }
