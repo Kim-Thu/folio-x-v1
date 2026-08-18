@@ -1,20 +1,58 @@
 ---
 import CBox from "@/components/object/component/CBox.astro";
+import CButton from "@/components/object/component/CButton.astro";
 import CColumns from "@/components/object/component/CColumns.astro";
 import CImage from "@/components/object/component/CImage.astro";
 import CMedia from "@/components/object/component/CMedia.astro";
 import type { PGalleryProps } from "@/types/components/object/project/gallery/PGallery.types";
+import { galleryGridActionClasses } from "@/variants/components/object/project/gallery/PGallery.variants";
 
-type Props = Pick<PGalleryProps, "items" | "label">;
-const { items, label } = Astro.props as Props;
+type Props = Pick<
+	PGalleryProps,
+	"items" | "label" | "columns" | "visibleCount" | "viewMoreLabel"
+>;
+
+const {
+	items,
+	label,
+	columns = "two",
+	visibleCount = items.length,
+	viewMoreLabel,
+} = Astro.props as Props;
+
+const hasMoreItems = Boolean(viewMoreLabel) && items.length > visibleCount;
 ---
 
-<CColumns columns="two" gap="sm" aria-label={label}>
+<div data-gallery-grid>
+	<CColumns columns={columns} gap="sm" aria-label={label}>
+		{
+			items.map((item, index) => (
+				<CBox
+					radius="md"
+					overflow="hidden"
+					hidden={hasMoreItems && index >= visibleCount}
+					data-gallery-extra={hasMoreItems && index >= visibleCount ? "true" : undefined}
+				>
+					<CMedia ratio="video">
+						<CImage {...item} variant="fill" />
+					</CMedia>
+				</CBox>
+			))
+		}
+	</CColumns>
+
 	{
-		items.map((item) => (
-			<CBox radius="md" overflow="hidden">
-				<CMedia ratio="video"><CImage {...item} variant="fill" /></CMedia>
-			</CBox>
-		))
+		hasMoreItems && viewMoreLabel && (
+			<div class={galleryGridActionClasses}>
+				<CButton
+					label={viewMoreLabel}
+					type="button"
+					variant="outline"
+					tone="light"
+					size="sm"
+					data-gallery-view-more
+				/>
+			</div>
+		)
 	}
-</CColumns>
+</div>
