@@ -17,19 +17,7 @@
   "updatedLabel": "2 months ago",
   "liveUrl": "https://example.com",
   "sourceUrl": "https://github.com",
-  "content": [
-    { "type": "heading", "id": "overview", "level": 2, "text": "Overview", "navigationLabel": "Overview" },
-    { "type": "paragraph", "text": "An experiment in combining spatial storytelling with a robust semantic document structure." },
-    {
-      "type": "feature-grid",
-      "id": "features",
-      "title": "Features",
-      "navigationLabel": "Features",
-      "items": [
-        { "title": "Spatial navigation", "description": "Move through work without losing content clarity.", "icon": "globeAlt" }
-      ]
-    }
-  ],
+  "content": "<h2 id=\"overview\">Overview</h2><p>An experiment in combining spatial storytelling with a robust semantic document structure.</p><h2 id=\"features\">Features</h2><h3>Spatial navigation</h3><p>Move through work without losing content clarity.</p>",
   "gallery": [
     { "src": "/uploads/hero-image.webp", "alt": "Spatial interface", "width": 1440, "height": 1080 }
   ],
