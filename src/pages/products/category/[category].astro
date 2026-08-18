@@ -9,9 +9,14 @@ import BaseLayout from "@/layouts/BaseLayout.astro";
 
 export const getStaticPaths = getProductCategoryPaths;
 
+interface Props {
+	categorySlug: string;
+}
+
+const { categorySlug } = Astro.props as Props;
 const [layout, data] = await Promise.all([
 	getLayoutData(),
-	getProductsPageData(),
+	getProductsPageData({ categorySlug }),
 ]);
 ---
 
