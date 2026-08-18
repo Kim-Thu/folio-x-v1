@@ -1,0 +1,25 @@
+{
+  "order": 5,
+  "readingMinutes": 6,
+  "slug": "thiet-ke-he-thong-de-de-thay-doi",
+  "category": "Engineering",
+  "categorySlug": "engineering",
+  "tags": [
+    { "label": "Architecture", "slug": "architecture" },
+    { "label": "Maintainability", "slug": "maintainability" }
+  ],
+  "title": "Thiết kế hệ thống để dễ thay đổi",
+  "excerpt": "Một hệ thống tốt không chỉ chạy đúng hôm nay mà còn giúp những thay đổi ngày mai ít tốn kém hơn.",
+  "publishedAt": "2026-02-26",
+  "author": "Nguyễn Kim Thu",
+  "image": "https://images.unsplash.com/photo-1497366754035-f200968a6e72?auto=format&fit=crop&w=1400&q=82",
+  "imageAlt": "Không gian làm việc dành cho đội kỹ thuật và sản phẩm",
+  "content": [
+    { "type": "heading", "id": "ranh-gioi-ro-rang", "level": 2, "text": "Ranh giới rõ ràng giúp thay đổi an toàn" },
+    { "type": "paragraph", "text": "Khi trách nhiệm được chia đúng chỗ, một thay đổi nhỏ không cần kéo theo hàng loạt phần không liên quan. Điều đó làm cho việc kiểm thử, phát hành và quay lui trở nên dễ dự đoán hơn." },
+    { "type": "heading", "id": "toi-uu-cho-viec-hieu", "level": 2, "text": "Tối ưu cho việc hiểu hệ thống" },
+    { "type": "paragraph", "text": "Tên gọi, contract và luồng dữ liệu nên giúp người đọc hiểu được hệ thống trước khi phải lần theo từng chi tiết triển khai." },
+    { "type": "heading", "id": "thay-doi-la-mot-phan-cua-thiet-ke", "level": 2, "text": "Thay đổi là một phần của thiết kế" },
+    { "type": "paragraph", "text": "Khả năng thay đổi không đến từ việc thêm nhiều abstraction, mà từ việc giữ mỗi abstraction gắn với một trách nhiệm thật và một lý do thay đổi rõ ràng." }
+  ]
+}
