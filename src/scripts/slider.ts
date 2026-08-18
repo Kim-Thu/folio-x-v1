@@ -6,6 +6,8 @@ const containerSelector = "[data-slider-container]";
 const slideSelector = "[data-slide]";
 const previousSelector = "[data-slider-previous]";
 const nextSelector = "[data-slider-next]";
+const externalPreviousSelector = "[data-slider-external-previous]";
+const externalNextSelector = "[data-slider-external-next]";
 const currentSelector = "[data-slider-current]";
 const totalSelector = "[data-slider-total]";
 const goSelector = "[data-slider-go]";
@@ -20,6 +22,15 @@ const toInterval = (value: string | undefined) => {
 	const parsed = Number(value);
 	return Number.isFinite(parsed) ? Math.max(1000, parsed) : 5000;
 };
+
+const findExternalButton = (
+	selector: string,
+	target: string,
+	attribute: "sliderExternalPrevious" | "sliderExternalNext",
+) =>
+	Array.from(document.querySelectorAll<HTMLButtonElement>(selector)).find(
+		(button) => button.dataset[attribute] === target,
+	);
 
 const initSlider = (root: HTMLElement) => {
 	if (root.dataset.sliderInitialized === "true") return;
@@ -49,8 +60,24 @@ const initSlider = (root: HTMLElement) => {
 
 	root.dataset.sliderInitialized = "true";
 
-	const previous = root.querySelector<HTMLButtonElement>(previousSelector);
-	const next = root.querySelector<HTMLButtonElement>(nextSelector);
+	const previous =
+		root.querySelector<HTMLButtonElement>(previousSelector) ??
+		(root.id
+			? findExternalButton(
+					externalPreviousSelector,
+					root.id,
+					"sliderExternalPrevious",
+				)
+			: undefined);
+	const next =
+		root.querySelector<HTMLButtonElement>(nextSelector) ??
+		(root.id
+			? findExternalButton(
+					externalNextSelector,
+					root.id,
+					"sliderExternalNext",
+				)
+			: undefined);
 	const current = root.querySelector<HTMLElement>(currentSelector);
 	const total = root.querySelector<HTMLElement>(totalSelector);
 	const directButtons = Array.from(
