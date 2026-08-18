@@ -9,7 +9,10 @@ import CText from "@/components/object/component/CText.astro";
 import type { CContentFlowProps } from "@/types/components/object/component/CContentFlow.types";
 import { cn } from "@/utils/cn";
 import {
+	contentFlowCaptionClasses,
 	contentFlowClasses,
+	contentFlowImageMediaClasses,
+	contentFlowRichTextClasses,
 	contentFlowSpacingClasses,
 } from "@/variants/components/object/component/CContentFlow.variants";
 
@@ -30,15 +33,25 @@ const { class: className, items, ...attributes } =
 				{item.text}
 			</CHeading>
 		) : item.type === "paragraph" ? (
-			<CText tone="subtle" class={contentFlowSpacingClasses.paragraph}>
-				{item.text}
+			<CText
+				tone="subtle"
+				class={cn(
+					contentFlowSpacingClasses.paragraph,
+					contentFlowRichTextClasses,
+				)}
+			>
+				<Fragment set:html={item.text} />
 			</CText>
 		) : item.type === "image" ? (
 			<figure class={contentFlowSpacingClasses.image}>
-				<CMedia ratio="video">
+				<CMedia ratio="video" class={contentFlowImageMediaClasses}>
 					<CImage {...item.image} variant="fill" />
 				</CMedia>
-				{item.caption && <figcaption class="mt-2 text-sm text-neutral-500">{item.caption}</figcaption>}
+				{item.caption && (
+					<figcaption class={contentFlowCaptionClasses}>
+						{item.caption}
+					</figcaption>
+				)}
 			</figure>
 		) : item.type === "feature-grid" ? (
 			<section id={item.id} class={contentFlowSpacingClasses["feature-grid"]} data-article-heading>
@@ -57,12 +70,12 @@ const { class: className, items, ...attributes } =
 			</section>
 		) : item.type === "list" ? (
 			item.style === "ordered" ? (
-				<ol class={cn(contentFlowSpacingClasses.list, "list-decimal space-y-2 pl-6 text-neutral-600")}>
-					{item.items.map((value) => <li>{value}</li>)}
+				<ol class={cn(contentFlowSpacingClasses.list, contentFlowRichTextClasses, "list-decimal space-y-2 pl-6 text-neutral-600")}>
+					{item.items.map((value) => <li><Fragment set:html={value} /></li>)}
 				</ol>
 			) : (
-				<ul class={cn(contentFlowSpacingClasses.list, "list-disc space-y-2 pl-6 text-neutral-600")}>
-					{item.items.map((value) => <li>{value}</li>)}
+				<ul class={cn(contentFlowSpacingClasses.list, contentFlowRichTextClasses, "list-disc space-y-2 pl-6 text-neutral-600")}>
+					{item.items.map((value) => <li><Fragment set:html={value} /></li>)}
 				</ul>
 			)
 		) : item.type === "table" ? (
@@ -84,8 +97,8 @@ const { class: className, items, ...attributes } =
 				</table>
 			</div>
 		) : item.type === "quote" ? (
-			<blockquote class={cn(contentFlowSpacingClasses.quote, "border-l-2 pl-5")}>
-				<CText>{item.text}</CText>
+			<blockquote class={cn(contentFlowSpacingClasses.quote, contentFlowRichTextClasses, "border-l-2 pl-5")}>
+				<CText><Fragment set:html={item.text} /></CText>
 				{(item.attribution || item.source) && (
 					<footer class="mt-3 text-sm text-neutral-500">
 						{item.attribution && <span>{item.attribution}</span>}
@@ -99,14 +112,16 @@ const { class: className, items, ...attributes } =
 				<CColumns columns="one" gap="sm">
 					{item.icon && <CIcon name={item.icon} size="sm" />}
 					{item.title && <CHeading level={3} variant="h6">{item.title}</CHeading>}
-					<CText tone="subtle">{item.text}</CText>
+					<CText tone="subtle" class={contentFlowRichTextClasses}>
+						<Fragment set:html={item.text} />
+					</CText>
 				</CColumns>
 			</CBox>
 		) : item.type === "code" ? (
 			<figure class={contentFlowSpacingClasses.code}>
 				{item.filename && <div class="mb-2 text-sm font-medium">{item.filename}</div>}
 				<pre class="overflow-x-auto rounded-md bg-neutral-950 p-4 text-sm text-neutral-100"><code data-language={item.language}>{item.code}</code></pre>
-				{item.caption && <figcaption class="mt-2 text-sm text-neutral-500">{item.caption}</figcaption>}
+				{item.caption && <figcaption class={contentFlowCaptionClasses}>{item.caption}</figcaption>}
 			</figure>
 		) : item.type === "divider" ? (
 			<hr class={cn(contentFlowSpacingClasses.divider, item.style === "dashed" ? "border-dashed" : "border-solid")} />
@@ -126,7 +141,7 @@ const { class: className, items, ...attributes } =
 				) : (
 					<iframe src={item.src} title={item.title} loading="lazy" class="aspect-video w-full" allowfullscreen />
 				)}
-				{item.caption && <figcaption class="mt-2 text-sm text-neutral-500">{item.caption}</figcaption>}
+				{item.caption && <figcaption class={contentFlowCaptionClasses}>{item.caption}</figcaption>}
 			</figure>
 		) : item.type === "metric-grid" ? (
 			<section id={item.id} class={contentFlowSpacingClasses["metric-grid"]} data-article-heading={item.id ? true : undefined}>
