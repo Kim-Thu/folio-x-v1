@@ -29,6 +29,13 @@ import PSectionHeader from "@/components/object/project/section-header/PSectionH
 import PStatement from "@/components/object/project/statement/PStatement.astro";
 import PStatus from "@/components/object/project/status/PStatus.astro";
 import type { PPageTemplateProps } from "@/types/components/object/project/page/PPage.types";
+import {
+	pageFacetedDesktopSidebarClasses,
+	pageFacetedMobileAdvertisementClasses,
+	pageFacetedMobileFilterClasses,
+	pageFacetedMobileFilterContentClasses,
+	pageFacetedMobileFilterSummaryClasses,
+} from "@/variants/components/object/project/page/PPage.variants";
 
 const { regions } = Astro.props as PPageTemplateProps;
 const lead = regions.filter(
@@ -117,17 +124,32 @@ const orderedRegions = [...lead, ...content, ...closing];
 				{region.props.mode === "faceted" && region.props.sidebar ? (
 					<LSidebar label={region.props.sidebar.label} sticky>
 						<CColumns slot="sidebar" columns="one" gap="lg">
-							<PFilterPanel {...region.props.sidebar.filter} />
-							{region.props.sidebar.cards && (
-								<CBox surface="glass" radius="md" spacing="sm">
-									<CColumns columns="one" gap="sm">
-										{region.props.sidebar.cardsHeader && <PSectionHeader {...region.props.sidebar.cardsHeader} />}
-										<PCard {...region.props.sidebar.cards} />
-									</CColumns>
-								</CBox>
-							)}
-							{region.props.sidebar.advertisement && <PAdvertisement {...region.props.sidebar.advertisement} />}
+							<div class={pageFacetedDesktopSidebarClasses}>
+								<CColumns columns="one" gap="lg">
+									<PFilterPanel {...region.props.sidebar.filter} />
+									{region.props.sidebar.cards && (
+										<CBox surface="glass" radius="md" spacing="sm">
+											<CColumns columns="one" gap="sm">
+												{region.props.sidebar.cardsHeader && <PSectionHeader {...region.props.sidebar.cardsHeader} />}
+												<PCard {...region.props.sidebar.cards} />
+											</CColumns>
+										</CBox>
+									)}
+									{region.props.sidebar.advertisement && <PAdvertisement {...region.props.sidebar.advertisement} />}
+								</CColumns>
+							</div>
+
+							<details class={pageFacetedMobileFilterClasses}>
+								<summary class={pageFacetedMobileFilterSummaryClasses}>
+									<span>{region.props.sidebar.label}</span>
+									<span aria-hidden="true">+</span>
+								</summary>
+								<div class={pageFacetedMobileFilterContentClasses}>
+									<PFilterPanel {...region.props.sidebar.filter} />
+								</div>
+							</details>
 						</CColumns>
+
 						<CColumns columns="one" gap="lg" data-archive-results>
 							<CColumns columns="one" gap="none" class="gap-6">
 								{(region.props.result?.header || (region.props.result?.count !== undefined && region.props.result.label)) && (
@@ -144,6 +166,11 @@ const orderedRegions = [...lead, ...content, ...closing];
 								<CText data-product-empty data-facet-empty hidden tone="muted">{region.props.emptyLabel}</CText>
 							</CColumns>
 							<CPagination label={region.props.pagination.label} previousLabel={region.props.pagination.previousLabel} nextLabel={region.props.pagination.nextLabel} totalPages={region.props.pagination.totalPages} />
+							{region.props.sidebar.advertisement && (
+								<div class={pageFacetedMobileAdvertisementClasses}>
+									<PAdvertisement {...region.props.sidebar.advertisement} />
+								</div>
+							)}
 						</CColumns>
 					</LSidebar>
 				) : (
