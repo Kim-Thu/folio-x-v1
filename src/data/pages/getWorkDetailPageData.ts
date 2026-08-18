@@ -1,4 +1,5 @@
 import { getPage, getProjects } from "@/data/cms";
+import type { CContentFlowItem } from "@/types/components/object/component/CContentFlow.types";
 import type { PageRegion } from "@/types/components/object/project/page/PageRegion.types";
 import type { WorkDetailPageData } from "@/types/components/pages/work-detail/WorkDetailPage.types";
 
@@ -61,11 +62,39 @@ export async function getWorkDetailPageData(
 	const headerImages = Array.from(
 		new Map(gallery.map((image) => [image.src, image])).values(),
 	);
-	const articleBlocks = project.sections.map((section, blockIndex) => ({
-		id: `project-content-${blockIndex + 1}`,
-		title: section.title,
-		paragraphs: section.paragraphs,
-		image: gallery[blockIndex % gallery.length],
+	const articleContent: CContentFlowItem[] = project.sections.flatMap(
+		(section, blockIndex): CContentFlowItem[] => {
+			const id = `project-content-${blockIndex + 1}`;
+			const image = gallery[blockIndex % gallery.length];
+
+			return [
+				{
+					type: "heading",
+					id,
+					level: 2,
+					text: section.title,
+					navigationLabel: section.title,
+				},
+				...section.paragraphs.map(
+					(paragraph): CContentFlowItem => ({
+						type: "paragraph",
+						text: paragraph,
+					}),
+				),
+				...(image
+					? [
+							{
+								type: "image" as const,
+								image,
+							},
+						]
+					: []),
+			];
+		},
+	);
+	const articleTocItems = project.sections.map((section, blockIndex) => ({
+		label: section.title,
+		href: `#project-content-${blockIndex + 1}`,
 	}));
 
 	const regions: PageRegion[] = page.sections.flatMap((section): PageRegion[] => {
@@ -154,7 +183,19 @@ export async function getWorkDetailPageData(
 					key: section.id,
 					component: "article" as const,
 					section: frame,
-					props: { blocks: articleBlocks },
+					props: {
+						template: "flow",
+						content: articleContent,
+						toc: articleTocItems.length
+							? {
+									label: "On this page",
+									position: "end",
+									appearance: "panel",
+									sticky: true,
+									items: articleTocItems,
+								}
+							: undefined,
+					},
 				},
 			];
 		}
@@ -219,7 +260,7 @@ export async function getWorkDetailPageData(
 
 	return {
 		project,
-		pageTemplate: page.template ,
+		pageTemplate: page.template,
 		regions,
 	};
 }
