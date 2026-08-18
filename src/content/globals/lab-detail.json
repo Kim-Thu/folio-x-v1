@@ -45,6 +45,13 @@
         "icon": "github",
         "variant": "outline"
       }
+    },
+    "share": {
+      "label": "Share project",
+      "twitterLabel": "Share on Twitter",
+      "facebookLabel": "Share on Facebook",
+      "linkedinLabel": "Share on LinkedIn",
+      "copyLabel": "Open project link"
     }
   },
   "navigation": {
