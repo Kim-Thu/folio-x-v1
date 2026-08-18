@@ -138,6 +138,20 @@ export async function getWorkDetailPageData(
 					props: {
 						template: section.template,
 						data: {
+							breadcrumb: {
+								label: "Breadcrumb",
+								items: [
+									{
+										label: "Projects",
+										href: archive.content.routes.base,
+									},
+									{
+										label: project.category,
+										href: `${archive.content.routes.categoryBase}${project.categorySlug}`,
+									},
+								],
+								current: project.title,
+							},
 							backAction: section.content.backAction,
 							category: {
 								label: project.category,
