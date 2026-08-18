@@ -68,17 +68,7 @@
             "spacing": "body",
             "container": "content"
           },
-          "content": {
-            "blocks": [
-              {
-                "id": "overview",
-                "title": "Overview",
-                "paragraphs": [
-                  "Ready-to-use sections and blocks for Tailwind CSS."
-                ]
-              }
-            ]
-          }
+          "content": "<h2 id=\"overview\">Overview</h2><p>Ready-to-use sections and blocks for Tailwind CSS.</p>"
         }
       ]
     }
