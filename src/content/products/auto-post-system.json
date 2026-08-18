@@ -69,17 +69,7 @@
             "spacing": "body",
             "container": "site"
           },
-          "content": {
-            "blocks": [
-              {
-                "id": "product-overview",
-                "title": "Overview",
-                "paragraphs": [
-                  "Automatically share your content to social media."
-                ]
-              }
-            ]
-          }
+          "content": "<h2 id=\"overview\">Overview</h2><p>Automatically share your content to social media.</p>"
         }
       ]
     }
