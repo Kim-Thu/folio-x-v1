@@ -79,7 +79,7 @@ const containerClassName = cn(
 	<slot name="navigation" />
 
 	{
-		itemCount > 1 && (
+		itemCount > 1 && controls !== "none" && (
 			<div class={sliderControlsClasses[controls]}>
 				{controls === "dots" && (
 					<div class={sliderDotsClasses} role="group" aria-label={label}>
