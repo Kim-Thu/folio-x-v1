@@ -8,4 +8,3 @@ export type Lab = LabEntry & {
 };
 
 export type LabImage = LabEntry["image"];
-export type LabContentBlock = LabEntry["content"][number];
