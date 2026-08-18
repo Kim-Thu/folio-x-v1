@@ -70,9 +70,6 @@
       "theme": "canvas",
       "spacing": "body",
       "container": "site"
-    },
-    "article": {
-      "template": "flow"
     }
   },
   "sidebar": {
@@ -165,7 +162,7 @@
     "copy": {
       "stack": {
         "columns": "one",
-        "gap": "xs"
+        "gap": "sm"
       },
       "headingLevel": 3,
       "headingVariant": "h5",
