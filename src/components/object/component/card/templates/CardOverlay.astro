@@ -30,7 +30,7 @@ const card = resolveProjectOverlayCard({
 
 <CBox
 	as="article"
-	class="w-full"
+	class="h-full w-full"
 	surface="dark"
 	radius="lg"
 	position="relative"
@@ -52,8 +52,8 @@ const card = resolveProjectOverlayCard({
 		</CMedia>
 	)}
 
-	<CBox position="relative" class="p-8">
-		<div class="flex flex-col">
+	<CBox position="relative" class="h-full p-8">
+		<div class="flex h-full flex-col">
 			<div class="w-full md:w-4/5">
 				<CColumns columns="one" gap="sm">
 					<CColumns columns="one" gap="xs">
@@ -90,7 +90,7 @@ const card = resolveProjectOverlayCard({
 			</div>
 
 			{card.action && (
-				<div class="pt-8">
+				<div class="mt-auto pt-8">
 					<CButton
 						href={card.action.href}
 						label={card.action.label}
