@@ -273,10 +273,14 @@ export async function getProductDetailPageData(
 					appearance: "catalog",
 					data: { title: "Related products" },
 				},
+				sliderHeaderControls: true,
 				cards: {
 					template: "slider",
 					columns: 5,
 					gap: archive.content.cards.gap,
+					slider: {
+						controls: "none",
+					},
 					card: {
 						template: archive.content.cards.template,
 						source: "products",
