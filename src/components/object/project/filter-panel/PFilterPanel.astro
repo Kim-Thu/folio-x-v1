@@ -17,6 +17,7 @@ import {
 	filterPanelSectionClasses,
 	filterPanelSectionContentClasses,
 	filterPanelSectionIconClasses,
+	filterPanelSectionLabelClasses,
 	filterPanelSectionSummaryClasses,
 } from "@/variants/components/object/project/filter-panel/PFilterPanel.variants";
 
@@ -26,14 +27,6 @@ const extraGroups = (data.groups ?? []).filter((group) => group.control !== "pla
 
 const hasCheckedOption = (options: Array<{ checked?: boolean }>) =>
 	options.some((option) => option.checked);
-
-const hasActiveFilters = Boolean(
-	(platform && hasCheckedOption(platform.options)) ||
-	(data.range && data.range.value !== data.range.max) ||
-	(data.license && hasCheckedOption(data.license.options)) ||
-	extraGroups.some((group) => hasCheckedOption(group.options)) ||
-	data.ratings?.options.some((rating) => rating.checked),
-);
 
 const showReset = Boolean(
 	data.category ||
@@ -63,11 +56,8 @@ const showReset = Boolean(
 		)}
 
 		{data.filterLabel && (
-			<details class={filterPanelSectionClasses} open={hasActiveFilters}>
-				<summary class={filterPanelSectionSummaryClasses}>
-					<span>{data.filterLabel}</span>
-					<CIcon name="chevronDown" size="sm" class={filterPanelSectionIconClasses} />
-				</summary>
+			<section aria-label={data.filterLabel}>
+				<div class={filterPanelSectionLabelClasses}>{data.filterLabel}</div>
 
 				<div class={filterPanelSectionContentClasses}>
 					{platform && (
@@ -148,7 +138,7 @@ const showReset = Boolean(
 						</details>
 					)}
 				</div>
-			</details>
+			</section>
 		)}
 
 		{showReset && (
