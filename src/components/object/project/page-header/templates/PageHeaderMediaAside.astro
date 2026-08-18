@@ -1,7 +1,6 @@
 ---
 import CBadge from "@/components/object/component/CBadge.astro";
 import CBox from "@/components/object/component/CBox.astro";
-import CBreadcrumb from "@/components/object/component/CBreadcrumb.astro";
 import CButton from "@/components/object/component/CButton.astro";
 import CColumns from "@/components/object/component/CColumns.astro";
 import CFeature from "@/components/object/component/CFeature.astro";
@@ -27,83 +26,80 @@ import {
 const { data } = Astro.props as { data: PPageHeaderMediaAsideData };
 ---
 
-<CColumns columns="one" gap="md">
-	<CBreadcrumb {...data.breadcrumb} />
-	<CColumns columns="twelve" gap="md" align="stretch">
-		<CGridItem mdSpan={7} lgSpan={8} align="stretch">
-			<CMedia ratio="video" shape="card" class={pageHeaderMediaAsideMediaClasses}>
-				<CImage {...data.image} variant="fill" />
-			</CMedia>
-		</CGridItem>
+<CColumns columns="twelve" gap="md" align="stretch">
+	<CGridItem mdSpan={7} lgSpan={8} align="stretch">
+		<CMedia ratio="video" shape="card" class={pageHeaderMediaAsideMediaClasses}>
+			<CImage {...data.image} variant="fill" />
+		</CMedia>
+	</CGridItem>
 
-		<CGridItem as="header" mdSpan={5} lgSpan={4} align="stretch">
-			<CBox surface="glass" radius="md" spacing="md" class="h-full">
-				<div class={pageHeaderMediaAsideContentClasses}>
-					<div class={pageHeaderMediaAsideMainClasses}>
-						{data.badge && <CBadge>{data.badge}</CBadge>}
+	<CGridItem as="header" mdSpan={5} lgSpan={4} align="stretch">
+		<CBox surface="glass" radius="md" spacing="md" class="h-full">
+			<div class={pageHeaderMediaAsideContentClasses}>
+				<div class={pageHeaderMediaAsideMainClasses}>
+					{data.badge && <CBadge>{data.badge}</CBadge>}
 
-						<CRow
-							justify="start"
-							gap="md"
-							wrap
-							class={pageHeaderMediaAsideMetricsClasses}
-						>
-							{data.metrics.map((metric) => (
-								<CFeature {...metric} appearance="caption" />
-							))}
-						</CRow>
+					<CRow
+						justify="start"
+						gap="md"
+						wrap
+						class={pageHeaderMediaAsideMetricsClasses}
+					>
+						{data.metrics.map((metric) => (
+							<CFeature {...metric} appearance="caption" />
+						))}
+					</CRow>
 
-						{data.category && (
-							<CMetadata
-								data={{
-									items: [{
-										type: "category",
-										label: data.category.label,
-										href: data.category.href,
-										display: "text",
-									}],
-								}}
-								tone="brand"
-							/>
-						)}
-
-						<CHeading level={1} variant="h3">{data.title}</CHeading>
-						<CText tone="muted">{data.description}</CText>
-
-						{data.tags && data.tags.length > 0 && (
-							<CTags
-								items={data.tags.map((tag) => ({ label: tag }))}
-								label={`${data.title} technologies`}
-							/>
-						)}
-
-						<CRow
-							gap="sm"
-							role="group"
-							aria-label={data.actionsLabel}
-							wrap
-							class={pageHeaderMediaAsideActionsClasses}
-						>
-							{data.actions.map((action) => (
-								<CButton
-									href={action.href}
-									label={action.label}
-									icon={action.icon}
-									variant={action.variant}
-									tone="light"
-									size="sm"
-								/>
-							))}
-						</CRow>
-					</div>
-
-					{data.share && (
-						<div class={pageHeaderMediaAsideShareClasses}>
-							<CShareLinks {...data.share} />
-						</div>
+					{data.category && (
+						<CMetadata
+							data={{
+								items: [{
+									type: "category",
+									label: data.category.label,
+									href: data.category.href,
+									display: "text",
+								}],
+							}}
+							tone="brand"
+						/>
 					)}
+
+					<CHeading level={1} variant="h3">{data.title}</CHeading>
+					<CText tone="muted">{data.description}</CText>
+
+					{data.tags && data.tags.length > 0 && (
+						<CTags
+							items={data.tags.map((tag) => ({ label: tag }))}
+							label={`${data.title} technologies`}
+						/>
+					)}
+
+					<CRow
+						gap="sm"
+						role="group"
+						aria-label={data.actionsLabel}
+						wrap
+						class={pageHeaderMediaAsideActionsClasses}
+					>
+						{data.actions.map((action) => (
+							<CButton
+								href={action.href}
+								label={action.label}
+								icon={action.icon}
+								variant={action.variant}
+								tone="light"
+								size="sm"
+							/>
+						))}
+					</CRow>
 				</div>
-			</CBox>
-		</CGridItem>
-	</CColumns>
+
+				{data.share && (
+					<div class={pageHeaderMediaAsideShareClasses}>
+						<CShareLinks {...data.share} />
+					</div>
+				)}
+			</div>
+		</CBox>
+	</CGridItem>
 </CColumns>
