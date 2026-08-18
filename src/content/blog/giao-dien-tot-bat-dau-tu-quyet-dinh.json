@@ -1,0 +1,25 @@
+{
+  "order": 6,
+  "readingMinutes": 5,
+  "slug": "giao-dien-tot-bat-dau-tu-quyet-dinh",
+  "category": "Product",
+  "categorySlug": "product",
+  "tags": [
+    { "label": "UX", "slug": "ux" },
+    { "label": "Product thinking", "slug": "product-thinking" }
+  ],
+  "title": "Giao diện tốt bắt đầu từ quyết định",
+  "excerpt": "Trước khi tối ưu màu sắc hay khoảng cách, cần xác định người dùng đang phải quyết định điều gì và thông tin nào giúp họ quyết định tốt hơn.",
+  "publishedAt": "2026-02-14",
+  "author": "Nguyễn Kim Thu",
+  "image": "https://images.unsplash.com/photo-1552664730-d307ca884978?auto=format&fit=crop&w=1400&q=82",
+  "imageAlt": "Nhóm sản phẩm trao đổi trước bảng kế hoạch",
+  "content": [
+    { "type": "heading", "id": "bat-dau-tu-quyet-dinh", "level": 2, "text": "Bắt đầu từ quyết định của người dùng" },
+    { "type": "paragraph", "text": "Mỗi màn hình đều tồn tại để hỗ trợ một hoặc nhiều quyết định. Khi quyết định đó chưa rõ, giao diện dễ trở thành tập hợp của nhiều thành phần đúng riêng lẻ nhưng thiếu một hướng ưu tiên chung." },
+    { "type": "heading", "id": "thong-tin-phai-co-thu-tu", "level": 2, "text": "Thông tin phải có thứ tự" },
+    { "type": "paragraph", "text": "Hierarchy tốt giúp người dùng nhận ra điều quan trọng trước, chi tiết hỗ trợ sau và hành động tiếp theo ở đúng thời điểm." },
+    { "type": "heading", "id": "giam-ma-sat", "level": 2, "text": "Giảm ma sát thay vì thêm hiệu ứng" },
+    { "type": "paragraph", "text": "Một trải nghiệm nhanh và dễ hiểu thường đến từ việc bỏ bớt bước không cần thiết, làm rõ trạng thái và giữ phản hồi nhất quán hơn là bổ sung thêm hiệu ứng trang trí." }
+  ]
+}
