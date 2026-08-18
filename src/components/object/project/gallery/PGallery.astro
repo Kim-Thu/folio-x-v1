@@ -1,11 +1,14 @@
 ---
+import CColumns from "@/components/object/component/CColumns.astro";
 import GalleryGrid from "@/components/object/project/gallery/templates/GalleryGrid.astro";
 import GallerySlider from "@/components/object/project/gallery/templates/GallerySlider.astro";
+import PSectionHeader from "@/components/object/project/section-header/PSectionHeader.astro";
 import type { PGalleryProps } from "@/types/components/object/project/gallery/PGallery.types";
 
 const {
 	items,
 	label,
+	header,
 	columns,
 	visibleCount,
 	viewMoreLabel,
@@ -17,23 +20,27 @@ const {
 } = Astro.props as PGalleryProps;
 ---
 
-{
-	template === "slider" ? (
-		<GallerySlider
-			{items}
-			{label}
-			{previousLabel}
-			{nextLabel}
-			{sliderControls}
-			{thumbnailLabel}
-		/>
-	) : (
-		<GalleryGrid
-			{items}
-			{label}
-			{columns}
-			{visibleCount}
-			{viewMoreLabel}
-		/>
-	)
-}
+<CColumns columns="one" gap="md">
+	{header && <PSectionHeader {...header} />}
+
+	{
+		template === "slider" ? (
+			<GallerySlider
+				{items}
+				{label}
+				{previousLabel}
+				{nextLabel}
+				{sliderControls}
+				{thumbnailLabel}
+			/>
+		) : (
+			<GalleryGrid
+				{items}
+				{label}
+				{columns}
+				{visibleCount}
+				{viewMoreLabel}
+			/>
+		)
+	}
+</CColumns>
