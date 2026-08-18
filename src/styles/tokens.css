@@ -1,4 +1,6 @@
 @theme {
+    --font-sans:"Google Sans Flex Variable", ui-sans-serif, system-ui, sans-serif;
+    --font-mono:"Google Sans Flex Variable", ui-sans-serif, system-ui, sans-serif;
     --color-black:#121317;
     --color-gray-10:#e6eaf0;
     --text-2xs: 0.7rem;
