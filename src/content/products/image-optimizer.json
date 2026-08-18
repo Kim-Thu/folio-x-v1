@@ -69,17 +69,7 @@
             "spacing": "body",
             "container": "content"
           },
-          "content": {
-            "blocks": [
-              {
-                "id": "product-overview",
-                "title": "Overview",
-                "paragraphs": [
-                  "Optimize and compress images automatically."
-                ]
-              }
-            ]
-          }
+          "content": "<h2 id=\"overview\">Overview</h2><p>Optimize and compress images automatically.</p>"
         }
       ]
     }
