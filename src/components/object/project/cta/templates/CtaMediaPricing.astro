@@ -10,6 +10,7 @@ import CMedia from "@/components/object/component/CMedia.astro";
 import CRow from "@/components/object/component/CRow.astro";
 import CText from "@/components/object/component/CText.astro";
 import type { PCtaData } from "@/types/components/object/project/cta/PCta.types";
+import { ctaMediaPricingFeatureClasses } from "@/variants/components/object/project/cta/PCta.variants";
 
 type Props = { data: PCtaData };
 const { data } = Astro.props as Props;
@@ -51,7 +52,11 @@ const headingId = `${data.id}-title`;
 						<div class="pt-6 md:pt-8 lg:mt-auto lg:pt-6">
 							<CRow align="center" gap="md">
 								{data.features.items.map((feature) => (
-									<CFeature {...feature} appearance="body" />
+									<CFeature
+										{...feature}
+										appearance="body"
+										class={ctaMediaPricingFeatureClasses}
+									/>
 								))}
 							</CRow>
 						</div>
