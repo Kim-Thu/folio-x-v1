@@ -6,7 +6,7 @@ export const articleDocumentClasses = [
 	"[&_strong]:font-semibold [&_b]:font-semibold [&_em]:italic [&_i]:italic [&_del]:line-through [&_s]:line-through",
 	"[&_a]:font-medium [&_a]:text-blue-600 [&_a]:underline [&_a]:underline-offset-4",
 	"[&_code]:rounded-md [&_code]:bg-gray-100 [&_code]:px-1 [&_code]:py-0.5 [&_code]:font-mono [&_code]:text-sm",
-	"[&>figure]:mt-6 [&>figure]:first:mt-0 [&>figure]:md:mt-8 [&>figure_img]:w-full [&>figure_img]:rounded-2xl [&>figure_figcaption]:mt-2 [&>figure_figcaption]:text-sm [&>figure_figcaption]:leading-relaxed [&>figure_figcaption]:text-gray-500",
+	"[&>figure]:mt-6 [&>figure]:first:mt-0 [&>figure]:md:mt-8 [&>figure_img]:w-full [&>figure_img]:rounded-2xl [&>figure_figcaption]:mt-2 [&>figure_figcaption]:text-center [&>figure_figcaption]:text-sm [&>figure_figcaption]:italic [&>figure_figcaption]:leading-relaxed [&>figure_figcaption]:text-gray-500",
 	"[&>img]:mt-6 [&>img]:w-full [&>img]:rounded-2xl [&>img]:first:mt-0 [&>img]:md:mt-8",
 	"[&>ul]:mt-4 [&>ul]:list-disc [&>ul]:space-y-2 [&>ul]:pl-6 [&>ul]:text-gray-600",
 	"[&>ol]:mt-4 [&>ol]:list-decimal [&>ol]:space-y-2 [&>ol]:pl-6 [&>ol]:text-gray-600",
