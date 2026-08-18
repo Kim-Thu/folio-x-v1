@@ -2,6 +2,7 @@ import {
 	buildUrlWithSearchParams,
 	readCommaSeparatedParam,
 	writeCommaSeparatedParam,
+	writeOptionalParam,
 } from "@/utils/search-params";
 
 function initProductsRoot(root: HTMLElement): void {
@@ -132,6 +133,23 @@ function initProductsRoot(root: HTMLElement): void {
 				link.dataset.choiceValue === value,
 		)?.href;
 
+	const rewriteProductsIndexCategoryLinks = (): void => {
+		if (!isProductsIndex()) return;
+
+		navigationLinks
+			.filter((link) => link.dataset.choiceControl === "category")
+			.forEach((link) => {
+				const value = link.dataset.choiceValue ?? "all";
+				const params = new URLSearchParams(window.location.search);
+				writeOptionalParam(
+					params,
+					"categories",
+					value === "all" ? undefined : value,
+				);
+				link.href = buildUrlWithSearchParams("/products", params);
+			});
+	};
+
 	const syncPriceOutput = (): void => {
 		if (!range || !priceOutput) return;
 		priceOutput.value = `$${range.value}${
@@ -175,16 +193,14 @@ function initProductsRoot(root: HTMLElement): void {
 
 	const syncLocationFromFilters = (): void => {
 		const params = new URLSearchParams(window.location.search);
+		const category =
+			categorySelect?.value ?? selectedNavigationValue("category") ?? "all";
 
-		if (isProductsIndex()) {
-			const category =
-				categorySelect?.value ?? selectedNavigationValue("category") ?? "all";
-			if (category !== "all") params.set("categories", category);
-			else params.delete("categories");
-		} else {
-			params.delete("categories");
-		}
-
+		writeOptionalParam(
+			params,
+			"categories",
+			isProductsIndex() && category !== "all" ? category : undefined,
+		);
 		writeCommaSeparatedParam(
 			params,
 			"platform",
@@ -200,9 +216,11 @@ function initProductsRoot(root: HTMLElement): void {
 			"rating",
 			selectedValues("[data-rating-filter]:checked"),
 		);
-
-		if (range && range.value !== range.max) params.set("price", range.value);
-		else params.delete("price");
+		writeOptionalParam(
+			params,
+			"price",
+			range && range.value !== range.max ? range.value : undefined,
+		);
 
 		window.history.replaceState(
 			{},
@@ -213,6 +231,7 @@ function initProductsRoot(root: HTMLElement): void {
 				window.location.hash,
 			),
 		);
+		rewriteProductsIndexCategoryLinks();
 	};
 
 	const syncFiltersFromLocation = (): void => {
@@ -363,7 +382,7 @@ function initProductsRoot(root: HTMLElement): void {
 	};
 
 	const selectCategory = (value: string): void => {
-		if (isProductCategoryRoute()) {
+		if (!isProductsIndex()) {
 			const href =
 				value === "all" ? "/products" : navigationHref("category", value);
 			if (href) window.location.assign(href);
@@ -408,6 +427,8 @@ function initProductsRoot(root: HTMLElement): void {
 		resetAndRender();
 	};
 
+	rewriteProductsIndexCategoryLinks();
+
 	root
 		.querySelectorAll<HTMLInputElement>('input[name="product-category"]')
 		.forEach((radio) => {
@@ -440,8 +461,7 @@ function initProductsRoot(root: HTMLElement): void {
 			const control = link.dataset.choiceControl;
 			const value = link.dataset.choiceValue;
 			if (!control || !value || control !== "category") return;
-
-			if (isProductCategoryRoute()) return;
+			if (!isProductsIndex()) return;
 
 			event.preventDefault();
 			selectCategory(value);
@@ -517,22 +537,12 @@ function initProductsRoot(root: HTMLElement): void {
 
 	window.addEventListener("popstate", () => {
 		syncFiltersFromLocation();
+		rewriteProductsIndexCategoryLinks();
 		resetAndRender();
 	});
 
-	if (isProductsIndex()) {
-		navigationLinks
-			.filter((link) => link.dataset.choiceControl === "category")
-			.forEach((link) => {
-				const value = link.dataset.choiceValue ?? "all";
-				const url = new URL(window.location.href);
-				if (value === "all") url.searchParams.delete("categories");
-				else url.searchParams.set("categories", value);
-				link.href = buildUrlWithSearchParams(url.pathname, url.searchParams);
-			});
-	}
-
 	syncFiltersFromLocation();
+	rewriteProductsIndexCategoryLinks();
 	applyView("grid");
 	render();
 }
