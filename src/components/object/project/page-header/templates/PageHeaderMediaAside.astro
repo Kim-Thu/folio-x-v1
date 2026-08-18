@@ -16,9 +16,11 @@ import CTags from "@/components/object/component/CTags.astro";
 import CText from "@/components/object/component/CText.astro";
 import type { PPageHeaderMediaAsideData } from "@/types/components/object/project/page-header/PPageHeader.types";
 import {
+	pageHeaderMediaAsideActionsClasses,
 	pageHeaderMediaAsideContentClasses,
 	pageHeaderMediaAsideMainClasses,
 	pageHeaderMediaAsideMediaClasses,
+	pageHeaderMediaAsideMetricsClasses,
 	pageHeaderMediaAsideShareClasses,
 } from "@/variants/components/object/project/page-header/PPageHeader.variants";
 
@@ -40,7 +42,12 @@ const { data } = Astro.props as { data: PPageHeaderMediaAsideData };
 					<div class={pageHeaderMediaAsideMainClasses}>
 						{data.badge && <CBadge>{data.badge}</CBadge>}
 
-						<CRow justify="between" gap="md" wrap>
+						<CRow
+							justify="start"
+							gap="md"
+							wrap
+							class={pageHeaderMediaAsideMetricsClasses}
+						>
 							{data.metrics.map((metric) => (
 								<CFeature {...metric} appearance="caption" />
 							))}
@@ -70,7 +77,13 @@ const { data } = Astro.props as { data: PPageHeaderMediaAsideData };
 							/>
 						)}
 
-						<CRow gap="sm" role="group" aria-label={data.actionsLabel} wrap>
+						<CRow
+							gap="sm"
+							role="group"
+							aria-label={data.actionsLabel}
+							wrap
+							class={pageHeaderMediaAsideActionsClasses}
+						>
 							{data.actions.map((action) => (
 								<CButton
 									href={action.href}
