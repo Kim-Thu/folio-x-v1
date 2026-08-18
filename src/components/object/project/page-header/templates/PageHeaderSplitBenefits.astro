@@ -1,5 +1,4 @@
 ---
-import CBreadcrumb from "@/components/object/component/CBreadcrumb.astro";
 import CColumns from "@/components/object/component/CColumns.astro";
 import CFeature from "@/components/object/component/CFeature.astro";
 import CGridItem from "@/components/object/component/CGridItem.astro";
@@ -18,8 +17,6 @@ const benefits = data.benefits?.items ?? [];
 <CColumns columns="twelve" gap="lg" align="center">
 	<CGridItem as="header" lgSpan={6}>
 		<CColumns columns="one" gap="lg">
-			{data.breadcrumb && <CBreadcrumb {...data.breadcrumb} />}
-
 			<CColumns columns="one" gap="none" class="gap-2">
 				<CText variant="label" tone="brand">{data.eyebrow}</CText>
 
