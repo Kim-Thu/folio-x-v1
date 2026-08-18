@@ -1,6 +1,6 @@
 ﻿import type { CChoiceGroupAppearance } from "@/types/components/object/component/CChoiceGroup.types";
 
-export const choiceVisibleOptionCount = 5;
+export const choiceVisibleOptionCount = 4;
 
 export const choiceOptionClasses: Record<CChoiceGroupAppearance, string> = {
 	controls:
