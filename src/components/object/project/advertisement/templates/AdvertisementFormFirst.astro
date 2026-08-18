@@ -4,12 +4,12 @@ import CButton from "@/components/object/component/CButton.astro";
 import CColumns from "@/components/object/component/CColumns.astro";
 import CHeading from "@/components/object/component/CHeading.astro";
 import CImage from "@/components/object/component/CImage.astro";
+import CMedia from "@/components/object/component/CMedia.astro";
 import CSubscriptionForm from "@/components/object/component/CSubscriptionForm.astro";
 import CText from "@/components/object/component/CText.astro";
 import type { PAdvertisementData } from "@/types/components/object/project/advertisement/PAdvertisement.types";
 import {
 	advertisementFormFirstContentClasses,
-	advertisementFormFirstImageClasses,
 	advertisementFormFirstMediaClasses,
 	advertisementFormFirstRootClasses,
 } from "@/variants/components/object/project/advertisement/PAdvertisement.variants";
@@ -28,7 +28,11 @@ const form = data.form ? { ...data.form, tone: "light" as const } : undefined;
 	<CBox spacing="md" class={advertisementFormFirstContentClasses}>
 		<CColumns columns="one" gap="sm">
 			<CHeading level={3} variant="h4">{data.title}</CHeading>
-			<CText variant="body-sm" tone="muted">{data.description}</CText>
+
+			<CText variant="body-sm" tone="muted">
+				{data.description}
+			</CText>
+
 			{form ? (
 				<CSubscriptionForm {...form} />
 			) : (
@@ -44,9 +48,12 @@ const form = data.form ? { ...data.form, tone: "light" as const } : undefined;
 		</CColumns>
 	</CBox>
 
-	<div class={advertisementFormFirstMediaClasses}>
-		<div class={advertisementFormFirstImageClasses}>
-			<CImage {...data.image} variant="natural" />
-		</div>
-	</div>
+	<CMedia
+		placement="background"
+		ratio="natural"
+		shape="none"
+		class={advertisementFormFirstMediaClasses}
+	>
+		<CImage {...data.image} variant="background-contain" />
+	</CMedia>
 </CBox>
