@@ -19,5 +19,5 @@ export const sectionSpacingClasses: Record<LSectionSpacing, string> = {
 	none: "",
 	lead: "pt-24 pb-8 md:pt-28 md:pb-12",
 	body: "pb-16 md:pb-24",
-	closing: "pb-12 md:pb-16",
+	closing: "pb-12",
 };
