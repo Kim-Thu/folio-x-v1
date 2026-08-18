@@ -10,7 +10,10 @@ import CRow from "@/components/object/component/CRow.astro";
 import CTags from "@/components/object/component/CTags.astro";
 import CText from "@/components/object/component/CText.astro";
 import type { DetailsRegion } from "@/types/components/object/project/page/PageRegion.types";
-import { pageDetailsTagsClasses } from "@/variants/components/object/project/page/PPageDetails.variants";
+import {
+	pageDetailsLabelClasses,
+	pageDetailsTagsClasses,
+} from "@/variants/components/object/project/page/PPageDetails.variants";
 
 type Props = DetailsRegion["props"];
 
@@ -42,6 +45,7 @@ const onDark = list.tone === "on-dark";
 									as="span"
 									variant="caption"
 									tone={onDark ? "on-dark-subtle" : "subtle"}
+									class={pageDetailsLabelClasses}
 								>
 									{item.label}
 								</CText>
@@ -65,6 +69,7 @@ const onDark = list.tone === "on-dark";
 									as="span"
 									variant="caption"
 									tone={onDark ? "on-dark-subtle" : "subtle"}
+									class={pageDetailsLabelClasses}
 								>
 									{item.label}
 								</CText>
