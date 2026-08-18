@@ -67,17 +67,7 @@
             "spacing": "body",
             "container": "content"
           },
-          "content": {
-            "blocks": [
-              {
-                "id": "product-overview",
-                "title": "Overview",
-                "paragraphs": [
-                  "Complete design system with components and guidelines."
-                ]
-              }
-            ]
-          }
+          "content": "<h2 id=\"overview\">Overview</h2><p>Complete design system with components and guidelines.</p>"
         }
       ]
     }
