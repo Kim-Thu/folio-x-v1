@@ -4,10 +4,15 @@ import CButton from "@/components/object/component/CButton.astro";
 import CColumns from "@/components/object/component/CColumns.astro";
 import CHeading from "@/components/object/component/CHeading.astro";
 import CImage from "@/components/object/component/CImage.astro";
-import CMedia from "@/components/object/component/CMedia.astro";
 import CSubscriptionForm from "@/components/object/component/CSubscriptionForm.astro";
 import CText from "@/components/object/component/CText.astro";
 import type { PAdvertisementData } from "@/types/components/object/project/advertisement/PAdvertisement.types";
+import {
+	advertisementFormFirstContentClasses,
+	advertisementFormFirstImageClasses,
+	advertisementFormFirstMediaClasses,
+	advertisementFormFirstRootClasses,
+} from "@/variants/components/object/project/advertisement/PAdvertisement.variants";
 
 const { data } = Astro.props as { data: PAdvertisementData };
 const form = data.form ? { ...data.form, tone: "light" as const } : undefined;
@@ -18,28 +23,30 @@ const form = data.form ? { ...data.form, tone: "light" as const } : undefined;
 	surface="accent"
 	radius="md"
 	overflow="hidden"
+	class={advertisementFormFirstRootClasses}
 >
-	<CColumns columns="one" gap="none">
-		<CBox spacing="md">
-			<CColumns columns="one" gap="sm">
-				<CHeading level={3} variant="h4">{data.title}</CHeading>
-				<CText variant="body-sm" tone="muted">{data.description}</CText>
-				{form ? (
-					<CSubscriptionForm {...form} />
-				) : (
-					<CButton
-						href={data.action.href}
-						label={data.action.label}
-						icon={data.action.icon ?? "arrowRight"}
-						size="xs"
-						tone="light"
-						variant="outline"
-					/>
-				)}
-			</CColumns>
-		</CBox>
-		<CMedia ratio="editorial">
-			<CImage {...data.image} variant="background-contain" />
-		</CMedia>
-	</CColumns>
+	<CBox spacing="md" class={advertisementFormFirstContentClasses}>
+		<CColumns columns="one" gap="sm">
+			<CHeading level={3} variant="h4">{data.title}</CHeading>
+			<CText variant="body-sm" tone="muted">{data.description}</CText>
+			{form ? (
+				<CSubscriptionForm {...form} />
+			) : (
+				<CButton
+					href={data.action.href}
+					label={data.action.label}
+					icon={data.action.icon ?? "arrowRight"}
+					size="xs"
+					tone="light"
+					variant="outline"
+				/>
+			)}
+		</CColumns>
+	</CBox>
+
+	<div class={advertisementFormFirstMediaClasses}>
+		<div class={advertisementFormFirstImageClasses}>
+			<CImage {...data.image} variant="natural" />
+		</div>
+	</div>
 </CBox>
