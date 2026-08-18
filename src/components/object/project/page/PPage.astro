@@ -1,16 +1,38 @@
 ---
 import LPage from "@/components/layout/LPage.astro";
+import LSection from "@/components/layout/LSection.astro";
+import CBreadcrumb from "@/components/object/component/CBreadcrumb.astro";
 import PageStacked from "@/components/object/project/page/templates/PageStacked.astro";
 import PageLeadContent from "@/components/object/project/page/templates/PageLeadContent.astro";
 import PageLeadContentClosing from "@/components/object/project/page/templates/PageLeadContentClosing.astro";
 import PageLeadContentNavigation from "@/components/object/project/page/templates/PageLeadContentNavigation.astro";
 import PageLeadNavigationContent from "@/components/object/project/page/templates/PageLeadNavigationContent.astro";
+import type { CBreadcrumbData } from "@/types/components/object/component/CBreadcrumb.types";
+import type { PageRegion } from "@/types/components/object/project/page/PageRegion.types";
 import type {
 	PPageProps,
 	PPageTemplate,
 } from "@/types/components/object/project/page/PPage.types";
 
 const { template, regions } = Astro.props as PPageProps;
+
+const findBreadcrumb = (items: PageRegion[]): CBreadcrumbData | undefined => {
+	for (const region of items) {
+		if (region.component === "page-header" && "breadcrumb" in region.props.data) {
+			const breadcrumb = region.props.data.breadcrumb;
+			if (breadcrumb) return breadcrumb;
+		}
+
+		if (region.component === "group") {
+			const breadcrumb = findBreadcrumb(region.props.regions);
+			if (breadcrumb) return breadcrumb;
+		}
+	}
+
+	return undefined;
+};
+
+const breadcrumb = findBreadcrumb(regions);
 
 const templates = {
 	stacked: PageStacked,
@@ -24,5 +46,10 @@ const PageTemplate = templates[template];
 ---
 
 <LPage data-page-template={template}>
+	{breadcrumb && (
+		<LSection theme="none" spacing="compact" container="site">
+			<CBreadcrumb {...breadcrumb} />
+		</LSection>
+	)}
 	<PageTemplate {regions} />
 </LPage>
