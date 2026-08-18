@@ -68,17 +68,7 @@
             "spacing": "body",
             "container": "content"
           },
-          "content": {
-            "blocks": [
-              {
-                "id": "overview",
-                "title": "Overview",
-                "paragraphs": [
-                  "Landing page template for SaaS and digital products."
-                ]
-              }
-            ]
-          }
+          "content": "<h2 id=\"overview\">Overview</h2><p>Landing page template for SaaS and digital products.</p>"
         }
       ]
     }
