@@ -1,5 +1,6 @@
 import {
 	buildUrlWithSearchParams,
+	readBoundedNumberParam,
 	readCommaSeparatedParam,
 	writeCommaSeparatedParam,
 	writeOptionalParam,
@@ -62,6 +63,13 @@ function initProductsRoot(root: HTMLElement): void {
 	const cardData = (card: HTMLElement): HTMLElement =>
 		card.querySelector<HTMLElement>("[data-card-view='grid'] [data-product-card]") ??
 		card;
+
+	const productPrices = cards
+		.map((card) => Number(cardData(card).dataset.price))
+		.filter((price) => Number.isFinite(price));
+	const minimumProductPrice = productPrices.length
+		? Math.min(...productPrices)
+		: Number(range?.min ?? 0);
 
 	const selectedValues = (selector: string): string[] =>
 		Array.from(root.querySelectorAll<HTMLInputElement>(selector)).map(
@@ -206,14 +214,26 @@ function initProductsRoot(root: HTMLElement): void {
 		);
 
 		if (range) {
-			const rawPrice = params.get("price");
-			const price = rawPrice === null ? Number.NaN : Number(rawPrice);
-			range.value =
-				Number.isFinite(price) &&
-				price >= Number(range.min) &&
-				price <= Number(range.max)
-					? String(price)
-					: range.max;
+			const price = readBoundedNumberParam(
+				params,
+				"price",
+				Math.max(Number(range.min), minimumProductPrice),
+				Number(range.max),
+			);
+			range.value = price === undefined ? range.max : String(price);
+
+			if (params.has("price") && price === undefined) {
+				params.delete("price");
+				window.history.replaceState(
+					{},
+					"",
+					buildUrlWithSearchParams(
+						window.location.pathname,
+						params,
+						window.location.hash,
+					),
+				);
+			}
 		}
 
 		syncPriceOutput();
