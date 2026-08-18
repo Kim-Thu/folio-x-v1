@@ -172,6 +172,7 @@ export async function getInsightDetailPageData(
 								headingLevel: sidebar.relatedCards.heading.level,
 							},
 							cards: relatedPCard,
+							action: sidebar.relatedCards.action,
 						},
 					},
 				]
