@@ -1,5 +1,7 @@
 export const pageHeaderBreadcrumbOffsetClasses = "pt-24";
 
+export const pageHeaderSliderAsideRootClasses = "gap-6";
+
 export const pageHeaderGallerySummaryRootClasses = "flex flex-col gap-6";
 
 export const pageHeaderGallerySummaryGalleryClasses = "h-full";
