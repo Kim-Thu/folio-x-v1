@@ -1,6 +1,5 @@
 ---
 import CBox from "@/components/object/component/CBox.astro";
-import CBreadcrumb from "@/components/object/component/CBreadcrumb.astro";
 import CButton from "@/components/object/component/CButton.astro";
 import CColumns from "@/components/object/component/CColumns.astro";
 import CHeading from "@/components/object/component/CHeading.astro";
@@ -21,8 +20,6 @@ const { data } = Astro.props as Props;
 ---
 
 <CColumns columns="one" gap="xl">
-	<CBreadcrumb {...data.breadcrumb} />
-
 	{data.backAction && (
 		<CButton href={data.backAction.href} label={data.backAction.label} icon="arrowLeft" iconPosition="start" variant="text-subtle" tone="light" size="xs" />
 	)}
