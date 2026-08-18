@@ -10,14 +10,12 @@ import CMetadata from "@/components/object/component/CMetadata.astro";
 import CTags from "@/components/object/component/CTags.astro";
 import CText from "@/components/object/component/CText.astro";
 import type { CCardTemplateProps } from "@/types/components/object/component/card/CCard.types";
-import { cn } from "@/utils/cn";
 import { resolveProjectOverlayCard } from "@/utils/card";
 
 const {
 	data,
 	headingLevel = 3,
 	index,
-	mediaRatio = "natural",
 	presentation,
 	slots,
 	source,
@@ -28,21 +26,11 @@ const card = resolveProjectOverlayCard({
 	source,
 	presentation,
 });
-
-const desktopRatioClasses: Record<NonNullable<CCardTemplateProps["mediaRatio"]>, string> = {
-	editorial: "lg:aspect-video",
-	landscape: "lg:aspect-4/3",
-	natural: "lg:aspect-video",
-	panoramic: "lg:aspect-3/1",
-	portrait: "lg:aspect-2/3",
-	square: "lg:aspect-square",
-	video: "lg:aspect-video",
-};
 ---
 
 <CBox
 	as="article"
-	class={cn("w-full", desktopRatioClasses[mediaRatio])}
+	class="w-full"
 	surface="dark"
 	radius="lg"
 	position="relative"
@@ -64,8 +52,8 @@ const desktopRatioClasses: Record<NonNullable<CCardTemplateProps["mediaRatio"]>,
 		</CMedia>
 	)}
 
-	<CBox position="relative" class="h-full p-8">
-		<div class="flex h-full flex-col">
+	<CBox position="relative" class="p-8">
+		<div class="flex flex-col">
 			<div class="w-full md:w-4/5">
 				<CColumns columns="one" gap="sm">
 					<CColumns columns="one" gap="xs">
@@ -102,7 +90,7 @@ const desktopRatioClasses: Record<NonNullable<CCardTemplateProps["mediaRatio"]>,
 			</div>
 
 			{card.action && (
-				<div class="mt-auto pt-8">
+				<div class="pt-8">
 					<CButton
 						href={card.action.href}
 						label={card.action.label}
