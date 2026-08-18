@@ -1,4 +1,4 @@
-export const pageHeaderBreadcrumbOffsetClasses = "pt-16";
+export const pageHeaderBreadcrumbOffsetClasses = "pt-24";
 
 export const pageHeaderGallerySummaryRootClasses = "flex flex-col gap-6";
 
