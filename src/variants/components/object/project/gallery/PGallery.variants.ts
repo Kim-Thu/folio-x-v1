@@ -1,3 +1,5 @@
+export const galleryGridActionClasses = "mt-8 flex justify-center";
+
 export const gallerySliderThumbnailsClasses =
 	"mt-3 grid grid-cols-3 items-stretch gap-2 sm:grid-cols-6";
 
