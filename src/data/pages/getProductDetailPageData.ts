@@ -124,25 +124,32 @@ export async function getProductDetailPageData(
 			};
 		}
 
-		const blocks = section.content.blocks;
+		const content = section.content;
+		const tocItems = Array.from(
+			content.matchAll(
+				/<h([23])\b[^>]*\bid=(["'])([^"']+)\2[^>]*>([\s\S]*?)<\/h\1>/gi,
+			),
+			(match) => ({
+				label: match[4].replace(/<[^>]*>/g, "").trim(),
+				href: `#${match[3]}`,
+			}),
+		);
 
 		return {
 			key: section.id,
 			component: "article",
 			section: frame,
 			props: {
-				template: section.template,
-				blocks,
-				toc: {
-					label: "On this page",
-					position: "start",
-					appearance: "panel",
-					sticky: true,
-					items: blocks.map((block) => ({
-						label: block.title,
-						href: `#${block.id}`,
-					})),
-				},
+				content,
+				toc: tocItems.length
+					? {
+							label: "On this page",
+							position: "start",
+							appearance: "panel",
+							sticky: true,
+							items: tocItems,
+						}
+					: undefined,
 			},
 		};
 	});
