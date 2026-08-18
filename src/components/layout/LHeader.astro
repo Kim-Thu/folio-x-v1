@@ -7,6 +7,7 @@ import {
 	headerContentClasses,
 	headerPositionClasses,
 	headerSolidClasses,
+	headerSolidToneClasses,
 	headerToneClasses,
 } from "@/variants/components/layout/LHeader.variants";
 
@@ -28,6 +29,7 @@ const {
 		headerPositionClasses[solid ? "solid" : "overlay"],
 		headerToneClasses[tone],
 		solid && headerSolidClasses,
+		solid && headerSolidToneClasses[tone],
 	)}
 	data-header-tone={tone}
 	data-solid-header={String(solid)}
