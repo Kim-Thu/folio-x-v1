@@ -38,7 +38,14 @@ export async function getLabDetailPageData(
 	const metricValue = (source: "stars" | "forks" | "updatedLabel") =>
 		source === "updatedLabel" ? lab.updatedLabel : String(lab[source]);
 
-	const share = presentation.header.share;
+	const share = presentation.header.share ?? {
+		label: "Share project",
+		twitterLabel: "Share on Twitter",
+		facebookLabel: "Share on Facebook",
+		linkedinLabel: "Share on LinkedIn",
+		copyLabel: "Open project link",
+	};
+
 	const headerData: PPageHeaderMediaAsideData = {
 		breadcrumb: {
 			label: presentation.header.labels.breadcrumb,
@@ -90,33 +97,31 @@ export async function getLabDetailPageData(
 					]
 				: []),
 		],
-		share: share
-			? {
-					label: share.label,
-					links: [
-						{
-							label: share.twitterLabel,
-							href: `https://twitter.com/intent/tweet?url=${encodeURIComponent(lab.href)}`,
-							icon: "twitter",
-						},
-						{
-							label: share.facebookLabel,
-							href: `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(lab.href)}`,
-							icon: "facebook",
-						},
-						{
-							label: share.linkedinLabel,
-							href: `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(lab.href)}`,
-							icon: "linkedin",
-						},
-						{
-							label: share.copyLabel,
-							href: lab.href,
-							icon: "link",
-						},
-					],
-				}
-			: undefined,
+		share: {
+			label: share.label,
+			links: [
+				{
+					label: share.twitterLabel,
+					href: `https://twitter.com/intent/tweet?url=${encodeURIComponent(lab.href)}`,
+					icon: "twitter",
+				},
+				{
+					label: share.facebookLabel,
+					href: `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(lab.href)}`,
+					icon: "facebook",
+				},
+				{
+					label: share.linkedinLabel,
+					href: `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(lab.href)}`,
+					icon: "linkedin",
+				},
+				{
+					label: share.copyLabel,
+					href: lab.href,
+					icon: "link",
+				},
+			],
+		},
 	};
 
 	const contentTabs = lab.content.flatMap((block) => {
