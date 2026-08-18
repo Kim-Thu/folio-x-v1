@@ -42,6 +42,7 @@ const orderedRegions = [...lead, ...content];
 
 {orderedRegions.map((region) => {
 	const section = region.section === false ? undefined : region.section;
+	const sliderId = `${region.key}-slider`;
 	return (
 	<LSection
 		id={section?.id}
@@ -58,13 +59,37 @@ const orderedRegions = [...lead, ...content];
 		{region.component === "cards" && (
 			<CBox surface={region.props.panel ? "glass" : "plain"} radius={region.props.panel ? "md" : "none"} spacing={region.props.panel ? "sm" : "none"}>
 				<CColumns columns="one" gap="md">
-					{region.props.header && region.props.headerAction ? (
+					{region.props.header && region.props.sliderHeaderControls ? (
+						<CRow justify="between" align="end">
+							<PSectionHeader {...region.props.header} />
+							<CRow gap="xs" role="group" aria-label="Slider navigation">
+								<CButton
+									label="Previous"
+									icon="chevronLeft"
+									iconOnly
+									size="sm"
+									variant="secondary"
+									tone="light"
+									data-slider-external-previous={sliderId}
+								/>
+								<CButton
+									label="Next"
+									icon="chevronRight"
+									iconOnly
+									size="sm"
+									variant="secondary"
+									tone="light"
+									data-slider-external-next={sliderId}
+								/>
+							</CRow>
+						</CRow>
+					) : region.props.header && region.props.headerAction ? (
 						<CRow justify="between" align="end">
 							<PSectionHeader {...region.props.header} />
 							<CButton {...region.props.headerAction} variant={region.props.headerAction.variant ?? "text"} />
 						</CRow>
 					) : (region.props.header && <PSectionHeader {...region.props.header} />)}
-					<PCard {...region.props.cards} />
+					<PCard {...region.props.cards} id={region.props.sliderHeaderControls ? sliderId : undefined} />
 					{region.props.action && <CRow justify="center"><CButton {...region.props.action} /></CRow>}
 				</CColumns>
 			</CBox>
