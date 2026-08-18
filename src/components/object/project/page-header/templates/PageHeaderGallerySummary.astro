@@ -1,6 +1,5 @@
 ---
 import CBadge from "@/components/object/component/CBadge.astro";
-import CBreadcrumb from "@/components/object/component/CBreadcrumb.astro";
 import CBox from "@/components/object/component/CBox.astro";
 import CButton from "@/components/object/component/CButton.astro";
 import CColumns from "@/components/object/component/CColumns.astro";
@@ -54,8 +53,6 @@ const factsColumns: CColumnsTemplate =
 ---
 
 <div class={pageHeaderGallerySummaryRootClasses}>
-	<CBreadcrumb {...data.breadcrumb} />
-
 	<CColumns columns="twelve" gap="lg" align="stretch">
 		<CGridItem lgSpan={6}>
 			<div class={pageHeaderGallerySummaryGalleryClasses}>
