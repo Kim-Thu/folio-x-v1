@@ -167,79 +167,12 @@
         {
           "id": "product-overview",
           "type": "article",
-          "template": "grouped",
           "settings": {
             "theme": "canvas",
             "spacing": "body",
             "container": "site"
           },
-          "content": {
-            "blocks": [
-              {
-                "id": "overview",
-                "title": "Overview",
-                "paragraphs": [
-                  "Nebula is a modern WordPress theme created for SaaS products, startups and digital businesses that need a polished marketing site without rebuilding the same structural patterns for every page.",
-                  "The theme combines reusable page compositions with a restrained visual system, responsive behavior and practical defaults for product marketing, documentation and commerce-oriented content.",
-                  "The test content on this page is intentionally longer than the production copy so the sticky table of contents, active heading state and anchor scrolling can be reviewed across a realistic document length."
-                ]
-              },
-              {
-                "id": "key-features",
-                "title": "Key features",
-                "paragraphs": [
-                  "Nebula provides reusable layout structures for landing pages, product showcases, feature presentations, comparison content and editorial sections while keeping typography and spacing consistent across templates.",
-                  "Responsive presentation is handled from mobile through desktop so navigation, media, cards and content groups remain readable without requiring separate page-specific implementations.",
-                  "Theme configuration is designed to keep common choices predictable: teams can adjust content and approved presentation options while the underlying component system maintains a consistent visual language."
-                ]
-              },
-              {
-                "id": "live-demos",
-                "title": "Live demos",
-                "paragraphs": [
-                  "The supplied preview gallery represents several common product scenarios including a marketing homepage, application dashboard, visual builder, theme options screen, commerce experience and documentation layout.",
-                  "Use the previews to compare how the same visual system behaves across content-heavy and product-focused interfaces before deciding which compositions should be included in a real implementation.",
-                  "For testing purposes, this section also provides enough vertical content to verify that selecting Live demos from the table of contents scrolls to the correct heading and updates the active navigation item."
-                ]
-              },
-              {
-                "id": "whats-included",
-                "title": "What's included",
-                "paragraphs": [
-                  "The package includes the Nebula WordPress theme, reusable page layouts, the demo content required to reproduce the supplied previews and the assets used by the example product experience.",
-                  "It also includes the shared presentation patterns required for navigation, buttons, cards, media blocks, product summaries and documentation-style article content so the demo can be rebuilt without duplicating page markup.",
-                  "The exact production package can later be replaced with real product data; this copy exists to provide a complete test surface for the current Product Detail architecture."
-                ]
-              },
-              {
-                "id": "reviews",
-                "title": "Reviews",
-                "paragraphs": [
-                  "Example customer feedback emphasizes quick setup, clear customization boundaries and consistent presentation across marketing pages and product documentation.",
-                  "Review content is currently represented as article copy because the dedicated review presentation has not yet been evaluated for this Product Detail layout. This keeps the test focused on the existing article and TOC behavior without introducing another pattern prematurely.",
-                  "When a review template is added later, this heading can remain the anchor target while its internal content is replaced by the approved reusable review pattern."
-                ]
-              },
-              {
-                "id": "documentation",
-                "title": "Documentation",
-                "paragraphs": [
-                  "Documentation covers installation, initial setup, page composition, theme configuration, content updates and the most common maintenance workflows used after launch.",
-                  "Guides should explain which choices are content-driven and which are controlled by the component system so editors can work safely without storing layout classes or implementation details in CMS data.",
-                  "This longer section is useful for checking the sticky TOC while scrolling through dense content and for confirming that the active state advances correctly as headings enter the observer range."
-                ]
-              },
-              {
-                "id": "support",
-                "title": "Support",
-                "paragraphs": [
-                  "Support covers installation questions, configuration of the supplied theme files and issues that can be reproduced against the documented product package.",
-                  "Requests should include the affected page, reproduction steps and relevant environment information so implementation problems can be separated from content or configuration issues.",
-                  "This final block provides a clear last anchor for testing navigation to the end of the article and checking how the sticky table of contents behaves near the bottom boundary of its containing section."
-                ]
-              }
-            ]
-          }
+          "content": "<h2 id=\"overview\">Overview</h2><p>Nebula is a modern WordPress theme created for SaaS products, startups and digital businesses that need a polished marketing site without rebuilding the same structural patterns for every page.</p><p>The theme combines reusable page compositions with a restrained visual system, responsive behavior and practical defaults for product marketing, documentation and commerce-oriented content.</p><p>The test content on this page is intentionally longer than the production copy so the sticky table of contents, active heading state and anchor scrolling can be reviewed across a realistic document length.</p><h2 id=\"key-features\">Key features</h2><p>Nebula provides reusable layout structures for landing pages, product showcases, feature presentations, comparison content and editorial sections while keeping typography and spacing consistent across templates.</p><p>Responsive presentation is handled from mobile through desktop so navigation, media, cards and content groups remain readable without requiring separate page-specific implementations.</p><p>Theme configuration is designed to keep common choices predictable: teams can adjust content and approved presentation options while the underlying component system maintains a consistent visual language.</p><h2 id=\"live-demos\">Live demos</h2><p>The supplied preview gallery represents several common product scenarios including a marketing homepage, application dashboard, visual builder, theme options screen, commerce experience and documentation layout.</p><p>Use the previews to compare how the same visual system behaves across content-heavy and product-focused interfaces before deciding which compositions should be included in a real implementation.</p><p>For testing purposes, this section also provides enough vertical content to verify that selecting Live demos from the table of contents scrolls to the correct heading and updates the active navigation item.</p><h2 id=\"whats-included\">What's included</h2><p>The package includes the Nebula WordPress theme, reusable page layouts, the demo content required to reproduce the supplied previews and the assets used by the example product experience.</p><p>It also includes the shared presentation patterns required for navigation, buttons, cards, media blocks, product summaries and documentation-style article content so the demo can be rebuilt without duplicating page markup.</p><p>The exact production package can later be replaced with real product data; this copy exists to provide a complete test surface for the current Product Detail architecture.</p><h2 id=\"reviews\">Reviews</h2><p>Example customer feedback emphasizes quick setup, clear customization boundaries and consistent presentation across marketing pages and product documentation.</p><p>Review content is currently represented as article copy because the dedicated review presentation has not yet been evaluated for this Product Detail layout. This keeps the test focused on the existing article and TOC behavior without introducing another pattern prematurely.</p><p>When a review template is added later, this heading can remain the anchor target while its internal content is replaced by the approved reusable review pattern.</p><h2 id=\"documentation\">Documentation</h2><p>Documentation covers installation, initial setup, page composition, theme configuration, content updates and the most common maintenance workflows used after launch.</p><p>Guides should explain which choices are content-driven and which are controlled by the component system so editors can work safely without storing layout classes or implementation details in CMS data.</p><p>This longer section is useful for checking the sticky TOC while scrolling through dense content and for confirming that the active state advances correctly as headings enter the observer range.</p><h2 id=\"support\">Support</h2><p>Support covers installation questions, configuration of the supplied theme files and issues that can be reproduced against the documented product package.</p><p>Requests should include the affected page, reproduction steps and relevant environment information so implementation problems can be separated from content or configuration issues.</p><p>This final block provides a clear last anchor for testing navigation to the end of the article and checking how the sticky table of contents behaves near the bottom boundary of its containing section.</p>"
         }
       ]
     }
