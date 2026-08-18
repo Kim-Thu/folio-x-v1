@@ -100,6 +100,7 @@ export interface PPageHeaderSplitMediaData {
 }
 
 export interface PPageHeaderSliderAsideData {
+  breadcrumb: CBreadcrumbData;
   backAction?: {
     label: string;
     href: string;
