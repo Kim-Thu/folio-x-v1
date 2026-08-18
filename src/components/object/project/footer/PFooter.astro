@@ -10,6 +10,12 @@ import CNavigation from "@/components/object/component/CNavigation.astro";
 import CRow from "@/components/object/component/CRow.astro";
 import CText from "@/components/object/component/CText.astro";
 import type { PFooterProps } from "@/types/components/object/project/footer/PFooter.types";
+import {
+	footerCopyrightClasses,
+	footerLegalLinkClasses,
+	footerLocationLabelClasses,
+	footerSectionLabelClasses,
+} from "@/variants/components/object/project/footer/PFooter.variants";
 
 type Props = PFooterProps;
 
@@ -41,6 +47,7 @@ const { brand, columns, contact, legalLinks, copyright } = Astro.props;
 								level={2}
 								variant="footer"
 								id={`${column.id || column.label}-title`}
+								class={footerSectionLabelClasses}
 							>
 								{column.label}
 							</CHeading>
@@ -54,14 +61,18 @@ const { brand, columns, contact, legalLinks, copyright } = Astro.props;
 
 			<CGridItem mdSpan={2} lgSpan={3}>
 				<CColumns columns="one" gap="sm" align="start">
-					<CHeading level={2} variant="footer">
+					<CHeading level={2} variant="footer" class={footerSectionLabelClasses}>
 						{contact.label}
 					</CHeading>
 					<CLink href={`mailto:${contact.email}`}>
 						{contact.email}
 					</CLink>
 					<CColumns columns="one" gap="xs" align="start">
-						<CText variant="caption" tone="on-dark-subtle">
+						<CText
+							variant="caption"
+							tone="on-dark-subtle"
+							class={footerLocationLabelClasses}
+						>
 							{contact.locationLabel}
 						</CText>
 						<CText variant="body-sm" tone="on-dark-muted">
@@ -75,10 +86,18 @@ const { brand, columns, contact, legalLinks, copyright } = Astro.props;
 
 	<CBox spacing="md" class="border-t border-white/10">
 		<CRow justify="between" align="center" gap="sm" wrap>
-			<CText variant="label" tone="on-dark-subtle">{copyright}</CText>
+			<CText
+				variant="label"
+				tone="on-dark-subtle"
+				class={footerCopyrightClasses}
+			>
+				{copyright}
+			</CText>
 			<CRow gap="md" wrap>
 				{legalLinks.map((item) => (
-					<CLink href={item.href}>{item.label}</CLink>
+					<CLink href={item.href} class={footerLegalLinkClasses}>
+						{item.label}
+					</CLink>
 				))}
 			</CRow>
 		</CRow>
