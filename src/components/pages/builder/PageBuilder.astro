@@ -575,7 +575,7 @@ const regions: PageRegion[] = "regions" in props ? props.regions : await Promise
 		case "page-header":
 			return { key: section.id, component: "page-header", section: frame, props: { template: section.template, data: section.content } as unknown as PageHeaderRegionProps };
 		case "article":
-			return { key: section.id, component: "article", section: frame, props: { blocks: section.content.blocks } as unknown as ArticleRegionProps };
+			return { key: section.id, component: "article", section: frame, props: { content: section.content } as unknown as ArticleRegionProps };
 		case "cta":
 			return { key: section.id, component: "cta", section: frame, props: { template: section.template, data: section.content } as unknown as CtaRegionProps };
 		case "collection": {
