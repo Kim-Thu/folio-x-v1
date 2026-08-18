@@ -9,7 +9,7 @@ export const mediaBaseClasses = "relative min-w-0 overflow-hidden";
 
 export const mediaShapeClasses: Record<CMediaShape, string> = {
 	none: "",
-	card: "",
+	card: "rounded-2xl ring-1 ring-inset ring-gray-100",
 	circle: "rounded-full",
 };
 
