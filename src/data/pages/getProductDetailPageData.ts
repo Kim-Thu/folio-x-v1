@@ -1,5 +1,6 @@
 import { getPage, getProducts } from "@/data/cms";
 import type { PageRegion } from "@/types/components/object/project/page/PageRegion.types";
+import type { PReviewsProps } from "@/types/components/object/project/reviews/PReviews.types";
 import type { ProductDetailPageData } from "@/types/components/pages/product-detail/ProductDetailPage.types";
 
 type ProductsPage = Awaited<ReturnType<typeof getPage>>;
@@ -60,6 +61,43 @@ function resolveArticleContent(content: unknown): string {
 
 	throw new TypeError("Product article content must be an HTML string");
 }
+
+const customerReviews: Omit<PReviewsProps, "id"> = {
+	eyebrow: "Đánh giá từ khách hàng",
+	title: "Khách hàng nói gì về sản phẩm",
+	summary: {
+		score: 4.9,
+		maximum: 5,
+		totalLabel: "Dựa trên 128 đánh giá",
+		distribution: [
+			{ label: "5 sao", value: 92 },
+			{ label: "4 sao", value: 6 },
+			{ label: "3 sao", value: 1 },
+			{ label: "2 sao", value: 0.5 },
+			{ label: "1 sao", value: 0.5 },
+		],
+	},
+	items: [
+		{
+			name: "Huy Nguyễn",
+			date: "2 tuần trước",
+			quote: "Theme đẹp, dễ tuỳ biến và tốc độ rất ấn tượng. Hỗ trợ khách hàng cũng rất nhanh chóng.",
+			rating: 5,
+		},
+		{
+			name: "Lan Anh",
+			date: "1 tháng trước",
+			quote: "Mình đã thử nhiều giải pháp nhưng đây là hệ thống tốt nhất từ trước đến giờ. Highly recommended!",
+			rating: 5,
+		},
+		{
+			name: "Minh Trí",
+			date: "1 tháng trước",
+			quote: "Giao diện hiện đại, nhiều demo chất lượng và luồng vận hành rõ ràng. Kết quả vượt mong đợi.",
+			rating: 5,
+		},
+	],
+};
 
 export async function getProductDetailPaths() {
 	const products = await getProducts();
@@ -195,6 +233,21 @@ export async function getProductDetailPageData(
 					: undefined,
 			},
 		};
+	});
+
+	regions.push({
+		key: "customer-reviews",
+		component: "reviews",
+		section: {
+			id: "customer-reviews",
+			theme: "canvas",
+			spacing: "compact",
+			container: "site",
+		},
+		props: {
+			id: "customer-reviews",
+			...customerReviews,
+		},
 	});
 
 	return {
