@@ -57,18 +57,18 @@ const { data } = Astro.props as Props;
 
 		<CGridItem as="aside" lgSpan={3}>
 			<CColumns columns="one" gap="md">
-				<CImage {...data.asideDecoration} alt="" variant="natural" class="mx-auto w-4/5" aria-hidden="true" />
+				<CImage {...data.asideDecoration} alt="" variant="natural" class="mx-auto w-2/3" aria-hidden="true" />
 				<CBox surface="glass" radius="md" spacing="md">
-					<CList direction="column" gap="sm">
+					<CList direction="column" gap="md">
 						{data.facts.map((item) => (
 							<li>
-								<CRow align="center" justify="between" gap="sm">
+								<CColumns columns="one" gap="xs">
 									<CRow align="center" gap="sm">
 										{item.icon && <CIconTile icon={item.icon} size="sm" iconSize="md" />}
 										<CText variant="caption" tone="subtle">{item.label}</CText>
 									</CRow>
 									{item.href ? <CLink href={item.href}>{item.value}</CLink> : <CText variant="body-sm">{item.value}</CText>}
-								</CRow>
+								</CColumns>
 							</li>
 						))}
 					</CList>
