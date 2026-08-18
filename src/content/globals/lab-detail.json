@@ -116,6 +116,9 @@
       "appearance": "compact",
       "headingLevel": 2
     },
+    "columns": "five",
+    "visibleCount": 5,
+    "viewMoreLabel": "View more",
     "mediaRatio": "editorial",
     "imageVariant": "fill",
     "captionVariant": "caption",
