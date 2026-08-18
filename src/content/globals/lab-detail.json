@@ -58,7 +58,7 @@
     "labelTemplate": "{title} navigation",
     "settings": {
       "theme": "canvas",
-      "spacing": "none",
+      "spacing": "closing",
       "container": "site"
     },
     "appearance": "underline",
