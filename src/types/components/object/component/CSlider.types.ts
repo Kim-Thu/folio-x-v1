@@ -1,6 +1,11 @@
 import type { HTMLAttributes } from "astro/types";
 
-export type CSliderControls = "overlay" | "below" | "below-left" | "dots";
+export type CSliderControls =
+	| "none"
+	| "overlay"
+	| "below"
+	| "below-left"
+	| "dots";
 export type CSliderGap = "none" | "sm" | "md" | "lg" | "xl";
 export type CSliderShape = "none" | "card";
 
