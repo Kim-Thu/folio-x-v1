@@ -115,6 +115,7 @@ export interface ReaderRegion extends PageRegionBase {
 }
 
 export interface PageDetailsItem {
+	key?: string;
 	label: string;
 	value: string;
 	href?: string;
@@ -157,11 +158,6 @@ export interface TocRegion extends PageRegionBase {
 	props: CTOCProps;
 }
 
-export interface AdvertisementRegion extends PageRegionBase {
-	component: "advertisement";
-	props: PAdvertisementProps;
-}
-
 export type PageRegion =
 	| PageHeaderRegion
 	| HeroRegion
@@ -171,8 +167,6 @@ export type PageRegion =
 	| CardsRegion
 	| CtaRegion
 	| PostNavigationRegion
-	| PageCollectionRegion
-	| PageArchiveRegion
 	| StatusRegion
 	| TabsRegion
 	| GalleryRegion
@@ -181,9 +175,12 @@ export type PageRegion =
 	| DetailsRegion
 	| ProfileRegion
 	| TocRegion
-	| AdvertisementRegion
+	| PAdvertisementRegion
+	| PageArchiveRegion
+	| PageCollectionRegion
 	| PageGroupRegion;
 
-export interface PageRegionProps {
-	region: PageRegion;
+export interface PAdvertisementRegion extends PageRegionBase {
+	component: "advertisement";
+	props: PAdvertisementProps;
 }
