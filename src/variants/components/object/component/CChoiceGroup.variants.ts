@@ -1,5 +1,7 @@
 ﻿import type { CChoiceGroupAppearance } from "@/types/components/object/component/CChoiceGroup.types";
 
+export const choiceVisibleOptionCount = 5;
+
 export const choiceOptionClasses: Record<CChoiceGroupAppearance, string> = {
 	controls:
 		"group/choice flex cursor-pointer items-center gap-2 text-sm text-gray-500",
@@ -22,3 +24,11 @@ export const choiceCountClasses = "font-mono text-xs text-gray-500";
 export const choiceNavigationClasses = "grid gap-1";
 export const choiceNavigationTitleClasses =
 	"mb-2 inline-flex w-full border-b border-gray-100 pb-2 font-mono text-xs uppercase tracking-widest text-black";
+
+export const choiceOverflowClasses = "group/choice-overflow";
+export const choiceOverflowContentClasses = "mt-2 grid gap-2";
+export const choiceNavigationOverflowContentClasses = "mt-1 grid gap-1";
+export const choiceOverflowSummaryClasses =
+	"mt-2 cursor-pointer list-none text-sm font-medium text-blue-600 marker:hidden hover:text-blue-700 [&::-webkit-details-marker]:hidden";
+export const choiceOverflowShowMoreClasses = "group-open/choice-overflow:hidden";
+export const choiceOverflowShowLessClasses = "hidden group-open/choice-overflow:inline";
