@@ -252,18 +252,13 @@ export async function getProductDetailPageData(
 		},
 	});
 
-	const relatedLimit = archive.content.cards.columns;
 	const relatedProducts = products.filter(
 		(item) =>
 			item.slug !== product.slug &&
 			item.categorySlug === product.categorySlug,
 	);
-	const visibleRelatedProducts =
-		relatedLimit === undefined
-			? relatedProducts
-			: relatedProducts.slice(0, relatedLimit);
 
-	if (visibleRelatedProducts.length > 0) {
+	if (relatedProducts.length > 0) {
 		regions.push({
 			key: "related-products",
 			component: "cards",
@@ -275,21 +270,19 @@ export async function getProductDetailPageData(
 			},
 			props: {
 				header: {
+					appearance: "compact",
 					data: { title: "Related products" },
 				},
 				cards: {
-					template:
-						archive.content.cards.layout === "carousel"
-							? "slider"
-							: archive.content.cards.layout,
-					columns: archive.content.cards.columns,
+					template: "slider",
+					columns: 4,
 					gap: archive.content.cards.gap,
 					card: {
 						template: archive.content.cards.template,
 						source: "products",
 						presentation: archive.content.itemPresentation,
 					},
-					items: visibleRelatedProducts,
+					items: relatedProducts,
 				},
 			},
 		});
@@ -306,8 +299,8 @@ export async function getProductDetailPageData(
 			image: previousProduct.image,
 			alt: previousProduct.title,
 			label: "Previous",
-			summary: previousProduct.description,
 			icon: "arrowLeft",
+			summary: previousProduct.description,
 		});
 	}
 
