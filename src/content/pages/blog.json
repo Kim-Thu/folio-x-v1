@@ -190,24 +190,12 @@
       {
         "id": "insights-seo-content",
         "type": "article",
-        "template": "grouped",
         "settings": {
           "theme": "canvas",
           "spacing": "closing",
           "container": "content"
         },
-        "content": {
-          "blocks": [
-            {
-              "id": "insights-on-design-engineering-and-product-systems",
-              "title": "Insights on design, engineering and product systems",
-              "paragraphs": [
-                "NKT Studio Insights shares practical notes on web development, frontend architecture, performance, automation, product systems, content workflows, and interaction design. Each article focuses on a concrete problem, the reasoning behind an approach, and lessons that can be reused in real projects.",
-                "Browse articles by topic to find technical notes, implementation patterns, workflow ideas, and observations from building and maintaining modern digital products."
-              ]
-            }
-          ]
-        }
+        "content": "<h2 id=\"insights-on-design-engineering-and-product-systems\">Insights on design, engineering and product systems</h2><p>NKT Studio Insights shares practical notes on web development, frontend architecture, performance, automation, product systems, content workflows, and interaction design. Each article focuses on a concrete problem, the reasoning behind an approach, and lessons that can be reused in real projects.</p><p>Browse articles by topic to find technical notes, implementation patterns, workflow ideas, and observations from building and maintaining modern digital products.</p>"
       },
       {
         "id": "insights-closing",
