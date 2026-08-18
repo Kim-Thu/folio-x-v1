@@ -252,6 +252,44 @@ export async function getProductDetailPageData(
 		},
 	});
 
+	const relatedLimit = archive.content.cards.columns;
+	const relatedProducts = products
+		.filter(
+			(item) =>
+				item.slug !== product.slug &&
+				item.categorySlug === product.categorySlug,
+		)
+		.slice(0, relatedLimit);
+
+	if (relatedProducts.length > 0) {
+		regions.push({
+			key: "related-products",
+			component: "cards",
+			section: {
+				id: "related-products",
+				theme: "canvas",
+				spacing: "compact",
+				container: "site",
+			},
+			props: {
+				header: {
+					data: { title: "Related products" },
+				},
+				cards: {
+					template: archive.content.cards.layout,
+					columns: archive.content.cards.columns,
+					gap: archive.content.cards.gap,
+					card: {
+						template: archive.content.cards.template,
+						source: "products",
+						presentation: archive.content.itemPresentation,
+					},
+					items: relatedProducts,
+				},
+			},
+		});
+	}
+
 	const navigationItems: PPostNavigationProps["items"] = [];
 	const previousProduct = products[productIndex - 1];
 	const nextProduct = products[productIndex + 1];
