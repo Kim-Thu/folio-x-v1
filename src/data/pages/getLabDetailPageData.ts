@@ -265,6 +265,11 @@ export async function getLabDetailPageData(
 						props: {
 							template: "grid" as const,
 							label: presentation.gallery.title,
+							header: {
+								data: { title: presentation.gallery.title },
+								appearance: presentation.gallery.header.appearance,
+								headingLevel: presentation.gallery.header.headingLevel,
+							},
 							columns: presentation.gallery.columns,
 							visibleCount: presentation.gallery.visibleCount,
 							viewMoreLabel: presentation.gallery.viewMoreLabel,
