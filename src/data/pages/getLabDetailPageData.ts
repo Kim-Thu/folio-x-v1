@@ -41,9 +41,12 @@ export async function getLabDetailPageData(
 		getLabs(),
 		getLabDetailSettings(),
 	]);
-	const lab = labs.find((item) => item.slug === slug);
+	const labIndex = labs.findIndex((item) => item.slug === slug);
+	const lab = labs[labIndex];
 	if (!lab) throw new Error(`Unknown lab slug: ${slug}`);
 
+	const previousLab = labIndex > 0 ? labs[labIndex - 1] : undefined;
+	const nextLab = labIndex < labs.length - 1 ? labs[labIndex + 1] : undefined;
 	const labsBySlug = new Map(labs.map((item) => [item.slug, item]));
 	const relatedLabs = lab.related.slugs.map((relatedSlug) => {
 		const relatedLab = labsBySlug.get(relatedSlug);
@@ -374,6 +377,53 @@ export async function getLabDetailPageData(
 				]
 			: []),
 	];
+
+	const navigationItems = [
+		...(previousLab
+			? [
+					{
+						title: previousLab.title,
+						href: previousLab.href,
+						image: previousLab.image.src,
+						alt: previousLab.image.alt,
+						label: "Previous",
+						icon: "arrowLeft" as const,
+						summary: previousLab.summary,
+					},
+				]
+			: []),
+		...(nextLab
+			? [
+					{
+						title: nextLab.title,
+						href: nextLab.href,
+						image: nextLab.image.src,
+						alt: nextLab.image.alt,
+						label: "Next",
+						icon: "arrowRight" as const,
+						summary: nextLab.summary,
+					},
+				]
+			: []),
+	];
+
+	if (navigationItems.length > 0) {
+		regions.push({
+			key: "lab-post-navigation",
+			component: "post-navigation",
+			section: {
+				id: "lab-post-navigation",
+				theme: "canvas",
+				spacing: "closing",
+				container: "site",
+			},
+			props: {
+				template: "split",
+				label: "Previous / Next",
+				items: navigationItems,
+			},
+		});
+	}
 
 	return {
 		lab,
