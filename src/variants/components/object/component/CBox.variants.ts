@@ -29,7 +29,7 @@ export const boxSurfaceClasses: Record<CBoxSurface, string> = {
 	dark: "bg-black text-white",
 	glass: "bg-white/80 ring-1 ring-inset ring-gray-100 backdrop-blur-sm",
 	"glass-dark":
-		"bg-black/18 text-white ring-1 ring-inset ring-gray-10/12 backdrop-blur-sm",
+		"bg-black/[0.18] text-white ring-1 ring-inset ring-gray-10/12 backdrop-blur-sm",
 	soft: "bg-gray-50",
 };
 
