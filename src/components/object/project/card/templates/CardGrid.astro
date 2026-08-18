@@ -4,6 +4,8 @@ import CColumns from "@/components/object/component/CColumns.astro";
 import type { PCardTemplateProps } from "@/types/components/object/project/card/PCard.types";
 import {
 	pCardColumnTemplates,
+	pCardProductGridViewClasses,
+	pCardProductItemClasses,
 	pCardTemplateColumnDefaults,
 } from "@/variants/components/object/project/card/PCard.variants";
 
@@ -34,8 +36,8 @@ const supportsProductViewSwitch =
 >
 	{items.map((item, index) => (
 		supportsProductViewSwitch ? (
-			<div data-product-item>
-				<div data-card-view="grid">
+			<div data-product-item class={pCardProductItemClasses}>
+				<div data-card-view="grid" class={pCardProductGridViewClasses}>
 					<CCard {...cardConfig} data={item} index={index} />
 				</div>
 				<div data-card-view="list" hidden>
