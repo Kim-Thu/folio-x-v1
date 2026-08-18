@@ -1,4 +1,9 @@
 import { parseFacetData } from "@/scripts/facet-data";
+import {
+	buildUrlWithSearchParams,
+	readCommaSeparatedParam,
+	writeCommaSeparatedParam,
+} from "@/utils/search-params";
 
 function initArchiveFacetsRoot(root: HTMLElement): void {
 	const results = root.querySelector<HTMLElement>("[data-archive-results]");
@@ -21,6 +26,12 @@ function initArchiveFacetsRoot(root: HTMLElement): void {
 	const next =
 		results?.querySelector<HTMLButtonElement>("[data-page-next]") ?? null;
 	const reset = root.querySelector<HTMLButtonElement>("[data-filter-reset]");
+	const facetInputs = Array.from(
+		root.querySelectorAll<HTMLInputElement>("[data-facet-filter]"),
+	);
+	const facetSelects = Array.from(
+		root.querySelectorAll<HTMLSelectElement>("[data-facet-select]"),
+	);
 	const navigationChoices = Array.from(
 		root.querySelectorAll<HTMLElement>("[data-choice-link], [data-choice-filter]"),
 	);
@@ -29,14 +40,17 @@ function initArchiveFacetsRoot(root: HTMLElement): void {
 
 	if (!cards.length || !collection) return;
 
+	const normalizedPath = window.location.pathname.replace(/\/+$/, "") || "/";
+	const isTaxonomyRoute = /\/(category|tag|technology)\/[^/]+$/.test(normalizedPath);
+
 	const isChoiceActive = (choice: HTMLElement): boolean =>
 		choice.matches("[data-choice-link]")
-			? choice.getAttribute("aria-current") === "true"
+			? Boolean(choice.getAttribute("aria-current"))
 			: choice.getAttribute("aria-pressed") === "true";
 
 	const setChoiceActive = (choice: HTMLElement, active: boolean): void => {
 		if (choice.matches("[data-choice-link]")) {
-			if (active) choice.setAttribute("aria-current", "true");
+			if (active) choice.setAttribute("aria-current", "page");
 			else choice.removeAttribute("aria-current");
 			return;
 		}
@@ -52,21 +66,19 @@ function initArchiveFacetsRoot(root: HTMLElement): void {
 	const selectedByKey = (): Record<string, string[]> => {
 		const selected: Record<string, string[]> = {};
 
-		root
-			.querySelectorAll<HTMLInputElement>("[data-facet-filter]:checked")
+		facetInputs
+			.filter((control) => control.checked)
 			.forEach((control) => {
 				const key = control.dataset.facetKey;
 				if (!key || control.value === "all") return;
 				(selected[key] ??= []).push(control.value);
 			});
 
-		root
-			.querySelectorAll<HTMLSelectElement>("[data-facet-select]")
-			.forEach((control) => {
-				const key = control.dataset.facetKey;
-				if (!key || !control.value || control.value === "all") return;
-				selected[key] = [control.value];
-			});
+		facetSelects.forEach((control) => {
+			const key = control.dataset.facetKey;
+			if (!key || !control.value || control.value === "all") return;
+			selected[key] = [control.value];
+		});
 
 		navigationChoices.forEach((choice) => {
 			if (!isChoiceActive(choice)) return;
@@ -77,6 +89,92 @@ function initArchiveFacetsRoot(root: HTMLElement): void {
 		});
 
 		return selected;
+	};
+
+	const syncLocation = (): void => {
+		if (isTaxonomyRoute) return;
+
+		const params = new URLSearchParams(window.location.search);
+		const selected = selectedByKey();
+		const keys = new Set<string>();
+
+		facetInputs.forEach((control) => {
+			if (control.dataset.facetKey) keys.add(control.dataset.facetKey);
+		});
+		facetSelects.forEach((control) => {
+			if (control.dataset.facetKey) keys.add(control.dataset.facetKey);
+		});
+		navigationChoices.forEach((choice) => {
+			if (choice.dataset.choiceControl) keys.add(choice.dataset.choiceControl);
+		});
+
+		keys.forEach((key) => {
+			writeCommaSeparatedParam(params, key, selected[key] ?? []);
+		});
+
+		window.history.replaceState(
+			{},
+			"",
+			buildUrlWithSearchParams(
+				window.location.pathname,
+				params,
+				window.location.hash,
+			),
+		);
+	};
+
+	const syncFromLocation = (): void => {
+		if (isTaxonomyRoute) return;
+
+		const params = new URLSearchParams(window.location.search);
+
+		facetInputs.forEach((control) => {
+			const key = control.dataset.facetKey;
+			if (!key) return;
+			const values = readCommaSeparatedParam(params, key);
+			control.checked = control.value === "all"
+				? values.length === 0
+				: values.includes(control.value);
+		});
+
+		facetSelects.forEach((control) => {
+			const key = control.dataset.facetKey;
+			if (!key) return;
+			const values = readCommaSeparatedParam(params, key);
+			control.value = values[0] ?? "all";
+		});
+
+		const controls = new Set(
+			navigationChoices
+				.map((choice) => choice.dataset.choiceControl)
+				.filter((control): control is string => Boolean(control)),
+		);
+		controls.forEach((control) => {
+			const values = readCommaSeparatedParam(params, control);
+			choicesForControl(control).forEach((choice) => {
+				const value = choice.dataset.choiceValue;
+				setChoiceActive(
+					choice,
+					value === "all" ? values.length === 0 : Boolean(value && values.includes(value)),
+				);
+			});
+		});
+	};
+
+	const rewriteRootNavigationHrefs = (): void => {
+		if (isTaxonomyRoute) return;
+
+		navigationChoices.forEach((choice) => {
+			if (!(choice instanceof HTMLAnchorElement)) return;
+			const control = choice.dataset.choiceControl;
+			const value = choice.dataset.choiceValue;
+			if (!control || !value) return;
+
+			const params = new URLSearchParams(window.location.search);
+			if (value === "all") params.delete(control);
+			else params.set(control, value);
+			choice.href = buildUrlWithSearchParams(window.location.pathname, params);
+		});
 	};
 
 	const render = (): void => {
@@ -123,25 +221,27 @@ function initArchiveFacetsRoot(root: HTMLElement): void {
 		if (next) next.disabled = currentPage === totalPages;
 	};
 
-	const resetAndRender = (): void => {
+	const resetAndRender = (syncUrl = true): void => {
 		currentPage = 1;
+		if (syncUrl) syncLocation();
 		render();
 	};
 
-	root
-		.querySelectorAll<HTMLInputElement>("[data-facet-filter]")
-		.forEach((control) => control.addEventListener("change", resetAndRender));
+	facetInputs.forEach((control) => {
+		control.addEventListener("change", () => resetAndRender());
+	});
 
-	root
-		.querySelectorAll<HTMLSelectElement>(
-			"[data-facet-select], [data-archive-sort]",
-		)
-		.forEach((control) => control.addEventListener("change", resetAndRender));
+	facetSelects.forEach((control) => {
+		control.addEventListener("change", () => resetAndRender());
+	});
 
-	search?.addEventListener("input", resetAndRender);
+	sort?.addEventListener("change", () => resetAndRender(false));
+	search?.addEventListener("input", () => resetAndRender(false));
 
 	navigationChoices.forEach((choice) => {
 		choice.addEventListener("click", (event) => {
+			if (isTaxonomyRoute && choice instanceof HTMLAnchorElement) return;
+
 			event.preventDefault();
 
 			const control = choice.dataset.choiceControl;
@@ -161,30 +261,28 @@ function initArchiveFacetsRoot(root: HTMLElement): void {
 				setChoiceActive(choice, !isChoiceActive(choice));
 			}
 
+			rewriteRootNavigationHrefs();
 			resetAndRender();
 		});
 	});
 
 	reset?.addEventListener("click", () => {
-		root
-			.querySelectorAll<HTMLInputElement>("[data-facet-filter]")
-			.forEach((control) => {
-				control.checked = control.value === "all";
-			});
+		facetInputs.forEach((control) => {
+			control.checked = control.value === "all";
+		});
 
-		root
-			.querySelectorAll<HTMLSelectElement>("[data-facet-select]")
-			.forEach((control) => {
-				if (Array.from(control.options).some((option) => option.value === "all")) {
-					control.value = "all";
-				}
-			});
+		facetSelects.forEach((control) => {
+			if (Array.from(control.options).some((option) => option.value === "all")) {
+				control.value = "all";
+			}
+		});
 
 		navigationChoices.forEach((choice) => {
 			setChoiceActive(choice, choice.dataset.choiceValue === "all");
 		});
 
 		if (search) search.value = "";
+		rewriteRootNavigationHrefs();
 		resetAndRender();
 	});
 
@@ -216,6 +314,14 @@ function initArchiveFacetsRoot(root: HTMLElement): void {
 		render();
 	});
 
+	window.addEventListener("popstate", () => {
+		syncFromLocation();
+		rewriteRootNavigationHrefs();
+		resetAndRender(false);
+	});
+
+	syncFromLocation();
+	rewriteRootNavigationHrefs();
 	render();
 }
 
