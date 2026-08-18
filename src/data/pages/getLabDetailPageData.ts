@@ -38,6 +38,7 @@ export async function getLabDetailPageData(
 	const metricValue = (source: "stars" | "forks" | "updatedLabel") =>
 		source === "updatedLabel" ? lab.updatedLabel : String(lab[source]);
 
+	const share = presentation.header.share;
 	const headerData: PPageHeaderMediaAsideData = {
 		breadcrumb: {
 			label: presentation.header.labels.breadcrumb,
@@ -89,31 +90,33 @@ export async function getLabDetailPageData(
 					]
 				: []),
 		],
-		share: {
-			label: presentation.header.share.label,
-			links: [
-				{
-					label: presentation.header.share.twitterLabel,
-					href: `https://twitter.com/intent/tweet?url=${encodeURIComponent(lab.href)}`,
-					icon: "twitter",
-				},
-				{
-					label: presentation.header.share.facebookLabel,
-					href: `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(lab.href)}`,
-					icon: "facebook",
-				},
-				{
-					label: presentation.header.share.linkedinLabel,
-					href: `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(lab.href)}`,
-					icon: "linkedin",
-				},
-				{
-					label: presentation.header.share.copyLabel,
-					href: lab.href,
-					icon: "link",
-				},
-			],
-		},
+		share: share
+			? {
+					label: share.label,
+					links: [
+						{
+							label: share.twitterLabel,
+							href: `https://twitter.com/intent/tweet?url=${encodeURIComponent(lab.href)}`,
+							icon: "twitter",
+						},
+						{
+							label: share.facebookLabel,
+							href: `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(lab.href)}`,
+							icon: "facebook",
+						},
+						{
+							label: share.linkedinLabel,
+							href: `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(lab.href)}`,
+							icon: "linkedin",
+						},
+						{
+							label: share.copyLabel,
+							href: lab.href,
+							icon: "link",
+						},
+					],
+				}
+			: undefined,
 	};
 
 	const contentTabs = lab.content.flatMap((block) => {
