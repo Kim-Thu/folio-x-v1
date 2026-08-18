@@ -72,6 +72,7 @@ export interface CardsRegion extends PageRegionBase {
 	props: {
 		header?: PSectionHeaderProps;
 		headerAction?: CButtonLinkProps;
+		sliderHeaderControls?: boolean;
 		cards: PCardProps;
 		action?: CButtonLinkProps;
 		panel?: boolean;
