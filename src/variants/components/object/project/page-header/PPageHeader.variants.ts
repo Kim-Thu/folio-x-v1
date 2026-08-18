@@ -42,3 +42,9 @@ export const pageHeaderGallerySummaryFactsClasses = "mt-8 lg:mt-10";
 
 export const pageHeaderGallerySummaryFactClasses =
 	"py-1 lg:border-r lg:border-gray-100 lg:px-5 lg:first:pl-0 lg:last:border-r-0 lg:last:pr-0";
+
+export const pageHeaderMediaAsideContentClasses = "flex h-full flex-col";
+
+export const pageHeaderMediaAsideMainClasses = "flex flex-col gap-2";
+
+export const pageHeaderMediaAsideShareClasses = "mt-auto pt-6";
