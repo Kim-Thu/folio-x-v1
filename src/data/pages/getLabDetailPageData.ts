@@ -265,9 +265,9 @@ export async function getLabDetailPageData(
 						props: {
 							template: "grid" as const,
 							label: presentation.gallery.title,
-							columns: "five" as const,
-							visibleCount: 5,
-							viewMoreLabel: "View more",
+							columns: presentation.gallery.columns,
+							visibleCount: presentation.gallery.visibleCount,
+							viewMoreLabel: presentation.gallery.viewMoreLabel,
 							items: lab.gallery,
 						},
 					},
