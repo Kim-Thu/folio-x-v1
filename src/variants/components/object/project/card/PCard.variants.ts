@@ -18,6 +18,10 @@ export const pCardTemplateColumnDefaults: Partial<Record<PCardTemplate, PCardCol
 	"three-column": 3,
 };
 
+export const pCardProductItemClasses = "h-full";
+
+export const pCardProductGridViewClasses = "h-full";
+
 export const pCardSliderItemClasses: Record<PCardColumns, string> = {
 	1: "min-w-0 grow-0 shrink-0 basis-full",
 	2: "min-w-0 grow-0 shrink-0 basis-5/6 sm:basis-1/2",
