@@ -22,4 +22,22 @@ export function initImageGalleries(): void {
 			});
 		});
 	});
+
+	document.querySelectorAll<HTMLElement>("[data-gallery-grid]").forEach((gallery) => {
+		const viewMoreButton = gallery.querySelector<HTMLButtonElement>(
+			"[data-gallery-view-more]",
+		);
+		if (!viewMoreButton) return;
+
+		const extraItems = Array.from(
+			gallery.querySelectorAll<HTMLElement>("[data-gallery-extra]"),
+		);
+
+		viewMoreButton.addEventListener("click", () => {
+			extraItems.forEach((item) => {
+				item.hidden = false;
+			});
+			viewMoreButton.hidden = true;
+		});
+	});
 }
