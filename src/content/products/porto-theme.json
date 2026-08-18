@@ -69,17 +69,7 @@
             "spacing": "body",
             "container": "content"
           },
-          "content": {
-            "blocks": [
-              {
-                "id": "product-overview-content",
-                "title": "Overview",
-                "paragraphs": [
-                  "Multipurpose WordPress theme for any business."
-                ]
-              }
-            ]
-          }
+          "content": "<h2 id=\"overview\">Overview</h2><p>Multipurpose WordPress theme for any business.</p>"
         }
       ]
     }
