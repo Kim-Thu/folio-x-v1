@@ -9,6 +9,16 @@ type ProductsArchiveSection = Extract<
 	{ type: "archive"; content: { source: { collection: "products" } } }
 >;
 
+type LegacyArticleBlock = {
+	id: string;
+	title: string;
+	paragraphs: string[];
+};
+
+type LegacyArticleContent = {
+	blocks: LegacyArticleBlock[];
+};
+
 function isProductsArchiveSection(
 	section: ProductsPageSection,
 ): section is ProductsArchiveSection {
@@ -16,6 +26,39 @@ function isProductsArchiveSection(
 		section.type === "archive" &&
 		section.content.source.collection === "products"
 	);
+}
+
+function escapeHtml(value: string): string {
+	return value
+		.replaceAll("&", "&amp;")
+		.replaceAll("<", "&lt;")
+		.replaceAll(">", "&gt;")
+		.replaceAll('"', "&quot;")
+		.replaceAll("'", "&#039;");
+}
+
+function resolveArticleContent(content: unknown): string {
+	if (typeof content === "string") return content;
+
+	if (
+		content &&
+		typeof content === "object" &&
+		"blocks" in content &&
+		Array.isArray((content as LegacyArticleContent).blocks)
+	) {
+		return (content as LegacyArticleContent).blocks
+			.map((block) => {
+				const heading = `<h2 id="${escapeHtml(block.id)}">${escapeHtml(block.title)}</h2>`;
+				const paragraphs = block.paragraphs
+					.map((paragraph) => `<p>${escapeHtml(paragraph)}</p>`)
+					.join("");
+
+				return `${heading}${paragraphs}`;
+			})
+			.join("");
+	}
+
+	throw new TypeError("Product article content must be an HTML string");
 }
 
 export async function getProductDetailPaths() {
@@ -124,7 +167,7 @@ export async function getProductDetailPageData(
 			};
 		}
 
-		const content = section.content;
+		const content = resolveArticleContent(section.content);
 		const tocItems = Array.from(
 			content.matchAll(
 				/<h([23])\b[^>]*\bid=(["'])([^"']+)\2[^>]*>([\s\S]*?)<\/h\1>/gi,
