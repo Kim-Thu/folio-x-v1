@@ -25,16 +25,19 @@ const { data } = Astro.props as Props;
 	)}
 
 	<CColumns columns="twelve" gap="md" align="start">
-		<CGridItem as="header" lgSpan={3}>
-			<CColumns columns="one" gap="md">
-				<CLink href={data.category.href}><CText as="span" variant="caption" tone="brand">{data.category.label}</CText></CLink>
-				<CHeading level={1} variant="page-title">{data.title}</CHeading>
-				<CText tone="muted">{data.description}</CText>
-				<CRow gap="xs" aria-label={data.tagsLabel}>
-					{data.tags.map((tag) => <CButton href={tag.href} label={tag.label} variant="outline" tone="light" size="xs" />)}
-				</CRow>
+		<CGridItem as="header" lgSpan={3} align="stretch">
+			<CColumns columns="one" gap="none" class="h-full">
+				<CColumns columns="one" gap="none" class="gap-2">
+					<CLink href={data.category.href}><CText as="span" variant="caption" tone="brand">{data.category.label}</CText></CLink>
+					<CHeading level={1} variant="page-title">{data.title}</CHeading>
+					<CText tone="muted">{data.description}</CText>
+					<CRow gap="xs" aria-label={data.tagsLabel}>
+						{data.tags.map((tag) => <CButton href={tag.href} label={tag.label} variant="outline" tone="light" size="xs" />)}
+					</CRow>
+				</CColumns>
+
 				{data.actions.length > 0 && (
-					<CRow gap="xs" role="group" aria-label={data.actionsLabel}>
+					<CRow class="mt-auto pt-8" gap="xs" role="group" aria-label={data.actionsLabel}>
 						{data.actions.map((action) => (
 							<CButton href={action.href} label={action.label} icon={action.icon} variant={action.kind === "live" ? "secondary" : "outline"} tone="light" size="sm" />
 						))}
