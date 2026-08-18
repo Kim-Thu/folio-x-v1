@@ -1,6 +1,7 @@
 import type { CColumnsTemplate } from "@/types/components/object/component/CColumns.types";
 import type { CImageData } from "@/types/components/object/component/CImage.types";
 import type { CSliderControls } from "@/types/components/object/component/CSlider.types";
+import type { PSectionHeaderProps } from "@/types/components/object/project/section-header/PSectionHeader.types";
 
 export type PGalleryTemplate = "grid" | "slider";
 export type PGalleryGridColumns = Extract<
@@ -13,6 +14,7 @@ export interface PGalleryItem extends CImageData {}
 export interface PGalleryProps {
 	items: PGalleryItem[];
 	label: string;
+	header?: PSectionHeaderProps;
 	columns?: PGalleryGridColumns;
 	visibleCount?: number;
 	viewMoreLabel?: string;
