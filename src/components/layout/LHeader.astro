@@ -5,6 +5,7 @@ import { cn } from "@/utils/cn";
 import {
 	headerClasses,
 	headerContentClasses,
+	headerPositionClasses,
 	headerSolidClasses,
 	headerToneClasses,
 } from "@/variants/components/layout/LHeader.variants";
@@ -22,7 +23,12 @@ const {
 <header
 	{...attributes}
 	id={id}
-	class={cn(headerClasses, headerToneClasses[tone], solid && headerSolidClasses)}
+	class={cn(
+		headerClasses,
+		headerPositionClasses[solid ? "solid" : "overlay"],
+		headerToneClasses[tone],
+		solid && headerSolidClasses,
+	)}
 	data-header-tone={tone}
 	data-solid-header={String(solid)}
 	data-scroll-state="visible"
