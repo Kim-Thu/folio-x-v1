@@ -2,6 +2,14 @@ import type { CContentFlowItem } from "@/types/components/object/component/CCont
 
 export const contentFlowClasses = "min-w-0";
 
+export const contentFlowRichTextClasses =
+	"[&_strong]:font-semibold [&_b]:font-semibold [&_em]:italic [&_i]:italic [&_del]:line-through [&_s]:line-through [&_a]:font-medium [&_a]:text-blue-600 [&_a]:underline [&_a]:underline-offset-4 [&_code]:rounded-md [&_code]:bg-gray-100 [&_code]:px-1 [&_code]:py-0.5 [&_code]:font-mono [&_code]:text-sm";
+
+export const contentFlowImageMediaClasses = "rounded-2xl";
+
+export const contentFlowCaptionClasses =
+	"mt-2 text-sm leading-relaxed text-gray-500";
+
 export const contentFlowSpacingClasses: Record<
 	CContentFlowItem["type"],
 	string
