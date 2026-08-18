@@ -92,7 +92,6 @@ export const labDetailSettingsSchema = z.object({
   content: z.object({
     id: z.string().min(1),
     settings: sectionSettingsSchema,
-    article: z.object({ template: z.literal("flow") }),
   }),
   sidebar: z.object({
     labelTemplate: z.string().includes("{title}"),
