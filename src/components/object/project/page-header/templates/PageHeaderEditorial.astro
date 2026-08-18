@@ -15,6 +15,7 @@ const { data } = Astro.props as { data: PPageHeaderEditorialData };
 
 <CColumns columns="one" gap="md">
 	<CBreadcrumb {...data.breadcrumb} />
+
 	<CColumns as="header" columns="one" gap="lg">
 		<CColumns columns="one" gap="sm">
 			<CMetadata
@@ -35,20 +36,31 @@ const { data } = Astro.props as { data: PPageHeaderEditorialData };
 				}}
 				tone="brand"
 			/>
+
 			<CHeading level={1} variant="page-title">{data.title}</CHeading>
-			<CText variant="body-responsive" tone="subtle">{data.description}</CText>
+
+			<CText variant="body-responsive" tone="subtle">
+				{data.description}
+			</CText>
 		</CColumns>
-		<CRow justify="between" align="center" gap="md">
-			<CRow align="center" gap="sm">
+
+		<CRow justify="between" align="end" gap="md">
+			<CColumns columns="one" gap="xs" align="start">
 				{data.authorImage && (
 					<CMedia ratio="square" size="thumbnail" shape="circle">
 						<CImage {...data.authorImage} variant="fill" />
 					</CMedia>
 				)}
+
 				<CMetadata
+					template="stacked"
 					data={{
 						items: [
-							{ type: "author", label: data.author, display: "text" },
+							{
+								type: "author",
+								label: data.author,
+								display: "text",
+							},
 							{
 								type: "datetime",
 								label: data.publishedLabel,
@@ -58,10 +70,12 @@ const { data } = Astro.props as { data: PPageHeaderEditorialData };
 						],
 					}}
 				/>
-			</CRow>
+			</CColumns>
+
 			{data.share && <CShareLinks {...data.share} />}
 		</CRow>
 	</CColumns>
+
 	<CMedia ratio="video">
 		<CImage
 			{...data.image}
