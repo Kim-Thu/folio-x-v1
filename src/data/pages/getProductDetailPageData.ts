@@ -275,7 +275,7 @@ export async function getProductDetailPageData(
 				},
 				cards: {
 					template: "slider",
-					columns: 4,
+					columns: 5,
 					gap: archive.content.cards.gap,
 					card: {
 						template: archive.content.cards.template,
