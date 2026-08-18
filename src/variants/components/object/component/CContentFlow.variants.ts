@@ -8,7 +8,7 @@ export const contentFlowRichTextClasses =
 export const contentFlowImageMediaClasses = "rounded-2xl";
 
 export const contentFlowCaptionClasses =
-	"mt-2 text-sm leading-relaxed text-gray-500";
+	"mt-2 text-center text-sm italic leading-relaxed text-gray-500";
 
 export const contentFlowSpacingClasses: Record<
 	CContentFlowItem["type"],
