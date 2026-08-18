@@ -5,12 +5,49 @@ import PageLeadContent from "@/components/object/project/page/templates/PageLead
 import PageLeadContentClosing from "@/components/object/project/page/templates/PageLeadContentClosing.astro";
 import PageLeadContentNavigation from "@/components/object/project/page/templates/PageLeadContentNavigation.astro";
 import PageLeadNavigationContent from "@/components/object/project/page/templates/PageLeadNavigationContent.astro";
+import type { PageRegion } from "@/types/components/object/project/page/PageRegion.types";
 import type {
 	PPageProps,
 	PPageTemplate,
 } from "@/types/components/object/project/page/PPage.types";
 
 const { template, regions } = Astro.props as PPageProps;
+
+const containsPageHeader = (region: PageRegion): boolean =>
+	region.component === "page-header" ||
+	(region.component === "group" &&
+		region.props.regions.some(containsPageHeader));
+
+const normalizeLeadSpacing = (region: PageRegion): PageRegion => {
+	const normalizedRegion =
+		region.component === "group"
+			? {
+					...region,
+					props: {
+						...region.props,
+						regions: region.props.regions.map(normalizeLeadSpacing),
+					},
+				}
+			: region;
+
+	if (
+		!containsPageHeader(normalizedRegion) ||
+		normalizedRegion.section === false ||
+		!normalizedRegion.section
+	) {
+		return normalizedRegion;
+	}
+
+	return {
+		...normalizedRegion,
+		section: {
+			...normalizedRegion.section,
+			spacing: "closing",
+		},
+	};
+};
+
+const pageRegions = regions.map(normalizeLeadSpacing);
 
 const templates = {
 	stacked: PageStacked,
@@ -24,5 +61,5 @@ const PageTemplate = templates[template];
 ---
 
 <LPage data-page-template={template}>
-	<PageTemplate {regions} />
+	<PageTemplate regions={pageRegions} />
 </LPage>
