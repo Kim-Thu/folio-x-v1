@@ -634,15 +634,8 @@ const pageHeaderSectionSchema = z.object({
 const articleSectionSchema = z.object({
 	id: z.string().min(1),
 	type: z.literal("article"),
-	template: z.literal("grouped").optional(),
 	settings: pageSectionSettingsSchema,
-	content: z.object({
-		blocks: z.array(z.object({
-			id: z.string().min(1),
-			title: z.string().min(1),
-			paragraphs: z.array(z.string().min(1)).min(1),
-		})).min(1),
-	}),
+	content: z.string().min(1),
 });
 
 const ctaSectionSchema = z.object({
@@ -739,15 +732,8 @@ const productDetailPageSchema = z.object({
 		z.object({
 			id: z.string().min(1),
 			type: z.literal("article"),
-			template: z.literal("grouped").optional(),
 			settings: detailSectionSettingsSchema,
-			content: z.object({
-				blocks: z.array(z.object({
-					id: z.string().min(1),
-					title: z.string().min(1),
-					paragraphs: z.array(z.string().min(1)).min(1),
-				})).min(1),
-			}),
+			content: z.string().min(1),
 		}),
 	])),
 });
