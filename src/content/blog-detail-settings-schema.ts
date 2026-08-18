@@ -73,6 +73,10 @@ export const blogDetailSettingsSchema = z.object({
           action: z.boolean(),
         }),
       }),
+      action: z.object({
+        href: z.string().min(1),
+        label: z.string().min(1),
+      }),
     }),
     newsletter: z.object({
       template: z.literal("form-first"),
