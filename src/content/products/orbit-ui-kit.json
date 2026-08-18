@@ -69,17 +69,7 @@
             "spacing": "body",
             "container": "site"
           },
-          "content": {
-            "blocks": [
-              {
-                "id": "product-overview",
-                "title": "Overview",
-                "paragraphs": [
-                  "Modern UI kit with 300+ components and elegant system."
-                ]
-              }
-            ]
-          }
+          "content": "<h2 id=\"overview\">Overview</h2><p>Modern UI kit with 300+ components and elegant system.</p>"
         }
       ]
     }
