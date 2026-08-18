@@ -6,6 +6,26 @@ import type { PPageHeaderMediaAsideData } from "@/types/components/object/projec
 const formatTitleLabel = (template: string, title: string) =>
 	template.replace("{title}", title);
 
+const getArticleTabs = (content: string) =>
+	Array.from(
+		content.matchAll(/<h2\b[^>]*\bid=["']([^"']+)["'][^>]*>(.*?)<\/h2>/gi),
+	).flatMap((match) => {
+		const id = match[1];
+		const heading = match[2];
+		if (!id || !heading) return [];
+
+		const label = heading.replace(/<[^>]+>/g, "").trim();
+		if (!label) return [];
+
+		return [
+			{
+				label,
+				value: id,
+				href: `#${id}`,
+			},
+		];
+	});
+
 export async function getLabDetailPaths() {
 	const labs = await getLabs();
 	return labs.map((lab) => ({
@@ -124,35 +144,7 @@ export async function getLabDetailPageData(
 		},
 	};
 
-	const contentTabs = lab.content.flatMap((block) => {
-		if (
-			(block.type === "heading" || block.type === "feature-grid") &&
-			block.navigationLabel
-		) {
-			return [
-				{
-					label: block.navigationLabel,
-					value: block.id,
-					href: `#${block.id}`,
-				},
-			];
-		}
-		if (
-			block.type === "metric-grid" &&
-			block.navigationLabel &&
-			block.id
-		) {
-			return [
-				{
-					label: block.navigationLabel,
-					value: block.id,
-					href: `#${block.id}`,
-				},
-			];
-		}
-		return [];
-	});
-
+	const contentTabs = getArticleTabs(lab.content);
 	const tabs = [
 		...contentTabs,
 		...(lab.gallery.length > 0
@@ -221,7 +213,6 @@ export async function getLabDetailPageData(
 					component: "article",
 					section: false,
 					props: {
-						template: presentation.content.article.template,
 						content: lab.content,
 					},
 				},
