@@ -67,17 +67,7 @@
             "spacing": "body",
             "container": "content"
           },
-          "content": {
-            "blocks": [
-              {
-                "id": "product-overview",
-                "title": "Overview",
-                "paragraphs": [
-                  "Editorial portfolio system for independent creators."
-                ]
-              }
-            ]
-          }
+          "content": "<h2 id=\"overview\">Overview</h2><p>Editorial portfolio system for independent creators.</p>"
         }
       ]
     }
