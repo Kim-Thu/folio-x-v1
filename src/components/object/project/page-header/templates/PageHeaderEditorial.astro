@@ -44,8 +44,8 @@ const { data } = Astro.props as { data: PPageHeaderEditorialData };
 			</CText>
 		</CColumns>
 
-		<CRow justify="between" align="end" gap="md">
-			<CColumns columns="one" gap="xs" align="start">
+		<CRow justify="between" align="center" gap="md">
+			<CRow align="center" gap="sm" wrap={false}>
 				{data.authorImage && (
 					<CMedia ratio="square" size="thumbnail" shape="circle">
 						<CImage {...data.authorImage} variant="fill" />
@@ -70,7 +70,7 @@ const { data } = Astro.props as { data: PPageHeaderEditorialData };
 						],
 					}}
 				/>
-			</CColumns>
+			</CRow>
 
 			{data.share && <CShareLinks {...data.share} />}
 		</CRow>
