@@ -152,7 +152,6 @@ export async function getWorkDetailPageData(
 								],
 								current: project.title,
 							},
-							backAction: section.content.backAction,
 							category: {
 								label: project.category,
 								href: `${archive.content.routes.categoryBase}${project.categorySlug}`,
