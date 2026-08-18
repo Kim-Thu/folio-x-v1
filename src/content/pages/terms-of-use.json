@@ -46,38 +46,7 @@
           "spacing": "body",
           "container": "content"
         },
-        "content": {
-          "blocks": [
-            {
-              "id": "policy-1",
-              "title": "Phạm vi sử dụng",
-              "paragraphs": [
-                "Website được cung cấp nhằm giới thiệu kinh nghiệm, dự án, góc nhìn chuyên môn và phương thức liên hệ. Bạn có thể truy cập nội dung cho mục đích tham khảo hợp pháp và phi thương mại."
-              ]
-            },
-            {
-              "id": "policy-2",
-              "title": "Quyền sở hữu nội dung",
-              "paragraphs": [
-                "Trừ khi được ghi chú khác, nội dung chữ, cấu trúc trình bày và tài sản thương hiệu thuộc quyền của chủ website. Hình ảnh giữ chỗ từ Unsplash thuộc quyền và điều khoản của tác giả hoặc nhà cung cấp tương ứng."
-              ]
-            },
-            {
-              "id": "policy-3",
-              "title": "Thông tin dự án",
-              "paragraphs": [
-                "Các case study có thể được biên tập, rút gọn hoặc ẩn một phần dữ liệu để bảo vệ thông tin nội bộ. Kết quả được trình bày nhằm cung cấp bối cảnh và không phải cam kết rằng mọi dự án khác sẽ đạt kết quả tương tự."
-              ]
-            },
-            {
-              "id": "policy-4",
-              "title": "Liên kết và giới hạn trách nhiệm",
-              "paragraphs": [
-                "Website có thể chứa liên kết tới dịch vụ bên thứ ba. Chủ website không kiểm soát nội dung, tính khả dụng hoặc chính sách của các dịch vụ đó. Website được cung cấp theo hiện trạng và có thể được cập nhật mà không cần thông báo trước."
-              ]
-            }
-          ]
-        }
+        "content": "<h2 id=\"policy-1\">Phạm vi sử dụng</h2><p>Website được cung cấp nhằm giới thiệu kinh nghiệm, dự án, góc nhìn chuyên môn và phương thức liên hệ. Bạn có thể truy cập nội dung cho mục đích tham khảo hợp pháp và phi thương mại.</p><h2 id=\"policy-2\">Quyền sở hữu nội dung</h2><p>Trừ khi được ghi chú khác, nội dung chữ, cấu trúc trình bày và tài sản thương hiệu thuộc quyền của chủ website. Hình ảnh giữ chỗ từ Unsplash thuộc quyền và điều khoản của tác giả hoặc nhà cung cấp tương ứng.</p><h2 id=\"policy-3\">Thông tin dự án</h2><p>Các case study có thể được biên tập, rút gọn hoặc ẩn một phần dữ liệu để bảo vệ thông tin nội bộ. Kết quả được trình bày nhằm cung cấp bối cảnh và không phải cam kết rằng mọi dự án khác sẽ đạt kết quả tương tự.</p><h2 id=\"policy-4\">Liên kết và giới hạn trách nhiệm</h2><p>Website có thể chứa liên kết tới dịch vụ bên thứ ba. Chủ website không kiểm soát nội dung, tính khả dụng hoặc chính sách của các dịch vụ đó. Website được cung cấp theo hiện trạng và có thể được cập nhật mà không cần thông báo trước.</p>"
       }
     ]
   }
