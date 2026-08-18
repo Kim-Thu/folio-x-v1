@@ -270,7 +270,7 @@ export async function getProductDetailPageData(
 			},
 			props: {
 				header: {
-					appearance: "compact",
+					appearance: "catalog",
 					data: { title: "Related products" },
 				},
 				cards: {
