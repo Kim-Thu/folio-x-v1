@@ -1,5 +1,6 @@
 import { getPage, getProducts } from "@/data/cms";
 import type { PageRegion } from "@/types/components/object/project/page/PageRegion.types";
+import type { PPostNavigationProps } from "@/types/components/object/project/post-navigation/PPostNavigation.types";
 import type { PReviewsProps } from "@/types/components/object/project/reviews/PReviews.types";
 import type { ProductDetailPageData } from "@/types/components/pages/product-detail/ProductDetailPage.types";
 
@@ -114,7 +115,8 @@ export async function getProductDetailPageData(
 		getProducts(),
 		getPage("products"),
 	]);
-	const product = products.find((item) => item.slug === slug);
+	const productIndex = products.findIndex((item) => item.slug === slug);
+	const product = products[productIndex];
 	if (!product) throw new Error(`Unknown product slug: ${slug}`);
 
 	const archive = productsPage.content.sections.find(isProductsArchiveSection);
@@ -249,6 +251,52 @@ export async function getProductDetailPageData(
 			...customerReviews,
 		},
 	});
+
+	const navigationItems: PPostNavigationProps["items"] = [];
+	const previousProduct = products[productIndex - 1];
+	const nextProduct = products[productIndex + 1];
+
+	if (previousProduct) {
+		navigationItems.push({
+			title: previousProduct.title,
+			href: previousProduct.href,
+			image: previousProduct.image,
+			alt: previousProduct.title,
+			label: "Previous",
+			summary: previousProduct.description,
+			icon: "arrowLeft",
+		});
+	}
+
+	if (nextProduct) {
+		navigationItems.push({
+			title: nextProduct.title,
+			href: nextProduct.href,
+			image: nextProduct.image,
+			alt: nextProduct.title,
+			label: "Next",
+			summary: nextProduct.description,
+			icon: "arrowRight",
+		});
+	}
+
+	if (navigationItems.length > 0) {
+		regions.push({
+			key: "product-navigation",
+			component: "post-navigation",
+			section: {
+				id: "product-navigation",
+				theme: "canvas",
+				spacing: "closing",
+				container: "site",
+			},
+			props: {
+				template: "split",
+				label: "Previous / Next",
+				items: navigationItems,
+			},
+		});
+	}
 
 	return {
 		product,
