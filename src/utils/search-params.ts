@@ -11,6 +11,23 @@ export function readCommaSeparatedParam(
 		.filter(Boolean);
 }
 
+export function readBoundedNumberParam(
+	params: URLSearchParams,
+	name: string,
+	minimum: number,
+	maximum: number,
+): number | undefined {
+	const rawValue = params.get(name);
+	if (rawValue === null || rawValue.trim() === "") return undefined;
+
+	const value = Number(rawValue);
+	if (!Number.isFinite(value) || value < minimum || value > maximum) {
+		return undefined;
+	}
+
+	return value;
+}
+
 export function writeCommaSeparatedParam(
 	params: URLSearchParams,
 	name: string,
