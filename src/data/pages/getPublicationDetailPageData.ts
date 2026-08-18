@@ -19,9 +19,12 @@ export async function getPublicationDetailPageData(
 		getPublications(collection),
 		getPublicationDetailSettings(),
 	]);
-	const entry = entries.find((item) => item.slug === entrySlug);
+	const entryIndex = entries.findIndex((item) => item.slug === entrySlug);
+	const entry = entries[entryIndex];
 	if (!entry) throw new Error(`Missing publication: ${collection}/${entrySlug}`);
 
+	const previousEntry = entryIndex > 0 ? entries[entryIndex - 1] : undefined;
+	const nextEntry = entryIndex < entries.length - 1 ? entries[entryIndex + 1] : undefined;
 	const detail = entry.detail;
 	if (!detail) throw new Error(`Missing CMS publication detail: ${collection}/${entry.slug}`);
 
@@ -221,9 +224,56 @@ export async function getPublicationDetailPageData(
 		},
 	];
 
+	const navigationItems = [
+		...(previousEntry
+			? [
+					{
+						title: previousEntry.title,
+						href: previousEntry.href,
+						image: previousEntry.cover.src,
+						alt: previousEntry.cover.alt,
+						label: "Previous",
+						icon: "arrowLeft" as const,
+						summary: previousEntry.summary,
+					},
+				]
+			: []),
+		...(nextEntry
+			? [
+					{
+						title: nextEntry.title,
+						href: nextEntry.href,
+						image: nextEntry.cover.src,
+						alt: nextEntry.cover.alt,
+						label: "Next",
+						icon: "arrowRight" as const,
+						summary: nextEntry.summary,
+					},
+				]
+			: []),
+	];
+
+	if (navigationItems.length > 0) {
+		regions.push({
+			key: "publication-post-navigation",
+			component: "post-navigation",
+			section: {
+				id: "publication-post-navigation",
+				theme: "canvas",
+				spacing: "closing",
+				container: "site",
+			},
+			props: {
+				template: "split",
+				label: "Previous / Next",
+				items: navigationItems,
+			},
+		});
+	}
+
 	return {
 		entry,
-		pageTemplate: presentation.page.template ,
+		pageTemplate: presentation.page.template,
 		regions,
 	};
 }
