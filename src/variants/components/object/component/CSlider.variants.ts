@@ -28,6 +28,7 @@ export const sliderViewportShapeClasses: Record<CSliderShape, string> = {
 };
 
 export const sliderControlsClasses: Record<CSliderControls, string> = {
+	none: "",
 	overlay:
 		"pointer-events-none absolute inset-x-4 top-1/2 z-20 -translate-y-1/2 [&>div]:w-full [&>div]:justify-between [&>div>button]:pointer-events-auto",
 	below: "mt-4 flex items-center gap-4",
