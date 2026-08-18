@@ -86,6 +86,7 @@ export async function getWorkDetailPageData(
 							{
 								type: "image" as const,
 								image,
+								caption: image.alt,
 							},
 						]
 					: []),
