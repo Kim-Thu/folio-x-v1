@@ -8,30 +8,57 @@ import CLink from "@/components/object/component/CLink.astro";
 import CRow from "@/components/object/component/CRow.astro";
 import CText from "@/components/object/component/CText.astro";
 import type { CCardTemplateProps } from "@/types/components/object/component/card/CCard.types";
+import {
+	cardIconPanelActionClasses,
+	cardIconPanelContentClasses,
+	cardIconPanelIconColumnClasses,
+	cardIconPanelRootClasses,
+} from "@/variants/components/object/component/CCard.variants";
 
 const { data, headingLevel = 3, slots } = Astro.props as CCardTemplateProps;
 ---
 
-<CBox as="article" surface="glass" radius="md" spacing="sm">
-	<CRow align="start" gap="sm" wrap={false}>
-		{slots.icon && data.icon && <CIconTile icon={data.icon} />}
-		<CColumns columns="one" gap="xs">
+<CBox
+	as="article"
+	surface="glass"
+	radius="md"
+	spacing="sm"
+	class={cardIconPanelRootClasses}
+>
+	<CRow align="stretch" gap="md" wrap={false} class="h-full">
+		{
+			slots.icon && data.icon && (
+				<div class={cardIconPanelIconColumnClasses}>
+					<CIconTile icon={data.icon} />
+				</div>
+			)
+		}
+
+		<CColumns columns="one" gap="xs" class={cardIconPanelContentClasses}>
 			{slots.title && (
 				<CHeading level={headingLevel} variant="h5">
 					<CLink href={data.href}>{data.title.join(" ")}</CLink>
 				</CHeading>
 			)}
-			{slots.excerpt && data.excerpt && <CText variant="body-sm" tone="subtle">{data.excerpt}</CText>}
+
+			{slots.excerpt && data.excerpt && (
+				<CText variant="body-sm" tone="subtle">
+					{data.excerpt}
+				</CText>
+			)}
+
 			{slots.action && data.action && (
-				<CButton
-					href={data.action.href}
-					label={data.action.label}
-					icon={data.action.icon}
-					iconPosition={data.action.iconPosition}
-					variant="outline"
-					tone="light"
-					size="xs"
-				/>
+				<div class={cardIconPanelActionClasses}>
+					<CButton
+						href={data.action.href}
+						label={data.action.label}
+						icon={data.action.icon}
+						iconPosition={data.action.iconPosition}
+						variant="outline"
+						tone="light"
+						size="xs"
+					/>
+				</div>
 			)}
 		</CColumns>
 	</CRow>
