@@ -328,5 +328,8 @@ function initArchiveFacetsRoot(root: HTMLElement): void {
 export function initArchiveFacets(scope: ParentNode = document): void {
 	scope
 		.querySelectorAll<HTMLElement>('[data-filter-mode="faceted"]')
-		.forEach(initArchiveFacetsRoot);
+		.forEach((root) => {
+			if (root.querySelector("[data-product-item]")) return;
+			initArchiveFacetsRoot(root);
+		});
 }
