@@ -31,10 +31,22 @@ function initProductsRoot(root: HTMLElement): void {
 	const platformControls = Array.from(
 		root.querySelectorAll<HTMLInputElement>("[data-platform-filter]"),
 	);
+	const licenseControls = Array.from(
+		root.querySelectorAll<HTMLInputElement>("[data-license-filter]"),
+	);
+	const ratingControls = Array.from(
+		root.querySelectorAll<HTMLInputElement>("[data-rating-filter]"),
+	);
 	const pageSize = Number(root.dataset.paginationPageSize ?? 9);
 	let currentPage = 1;
 
 	if (!cards.length || !grid) return;
+
+	const normalizedPath = (): string =>
+		window.location.pathname.replace(/\/+$/, "") || "/";
+	const isProductsIndex = (): boolean => normalizedPath() === "/products";
+	const isProductCategoryRoute = (): boolean =>
+		/^\/products\/category\/[^/]+$/.test(normalizedPath());
 
 	const gridColumnClasses = Array.from(grid.classList).filter((className) =>
 		className.includes("grid-cols-"),
@@ -63,7 +75,7 @@ function initProductsRoot(root: HTMLElement): void {
 		navigationLinks.find(
 			(link) =>
 				link.dataset.choiceControl === control &&
-				link.getAttribute("aria-current") === "page",
+				Boolean(link.getAttribute("aria-current")),
 		)?.dataset.choiceValue;
 
 	const syncSelectDisplay = (
@@ -114,12 +126,6 @@ function initProductsRoot(root: HTMLElement): void {
 				link.dataset.choiceValue === value,
 		)?.href;
 
-	const syncLocation = (control: string, value: string): void => {
-		const href = navigationHref(control, value);
-		if (!href) return;
-		window.history.pushState({}, "", href);
-	};
-
 	const syncPriceOutput = (): void => {
 		if (!range || !priceOutput) return;
 		priceOutput.value = `$${range.value}${
@@ -127,9 +133,9 @@ function initProductsRoot(root: HTMLElement): void {
 		}`;
 	};
 
-	const syncPlatformControls = (value: string): void => {
+	const syncPlatformControls = (values: string[]): void => {
 		platformControls.forEach((control) => {
-			control.checked = value !== "all" && control.value === value;
+			control.checked = values.includes(control.value);
 		});
 	};
 
@@ -140,6 +146,101 @@ function initProductsRoot(root: HTMLElement): void {
 			platformSelect,
 			selected.length === 1 ? selected[0].value : "all",
 		);
+	};
+
+	const setCheckedValues = (
+		controls: HTMLInputElement[],
+		values: string[],
+	): void => {
+		controls.forEach((control) => {
+			control.checked = values.includes(control.value);
+		});
+	};
+
+	const readListParam = (name: string): string[] => {
+		const value = new URLSearchParams(window.location.search).get(name);
+		if (!value) return [];
+		return value.split(",").map((item) => item.trim()).filter(Boolean);
+	};
+
+	const writeListParam = (
+		params: URLSearchParams,
+		name: string,
+		values: string[],
+	): void => {
+		if (values.length) params.set(name, values.join(","));
+		else params.delete(name);
+	};
+
+	const categoryFromPath = (): string => {
+		if (!isProductCategoryRoute()) return "all";
+		const currentPath = normalizedPath();
+		const currentLink = navigationLinks.find((link) => {
+			if (link.dataset.choiceControl !== "category") return false;
+			return new URL(link.href, window.location.href).pathname.replace(/\/+$/, "") === currentPath;
+		});
+		return currentLink?.dataset.choiceValue ?? "all";
+	};
+
+	const syncLocationFromFilters = (): void => {
+		const params = new URLSearchParams(window.location.search);
+
+		if (isProductsIndex()) {
+			const category =
+				categorySelect?.value ?? selectedNavigationValue("category") ?? "all";
+			if (category !== "all") params.set("categories", category);
+			else params.delete("categories");
+		} else {
+			params.delete("categories");
+		}
+
+		writeListParam(
+			params,
+			"platform",
+			selectedValues("[data-platform-filter]:checked"),
+		);
+		writeListParam(
+			params,
+			"license",
+			selectedValues("[data-license-filter]:checked"),
+		);
+		writeListParam(
+			params,
+			"rating",
+			selectedValues("[data-rating-filter]:checked"),
+		);
+
+		if (range && range.value !== range.max) params.set("price", range.value);
+		else params.delete("price");
+
+		const query = params.toString();
+		const nextUrl = `${window.location.pathname}${query ? `?${query}` : ""}${window.location.hash}`;
+		window.history.replaceState({}, "", nextUrl);
+	};
+
+	const syncFiltersFromLocation = (): void => {
+		const params = new URLSearchParams(window.location.search);
+		const category = isProductCategoryRoute()
+			? categoryFromPath()
+			: params.get("categories") ?? "all";
+
+		if (categorySelect) syncSelectDisplay(categorySelect, category);
+		syncNavigationFilter("category", category);
+
+		const platforms = readListParam("platform");
+		syncPlatformControls(platforms);
+		syncPlatformSelectFromControls();
+		setCheckedValues(licenseControls, readListParam("license"));
+		setCheckedValues(ratingControls, readListParam("rating"));
+
+		if (range) {
+			const price = Number(params.get("price"));
+			range.value = Number.isFinite(price) && price >= Number(range.min) && price <= Number(range.max)
+				? String(price)
+				: range.max;
+		}
+
+		syncPriceOutput();
 	};
 
 	const applyView = (view: "grid" | "list"): void => {
@@ -256,35 +357,47 @@ function initProductsRoot(root: HTMLElement): void {
 	};
 
 	const selectCategory = (value: string): void => {
+		if (isProductCategoryRoute()) {
+			const href = value === "all" ? "/products" : navigationHref("category", value);
+			if (href) window.location.assign(href);
+			return;
+		}
+
 		if (categorySelect) syncSelectDisplay(categorySelect, value);
 		syncNavigationFilter("category", value);
-		syncLocation("category", value);
+		syncLocationFromFilters();
 		resetAndRender();
 	};
 
 	const selectToolbarPlatform = (value: string): void => {
 		if (platformSelect) syncSelectDisplay(platformSelect, value);
-		syncPlatformControls(value);
+		syncPlatformControls(value === "all" ? [] : [value]);
+		syncLocationFromFilters();
 		resetAndRender();
 	};
 
 	const resetAllFilters = (): void => {
 		if (search) search.value = "";
-		if (categorySelect) syncSelectDisplay(categorySelect, "all");
 		if (platformSelect) syncSelectDisplay(platformSelect, "all");
 		if (range) range.value = range.max;
 
-		root
-			.querySelectorAll<HTMLInputElement>(
-				"[data-platform-filter], [data-license-filter], [data-rating-filter]",
-			)
-			.forEach((control) => {
-				control.checked = false;
-			});
+		platformControls.forEach((control) => {
+			control.checked = false;
+		});
+		licenseControls.forEach((control) => {
+			control.checked = false;
+		});
+		ratingControls.forEach((control) => {
+			control.checked = false;
+		});
 
-		syncNavigationFilter("category", "all");
-		syncLocation("category", "all");
+		if (isProductsIndex()) {
+			if (categorySelect) syncSelectDisplay(categorySelect, "all");
+			syncNavigationFilter("category", "all");
+		}
+
 		syncPriceOutput();
+		syncLocationFromFilters();
 		resetAndRender();
 	};
 
@@ -319,8 +432,9 @@ function initProductsRoot(root: HTMLElement): void {
 		link.addEventListener("click", (event) => {
 			const control = link.dataset.choiceControl;
 			const value = link.dataset.choiceValue;
-			if (!control || !value) return;
-			if (control !== "category") return;
+			if (!control || !value || control !== "category") return;
+
+			if (isProductCategoryRoute()) return;
 
 			event.preventDefault();
 			selectCategory(value);
@@ -329,25 +443,28 @@ function initProductsRoot(root: HTMLElement): void {
 
 	reset?.addEventListener("click", resetAllFilters);
 
-	[search, range].forEach((control) => {
-		control?.addEventListener("input", () => {
-			syncPriceOutput();
-			resetAndRender();
-		});
+	search?.addEventListener("input", resetAndRender);
+
+	range?.addEventListener("input", () => {
+		syncPriceOutput();
+		syncLocationFromFilters();
+		resetAndRender();
 	});
 
 	platformControls.forEach((control) => {
 		control.addEventListener("change", () => {
 			syncPlatformSelectFromControls();
+			syncLocationFromFilters();
 			resetAndRender();
 		});
 	});
 
-	root
-		.querySelectorAll<HTMLInputElement>(
-			"[data-license-filter], [data-rating-filter]",
-		)
-		.forEach((control) => control.addEventListener("change", resetAndRender));
+	[...licenseControls, ...ratingControls].forEach((control) => {
+		control.addEventListener("change", () => {
+			syncLocationFromFilters();
+			resetAndRender();
+		});
+	});
 
 	root
 		.querySelectorAll<HTMLButtonElement>("[data-view-control]")
@@ -391,24 +508,24 @@ function initProductsRoot(root: HTMLElement): void {
 		render();
 	});
 
-	const syncCategoryFromLocation = (): void => {
-		const currentPath = window.location.pathname;
-		const currentLink = navigationLinks.find((link) => {
-			if (link.dataset.choiceControl !== "category") return false;
-			return new URL(link.href, window.location.href).pathname === currentPath;
-		});
-		const value = currentLink?.dataset.choiceValue ?? "all";
-
-		if (categorySelect) syncSelectDisplay(categorySelect, value);
-		syncNavigationFilter("category", value);
+	window.addEventListener("popstate", () => {
+		syncFiltersFromLocation();
 		resetAndRender();
-	};
+	});
 
-	window.addEventListener("popstate", syncCategoryFromLocation);
+	if (isProductsIndex()) {
+		navigationLinks
+			.filter((link) => link.dataset.choiceControl === "category")
+			.forEach((link) => {
+				const value = link.dataset.choiceValue ?? "all";
+				const url = new URL(window.location.href);
+				if (value === "all") url.searchParams.delete("categories");
+				else url.searchParams.set("categories", value);
+				link.href = `${url.pathname}${url.search}`;
+			});
+	}
 
-	syncCategoryFromLocation();
-	syncPlatformSelectFromControls();
-	syncPriceOutput();
+	syncFiltersFromLocation();
 	applyView("grid");
 	render();
 }
