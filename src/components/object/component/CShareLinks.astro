@@ -5,13 +5,17 @@ import CList from "@/components/object/component/CList.astro";
 import CNavigation from "@/components/object/component/CNavigation.astro";
 import CText from "@/components/object/component/CText.astro";
 import type { CShareLinksProps } from "@/types/components/object/component/CShareLinks.types";
+import {
+	shareLinksButtonClasses,
+	shareLinksLabelClasses,
+} from "@/variants/components/object/component/CShareLinks.variants";
 
 const { label, links } = Astro.props as CShareLinksProps;
 ---
 
 <CNavigation {label}>
 	<CColumns columns="one" gap="xs">
-		<CText variant="body-sm">{label}</CText>
+		<CText variant="body-sm" class={shareLinksLabelClasses}>{label}</CText>
 		<CList gap="sm">
 			{links.map((link) => (
 				<li>
@@ -20,9 +24,10 @@ const { label, links } = Astro.props as CShareLinksProps;
 						label={link.label}
 						icon={link.icon}
 						iconOnly
-						size="sm"
+						size="md"
 						tone="light"
 						variant="view"
+						class={shareLinksButtonClasses}
 					/>
 				</li>
 			))}
