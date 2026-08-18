@@ -1,3 +1,9 @@
+import {
+	buildUrlWithSearchParams,
+	readCommaSeparatedParam,
+	writeCommaSeparatedParam,
+} from "@/utils/search-params";
+
 function initProductsRoot(root: HTMLElement): void {
 	const grid = root.querySelector<HTMLElement>("[data-product-grid]");
 	const cards = Array.from(
@@ -157,21 +163,6 @@ function initProductsRoot(root: HTMLElement): void {
 		});
 	};
 
-	const readListParam = (name: string): string[] => {
-		const value = new URLSearchParams(window.location.search).get(name);
-		if (!value) return [];
-		return value.split(",").map((item) => item.trim()).filter(Boolean);
-	};
-
-	const writeListParam = (
-		params: URLSearchParams,
-		name: string,
-		values: string[],
-	): void => {
-		if (values.length) params.set(name, values.join(","));
-		else params.delete(name);
-	};
-
 	const categoryFromPath = (): string => {
 		if (!isProductCategoryRoute()) return "all";
 		const currentPath = normalizedPath();
@@ -194,17 +185,17 @@ function initProductsRoot(root: HTMLElement): void {
 			params.delete("categories");
 		}
 
-		writeListParam(
+		writeCommaSeparatedParam(
 			params,
 			"platform",
 			selectedValues("[data-platform-filter]:checked"),
 		);
-		writeListParam(
+		writeCommaSeparatedParam(
 			params,
 			"license",
 			selectedValues("[data-license-filter]:checked"),
 		);
-		writeListParam(
+		writeCommaSeparatedParam(
 			params,
 			"rating",
 			selectedValues("[data-rating-filter]:checked"),
@@ -213,9 +204,15 @@ function initProductsRoot(root: HTMLElement): void {
 		if (range && range.value !== range.max) params.set("price", range.value);
 		else params.delete("price");
 
-		const query = params.toString();
-		const nextUrl = `${window.location.pathname}${query ? `?${query}` : ""}${window.location.hash}`;
-		window.history.replaceState({}, "", nextUrl);
+		window.history.replaceState(
+			{},
+			"",
+			buildUrlWithSearchParams(
+				window.location.pathname,
+				params,
+				window.location.hash,
+			),
+		);
 	};
 
 	const syncFiltersFromLocation = (): void => {
@@ -227,17 +224,26 @@ function initProductsRoot(root: HTMLElement): void {
 		if (categorySelect) syncSelectDisplay(categorySelect, category);
 		syncNavigationFilter("category", category);
 
-		const platforms = readListParam("platform");
+		const platforms = readCommaSeparatedParam(params, "platform");
 		syncPlatformControls(platforms);
 		syncPlatformSelectFromControls();
-		setCheckedValues(licenseControls, readListParam("license"));
-		setCheckedValues(ratingControls, readListParam("rating"));
+		setCheckedValues(
+			licenseControls,
+			readCommaSeparatedParam(params, "license"),
+		);
+		setCheckedValues(
+			ratingControls,
+			readCommaSeparatedParam(params, "rating"),
+		);
 
 		if (range) {
 			const price = Number(params.get("price"));
-			range.value = Number.isFinite(price) && price >= Number(range.min) && price <= Number(range.max)
-				? String(price)
-				: range.max;
+			range.value =
+				Number.isFinite(price) &&
+				price >= Number(range.min) &&
+				price <= Number(range.max)
+					? String(price)
+					: range.max;
 		}
 
 		syncPriceOutput();
@@ -358,7 +364,8 @@ function initProductsRoot(root: HTMLElement): void {
 
 	const selectCategory = (value: string): void => {
 		if (isProductCategoryRoute()) {
-			const href = value === "all" ? "/products" : navigationHref("category", value);
+			const href =
+				value === "all" ? "/products" : navigationHref("category", value);
 			if (href) window.location.assign(href);
 			return;
 		}
@@ -521,7 +528,7 @@ function initProductsRoot(root: HTMLElement): void {
 				const url = new URL(window.location.href);
 				if (value === "all") url.searchParams.delete("categories");
 				else url.searchParams.set("categories", value);
-				link.href = `${url.pathname}${url.search}`;
+				link.href = buildUrlWithSearchParams(url.pathname, url.searchParams);
 			});
 	}
 
