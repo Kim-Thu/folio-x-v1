@@ -1,4 +1,5 @@
 ---
+import CBreadcrumb from "@/components/object/component/CBreadcrumb.astro";
 import CColumns from "@/components/object/component/CColumns.astro";
 import CHeading from "@/components/object/component/CHeading.astro";
 import CImage from "@/components/object/component/CImage.astro";
@@ -13,6 +14,7 @@ const { data } = Astro.props as { data: PPageHeaderEditorialData };
 ---
 
 <CColumns columns="one" gap="md">
+	<CBreadcrumb {...data.breadcrumb} />
 	<CColumns as="header" columns="one" gap="lg">
 		<CColumns columns="one" gap="sm">
 			<CMetadata
