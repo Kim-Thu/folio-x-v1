@@ -31,6 +31,14 @@ const buttonPresentationSchema = z.object({
   variant: z.enum(["primary", "outline"]),
 });
 
+const subscriptionFormSchema = z.object({
+  formName: z.string().min(1),
+  inputId: z.string().min(1),
+  inputLabel: z.string().min(1),
+  placeholder: z.string().min(1),
+  submitLabel: z.string().min(1),
+});
+
 export const publicationDetailSettingsSchema = z.object({
   page: z.object({
     template: z.literal("lead-navigation-content"),
@@ -88,6 +96,7 @@ export const publicationDetailSettingsSchema = z.object({
   chapters: z.object({
     id: z.string().min(1),
     settings: sectionSettingsSchema,
+    visibleCount: z.number().int().positive(),
     labels: z.object({
       aside: z.string().min(1),
       introduction: z.string().min(1),
@@ -97,6 +106,7 @@ export const publicationDetailSettingsSchema = z.object({
       listView: z.string().min(1),
       numberPrefix: z.string(),
       chapter: z.string().min(1),
+      showAllTemplate: z.string().includes("{count}"),
     }),
     overviewLayout: z.object({
       columns: z.enum(["one", "two", "three", "four", "five", "compact-three", "twelve"]),
@@ -115,6 +125,24 @@ export const publicationDetailSettingsSchema = z.object({
       size: z.enum(["sm", "md"]),
       variant: z.enum(["primary", "outline"]),
     }),
+  }),
+  related: z.object({
+    title: z.string().min(1),
+    limit: z.number().int().positive().max(6),
+    actionLabel: z.string().min(1),
+  }),
+  subscription: z.object({
+    id: z.string().min(1),
+    title: z.string().min(1),
+    description: z.string().min(1),
+    settings: sectionSettingsSchema,
+    image: z.object({
+      src: z.string().min(1),
+      alt: z.string(),
+      width: z.number().int().positive(),
+      height: z.number().int().positive(),
+    }).optional(),
+    form: subscriptionFormSchema,
   }),
   reader: z.object({
     template: z.literal("reader"),
