@@ -72,9 +72,9 @@ const license = productSource ? productPresentation?.license : data.product?.lic
 {product && (
 	<CBox
 		as="article"
-		surface="plain"
+		surface="glass"
 		radius="md"
-		overflow="hidden"
+		overflow="visible"
 		class={cardMediaDetailsRootClasses}
 		data-product-card
 		data-title={title.toLowerCase()}
@@ -86,7 +86,12 @@ const license = productSource ? productPresentation?.license : data.product?.lic
 		data-sort-index={index}
 	>
 		{slots.media && media && (
-			<CMedia ratio="editorial" href={href} ariaLabel={title}>
+			<CMedia
+				ratio="editorial"
+				shape="none"
+				href={href}
+				ariaLabel={title}
+			>
 				<CImage {...media} variant="fill" />
 				{product.badge && <CBadge placement="top-end">{product.badge}</CBadge>}
 			</CMedia>
