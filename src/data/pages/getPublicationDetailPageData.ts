@@ -239,7 +239,7 @@ export async function getPublicationDetailPageData(
 							list: {
 								items: [
 									{
-										label: presentation.chapters.labels.introduction,
+										label: "",
 										value: description[0],
 									},
 								],
