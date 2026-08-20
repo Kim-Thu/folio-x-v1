@@ -93,6 +93,7 @@
       "spacing": "body",
       "container": "site"
     },
+    "visibleCount": 8,
     "labels": {
       "aside": "Supporting information",
       "introduction": "Introduction",
@@ -101,7 +102,8 @@
       "title": "Chapter list",
       "listView": "List view",
       "numberPrefix": "#",
-      "chapter": "Chapter"
+      "chapter": "Chapter",
+      "showAllTemplate": "View all chapters ({count})"
     },
     "overviewLayout": {
       "columns": "one",
@@ -128,6 +130,34 @@
       "iconPosition": "end",
       "size": "sm",
       "variant": "primary"
+    }
+  },
+  "related": {
+    "title": "You may also like",
+    "limit": 3,
+    "actionLabel": "View more"
+  },
+  "subscription": {
+    "id": "publication-subscription",
+    "title": "Never miss a new chapter",
+    "description": "Subscribe to receive a notification whenever a new chapter is published.",
+    "settings": {
+      "theme": "canvas",
+      "spacing": "compact",
+      "container": "site"
+    },
+    "image": {
+      "src": "/uploads/library-newsletter-book.webp",
+      "alt": "Newsletter illustration",
+      "width": 1448,
+      "height": 1086
+    },
+    "form": {
+      "formName": "publication-subscription",
+      "inputId": "publication-subscription-email",
+      "inputLabel": "Email address",
+      "placeholder": "Your email address...",
+      "submitLabel": "Subscribe"
     }
   },
   "reader": {
