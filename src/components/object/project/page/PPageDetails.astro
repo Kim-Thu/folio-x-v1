@@ -21,6 +21,7 @@ const { title, list, tags } = Astro.props as Props;
 const variant = title ? "default" : (list.variant ?? "default");
 const horizontal = variant === "facts" || variant === "metrics" || variant === "highlights";
 const onDark = list.tone === "on-dark";
+const showTagsHeading = Boolean(tags?.title && tags.title !== title);
 ---
 
 <CBox
@@ -31,73 +32,79 @@ const onDark = list.tone === "on-dark";
 	<CColumns columns="one" gap="sm">
 		{title && <CHeading level={2} variant="h5">{title}</CHeading>}
 
-		<CList
-			direction={horizontal ? "row" : "column"}
-			gap={variant === "compact" ? "xs" : "md"}
-		>
-			{list.items.map((item) => (
-				<li>
-					{variant === "compact" ? (
-						<CRow align="center" justify="between" gap="sm" wrap={false}>
-							<CRow align="center" gap="sm" wrap={false}>
-								{item.icon && <CIconTile icon={item.icon} size="sm" />}
-								<CText
-									as="span"
-									variant="caption"
-									tone={onDark ? "on-dark-subtle" : "subtle"}
-									class={pageDetailsLabelClasses}
-								>
-									{item.label}
-								</CText>
-							</CRow>
-
-							{item.key === "status" ? (
-								<CBadge appearance="solid" tone="brand">{item.value}</CBadge>
-							) : item.href ? (
-								<CLink href={item.href}>{item.value}</CLink>
-							) : (
-								<CText as="span" variant="body-sm" tone={onDark ? "on-dark" : "inherit"}>
-									{item.value}
-								</CText>
-							)}
-						</CRow>
-					) : (
-						<CRow align="center" gap="sm">
-							{item.icon && <CIconTile icon={item.icon} size="sm" />}
-							<CColumns columns="one" gap="xs">
-								<CText
-									as="span"
-									variant="caption"
-									tone={onDark ? "on-dark-subtle" : "subtle"}
-									class={pageDetailsLabelClasses}
-								>
-									{item.label}
-								</CText>
+		{list.items.length > 0 && (
+			<CList
+				direction={horizontal ? "row" : "column"}
+				gap={variant === "compact" ? "xs" : "md"}
+			>
+				{list.items.map((item) => (
+					<li>
+						{variant === "compact" ? (
+							<CRow align="center" justify="between" gap="sm" wrap={false}>
+								<CRow align="center" gap="sm" wrap={false}>
+									{item.icon && <CIconTile icon={item.icon} size="sm" />}
+									{item.label && (
+										<CText
+											as="span"
+											variant="caption"
+											tone={onDark ? "on-dark-subtle" : "subtle"}
+											class={pageDetailsLabelClasses}
+										>
+											{item.label}
+										</CText>
+									)}
+								</CRow>
 
 								{item.key === "status" ? (
 									<CBadge appearance="solid" tone="brand">{item.value}</CBadge>
 								) : item.href ? (
 									<CLink href={item.href}>{item.value}</CLink>
 								) : (
-									<CText
-										as="span"
-										variant={variant === "metrics" ? "price" : "body-sm"}
-										tone={onDark ? "on-dark" : "inherit"}
-									>
+									<CText as="span" variant="body-sm" tone={onDark ? "on-dark" : "inherit"}>
 										{item.value}
 									</CText>
 								)}
-							</CColumns>
-						</CRow>
-					)}
-				</li>
-			))}
-		</CList>
+							</CRow>
+						) : (
+							<CRow align="center" gap="sm">
+								{item.icon && <CIconTile icon={item.icon} size="sm" />}
+								<CColumns columns="one" gap="xs">
+									{item.label && (
+										<CText
+											as="span"
+											variant="caption"
+											tone={onDark ? "on-dark-subtle" : "subtle"}
+											class={pageDetailsLabelClasses}
+										>
+											{item.label}
+										</CText>
+									)}
+
+									{item.key === "status" ? (
+										<CBadge appearance="solid" tone="brand">{item.value}</CBadge>
+									) : item.href ? (
+										<CLink href={item.href}>{item.value}</CLink>
+									) : (
+										<CText
+											as="span"
+											variant={variant === "metrics" ? "price" : "body-sm"}
+											tone={onDark ? "on-dark" : "inherit"}
+										>
+											{item.value}
+										</CText>
+									)}
+								</CColumns>
+							</CRow>
+						)}
+					</li>
+				))}
+			</CList>
+		)}
 
 		{tags && (
 			<div class={pageDetailsTagsClasses}>
 				<CColumns columns="one" gap="sm">
-					<CHeading level={3} variant="h6">{tags.title}</CHeading>
+					{showTagsHeading && <CHeading level={3} variant="h6">{tags.title}</CHeading>}
 					<CTags {...tags.list} />
 				</CColumns>
 			</div>
