@@ -13,11 +13,16 @@ import {
 
 const { class: className, label, items, current, ...attributes } =
 	Astro.props as CBreadcrumbProps;
+
+const breadcrumbItems =
+	items[0]?.href === "/"
+		? items
+		: [{ label: "Home", href: "/" }, ...items];
 ---
 
 <nav {...attributes} class={cn(breadcrumbClasses, className)} aria-label={label}>
 	<ol class={breadcrumbListClasses}>
-		{items.map((item) => (
+		{breadcrumbItems.map((item) => (
 			<>
 				<li>
 					<CLink href={item.href} class={breadcrumbLinkClasses}>{item.label}</CLink>
