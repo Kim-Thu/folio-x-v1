@@ -3,7 +3,7 @@ export const headerClasses =
 
 export const headerToneClasses = {
 	dark: "text-white data-[scroll-surface=solid]:bg-black/80 data-[scroll-surface=solid]:backdrop-blur-header",
-	light: "text-black data-[scroll-surface=solid]:bg-white/40 data-[scroll-surface=solid]:backdrop-blur-header",
+	light: "text-black data-[scroll-surface=solid]:bg-white/20 data-[scroll-surface=solid]:backdrop-blur-header",
 } as const;
 
 export const headerContentClasses =
