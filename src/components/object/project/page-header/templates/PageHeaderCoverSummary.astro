@@ -34,10 +34,10 @@ const { data } = Astro.props as Props;
 
 			<CGridItem as="header" lgSpan={6}>
 				<CColumns columns="one" gap="md">
-					<CTags label={data.tagsLabel} items={data.tags} />
+					<CTags label={data.tagsLabel} items={data.tags} appearance="outline" tone="inverse" />
 					<CRow align="center" gap="sm" wrap>
 						<CHeading level={1} variant="h3">{data.title}</CHeading>
-						{data.badge && <CBadge tone="brand">{data.badge}</CBadge>}
+						{data.badge && <CBadge appearance="outline" tone="inverse">{data.badge}</CBadge>}
 					</CRow>
 					<CMetadata
 						data={{ items: [{ type: "author", label: `${data.author.label}: ${data.author.name}`, href: data.author.href, display: "text" }] }}
