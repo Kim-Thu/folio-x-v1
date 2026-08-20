@@ -5,6 +5,7 @@ import type {
 	PublicationDetailPageData,
 } from "@/types/components/pages/publication-detail/PublicationDetailPage.types";
 import type { CIconName } from "@/types/components/object/component/CIcon.types";
+import type { PCardProps } from "@/types/components/object/project/card/PCard.types";
 
 export async function getPublicationDetailPaths(collection: PublicationCollection) {
 	const entries = await getPublications(collection);
@@ -42,6 +43,57 @@ export async function getPublicationDetailPageData(
 		href: `${basePath}/${entry.slug}/${presentation.routes.chapterSegment}/${chapter.number}`,
 		action: presentation.chapters.itemAction,
 	}));
+
+	const relatedEntries = entries
+		.filter((item) => item.slug !== entry.slug)
+		.sort((a, b) => {
+			const aScore = a.genres.filter((genre) =>
+				entry.genres.some((entryGenre) => entryGenre.slug === genre.slug),
+			).length;
+			const bScore = b.genres.filter((genre) =>
+				entry.genres.some((entryGenre) => entryGenre.slug === genre.slug),
+			).length;
+			return bScore - aScore || a.order - b.order;
+		})
+		.slice(0, presentation.related.limit);
+
+	const relatedCards: PCardProps = {
+		template: "list",
+		columns: 1,
+		gap: "sm",
+		card: {
+			template: "compact-media",
+			mediaRatio: "portrait",
+			slots: {
+				media: true,
+				metadata: true,
+				title: true,
+				excerpt: false,
+				tags: false,
+				metrics: true,
+				action: false,
+				icon: false,
+			},
+			source: "static",
+		},
+		items: relatedEntries.map((item) => ({
+			href: item.href,
+			ariaLabel: item.title,
+			title: [item.title],
+			media: item.cover,
+			metadata: {
+				items: item.genres.slice(0, 2).map((genre) => ({
+					type: "category" as const,
+					label: genre.label,
+					display: "text" as const,
+				})),
+			},
+			metrics: [
+				{ icon: "star" as const, label: String(item.rating) },
+				{ icon: "eye" as const, label: item.views },
+			],
+		})),
+	};
 
 	const metrics: Array<{ label: string; value: string; icon: CIconName }> = [
 		{
@@ -172,13 +224,18 @@ export async function getPublicationDetailPageData(
 			props: {
 				template: "sidebar",
 				asideLabel: presentation.chapters.labels.aside,
+				asidePosition: "end",
+				stickyAside: false,
+				asideGap: "md",
+				gap: "lg",
 				regions: [
 					{
-						key: "publication-overview",
+						key: "publication-introduction",
 						component: "details",
 						placement: "aside",
 						section: false,
 						props: {
+							title: presentation.chapters.labels.introduction,
 							list: {
 								items: [
 									{
@@ -187,25 +244,63 @@ export async function getPublicationDetailPageData(
 									},
 								],
 							},
-							tags: detail.tags?.length
-								? {
-										title: presentation.chapters.labels.tags,
-										list: {
-											label: presentation.chapters.labels.tags,
-											items: detail.tags.map((tag) => ({
-												label: tag.label,
-												href: `${basePath}/${presentation.routes.tagSegment}/${tag.slug}`,
-											})),
-										},
-									}
-								: undefined,
 						},
 					},
+					...(detail.tags?.length
+						? [
+								{
+									key: "publication-tags",
+									component: "details" as const,
+									placement: "aside" as const,
+									section: false as const,
+									props: {
+										title: presentation.chapters.labels.tags,
+										list: { items: [] },
+										tags: {
+											title: presentation.chapters.labels.tags,
+											list: {
+												label: presentation.chapters.labels.tags,
+												items: detail.tags.map((tag) => ({
+													label: tag.label,
+													href: `${basePath}/${presentation.routes.tagSegment}/${tag.slug}`,
+												})),
+											},
+										},
+									},
+								},
+							]
+						: []),
+					...(relatedEntries.length > 0
+						? [
+								{
+									key: "publication-related",
+									component: "cards" as const,
+									placement: "aside" as const,
+									section: false as const,
+									props: {
+										panel: true,
+										header: {
+											data: { title: presentation.related.title },
+											appearance: "compact" as const,
+											headingLevel: 2 as const,
+										},
+										cards: relatedCards,
+										action: {
+											href: basePath,
+											label: presentation.related.actionLabel,
+											variant: "outline" as const,
+											tone: "light" as const,
+										},
+									},
+								},
+							]
+						: []),
 					...(chapterItems.length > 0
 						? [
 								{
 									key: "chapter-index",
 									component: "entry-index" as const,
+									placement: "main" as const,
 									section: false as const,
 									props: {
 										id: presentation.chapters.id,
@@ -214,12 +309,44 @@ export async function getPublicationDetailPageData(
 										sort: presentation.chapters.sort,
 										listViewLabel: presentation.chapters.labels.listView,
 										items: chapterItems,
-										visibleCount: chapterItems.length,
+										visibleCount: Math.min(
+											presentation.chapters.visibleCount,
+											chapterItems.length,
+										),
+										footerAction:
+											chapterItems.length > presentation.chapters.visibleCount
+												? {
+													label: presentation.chapters.labels.showAllTemplate.replace(
+														"{count}",
+														String(chapterItems.length),
+													),
+													variant: "outline" as const,
+													tone: "light" as const,
+												}
+												: undefined,
 									},
 								},
 							]
 						: []),
 				],
+			},
+		},
+		{
+			key: presentation.subscription.id,
+			component: "cta",
+			section: {
+				id: presentation.subscription.id,
+				...presentation.subscription.settings,
+			},
+			props: {
+				template: "subscription",
+				data: {
+					id: presentation.subscription.id,
+					title: presentation.subscription.title,
+					description: presentation.subscription.description,
+					image: presentation.subscription.image,
+					form: presentation.subscription.form,
+				},
 			},
 		},
 	];
