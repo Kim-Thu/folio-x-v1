@@ -7,6 +7,41 @@ import type {
 import type { CIconName } from "@/types/components/object/component/CIcon.types";
 import type { PCardProps } from "@/types/components/object/project/card/PCard.types";
 
+const publicationRelatedDefaults = {
+	title: "You may also like",
+	limit: 3,
+	actionLabel: "View more",
+} as const;
+
+const publicationChapterDefaults = {
+	visibleCount: 8,
+	showAllTemplate: "View all chapters ({count})",
+} as const;
+
+const publicationSubscriptionDefaults = {
+	id: "publication-subscription",
+	title: "Never miss a new chapter",
+	description: "Subscribe to receive a notification whenever a new chapter is published.",
+	settings: {
+		theme: "canvas" as const,
+		spacing: "compact" as const,
+		container: "site" as const,
+	},
+	image: {
+		src: "/uploads/library-newsletter-book.webp",
+		alt: "Newsletter illustration",
+		width: 1448,
+		height: 1086,
+	},
+	form: {
+		formName: "publication-subscription",
+		inputId: "publication-subscription-email",
+		inputLabel: "Email address",
+		placeholder: "Your email address...",
+		submitLabel: "Subscribe",
+	},
+} as const;
+
 export async function getPublicationDetailPaths(collection: PublicationCollection) {
 	const entries = await getPublications(collection);
 	return entries.map((entry) => ({ params: { slug: entry.slug } }));
@@ -28,6 +63,12 @@ export async function getPublicationDetailPageData(
 	const nextEntry = entryIndex < entries.length - 1 ? entries[entryIndex + 1] : undefined;
 	const detail = entry.detail;
 	if (!detail) throw new Error(`Missing CMS publication detail: ${collection}/${entry.slug}`);
+
+	const relatedPresentation = presentation.related ?? publicationRelatedDefaults;
+	const chapterVisibleCount = presentation.chapters.visibleCount ?? publicationChapterDefaults.visibleCount;
+	const chapterShowAllTemplate =
+		presentation.chapters.labels.showAllTemplate ?? publicationChapterDefaults.showAllTemplate;
+	const subscriptionPresentation = presentation.subscription ?? publicationSubscriptionDefaults;
 
 	const collectionPresentation = presentation.collections[collection];
 	const basePath = collectionPresentation.basePath;
@@ -55,7 +96,7 @@ export async function getPublicationDetailPageData(
 			).length;
 			return bScore - aScore || a.order - b.order;
 		})
-		.slice(0, presentation.related.limit);
+		.slice(0, relatedPresentation.limit);
 
 	const relatedCards: PCardProps = {
 		template: "list",
@@ -280,14 +321,14 @@ export async function getPublicationDetailPageData(
 									props: {
 										panel: true,
 										header: {
-											data: { title: presentation.related.title },
+											data: { title: relatedPresentation.title },
 											appearance: "compact" as const,
 											headingLevel: 2 as const,
 										},
 										cards: relatedCards,
 										action: {
 											href: basePath,
-											label: presentation.related.actionLabel,
+											label: relatedPresentation.actionLabel,
 											variant: "outline" as const,
 											tone: "light" as const,
 										},
@@ -310,13 +351,13 @@ export async function getPublicationDetailPageData(
 										listViewLabel: presentation.chapters.labels.listView,
 										items: chapterItems,
 										visibleCount: Math.min(
-											presentation.chapters.visibleCount,
+											chapterVisibleCount,
 											chapterItems.length,
 										),
 										footerAction:
-											chapterItems.length > presentation.chapters.visibleCount
+											chapterItems.length > chapterVisibleCount
 												? {
-													label: presentation.chapters.labels.showAllTemplate.replace(
+													label: chapterShowAllTemplate.replace(
 														"{count}",
 														String(chapterItems.length),
 													),
@@ -332,20 +373,20 @@ export async function getPublicationDetailPageData(
 			},
 		},
 		{
-			key: presentation.subscription.id,
+			key: subscriptionPresentation.id,
 			component: "cta",
 			section: {
-				id: presentation.subscription.id,
-				...presentation.subscription.settings,
+				id: subscriptionPresentation.id,
+				...subscriptionPresentation.settings,
 			},
 			props: {
 				template: "subscription",
 				data: {
-					id: presentation.subscription.id,
-					title: presentation.subscription.title,
-					description: presentation.subscription.description,
-					image: presentation.subscription.image,
-					form: presentation.subscription.form,
+					id: subscriptionPresentation.id,
+					title: subscriptionPresentation.title,
+					description: subscriptionPresentation.description,
+					image: subscriptionPresentation.image,
+					form: subscriptionPresentation.form,
 				},
 			},
 		},
