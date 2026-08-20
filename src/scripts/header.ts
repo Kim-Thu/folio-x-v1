@@ -19,17 +19,10 @@ export function initHeader(): void {
 
 		const solidSurface = header.dataset.solidHeader === "true" || isPastHeader;
 		const hidden = !menuIsOpen() && isPastHeader && isScrollingDown;
+
 		header.dataset.scrollSurface = solidSurface ? "solid" : "transparent";
 		header.dataset.scrollState = hidden ? "hidden" : "visible";
 		header.classList.toggle("-translate-y-full", hidden);
-		header.classList.toggle(
-			"bg-black/80",
-			solidSurface && header.dataset.headerTone === "dark",
-		);
-		header.classList.toggle(
-			"bg-white/90",
-			solidSurface && header.dataset.headerTone !== "dark",
-		);
 		previousScrollY = currentScrollY;
 	};
 
