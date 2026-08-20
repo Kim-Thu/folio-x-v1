@@ -16,6 +16,7 @@ const {
 	data,
 	headingLevel = 3,
 	index,
+	mediaRatio = "natural",
 	presentation,
 	slots,
 	source,
@@ -34,7 +35,7 @@ const card = resolveProjectOverlayCard({
 	surface="dark"
 	radius="lg"
 	position="relative"
-	ratio="natural"
+	ratio={mediaRatio}
 	overflow="hidden"
 	data-tab-card={card.filterValue ? "" : undefined}
 	data-filter-category={card.filterValue}
