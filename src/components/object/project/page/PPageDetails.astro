@@ -25,13 +25,13 @@ const variant = list.variant ?? "default";
 const horizontal = variant === "facts" || variant === "metrics" || variant === "highlights";
 const onDark = list.tone === "on-dark";
 const showTagsHeading = Boolean(tags?.title && tags.title !== title);
-const panel = variant === "panel";
+const panel = Boolean(title);
 ---
 
 <CBox
-	surface={panel ? "bordered" : title ? "glass" : "plain"}
-	radius={title ? "md" : "none"}
-	spacing={panel ? "sm" : title ? "md" : "none"}
+	surface={panel ? "bordered" : "plain"}
+	radius={panel ? "md" : "none"}
+	spacing={panel ? "sm" : "none"}
 	class={panel ? pageDetailsPanelClasses : undefined}
 >
 	<CColumns columns="one" gap="sm">
