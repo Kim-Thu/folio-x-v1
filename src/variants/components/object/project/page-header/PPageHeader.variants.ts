@@ -8,15 +8,15 @@ export const pageHeaderCoverSummaryGridClasses = "items-stretch";
 
 export const pageHeaderCoverSummaryMainClasses = "flex h-full flex-col";
 
-export const pageHeaderCoverSummaryIdentityClasses = "flex flex-col gap-3";
+export const pageHeaderCoverSummaryIdentityClasses = "flex flex-col gap-4";
 
-export const pageHeaderCoverSummaryMetricsClasses = "mt-6";
+export const pageHeaderCoverSummaryMetricsClasses = "mt-8";
 
 export const pageHeaderCoverSummaryMetricClasses = "min-w-0";
 
-export const pageHeaderCoverSummaryActionsClasses = "mt-6";
+export const pageHeaderCoverSummaryActionsClasses = "mt-8";
 
-export const pageHeaderCoverSummaryDescriptionClasses = "mt-auto pt-8";
+export const pageHeaderCoverSummaryDescriptionClasses = "mt-8";
 
 export const pageHeaderCoverSummaryFactsClasses = "h-full";
 
