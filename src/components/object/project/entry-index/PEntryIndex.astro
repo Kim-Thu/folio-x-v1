@@ -29,21 +29,21 @@ const { id, label, title, sort, listViewLabel, items, visibleCount = items.lengt
 		<CColumns columns="one" gap="none" separator="light">
 			{items.map((item, index) => (
 				<CBox as="article" spacing="sm" data-entry-row data-order={item.order} hidden={index >= visibleCount}>
-					<CColumns columns="twelve" gap="sm">
+					<CColumns columns="twelve" gap="sm" align="center">
 						<CGridItem mdSpan={1}><CText as="span" variant="label" tone="muted">{item.number}</CText></CGridItem>
 						<CGridItem mdSpan={5}>
-						<CRow align="center" gap="xs" wrap>
-							<CLink href={item.href}>
-								<CHeading level={3} variant="h6">{item.title}</CHeading>
-							</CLink>
-							{item.badge && <CBadge tone="brand">{item.badge}</CBadge>}
-						</CRow>
+							<CRow align="center" gap="xs" wrap>
+								<CLink href={item.href}>
+									<CHeading level={3} variant="h6">{item.title}</CHeading>
+								</CLink>
+								{item.badge && <CBadge tone="brand">{item.badge}</CBadge>}
+							</CRow>
 						</CGridItem>
 						<CGridItem mdSpan={2}>
-						<CMetadata
-							data={{ items: [{ type: "datetime", label: item.publishedLabel, datetime: item.publishedAt, display: "text" }] }}
-							slots={{ author: false, category: false, index: false, readingTime: false, icons: false }}
-						/>
+							<CMetadata
+								data={{ items: [{ type: "datetime", label: item.publishedLabel, datetime: item.publishedAt, display: "text" }] }}
+								slots={{ author: false, category: false, index: false, readingTime: false, icons: false }}
+							/>
 						</CGridItem>
 						<CGridItem mdSpan={2}><CFeature icon="eye" label={item.views} appearance="caption" /></CGridItem>
 						<CGridItem mdSpan={2}>
