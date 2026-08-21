@@ -6,8 +6,6 @@ export const pageHeaderCoverSummaryPanelClasses = "overflow-hidden";
 
 export const pageHeaderCoverSummaryGridClasses = "items-stretch";
 
-export const pageHeaderCoverSummaryCoverClasses = "h-full";
-
 export const pageHeaderCoverSummaryMainClasses = "flex h-full flex-col";
 
 export const pageHeaderCoverSummaryIdentityClasses = "flex flex-col gap-3";
@@ -21,6 +19,8 @@ export const pageHeaderCoverSummaryActionsClasses = "mt-6";
 export const pageHeaderCoverSummaryDescriptionClasses = "mt-auto pt-8";
 
 export const pageHeaderCoverSummaryFactsClasses = "h-full";
+
+export const pageHeaderCoverSummaryFactsInnerClasses = "flex h-full flex-col";
 
 export const pageHeaderCoverSummaryFactsListClasses = "divide-y divide-gray-100";
 
