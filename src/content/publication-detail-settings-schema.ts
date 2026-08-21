@@ -81,6 +81,12 @@ export const publicationDetailSettingsSchema = z.object({
       followers: z.object({ icon: iconSchema }),
     }),
     primaryAction: buttonPresentationSchema,
+    share: z.object({
+      label: z.string().min(1),
+      twitterLabel: z.string().min(1),
+      facebookLabel: z.string().min(1),
+      copyLabel: z.string().min(1),
+    }),
   }),
   navigation: z.object({
     id: z.string().min(1),
