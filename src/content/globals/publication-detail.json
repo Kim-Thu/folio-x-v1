@@ -61,6 +61,12 @@
       "icon": "bookOpen",
       "variant": "primary",
       "size": "md"
+    },
+    "share": {
+      "label": "Share",
+      "twitterLabel": "Share on Twitter",
+      "facebookLabel": "Share on Facebook",
+      "copyLabel": "Copy publication link"
     }
   },
   "navigation": {
