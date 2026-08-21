@@ -6,7 +6,7 @@ import CButton from "@/components/object/component/CButton.astro";
 import CColumns from "@/components/object/component/CColumns.astro";
 import CHeading from "@/components/object/component/CHeading.astro";
 import CGridItem from "@/components/object/component/CGridItem.astro";
-import CIconTile from "@/components/object/component/CIconTile.astro";
+import CIcon from "@/components/object/component/CIcon.astro";
 import CImage from "@/components/object/component/CImage.astro";
 import CLink from "@/components/object/component/CLink.astro";
 import CList from "@/components/object/component/CList.astro";
@@ -16,6 +16,21 @@ import CShareLinks from "@/components/object/component/CShareLinks.astro";
 import CTags from "@/components/object/component/CTags.astro";
 import CText from "@/components/object/component/CText.astro";
 import type { PPageHeaderCoverSummaryData } from "@/types/components/object/project/page-header/PPageHeader.types";
+import {
+	pageHeaderCoverSummaryActionsClasses,
+	pageHeaderCoverSummaryCoverClasses,
+	pageHeaderCoverSummaryDescriptionClasses,
+	pageHeaderCoverSummaryFactClasses,
+	pageHeaderCoverSummaryFactsClasses,
+	pageHeaderCoverSummaryFactsListClasses,
+	pageHeaderCoverSummaryGridClasses,
+	pageHeaderCoverSummaryIdentityClasses,
+	pageHeaderCoverSummaryMainClasses,
+	pageHeaderCoverSummaryMetricClasses,
+	pageHeaderCoverSummaryMetricsClasses,
+	pageHeaderCoverSummaryPanelClasses,
+	pageHeaderCoverSummaryShareClasses,
+} from "@/variants/components/object/project/page-header/PPageHeader.variants";
 
 type Props = { data: PPageHeaderCoverSummaryData };
 const { data } = Astro.props as Props;
@@ -23,68 +38,184 @@ const { data } = Astro.props as Props;
 
 <CColumns columns="one" gap="md">
 	<CBreadcrumb {...data.breadcrumb} />
-	<CBox as="section" surface="glass-dark" radius="md" spacing="md" overflow="hidden">
-		<CColumns columns="twelve" gap="lg">
-			<CGridItem lgSpan={3}>
-				<CBox position="relative" radius="md" overflow="hidden">
-					<CImage {...data.cover} variant="natural" />
-					{data.trailer && <CBox position="overlay-bottom"><CButton {...data.trailer} tone="dark" /></CBox>}
+
+	<CBox
+		as="section"
+		surface="glass-dark"
+		radius="md"
+		spacing="md"
+		class={pageHeaderCoverSummaryPanelClasses}
+	>
+		<CColumns
+			columns="twelve"
+			gap="lg"
+			class={pageHeaderCoverSummaryGridClasses}
+		>
+			<CGridItem lgSpan={3} align="stretch">
+				<CBox
+					position="relative"
+					ratio="portrait"
+					radius="md"
+					overflow="hidden"
+					class={pageHeaderCoverSummaryCoverClasses}
+				>
+					<CImage {...data.cover} variant="fill" />
+
+					{data.trailer && (
+						<CBox position="overlay-bottom">
+							<CButton {...data.trailer} tone="dark" />
+						</CBox>
+					)}
 				</CBox>
 			</CGridItem>
 
-			<CGridItem as="header" lgSpan={6}>
-				<CColumns columns="one" gap="md">
-					<CTags label={data.tagsLabel} items={data.tags} appearance="outline" tone="inverse" />
-					<CRow align="center" gap="sm" wrap>
-						<CHeading level={1} variant="h3">{data.title}</CHeading>
-						{data.badge && <CBadge appearance="outline" tone="inverse">{data.badge}</CBadge>}
-					</CRow>
-					<CMetadata
-						data={{ items: [{ type: "author", label: `${data.author.label}: ${data.author.name}`, href: data.author.href, display: "text" }] }}
-						tone="on-dark-subtle"
-						slots={{ category: false, datetime: false, index: false, readingTime: false, icons: false }}
-					/>
-					<CList direction="row" gap="md">
+			<CGridItem as="header" lgSpan={6} align="stretch">
+				<div class={pageHeaderCoverSummaryMainClasses}>
+					<div class={pageHeaderCoverSummaryIdentityClasses}>
+						<CTags
+							label={data.tagsLabel}
+							items={data.tags}
+							appearance="outline"
+							tone="inverse"
+						/>
+
+						<CRow align="center" gap="sm" wrap>
+							<CHeading level={1} variant="h3">
+								{data.title}
+							</CHeading>
+
+							{data.badge && (
+								<CBadge appearance="outline" tone="inverse">
+									{data.badge}
+								</CBadge>
+							)}
+						</CRow>
+
+						<CMetadata
+							data={{
+								items: [
+									{
+										type: "author",
+										label: `${data.author.label}: ${data.author.name}`,
+										href: data.author.href,
+										display: "text",
+									},
+								],
+							}}
+							tone="on-dark-subtle"
+							slots={{
+								category: false,
+								datetime: false,
+								index: false,
+								readingTime: false,
+								icons: false,
+							}}
+						/>
+					</div>
+
+					<CList
+						direction="row"
+						gap="lg"
+						class={pageHeaderCoverSummaryMetricsClasses}
+					>
 						{data.metrics.map((item) => (
-							<li>
-								<CRow align="center" gap="sm">
-									{item.icon && <CIconTile icon={item.icon} size="sm" iconSize="md" />}
-									<CColumns columns="one" gap="xs">
-										<CText variant="caption" tone="on-dark-subtle">{item.label}</CText>
-										{item.href ? <CLink href={item.href}>{item.value}</CLink> : <CText variant="price" tone="on-dark">{item.value}</CText>}
-									</CColumns>
-								</CRow>
+							<li class={pageHeaderCoverSummaryMetricClasses}>
+								<CColumns columns="one" gap="xs">
+									<CRow align="center" gap="xs" wrap={false}>
+										{item.icon && (
+											<CIcon name={item.icon} size="md" />
+										)}
+
+										{item.href ? (
+											<CLink href={item.href}>{item.value}</CLink>
+										) : (
+											<CText variant="price" tone="on-dark">
+												{item.value}
+											</CText>
+										)}
+									</CRow>
+
+									<CText variant="caption" tone="on-dark-subtle">
+										{item.label}
+									</CText>
+								</CColumns>
 							</li>
 						))}
 					</CList>
-					<CRow gap="sm" wrap role="group" aria-label={data.actionsLabel}>
-						{data.actions.map((action) => <CButton {...action} tone="dark" />)}
-					</CRow>
-					<CColumns columns="one" gap="sm">
-						{data.description.map((paragraph) => <CText tone="on-dark-muted">{paragraph}</CText>)}
+
+					{data.actions.length > 0 && (
+						<CRow
+							gap="sm"
+							wrap
+							role="group"
+							aria-label={data.actionsLabel}
+							class={pageHeaderCoverSummaryActionsClasses}
+						>
+							{data.actions.map((action) => (
+								<CButton {...action} tone="dark" />
+							))}
+						</CRow>
+					)}
+
+					<CColumns
+						columns="one"
+						gap="sm"
+						class={pageHeaderCoverSummaryDescriptionClasses}
+					>
+						{data.description.map((paragraph) => (
+							<CText tone="on-dark-muted">{paragraph}</CText>
+						))}
 					</CColumns>
-				</CColumns>
+				</div>
 			</CGridItem>
 
-			<CGridItem as="aside" lgSpan={3}>
-				<CBox surface="canvas" radius="md" spacing="sm">
-					<CColumns columns="one" gap="sm">
-						<CHeading level={2} variant="h5">{data.facts.title}</CHeading>
-						<CList direction="column" gap="sm">
-							{data.facts.items.map((item) => (
-								<li>
-									<CRow align="center" justify="between" gap="sm">
-										<CRow align="center" gap="sm">
-											{item.icon && <CIconTile icon={item.icon} size="sm" iconSize="md" />}
-											<CText variant="caption" tone="subtle">{item.label}</CText>
+			<CGridItem as="aside" lgSpan={3} align="stretch">
+				<CBox
+					surface="canvas"
+					radius="md"
+					spacing="md"
+					class={pageHeaderCoverSummaryFactsClasses}
+				>
+					<div class="flex h-full flex-col">
+						<CColumns columns="one" gap="md">
+							<CHeading level={2} variant="h5">
+								{data.facts.title}
+							</CHeading>
+
+							<CList
+								direction="column"
+								gap="none"
+								class={pageHeaderCoverSummaryFactsListClasses}
+							>
+								{data.facts.items.map((item) => (
+									<li class={pageHeaderCoverSummaryFactClasses}>
+										<CRow
+											align="start"
+											justify="between"
+											gap="md"
+											wrap={false}
+										>
+											<CText variant="caption" tone="subtle">
+												{item.label}
+											</CText>
+
+											{item.href ? (
+												<CLink href={item.href}>{item.value}</CLink>
+											) : (
+												<CText variant="body-sm">{item.value}</CText>
+											)}
 										</CRow>
-										{item.href ? <CLink href={item.href}>{item.value}</CLink> : <CText variant="body-sm">{item.value}</CText>}
-									</CRow>
-								</li>
-							))}
-						</CList>
-						{data.share && <CShareLinks {...data.share} />}
-					</CColumns>
+									</li>
+								))}
+							</CList>
+						</CColumns>
+
+						{data.share && (
+							<div class={pageHeaderCoverSummaryShareClasses}>
+								<CShareLinks {...data.share} />
+							</div>
+						)}
+					</div>
 				</CBox>
 			</CGridItem>
 		</CColumns>
