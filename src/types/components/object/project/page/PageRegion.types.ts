@@ -145,6 +145,7 @@ export interface DetailsRegion extends PageRegionBase {
 			title: string;
 			list: CTagsProps;
 		};
+		action?: CButtonLinkProps;
 	};
 }
 
