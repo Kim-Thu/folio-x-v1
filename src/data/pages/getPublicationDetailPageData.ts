@@ -72,6 +72,7 @@ export async function getPublicationDetailPageData(
 
 	const collectionPresentation = presentation.collections[collection];
 	const basePath = collectionPresentation.basePath;
+	const publicationHref = `${basePath}/${entry.slug}`;
 	const description = detail.description?.length ? detail.description : [entry.summary];
 	const configuredChapters = [...(detail.reader ?? [])].sort((a, b) => b.number - a.number);
 	const chapterItems = configuredChapters.map((chapter) => ({
@@ -236,6 +237,26 @@ export async function getPublicationDetailPageData(
 					facts: {
 						title: presentation.header.labels.factsTitle,
 						items: facts,
+					},
+					share: {
+						label: presentation.header.share.label,
+						links: [
+							{
+								label: presentation.header.share.twitterLabel,
+								href: `https://twitter.com/intent/tweet?url=${encodeURIComponent(publicationHref)}`,
+								icon: "twitter",
+							},
+							{
+								label: presentation.header.share.facebookLabel,
+								href: `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(publicationHref)}`,
+								icon: "facebook",
+							},
+							{
+								label: presentation.header.share.copyLabel,
+								href: publicationHref,
+								icon: "link",
+							},
+						],
 					},
 				},
 			},
