@@ -35,6 +35,7 @@
       "followers": "Followers",
       "actions": "Publication actions",
       "primaryAction": "Read from start",
+      "secondaryAction": "Follow",
       "factsTitle": "Information",
       "language": "Language",
       "status": "Status",
@@ -60,6 +61,12 @@
     "primaryAction": {
       "icon": "bookOpen",
       "variant": "primary",
+      "size": "md"
+    },
+    "secondaryAction": {
+      "icon": "bookmark",
+      "iconPosition": "end",
+      "variant": "outline",
       "size": "md"
     },
     "share": {
