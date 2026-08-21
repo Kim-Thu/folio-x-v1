@@ -1,6 +1,7 @@
 ---
 import CBadge from "@/components/object/component/CBadge.astro";
 import CBox from "@/components/object/component/CBox.astro";
+import CButton from "@/components/object/component/CButton.astro";
 import CColumns from "@/components/object/component/CColumns.astro";
 import CHeading from "@/components/object/component/CHeading.astro";
 import CIconTile from "@/components/object/component/CIconTile.astro";
@@ -11,23 +12,27 @@ import CTags from "@/components/object/component/CTags.astro";
 import CText from "@/components/object/component/CText.astro";
 import type { DetailsRegion } from "@/types/components/object/project/page/PageRegion.types";
 import {
+	pageDetailsActionClasses,
 	pageDetailsLabelClasses,
+	pageDetailsPanelClasses,
 	pageDetailsTagsClasses,
 } from "@/variants/components/object/project/page/PPageDetails.variants";
 
 type Props = DetailsRegion["props"];
 
-const { title, list, tags } = Astro.props as Props;
-const variant = title ? "default" : (list.variant ?? "default");
+const { title, list, tags, action } = Astro.props as Props;
+const variant = list.variant ?? "default";
 const horizontal = variant === "facts" || variant === "metrics" || variant === "highlights";
 const onDark = list.tone === "on-dark";
 const showTagsHeading = Boolean(tags?.title && tags.title !== title);
+const panel = variant === "panel";
 ---
 
 <CBox
-	surface={title ? "glass" : "plain"}
+	surface={panel ? "bordered" : title ? "glass" : "plain"}
 	radius={title ? "md" : "none"}
-	spacing={title ? "md" : "none"}
+	spacing={panel ? "sm" : title ? "md" : "none"}
+	class={panel ? pageDetailsPanelClasses : undefined}
 >
 	<CColumns columns="one" gap="sm">
 		{title && <CHeading level={2} variant="h5">{title}</CHeading>}
@@ -108,6 +113,12 @@ const showTagsHeading = Boolean(tags?.title && tags.title !== title);
 					<CTags {...tags.list} />
 				</CColumns>
 			</div>
+		)}
+
+		{action && (
+			<CRow class={pageDetailsActionClasses}>
+				<CButton {...action} variant={action.variant ?? "text"} />
+			</CRow>
 		)}
 	</CColumns>
 </CBox>
