@@ -107,6 +107,7 @@ const searchValue = insight
 		: data.searchValue ?? title;
 const sortValue = insight?.publishedAt
 	?? (publication ? String(publication.order).padStart(4, "0") : data.sortValue);
+const staticCard = source === "static";
 ---
 
 <CBox
@@ -122,6 +123,7 @@ const sortValue = insight?.publishedAt
 			<CMedia
 				ratio={mediaRatio}
 				size={mediaRatio === "portrait" ? "compact" : "thumbnail"}
+				shape="none"
 				href={href}
 				ariaLabel={ariaLabel}
 				class="rounded-md"
@@ -131,9 +133,15 @@ const sortValue = insight?.publishedAt
 		)}
 
 		<CColumns columns="one" gap="xs">
+			{staticCard && slots.title && (
+				<CHeading level={headingLevel} variant="h5">
+					<CLink href={href}>{title}</CLink>
+				</CHeading>
+			)}
+
 			{slots.metadata && metadata && <CMetadata data={metadata} tone="on-light" />}
 
-			{slots.title && (
+			{!staticCard && slots.title && (
 				<CHeading level={headingLevel} variant="h5">
 					<CLink href={href}>{title}</CLink>
 				</CHeading>
