@@ -3,7 +3,7 @@ import type { CFeatureData } from "@/types/components/object/component/CFeature.
 import type { CIconName } from "@/types/components/object/component/CIcon.types";
 import type { CImageData } from "@/types/components/object/component/CImage.types";
 import type { CShareLinksProps } from "@/types/components/object/component/CShareLinks.types";
-import type { CButtonLinkProps } from "@/types/components/object/component/CButton.types";
+import type { CButtonLinkProps, CButtonProps } from "@/types/components/object/component/CButton.types";
 
 export type PPageHeaderTemplate =
   | "editorial"
@@ -33,7 +33,7 @@ export interface PPageHeaderCoverSummaryData {
   author: { label: string; name: string; href?: string };
   metrics: PPageHeaderDetailItem[];
   actionsLabel: string;
-  actions: CButtonLinkProps[];
+  actions: CButtonProps[];
   description: string[];
   facts: { title: string; items: PPageHeaderDetailItem[] };
   share?: CShareLinksProps;
