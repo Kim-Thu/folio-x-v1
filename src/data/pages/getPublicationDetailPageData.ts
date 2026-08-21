@@ -18,13 +18,6 @@ const publicationChapterDefaults = {
 	showAllTemplate: "View all chapters ({count})",
 } as const;
 
-const publicationShareDefaults = {
-	label: "Share",
-	twitterLabel: "Share on Twitter",
-	facebookLabel: "Share on Facebook",
-	copyLabel: "Copy publication link",
-} as const;
-
 const publicationSubscriptionDefaults = {
 	id: "publication-subscription",
 	title: "Never miss a new chapter",
@@ -48,6 +41,21 @@ const publicationSubscriptionDefaults = {
 		submitLabel: "Subscribe",
 	},
 } as const;
+
+const publicationShareDefaults = {
+	label: "Share",
+	twitterLabel: "Share on Twitter",
+	facebookLabel: "Share on Facebook",
+	copyLabel: "Copy publication link",
+} as const;
+
+const publicationSecondaryActionDefaults = {
+	label: "Follow",
+	icon: "bookmark" as const,
+	iconPosition: "end" as const,
+	variant: "outline" as const,
+	size: "md" as const,
+};
 
 export async function getPublicationDetailPaths(collection: PublicationCollection) {
 	const entries = await getPublications(collection);
@@ -75,8 +83,14 @@ export async function getPublicationDetailPageData(
 	const chapterVisibleCount = presentation.chapters.visibleCount ?? publicationChapterDefaults.visibleCount;
 	const chapterShowAllTemplate =
 		presentation.chapters.labels.showAllTemplate ?? publicationChapterDefaults.showAllTemplate;
-	const sharePresentation = presentation.header.share ?? publicationShareDefaults;
 	const subscriptionPresentation = presentation.subscription ?? publicationSubscriptionDefaults;
+	const sharePresentation = presentation.header.share ?? publicationShareDefaults;
+	const secondaryActionPresentation = presentation.header.secondaryAction
+		? {
+			label: presentation.header.labels.secondaryAction ?? publicationSecondaryActionDefaults.label,
+			...presentation.header.secondaryAction,
+		}
+		: publicationSecondaryActionDefaults;
 
 	const collectionPresentation = presentation.collections[collection];
 	const basePath = collectionPresentation.basePath;
@@ -232,15 +246,18 @@ export async function getPublicationDetailPageData(
 					},
 					metrics,
 					actionsLabel: presentation.header.labels.actions,
-					actions: configuredChapters.length > 0
-						? [
-								{
-									label: presentation.header.labels.primaryAction,
-									href: `#${presentation.chapters.id}`,
-									...presentation.header.primaryAction,
-								},
-							]
-						: [],
+					actions: [
+						...(configuredChapters.length > 0
+							? [
+									{
+										label: presentation.header.labels.primaryAction,
+										href: `#${presentation.chapters.id}`,
+										...presentation.header.primaryAction,
+									},
+								]
+							: []),
+						secondaryActionPresentation,
+					],
 					description,
 					facts: {
 						title: presentation.header.labels.factsTitle,
