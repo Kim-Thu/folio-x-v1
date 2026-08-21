@@ -18,10 +18,10 @@ import CText from "@/components/object/component/CText.astro";
 import type { PPageHeaderCoverSummaryData } from "@/types/components/object/project/page-header/PPageHeader.types";
 import {
 	pageHeaderCoverSummaryActionsClasses,
-	pageHeaderCoverSummaryCoverClasses,
 	pageHeaderCoverSummaryDescriptionClasses,
 	pageHeaderCoverSummaryFactClasses,
 	pageHeaderCoverSummaryFactsClasses,
+	pageHeaderCoverSummaryFactsInnerClasses,
 	pageHeaderCoverSummaryFactsListClasses,
 	pageHeaderCoverSummaryGridClasses,
 	pageHeaderCoverSummaryIdentityClasses,
@@ -57,7 +57,6 @@ const { data } = Astro.props as Props;
 					ratio="portrait"
 					radius="md"
 					overflow="hidden"
-					class={pageHeaderCoverSummaryCoverClasses}
 				>
 					<CImage {...data.cover} variant="fill" />
 
@@ -176,7 +175,7 @@ const { data } = Astro.props as Props;
 					spacing="md"
 					class={pageHeaderCoverSummaryFactsClasses}
 				>
-					<div class="flex h-full flex-col">
+					<div class={pageHeaderCoverSummaryFactsInnerClasses}>
 						<CColumns columns="one" gap="md">
 							<CHeading level={2} variant="h5">
 								{data.facts.title}
