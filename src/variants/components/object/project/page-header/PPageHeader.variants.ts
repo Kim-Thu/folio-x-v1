@@ -2,6 +2,32 @@ export const pageHeaderBreadcrumbOffsetClasses = "pt-24";
 
 export const pageHeaderSliderAsideRootClasses = "gap-6";
 
+export const pageHeaderCoverSummaryPanelClasses = "overflow-hidden";
+
+export const pageHeaderCoverSummaryGridClasses = "items-stretch";
+
+export const pageHeaderCoverSummaryCoverClasses = "h-full";
+
+export const pageHeaderCoverSummaryMainClasses = "flex h-full flex-col";
+
+export const pageHeaderCoverSummaryIdentityClasses = "flex flex-col gap-3";
+
+export const pageHeaderCoverSummaryMetricsClasses = "mt-6";
+
+export const pageHeaderCoverSummaryMetricClasses = "min-w-0";
+
+export const pageHeaderCoverSummaryActionsClasses = "mt-6";
+
+export const pageHeaderCoverSummaryDescriptionClasses = "mt-auto pt-8";
+
+export const pageHeaderCoverSummaryFactsClasses = "h-full";
+
+export const pageHeaderCoverSummaryFactsListClasses = "divide-y divide-gray-100";
+
+export const pageHeaderCoverSummaryFactClasses = "py-3 first:pt-0 last:pb-0";
+
+export const pageHeaderCoverSummaryShareClasses = "mt-auto border-t border-gray-100 pt-4";
+
 export const pageHeaderGallerySummaryRootClasses = "flex flex-col gap-6";
 
 export const pageHeaderGallerySummaryGalleryClasses = "h-full";
