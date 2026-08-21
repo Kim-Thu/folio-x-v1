@@ -66,6 +66,7 @@ export const publicationDetailSettingsSchema = z.object({
       followers: z.string().min(1),
       actions: z.string().min(1),
       primaryAction: z.string().min(1),
+      secondaryAction: z.string().min(1),
       factsTitle: z.string().min(1),
       language: z.string().min(1),
       status: z.string().min(1),
@@ -81,6 +82,7 @@ export const publicationDetailSettingsSchema = z.object({
       followers: z.object({ icon: iconSchema }),
     }),
     primaryAction: buttonPresentationSchema,
+    secondaryAction: buttonPresentationSchema,
     share: z.object({
       label: z.string().min(1),
       twitterLabel: z.string().min(1),
