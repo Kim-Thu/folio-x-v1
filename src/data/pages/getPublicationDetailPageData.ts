@@ -18,6 +18,13 @@ const publicationChapterDefaults = {
 	showAllTemplate: "View all chapters ({count})",
 } as const;
 
+const publicationShareDefaults = {
+	label: "Share",
+	twitterLabel: "Share on Twitter",
+	facebookLabel: "Share on Facebook",
+	copyLabel: "Copy publication link",
+} as const;
+
 const publicationSubscriptionDefaults = {
 	id: "publication-subscription",
 	title: "Never miss a new chapter",
@@ -68,6 +75,7 @@ export async function getPublicationDetailPageData(
 	const chapterVisibleCount = presentation.chapters.visibleCount ?? publicationChapterDefaults.visibleCount;
 	const chapterShowAllTemplate =
 		presentation.chapters.labels.showAllTemplate ?? publicationChapterDefaults.showAllTemplate;
+	const sharePresentation = presentation.header.share ?? publicationShareDefaults;
 	const subscriptionPresentation = presentation.subscription ?? publicationSubscriptionDefaults;
 
 	const collectionPresentation = presentation.collections[collection];
@@ -239,20 +247,20 @@ export async function getPublicationDetailPageData(
 						items: facts,
 					},
 					share: {
-						label: presentation.header.share.label,
+						label: sharePresentation.label,
 						links: [
 							{
-								label: presentation.header.share.twitterLabel,
+								label: sharePresentation.twitterLabel,
 								href: `https://twitter.com/intent/tweet?url=${encodeURIComponent(publicationHref)}`,
 								icon: "twitter",
 							},
 							{
-								label: presentation.header.share.facebookLabel,
+								label: sharePresentation.facebookLabel,
 								href: `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(publicationHref)}`,
 								icon: "facebook",
 							},
 							{
-								label: presentation.header.share.copyLabel,
+								label: sharePresentation.copyLabel,
 								href: publicationHref,
 								icon: "link",
 							},
