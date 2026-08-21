@@ -112,13 +112,13 @@ const { data } = Astro.props as Props;
 						/>
 					</div>
 
-					<CList
-						direction="row"
-						gap="lg"
+					<CColumns
+						columns="four"
+						gap="sm"
 						class={pageHeaderCoverSummaryMetricsClasses}
 					>
 						{data.metrics.map((item) => (
-							<li class={pageHeaderCoverSummaryMetricClasses}>
+							<div class={pageHeaderCoverSummaryMetricClasses}>
 								<CColumns columns="one" gap="xs">
 									<CRow align="center" gap="xs" wrap={false}>
 										{item.icon && (
@@ -128,19 +128,19 @@ const { data } = Astro.props as Props;
 										{item.href ? (
 											<CLink href={item.href}>{item.value}</CLink>
 										) : (
-											<CText variant="price" tone="on-dark">
+											<CText variant="body" tone="on-dark">
 												{item.value}
 											</CText>
 										)}
 									</CRow>
 
-									<CText variant="caption" tone="on-dark-subtle">
+									<CText variant="body-sm" tone="on-dark-subtle">
 										{item.label}
 									</CText>
 								</CColumns>
-							</li>
+							</div>
 						))}
-					</CList>
+					</CColumns>
 
 					{data.actions.length > 0 && (
 						<CRow
@@ -162,7 +162,9 @@ const { data } = Astro.props as Props;
 						class={pageHeaderCoverSummaryDescriptionClasses}
 					>
 						{data.description.map((paragraph) => (
-							<CText tone="on-dark-muted">{paragraph}</CText>
+							<CText variant="body-sm" tone="on-dark-muted">
+								{paragraph}
+							</CText>
 						))}
 					</CColumns>
 				</div>
