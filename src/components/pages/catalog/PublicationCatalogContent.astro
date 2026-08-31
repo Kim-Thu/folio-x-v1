@@ -157,7 +157,9 @@ const publicationSource: CardSourceConfig = {
 
 <CBox data-collection-filter-root>
 	<CColumns columns="one" gap="md">
-		<PArchiveToolbar {...toolbar} />
+		<CBox class="py-8 md:py-12">
+			<PArchiveToolbar {...toolbar} />
+		</CBox>
 
 		<LSidebar
 			label={settings.sidebar.labelTemplate.replace("{catalog}", catalog)}
