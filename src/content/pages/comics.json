@@ -15,7 +15,7 @@
         "template": "immersive",
         "settings": {
           "theme": "canvas",
-          "spacing": "body",
+          "spacing": "lead",
           "container": "site"
         },
         "content": {
