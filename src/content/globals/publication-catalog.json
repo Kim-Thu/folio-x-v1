@@ -60,14 +60,14 @@
     "featuredTitle": "Featured",
     "latestTitle": "Latest updates",
     "popularGenresTitle": "Popular genres",
-    "featuredLimit": 4,
+    "featuredLimit": 5,
     "latestLimit": 6,
     "popularGenresLimit": 8,
     "featuredCards": {
       "template": "media-metrics",
-      "layout": "showcase",
-      "columns": 4,
-      "gap": "md",
+      "layout": "grid",
+      "columns": 5,
+      "gap": "sm",
       "mediaRatio": "portrait",
       "slots": {
         "excerpt": false,
@@ -89,7 +89,7 @@
       "template": "icon-summary",
       "layout": "grid",
       "columns": 4,
-      "gap": "md",
+      "gap": "sm",
       "slots": {
         "media": false,
         "metadata": false,
