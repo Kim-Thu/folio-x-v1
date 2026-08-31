@@ -130,18 +130,20 @@ const sortValue = insight?.publishedAt
 			</CMedia>
 		)}
 
-		<CColumns columns="one" gap="xs">
-			{slots.metadata && metadata && <CMetadata data={metadata} tone="on-light" />}
+		<CColumns columns="one" gap="sm">
+			<CColumns columns="one" gap="xs">
+				{slots.metadata && metadata && <CMetadata data={metadata} tone="on-light" />}
 
-			{slots.title && (
-				<CHeading level={headingLevel} variant="h5">
-					<CLink href={href}>{title}</CLink>
-				</CHeading>
-			)}
+				{slots.title && (
+					<CHeading level={headingLevel} variant="h5">
+						<CLink href={href}>{title}</CLink>
+					</CHeading>
+				)}
 
-			{slots.excerpt && excerpt && (
-				<CText variant="body-sm" tone="subtle">{excerpt}</CText>
-			)}
+				{slots.excerpt && excerpt && (
+					<CText variant="body-sm" tone="subtle">{excerpt}</CText>
+				)}
+			</CColumns>
 
 			{slots.metrics && metrics && metrics.length > 0 && (
 				<CRow gap="sm">
