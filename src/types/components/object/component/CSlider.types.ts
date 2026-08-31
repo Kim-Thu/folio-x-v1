@@ -12,7 +12,7 @@ export interface CSliderBehavior {
 }
 
 export interface CSliderProps
-	extends Omit<HTMLAttributes<"div">, "class">,
+	extends Omit<HTMLAttributes<"div">, "class" | "draggable">,
 		CSliderBehavior {
 	class?: string;
 	controls?: CSliderControls;
