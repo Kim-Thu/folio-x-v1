@@ -4,11 +4,10 @@ import CBox from "@/components/object/component/CBox.astro";
 import CColumns from "@/components/object/component/CColumns.astro";
 import PArchiveToolbar from "@/components/object/project/archive-toolbar/PArchiveToolbar.astro";
 import PCard from "@/components/object/project/card/PCard.astro";
-import PCta from "@/components/object/project/cta/PCta.astro";
 import PFilterPanel from "@/components/object/project/filter-panel/PFilterPanel.astro";
 import PSectionHeader from "@/components/object/project/section-header/PSectionHeader.astro";
 import { getPublicationCatalogSettings } from "@/data/cms";
-import type { PublicationEntry } from "@/types/content";
+import type { CIconName } from "@/types/components/object/component/CIcon.types";
 import type {
 	CCardConfig,
 	CCardData,
@@ -17,20 +16,15 @@ import type {
 	PublicationCardPresentation,
 } from "@/types/components/object/component/card/CCard.types";
 import type { PCardProps } from "@/types/components/object/project/card/PCard.types";
-import type { PCtaProps } from "@/types/components/object/project/cta/PCta.types";
-import type { CIconName } from "@/types/components/object/component/CIcon.types";
-import type { PageSectionData } from "@/types/components/pages/builder/PageBuilder.types";
-
-type CtaSection = Extract<PageSectionData, { type: "cta" }>;
+import type { PublicationEntry } from "@/types/content";
 
 type Props = {
 	catalog: "novels" | "comics";
 	entries: PublicationEntry[];
 	presentation: PublicationCardPresentation;
-	closing?: CtaSection;
 };
 
-const { catalog, entries, presentation, closing } = Astro.props as Props;
+const { catalog, entries, presentation } = Astro.props as Props;
 const settings = await getPublicationCatalogSettings();
 const featuredCards = entries.slice(0, settings.main.featuredLimit);
 const latestCards = entries.slice(0, settings.main.latestLimit);
@@ -156,8 +150,24 @@ const publicationSource: CardSourceConfig = {
 ---
 
 <CBox data-collection-filter-root>
-	<CColumns columns="one" gap="md">
+	<CColumns columns="one" gap="xl">
 		<PArchiveToolbar {...toolbar} />
+
+		<CColumns columns="one" gap="md">
+			<PSectionHeader
+				data={{ title: settings.main.featuredTitle }}
+				appearance="compact"
+				headingLevel={2}
+			/>
+			<PCard
+				{...cardProps(
+					settings.main.featuredCards,
+					featuredCards,
+					undefined,
+					publicationSource,
+				)}
+			/>
+		</CColumns>
 
 		<LSidebar
 			label={settings.sidebar.labelTemplate.replace("{catalog}", catalog)}
@@ -165,38 +175,32 @@ const publicationSource: CardSourceConfig = {
 			sticky={settings.sidebar.sticky}
 		>
 			<CColumns slot="sidebar" columns="one" gap="md">
-				<CBox
-					surface={settings.sidebar.panel.surface}
-					radius={settings.sidebar.panel.radius}
-					spacing={settings.sidebar.panel.spacing}
-				>
-					<PFilterPanel
-						data={{
-							groups: [
-								{
-									appearance: "navigation",
-									control: "genre",
-									legend: settings.sidebar.genresLegend,
-									name: `${catalog}-genres`,
-									type: "radio",
-									options: [
-										{
-											label: settings.sidebar.allGenresShortLabel,
-											value: "all",
-											count: entries.length,
-											checked: true,
-										},
-										...genres.map((genre) => ({
-											label: genre.label,
-											value: genre.slug,
-											count: genre.count,
-										})),
-									],
-								},
-							],
-						}}
-					/>
-				</CBox>
+				<PFilterPanel
+					data={{
+						groups: [
+							{
+								appearance: "navigation",
+								control: "genre",
+								legend: settings.sidebar.genresLegend,
+								name: `${catalog}-genres`,
+								type: "radio",
+								options: [
+									{
+										label: settings.sidebar.allGenresShortLabel,
+										value: "all",
+										count: entries.length,
+										checked: true,
+									},
+									...genres.map((genre) => ({
+										label: genre.label,
+										value: genre.slug,
+										count: genre.count,
+									})),
+								],
+							},
+						],
+					}}
+				/>
 
 				<CBox
 					surface={settings.sidebar.panel.surface}
@@ -207,7 +211,7 @@ const publicationSource: CardSourceConfig = {
 						<PSectionHeader
 							data={{ title: settings.sidebar.trendingTitle }}
 							appearance="compact"
-							headingLevel={2}
+							headingLevel={3}
 						/>
 						<PCard
 							{...cardProps(
@@ -229,7 +233,7 @@ const publicationSource: CardSourceConfig = {
 						<PSectionHeader
 							data={{ title: settings.sidebar.popularAuthorsTitle }}
 							appearance="compact"
-							headingLevel={2}
+							headingLevel={3}
 						/>
 						<PCard
 							{...cardProps(settings.sidebar.listCards, authorCards, {
@@ -243,65 +247,38 @@ const publicationSource: CardSourceConfig = {
 				</CBox>
 			</CColumns>
 
-			<CColumns columns="one" gap="lg">
-				<CColumns columns="one" gap="sm">
-					<PSectionHeader
-						data={{ title: settings.main.featuredTitle }}
-						appearance="compact"
-						headingLevel={2}
-					/>
-					<PCard
-						{...cardProps(
-							settings.main.featuredCards,
-							featuredCards,
-							undefined,
-							publicationSource,
-						)}
-					/>
-				</CColumns>
-
-				<CColumns columns="one" gap="sm">
-					<PSectionHeader
-						data={{ title: settings.main.latestTitle }}
-						appearance="compact"
-						headingLevel={2}
-					/>
-					<PCard
-						{...cardProps(
-							settings.main.latestCards,
-							latestCards,
-							undefined,
-							publicationSource,
-						)}
-					/>
-				</CColumns>
-
-				<CBox
-					surface={settings.sidebar.panel.surface}
-					radius={settings.sidebar.panel.radius}
-					spacing={settings.sidebar.panel.spacing}
-				>
-					<CColumns columns="one" gap="sm">
-						<PSectionHeader
-							data={{ title: settings.main.popularGenresTitle }}
-							appearance="compact"
-							headingLevel={2}
-						/>
-						<PCard
-							{...cardProps(settings.main.genreCards, popularGenreCards)}
-						/>
-					</CColumns>
-				</CBox>
-
-				{closing && (
-					<PCta
-						{...({
-							template: closing.template,
-							data: closing.content,
-						} as unknown as PCtaProps)}
-					/>
-				)}
+			<CColumns columns="one" gap="md">
+				<PSectionHeader
+					data={{ title: settings.main.latestTitle }}
+					appearance="compact"
+					headingLevel={2}
+				/>
+				<PCard
+					{...cardProps(
+						settings.main.latestCards,
+						latestCards,
+						undefined,
+						publicationSource,
+					)}
+				/>
 			</CColumns>
 		</LSidebar>
+
+		<CBox
+			surface={settings.sidebar.panel.surface}
+			radius={settings.sidebar.panel.radius}
+			spacing="md"
+		>
+			<CColumns columns="one" gap="md">
+				<PSectionHeader
+					data={{ title: settings.main.popularGenresTitle }}
+					appearance="compact"
+					headingLevel={2}
+				/>
+				<PCard
+					{...cardProps(settings.main.genreCards, popularGenreCards)}
+				/>
+			</CColumns>
+		</CBox>
 	</CColumns>
 </CBox>
