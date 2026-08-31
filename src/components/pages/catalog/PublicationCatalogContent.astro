@@ -169,7 +169,7 @@ const publicationSource: CardSourceConfig = {
 			position={settings.sidebar.position}
 			sticky={settings.sidebar.sticky}
 		>
-			<CColumns slot="sidebar" columns="one" gap="md">
+			<CColumns slot="sidebar" columns="one" gap="lg">
 				<PFilterPanel
 					data={{
 						groups: [
@@ -197,134 +197,140 @@ const publicationSource: CardSourceConfig = {
 					}}
 				/>
 
-				<CBox
-					surface={settings.sidebar.panel.surface}
-					radius={settings.sidebar.panel.radius}
-					spacing={settings.sidebar.panel.spacing}
-				>
-					<CColumns columns="one" gap="sm">
-						<PSectionHeader
-							data={{ title: settings.sidebar.trendingTitle }}
-							appearance="compact"
-							headingLevel={3}
-						/>
-						<PCard
-							{...cardProps(
-								settings.sidebar.listCards,
-								trendingCards,
-								undefined,
-								publicationSource,
-							)}
-						/>
-					</CColumns>
-				</CBox>
+				<CColumns columns="one" gap="md">
+					<CBox
+						surface={settings.sidebar.panel.surface}
+						radius={settings.sidebar.panel.radius}
+						spacing={settings.sidebar.panel.spacing}
+					>
+						<CColumns columns="one" gap="sm">
+							<PSectionHeader
+								data={{ title: settings.sidebar.trendingTitle }}
+								appearance="compact"
+								headingLevel={3}
+							/>
+							<PCard
+								{...cardProps(
+									settings.sidebar.listCards,
+									trendingCards,
+									undefined,
+									publicationSource,
+								)}
+							/>
+						</CColumns>
+					</CBox>
 
-				<CBox
-					surface={settings.sidebar.panel.surface}
-					radius={settings.sidebar.panel.radius}
-					spacing={settings.sidebar.panel.spacing}
-				>
-					<CColumns columns="one" gap="sm">
-						<PSectionHeader
-							data={{ title: settings.sidebar.popularAuthorsTitle }}
-							appearance="compact"
-							headingLevel={3}
-						/>
-						<PCard
-							{...cardProps(settings.sidebar.listCards, authorCards, {
-								metadata: false,
-								tags: false,
-								metrics: false,
-								action: false,
-							})}
-						/>
-					</CColumns>
-				</CBox>
+					<CBox
+						surface={settings.sidebar.panel.surface}
+						radius={settings.sidebar.panel.radius}
+						spacing={settings.sidebar.panel.spacing}
+					>
+						<CColumns columns="one" gap="sm">
+							<PSectionHeader
+								data={{ title: settings.sidebar.popularAuthorsTitle }}
+								appearance="compact"
+								headingLevel={3}
+							/>
+							<PCard
+								{...cardProps(settings.sidebar.listCards, authorCards, {
+									metadata: false,
+									tags: false,
+									metrics: false,
+									action: false,
+								})}
+							/>
+						</CColumns>
+					</CBox>
+				</CColumns>
 			</CColumns>
 
 			<CColumns columns="one" gap="xl">
-				<CColumns columns="one" gap="md">
-					<PSectionHeader
-						data={{ title: settings.main.featuredTitle }}
-						appearance="compact"
-						headingLevel={2}
-					/>
-					<PCard
-						{...cardProps(
-							settings.main.featuredCards,
-							featuredCards,
-							undefined,
-							publicationSource,
-						)}
-					/>
-				</CColumns>
-
-				<CColumns columns="one" gap="md">
-					<PSectionHeader
-						data={{ title: settings.main.latestTitle }}
-						appearance="compact"
-						headingLevel={2}
-					/>
-					<PCard
-						{...cardProps(
-							settings.main.latestCards,
-							latestCards,
-							undefined,
-							publicationSource,
-						)}
-					/>
-				</CColumns>
-
-				<CBox
-					surface={settings.sidebar.panel.surface}
-					radius={settings.sidebar.panel.radius}
-					spacing="md"
-				>
-					<CColumns columns="one" gap="md">
+				<CColumns columns="one" gap="lg">
+					<CColumns columns="one" gap="sm">
 						<PSectionHeader
-							data={{ title: settings.main.popularGenresTitle }}
-							appearance="compact"
-							headingLevel={2}
-						/>
-						<PCard
-							{...cardProps(settings.main.genreCards, popularGenreCards)}
-						/>
-					</CColumns>
-				</CBox>
-
-				<CColumns columns="one" gap="md">
-					<PSectionHeader
-						data={{ title: settings.main.topRatedTitle }}
-						appearance="compact"
-						headingLevel={2}
-					/>
-					<PCard
-						{...cardProps(
-							settings.main.topRatedCards,
-							topRatedCards,
-							undefined,
-							publicationSource,
-						)}
-					/>
-				</CColumns>
-
-				{completedCards.length > 0 && (
-					<CColumns columns="one" gap="md">
-						<PSectionHeader
-							data={{ title: settings.main.completedTitle }}
+							data={{ title: settings.main.featuredTitle }}
 							appearance="compact"
 							headingLevel={2}
 						/>
 						<PCard
 							{...cardProps(
-								settings.main.completedCards,
-								completedCards,
+								settings.main.featuredCards,
+								featuredCards,
 								undefined,
 								publicationSource,
 							)}
 						/>
 					</CColumns>
-				)}
+
+					<CColumns columns="one" gap="sm">
+						<PSectionHeader
+							data={{ title: settings.main.latestTitle }}
+							appearance="compact"
+							headingLevel={2}
+						/>
+						<PCard
+							{...cardProps(
+								settings.main.latestCards,
+								latestCards,
+								undefined,
+								publicationSource,
+							)}
+						/>
+					</CColumns>
+				</CColumns>
+
+				<CColumns columns="one" gap="lg">
+					<CBox
+						surface={settings.sidebar.panel.surface}
+						radius={settings.sidebar.panel.radius}
+						spacing="md"
+					>
+						<CColumns columns="one" gap="sm">
+							<PSectionHeader
+								data={{ title: settings.main.popularGenresTitle }}
+								appearance="compact"
+								headingLevel={2}
+							/>
+							<PCard
+								{...cardProps(settings.main.genreCards, popularGenreCards)}
+							/>
+						</CColumns>
+					</CBox>
+
+					<CColumns columns="one" gap="sm">
+						<PSectionHeader
+							data={{ title: settings.main.topRatedTitle }}
+							appearance="compact"
+							headingLevel={2}
+						/>
+						<PCard
+							{...cardProps(
+								settings.main.topRatedCards,
+								topRatedCards,
+								undefined,
+								publicationSource,
+							)}
+						/>
+					</CColumns>
+
+					{completedCards.length > 0 && (
+						<CColumns columns="one" gap="sm">
+							<PSectionHeader
+								data={{ title: settings.main.completedTitle }}
+								appearance="compact"
+								headingLevel={2}
+							/>
+							<PCard
+								{...cardProps(
+									settings.main.completedCards,
+									completedCards,
+									undefined,
+									publicationSource,
+								)}
+							/>
+						</CColumns>
+					)}
+				</CColumns>
 
 				<CColumns columns="one" gap="md">
 					<PSectionHeader
