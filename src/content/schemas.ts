@@ -503,7 +503,7 @@ const productsArchiveSectionSchema = z.object({
 				name: z.string().min(1),
 				min: z.number(),
 				max: z.number(),
-				value: z.union([z.string(), z.number()]),
+				value: z.number(),
 				prefix: z.string().optional(),
 				maxSuffix: z.string().optional(),
 			}),
