@@ -53,7 +53,8 @@ const newsletter = data.page.content.sections.find(
 		<LSection
 			id={hero.id}
 			theme={hero.settings.theme}
-			spacing={hero.settings.spacing}
+			spacing="none"
+			class="pb-8 md:pb-12"
 		>
 			<PPageHeader
 				{...({ template: hero.template, data: hero.content } as unknown as PPageHeaderProps)}
