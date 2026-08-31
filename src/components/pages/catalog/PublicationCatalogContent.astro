@@ -153,22 +153,6 @@ const publicationSource: CardSourceConfig = {
 	<CColumns columns="one" gap="xl">
 		<PArchiveToolbar {...toolbar} />
 
-		<CColumns columns="one" gap="md">
-			<PSectionHeader
-				data={{ title: settings.main.featuredTitle }}
-				appearance="compact"
-				headingLevel={2}
-			/>
-			<PCard
-				{...cardProps(
-					settings.main.featuredCards,
-					featuredCards,
-					undefined,
-					publicationSource,
-				)}
-			/>
-		</CColumns>
-
 		<LSidebar
 			label={settings.sidebar.labelTemplate.replace("{catalog}", catalog)}
 			position={settings.sidebar.position}
@@ -247,38 +231,56 @@ const publicationSource: CardSourceConfig = {
 				</CBox>
 			</CColumns>
 
-			<CColumns columns="one" gap="md">
-				<PSectionHeader
-					data={{ title: settings.main.latestTitle }}
-					appearance="compact"
-					headingLevel={2}
-				/>
-				<PCard
-					{...cardProps(
-						settings.main.latestCards,
-						latestCards,
-						undefined,
-						publicationSource,
-					)}
-				/>
+			<CColumns columns="one" gap="xl">
+				<CColumns columns="one" gap="md">
+					<PSectionHeader
+						data={{ title: settings.main.featuredTitle }}
+						appearance="compact"
+						headingLevel={2}
+					/>
+					<PCard
+						{...cardProps(
+							settings.main.featuredCards,
+							featuredCards,
+							undefined,
+							publicationSource,
+						)}
+					/>
+				</CColumns>
+
+				<CColumns columns="one" gap="md">
+					<PSectionHeader
+						data={{ title: settings.main.latestTitle }}
+						appearance="compact"
+						headingLevel={2}
+					/>
+					<PCard
+						{...cardProps(
+							settings.main.latestCards,
+							latestCards,
+							undefined,
+							publicationSource,
+						)}
+					/>
+				</CColumns>
+
+				<CBox
+					surface={settings.sidebar.panel.surface}
+					radius={settings.sidebar.panel.radius}
+					spacing="md"
+				>
+					<CColumns columns="one" gap="md">
+						<PSectionHeader
+							data={{ title: settings.main.popularGenresTitle }}
+							appearance="compact"
+							headingLevel={2}
+						/>
+						<PCard
+							{...cardProps(settings.main.genreCards, popularGenreCards)}
+						/>
+					</CColumns>
+				</CBox>
 			</CColumns>
 		</LSidebar>
-
-		<CBox
-			surface={settings.sidebar.panel.surface}
-			radius={settings.sidebar.panel.radius}
-			spacing="md"
-		>
-			<CColumns columns="one" gap="md">
-				<PSectionHeader
-					data={{ title: settings.main.popularGenresTitle }}
-					appearance="compact"
-					headingLevel={2}
-				/>
-				<PCard
-					{...cardProps(settings.main.genreCards, popularGenreCards)}
-				/>
-			</CColumns>
-		</CBox>
 	</CColumns>
 </CBox>
