@@ -497,9 +497,24 @@ const productsArchiveSectionSchema = z.object({
 			filterLabel: z.string().min(1),
 			category: filterGroupSchema,
 			platform: filterGroupSchema,
-			price: z.record(z.string(), z.unknown()).optional(),
-			license: z.record(z.string(), z.unknown()).optional(),
-			ratings: z.record(z.string(), z.unknown()).optional(),
+			price: z.object({
+				id: z.string().min(1),
+				label: z.string().min(1),
+				name: z.string().min(1),
+				min: z.number(),
+				max: z.number(),
+				value: z.number(),
+				prefix: z.string().optional(),
+				maxSuffix: z.string().optional(),
+			}),
+			license: z.object({
+				legend: z.string().min(1),
+				freeLabel: z.string().min(1),
+				proLabel: z.string().min(1),
+			}),
+			ratings: z.object({
+				legend: z.string().min(1),
+			}),
 			advertisement: z.object({
 				title: z.string().min(1),
 				description: z.string().min(1),
