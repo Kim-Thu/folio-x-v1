@@ -60,9 +60,13 @@
     "featuredTitle": "Featured",
     "latestTitle": "Latest updates",
     "popularGenresTitle": "Popular genres",
+    "topRatedTitle": "Top rated",
+    "completedTitle": "Completed stories",
     "featuredLimit": 5,
     "latestLimit": 6,
     "popularGenresLimit": 8,
+    "topRatedLimit": 4,
+    "completedLimit": 4,
     "featuredCards": {
       "template": "media-metrics",
       "layout": "grid",
@@ -95,6 +99,28 @@
         "metadata": false,
         "tags": false,
         "metrics": false,
+        "action": false
+      }
+    },
+    "topRatedCards": {
+      "template": "media-metrics",
+      "layout": "grid",
+      "columns": 4,
+      "gap": "sm",
+      "mediaRatio": "portrait",
+      "slots": {
+        "excerpt": false,
+        "action": false
+      }
+    },
+    "completedCards": {
+      "template": "compact-media",
+      "layout": "grid",
+      "columns": 2,
+      "gap": "sm",
+      "slots": {
+        "excerpt": true,
+        "tags": false,
         "action": false
       }
     },
