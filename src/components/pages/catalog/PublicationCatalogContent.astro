@@ -29,6 +29,12 @@ const settings = await getPublicationCatalogSettings();
 const featuredCards = entries.slice(0, settings.main.featuredLimit);
 const latestCards = entries.slice(0, settings.main.latestLimit);
 const trendingCards = entries.slice(0, settings.sidebar.trendingLimit);
+const topRatedCards = [...entries]
+	.sort((a, b) => b.rating - a.rating)
+	.slice(0, settings.main.topRatedLimit);
+const completedCards = entries
+	.filter((entry) => entry.status === "complete")
+	.slice(0, settings.main.completedLimit);
 
 const genreMap = new Map<string, { label: string; slug: string; count: number }>();
 for (const entry of entries) {
@@ -280,6 +286,40 @@ const publicationSource: CardSourceConfig = {
 						/>
 					</CColumns>
 				</CBox>
+
+				<CColumns columns="one" gap="md">
+					<PSectionHeader
+						data={{ title: settings.main.topRatedTitle }}
+						appearance="compact"
+						headingLevel={2}
+					/>
+					<PCard
+						{...cardProps(
+							settings.main.topRatedCards,
+							topRatedCards,
+							undefined,
+							publicationSource,
+						)}
+					/>
+				</CColumns>
+
+				{completedCards.length > 0 && (
+					<CColumns columns="one" gap="md">
+						<PSectionHeader
+							data={{ title: settings.main.completedTitle }}
+							appearance="compact"
+							headingLevel={2}
+						/>
+						<PCard
+							{...cardProps(
+								settings.main.completedCards,
+								completedCards,
+								undefined,
+								publicationSource,
+							)}
+						/>
+					</CColumns>
+				)}
 			</CColumns>
 		</LSidebar>
 	</CColumns>
