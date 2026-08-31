@@ -53,17 +53,9 @@ const newsletter = data.page.content.sections.find(
 			theme={hero.settings.theme}
 			spacing="none"
 		>
-			{hero.settings.container === "none" ? (
-				<PPageHeader
-					{...({ template: hero.template, data: hero.content } as unknown as PPageHeaderProps)}
-				/>
-			) : (
-				<LContainer size={hero.settings.container}>
-					<PPageHeader
-						{...({ template: hero.template, data: hero.content } as unknown as PPageHeaderProps)}
-					/>
-				</LContainer>
-			)}
+			<PPageHeader
+				{...({ template: hero.template, data: hero.content } as unknown as PPageHeaderProps)}
+			/>
 		</LSection>
 	)}
 
