@@ -11,14 +11,8 @@
     "sortLabel": "Sort",
     "sortValue": "newest",
     "sortOptions": [
-      {
-        "label": "Newest",
-        "value": "newest"
-      },
-      {
-        "label": "Oldest",
-        "value": "oldest"
-      }
+      { "label": "Newest", "value": "newest" },
+      { "label": "Oldest", "value": "oldest" }
     ],
     "viewLabel": "View",
     "gridViewLabel": "Grid view",
@@ -30,11 +24,7 @@
     "sticky": true,
     "genresLegend": "Genres",
     "allGenresShortLabel": "All",
-    "panel": {
-      "surface": "glass",
-      "radius": "md",
-      "spacing": "sm"
-    },
+    "panel": { "surface": "glass", "radius": "md", "spacing": "sm" },
     "trendingTitle": "Trending",
     "popularAuthorsTitle": "Popular authors",
     "listCards": {
@@ -42,11 +32,7 @@
       "layout": "list",
       "columns": 1,
       "gap": "sm",
-      "slots": {
-        "excerpt": false,
-        "tags": false,
-        "action": false
-      }
+      "slots": { "excerpt": false, "tags": false, "action": false }
     },
     "authorPlaceholder": {
       "src": "/uploads/avatar-placehoder.png",
@@ -60,30 +46,34 @@
     "featuredTitle": "Featured",
     "latestTitle": "Latest updates",
     "popularGenresTitle": "Popular genres",
+    "topRatedTitle": "Top rated",
+    "completedTitle": "Completed stories",
+    "allStoriesTitle": "All stories",
     "featuredLimit": 5,
     "latestLimit": 6,
     "popularGenresLimit": 8,
+    "topRatedLimit": 4,
+    "completedLimit": 4,
+    "allStoriesPageSize": 8,
+    "allStoriesPagination": {
+      "label": "Story pages",
+      "previousLabel": "Previous page",
+      "nextLabel": "Next page"
+    },
     "featuredCards": {
       "template": "media-metrics",
       "layout": "grid",
       "columns": 5,
       "gap": "sm",
       "mediaRatio": "portrait",
-      "slots": {
-        "excerpt": false,
-        "action": false
-      }
+      "slots": { "excerpt": false, "action": false }
     },
     "latestCards": {
       "template": "compact-media",
       "layout": "grid",
       "columns": 3,
       "gap": "sm",
-      "slots": {
-        "excerpt": true,
-        "tags": false,
-        "action": false
-      }
+      "slots": { "excerpt": true, "tags": false, "action": false }
     },
     "genreCards": {
       "template": "icon-summary",
@@ -97,6 +87,29 @@
         "metrics": false,
         "action": false
       }
+    },
+    "topRatedCards": {
+      "template": "media-metrics",
+      "layout": "grid",
+      "columns": 4,
+      "gap": "sm",
+      "mediaRatio": "portrait",
+      "slots": { "excerpt": false, "action": false }
+    },
+    "completedCards": {
+      "template": "compact-media",
+      "layout": "grid",
+      "columns": 2,
+      "gap": "sm",
+      "slots": { "excerpt": true, "tags": false, "action": false }
+    },
+    "allStoriesCards": {
+      "template": "media-metrics",
+      "layout": "grid",
+      "columns": 4,
+      "gap": "sm",
+      "mediaRatio": "portrait",
+      "slots": { "excerpt": false, "action": false }
     },
     "genreIcons": [
       "star",

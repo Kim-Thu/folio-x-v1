@@ -1,3 +1,8 @@
+import {
+	getPaginationControls,
+	syncPaginationControls,
+} from "@/scripts/pagination-controls";
+
 export function initArchiveFilter(): void {
 	document.querySelectorAll<HTMLElement>("[data-filter-root]").forEach((root) => {
 		const filterButtons = Array.from(
@@ -14,14 +19,8 @@ export function initArchiveFilter(): void {
 		const viewButtons = Array.from(
 			root.querySelectorAll<HTMLButtonElement>("[data-view-control]"),
 		);
-		const pagination = root.querySelector<HTMLElement>("[data-pagination]");
-		const pageButtons = Array.from(
-			pagination?.querySelectorAll<HTMLButtonElement>("[data-page]") ?? [],
-		);
-		const previousButton =
-			pagination?.querySelector<HTMLButtonElement>("[data-page-previous]");
-		const nextButton =
-			pagination?.querySelector<HTMLButtonElement>("[data-page-next]");
+		const paginationControls = getPaginationControls(root);
+		const { pageButtons, previousButton, nextButton } = paginationControls;
 		const pageSize = Number(root.dataset.paginationPageSize) || cards.length || 1;
 
 		if (!filterButtons.length || !cards.length || !collection) return;
@@ -74,17 +73,12 @@ export function initArchiveFilter(): void {
 			});
 
 			if (emptyState) emptyState.hidden = matchingCards.length > 0;
-			if (pagination) pagination.hidden = matchingCards.length === 0;
-
-			pageButtons.forEach((button) => {
-				const page = Number(button.dataset.page);
-				button.parentElement?.toggleAttribute("hidden", page > totalPages);
-				if (page === activePage) button.setAttribute("aria-current", "page");
-				else button.removeAttribute("aria-current");
-			});
-
-			if (previousButton) previousButton.disabled = activePage === 1;
-			if (nextButton) nextButton.disabled = activePage === totalPages;
+			syncPaginationControls(
+				paginationControls,
+				activePage,
+				totalPages,
+				matchingCards.length,
+			);
 		};
 
 		filterButtons.forEach((button) => {

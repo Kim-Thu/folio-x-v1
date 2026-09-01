@@ -12,13 +12,8 @@ import CRating from "@/components/object/component/CRating.astro";
 import CRow from "@/components/object/component/CRow.astro";
 import CTags from "@/components/object/component/CTags.astro";
 import CText from "@/components/object/component/CText.astro";
-import type {
-	CCardTemplateProps,
-	LabCardPresentation,
-	PublicationCardPresentation,
-	PublicationCollectionPresentation,
-} from "@/types/components/object/component/card/CCard.types";
-import type { Lab, PublicationEntry } from "@/types/content";
+import type { CCardTemplateProps } from "@/types/components/object/component/card/CCard.types";
+import { resolveMultiSourceCard } from "@/utils/card-resolver";
 
 const {
 	data,
@@ -30,111 +25,13 @@ const {
 	source,
 } = Astro.props as CCardTemplateProps;
 
-const lab = source === "labs" ? data as unknown as Lab : undefined;
-const publication = source === "comics" || source === "novels" || source === "publications"
-	? data as unknown as PublicationEntry
-	: undefined;
-const labPresentation = lab
-	? presentation as LabCardPresentation | undefined
-	: undefined;
-const publicationPresentation = publication
-	? source === "publications"
-		? (presentation as PublicationCollectionPresentation | undefined)?.[publication.catalog]
-		: presentation as PublicationCardPresentation | undefined
-	: undefined;
-
-const href = lab?.href ?? publication?.href ?? data.href;
-const title = lab?.title ?? publication?.title ?? data.title.join(" ");
-const excerpt = lab?.summary ?? publication?.summary ?? data.excerpt;
-const media = lab?.image ?? publication?.cover ?? data.media;
-const ariaLabel = lab
-	? `${labPresentation?.ariaLabelPrefix ?? ""}${lab.title}`
-	: publication
-		? `${publicationPresentation?.ariaLabelPrefix ?? ""}${publication.title}`
-		: data.ariaLabel;
-const metadata = lab
-	? {
-		items: [
-			{
-				type: "category" as const,
-				label: lab.category.label,
-				href: labPresentation?.routes.categoryBase
-					? `${labPresentation.routes.categoryBase}${lab.category.slug}`
-					: undefined,
-				display: labPresentation?.categoryDisplay,
-			},
-		],
-	}
-	: publication
-		? {
-			items: publication.genres.map((genre) => ({
-				type: "category" as const,
-				label: genre.label,
-				href: publicationPresentation?.routes.categoryBase
-					? `${publicationPresentation.routes.categoryBase}${genre.slug}`
-					: undefined,
-				display: publicationPresentation?.categoryDisplay,
-			})),
-		}
-		: data.metadata;
-const badge = lab
-	? {
-		label: lab.statusLabel,
-		tone: lab.status === "complete"
-			? labPresentation?.completeBadgeTone
-			: labPresentation?.activeBadgeTone,
-	}
-	: data.badge;
-const tags = lab
-	? lab.technologies.map((technology) => ({
-		label: technology.label,
-		href: labPresentation?.routes.technologyBase
-			? `${labPresentation.routes.technologyBase}${technology.slug}`
-			: undefined,
-	}))
-	: publication
-		? publication.genres.map((genre) => ({
-			label: genre.label,
-			href: publicationPresentation?.routes.categoryBase
-				? `${publicationPresentation.routes.categoryBase}${genre.slug}`
-				: undefined,
-		}))
-		: data.tags;
-const tagsLabel = lab
-	? `${lab.title}${labPresentation?.tagsLabelSuffix ?? ""}`
-	: publication
-		? `${publication.title}${publicationPresentation?.tagsLabelSuffix ?? ""}`
-		: data.tagsLabel;
-const metrics = lab && labPresentation
-	? [
-		{ icon: labPresentation.metricIcons[0], label: String(lab.stars) },
-		{ icon: labPresentation.metricIcons[1], label: String(lab.forks) },
-		{ icon: labPresentation.metricIcons[2], label: lab.updatedLabel },
-	]
-	: publication && publicationPresentation
-		? [{ icon: publicationPresentation.viewsIcon, label: publication.views }]
-		: data.metrics;
-const rating = publication ? { value: publication.rating } : data.rating;
-const facets = lab
-	? {
-		category: [lab.category.slug],
-		status: [lab.status],
-		technology: lab.technologies.map((technology) => technology.slug),
-	}
-	: publication
-		? {
-			genre: publication.genres.map((genre) => genre.slug),
-			status: [publication.status],
-		}
-		: data.facets;
-const searchValue = lab
-	? [lab.title, lab.summary, lab.category.label, ...lab.technologies.map((technology) => technology.label)].join(" ")
-	: publication
-		? [publication.title, publication.summary, publication.author, ...publication.genres.map((genre) => genre.label)].join(" ")
-		: data.searchValue ?? title;
-const sortValue = publication
-	? String(publication.order).padStart(4, "0")
-	: data.sortValue;
+const card = resolveMultiSourceCard({ data, source, presentation });
+const isLab = Boolean(card.labCard);
+const badge = card.labCard?.badge ?? data.badge;
+const tags = card.labCard?.tags ?? card.publicationCard?.tags ?? data.tags;
+const tagsLabel = card.labCard?.tagsLabel ?? card.publicationCard?.tagsLabel ?? data.tagsLabel;
+const metrics = card.labCard?.metrics ?? card.publicationCard?.metrics ?? data.metrics;
+const rating = card.labCard ? data.rating : card.publicationCard?.rating ?? data.rating;
 ---
 
 <CBox
@@ -142,54 +39,64 @@ const sortValue = publication
 	surface="glass"
 	radius="md"
 	overflow="hidden"
-	data-facet-card={facets ? "" : undefined}
-	data-facets={facets ? JSON.stringify(facets) : undefined}
-	data-search-value={searchValue.toLowerCase()}
-	data-sort-value={sortValue}
+	data-facet-card={card.facets ? "" : undefined}
+	data-facets={card.facets ? JSON.stringify(card.facets) : undefined}
+	data-search-value={card.searchValue.toLowerCase()}
+	data-sort-value={card.sortValue}
 	data-sort-index={index}
 >
-	{slots.media && media && (
+	{slots.media && card.media && (
 		<div class="relative">
-			<CMedia ratio={mediaRatio} href={href} ariaLabel={ariaLabel}>
-				<CImage {...media} variant="fill" />
+			<CMedia ratio={mediaRatio} href={card.href} ariaLabel={card.ariaLabel}>
+				<CImage {...card.media} variant="fill" />
 				{badge && <CBadge placement="top-end" tone={badge.tone}>{badge.label}</CBadge>}
 			</CMedia>
 
-			{lab && slots.tags && tags && tags.length > 0 && (
+			{isLab && slots.tags && tags && tags.length > 0 && (
 				<div class="absolute inset-x-4 bottom-4 z-20 flex flex-wrap items-center gap-2">
-					<CTags items={tags} label={tagsLabel ?? `${title} tags`} />
+					<CTags items={tags} label={tagsLabel ?? `${card.title} tags`} />
 				</div>
 			)}
 		</div>
 	)}
 
 	<CBox spacing="sm">
-		<CColumns columns="one" gap="xs">
-			{slots.metadata && metadata && (
-				<CMetadata data={metadata} slots={{ icons: false }} tone="brand" />
-			)}
+		<CColumns columns="one" gap="md">
+			<CColumns columns="one" gap="xs">
+				{slots.metadata && card.metadata && (
+					<CMetadata data={card.metadata} slots={{ icons: false }} tone="brand" />
+				)}
 
-			{slots.title && (
-				<CHeading level={headingLevel} variant="h4">
-					<CLink href={href}>{title}</CLink>
-				</CHeading>
-			)}
+				{slots.title && (
+					<CHeading level={headingLevel} variant="h4">
+						<CLink href={card.href}>{card.title}</CLink>
+					</CHeading>
+				)}
 
-			{slots.excerpt && excerpt && (
-				<CText variant="body-sm" tone="subtle">{excerpt}</CText>
-			)}
+				{slots.excerpt && card.excerpt && (
+					<CText variant="body-sm" tone="subtle">{card.excerpt}</CText>
+				)}
 
-			{!lab && slots.tags && tags && tags.length > 0 && (
-				<CTags items={tags} label={tagsLabel ?? `${title} tags`} />
-			)}
+				{!isLab && slots.tags && tags && tags.length > 0 && (
+					<CTags items={tags} label={tagsLabel ?? `${card.title} tags`} />
+				)}
+			</CColumns>
 
-			{slots.metrics && metrics && metrics.length > 0 && (
-				<CRow gap="lg" class="mt-8">
-					{metrics.map((metric) => <CFeature {...metric} appearance="caption" />)}
+			{((slots.metrics && metrics && metrics.length > 0) || rating) && (
+				<CRow gap="lg">
+					{slots.metrics && metrics?.map((metric) => (
+						<CFeature {...metric} appearance="caption" />
+					))}
+					{rating && (
+						<CRating
+							style="compact"
+							value={rating.value}
+							maximum={5}
+							count={rating.count}
+						/>
+					)}
 				</CRow>
 			)}
-
-			{rating && <CRating style="compact" value={rating.value} maximum={5} count={rating.count} />}
 		</CColumns>
 	</CBox>
 </CBox>

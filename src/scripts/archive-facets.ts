@@ -1,4 +1,8 @@
 import { parseFacetData } from "@/scripts/facet-data";
+import {
+	getPaginationControls,
+	syncPaginationControls,
+} from "@/scripts/pagination-controls";
 
 function initArchiveFacetsRoot(root: HTMLElement): void {
 	const results = root.querySelector<HTMLElement>("[data-archive-results]");
@@ -11,15 +15,8 @@ function initArchiveFacetsRoot(root: HTMLElement): void {
 	const sort = root.querySelector<HTMLSelectElement>("[data-archive-sort]");
 	const count = results?.querySelector<HTMLElement>("[data-result-count]") ?? null;
 	const empty = results?.querySelector<HTMLElement>("[data-facet-empty]") ?? null;
-	const pagination =
-		results?.querySelector<HTMLElement>("[data-pagination]") ?? null;
-	const pageButtons = Array.from(
-		results?.querySelectorAll<HTMLButtonElement>("[data-page]") ?? [],
-	);
-	const previous =
-		results?.querySelector<HTMLButtonElement>("[data-page-previous]") ?? null;
-	const next =
-		results?.querySelector<HTMLButtonElement>("[data-page-next]") ?? null;
+	const paginationControls = getPaginationControls(results ?? root);
+	const { pageButtons, previousButton: previous, nextButton: next } = paginationControls;
 	const reset = root.querySelector<HTMLButtonElement>("[data-filter-reset]");
 	const navigationChoices = Array.from(
 		root.querySelectorAll<HTMLElement>("[data-choice-link], [data-choice-filter]"),
@@ -112,15 +109,12 @@ function initArchiveFacetsRoot(root: HTMLElement): void {
 
 		if (count) count.textContent = String(visible.length);
 		if (empty) empty.hidden = visible.length > 0;
-		if (pagination) pagination.hidden = visible.length === 0;
-		pageButtons.forEach((button) => {
-			const page = Number(button.dataset.page);
-			button.parentElement?.toggleAttribute("hidden", page > totalPages);
-			if (page === currentPage) button.setAttribute("aria-current", "page");
-			else button.removeAttribute("aria-current");
-		});
-		if (previous) previous.disabled = currentPage === 1;
-		if (next) next.disabled = currentPage === totalPages;
+		syncPaginationControls(
+			paginationControls,
+			currentPage,
+			totalPages,
+			visible.length,
+		);
 	};
 
 	const resetAndRender = (): void => {

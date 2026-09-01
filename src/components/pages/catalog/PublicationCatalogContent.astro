@@ -2,13 +2,13 @@
 import LSidebar from "@/components/layout/LSidebar.astro";
 import CBox from "@/components/object/component/CBox.astro";
 import CColumns from "@/components/object/component/CColumns.astro";
+import CPagination from "@/components/object/component/CPagination.astro";
 import PArchiveToolbar from "@/components/object/project/archive-toolbar/PArchiveToolbar.astro";
 import PCard from "@/components/object/project/card/PCard.astro";
-import PCta from "@/components/object/project/cta/PCta.astro";
 import PFilterPanel from "@/components/object/project/filter-panel/PFilterPanel.astro";
 import PSectionHeader from "@/components/object/project/section-header/PSectionHeader.astro";
 import { getPublicationCatalogSettings } from "@/data/cms";
-import type { PublicationEntry } from "@/types/content";
+import type { CIconName } from "@/types/components/object/component/CIcon.types";
 import type {
 	CCardConfig,
 	CCardData,
@@ -17,24 +17,29 @@ import type {
 	PublicationCardPresentation,
 } from "@/types/components/object/component/card/CCard.types";
 import type { PCardProps } from "@/types/components/object/project/card/PCard.types";
-import type { PCtaProps } from "@/types/components/object/project/cta/PCta.types";
-import type { CIconName } from "@/types/components/object/component/CIcon.types";
-import type { PageSectionData } from "@/types/components/pages/builder/PageBuilder.types";
-
-type CtaSection = Extract<PageSectionData, { type: "cta" }>;
+import type { PublicationEntry } from "@/types/content";
 
 type Props = {
 	catalog: "novels" | "comics";
 	entries: PublicationEntry[];
 	presentation: PublicationCardPresentation;
-	closing?: CtaSection;
 };
 
-const { catalog, entries, presentation, closing } = Astro.props as Props;
+const { catalog, entries, presentation } = Astro.props as Props;
 const settings = await getPublicationCatalogSettings();
 const featuredCards = entries.slice(0, settings.main.featuredLimit);
 const latestCards = entries.slice(0, settings.main.latestLimit);
 const trendingCards = entries.slice(0, settings.sidebar.trendingLimit);
+const topRatedCards = [...entries]
+	.sort((a, b) => b.rating - a.rating)
+	.slice(0, settings.main.topRatedLimit);
+const completedCards = entries
+	.filter((entry) => entry.status === "complete")
+	.slice(0, settings.main.completedLimit);
+const allStoriesTotalPages = Math.max(
+	1,
+	Math.ceil(entries.length / settings.main.allStoriesPageSize),
+);
 
 const genreMap = new Map<string, { label: string; slug: string; count: number }>();
 for (const entry of entries) {
@@ -156,7 +161,7 @@ const publicationSource: CardSourceConfig = {
 ---
 
 <CBox data-collection-filter-root>
-	<CColumns columns="one" gap="md">
+	<CColumns columns="one" gap="xl">
 		<PArchiveToolbar {...toolbar} />
 
 		<LSidebar
@@ -164,143 +169,190 @@ const publicationSource: CardSourceConfig = {
 			position={settings.sidebar.position}
 			sticky={settings.sidebar.sticky}
 		>
-			<CColumns slot="sidebar" columns="one" gap="md">
-				<CBox
-					surface={settings.sidebar.panel.surface}
-					radius={settings.sidebar.panel.radius}
-					spacing={settings.sidebar.panel.spacing}
-				>
-					<PFilterPanel
-						data={{
-							groups: [
-								{
-									appearance: "navigation",
-									control: "genre",
-									legend: settings.sidebar.genresLegend,
-									name: `${catalog}-genres`,
-									type: "radio",
-									options: [
-										{
-											label: settings.sidebar.allGenresShortLabel,
-											value: "all",
-											count: entries.length,
-											checked: true,
-										},
-										...genres.map((genre) => ({
-											label: genre.label,
-											value: genre.slug,
-											count: genre.count,
-										})),
-									],
-								},
-							],
-						}}
-					/>
-				</CBox>
+			<CColumns slot="sidebar" columns="one" gap="lg">
+				<PFilterPanel
+					data={{
+						groups: [
+							{
+								appearance: "navigation",
+								control: "genre",
+								legend: settings.sidebar.genresLegend,
+								name: `${catalog}-genres`,
+								type: "radio",
+								options: [
+									{
+										label: settings.sidebar.allGenresShortLabel,
+										value: "all",
+										count: entries.length,
+										checked: true,
+									},
+									...genres.map((genre) => ({
+										label: genre.label,
+										value: genre.slug,
+										count: genre.count,
+									})),
+								],
+							},
+						],
+					}}
+				/>
 
-				<CBox
-					surface={settings.sidebar.panel.surface}
-					radius={settings.sidebar.panel.radius}
-					spacing={settings.sidebar.panel.spacing}
-				>
+				<CColumns columns="one" gap="md">
+					<CBox
+						surface={settings.sidebar.panel.surface}
+						radius={settings.sidebar.panel.radius}
+						spacing={settings.sidebar.panel.spacing}
+					>
+						<CColumns columns="one" gap="sm">
+							<PSectionHeader
+								data={{ title: settings.sidebar.trendingTitle }}
+								appearance="compact"
+								headingLevel={3}
+							/>
+							<PCard
+								{...cardProps(
+									settings.sidebar.listCards,
+									trendingCards,
+									undefined,
+									publicationSource,
+								)}
+							/>
+						</CColumns>
+					</CBox>
+
+					<CBox
+						surface={settings.sidebar.panel.surface}
+						radius={settings.sidebar.panel.radius}
+						spacing={settings.sidebar.panel.spacing}
+					>
+						<CColumns columns="one" gap="sm">
+							<PSectionHeader
+								data={{ title: settings.sidebar.popularAuthorsTitle }}
+								appearance="compact"
+								headingLevel={3}
+							/>
+							<PCard
+								{...cardProps(settings.sidebar.listCards, authorCards, {
+									metadata: false,
+									tags: false,
+									metrics: false,
+									action: false,
+								})}
+							/>
+						</CColumns>
+					</CBox>
+				</CColumns>
+			</CColumns>
+
+			<CColumns columns="one" gap="xl">
+				<CColumns columns="one" gap="lg">
 					<CColumns columns="one" gap="sm">
 						<PSectionHeader
-							data={{ title: settings.sidebar.trendingTitle }}
+							data={{ title: settings.main.featuredTitle }}
 							appearance="compact"
 							headingLevel={2}
 						/>
 						<PCard
 							{...cardProps(
-								settings.sidebar.listCards,
-								trendingCards,
+								settings.main.featuredCards,
+								featuredCards,
 								undefined,
 								publicationSource,
 							)}
 						/>
 					</CColumns>
-				</CBox>
 
-				<CBox
-					surface={settings.sidebar.panel.surface}
-					radius={settings.sidebar.panel.radius}
-					spacing={settings.sidebar.panel.spacing}
-				>
 					<CColumns columns="one" gap="sm">
 						<PSectionHeader
-							data={{ title: settings.sidebar.popularAuthorsTitle }}
+							data={{ title: settings.main.latestTitle }}
 							appearance="compact"
 							headingLevel={2}
 						/>
 						<PCard
-							{...cardProps(settings.sidebar.listCards, authorCards, {
-								metadata: false,
-								tags: false,
-								metrics: false,
-								action: false,
-							})}
+							{...cardProps(
+								settings.main.latestCards,
+								latestCards,
+								undefined,
+								publicationSource,
+							)}
 						/>
 					</CColumns>
-				</CBox>
-			</CColumns>
+				</CColumns>
 
-			<CColumns columns="one" gap="lg">
-				<CColumns columns="one" gap="sm">
+				<CColumns columns="one" gap="lg">
+					<CBox
+						surface={settings.sidebar.panel.surface}
+						radius={settings.sidebar.panel.radius}
+						spacing="md"
+					>
+						<CColumns columns="one" gap="sm">
+							<PSectionHeader
+								data={{ title: settings.main.popularGenresTitle }}
+								appearance="compact"
+								headingLevel={2}
+							/>
+							<PCard
+								{...cardProps(settings.main.genreCards, popularGenreCards)}
+							/>
+						</CColumns>
+					</CBox>
+
+					<CColumns columns="one" gap="sm">
+						<PSectionHeader
+							data={{ title: settings.main.topRatedTitle }}
+							appearance="compact"
+							headingLevel={2}
+						/>
+						<PCard
+							{...cardProps(
+								settings.main.topRatedCards,
+								topRatedCards,
+								undefined,
+								publicationSource,
+							)}
+						/>
+					</CColumns>
+
+					{completedCards.length > 0 && (
+						<CColumns columns="one" gap="sm">
+							<PSectionHeader
+								data={{ title: settings.main.completedTitle }}
+								appearance="compact"
+								headingLevel={2}
+							/>
+							<PCard
+								{...cardProps(
+									settings.main.completedCards,
+									completedCards,
+									undefined,
+									publicationSource,
+								)}
+							/>
+						</CColumns>
+					)}
+				</CColumns>
+
+				<CColumns columns="one" gap="md">
 					<PSectionHeader
-						data={{ title: settings.main.featuredTitle }}
+						data={{ title: settings.main.allStoriesTitle }}
 						appearance="compact"
 						headingLevel={2}
 					/>
 					<PCard
 						{...cardProps(
-							settings.main.featuredCards,
-							featuredCards,
+							settings.main.allStoriesCards,
+							entries,
 							undefined,
 							publicationSource,
 						)}
+						data-pagination-collection
+						data-pagination-page-size={settings.main.allStoriesPageSize}
+					/>
+					<CPagination
+						{...settings.main.allStoriesPagination}
+						totalPages={allStoriesTotalPages}
 					/>
 				</CColumns>
-
-				<CColumns columns="one" gap="sm">
-					<PSectionHeader
-						data={{ title: settings.main.latestTitle }}
-						appearance="compact"
-						headingLevel={2}
-					/>
-					<PCard
-						{...cardProps(
-							settings.main.latestCards,
-							latestCards,
-							undefined,
-							publicationSource,
-						)}
-					/>
-				</CColumns>
-
-				<CBox
-					surface={settings.sidebar.panel.surface}
-					radius={settings.sidebar.panel.radius}
-					spacing={settings.sidebar.panel.spacing}
-				>
-					<CColumns columns="one" gap="sm">
-						<PSectionHeader
-							data={{ title: settings.main.popularGenresTitle }}
-							appearance="compact"
-							headingLevel={2}
-						/>
-						<PCard
-							{...cardProps(settings.main.genreCards, popularGenreCards)}
-						/>
-					</CColumns>
-				</CBox>
-
-				{closing && (
-					<PCta
-						{...({
-							template: closing.template,
-							data: closing.content,
-						} as unknown as PCtaProps)}
-					/>
-				)}
 			</CColumns>
 		</LSidebar>
 	</CColumns>

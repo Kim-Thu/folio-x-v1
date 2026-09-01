@@ -2,15 +2,17 @@
 import LContainer from "@/components/layout/LContainer.astro";
 import LPage from "@/components/layout/LPage.astro";
 import LSection from "@/components/layout/LSection.astro";
+import PCta from "@/components/object/project/cta/PCta.astro";
 import PPageHeader from "@/components/object/project/page-header/PPageHeader.astro";
 import PublicationCatalogContent from "@/components/pages/catalog/PublicationCatalogContent.astro";
 import { getPublications } from "@/data/cms";
 import type {
 	PublicationCardPresentation,
 } from "@/types/components/object/component/card/CCard.types";
-import type { CatalogPageProps } from "@/types/components/pages/catalog/CatalogPage.types";
-import type { PageSectionData } from "@/types/components/pages/builder/PageBuilder.types";
+import type { PCtaProps } from "@/types/components/object/project/cta/PCta.types";
 import type { PPageHeaderProps } from "@/types/components/object/project/page-header/PPageHeader.types";
+import type { PageSectionData } from "@/types/components/pages/builder/PageBuilder.types";
+import type { CatalogPageProps } from "@/types/components/pages/catalog/CatalogPage.types";
 
 const { data } = Astro.props as CatalogPageProps;
 const catalog = data.page.slug === "/comics" ? "comics" : "novels";
@@ -75,7 +77,27 @@ const newsletter = data.page.content.sections.find(
 					{catalog}
 					{entries}
 					presentation={catalogSection.content.itemPresentation}
-					closing={newsletter}
+				/>
+			</LContainer>
+		</LSection>
+	)}
+
+	{newsletter && (
+		<LSection
+			id={newsletter.id}
+			theme={newsletter.settings.theme}
+			spacing={newsletter.settings.spacing}
+		>
+			<LContainer
+				size={newsletter.settings.container === "none"
+					? "site"
+					: newsletter.settings.container}
+			>
+				<PCta
+					{...({
+						template: newsletter.template,
+						data: newsletter.content,
+					} as unknown as PCtaProps)}
 				/>
 			</LContainer>
 		</LSection>

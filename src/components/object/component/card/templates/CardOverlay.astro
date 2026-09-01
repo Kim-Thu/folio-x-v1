@@ -10,8 +10,12 @@ import CMetadata from "@/components/object/component/CMetadata.astro";
 import CTags from "@/components/object/component/CTags.astro";
 import CText from "@/components/object/component/CText.astro";
 import type { CCardTemplateProps } from "@/types/components/object/component/card/CCard.types";
-import { cn } from "@/utils/cn";
 import { resolveProjectOverlayCard } from "@/utils/card";
+import { cn } from "@/utils/cn";
+import {
+	cardFillColumnClasses,
+	cardPinnedFooterClasses,
+} from "@/variants/components/object/component/card/CCard.variants";
 
 const {
 	data,
@@ -23,11 +27,7 @@ const {
 	source,
 } = Astro.props as CCardTemplateProps;
 
-const card = resolveProjectOverlayCard({
-	data,
-	source,
-	presentation,
-});
+const card = resolveProjectOverlayCard({ data, source, presentation });
 
 const desktopRatioClasses: Record<NonNullable<CCardTemplateProps["mediaRatio"]>, string> = {
 	editorial: "lg:aspect-video",
@@ -54,27 +54,18 @@ const desktopRatioClasses: Record<NonNullable<CCardTemplateProps["mediaRatio"]>,
 	data-sort-index={index}
 >
 	{slots.media && card.media && (
-		<CMedia
-			ratio="natural"
-			placement="background"
-			href={card.href}
-			ariaLabel={card.title}
-		>
+		<CMedia ratio="natural" placement="background" href={card.href} ariaLabel={card.title}>
 			<CImage {...card.media} variant="fill" />
 		</CMedia>
 	)}
 
 	<CBox position="relative" class="h-full p-8">
-		<div class="flex h-full flex-col">
+		<div class={cardFillColumnClasses}>
 			<div class="w-full md:w-4/5">
 				<CColumns columns="one" gap="sm">
 					<CColumns columns="one" gap="xs">
 						{slots.metadata && card.metadata && (
-							<CMetadata
-								data={card.metadata}
-								size="caption"
-								tone="on-dark"
-							/>
+							<CMetadata data={card.metadata} size="caption" tone="on-dark" />
 						)}
 
 						{slots.title && (
@@ -84,9 +75,7 @@ const desktopRatioClasses: Record<NonNullable<CCardTemplateProps["mediaRatio"]>,
 						)}
 
 						{slots.excerpt && card.excerpt && (
-							<CText variant="body-sm" tone="on-dark">
-								{card.excerpt}
-							</CText>
+							<CText variant="body-sm" tone="on-dark">{card.excerpt}</CText>
 						)}
 					</CColumns>
 
@@ -102,7 +91,7 @@ const desktopRatioClasses: Record<NonNullable<CCardTemplateProps["mediaRatio"]>,
 			</div>
 
 			{card.action && (
-				<div class="mt-auto pt-8">
+				<div class={cardPinnedFooterClasses}>
 					<CButton
 						href={card.action.href}
 						label={card.action.label}

@@ -104,6 +104,277 @@ export function getCardSourceContext<S extends DynamicCardSource>(
 	};
 }
 
+export function resolveInsightCard({
+	data,
+	source,
+	presentation,
+}: CardSourceContextInput) {
+	const {
+		item: insight,
+		presentation: insightPresentation,
+	} = getCardSourceContext("blog", { data, source, presentation });
+	const href = insight?.href ?? data.href;
+	const title = insight?.title ?? data.title.join(" ");
+	const excerpt = insight?.excerpt ?? data.excerpt;
+	const media = insight && insightPresentation && insight.image && insight.imageAlt
+		? {
+			src: insight.image,
+			alt: insight.imageAlt,
+			width: insightPresentation.imageWidth,
+			height: insightPresentation.imageHeight,
+		}
+		: data.media;
+	const metadata = insight
+		? {
+			separator: insightPresentation?.separator,
+			items: [
+				{
+					type: "category" as const,
+					label: insight.category,
+					href: insightPresentation?.routes.categoryBase
+						? `${insightPresentation.routes.categoryBase}${insight.categorySlug}`
+						: undefined,
+					display: insightPresentation?.metadataDisplay,
+				},
+				{
+					type: "reading-time" as const,
+					label: insight.readTime,
+					display: insightPresentation?.metadataDisplay,
+				},
+			],
+		}
+		: data.metadata;
+	const secondaryMetadata = insight
+		? {
+			separator: insightPresentation?.separator,
+			items: [
+				{
+					type: "author" as const,
+					label: insight.author,
+					display: insightPresentation?.metadataDisplay,
+				},
+				{
+					type: "datetime" as const,
+					label: insight.publishedLabel,
+					datetime: insight.publishedAt,
+					display: insightPresentation?.metadataDisplay,
+				},
+			],
+		}
+		: data.secondaryMetadata;
+	const facets = insight
+		? {
+			category: [insight.categorySlug],
+			tag: insight.tags.map((tag) => tag.slug),
+		}
+		: data.facets;
+	const searchValue = insight
+		? [
+			insight.title,
+			insight.excerpt,
+			insight.category,
+			insight.author,
+			...insight.tags.map((tag) => tag.label),
+		].join(" ")
+		: data.searchValue ?? title;
+	const sortValue = insight?.publishedAt ?? data.sortValue;
+
+	return {
+		insight,
+		presentation: insightPresentation,
+		href,
+		title,
+		excerpt,
+		media,
+		metadata,
+		secondaryMetadata,
+		facets,
+		searchValue,
+		sortValue,
+	};
+}
+
+export function resolveLabCard({
+	data,
+	source,
+	presentation,
+}: CardSourceContextInput) {
+	const {
+		item: lab,
+		presentation: labPresentation,
+	} = getCardSourceContext("labs", { data, source, presentation });
+	const href = lab?.href ?? data.href;
+	const title = lab?.title ?? data.title.join(" ");
+	const excerpt = lab?.summary ?? data.excerpt;
+	const media = lab?.image ?? data.media;
+	const ariaLabel = lab
+		? `${labPresentation?.ariaLabelPrefix ?? ""}${lab.title}`
+		: data.ariaLabel;
+	const metadata = lab
+		? {
+			items: [
+				{
+					type: "category" as const,
+					label: lab.category.label,
+					href: labPresentation?.routes.categoryBase
+						? `${labPresentation.routes.categoryBase}${lab.category.slug}`
+						: undefined,
+					display: labPresentation?.categoryDisplay,
+				},
+			],
+		}
+		: data.metadata;
+	const badge = lab
+		? {
+			label: lab.statusLabel,
+			tone: lab.status === "complete"
+				? labPresentation?.completeBadgeTone
+				: labPresentation?.activeBadgeTone,
+		}
+		: data.badge;
+	const tags = lab
+		? lab.technologies.map((technology) => ({
+			label: technology.label,
+			href: labPresentation?.routes.technologyBase
+				? `${labPresentation.routes.technologyBase}${technology.slug}`
+				: undefined,
+		}))
+		: data.tags;
+	const tagsLabel = lab
+		? `${lab.title}${labPresentation?.tagsLabelSuffix ?? ""}`
+		: data.tagsLabel;
+	const metrics = lab && labPresentation
+		? [
+			{ icon: labPresentation.metricIcons[0], label: String(lab.stars) },
+			{ icon: labPresentation.metricIcons[1], label: String(lab.forks) },
+			{ icon: labPresentation.metricIcons[2], label: lab.updatedLabel },
+		]
+		: data.metrics;
+	const facets = lab
+		? {
+			category: [lab.category.slug],
+			status: [lab.status],
+			technology: lab.technologies.map((technology) => technology.slug),
+		}
+		: data.facets;
+	const searchValue = lab
+		? [
+			lab.title,
+			lab.summary,
+			lab.category.label,
+			...lab.technologies.map((technology) => technology.label),
+		].join(" ")
+		: data.searchValue ?? title;
+
+	return {
+		lab,
+		presentation: labPresentation,
+		href,
+		title,
+		excerpt,
+		media,
+		ariaLabel,
+		metadata,
+		badge,
+		tags,
+		tagsLabel,
+		metrics,
+		facets,
+		searchValue,
+	};
+}
+
+export function resolvePublicationCard({
+	data,
+	source,
+	presentation,
+}: CardSourceContextInput) {
+	let publication: PublicationEntry | undefined;
+	let publicationPresentation: PublicationCardPresentation | undefined;
+
+	if (source === "comics" || source === "novels") {
+		const context = getCardSourceContext(source, { data, source, presentation });
+		publication = context.item;
+		publicationPresentation = context.presentation;
+	} else if (source === "publications") {
+		const context = getCardSourceContext("publications", { data, source, presentation });
+		publication = context.item;
+		publicationPresentation = publication
+			? context.presentation?.[publication.catalog]
+			: undefined;
+	}
+
+	const href = publication?.href ?? data.href;
+	const title = publication?.title ?? data.title.join(" ");
+	const excerpt = publication?.summary ?? data.excerpt;
+	const media = publication?.cover ?? data.media;
+	const ariaLabel = publication
+		? `${publicationPresentation?.ariaLabelPrefix ?? ""}${publication.title}`
+		: data.ariaLabel;
+	const metadata = publication
+		? {
+			items: publication.genres.map((genre) => ({
+				type: "category" as const,
+				label: genre.label,
+				href: publicationPresentation?.routes.categoryBase
+					? `${publicationPresentation.routes.categoryBase}${genre.slug}`
+					: undefined,
+				display: publicationPresentation?.categoryDisplay,
+			})),
+		}
+		: data.metadata;
+	const tags = publication
+		? publication.genres.map((genre) => ({
+			label: genre.label,
+			href: publicationPresentation?.routes.categoryBase
+				? `${publicationPresentation.routes.categoryBase}${genre.slug}`
+				: undefined,
+		}))
+		: data.tags;
+	const tagsLabel = publication
+		? `${publication.title}${publicationPresentation?.tagsLabelSuffix ?? ""}`
+		: data.tagsLabel;
+	const metrics = publication && publicationPresentation
+		? [{ icon: publicationPresentation.viewsIcon, label: publication.views }]
+		: data.metrics;
+	const rating = publication ? { value: publication.rating } : data.rating;
+	const facets = publication
+		? {
+			genre: publication.genres.map((genre) => genre.slug),
+			status: [publication.status],
+		}
+		: data.facets;
+	const searchValue = publication
+		? [
+			publication.title,
+			publication.summary,
+			publication.author,
+			...publication.genres.map((genre) => genre.label),
+		].join(" ")
+		: data.searchValue ?? title;
+	const sortValue = publication
+		? String(publication.order).padStart(4, "0")
+		: data.sortValue;
+
+	return {
+		publication,
+		presentation: publicationPresentation,
+		href,
+		title,
+		excerpt,
+		media,
+		ariaLabel,
+		metadata,
+		tags,
+		tagsLabel,
+		metrics,
+		rating,
+		facets,
+		searchValue,
+		sortValue,
+	};
+}
+
 interface ProjectOverlayCardInput {
 	data: CCardData;
 	source?: CCardSource;

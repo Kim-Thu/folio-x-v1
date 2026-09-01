@@ -30,7 +30,7 @@ const slides = data.slides?.length ? data.slides : [data];
 >
 	{slides.map((slide, index) => (
 		<CSlide>
-			<CBox position="relative" radius="md" overflow="hidden">
+			<CBox position="relative" radius="none" overflow="hidden">
 				<CMedia ratio="natural" shape="none" placement="background">
 					<CImage
 						{...slide.image}

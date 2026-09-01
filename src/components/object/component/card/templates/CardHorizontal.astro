@@ -13,6 +13,10 @@ import CTags from "@/components/object/component/CTags.astro";
 import CText from "@/components/object/component/CText.astro";
 import type { CCardTemplateProps } from "@/types/components/object/component/card/CCard.types";
 import { getCardSourceContext } from "@/utils/card";
+import {
+	cardFillColumnClasses,
+	cardPinnedFooterClasses,
+} from "@/variants/components/object/component/card/CCard.variants";
 
 const {
 	data,
@@ -76,8 +80,8 @@ const inverse = data.appearance === "inverse";
 			</CMedia>
 		)}
 
-		<CBox spacing="sm" class="h-full">
-			<div class="flex h-full flex-col">
+		<CBox spacing="sm">
+			<div class={cardFillColumnClasses}>
 				<CColumns columns="one" gap="xs">
 					{slots.metadata && metadata && (
 						<CMetadata
@@ -106,7 +110,7 @@ const inverse = data.appearance === "inverse";
 					)}
 				</CColumns>
 
-				<div class="mt-auto pt-8">
+				<div class={cardPinnedFooterClasses}>
 					{product ? (
 						<CRow as="footer" justify="between" align="end" gap="md" wrap={false}>
 							<CRow gap="sm" align="baseline" wrap={false}>

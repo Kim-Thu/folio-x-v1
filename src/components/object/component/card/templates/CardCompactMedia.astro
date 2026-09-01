@@ -9,13 +9,8 @@ import CMedia from "@/components/object/component/CMedia.astro";
 import CMetadata from "@/components/object/component/CMetadata.astro";
 import CRow from "@/components/object/component/CRow.astro";
 import CText from "@/components/object/component/CText.astro";
-import type {
-	CCardTemplateProps,
-	InsightCardPresentation,
-	PublicationCardPresentation,
-	PublicationCollectionPresentation,
-} from "@/types/components/object/component/card/CCard.types";
-import type { Insight, PublicationEntry } from "@/types/content";
+import type { CCardTemplateProps } from "@/types/components/object/component/card/CCard.types";
+import { resolveMultiSourceCard } from "@/utils/card-resolver";
 
 const {
 	data,
@@ -27,121 +22,45 @@ const {
 	source,
 } = Astro.props as CCardTemplateProps;
 
-const insight = source === "blog" ? data as unknown as Insight : undefined;
-const publication = source === "comics" || source === "novels" || source === "publications"
-	? data as unknown as PublicationEntry
-	: undefined;
-const insightPresentation = insight
-	? presentation as InsightCardPresentation | undefined
-	: undefined;
-const publicationPresentation = publication
-	? source === "publications"
-		? (presentation as PublicationCollectionPresentation | undefined)?.[publication.catalog]
-		: presentation as PublicationCardPresentation | undefined
-	: undefined;
-const href = insight?.href ?? publication?.href ?? data.href;
-const title = insight?.title ?? publication?.title ?? data.title.join(" ");
-const excerpt = insight?.excerpt ?? publication?.summary ?? data.excerpt;
-const media = insight && insightPresentation && insight.image && insight.imageAlt
-	? {
-		src: insight.image,
-		alt: insight.imageAlt,
-		width: insightPresentation.imageWidth,
-		height: insightPresentation.imageHeight,
-	}
-	: publication?.cover ?? data.media;
-const ariaLabel = insight
-	? insight.title
-	: publication
-		? `${publicationPresentation?.ariaLabelPrefix ?? ""}${publication.title}`
-		: data.ariaLabel;
-const metadata = insight
-	? {
-		separator: insightPresentation?.separator,
-		items: [
-			{
-				type: "category" as const,
-				label: insight.category,
-				href: insightPresentation?.routes.categoryBase
-					? `${insightPresentation.routes.categoryBase}${insight.categorySlug}`
-					: undefined,
-				display: insightPresentation?.metadataDisplay,
-			},
-			{
-				type: "reading-time" as const,
-				label: insight.readTime,
-				display: insightPresentation?.metadataDisplay,
-			},
-		],
-	}
-	: publication
-		? {
-			items: publication.genres.map((genre) => ({
-				type: "category" as const,
-				label: genre.label,
-				href: publicationPresentation?.routes.categoryBase
-					? `${publicationPresentation.routes.categoryBase}${genre.slug}`
-					: undefined,
-				display: publicationPresentation?.categoryDisplay,
-			})),
-		}
-		: data.metadata;
-const metrics = publication && publicationPresentation
-	? [{ icon: publicationPresentation.viewsIcon, label: publication.views }]
-	: data.metrics;
-const facets = insight
-	? {
-		category: [insight.categorySlug],
-		tag: insight.tags.map((tag) => tag.slug),
-	}
-	: publication
-		? {
-			genre: publication.genres.map((genre) => genre.slug),
-			status: [publication.status],
-		}
-		: data.facets;
-const searchValue = insight
-	? [insight.title, insight.excerpt, insight.category, insight.author, ...insight.tags.map((tag) => tag.label)].join(" ")
-	: publication
-		? [publication.title, publication.summary, publication.author, ...publication.genres.map((genre) => genre.label)].join(" ")
-		: data.searchValue ?? title;
-const sortValue = insight?.publishedAt
-	?? (publication ? String(publication.order).padStart(4, "0") : data.sortValue);
+const card = resolveMultiSourceCard({ data, source, presentation });
+const metrics = card.insightCard ? data.metrics : card.publicationCard?.metrics ?? data.metrics;
 ---
 
 <CBox
 	as="article"
-	data-facet-card={facets ? "" : undefined}
-	data-facets={facets ? JSON.stringify(facets) : undefined}
-	data-search-value={searchValue.toLowerCase()}
-	data-sort-value={sortValue}
+	data-facet-card={card.facets ? "" : undefined}
+	data-facets={card.facets ? JSON.stringify(card.facets) : undefined}
+	data-search-value={card.searchValue.toLowerCase()}
+	data-sort-value={card.sortValue}
 	data-sort-index={index}
 >
 	<CRow align="start" gap="sm" wrap={false}>
-		{slots.media && media && (
+		{slots.media && card.media && (
 			<CMedia
 				ratio={mediaRatio}
+				shape="card"
 				size={mediaRatio === "portrait" ? "compact" : "thumbnail"}
-				href={href}
-				ariaLabel={ariaLabel}
-				class="rounded-md"
+				href={card.href}
+				ariaLabel={card.ariaLabel}
 			>
-				<CImage {...media} variant="fill" />
+				<CImage {...card.media} variant="fill" />
 			</CMedia>
 		)}
 
-		<CColumns columns="one" gap="xs">
-			{slots.metadata && metadata && <CMetadata data={metadata} tone="on-light" />}
+		<CColumns columns="one" gap="sm">
+			<CColumns columns="one" gap="none">
+				{slots.metadata && card.metadata && <CMetadata data={card.metadata} tone="on-light" />}
 
-			{slots.title && (
-				<CHeading level={headingLevel} variant="h5">
-					<CLink href={href}>{title}</CLink>
-				</CHeading>
-			)}
+				{slots.title && (
+					<CHeading level={headingLevel} variant="h5">
+						<CLink href={card.href}>{card.title}</CLink>
+					</CHeading>
+				)}
 
-			{slots.excerpt && excerpt && (
-				<CText variant="body-sm" tone="subtle">{excerpt}</CText>
-			)}
+				{slots.excerpt && card.excerpt && (
+					<CText variant="body-sm" tone="subtle">{card.excerpt}</CText>
+				)}
+			</CColumns>
 
 			{slots.metrics && metrics && metrics.length > 0 && (
 				<CRow gap="sm">
