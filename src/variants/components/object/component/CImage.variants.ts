@@ -11,7 +11,7 @@ export const imageVariantClasses: Record<CImageVariant, string> = {
 	fill: "h-full object-cover",
 	"payment-logo": "h-9 w-auto",
 	"background-contain": "absolute inset-0 h-full object-contain",
-	"scene-right": "absolute inset-y-0 right-0 h-full w-auto max-w-none",
+	"scene-right": "absolute right-0 top-0 h-auto w-full max-w-none",
 };
 
 export const imagePositionClasses: Record<CImagePosition, string> = {
