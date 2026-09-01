@@ -13,6 +13,7 @@ const data = getSystemStatePageData(emptyContent);
 	{...layoutData}
 	title={emptyContent.metadataTitle}
 	description={emptyContent.metadataDescription}
+	seo={{ robots: { index: false, follow: false } }}
 >
 	<SystemStatePage {data} />
 </BaseLayout>

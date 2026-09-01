@@ -18,13 +18,34 @@ const [layout, data] = await Promise.all([
 	getLayoutData(),
 	getInsightDetailPageData(slug),
 ]);
+const title = `${data.post.title} | ${layout.title}`;
 ---
 
 <BaseLayout
 	{...layout}
 	tone="light"
-	title={`${data.post.title} | ${layout.title}`}
+	{title}
 	description={data.post.excerpt}
+	seo={{
+		type: "article",
+		image: { src: data.post.image, alt: data.post.imageAlt },
+		publishedAt: data.post.publishedAt,
+		breadcrumbs: [
+			{ label: "Home", href: "/" },
+			{ label: "Insights", href: "/blog" },
+			{ label: data.post.title, href: `/blog/${data.post.slug}` },
+		],
+		entity: {
+			kind: "blog-post",
+			headline: data.post.title,
+			description: data.post.excerpt,
+			author: data.post.author,
+			publishedAt: data.post.publishedAt,
+			image: { src: data.post.image, alt: data.post.imageAlt },
+			category: data.post.category,
+			keywords: data.post.tags.map((tag) => tag.label),
+		},
+	}}
 >
 	<InsightDetailPage {data} />
 </BaseLayout>

@@ -20,6 +20,22 @@ const [layout, data] = await Promise.all([
 	tone="light"
 	title={`${data.entry.title} | ${layout.title}`}
 	description={data.entry.summary}
+	seo={{
+		image: data.entry.cover,
+		breadcrumbs: [
+			{ label: "Home", href: "/" },
+			{ label: "Novels", href: "/novels" },
+			{ label: data.entry.title, href: `/novels/${data.entry.slug}` },
+		],
+		entity: {
+			kind: "creative-work",
+			name: data.entry.title,
+			description: data.entry.summary,
+			creator: data.entry.author,
+			image: data.entry.cover,
+			keywords: data.entry.genres.map((genre) => genre.label),
+		},
+	}}
 >
 	<PublicationDetailPage {data} />
 </BaseLayout>

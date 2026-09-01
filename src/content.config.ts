@@ -8,10 +8,10 @@ import { blogDetailSettingsSchema } from "@/content/blog-detail-settings-schema"
 import { publicationEntrySchema } from "@/content/publication-schema";
 import { publicationDetailSettingsSchema } from "@/content/publication-detail-settings-schema";
 import { publicationCatalogSettingsSchema } from "@/content/publication-catalog-settings-schema";
+import { pageSchema } from "@/content/page-schema";
 import {
   closingProfileSettingsSchema,
   footerSettingsSchema,
-  pageSchema,
   interfaceSettingsSchema,
   navigationSettingsSchema,
   productEntrySchema,

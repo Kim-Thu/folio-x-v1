@@ -8,7 +8,7 @@ import {
 import type { BaseLayoutProps } from "@/types/layouts/BaseLayout.types";
 
 export interface LayoutData extends Required<
-	Pick<BaseLayoutProps, "title" | "description" | "language" | "header" | "footer" | "closingProfile" | "loadingScreen" | "skipToContent">
+	Pick<BaseLayoutProps, "title" | "description" | "language" | "seoSite" | "header" | "footer" | "closingProfile" | "loadingScreen" | "skipToContent">
 > {}
 
 export async function getLayoutData(): Promise<LayoutData> {
@@ -33,6 +33,18 @@ export async function getLayoutData(): Promise<LayoutData> {
 		title: metadata.title,
 		description: metadata.description,
 		language: metadata.language,
+		seoSite: {
+			name: site.name,
+			shortName: site.shortName,
+			role: site.role,
+			location: site.location,
+			email: site.email,
+			logo: site.logo,
+			language: metadata.language,
+			sameAs: navigation.socialLinks
+				.map((item) => item.href)
+				.filter((href) => /^https?:\/\//.test(href)),
+		},
 		skipToContent: interfaceSettings.skipToContent,
 		header: {
 			logo,

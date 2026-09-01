@@ -9,6 +9,7 @@ import PClosingProfile from "@/components/object/project/closing-profile/PClosin
 import PFooter from "@/components/object/project/footer/PFooter.astro";
 import PHeader from "@/components/object/project/header/PHeader.astro";
 import PLoadingScreen from "@/components/object/project/loading-screen/PLoadingScreen.astro";
+import PSeo from "@/components/object/project/seo/PSeo.astro";
 import "@/styles/globals.css";
 import type { BaseLayoutProps } from "@/types/layouts/BaseLayout.types";
 import { cn } from "@/utils/cn";
@@ -25,6 +26,8 @@ const {
 	language = "en",
 	hasOverlayHeader = false,
 	tone = "light",
+	seo,
+	seoSite,
 	header,
 	footer,
 	closingProfile,
@@ -46,12 +49,8 @@ const bodyClass = cn(
 		<meta charset="UTF-8" />
 		<meta name="viewport" content="width=device-width" />
 		<link rel="icon" href="/favicon.ico" sizes="any" />
-		<meta name="description" content={description} />
-		<meta property="og:title" content={title} />
-		<meta property="og:description" content={description} />
-		<meta property="og:type" content="website" />
+		<PSeo site={seoSite} {title} {description} {language} {seo} />
 		<link rel="preconnect" href="https://images.unsplash.com" />
-		<title>{title}</title>
 	</head>
 	<body class={bodyClass} data-page-tone={tone}>
 		<CSkipLink href="#main-content">{skipToContent}</CSkipLink>

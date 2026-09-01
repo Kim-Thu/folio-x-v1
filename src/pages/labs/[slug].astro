@@ -25,6 +25,21 @@ const [layout, data] = await Promise.all([
 	tone="light"
 	title={`${data.lab.title} | ${layout.title}`}
 	description={data.lab.summary}
+	seo={{
+		image: data.lab.image,
+		breadcrumbs: [
+			{ label: "Home", href: "/" },
+			{ label: "Labs", href: "/labs" },
+			{ label: data.lab.title, href: `/labs/${data.lab.slug}` },
+		],
+		entity: {
+			kind: "creative-work",
+			name: data.lab.title,
+			description: data.lab.summary,
+			image: data.lab.image,
+			keywords: [data.lab.category.label, ...data.lab.technologies.map((technology) => technology.label)],
+		},
+	}}
 >
 	<LabDetailPage {data} />
 </BaseLayout>

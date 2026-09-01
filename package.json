@@ -10,7 +10,8 @@
     "postbuild": "node scripts/generate-resource-hints.mjs",
     "preview": "astro preview",
     "check": "astro check",
-    "validate": "npm run build && npm audit --audit-level=high",
+    "validate:seo": "node scripts/validate-seo.mjs",
+    "validate": "npm run build && npm run validate:seo && npm audit --audit-level=high",
     "prepare": "git config core.hooksPath .githooks"
   },
   "dependencies": {
