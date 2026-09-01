@@ -88,10 +88,10 @@ const sortValue = insight?.publishedAt ?? publicationCard.sortValue;
 		{slots.media && media && (
 			<CMedia
 				ratio={mediaRatio}
+				shape="card"
 				size={mediaRatio === "portrait" ? "compact" : "thumbnail"}
 				href={href}
 				ariaLabel={ariaLabel}
-				class="rounded-md"
 			>
 				<CImage {...media} variant="fill" />
 			</CMedia>
