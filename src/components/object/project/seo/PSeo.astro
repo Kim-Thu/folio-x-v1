@@ -20,12 +20,14 @@ const page = normalizeSeo({
 const structuredData = serializeStructuredData(
 	buildStructuredData(page, site, siteUrl),
 );
+const rssUrl = new URL("/rss.xml", siteUrl).toString();
 ---
 
 <title>{page.title}</title>
 <meta name="description" content={page.description} />
 <meta name="robots" content={page.robots} />
 <link rel="canonical" href={page.canonicalUrl} />
+<link rel="alternate" type="application/rss+xml" title={`${site.name} RSS`} href={rssUrl} />
 
 <meta property="og:title" content={page.title} />
 <meta property="og:description" content={page.description} />
