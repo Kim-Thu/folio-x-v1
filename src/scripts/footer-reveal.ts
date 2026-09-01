@@ -7,6 +7,9 @@ export function initFooterReveal(): void {
 	const stage = profile?.querySelector<HTMLElement>(
 		"[data-closing-profile-stage]",
 	);
+	const portrait = profile?.querySelector<HTMLElement>(
+		"[data-closing-profile-portrait]",
+	);
 
 	const motionElements = profile?.querySelectorAll<HTMLElement>(
 		"[data-closing-profile-motion]",
@@ -46,29 +49,38 @@ export function initFooterReveal(): void {
 		resetMotion();
 
 		const stageRect = stage.getBoundingClientRect();
+		const portraitRect = portrait?.getBoundingClientRect();
+		const portraitGap = clamp(stageRect.width * 0.025, 24, 64);
 
 		/*
-		 * Khoảng chữ tách khỏi tâm.
+		 * Fallback cho trường hợp không có portrait.
 		 * Co theo màn hình nhưng không bị bay quá xa.
 		 */
-		const travelDistance = Math.min(320, stageRect.width * 0.22);
+		const fallbackTravelDistance = Math.min(320, stageRect.width * 0.22);
 
 		motionElements.forEach((element) => {
 			const direction =
 				element.dataset.closingProfileMotion === "left" ? -1 : 1;
-
 			const elementRect = element.getBoundingClientRect();
 
 			/*
-			 * Giới hạn để chữ không vượt khỏi stage.
+			 * Khi có portrait, đẩy từng dòng chữ ra ngoài biên portrait để tên
+			 * luôn đọc được ở trạng thái reveal hoàn tất. Nếu không đủ không gian,
+			 * clamp theo stage để chữ vẫn không tràn khỏi khu vực hiển thị.
 			 */
+			const desiredOffset = portraitRect
+				? direction < 0
+					? portraitRect.left - portraitGap - elementRect.right
+					: portraitRect.right + portraitGap - elementRect.left
+				: fallbackTravelDistance * direction;
+
 			const minimumOffset = stageRect.left - elementRect.left;
-
 			const maximumOffset = stageRect.right - elementRect.right;
-
-			const desiredOffset = travelDistance * direction;
-
-			const targetOffset = clamp(desiredOffset, minimumOffset, maximumOffset);
+			const targetOffset = clamp(
+				desiredOffset,
+				minimumOffset,
+				maximumOffset,
+			);
 
 			const animation = element.animate(
 				[
@@ -135,6 +147,9 @@ export function initFooterReveal(): void {
 	});
 
 	resizeObserver.observe(stage);
+	if (portrait) {
+		resizeObserver.observe(portrait);
+	}
 
 	motionElements.forEach((element) => {
 		resizeObserver.observe(element);
