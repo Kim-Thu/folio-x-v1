@@ -9,12 +9,8 @@ import CMedia from "@/components/object/component/CMedia.astro";
 import CMetadata from "@/components/object/component/CMetadata.astro";
 import CRow from "@/components/object/component/CRow.astro";
 import CText from "@/components/object/component/CText.astro";
-import type {
-	CCardTemplateProps,
-	InsightCardPresentation,
-} from "@/types/components/object/component/card/CCard.types";
-import type { Insight } from "@/types/content";
-import { resolvePublicationCard } from "@/utils/card";
+import type { CCardTemplateProps } from "@/types/components/object/component/card/CCard.types";
+import { resolveInsightCard, resolvePublicationCard } from "@/utils/card";
 
 const {
 	data,
@@ -26,54 +22,19 @@ const {
 	source,
 } = Astro.props as CCardTemplateProps;
 
-const insight = source === "blog" ? data as unknown as Insight : undefined;
-const insightPresentation = insight
-	? presentation as InsightCardPresentation | undefined
-	: undefined;
+const insightCard = resolveInsightCard({ data, source, presentation });
 const publicationCard = resolvePublicationCard({ data, source, presentation });
-const href = insight?.href ?? publicationCard.href;
-const title = insight?.title ?? publicationCard.title;
-const excerpt = insight?.excerpt ?? publicationCard.excerpt;
-const media = insight && insightPresentation && insight.image && insight.imageAlt
-	? {
-		src: insight.image,
-		alt: insight.imageAlt,
-		width: insightPresentation.imageWidth,
-		height: insightPresentation.imageHeight,
-	}
-	: publicationCard.media;
-const ariaLabel = insight ? insight.title : publicationCard.ariaLabel;
-const metadata = insight
-	? {
-		separator: insightPresentation?.separator,
-		items: [
-			{
-				type: "category" as const,
-				label: insight.category,
-				href: insightPresentation?.routes.categoryBase
-					? `${insightPresentation.routes.categoryBase}${insight.categorySlug}`
-					: undefined,
-				display: insightPresentation?.metadataDisplay,
-			},
-			{
-				type: "reading-time" as const,
-				label: insight.readTime,
-				display: insightPresentation?.metadataDisplay,
-			},
-		],
-	}
-	: publicationCard.metadata;
+const isInsight = Boolean(insightCard.insight);
+const href = isInsight ? insightCard.href : publicationCard.href;
+const title = isInsight ? insightCard.title : publicationCard.title;
+const excerpt = isInsight ? insightCard.excerpt : publicationCard.excerpt;
+const media = isInsight ? insightCard.media : publicationCard.media;
+const ariaLabel = isInsight ? insightCard.title : publicationCard.ariaLabel;
+const metadata = isInsight ? insightCard.metadata : publicationCard.metadata;
 const metrics = publicationCard.metrics;
-const facets = insight
-	? {
-		category: [insight.categorySlug],
-		tag: insight.tags.map((tag) => tag.slug),
-	}
-	: publicationCard.facets;
-const searchValue = insight
-	? [insight.title, insight.excerpt, insight.category, insight.author, ...insight.tags.map((tag) => tag.label)].join(" ")
-	: publicationCard.searchValue;
-const sortValue = insight?.publishedAt ?? publicationCard.sortValue;
+const facets = isInsight ? insightCard.facets : publicationCard.facets;
+const searchValue = isInsight ? insightCard.searchValue : publicationCard.searchValue;
+const sortValue = isInsight ? insightCard.sortValue : publicationCard.sortValue;
 ---
 
 <CBox

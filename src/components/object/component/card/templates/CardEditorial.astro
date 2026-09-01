@@ -7,11 +7,8 @@ import CLink from "@/components/object/component/CLink.astro";
 import CMedia from "@/components/object/component/CMedia.astro";
 import CMetadata from "@/components/object/component/CMetadata.astro";
 import CText from "@/components/object/component/CText.astro";
-import type {
-	CCardTemplateProps,
-	InsightCardPresentation,
-} from "@/types/components/object/component/card/CCard.types";
-import type { Insight } from "@/types/content";
+import type { CCardTemplateProps } from "@/types/components/object/component/card/CCard.types";
+import { resolveInsightCard } from "@/utils/card";
 
 const {
 	data,
@@ -22,69 +19,7 @@ const {
 	source,
 } = Astro.props as CCardTemplateProps;
 
-const insight = source === "blog" ? data as unknown as Insight : undefined;
-const insightPresentation = insight
-	? presentation as InsightCardPresentation | undefined
-	: undefined;
-const href = insight?.href ?? data.href;
-const title = insight?.title ?? data.title.join(" ");
-const excerpt = insight?.excerpt ?? data.excerpt;
-const media = insight && insightPresentation && insight.image && insight.imageAlt
-	? {
-		src: insight.image,
-		alt: insight.imageAlt,
-		width: insightPresentation.imageWidth,
-		height: insightPresentation.imageHeight,
-	}
-	: data.media;
-const metadata = insight
-	? {
-		separator: insightPresentation?.separator,
-		items: [
-			{
-				type: "category" as const,
-				label: insight.category,
-				href: insightPresentation?.routes.categoryBase
-					? `${insightPresentation.routes.categoryBase}${insight.categorySlug}`
-					: undefined,
-				display: insightPresentation?.metadataDisplay,
-			},
-			{
-				type: "reading-time" as const,
-				label: insight.readTime,
-				display: insightPresentation?.metadataDisplay,
-			},
-		],
-	}
-	: data.metadata;
-const secondaryMetadata = insight
-	? {
-		separator: insightPresentation?.separator,
-		items: [
-			{
-				type: "author" as const,
-				label: insight.author,
-				display: insightPresentation?.metadataDisplay,
-			},
-			{
-				type: "datetime" as const,
-				label: insight.publishedLabel,
-				datetime: insight.publishedAt,
-				display: insightPresentation?.metadataDisplay,
-			},
-		],
-	}
-	: data.secondaryMetadata;
-const facets = insight
-	? {
-		category: [insight.categorySlug],
-		tag: insight.tags.map((tag) => tag.slug),
-	}
-	: data.facets;
-const searchValue = insight
-	? [insight.title, insight.excerpt, insight.category, insight.author, ...insight.tags.map((tag) => tag.label)].join(" ")
-	: data.searchValue ?? title;
-const sortValue = insight?.publishedAt ?? data.sortValue;
+const insightCard = resolveInsightCard({ data, source, presentation });
 ---
 
 <CBox
@@ -93,33 +28,35 @@ const sortValue = insight?.publishedAt ?? data.sortValue;
 	radius="md"
 	overflow="hidden"
 	data-facet-card
-	data-facets={JSON.stringify(facets ?? {})}
-	data-search-value={searchValue.toLowerCase()}
-	data-sort-value={sortValue}
+	data-facets={JSON.stringify(insightCard.facets ?? {})}
+	data-search-value={insightCard.searchValue.toLowerCase()}
+	data-sort-value={insightCard.sortValue}
 	data-sort-index={index}
 >
-	{slots.media && media && (
-		<CMedia ratio="video" href={href} ariaLabel={title}>
-			<CImage {...media} variant="fill" />
+	{slots.media && insightCard.media && (
+		<CMedia ratio="video" href={insightCard.href} ariaLabel={insightCard.title}>
+			<CImage {...insightCard.media} variant="fill" />
 		</CMedia>
 	)}
 
 	<CBox spacing="sm">
 		<CColumns columns="one" gap="xs">
-			{slots.metadata && metadata && <CMetadata data={metadata} tone="brand" />}
+			{slots.metadata && insightCard.metadata && (
+				<CMetadata data={insightCard.metadata} tone="brand" />
+			)}
 
 			{slots.title && (
 				<CHeading level={headingLevel} variant="h4">
-					<CLink href={href}>{title}</CLink>
+					<CLink href={insightCard.href}>{insightCard.title}</CLink>
 				</CHeading>
 			)}
 
-			{slots.excerpt && excerpt && (
-				<CText variant="body-sm" tone="subtle">{excerpt}</CText>
+			{slots.excerpt && insightCard.excerpt && (
+				<CText variant="body-sm" tone="subtle">{insightCard.excerpt}</CText>
 			)}
 
-			{slots.metadata && secondaryMetadata && (
-				<CMetadata data={secondaryMetadata} tone="on-light" class="pt-8" />
+			{slots.metadata && insightCard.secondaryMetadata && (
+				<CMetadata data={insightCard.secondaryMetadata} tone="on-light" class="pt-8" />
 			)}
 		</CColumns>
 	</CBox>
