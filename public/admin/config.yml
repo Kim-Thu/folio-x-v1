@@ -262,7 +262,7 @@ collections:
                         fields:
                           - { label: ID, name: id, widget: string }
                           - { label: Type, name: type, widget: hidden, default: page-header }
-                          - { label: Template, name: template, widget: select, options: [split-media, split-benefits, immersive] }
+                          - { label: Template, name: template, widget: select, options: [split-media, immersive] }
                           - label: Settings
                             name: settings
                             widget: object
