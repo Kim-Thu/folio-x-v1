@@ -13,6 +13,7 @@ const data = getSystemStatePageData(notFoundContent);
 	{...layoutData}
 	title={notFoundContent.metadataTitle}
 	description={notFoundContent.metadataDescription}
+	seo={{ robots: { index: false, follow: false } }}
 >
 	<SystemStatePage {data} />
 </BaseLayout>
