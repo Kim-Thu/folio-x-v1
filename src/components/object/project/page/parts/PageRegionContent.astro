@@ -40,11 +40,7 @@ const { region } = Astro.props as PageRegionProps;
 {region.component === "article" && <PArticle {...region.props} />}
 {region.component === "reviews" && <PReviews {...region.props} />}
 {region.component === "cards" && (
-	<CBox
-		surface={region.props.panel ? "glass" : "plain"}
-		radius={region.props.panel ? "md" : "none"}
-		spacing={region.props.panel ? "sm" : "none"}
-	>
+	<CBox surface={region.props.panel ? "glass" : "plain"} radius={region.props.panel ? "md" : "none"} spacing={region.props.panel ? "sm" : "none"}>
 		<CColumns columns="one" gap="md">
 			{region.props.header && region.props.headerAction ? (
 				<CRow justify="between" align="end">
@@ -69,11 +65,7 @@ const { region } = Astro.props as PageRegionProps;
 	<CColumns columns="one" gap="xl" data-tabbed-collection={region.props.behavior === "tabbed" ? "" : undefined}>
 		{region.props.header && <PSectionHeader {...region.props.header} />}
 		{region.props.tabs && <CTabList {...region.props.tabs} />}
-		<CColumns
-			columns={region.props.template === "split" ? "twelve" : "one"}
-			gap="xl"
-			data-collection-panel={region.props.behavior === "tabbed" ? "" : undefined}
-		>
+		<CColumns columns={region.props.template === "split" ? "twelve" : "one"} gap="xl" data-collection-panel={region.props.behavior === "tabbed" ? "" : undefined}>
 			{region.props.cardGroups.map((cards, index) => (
 				<CGridItem lgSpan={region.props.template === "split" ? (index === 0 ? 7 : 5) : "full"}>
 					<PCard {...cards} />
@@ -89,13 +81,7 @@ const { region } = Astro.props as PageRegionProps;
 	</CColumns>
 )}
 {region.component === "archive" && (
-	<CColumns
-		columns="one"
-		gap="md"
-		data-filter-root={region.props.mode === "taxonomy" ? "" : undefined}
-		data-filter-mode={region.props.mode}
-		data-pagination-page-size={region.props.pagination.pageSize}
-	>
+	<CColumns columns="one" gap="md" data-filter-root={region.props.mode === "taxonomy" ? "" : undefined} data-filter-mode={region.props.mode} data-pagination-page-size={region.props.pagination.pageSize}>
 		<PArchiveToolbar {...region.props.toolbar} />
 		{region.props.mode === "faceted" && region.props.sidebar ? (
 			<LSidebar label={region.props.sidebar.label} sticky>
@@ -121,24 +107,14 @@ const { region } = Astro.props as PageRegionProps;
 					)}
 					<PCard {...region.props.cards} />
 					<CText data-product-empty data-facet-empty hidden tone="muted">{region.props.emptyLabel}</CText>
-					<CPagination
-						label={region.props.pagination.label}
-						previousLabel={region.props.pagination.previousLabel}
-						nextLabel={region.props.pagination.nextLabel}
-						totalPages={region.props.pagination.totalPages}
-					/>
+					<CPagination label={region.props.pagination.label} previousLabel={region.props.pagination.previousLabel} nextLabel={region.props.pagination.nextLabel} totalPages={region.props.pagination.totalPages} />
 				</CColumns>
 			</LSidebar>
 		) : (
 			<CColumns columns="one" gap="md">
 				<PCard {...region.props.cards} />
 				<CText data-filter-empty hidden tone="muted">{region.props.emptyLabel}</CText>
-				<CPagination
-					label={region.props.pagination.label}
-					previousLabel={region.props.pagination.previousLabel}
-					nextLabel={region.props.pagination.nextLabel}
-					totalPages={region.props.pagination.totalPages}
-				/>
+				<CPagination label={region.props.pagination.label} previousLabel={region.props.pagination.previousLabel} nextLabel={region.props.pagination.nextLabel} totalPages={region.props.pagination.totalPages} />
 			</CColumns>
 		)}
 	</CColumns>
@@ -149,11 +125,7 @@ const { region } = Astro.props as PageRegionProps;
 {region.component === "entry-index" && <PEntryIndex {...region.props} />}
 {region.component === "reader" && <PReader {...region.props} />}
 {region.component === "details" && (
-	<CBox
-		surface={region.props.title ? "glass" : "plain"}
-		radius={region.props.title ? "md" : "none"}
-		spacing={region.props.title ? "md" : "none"}
-	>
+	<CBox surface={region.props.title ? "glass" : "plain"} radius={region.props.title ? "md" : "none"} spacing={region.props.title ? "md" : "none"}>
 		<CColumns columns="one" gap="sm">
 			{region.props.title && <CHeading level={2} variant="h5">{region.props.title}</CHeading>}
 			<CDescriptionList {...region.props.list} variant={region.props.title ? "default" : region.props.list.variant} />
@@ -170,27 +142,19 @@ const { region } = Astro.props as PageRegionProps;
 {region.component === "toc" && <CTOC {...region.props} />}
 {region.component === "advertisement" && <PAdvertisement {...region.props} />}
 {region.component === "group" && (
-	<CBox
-		surface={region.props.panel ? "glass" : "plain"}
-		radius={region.props.panel ? "md" : "none"}
-		spacing={region.props.panel ? "sm" : "none"}
-	>
+	<CBox surface={region.props.panel ? "glass" : "plain"} radius={region.props.panel ? "md" : "none"} spacing={region.props.panel ? "sm" : "none"}>
 		<CColumns columns="one" gap="md">
 			{region.props.toolbar && <PArchiveToolbar {...region.props.toolbar} />}
-			<LSidebar
-				label={region.props.asideLabel}
-				position={region.props.asidePosition}
-				sticky={region.props.stickyAside}
-			>
+			<LSidebar label={region.props.asideLabel} position={region.props.asidePosition} sticky={region.props.stickyAside}>
 				<CColumns slot="sidebar" columns="one" gap={region.props.asideGap ?? "md"}>
 					{region.props.regions
 						.filter((item) => item.enabled !== false && item.placement === "aside")
-						.map((item) => <PageRegionContent region={item} />)}
+						.map((item) => <Astro.self region={item} />)}
 				</CColumns>
 				<CColumns columns="one" gap={region.props.gap ?? "lg"}>
 					{region.props.regions
 						.filter((item) => item.enabled !== false && (item.placement ?? "main") === "main")
-						.map((item) => <PageRegionContent region={item} />)}
+						.map((item) => <Astro.self region={item} />)}
 				</CColumns>
 			</LSidebar>
 		</CColumns>
