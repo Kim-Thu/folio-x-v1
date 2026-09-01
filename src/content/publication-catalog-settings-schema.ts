@@ -1,9 +1,22 @@
 import { z } from "astro/zod";
-import { cardConfigSchema } from "@/content/card-config-schema";
+import {
+	cardColumnsSchema,
+	cardConfigSchema,
+	cardGapSchema,
+	cardLayoutSchema,
+	cardTemplateSchema,
+} from "@/content/card-config-schema";
 
 const optionSchema = z.object({
 	label: z.string().min(1),
 	value: z.string().min(1),
+});
+
+const catalogCardConfigSchema = cardConfigSchema.extend({
+	template: cardTemplateSchema,
+	layout: cardLayoutSchema,
+	columns: cardColumnsSchema,
+	gap: cardGapSchema,
 });
 
 export const publicationCatalogSettingsSchema = z.object({
@@ -36,7 +49,7 @@ export const publicationCatalogSettingsSchema = z.object({
 		}),
 		trendingTitle: z.string().min(1),
 		popularAuthorsTitle: z.string().min(1),
-		listCards: cardConfigSchema,
+		listCards: catalogCardConfigSchema,
 		authorPlaceholder: z.object({
 			src: z.string().min(1),
 			width: z.number().int().positive(),
@@ -63,12 +76,12 @@ export const publicationCatalogSettingsSchema = z.object({
 			previousLabel: z.string().min(1),
 			nextLabel: z.string().min(1),
 		}),
-		featuredCards: cardConfigSchema,
-		latestCards: cardConfigSchema,
-		genreCards: cardConfigSchema,
-		topRatedCards: cardConfigSchema,
-		completedCards: cardConfigSchema,
-		allStoriesCards: cardConfigSchema,
+		featuredCards: catalogCardConfigSchema,
+		latestCards: catalogCardConfigSchema,
+		genreCards: catalogCardConfigSchema,
+		topRatedCards: catalogCardConfigSchema,
+		completedCards: catalogCardConfigSchema,
+		allStoriesCards: catalogCardConfigSchema,
 		genreIcons: z.array(z.string().min(1)).min(1),
 		genreWorksTemplate: z.string().min(1),
 		authorWorksTemplate: z.string().min(1),
