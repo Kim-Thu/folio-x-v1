@@ -6,7 +6,6 @@ import {
 	cardLayoutSchema,
 	cardTemplateSchema,
 } from "@/content/card-config-schema";
-import { iconNameSchema } from "@/content/schemas";
 
 const optionSchema = z.object({
 	label: z.string().min(1),
@@ -18,12 +17,6 @@ const catalogCardConfigSchema = cardConfigSchema.extend({
 	layout: cardLayoutSchema,
 	columns: cardColumnsSchema,
 	gap: cardGapSchema,
-});
-
-const panelSchema = z.object({
-	surface: z.enum(["plain", "accent", "bordered", "canvas", "dark", "glass", "glass-dark", "soft"]),
-	radius: z.enum(["none", "md", "lg"]),
-	spacing: z.enum(["none", "xs", "sm", "md", "lg", "xl"]),
 });
 
 export const publicationCatalogSettingsSchema = z.object({
@@ -49,7 +42,11 @@ export const publicationCatalogSettingsSchema = z.object({
 		sticky: z.boolean(),
 		genresLegend: z.string().min(1),
 		allGenresShortLabel: z.string().min(1),
-		panel: panelSchema,
+		panel: z.object({
+			surface: z.string().min(1),
+			radius: z.string().min(1),
+			spacing: z.string().min(1),
+		}),
 		trendingTitle: z.string().min(1),
 		popularAuthorsTitle: z.string().min(1),
 		listCards: catalogCardConfigSchema,
@@ -85,7 +82,7 @@ export const publicationCatalogSettingsSchema = z.object({
 		topRatedCards: catalogCardConfigSchema,
 		completedCards: catalogCardConfigSchema,
 		allStoriesCards: catalogCardConfigSchema,
-		genreIcons: z.array(iconNameSchema).min(1),
+		genreIcons: z.array(z.string().min(1)).min(1),
 		genreWorksTemplate: z.string().min(1),
 		authorWorksTemplate: z.string().min(1),
 	}),
