@@ -13,7 +13,7 @@ import CRow from "@/components/object/component/CRow.astro";
 import CTags from "@/components/object/component/CTags.astro";
 import CText from "@/components/object/component/CText.astro";
 import type { CCardTemplateProps } from "@/types/components/object/component/card/CCard.types";
-import { resolveLabCard, resolvePublicationCard } from "@/utils/card";
+import { resolveMultiSourceCard } from "@/utils/card-resolver";
 
 const {
 	data,
@@ -25,30 +25,13 @@ const {
 	source,
 } = Astro.props as CCardTemplateProps;
 
-const isLab = source === "labs";
-const labCard = isLab
-	? resolveLabCard({ data, source, presentation })
-	: undefined;
-const publicationCard = isLab
-	? undefined
-	: resolvePublicationCard({ data, source, presentation });
-const href = labCard?.href ?? publicationCard?.href ?? data.href;
-const title = labCard?.title ?? publicationCard?.title ?? data.title.join(" ");
-const excerpt = labCard?.excerpt ?? publicationCard?.excerpt ?? data.excerpt;
-const media = labCard?.media ?? publicationCard?.media ?? data.media;
-const ariaLabel = labCard?.ariaLabel ?? publicationCard?.ariaLabel ?? data.ariaLabel;
-const metadata = labCard?.metadata ?? publicationCard?.metadata ?? data.metadata;
-const badge = labCard?.badge ?? data.badge;
-const tags = labCard?.tags ?? publicationCard?.tags ?? data.tags;
-const tagsLabel = labCard?.tagsLabel ?? publicationCard?.tagsLabel ?? data.tagsLabel;
-const metrics = labCard?.metrics ?? publicationCard?.metrics ?? data.metrics;
-const rating = isLab ? data.rating : publicationCard?.rating ?? data.rating;
-const facets = labCard?.facets ?? publicationCard?.facets ?? data.facets;
-const searchValue = labCard?.searchValue
-	?? publicationCard?.searchValue
-	?? data.searchValue
-	?? title;
-const sortValue = isLab ? data.sortValue : publicationCard?.sortValue ?? data.sortValue;
+const card = resolveMultiSourceCard({ data, source, presentation });
+const isLab = Boolean(card.labCard);
+const badge = card.labCard?.badge ?? data.badge;
+const tags = card.labCard?.tags ?? card.publicationCard?.tags ?? data.tags;
+const tagsLabel = card.labCard?.tagsLabel ?? card.publicationCard?.tagsLabel ?? data.tagsLabel;
+const metrics = card.labCard?.metrics ?? card.publicationCard?.metrics ?? data.metrics;
+const rating = card.labCard ? data.rating : card.publicationCard?.rating ?? data.rating;
 ---
 
 <CBox
@@ -56,22 +39,22 @@ const sortValue = isLab ? data.sortValue : publicationCard?.sortValue ?? data.so
 	surface="glass"
 	radius="md"
 	overflow="hidden"
-	data-facet-card={facets ? "" : undefined}
-	data-facets={facets ? JSON.stringify(facets) : undefined}
-	data-search-value={searchValue.toLowerCase()}
-	data-sort-value={sortValue}
+	data-facet-card={card.facets ? "" : undefined}
+	data-facets={card.facets ? JSON.stringify(card.facets) : undefined}
+	data-search-value={card.searchValue.toLowerCase()}
+	data-sort-value={card.sortValue}
 	data-sort-index={index}
 >
-	{slots.media && media && (
+	{slots.media && card.media && (
 		<div class="relative">
-			<CMedia ratio={mediaRatio} href={href} ariaLabel={ariaLabel}>
-				<CImage {...media} variant="fill" />
+			<CMedia ratio={mediaRatio} href={card.href} ariaLabel={card.ariaLabel}>
+				<CImage {...card.media} variant="fill" />
 				{badge && <CBadge placement="top-end" tone={badge.tone}>{badge.label}</CBadge>}
 			</CMedia>
 
 			{isLab && slots.tags && tags && tags.length > 0 && (
 				<div class="absolute inset-x-4 bottom-4 z-20 flex flex-wrap items-center gap-2">
-					<CTags items={tags} label={tagsLabel ?? `${title} tags`} />
+					<CTags items={tags} label={tagsLabel ?? `${card.title} tags`} />
 				</div>
 			)}
 		</div>
@@ -80,22 +63,22 @@ const sortValue = isLab ? data.sortValue : publicationCard?.sortValue ?? data.so
 	<CBox spacing="sm">
 		<CColumns columns="one" gap="md">
 			<CColumns columns="one" gap="xs">
-				{slots.metadata && metadata && (
-					<CMetadata data={metadata} slots={{ icons: false }} tone="brand" />
+				{slots.metadata && card.metadata && (
+					<CMetadata data={card.metadata} slots={{ icons: false }} tone="brand" />
 				)}
 
 				{slots.title && (
 					<CHeading level={headingLevel} variant="h4">
-						<CLink href={href}>{title}</CLink>
+						<CLink href={card.href}>{card.title}</CLink>
 					</CHeading>
 				)}
 
-				{slots.excerpt && excerpt && (
-					<CText variant="body-sm" tone="subtle">{excerpt}</CText>
+				{slots.excerpt && card.excerpt && (
+					<CText variant="body-sm" tone="subtle">{card.excerpt}</CText>
 				)}
 
 				{!isLab && slots.tags && tags && tags.length > 0 && (
-					<CTags items={tags} label={tagsLabel ?? `${title} tags`} />
+					<CTags items={tags} label={tagsLabel ?? `${card.title} tags`} />
 				)}
 			</CColumns>
 
