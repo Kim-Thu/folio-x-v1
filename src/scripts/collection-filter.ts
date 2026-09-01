@@ -1,4 +1,8 @@
 import { parseFacetData } from "@/scripts/facet-data";
+import {
+	getPaginationControls,
+	syncPaginationControls,
+} from "@/scripts/pagination-controls";
 
 export function initCollectionFilter(scope: ParentNode = document): void {
 	scope
@@ -20,16 +24,8 @@ export function initCollectionFilter(scope: ParentNode = document): void {
 			const paginatedCollection = root.querySelector<HTMLElement>(
 				"[data-pagination-collection]",
 			);
-			const pagination = root.querySelector<HTMLElement>("[data-pagination]");
-			const pageButtons = Array.from(
-				pagination?.querySelectorAll<HTMLButtonElement>("[data-page]") ?? [],
-			);
-			const previousButton = pagination?.querySelector<HTMLButtonElement>(
-				"[data-page-previous]",
-			);
-			const nextButton = pagination?.querySelector<HTMLButtonElement>(
-				"[data-page-next]",
-			);
+			const paginationControls = getPaginationControls(root);
+			const { pageButtons, previousButton, nextButton } = paginationControls;
 			const pageSize = Number(paginatedCollection?.dataset.paginationPageSize) || 1;
 			let activePage = 1;
 
@@ -88,17 +84,14 @@ export function initCollectionFilter(scope: ParentNode = document): void {
 					});
 				});
 
-				if (pagination && paginatedCollection) {
+				if (paginatedCollection) {
 					const totalPages = Math.max(1, Math.ceil(paginatedMatchCount / pageSize));
-					pagination.hidden = paginatedMatchCount === 0;
-					pageButtons.forEach((button) => {
-						const page = Number(button.dataset.page);
-						button.parentElement?.toggleAttribute("hidden", page > totalPages);
-						if (page === activePage) button.setAttribute("aria-current", "page");
-						else button.removeAttribute("aria-current");
-					});
-					if (previousButton) previousButton.disabled = activePage === 1;
-					if (nextButton) nextButton.disabled = activePage === totalPages;
+					syncPaginationControls(
+						paginationControls,
+						activePage,
+						totalPages,
+						paginatedMatchCount,
+					);
 				}
 			};
 
