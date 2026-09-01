@@ -11,7 +11,6 @@ export type PPageHeaderTemplate =
   | "immersive"
   | "split-media"
   | "slider-aside"
-  | "split-benefits"
   | "gallery-summary"
   | "media-aside"
   | "cover-summary";
@@ -73,23 +72,15 @@ export interface PPageHeaderEditorialData {
   share?: CShareLinksProps;
 }
 
-export interface PPageHeaderSplitBenefitsData {
-  id: string;
-  breadcrumb?: CBreadcrumbData;
-  eyebrow: string;
-  title: string;
-  accent: string;
-  description: string;
-  benefits: {
-    items: CFeatureData[];
-  };
-  image: CImageData;
-}
-
 export interface PPageHeaderSplitMediaData {
-  breadcrumb: CBreadcrumbData;
-  title: readonly string[];
-  description: string;
+  breadcrumb?: CBreadcrumbData;
+  eyebrow?: string;
+  title: string | readonly string[];
+  accent?: string;
+  description?: string;
+  benefits?: {
+    items?: CFeatureData[];
+  };
   image?: CImageData;
 }
 
@@ -195,10 +186,6 @@ export type PPageHeaderProps =
   | {
       data: PPageHeaderImmersiveData;
       template: "immersive";
-    }
-  | {
-      data: PPageHeaderSplitBenefitsData;
-      template: "split-benefits";
     }
   | {
       data: PPageHeaderSplitMediaData;
