@@ -1,7 +1,6 @@
 ---
 import PageHeaderEditorial from "@/components/object/project/page-header/templates/PageHeaderEditorial.astro";
 import PageHeaderImmersive from "@/components/object/project/page-header/templates/PageHeaderImmersive.astro";
-import PageHeaderSplitBenefits from "@/components/object/project/page-header/templates/PageHeaderSplitBenefits.astro";
 import PageHeaderGallerySummary from "@/components/object/project/page-header/templates/PageHeaderGallerySummary.astro";
 import PageHeaderSliderAside from "@/components/object/project/page-header/templates/PageHeaderSliderAside.astro";
 import PageHeaderSplitMedia from "@/components/object/project/page-header/templates/PageHeaderSplitMedia.astro";
@@ -11,7 +10,6 @@ import type {
 	PPageHeaderProps,
 	PPageHeaderEditorialData,
 	PPageHeaderImmersiveData,
-	PPageHeaderSplitBenefitsData,
 	PPageHeaderGallerySummaryData,
 	PPageHeaderSliderAsideData,
 	PPageHeaderSplitMediaData,
@@ -36,13 +34,6 @@ const template = props.template ?? "split-media";
 {
 	template === "immersive" && (
 		<PageHeaderImmersive data={props.data as PPageHeaderImmersiveData} />
-	)
-}
-{
-	template === "split-benefits" && (
-		<PageHeaderSplitBenefits
-			data={props.data as PPageHeaderSplitBenefitsData}
-		/>
 	)
 }
 {
