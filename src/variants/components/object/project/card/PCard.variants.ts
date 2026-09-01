@@ -17,6 +17,8 @@ export const pCardTemplateColumnDefaults: Partial<Record<PCardTemplate, PCardCol
 	"three-column": 3,
 };
 
+export const pCardProductViewCollectionClass = "group/product-view";
+
 export const pCardSliderClasses =
 	"w-[calc(100vw-(100vw-100%)/2)] max-w-none";
 
