@@ -13,6 +13,7 @@ import CRow from "@/components/object/component/CRow.astro";
 import CText from "@/components/object/component/CText.astro";
 import type { CCardTemplateProps } from "@/types/components/object/component/card/CCard.types";
 import { getCardSourceContext } from "@/utils/card";
+import { productCardResponsiveViewClasses } from "@/variants/components/object/component/card/CCard.variants";
 
 const {
 	data,
@@ -69,6 +70,8 @@ const license = productSource ? productPresentation?.license : data.product?.lic
 		surface="glass"
 		radius="md"
 		overflow="hidden"
+		class={source === "products" ? productCardResponsiveViewClasses : undefined}
+		data-product-item={source === "products" ? "" : undefined}
 		data-product-card
 		data-title={title.toLowerCase()}
 		data-filter-category={product.categorySlug}
@@ -126,7 +129,12 @@ const license = productSource ? productPresentation?.license : data.product?.lic
 								aria-pressed="false"
 							/>
 						)}
-						<CRating style="compact" value={product.rating} maximum={5} count={product.reviews} />
+						<CRating
+							style="compact"
+							value={product.rating}
+							maximum={5}
+							count={product.reviews}
+						/>
 					</CRow>
 				</CRow>
 			</CColumns>
