@@ -8,7 +8,11 @@ const orderedRegions = regions;
 ---
 
 {orderedRegions.map((region) => {
-	const section = region.section === false ? undefined : region.section;
+	if (region.section === false) {
+		return <PageRegionContent {region} />;
+	}
+
+	const section = region.section;
 	return (
 		<LSection
 			id={section?.id}
