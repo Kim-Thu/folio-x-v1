@@ -5,10 +5,7 @@ export type CImageVariant =
 	| "cover"
 	| "fill"
 	| "payment-logo"
-	| "background-contain"
-	| "scene-right";
-
-export type CImagePosition = "center" | "top";
+	| "background-contain";
 
 export interface CImageData {
 	src: string;
@@ -22,6 +19,5 @@ export interface CImageProps extends CImageData, Omit<
 	"alt" | "class" | "height" | "src" | "width"
 > {
 	variant?: CImageVariant;
-	position?: CImagePosition;
 	class?: string;
 }
