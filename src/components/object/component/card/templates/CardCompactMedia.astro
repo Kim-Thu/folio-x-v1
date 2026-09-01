@@ -22,23 +22,26 @@ const {
 	source,
 } = Astro.props as CCardTemplateProps;
 
-const insightCard = resolveInsightCard({ data, source, presentation });
-const isInsight = Boolean(insightCard.insight);
+const isInsight = source === "blog";
+const insightCard = isInsight
+	? resolveInsightCard({ data, source, presentation })
+	: undefined;
 const publicationCard = isInsight
 	? undefined
 	: resolvePublicationCard({ data, source, presentation });
-const href = isInsight ? insightCard.href : publicationCard?.href ?? data.href;
-const title = isInsight ? insightCard.title : publicationCard?.title ?? data.title.join(" ");
-const excerpt = isInsight ? insightCard.excerpt : publicationCard?.excerpt ?? data.excerpt;
-const media = isInsight ? insightCard.media : publicationCard?.media ?? data.media;
-const ariaLabel = isInsight ? insightCard.title : publicationCard?.ariaLabel ?? data.ariaLabel;
-const metadata = isInsight ? insightCard.metadata : publicationCard?.metadata ?? data.metadata;
+const href = insightCard?.href ?? publicationCard?.href ?? data.href;
+const title = insightCard?.title ?? publicationCard?.title ?? data.title.join(" ");
+const excerpt = insightCard?.excerpt ?? publicationCard?.excerpt ?? data.excerpt;
+const media = insightCard?.media ?? publicationCard?.media ?? data.media;
+const ariaLabel = insightCard?.title ?? publicationCard?.ariaLabel ?? data.ariaLabel;
+const metadata = insightCard?.metadata ?? publicationCard?.metadata ?? data.metadata;
 const metrics = isInsight ? data.metrics : publicationCard?.metrics ?? data.metrics;
-const facets = isInsight ? insightCard.facets : publicationCard?.facets ?? data.facets;
-const searchValue = isInsight
-	? insightCard.searchValue
-	: publicationCard?.searchValue ?? data.searchValue ?? title;
-const sortValue = isInsight ? insightCard.sortValue : publicationCard?.sortValue ?? data.sortValue;
+const facets = insightCard?.facets ?? publicationCard?.facets ?? data.facets;
+const searchValue = insightCard?.searchValue
+	?? publicationCard?.searchValue
+	?? data.searchValue
+	?? title;
+const sortValue = insightCard?.sortValue ?? publicationCard?.sortValue ?? data.sortValue;
 ---
 
 <CBox

@@ -25,26 +25,29 @@ const {
 	source,
 } = Astro.props as CCardTemplateProps;
 
-const labCard = resolveLabCard({ data, source, presentation });
-const isLab = Boolean(labCard.lab);
+const isLab = source === "labs";
+const labCard = isLab
+	? resolveLabCard({ data, source, presentation })
+	: undefined;
 const publicationCard = isLab
 	? undefined
 	: resolvePublicationCard({ data, source, presentation });
-const href = isLab ? labCard.href : publicationCard?.href ?? data.href;
-const title = isLab ? labCard.title : publicationCard?.title ?? data.title.join(" ");
-const excerpt = isLab ? labCard.excerpt : publicationCard?.excerpt ?? data.excerpt;
-const media = isLab ? labCard.media : publicationCard?.media ?? data.media;
-const ariaLabel = isLab ? labCard.ariaLabel : publicationCard?.ariaLabel ?? data.ariaLabel;
-const metadata = isLab ? labCard.metadata : publicationCard?.metadata ?? data.metadata;
-const badge = isLab ? labCard.badge : data.badge;
-const tags = isLab ? labCard.tags : publicationCard?.tags ?? data.tags;
-const tagsLabel = isLab ? labCard.tagsLabel : publicationCard?.tagsLabel ?? data.tagsLabel;
-const metrics = isLab ? labCard.metrics : publicationCard?.metrics ?? data.metrics;
+const href = labCard?.href ?? publicationCard?.href ?? data.href;
+const title = labCard?.title ?? publicationCard?.title ?? data.title.join(" ");
+const excerpt = labCard?.excerpt ?? publicationCard?.excerpt ?? data.excerpt;
+const media = labCard?.media ?? publicationCard?.media ?? data.media;
+const ariaLabel = labCard?.ariaLabel ?? publicationCard?.ariaLabel ?? data.ariaLabel;
+const metadata = labCard?.metadata ?? publicationCard?.metadata ?? data.metadata;
+const badge = labCard?.badge ?? data.badge;
+const tags = labCard?.tags ?? publicationCard?.tags ?? data.tags;
+const tagsLabel = labCard?.tagsLabel ?? publicationCard?.tagsLabel ?? data.tagsLabel;
+const metrics = labCard?.metrics ?? publicationCard?.metrics ?? data.metrics;
 const rating = isLab ? data.rating : publicationCard?.rating ?? data.rating;
-const facets = isLab ? labCard.facets : publicationCard?.facets ?? data.facets;
-const searchValue = isLab
-	? labCard.searchValue
-	: publicationCard?.searchValue ?? data.searchValue ?? title;
+const facets = labCard?.facets ?? publicationCard?.facets ?? data.facets;
+const searchValue = labCard?.searchValue
+	?? publicationCard?.searchValue
+	?? data.searchValue
+	?? title;
 const sortValue = isLab ? data.sortValue : publicationCard?.sortValue ?? data.sortValue;
 ---
 
