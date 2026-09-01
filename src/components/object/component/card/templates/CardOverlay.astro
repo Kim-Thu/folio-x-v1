@@ -27,11 +27,7 @@ const {
 	source,
 } = Astro.props as CCardTemplateProps;
 
-const card = resolveProjectOverlayCard({
-	data,
-	source,
-	presentation,
-});
+const card = resolveProjectOverlayCard({ data, source, presentation });
 
 const desktopRatioClasses: Record<NonNullable<CCardTemplateProps["mediaRatio"]>, string> = {
 	editorial: "lg:aspect-video",
@@ -58,12 +54,7 @@ const desktopRatioClasses: Record<NonNullable<CCardTemplateProps["mediaRatio"]>,
 	data-sort-index={index}
 >
 	{slots.media && card.media && (
-		<CMedia
-			ratio="natural"
-			placement="background"
-			href={card.href}
-			ariaLabel={card.title}
-		>
+		<CMedia ratio="natural" placement="background" href={card.href} ariaLabel={card.title}>
 			<CImage {...card.media} variant="fill" />
 		</CMedia>
 	)}
@@ -74,11 +65,7 @@ const desktopRatioClasses: Record<NonNullable<CCardTemplateProps["mediaRatio"]>,
 				<CColumns columns="one" gap="sm">
 					<CColumns columns="one" gap="xs">
 						{slots.metadata && card.metadata && (
-							<CMetadata
-								data={card.metadata}
-								size="caption"
-								tone="on-dark"
-							/>
+							<CMetadata data={card.metadata} size="caption" tone="on-dark" />
 						)}
 
 						{slots.title && (
@@ -88,9 +75,7 @@ const desktopRatioClasses: Record<NonNullable<CCardTemplateProps["mediaRatio"]>,
 						)}
 
 						{slots.excerpt && card.excerpt && (
-							<CText variant="body-sm" tone="on-dark">
-								{card.excerpt}
-							</CText>
+							<CText variant="body-sm" tone="on-dark">{card.excerpt}</CText>
 						)}
 					</CColumns>
 
@@ -106,7 +91,7 @@ const desktopRatioClasses: Record<NonNullable<CCardTemplateProps["mediaRatio"]>,
 			</div>
 
 			{card.action && (
-				<div class={cn(cardPinnedFooterClasses, "pt-8")}>
+				<div class={cardPinnedFooterClasses}>
 					<CButton
 						href={card.action.href}
 						label={card.action.label}
