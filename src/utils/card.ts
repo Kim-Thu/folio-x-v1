@@ -104,6 +104,97 @@ export function getCardSourceContext<S extends DynamicCardSource>(
 	};
 }
 
+export function resolvePublicationCard({
+	data,
+	source,
+	presentation,
+}: CardSourceContextInput) {
+	let publication: PublicationEntry | undefined;
+	let publicationPresentation: PublicationCardPresentation | undefined;
+
+	if (source === "comics" || source === "novels") {
+		const context = getCardSourceContext(source, { data, source, presentation });
+		publication = context.item;
+		publicationPresentation = context.presentation;
+	} else if (source === "publications") {
+		const context = getCardSourceContext("publications", { data, source, presentation });
+		publication = context.item;
+		publicationPresentation = publication
+			? context.presentation?.[publication.catalog]
+			: undefined;
+	}
+
+	const href = publication?.href ?? data.href;
+	const title = publication?.title ?? data.title.join(" ");
+	const excerpt = publication?.summary ?? data.excerpt;
+	const media = publication?.cover ?? data.media;
+	const ariaLabel = publication
+		? `${publicationPresentation?.ariaLabelPrefix ?? ""}${publication.title}`
+		: data.ariaLabel;
+	const metadata = publication
+		? {
+			items: publication.genres.map((genre) => ({
+				type: "category" as const,
+				label: genre.label,
+				href: publicationPresentation?.routes.categoryBase
+					? `${publicationPresentation.routes.categoryBase}${genre.slug}`
+					: undefined,
+				display: publicationPresentation?.categoryDisplay,
+			})),
+		}
+		: data.metadata;
+	const tags = publication
+		? publication.genres.map((genre) => ({
+			label: genre.label,
+			href: publicationPresentation?.routes.categoryBase
+				? `${publicationPresentation.routes.categoryBase}${genre.slug}`
+				: undefined,
+		}))
+		: data.tags;
+	const tagsLabel = publication
+		? `${publication.title}${publicationPresentation?.tagsLabelSuffix ?? ""}`
+		: data.tagsLabel;
+	const metrics = publication && publicationPresentation
+		? [{ icon: publicationPresentation.viewsIcon, label: publication.views }]
+		: data.metrics;
+	const rating = publication ? { value: publication.rating } : data.rating;
+	const facets = publication
+		? {
+			genre: publication.genres.map((genre) => genre.slug),
+			status: [publication.status],
+		}
+		: data.facets;
+	const searchValue = publication
+		? [
+			publication.title,
+			publication.summary,
+			publication.author,
+			...publication.genres.map((genre) => genre.label),
+		].join(" ")
+		: data.searchValue ?? title;
+	const sortValue = publication
+		? String(publication.order).padStart(4, "0")
+		: data.sortValue;
+
+	return {
+		publication,
+		presentation: publicationPresentation,
+		href,
+		title,
+		excerpt,
+		media,
+		ariaLabel,
+		metadata,
+		tags,
+		tagsLabel,
+		metrics,
+		rating,
+		facets,
+		searchValue,
+		sortValue,
+	};
+}
+
 interface ProjectOverlayCardInput {
 	data: CCardData;
 	source?: CCardSource;
