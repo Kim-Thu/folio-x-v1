@@ -51,7 +51,8 @@ export async function getWorkDetailPageData(
 	if (!archive) throw new Error("Missing projects archive section");
 
 	const projectsHeader = projectsPage.content.sections.find(isProjectsHeaderSection);
-	if (!projectsHeader?.content.breadcrumb) {
+	const projectsBreadcrumb = projectsHeader?.content.breadcrumb;
+	if (!projectsBreadcrumb) {
 		throw new Error("Missing projects page breadcrumb configuration");
 	}
 
@@ -125,11 +126,11 @@ export async function getWorkDetailPageData(
 						template: section.template,
 						data: {
 							breadcrumb: {
-								label: projectsHeader.content.breadcrumb.label,
+								label: projectsBreadcrumb.label,
 								items: [
-									...projectsHeader.content.breadcrumb.items,
+									...projectsBreadcrumb.items,
 									{
-										label: projectsHeader.content.breadcrumb.current,
+										label: projectsBreadcrumb.current,
 										href: archive.content.routes.base,
 									},
 									{ label: project.category, href: categoryHref },
