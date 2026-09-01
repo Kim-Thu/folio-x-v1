@@ -52,11 +52,12 @@ const benefits = data.benefits?.items ?? [];
 
 	{data.image && (
 		<CGridItem lgSpan={6} align="center">
-			<CMedia ratio="landscape">
+			<CMedia ratio="natural">
 				<CImage
 					{...data.image}
-					variant="fill"
+					variant="natural"
 					loading="eager"
+					decoding="sync"
 					fetchpriority="high"
 				/>
 			</CMedia>
