@@ -3,6 +3,7 @@ import type { CImageProps } from "@/types/components/object/component/CImage.typ
 import { cn } from "@/utils/cn";
 import {
 	imageBaseClasses,
+	imagePositionClasses,
 	imageVariantClasses,
 } from "@/variants/components/object/component/CImage.variants";
 
@@ -10,6 +11,7 @@ type Props = CImageProps;
 
 const {
 	variant = "natural",
+	position = "center",
 	loading = "lazy",
 	decoding = "async",
 	class: className,
@@ -21,5 +23,10 @@ const {
 	{...attributes}
 	loading={loading}
 	decoding={decoding}
-	class={cn(imageBaseClasses, imageVariantClasses[variant], className)}
+	class={cn(
+		imageBaseClasses,
+		imageVariantClasses[variant],
+		imagePositionClasses[position],
+		className,
+	)}
 />
