@@ -4,9 +4,29 @@ function addPath(paths: Set<string>, path: string): void {
 	paths.add(path === "" ? "/" : path);
 }
 
+function routeFileToPath(file: string): string | null {
+	if (file.includes("[") || file.endsWith("/404.astro") || file.endsWith("/empty-content.astro")) {
+		return null;
+	}
+	const relative = file.replace(/^\/src\/pages/, "").replace(/\.astro$/, "");
+	const withoutIndex = relative.endsWith("/index")
+		? relative.slice(0, -"/index".length)
+		: relative === "/index"
+			? ""
+			: relative;
+	return withoutIndex || "/";
+}
+
+export function getStaticPagePaths(): string[] {
+	const modules = import.meta.glob("/src/pages/**/*.astro");
+	return Object.keys(modules)
+		.map(routeFileToPath)
+		.filter((path): path is string => Boolean(path))
+		.sort();
+}
+
 export async function getIndexablePaths(): Promise<string[]> {
-	const [pages, blog, projects, products, labs, comics, novels] = await Promise.all([
-		getCollection("pages"),
+	const [blog, projects, products, labs, comics, novels] = await Promise.all([
 		getCollection("blog"),
 		getCollection("projects"),
 		getCollection("products"),
@@ -14,9 +34,8 @@ export async function getIndexablePaths(): Promise<string[]> {
 		getCollection("comics"),
 		getCollection("novels"),
 	]);
-	const paths = new Set<string>();
+	const paths = new Set<string>(getStaticPagePaths());
 
-	pages.forEach((entry) => addPath(paths, entry.data.slug));
 	blog.forEach((entry) => {
 		addPath(paths, `/blog/${entry.data.slug}`);
 		addPath(paths, `/blog/category/${entry.data.categorySlug}`);
@@ -65,9 +84,12 @@ export async function getAiDiscoveryResources() {
 		getCollection("comics"),
 		getCollection("novels"),
 	]);
+	const staticPaths = new Set(getStaticPagePaths());
 
 	return {
-		pages: pages.map((entry) => ({ path: entry.data.slug, title: entry.data.meta.title, description: entry.data.meta.description ?? "" })),
+		pages: pages
+			.filter((entry) => staticPaths.has(entry.data.slug))
+			.map((entry) => ({ path: entry.data.slug, title: entry.data.meta.title, description: entry.data.meta.description ?? "" })),
 		blog: blog.map((entry) => ({ path: `/blog/${entry.data.slug}`, title: entry.data.title, description: entry.data.excerpt })),
 		projects: projects.map((entry) => ({ path: `/projects/${entry.data.slug}`, title: entry.data.title, description: entry.data.summary })),
 		products: products.map((entry) => ({ path: `/products/${entry.data.slug}`, title: entry.data.title, description: entry.data.description })),
