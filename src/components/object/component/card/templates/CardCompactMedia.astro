@@ -10,7 +10,7 @@ import CMetadata from "@/components/object/component/CMetadata.astro";
 import CRow from "@/components/object/component/CRow.astro";
 import CText from "@/components/object/component/CText.astro";
 import type { CCardTemplateProps } from "@/types/components/object/component/card/CCard.types";
-import { resolveInsightCard, resolvePublicationCard } from "@/utils/card";
+import { resolveMultiSourceCard } from "@/utils/card-resolver";
 
 const {
 	data,
@@ -22,61 +22,43 @@ const {
 	source,
 } = Astro.props as CCardTemplateProps;
 
-const isInsight = source === "blog";
-const insightCard = isInsight
-	? resolveInsightCard({ data, source, presentation })
-	: undefined;
-const publicationCard = isInsight
-	? undefined
-	: resolvePublicationCard({ data, source, presentation });
-const href = insightCard?.href ?? publicationCard?.href ?? data.href;
-const title = insightCard?.title ?? publicationCard?.title ?? data.title.join(" ");
-const excerpt = insightCard?.excerpt ?? publicationCard?.excerpt ?? data.excerpt;
-const media = insightCard?.media ?? publicationCard?.media ?? data.media;
-const ariaLabel = insightCard?.title ?? publicationCard?.ariaLabel ?? data.ariaLabel;
-const metadata = insightCard?.metadata ?? publicationCard?.metadata ?? data.metadata;
-const metrics = isInsight ? data.metrics : publicationCard?.metrics ?? data.metrics;
-const facets = insightCard?.facets ?? publicationCard?.facets ?? data.facets;
-const searchValue = insightCard?.searchValue
-	?? publicationCard?.searchValue
-	?? data.searchValue
-	?? title;
-const sortValue = insightCard?.sortValue ?? publicationCard?.sortValue ?? data.sortValue;
+const card = resolveMultiSourceCard({ data, source, presentation });
+const metrics = card.insightCard ? data.metrics : card.publicationCard?.metrics ?? data.metrics;
 ---
 
 <CBox
 	as="article"
-	data-facet-card={facets ? "" : undefined}
-	data-facets={facets ? JSON.stringify(facets) : undefined}
-	data-search-value={searchValue.toLowerCase()}
-	data-sort-value={sortValue}
+	data-facet-card={card.facets ? "" : undefined}
+	data-facets={card.facets ? JSON.stringify(card.facets) : undefined}
+	data-search-value={card.searchValue.toLowerCase()}
+	data-sort-value={card.sortValue}
 	data-sort-index={index}
 >
 	<CRow align="start" gap="sm" wrap={false}>
-		{slots.media && media && (
+		{slots.media && card.media && (
 			<CMedia
 				ratio={mediaRatio}
 				shape="card"
 				size={mediaRatio === "portrait" ? "compact" : "thumbnail"}
-				href={href}
-				ariaLabel={ariaLabel}
+				href={card.href}
+				ariaLabel={card.ariaLabel}
 			>
-				<CImage {...media} variant="fill" />
+				<CImage {...card.media} variant="fill" />
 			</CMedia>
 		)}
 
 		<CColumns columns="one" gap="sm">
 			<CColumns columns="one" gap="none">
-				{slots.metadata && metadata && <CMetadata data={metadata} tone="on-light" />}
+				{slots.metadata && card.metadata && <CMetadata data={card.metadata} tone="on-light" />}
 
 				{slots.title && (
 					<CHeading level={headingLevel} variant="h5">
-						<CLink href={href}>{title}</CLink>
+						<CLink href={card.href}>{card.title}</CLink>
 					</CHeading>
 				)}
 
-				{slots.excerpt && excerpt && (
-					<CText variant="body-sm" tone="subtle">{excerpt}</CText>
+				{slots.excerpt && card.excerpt && (
+					<CText variant="body-sm" tone="subtle">{card.excerpt}</CText>
 				)}
 			</CColumns>
 
