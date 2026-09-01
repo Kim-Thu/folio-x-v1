@@ -122,27 +122,29 @@ const sortValue = publicationCard.sortValue;
 	)}
 
 	<CBox spacing="sm">
-		<CColumns columns="one" gap="xs">
-			{slots.metadata && metadata && (
-				<CMetadata data={metadata} slots={{ icons: false }} tone="brand" />
-			)}
+		<CColumns columns="one" gap="md">
+			<CColumns columns="one" gap="xs">
+				{slots.metadata && metadata && (
+					<CMetadata data={metadata} slots={{ icons: false }} tone="brand" />
+				)}
 
-			{slots.title && (
-				<CHeading level={headingLevel} variant="h4">
-					<CLink href={href}>{title}</CLink>
-				</CHeading>
-			)}
+				{slots.title && (
+					<CHeading level={headingLevel} variant="h4">
+						<CLink href={href}>{title}</CLink>
+					</CHeading>
+				)}
 
-			{slots.excerpt && excerpt && (
-				<CText variant="body-sm" tone="subtle">{excerpt}</CText>
-			)}
+				{slots.excerpt && excerpt && (
+					<CText variant="body-sm" tone="subtle">{excerpt}</CText>
+				)}
 
-			{!lab && slots.tags && tags && tags.length > 0 && (
-				<CTags items={tags} label={tagsLabel ?? `${title} tags`} />
-			)}
+				{!lab && slots.tags && tags && tags.length > 0 && (
+					<CTags items={tags} label={tagsLabel ?? `${title} tags`} />
+				)}
+			</CColumns>
 
 			{((slots.metrics && metrics && metrics.length > 0) || rating) && (
-				<CRow gap="lg" class="mt-8">
+				<CRow gap="lg">
 					{slots.metrics && metrics?.map((metric) => (
 						<CFeature {...metric} appearance="caption" />
 					))}
