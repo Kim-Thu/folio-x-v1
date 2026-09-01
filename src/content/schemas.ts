@@ -604,7 +604,7 @@ const heroSectionSchema = z.object({
 const pageHeaderSectionSchema = z.object({
 	id: z.string().min(1),
 	type: z.literal("page-header"),
-	template: z.enum(["split-media", "split-benefits", "immersive"]),
+	template: z.enum(["split-media", "immersive"]),
 	settings: pageSectionSettingsSchema,
 	content: z.object({
 		id: z.string().optional(),

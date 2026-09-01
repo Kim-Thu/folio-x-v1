@@ -12,7 +12,7 @@
       {
         "id": "products-hero",
         "type": "page-header",
-        "template": "split-benefits",
+        "template": "split-media",
         "settings": {
           "theme": "canvas",
           "spacing": "lead",

@@ -1,35 +1,61 @@
 ---
 import CBreadcrumb from "@/components/object/component/CBreadcrumb.astro";
 import CColumns from "@/components/object/component/CColumns.astro";
+import CFeature from "@/components/object/component/CFeature.astro";
 import CHeading from "@/components/object/component/CHeading.astro";
 import CGridItem from "@/components/object/component/CGridItem.astro";
 import CImage from "@/components/object/component/CImage.astro";
 import CMedia from "@/components/object/component/CMedia.astro";
+import CRow from "@/components/object/component/CRow.astro";
 import CText from "@/components/object/component/CText.astro";
 import type { PPageHeaderSplitMediaData } from "@/types/components/object/project/page-header/PPageHeader.types";
 
 type Props = { data: PPageHeaderSplitMediaData };
 const { data } = Astro.props as Props;
+const titleLines = typeof data.title === "string" ? [data.title] : data.title;
+const benefits = data.benefits?.items ?? [];
 ---
 
 <CColumns columns="twelve" gap="lg" align="center">
-	<CGridItem as="header" mdSpan={5}>
+	<CGridItem as="header" lgSpan={6}>
 		<CColumns columns="one" gap="lg">
-			<CBreadcrumb {...data.breadcrumb} />
+			{data.breadcrumb && <CBreadcrumb {...data.breadcrumb} />}
 
 			<CColumns columns="one" gap="sm">
-				<CHeading level={1} variant="display-3" lines={data.title} />
-				<CText tone="muted">{data.description}</CText>
+				{data.eyebrow && (
+					<CText variant="label" tone="brand">{data.eyebrow}</CText>
+				)}
+
+				<CHeading
+					level={1}
+					variant="display-3"
+					lines={titleLines}
+					accent={data.accent}
+				/>
+
+				{data.description && (
+					<CText variant="body-responsive" tone="subtle">
+						{data.description}
+					</CText>
+				)}
 			</CColumns>
+
+			{benefits.length > 0 && (
+				<CRow align="center" gap="lg">
+					{benefits.map((benefit) => (
+						<CFeature {...benefit} appearance="caption" />
+					))}
+				</CRow>
+			)}
 		</CColumns>
 	</CGridItem>
 
 	{data.image && (
-		<CGridItem mdSpan={7} align="center">
-			<CMedia>
+		<CGridItem lgSpan={6} align="center">
+			<CMedia ratio="landscape">
 				<CImage
 					{...data.image}
-					variant="natural"
+					variant="fill"
 					loading="eager"
 					fetchpriority="high"
 				/>
