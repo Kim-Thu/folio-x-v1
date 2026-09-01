@@ -8,12 +8,8 @@ import CLink from "@/components/object/component/CLink.astro";
 import CMedia from "@/components/object/component/CMedia.astro";
 import CMetadata from "@/components/object/component/CMetadata.astro";
 import CText from "@/components/object/component/CText.astro";
-import type {
-	CCardTemplateProps,
-	PublicationCardPresentation,
-	PublicationCollectionPresentation,
-} from "@/types/components/object/component/card/CCard.types";
-import { getCardSourceContext } from "@/utils/card";
+import type { CCardTemplateProps } from "@/types/components/object/component/card/CCard.types";
+import { resolvePublicationCard } from "@/utils/card";
 
 const {
 	data,
@@ -24,26 +20,14 @@ const {
 	source,
 } = Astro.props as CCardTemplateProps;
 
-const publicationContext = source === "publications"
-	? getCardSourceContext("publications", { data, source, presentation })
-	: source === "comics"
-		? getCardSourceContext("comics", { data, source, presentation })
-		: source === "novels"
-			? getCardSourceContext("novels", { data, source, presentation })
-			: { item: undefined, presentation: undefined };
-const publication = publicationContext.item;
-const publicationPresentation = publication
-	? source === "publications"
-		? (publicationContext.presentation as PublicationCollectionPresentation | undefined)?.[publication.catalog]
-		: publicationContext.presentation as PublicationCardPresentation | undefined
-	: undefined;
-const href = publication?.href ?? data.href;
-const title = publication?.title ?? data.title.join(" ");
-const excerpt = publication?.summary ?? data.excerpt;
-const media = publication?.cover ?? data.media;
-const ariaLabel = publication
-	? `${publicationPresentation?.ariaLabelPrefix ?? ""}${publication.title}`
-	: data.ariaLabel;
+const publicationCard = resolvePublicationCard({ data, source, presentation });
+const publication = publicationCard.publication;
+const publicationPresentation = publicationCard.presentation;
+const href = publicationCard.href;
+const title = publicationCard.title;
+const excerpt = publicationCard.excerpt;
+const media = publicationCard.media;
+const ariaLabel = publicationCard.ariaLabel;
 const metadata = publication
 	? {
 		separator: " · ",
