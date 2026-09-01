@@ -1,17 +1,9 @@
 import { z } from "astro/zod";
+import { cardConfigSchema } from "@/content/card-config-schema";
 
 const optionSchema = z.object({
 	label: z.string().min(1),
 	value: z.string().min(1),
-});
-
-const cardConfigSchema = z.object({
-	template: z.string().min(1),
-	layout: z.string().min(1),
-	columns: z.number().int().positive(),
-	gap: z.string().min(1),
-	mediaRatio: z.string().optional(),
-	slots: z.record(z.string(), z.boolean()).optional(),
 });
 
 export const publicationCatalogSettingsSchema = z.object({
