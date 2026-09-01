@@ -5,7 +5,8 @@ export type CImageVariant =
 	| "cover"
 	| "fill"
 	| "payment-logo"
-	| "background-contain";
+	| "background-contain"
+	| "scene-right";
 
 export type CImagePosition = "center" | "top";
 
