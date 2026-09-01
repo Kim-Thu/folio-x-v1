@@ -25,7 +25,7 @@ const headingId = `${data.id}-title`;
 			</CGridItem>
 		)}
 
-		<CGridItem as="header" lgSpan={5} align="center">
+		<CGridItem as="header" lgSpan={data.form ? 5 : 4} align="center">
 			<CBox spacing="xl">
 				<CColumns columns="one" gap="lg">
 					<CColumns columns="one" gap="sm">
@@ -65,7 +65,7 @@ const headingId = `${data.id}-title`;
 		)}
 
 		{data.image && !data.form && (
-			<CGridItem lgSpan={7}>
+			<CGridItem lgSpan={8}>
 				<CMedia ratio="natural" shape="none" class="aspect-5/2">
 					<CImage {...data.image} variant="scene-right" />
 				</CMedia>
