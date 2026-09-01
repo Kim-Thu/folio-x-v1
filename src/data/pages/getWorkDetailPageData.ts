@@ -8,6 +8,10 @@ type ProjectsArchiveSection = Extract<
 	ProjectsPageSection,
 	{ type: "archive"; content: { source: { collection: "projects" } } }
 >;
+type ProjectsHeaderSection = Extract<
+	ProjectsPageSection,
+	{ type: "page-header" }
+>;
 
 function isProjectsArchiveSection(
 	section: ProjectsPageSection,
@@ -16,6 +20,12 @@ function isProjectsArchiveSection(
 		section.type === "archive" &&
 		section.content.source.collection === "projects"
 	);
+}
+
+function isProjectsHeaderSection(
+	section: ProjectsPageSection,
+): section is ProjectsHeaderSection {
+	return section.type === "page-header";
 }
 
 export async function getWorkDetailPaths() {
@@ -39,6 +49,11 @@ export async function getWorkDetailPageData(
 
 	const archive = projectsPage.content.sections.find(isProjectsArchiveSection);
 	if (!archive) throw new Error("Missing projects archive section");
+
+	const projectsHeader = projectsPage.content.sections.find(isProjectsHeaderSection);
+	if (!projectsHeader?.content.breadcrumb) {
+		throw new Error("Missing projects page breadcrumb configuration");
+	}
 
 	const detail = project.detail;
 	const page = detail?.page;
@@ -77,6 +92,7 @@ export async function getWorkDetailPageData(
 		};
 
 		if (section.type === "page-header") {
+			const categoryHref = `${archive.content.routes.categoryBase}${project.categorySlug}`;
 			const actions = [
 				...(detail.liveUrl
 					? [
@@ -108,10 +124,21 @@ export async function getWorkDetailPageData(
 					props: {
 						template: section.template,
 						data: {
-							backAction: section.content.backAction,
+							breadcrumb: {
+								label: projectsHeader.content.breadcrumb.label,
+								items: [
+									...projectsHeader.content.breadcrumb.items,
+									{
+										label: projectsHeader.content.breadcrumb.current,
+										href: archive.content.routes.base,
+									},
+									{ label: project.category, href: categoryHref },
+								],
+								current: project.title,
+							},
 							category: {
 								label: project.category,
-								href: `${archive.content.routes.categoryBase}${project.categorySlug}`,
+								href: categoryHref,
 							},
 							title: project.title,
 							description: project.summary,
@@ -219,7 +246,7 @@ export async function getWorkDetailPageData(
 
 	return {
 		project,
-		pageTemplate: page.template ,
+		pageTemplate: page.template,
 		regions,
 	};
 }
