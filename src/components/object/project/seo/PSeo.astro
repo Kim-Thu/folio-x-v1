@@ -48,4 +48,4 @@ const rssUrl = new URL("/rss.xml", siteUrl).toString();
 
 {page.publishedAt && <meta property="article:published_time" content={page.publishedAt} />}
 {page.modifiedAt && <meta property="article:modified_time" content={page.modifiedAt} />}
-<script type="application/ld+json" set:html={structuredData}></script>
+<script type="application/ld+json" is:inline set:html={structuredData}></script>
