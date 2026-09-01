@@ -1,8 +1,9 @@
 import { defineConfig } from 'astro/config';
 import tailwindcss from '@tailwindcss/vite';
+import { siteOrigin } from './site.config.mjs';
 
 export default defineConfig({
-  site: 'https://folio-x-v1.netlify.app',
+  site: siteOrigin,
   build: {
     // CSS must remain external in production. The project does not allow
     // generated <style> blocks or inline/internal CSS in built HTML.
