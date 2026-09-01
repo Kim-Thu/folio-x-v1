@@ -1,3 +1,4 @@
+import { toAbsolutePageUrl, toAbsoluteUrl } from "@/data/seo/url";
 import type {
 	NormalizedSeoPage,
 	PSeoProps,
@@ -9,15 +10,11 @@ interface NormalizeSeoInput extends PSeoProps {
 	siteUrl?: URL;
 }
 
-function absoluteUrl(value: string, origin: URL): string {
-	return new URL(value, origin).toString();
-}
-
 function normalizeImage(image: SeoImage | undefined, origin: URL) {
 	if (!image) return undefined;
 	return {
 		...image,
-		src: absoluteUrl(image.src, origin),
+		src: toAbsoluteUrl(image.src, origin),
 	};
 }
 
@@ -32,7 +29,7 @@ export function normalizeSeo({
 }: NormalizeSeoInput): NormalizedSeoPage {
 	const origin = siteUrl ?? new URL(currentUrl.origin);
 	const canonicalPath = seo?.canonicalPath ?? currentUrl.pathname;
-	const canonicalUrl = absoluteUrl(canonicalPath, origin);
+	const canonicalUrl = toAbsolutePageUrl(canonicalPath, origin);
 	const image = normalizeImage(
 		seo?.image ?? (site.logo ? { src: site.logo, alt: site.name } : undefined),
 		origin,
