@@ -10,8 +10,12 @@ import CMetadata from "@/components/object/component/CMetadata.astro";
 import CTags from "@/components/object/component/CTags.astro";
 import CText from "@/components/object/component/CText.astro";
 import type { CCardTemplateProps } from "@/types/components/object/component/card/CCard.types";
-import { cn } from "@/utils/cn";
 import { resolveProjectOverlayCard } from "@/utils/card";
+import { cn } from "@/utils/cn";
+import {
+	cardFillColumnClasses,
+	cardPinnedFooterClasses,
+} from "@/variants/components/object/component/card/CCard.variants";
 
 const {
 	data,
@@ -65,7 +69,7 @@ const desktopRatioClasses: Record<NonNullable<CCardTemplateProps["mediaRatio"]>,
 	)}
 
 	<CBox position="relative" class="h-full p-8">
-		<div class="flex h-full flex-col">
+		<div class={cardFillColumnClasses}>
 			<div class="w-full md:w-4/5">
 				<CColumns columns="one" gap="sm">
 					<CColumns columns="one" gap="xs">
@@ -102,7 +106,7 @@ const desktopRatioClasses: Record<NonNullable<CCardTemplateProps["mediaRatio"]>,
 			</div>
 
 			{card.action && (
-				<div class="mt-auto pt-8">
+				<div class={cn(cardPinnedFooterClasses, "pt-8")}>
 					<CButton
 						href={card.action.href}
 						label={card.action.label}
