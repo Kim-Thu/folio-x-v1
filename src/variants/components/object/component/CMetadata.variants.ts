@@ -1,4 +1,4 @@
-﻿import type {
+import type {
 	CMetadataAlign,
 	CMetadataSize,
 	CMetadataTone,
@@ -24,6 +24,7 @@ export const metadataToneClasses: Record<CMetadataTone, string> = {
 	"on-brand": "text-black",
 };
 
+export const metadataItemClasses = "flex items-center";
 export const metadataItemContentClasses = "inline-flex items-center gap-1";
 export const metadataCategoryLinkClasses = "text-blue-600";
 export const metadataSeparatorClasses = "";
