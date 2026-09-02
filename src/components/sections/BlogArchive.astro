@@ -8,6 +8,7 @@ import FilterBar from '../navigation/FilterBar.astro';
 import BlogArchiveCard from '../ui/BlogArchiveCard.astro';
 import Container from '../ui/Container.astro';
 import MetaLabel from '../ui/MetaLabel.astro';
+import PSkeletonList from '../object/project/skeleton/PSkeletonList.astro';
 
 type Props = BlogArchiveProps;
 
@@ -25,7 +26,10 @@ const hasFilter = categories.length > 0;
         <p class="mt-7 text-base leading-7 text-on-light-muted md:text-lg lg:col-span-7">{description}</p>
         {hasFilter && <div class="mt-10 lg:col-span-12"><FilterBar categories={categories} allLabel={allLabel} label={filterLabel} theme="light" /></div>}
       </header>
-      <div class="mt-8" aria-live="polite">
+      <div data-filter-skeleton hidden class="mt-8" aria-hidden="true">
+        <PSkeletonList count={4} tone="light" variant="blog" />
+      </div>
+      <div data-filter-results class="mt-8" aria-live="polite" aria-busy="false">
         {posts.map((post) => <BlogArchiveCard post={post} />)}
       </div>
       <p data-filter-empty hidden class="py-3xl text-center text-on-light-muted">{emptyLabel}</p>
