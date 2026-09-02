@@ -18,6 +18,8 @@ const getActiveIndex = (viewport: HTMLElement, slides: HTMLElement[]) =>
 	).index;
 
 export function initSliders(): void {
+	const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
 	document.querySelectorAll<HTMLElement>("[data-slider]").forEach((slider) => {
 		const viewport = slider.querySelector<HTMLElement>("[data-slider-viewport]");
 		const slides = Array.from(
@@ -46,6 +48,7 @@ export function initSliders(): void {
 
 		let autoplayTimer = 0;
 		let hoverPaused = false;
+		let focusPaused = false;
 		let dragging = false;
 		let dragMoved = false;
 		let dragStartX = 0;
@@ -72,8 +75,8 @@ export function initSliders(): void {
 			directButtons.forEach((button, index) => {
 				const current = index === activeIndex;
 				button.setAttribute("aria-current", String(current));
-				button.classList.toggle("bg-blue-600", current);
-				button.classList.toggle("bg-white/60", !current);
+				button.classList.toggle("before:bg-blue-600", current);
+				button.classList.toggle("before:bg-white/60", !current);
 			});
 		};
 
@@ -88,7 +91,7 @@ export function initSliders(): void {
 
 			viewport.scrollTo({
 				left: targetLeft,
-				behavior: "smooth",
+				behavior: reducedMotion ? "auto" : "smooth",
 			});
 		};
 
@@ -100,7 +103,15 @@ export function initSliders(): void {
 
 		const scheduleAutoplay = () => {
 			stopAutoplay();
-			if (!autoplay || hoverPaused || dragging || document.hidden) return;
+			if (
+				!autoplay ||
+				hoverPaused ||
+				focusPaused ||
+				dragging ||
+				document.hidden
+			) {
+				return;
+			}
 
 			autoplayTimer = window.setTimeout(() => {
 				const atEnd = viewport.scrollLeft >= getMaxScrollLeft() - 1;
@@ -193,6 +204,20 @@ export function initSliders(): void {
 				scheduleAutoplay();
 			});
 		}
+
+		slider.addEventListener("focusin", () => {
+			focusPaused = true;
+			stopAutoplay();
+		});
+
+		slider.addEventListener("focusout", (event) => {
+			if (event.relatedTarget instanceof Node && slider.contains(event.relatedTarget)) {
+				return;
+			}
+
+			focusPaused = false;
+			scheduleAutoplay();
+		});
 
 		viewport.addEventListener(
 			"scroll",

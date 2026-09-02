@@ -27,7 +27,7 @@ const initialTip = data.tips?.[0];
 
 <CBox position="viewport" surface="plain" overflow="hidden" class={loadingScreenClasses} data-loading-screen data-hold-open={String(data.holdOpen ?? false)} role="status" aria-label={data.label}>
 	<CColumns columns="twelve" gap="sm" class={loadingScreenContentClasses}>
-		{data.image && <CBox class={loadingScreenMediaClasses}><CImage {...data.image} variant="natural" loading="eager" fetchpriority="high" /></CBox>}
+		{data.image && <CBox class={loadingScreenMediaClasses}><CImage {...data.image} variant="natural" loading="eager" /></CBox>}
 		<CColumns columns="one" gap="xs" class={loadingScreenMessageClasses}>
 			<CLogo {...logo} tone="dark" size="lg" />
 			<CText tone="muted">{data.status}</CText>

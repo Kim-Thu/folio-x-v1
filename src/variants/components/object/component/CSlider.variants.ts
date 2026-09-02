@@ -29,15 +29,15 @@ export const sliderControlsClasses: Record<CSliderControls, string> = {
 	overlay: "absolute bottom-4 right-4 flex items-center gap-2",
 	below: "mt-4 flex items-center gap-4",
 	"below-left": "mt-10 flex items-center",
-	dots: "absolute bottom-6 left-1/2 z-20 flex -translate-x-1/2 items-center gap-2",
+	dots: "absolute bottom-6 left-1/2 z-20 flex -translate-x-1/2 items-center",
 };
 
-export const sliderDotsClasses = "flex items-center gap-2";
+export const sliderDotsClasses = "flex items-center";
 
 export const sliderDotClasses =
-	"size-2 cursor-pointer rounded-full bg-white/60 transition-colors duration-300 hover:bg-white";
+	"relative size-6 cursor-pointer rounded-full bg-transparent before:absolute before:left-1/2 before:top-1/2 before:size-2 before:-translate-x-1/2 before:-translate-y-1/2 before:rounded-full before:bg-white/60 before:transition-colors before:duration-300 before:content-[''] hover:before:bg-white";
 
-export const sliderDotCurrentClasses = "bg-blue-600";
+export const sliderDotCurrentClasses = "before:bg-blue-600";
 
 export const sliderStatusClasses =
 	"flex min-w-0 flex-1 items-center gap-3 font-mono text-xs text-gray-500";

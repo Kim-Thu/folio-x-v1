@@ -25,6 +25,15 @@ export function initFooterReveal(): void {
 		return;
 	}
 
+	const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+	if (reducedMotion) {
+		motionElements.forEach((element) => {
+			element.getAnimations().forEach((animation) => animation.cancel());
+			element.style.removeProperty("transform");
+		});
+		return;
+	}
+
 	let scrollFrame = 0;
 	let layoutFrame = 0;
 	let revealProgress = 0;

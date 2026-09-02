@@ -12,13 +12,25 @@ export function initHeader(): void {
 	const menuIsOpen = (): boolean =>
 		menuButton.getAttribute("aria-expanded") === "true";
 
+	const getMenuFocusables = (): HTMLElement[] => {
+		const menuFocusables = Array.from(
+			mobileMenu.querySelectorAll<HTMLElement>(
+				'a[href], button:not([disabled]), [tabindex]:not([tabindex="-1"])',
+			),
+		);
+
+		return [menuButton, ...menuFocusables];
+	};
+
 	const updateHeader = (): void => {
 		const currentScrollY = Math.max(window.scrollY, 0);
 		const isPastHeader = currentScrollY > header.offsetHeight;
 		const isScrollingDown = currentScrollY > previousScrollY;
+		const hasHeaderFocus = header.contains(document.activeElement);
 
 		const solidSurface = header.dataset.solidHeader === "true" || isPastHeader;
-		const hidden = !menuIsOpen() && isPastHeader && isScrollingDown;
+		const hidden =
+			!menuIsOpen() && !hasHeaderFocus && isPastHeader && isScrollingDown;
 		header.dataset.scrollSurface = solidSurface ? "solid" : "transparent";
 		header.dataset.scrollState = hidden ? "hidden" : "visible";
 		header.classList.toggle("-translate-y-full", hidden);
@@ -60,6 +72,7 @@ export function initHeader(): void {
 		mobileMenu.setAttribute("aria-hidden", String(!isOpen));
 		mobileMenu.inert = !isOpen;
 		header.dataset.scrollState = "visible";
+		header.classList.remove("-translate-y-full");
 	};
 
 	window.addEventListener("scroll", requestHeaderUpdate, { passive: true });
@@ -67,10 +80,40 @@ export function initHeader(): void {
 	mobileMenu.addEventListener("click", (event) => {
 		if ((event.target as Element).closest("a")) setMenuState(false);
 	});
+
+	header.addEventListener("focusin", updateHeader);
+	header.addEventListener("focusout", () => {
+		window.requestAnimationFrame(updateHeader);
+	});
+
 	document.addEventListener("keydown", (event) => {
-		if (event.key === "Escape" && menuIsOpen()) {
+		if (!menuIsOpen()) return;
+
+		if (event.key === "Escape") {
 			setMenuState(false);
 			menuButton.focus();
+			return;
+		}
+
+		if (event.key !== "Tab") return;
+
+		const focusables = getMenuFocusables();
+		if (focusables.length === 0) return;
+
+		const activeElement = document.activeElement as HTMLElement | null;
+		const currentIndex = activeElement ? focusables.indexOf(activeElement) : -1;
+		const first = focusables[0];
+		const last = focusables[focusables.length - 1];
+
+		if (event.shiftKey && currentIndex <= 0) {
+			event.preventDefault();
+			last?.focus();
+			return;
+		}
+
+		if (!event.shiftKey && (currentIndex === -1 || currentIndex === focusables.length - 1)) {
+			event.preventDefault();
+			first?.focus();
 		}
 	});
 

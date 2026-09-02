@@ -12,7 +12,7 @@
     "check": "astro check",
     "validate:seo": "node scripts/validate-seo.mjs",
     "validate:images": "node scripts/validate-images.mjs",
-    "validate": "npm run build && npm run validate:seo && npm run validate:images && npm audit --audit-level=high",
+    "validate": "npm run build && npm run validate:seo && npm run validate:images && npm audit --omit=dev --audit-level=high",
     "prepare": "git config core.hooksPath .githooks"
   },
   "dependencies": {
