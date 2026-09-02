@@ -239,7 +239,9 @@ export async function getLabDetailPageData(
 							...presentation.gallery.settings,
 						},
 						props: {
-							template: "grid" as const,
+							template:
+								lab.gallery.length > 1 ? ("slider" as const) : ("grid" as const),
+							sliderControls: lab.gallery.length > 1 ? ("below" as const) : undefined,
 							label: presentation.gallery.title,
 							items: lab.gallery,
 						},
