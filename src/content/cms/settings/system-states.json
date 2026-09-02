@@ -34,5 +34,36 @@
     },
     "metadataTitle": "Chưa có nội dung — Nguyễn Kim Thu",
     "metadataDescription": "Khu vực này hiện chưa có nội dung để hiển thị."
+  },
+  "comingSoon": {
+    "id": "coming-soon-title",
+    "eyebrow": "Coming soon",
+    "title": "Khu vực này đang được hoàn thiện.",
+    "description": "Nội dung sẽ sớm được mở. Trong lúc chờ, bạn có thể quay về trang chủ hoặc xem các project hiện có.",
+    "primaryAction": {
+      "href": "/",
+      "label": "Về trang chủ",
+      "icon": "arrowLeft"
+    },
+    "secondaryAction": {
+      "href": "/projects",
+      "label": "Xem projects",
+      "icon": "arrowRight"
+    },
+    "metadataTitle": "Coming soon — Nguyễn Kim Thu",
+    "metadataDescription": "Khu vực này đang được hoàn thiện và sẽ sớm được mở."
+  },
+  "maintenance": {
+    "id": "maintenance-title",
+    "eyebrow": "Bảo trì hệ thống",
+    "title": "Website đang được bảo trì.",
+    "description": "Một số nội dung hoặc chức năng có thể tạm thời không truy cập được. Bạn có thể quay lại sau hoặc trở về trang chủ.",
+    "primaryAction": {
+      "href": "/",
+      "label": "Về trang chủ",
+      "icon": "arrowLeft"
+    },
+    "metadataTitle": "Đang bảo trì — Nguyễn Kim Thu",
+    "metadataDescription": "Website đang được bảo trì và sẽ hoạt động trở lại sau khi hoàn tất cập nhật."
   }
 }
