@@ -1,0 +1,39 @@
+---
+import CColumns from "@/components/object/component/CColumns.astro";
+import CSkeleton from "@/components/object/component/CSkeleton.astro";
+import type { PCardSkeletonProps } from "@/types/components/object/project/card/PCardSkeleton.types";
+import {
+	pCardColumnTemplates,
+	pCardTemplateColumnDefaults,
+} from "@/variants/components/object/project/card/PCard.variants";
+
+const {
+	count,
+	template = "grid",
+	columns,
+	gap = "md",
+} = Astro.props as PCardSkeletonProps;
+
+const resolvedColumns = columns ?? pCardTemplateColumnDefaults[template] ?? 3;
+const columnTemplate = pCardColumnTemplates[resolvedColumns];
+const items = Array.from({ length: Math.max(1, count) });
+---
+
+<CColumns
+	columns={columnTemplate}
+	gap={gap}
+	data-filter-skeleton
+	hidden
+	aria-hidden="true"
+>
+	{items.map(() => (
+		<article>
+			<CColumns columns="one" gap="sm">
+				<CSkeleton variant="media" />
+				<CSkeleton width="short" />
+				<CSkeleton />
+				<CSkeleton width="medium" />
+			</CColumns>
+		</article>
+	))}
+</CColumns>
