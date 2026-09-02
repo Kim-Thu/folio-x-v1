@@ -7,7 +7,6 @@ import CImage from "@/components/object/component/CImage.astro";
 import CLink from "@/components/object/component/CLink.astro";
 import CMedia from "@/components/object/component/CMedia.astro";
 import CMetadata from "@/components/object/component/CMetadata.astro";
-import CTags from "@/components/object/component/CTags.astro";
 import CText from "@/components/object/component/CText.astro";
 import type { CCardTemplateProps } from "@/types/components/object/component/card/CCard.types";
 import { resolveProjectOverlayCard } from "@/utils/card";
@@ -78,15 +77,6 @@ const desktopRatioClasses: Record<NonNullable<CCardTemplateProps["mediaRatio"]>,
 							<CText variant="body-sm" tone="on-dark">{card.excerpt}</CText>
 						)}
 					</CColumns>
-
-					{slots.tags && card.tags && card.tags.length > 0 && (
-						<CTags
-							appearance="outline"
-							items={card.tags}
-							label={card.tagsLabel ?? `${card.title} tags`}
-							tone="inverse"
-						/>
-					)}
 				</CColumns>
 			</div>
 
