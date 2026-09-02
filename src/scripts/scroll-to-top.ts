@@ -3,12 +3,14 @@ export function initScrollToTop(): void {
 	const button = root?.querySelector<HTMLButtonElement>("button");
 	if (!root || !button) return;
 
+	const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
 	const syncVisibility = (): void => {
 		root.classList.toggle("hidden", window.scrollY <= 480);
 	};
 
 	button.addEventListener("click", () => {
-		window.scrollTo({ top: 0, behavior: "smooth" });
+		window.scrollTo({ top: 0, behavior: reducedMotion ? "auto" : "smooth" });
 	});
 
 	syncVisibility();
