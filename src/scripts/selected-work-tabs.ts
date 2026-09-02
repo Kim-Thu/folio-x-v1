@@ -1,10 +1,15 @@
 export function initSelectedWorkTabs(): void {
-  document.querySelectorAll<HTMLElement>('[data-tabbed-collection]').forEach((root) => {
+  document.querySelectorAll<HTMLElement>('[data-tabbed-collection]').forEach((root, rootIndex) => {
     const tabs = Array.from(root.querySelectorAll<HTMLButtonElement>('[data-tab-value]'));
     const cards = Array.from(root.querySelectorAll<HTMLElement>('[data-tab-card]'));
     const panel = root.querySelector<HTMLElement>('[data-collection-panel]');
 
     if (!tabs.length || !cards.length || !panel) return;
+
+    const panelId = panel.id || `tab-panel-${rootIndex}`;
+    panel.id = panelId;
+    panel.setAttribute('role', 'tabpanel');
+    tabs.forEach((tab) => tab.setAttribute('aria-controls', panelId));
 
     const selectTab = (selectedTab: HTMLButtonElement): void => {
       const category = selectedTab.dataset.tabValue ?? 'all';
@@ -38,5 +43,8 @@ export function initSelectedWorkTabs(): void {
         selectTab(tabs[nextIndex]);
       });
     });
+
+    const initialTab = tabs.find((tab) => tab.getAttribute('aria-selected') === 'true') ?? tabs[0];
+    if (initialTab) selectTab(initialTab);
   });
 }
