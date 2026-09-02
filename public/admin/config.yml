@@ -263,15 +263,24 @@ collections:
                 fields: &action_fields
                   - { label: Nhãn, name: label, widget: string }
                   - { label: Đường dẫn, name: href, widget: string }
-                  - { label: Icon, name: icon, widget: select, options: [arrowLeft, arrowRight, arrowUpRight] }
+                  - { label: Icon, name: icon, widget: select, options: [arrowLeft, arrowRight, arrowUp, arrowUpRight] }
               - label: Hành động phụ
                 name: secondaryAction
                 widget: object
+                required: false
                 fields: *action_fields
               - { label: Tiêu đề SEO, name: metadataTitle, widget: string }
               - { label: Mô tả SEO, name: metadataDescription, widget: text }
           - label: Trang chưa có nội dung
             name: empty
+            widget: object
+            fields: *system_state_fields
+          - label: Trang Coming Soon
+            name: comingSoon
+            widget: object
+            fields: *system_state_fields
+          - label: Trang bảo trì
+            name: maintenance
             widget: object
             fields: *system_state_fields
 
