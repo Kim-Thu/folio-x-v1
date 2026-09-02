@@ -1,0 +1,48 @@
+---
+import CSkeleton from '../../component/CSkeleton.astro';
+
+interface Props {
+  count?: number;
+  tone?: 'light' | 'dark';
+  variant?: 'project' | 'blog';
+}
+
+const { count = 3, tone = 'light', variant = 'project' } = Astro.props;
+const toneClass = tone === 'dark' ? 'text-white' : 'text-black';
+---
+
+<div class:list={['grid gap-lg', toneClass]} aria-hidden="true">
+  {Array.from({ length: count }).map(() => (
+    variant === 'project' ? (
+      <div class="grid overflow-hidden rounded-card border-hairline border-current/10 md:grid-cols-2">
+        <CSkeleton variant="media" class="min-h-95 rounded-none" />
+        <div class="flex min-h-105 flex-col gap-lg p-7 md:p-9">
+          <div class="flex justify-between gap-lg">
+            <CSkeleton variant="text" class="w-24" />
+            <CSkeleton variant="text" class="w-12" />
+          </div>
+          <div class="my-auto grid gap-md py-8">
+            <CSkeleton variant="text" class="w-28" />
+            <CSkeleton variant="text" class="h-7 w-3/4" />
+            <CSkeleton variant="text" class="w-full" />
+            <CSkeleton variant="text" class="w-5/6" />
+          </div>
+          <CSkeleton variant="text" class="w-2/3" />
+        </div>
+      </div>
+    ) : (
+      <div class="grid gap-lg border-t-hairline border-current/10 py-7 md:grid-cols-12">
+        <CSkeleton variant="text" class="w-10 md:col-span-2" />
+        <div class="grid gap-md md:col-span-7">
+          <CSkeleton variant="text" class="w-40" />
+          <CSkeleton variant="text" class="h-7 w-4/5" />
+          <CSkeleton variant="text" class="w-full" />
+          <CSkeleton variant="text" class="w-5/6" />
+        </div>
+        <div class="flex items-end md:col-span-3 md:justify-end">
+          <CSkeleton variant="text" class="w-24" />
+        </div>
+      </div>
+    )
+  ))}
+</div>
