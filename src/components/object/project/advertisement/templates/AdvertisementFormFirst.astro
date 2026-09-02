@@ -10,12 +10,12 @@ import CText from "@/components/object/component/CText.astro";
 import type { PAdvertisementData } from "@/types/components/object/project/advertisement/PAdvertisement.types";
 
 const { data } = Astro.props as { data: PAdvertisementData };
-const form = data.form ? { ...data.form, tone: "light" as const } : undefined;
+const form = data.form ? { ...data.form, tone: "dark" as const } : undefined;
 ---
 
 <CBox
 	as="aside"
-	surface="accent"
+	surface="dark"
 	radius="md"
 	overflow="hidden"
 >
@@ -23,7 +23,7 @@ const form = data.form ? { ...data.form, tone: "light" as const } : undefined;
 		<CBox spacing="md">
 			<CColumns columns="one" gap="sm">
 				<CHeading level={3} variant="h4">{data.title}</CHeading>
-				<CText variant="body-sm" tone="muted">{data.description}</CText>
+				<CText variant="body-sm" tone="on-dark-muted">{data.description}</CText>
 				{form ? (
 					<CSubscriptionForm {...form} />
 				) : (
@@ -32,7 +32,7 @@ const form = data.form ? { ...data.form, tone: "light" as const } : undefined;
 						label={data.action.label}
 						icon={data.action.icon ?? "arrowRight"}
 						size="xs"
-						tone="light"
+						tone="dark"
 						variant="outline"
 					/>
 				)}

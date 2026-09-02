@@ -32,80 +32,88 @@ const { data } = Astro.props as Props;
 		</CGridItem>
 
 		<CGridItem as="header" lgSpan={5}>
-		<CColumns columns="one" gap="md">
-			<CRow align="center" gap="sm">
-				<CLink href={data.category.href}>
-					<CText as="span" variant="caption" tone="brand">
-						{data.category.label}
+			<CColumns columns="one" gap="lg">
+				<CColumns columns="one" gap="sm">
+					<CRow align="center" gap="sm">
+						<CLink href={data.category.href}>
+							<CText as="span" variant="caption" tone="brand">
+								{data.category.label}
+							</CText>
+						</CLink>
+					</CRow>
+
+					<CRow align="center" gap="sm">
+						<CHeading level={1} variant="h3">
+							{data.title}
+						</CHeading>
+						{data.badge && <CBadge tone="neutral">{data.badge}</CBadge>}
+					</CRow>
+
+					<CText tone="muted">{data.description}</CText>
+				</CColumns>
+
+				<CRow align="center" gap="sm">
+					<CRating
+						style="stars"
+						value={data.rating.value}
+						maximum={data.rating.maximum}
+						count={data.rating.count}
+						slots={{ count: true, value: true }}
+					/>
+					<CText as="span" variant="caption" tone="subtle">
+						{data.rating.salesLabel}
 					</CText>
-				</CLink>
-			</CRow>
+				</CRow>
 
-			<CRow align="center" gap="sm">
-			<CHeading level={1} variant="h3">
-					{data.title}
-				</CHeading>
-				{data.badge && <CBadge tone="neutral">{data.badge}</CBadge>}
-			</CRow>
-			<CText tone="muted">{data.description}</CText>
-			<CRow align="center" gap="sm">
-				<CRating
-					style="stars"
-					value={data.rating.value}
-					maximum={data.rating.maximum}
-					count={data.rating.count}
-					slots={{ count: true, value: true }}
-				/>
-				<CText as="span" variant="caption" tone="subtle">
-					{data.rating.salesLabel}
-				</CText>
-			</CRow>
+				<CColumns columns="one" gap="sm">
+					<CRow align="baseline" gap="sm">
+						<CText as="span" variant="price-display">{data.price.current}</CText>
+						{data.price.previous && (
+							<CText as="span" variant="price-old" tone="subtle">
+								{data.price.previous}
+							</CText>
+						)}
+						{data.price.discount && (
+							<CBadge tone="brand">{data.price.discount}</CBadge>
+						)}
+					</CRow>
 
-			<CRow align="baseline" gap="sm">
-				<CText as="span" variant="price-display">{data.price.current}</CText>
-				{data.price.previous && (
-					<CText as="span" variant="price-old" tone="subtle">
-						{data.price.previous}
+					<CColumns columns="one" gap="xs">
+						{data.features.map((feature) => <CFeature {...feature} />)}
+					</CColumns>
+				</CColumns>
+
+				<CRow
+					gap="sm"
+					role="group"
+					aria-label={data.actionsLabel}
+				>
+					{data.actions.map((action) => (
+						<CButton
+							href={action.href}
+							label={action.label}
+							icon={action.icon}
+							variant={action.variant}
+							tone="light"
+							size="md"
+						/>
+					))}
+				</CRow>
+
+				<CColumns columns="one" gap="xs">
+					<CText as="span" variant="caption" tone="subtle">
+						{data.paymentLabel}
 					</CText>
-				)}
-				{data.price.discount && (
-					<CBadge tone="brand">{data.price.discount}</CBadge>
-				)}
-			</CRow>
-
-			<CColumns columns="one" gap="xs">
-				{data.features.map((feature) => <CFeature {...feature} />)}
+					<CRow align="center" gap="sm">
+						{data.paymentMethods.map((method) => (
+							<CImage
+								{...method}
+								variant="payment-logo"
+							/>
+						))}
+					</CRow>
+				</CColumns>
 			</CColumns>
-
-			<CRow
-				gap="sm"
-				role="group"
-				aria-label={data.actionsLabel}
-			>
-				{data.actions.map((action) => (
-					<CButton
-						href={action.href}
-						label={action.label}
-						icon={action.icon}
-						variant={action.variant}
-						tone="light"
-						size="md"
-					/>
-				))}
-			</CRow>
-
-			<CRow align="center" gap="sm">
-				<CText as="span" variant="caption" tone="subtle">
-					{data.paymentLabel}
-				</CText>
-				{data.paymentMethods.map((method) => (
-					<CImage
-						{...method}
-						variant="payment-logo"
-					/>
-				))}
-			</CRow>
-		</CColumns>
 		</CGridItem>
 	</CColumns>
 
