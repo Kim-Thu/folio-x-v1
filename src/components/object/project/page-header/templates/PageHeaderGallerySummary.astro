@@ -83,7 +83,8 @@ const { data } = Astro.props as Props;
 					</CColumns>
 				</CColumns>
 
-				<CRow
+				<CColumns
+					columns="two"
 					gap="sm"
 					role="group"
 					aria-label={data.actionsLabel}
@@ -96,9 +97,10 @@ const { data } = Astro.props as Props;
 							variant={action.variant}
 							tone="light"
 							size="md"
+							wide
 						/>
 					))}
-				</CRow>
+				</CColumns>
 
 				<CColumns columns="one" gap="xs">
 					<CText as="span" variant="caption" tone="subtle">

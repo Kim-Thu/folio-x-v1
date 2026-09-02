@@ -13,6 +13,7 @@ import { resolveProjectOverlayCard } from "@/utils/card";
 import { cn } from "@/utils/cn";
 import {
 	cardFillColumnClasses,
+	cardOverlayContentClasses,
 	cardPinnedFooterClasses,
 } from "@/variants/components/object/component/card/CCard.variants";
 
@@ -58,7 +59,7 @@ const desktopRatioClasses: Record<NonNullable<CCardTemplateProps["mediaRatio"]>,
 		</CMedia>
 	)}
 
-	<CBox position="relative" class="h-full p-8">
+	<CBox position="relative" class={cardOverlayContentClasses}>
 		<div class={cardFillColumnClasses}>
 			<div class="w-full md:w-4/5">
 				<CColumns columns="one" gap="sm">
