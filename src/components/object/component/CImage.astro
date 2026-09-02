@@ -10,17 +10,49 @@ import {
 type Props = CImageProps;
 
 const {
+	src,
+	alt,
+	width,
+	height,
 	variant = "natural",
 	position = "center",
 	loading = "lazy",
 	decoding = "async",
+	sizes,
+	srcset: requestedSrcset,
 	class: className,
 	...attributes
 } = Astro.props;
+
+const responsiveWidths = [320, 480, 640, 768, 960, 1200, 1536, 1920, 2560];
+const optimizable = src.startsWith("/uploads/") && !src.toLowerCase().endsWith(".svg");
+const imageCdnUrl = (candidateWidth: number) =>
+	`/.netlify/images?url=${encodeURIComponent(src)}&w=${candidateWidth}`;
+
+const candidateWidths = optimizable
+	? [
+		...responsiveWidths.filter((candidateWidth) => candidateWidth < width),
+		width,
+	]
+	: [];
+const generatedSrcset = candidateWidths.length > 1
+	? candidateWidths
+		.map((candidateWidth) => `${imageCdnUrl(candidateWidth)} ${candidateWidth}w`)
+		.join(", ")
+	: undefined;
+const resolvedSrc = optimizable ? imageCdnUrl(width) : src;
+const resolvedSrcset = generatedSrcset ?? requestedSrcset;
+const resolvedSizes = resolvedSrcset ? sizes ?? "100vw" : sizes;
 ---
 
 <img
 	{...attributes}
+	src={resolvedSrc}
+	{alt}
+	{width}
+	{height}
+	srcset={resolvedSrcset}
+	sizes={resolvedSizes}
 	loading={loading}
 	decoding={decoding}
 	class={cn(
