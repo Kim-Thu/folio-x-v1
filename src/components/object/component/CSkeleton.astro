@@ -1,0 +1,23 @@
+---
+interface Props {
+  variant?: 'text' | 'block' | 'media';
+  class?: string;
+}
+
+const { variant = 'block', class: className = '' } = Astro.props;
+
+const variantClasses = {
+  text: 'h-4 rounded-full',
+  block: 'min-h-16 rounded-card',
+  media: 'aspect-[4/3] rounded-card',
+} as const;
+---
+
+<div
+  aria-hidden="true"
+  class:list={[
+    'animate-pulse bg-current/10',
+    variantClasses[variant],
+    className,
+  ]}
+></div>
