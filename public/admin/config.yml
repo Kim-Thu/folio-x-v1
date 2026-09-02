@@ -1199,6 +1199,14 @@ collections:
             name: empty
             widget: object
             fields: *system_state_fields
+          - label: Coming soon
+            name: comingSoon
+            widget: object
+            fields: *system_state_fields
+          - label: Maintenance
+            name: maintenance
+            widget: object
+            fields: *system_state_fields
 
       - name: closing_profile
         label: Kết trang cá nhân

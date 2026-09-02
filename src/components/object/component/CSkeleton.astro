@@ -1,0 +1,23 @@
+---
+import type { CSkeletonProps } from "@/types/components/object/component/CSkeleton.types";
+import { cn } from "@/utils/cn";
+import {
+	cSkeletonBaseClasses,
+	cSkeletonVariantClasses,
+	cSkeletonWidthClasses,
+} from "@/variants/components/object/component/CSkeleton.variants";
+
+const {
+	variant = "line",
+	width = "full",
+	...attributes
+} = Astro.props as CSkeletonProps;
+
+const classes = cn(
+	cSkeletonBaseClasses,
+	cSkeletonVariantClasses[variant],
+	cSkeletonWidthClasses[width],
+);
+---
+
+<span {...attributes} class={classes} aria-hidden="true"></span>

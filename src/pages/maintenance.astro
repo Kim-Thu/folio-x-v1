@@ -1,0 +1,19 @@
+---
+import SystemStatePage from "@/components/pages/system-state/SystemStatePage.astro";
+import { getLayoutData } from "@/data/pages/getLayoutData";
+import { getSystemStatePageData } from "@/data/pages/getSystemStatePageData";
+import { maintenanceContent } from "@/data/system-states";
+import BaseLayout from "@/layouts/BaseLayout.astro";
+
+const layoutData = await getLayoutData();
+const data = getSystemStatePageData(maintenanceContent);
+---
+
+<BaseLayout
+	{...layoutData}
+	title={maintenanceContent.metadataTitle}
+	description={maintenanceContent.metadataDescription}
+	seo={{ robots: { index: false, follow: true } }}
+>
+	<SystemStatePage {data} />
+</BaseLayout>

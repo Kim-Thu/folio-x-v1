@@ -1,4 +1,5 @@
 import { parseFacetData } from "@/scripts/facet-data";
+import { renderWithFilterLoading } from "@/scripts/filter-loading";
 import {
 	getPaginationControls,
 	syncPaginationControls,
@@ -117,9 +118,13 @@ function initArchiveFacetsRoot(root: HTMLElement): void {
 		);
 	};
 
+	const renderLoading = (): void => {
+		renderWithFilterLoading(root, render);
+	};
+
 	const resetAndRender = (): void => {
 		currentPage = 1;
-		render();
+		renderLoading();
 	};
 
 	root
@@ -196,18 +201,18 @@ function initArchiveFacetsRoot(root: HTMLElement): void {
 	pageButtons.forEach((button) => {
 		button.addEventListener("click", () => {
 			currentPage = Number(button.dataset.page) || 1;
-			render();
+			renderLoading();
 		});
 	});
 
 	previous?.addEventListener("click", () => {
 		currentPage = Math.max(1, currentPage - 1);
-		render();
+		renderLoading();
 	});
 
 	next?.addEventListener("click", () => {
 		currentPage += 1;
-		render();
+		renderLoading();
 	});
 
 	render();

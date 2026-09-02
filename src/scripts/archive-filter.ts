@@ -1,3 +1,4 @@
+import { renderWithFilterLoading } from "@/scripts/filter-loading";
 import {
 	getPaginationControls,
 	syncPaginationControls,
@@ -81,6 +82,10 @@ export function initArchiveFilter(): void {
 			);
 		};
 
+		const renderLoading = (): void => {
+			renderWithFilterLoading(root, render);
+		};
+
 		filterButtons.forEach((button) => {
 			button.addEventListener("click", () => {
 				activeFilter = button.dataset.filterValue ?? "all";
@@ -88,13 +93,13 @@ export function initArchiveFilter(): void {
 				filterButtons.forEach((item) =>
 					item.setAttribute("aria-pressed", String(item === button)),
 				);
-				render();
+				renderLoading();
 			});
 		});
 
 		sortControl?.addEventListener("change", () => {
 			activePage = 1;
-			render();
+			renderLoading();
 		});
 
 		viewButtons.forEach((button) => {
@@ -109,18 +114,18 @@ export function initArchiveFilter(): void {
 		pageButtons.forEach((button) => {
 			button.addEventListener("click", () => {
 				activePage = Number(button.dataset.page) || 1;
-				render();
+				renderLoading();
 			});
 		});
 
 		previousButton?.addEventListener("click", () => {
 			activePage = Math.max(1, activePage - 1);
-			render();
+			renderLoading();
 		});
 
 		nextButton?.addEventListener("click", () => {
 			activePage += 1;
-			render();
+			renderLoading();
 		});
 
 		render();

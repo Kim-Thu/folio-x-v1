@@ -20,4 +20,5 @@ export interface BaseLayoutProps {
 	closingProfile: PClosingProfileProps;
 	loadingScreen: PLoadingScreenProps;
 	skipToContent: string;
+	backToTop: string;
 }
