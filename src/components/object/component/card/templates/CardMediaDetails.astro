@@ -62,6 +62,7 @@ const actionLabel = productSource && productPresentation
 	? `${productPresentation.actionLabelPrefix}${productSource.title}`
 	: data.action?.label;
 const license = productSource ? productPresentation?.license : data.product?.license;
+const mediaSizes = "(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw";
 ---
 
 {product && (
@@ -83,7 +84,7 @@ const license = productSource ? productPresentation?.license : data.product?.lic
 	>
 		{slots.media && media && (
 			<CMedia ratio="editorial" href={href} ariaLabel={title}>
-				<CImage {...media} variant="fill" />
+				<CImage {...media} variant="fill" sizes={mediaSizes} />
 				{product.badge && <CBadge placement="top-end">{product.badge}</CBadge>}
 			</CMedia>
 		)}
