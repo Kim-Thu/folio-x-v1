@@ -57,8 +57,7 @@ const { data } = Astro.props as Props;
 						style="stars"
 						value={data.rating.value}
 						maximum={data.rating.maximum}
-						count={data.rating.count}
-						slots={{ count: true, value: true }}
+						slots={{ count: false, value: true }}
 					/>
 					<CText as="span" variant="caption" tone="subtle">
 						{data.rating.salesLabel}
@@ -102,19 +101,21 @@ const { data } = Astro.props as Props;
 					))}
 				</CColumns>
 
-				<CColumns columns="one" gap="xs">
-					<CText as="span" variant="caption" tone="subtle">
-						{data.paymentLabel}
-					</CText>
-					<CRow align="center" gap="sm">
-						{data.paymentMethods.map((method) => (
-							<CImage
-								{...method}
-								variant="payment-logo"
-							/>
-						))}
-					</CRow>
-				</CColumns>
+				{data.paymentMethods.length > 0 && (
+					<CColumns columns="one" gap="xs">
+						<CText as="span" variant="caption" tone="subtle">
+							{data.paymentLabel}
+						</CText>
+						<CRow align="center" gap="sm">
+							{data.paymentMethods.map((method) => (
+								<CImage
+									{...method}
+									variant="payment-logo"
+								/>
+							))}
+						</CRow>
+					</CColumns>
+				)}
 			</CColumns>
 		</CGridItem>
 	</CColumns>
