@@ -48,8 +48,8 @@
             },
             {
               "href": "#selected-works",
-              "label": "Xem video giới thiệu",
-              "icon": "play",
+              "label": "Xem dự án nổi bật",
+              "icon": "arrowUpRight",
               "iconPosition": "end",
               "variant": "text",
               "tone": "light",
@@ -76,7 +76,6 @@
         },
         "content": {
           "heading": {
-            "number": "01",
             "title": [
               "Explore",
               "My Universe"
@@ -202,7 +201,6 @@
         },
         "content": {
           "heading": {
-            "number": "02",
             "title": [
               "Featured",
               "Products"
@@ -260,7 +258,6 @@
         },
         "content": {
           "heading": {
-            "number": "03",
             "title": [
               "Selected",
               "Works"
@@ -319,7 +316,6 @@
         },
         "content": {
           "heading": {
-            "number": "04",
             "title": [
               "Tech Lab."
             ],
@@ -381,7 +377,6 @@
         },
         "content": {
           "heading": {
-            "number": "05",
             "title": [
               "Stories"
             ],
@@ -424,7 +419,7 @@
             "columns": 4,
             "gap": "sm",
             "mediaRatio": "portrait",
-            "headingLevel": 2,
+            "headingLevel": 3,
             "slots": {
               "metadata": true,
               "tags": false,
@@ -447,7 +442,6 @@
         },
         "content": {
           "heading": {
-            "number": "07",
             "label": "Insights",
             "title": [
               "Ghi chú từ việc xây, phá và sửa hệ thống."
