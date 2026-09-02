@@ -2,7 +2,7 @@
 import CButton from "@/components/object/component/CButton.astro";
 import type { CScrollToTopProps } from "@/types/components/object/component/CScrollToTop.types";
 
-const { label } = Astro.props as CScrollToTopProps;
+const { label, tone } = Astro.props as CScrollToTopProps;
 ---
 
 <div class="fixed right-4 bottom-4 z-50 hidden md:right-6 md:bottom-6" data-scroll-to-top>
@@ -12,6 +12,6 @@ const { label } = Astro.props as CScrollToTopProps;
 		iconOnly
 		size="md"
 		variant="secondary"
-		tone="light"
+		{tone}
 	/>
 </div>
