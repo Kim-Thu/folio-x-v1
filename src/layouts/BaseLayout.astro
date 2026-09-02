@@ -1,4 +1,5 @@
 ---
+import CScrollToTop from "@/components/object/component/CScrollToTop.astro";
 import CSkipLink from "@/components/object/component/CSkipLink.astro";
 import LContainer from "@/components/layout/LContainer.astro";
 import LFooter from "@/components/layout/LFooter.astro";
@@ -33,6 +34,7 @@ const {
 	closingProfile,
 	loadingScreen,
 	skipToContent,
+	backToTop,
 } = Astro.props;
 
 const bodyClass = cn(
@@ -77,6 +79,7 @@ const bodyClass = cn(
 				</LSection>
 			</Fragment>
 		</LFooterReveal>
+		<CScrollToTop label={backToTop} />
 		<script src="@/scripts/main.ts"></script>
 	</body>
 </html>
