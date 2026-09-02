@@ -46,17 +46,18 @@ const { data } = Astro.props as { data: PPageHeaderEditorialData };
 					</CMedia>
 				)}
 				<CMetadata
-			data={{
-				items: [
-					{ type: "author", label: data.author, display: "text" },
-					{
-						type: "datetime",
-						label: data.publishedLabel,
-						datetime: data.publishedAt,
-						display: "text",
-					},
-				],
-			}}
+					data={{
+						items: [
+							{ type: "author", label: data.author, display: "text" },
+							{
+								type: "datetime",
+								label: data.publishedLabel,
+								datetime: data.publishedAt,
+								display: "text",
+							},
+						],
+					}}
+					template="stacked"
 				/>
 			</CRow>
 			{data.share && <CShareLinks {...data.share} />}
