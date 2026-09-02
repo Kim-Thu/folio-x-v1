@@ -70,9 +70,13 @@ if (document.querySelector("[data-collection-filter-root]")) {
 
 if (document.querySelector('[data-filter-mode="faceted"] [data-product-item]')) {
 	featureInitializers.push(
-		import("@/scripts/products").then(({ initProducts }) => {
-			initProducts();
-		}),
+		import("@/scripts/product-filter-loading").then(
+			async ({ initProductFilterLoading }) => {
+				initProductFilterLoading();
+				const { initProducts } = await import("@/scripts/products");
+				initProducts();
+			},
+		),
 	);
 }
 
