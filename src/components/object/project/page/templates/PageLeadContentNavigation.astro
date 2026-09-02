@@ -23,11 +23,12 @@ const orderedRegions = [...lead, ...content, ...navigation];
 	}
 
 	const section = region.section;
+	const spacing = region.component === "page-header" ? "lead" : section?.spacing ?? "none";
 	return (
 		<LSection
 			id={section?.id}
 			theme={section?.theme ?? "none"}
-			spacing={section?.spacing ?? "none"}
+			spacing={spacing}
 			container={section?.container ?? "none"}
 			data-page-region={region.key}
 		>
