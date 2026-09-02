@@ -61,7 +61,7 @@ const resolveVariant = (isActive: boolean) =>
 				data-tab-control={tab.value}
 				data-tab-value={tab.value}
 				data-filter-value={tab.value}
-				aria-selected={String(isActive)}
+				aria-selected={isActive}
 			/>
 		);
 	})}
