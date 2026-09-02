@@ -7,7 +7,10 @@ import CRow from "@/components/object/component/CRow.astro";
 import CSearchField from "@/components/object/component/CSearchField.astro";
 import CSelect from "@/components/object/component/CSelect.astro";
 import CTabList from "@/components/object/component/CTabList.astro";
-import type { PArchiveToolbarProps } from "@/types/components/object/project/archive-toolbar/PArchiveToolbar.types";
+import type {
+	PArchiveToolbarProps,
+	PArchiveToolbarSelectVisibility,
+} from "@/types/components/object/project/archive-toolbar/PArchiveToolbar.types";
 import {
 	archiveToolbarActionsClasses,
 	archiveToolbarClasses,
@@ -18,6 +21,16 @@ import {
 } from "@/variants/components/object/project/archive-toolbar/PArchiveToolbar.variants";
 
 const { data } = Astro.props as PArchiveToolbarProps;
+const resolveSelectVisibility = (
+	control: string,
+	visibility?: PArchiveToolbarSelectVisibility,
+): PArchiveToolbarSelectVisibility => {
+	if (visibility) return visibility;
+	if (data.search && data.selects?.length === 1 && control === "category") {
+		return "mobile";
+	}
+	return "all";
+};
 ---
 
 <CBox surface="glass" radius="md" spacing="sm" class={archiveToolbarClasses}>
@@ -51,7 +64,9 @@ const { data } = Astro.props as PArchiveToolbarProps;
 						label={select.label}
 						options={select.options}
 						value={select.value}
-						class={archiveToolbarSelectVisibilityClasses[select.visibility ?? "all"]}
+						class={archiveToolbarSelectVisibilityClasses[
+							resolveSelectVisibility(select.control, select.visibility)
+						]}
 						data-category-select={select.control === "category" ? "" : undefined}
 						data-platform-select={select.control === "platform" ? "" : undefined}
 						data-facet-select
