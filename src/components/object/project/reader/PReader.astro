@@ -77,7 +77,7 @@ const { data } = Astro.props as PReaderProps;
 				) : (
 					<CColumns as="article" columns="one" gap="sm">
 						{data.content.images.map((image) => (
-							<CBox radius="md" overflow="hidden"><CImage {...image} variant="natural" /></CBox>
+							<CBox radius="md" overflow="hidden"><CImage {...image} variant="natural" sizes="100vw" /></CBox>
 						))}
 					</CColumns>
 				)}

@@ -17,6 +17,7 @@ import type { PPageHeaderCoverSummaryData } from "@/types/components/object/proj
 
 type Props = { data: PPageHeaderCoverSummaryData };
 const { data } = Astro.props as Props;
+const coverSizes = "(min-width: 1024px) 25vw, 100vw";
 ---
 
 <CColumns columns="one" gap="md">
@@ -25,7 +26,7 @@ const { data } = Astro.props as Props;
 		<CColumns columns="twelve" gap="lg">
 			<CGridItem lgSpan={3}>
 			<CBox position="relative" radius="md" overflow="hidden">
-				<CImage {...data.cover} variant="natural" />
+				<CImage {...data.cover} variant="natural" sizes={coverSizes} />
 				{data.trailer && <CBox position="overlay-bottom"><CButton {...data.trailer} tone="dark" /></CBox>}
 			</CBox>
 			</CGridItem>
