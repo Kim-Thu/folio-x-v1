@@ -1,0 +1,19 @@
+---
+import SystemStatePage from "@/components/pages/system-state/SystemStatePage.astro";
+import { getLayoutData } from "@/data/pages/getLayoutData";
+import { getSystemStatePageData } from "@/data/pages/getSystemStatePageData";
+import { comingSoonContent } from "@/data/system-states";
+import BaseLayout from "@/layouts/BaseLayout.astro";
+
+const layoutData = await getLayoutData();
+const data = getSystemStatePageData(comingSoonContent);
+---
+
+<BaseLayout
+	{...layoutData}
+	title={comingSoonContent.metadataTitle}
+	description={comingSoonContent.metadataDescription}
+	seo={{ robots: { index: false, follow: true } }}
+>
+	<SystemStatePage {data} />
+</BaseLayout>
