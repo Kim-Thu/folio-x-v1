@@ -266,6 +266,7 @@ const groupMainRegions =
 			) : (
 				<CColumns columns="one" gap={region.props.gap ?? "lg"}>
 					{groupMainRegions.map((item) => <Astro.self region={item} />)}
+				</CColumns>
 			)}
 		</CColumns>
 	</CBox>
