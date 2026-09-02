@@ -6,6 +6,7 @@ import { initHeader } from "@/scripts/header";
 import { initLoadingScreen } from "@/scripts/loading-screen";
 import { initReveal } from "@/scripts/reveal";
 import { initScrollProgress } from "@/scripts/scroll-progress";
+import { initScrollToTop } from "@/scripts/scroll-to-top";
 import { initSelect } from "@/scripts/select";
 import { initSelectedWorkTabs } from "@/scripts/selected-work-tabs";
 
@@ -13,6 +14,7 @@ const coreInitializers: ReadonlyArray<() => void> = [
 	initLoadingScreen,
 	initHeader,
 	initScrollProgress,
+	initScrollToTop,
 	initAccordion,
 	initDialogs,
 	initEntryIndex,
