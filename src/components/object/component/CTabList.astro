@@ -15,30 +15,43 @@ const {
 	tabs,
 	tone = "dark",
 } = Astro.props as CTabListProps;
+
+const isNavigation = tabs.length > 0 && tabs.every((tab) => typeof tab.href === "string");
+const Root = isNavigation ? "nav" : "div";
 ---
 
-<div class={cn(tabListClasses, tabListAppearanceClasses[appearance])} role="group" aria-label={label}>
-	{tabs.map((tab) => (
-		<CButton
-			variant={
-				appearance === "archive"
-					? "tab"
-					: appearance === "underline"
-						? "text"
-						: tab.value === activeValue
-							? "primary"
-							: "outline"
-			}
-			size="sm"
-			{tone}
-			class={tabListButtonClasses[appearance]}
-			data-tab-control={tab.value}
-			data-tab-value={tab.value}
-			data-filter-value={tab.value}
-			aria-selected={tab.value === activeValue ? "true" : "false"}
-			aria-pressed={tab.value === activeValue ? "true" : "false"}
-			label={tab.label}
-			href={tab.href}
-		/>
-	))}
-</div>
+<Root
+	class={cn(tabListClasses, tabListAppearanceClasses[appearance])}
+	role={isNavigation ? undefined : "tablist"}
+	aria-label={label}
+>
+	{tabs.map((tab) => {
+		const isActive = tab.value === activeValue;
+		return (
+			<CButton
+				variant={
+					appearance === "archive"
+						? "tab"
+						: appearance === "underline"
+							? "text"
+							: isActive
+								? "primary"
+								: "outline"
+				}
+				size="sm"
+				{tone}
+				class={tabListButtonClasses[appearance]}
+				id={!isNavigation ? `tab-${tab.value}` : undefined}
+				role={!isNavigation ? "tab" : undefined}
+				tabindex={!isNavigation ? (isActive ? 0 : -1) : undefined}
+				data-tab-control={tab.value}
+				data-tab-value={tab.value}
+				data-filter-value={tab.value}
+				aria-selected={!isNavigation ? String(isActive) : undefined}
+				aria-current={isNavigation && isActive ? "page" : undefined}
+				label={tab.label}
+				href={tab.href}
+			/>
+		);
+	})}
+</Root>
