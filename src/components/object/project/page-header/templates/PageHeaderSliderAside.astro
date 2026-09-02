@@ -16,6 +16,8 @@ import type { PPageHeaderSliderAsideData } from "@/types/components/object/proje
 
 type Props = { data: PPageHeaderSliderAsideData };
 const { data } = Astro.props as Props;
+const gallerySizes = "(min-width: 1024px) 50vw, 100vw";
+const asideSizes = "(min-width: 1024px) 25vw, 100vw";
 ---
 
 <CColumns columns="one" gap="md">
@@ -78,13 +80,13 @@ const { data } = Astro.props as Props;
 					controls="below"
 				>
 					{data.images.map((image) => (
-						<CSlide><CMedia ratio="editorial"><CImage {...image} variant="fill" /></CMedia></CSlide>
+						<CSlide><CMedia ratio="editorial"><CImage {...image} variant="fill" sizes={gallerySizes} /></CMedia></CSlide>
 					))}
 				</CSlider>
 			) : (
 				data.images[0] && (
 					<CMedia ratio="editorial">
-						<CImage {...data.images[0]} variant="fill" />
+						<CImage {...data.images[0]} variant="fill" sizes={gallerySizes} />
 					</CMedia>
 				)
 			)}
@@ -97,6 +99,7 @@ const { data } = Astro.props as Props;
 				{...data.asideDecoration}
 				alt=""
 				variant="natural"
+				sizes={asideSizes}
 				aria-hidden="true"
 			/>
 			<CDescriptionList items={data.facts} variant="panel" />
