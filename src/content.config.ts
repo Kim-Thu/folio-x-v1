@@ -9,6 +9,7 @@ import { publicationEntrySchema } from "@/content/publication-schema";
 import { publicationDetailSettingsSchema } from "@/content/publication-detail-settings-schema";
 import { publicationCatalogSettingsSchema } from "@/content/publication-catalog-settings-schema";
 import { pageSchema } from "@/content/page-schema";
+import { extendedSystemStatesSettingsSchema } from "@/content/system-states-settings-schema";
 import {
   closingProfileSettingsSchema,
   footerSettingsSchema,
@@ -16,7 +17,6 @@ import {
   navigationSettingsSchema,
   productEntrySchema,
   siteSettingsSchema,
-  systemStatesSettingsSchema,
 } from "@/content/schemas";
 
 const settingsBase = "./src/content/globals";
@@ -26,7 +26,7 @@ const navigationSettings = defineCollection({ loader: glob({ base: settingsBase,
 const closingProfileSettings = defineCollection({ loader: glob({ base: settingsBase, pattern: "closing-profile.json" }), schema: closingProfileSettingsSchema });
 const interfaceSettings = defineCollection({ loader: glob({ base: settingsBase, pattern: "interface.json" }), schema: interfaceSettingsSchema });
 const footerSettings = defineCollection({ loader: glob({ base: settingsBase, pattern: "footer.json" }), schema: footerSettingsSchema });
-const systemStatesSettings = defineCollection({ loader: glob({ base: settingsBase, pattern: "system-states.json" }), schema: systemStatesSettingsSchema });
+const systemStatesSettings = defineCollection({ loader: glob({ base: settingsBase, pattern: "system-states.json" }), schema: extendedSystemStatesSettingsSchema });
 const labDetailSettings = defineCollection({ loader: glob({ base: settingsBase, pattern: "lab-detail.json" }), schema: labDetailSettingsSchema });
 const blogDetailSettings = defineCollection({ loader: glob({ base: settingsBase, pattern: "blog-detail.json" }), schema: blogDetailSettingsSchema });
 const publicationDetailSettings = defineCollection({ loader: glob({ base: settingsBase, pattern: "publication-detail.json" }), schema: publicationDetailSettingsSchema });
