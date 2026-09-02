@@ -1,0 +1,14 @@
+---
+import { interfaceContent } from '../../../data/content';
+---
+
+<button
+  id="scroll-to-top"
+  type="button"
+  aria-label={interfaceContent.backToTop}
+  title={interfaceContent.backToTop}
+  class="fixed right-4 bottom-4 z-40 hidden size-12 items-center justify-center rounded-full border border-current bg-surface-light text-on-light shadow-lg transition hover:-translate-y-1 focus-visible:outline-2 focus-visible:outline-offset-2 md:right-6 md:bottom-6"
+  data-scroll-to-top
+>
+  <span aria-hidden="true" class="text-xl leading-none">↑</span>
+</button>

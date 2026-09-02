@@ -179,6 +179,8 @@ export const footerSettingsSchema = z.object({
 export const systemStatesSettingsSchema = z.object({
   notFound: systemStateSchema,
   empty: systemStateSchema,
+  comingSoon: systemStateSchema,
+  maintenance: systemStateSchema,
 });
 
 export const projectEntrySchema = z.object({
