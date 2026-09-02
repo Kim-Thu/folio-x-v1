@@ -26,10 +26,11 @@ const {
 
 const responsiveWidths = [320, 480, 640, 768, 960, 1200, 1536, 1920, 2560];
 const optimizable = src.startsWith("/uploads/") && !src.toLowerCase().endsWith(".svg");
+const useNetlifyImageCdn = optimizable && import.meta.env.NETLIFY === "true";
 const imageCdnUrl = (candidateWidth: number) =>
 	`/.netlify/images?url=${encodeURIComponent(src)}&w=${candidateWidth}`;
 
-const candidateWidths = optimizable
+const candidateWidths = useNetlifyImageCdn
 	? [
 		...responsiveWidths.filter((candidateWidth) => candidateWidth < width),
 		width,
@@ -40,7 +41,7 @@ const generatedSrcset = candidateWidths.length > 1
 		.map((candidateWidth) => `${imageCdnUrl(candidateWidth)} ${candidateWidth}w`)
 		.join(", ")
 	: undefined;
-const resolvedSrc = optimizable ? imageCdnUrl(width) : src;
+const resolvedSrc = useNetlifyImageCdn ? imageCdnUrl(width) : src;
 const resolvedSrcset = generatedSrcset ?? requestedSrcset;
 const resolvedSizes = resolvedSrcset ? sizes ?? "100vw" : sizes;
 ---
