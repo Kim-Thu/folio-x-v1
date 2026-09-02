@@ -13,6 +13,7 @@ import {
 	archiveToolbarClasses,
 	archiveToolbarGridClasses,
 	archiveToolbarSearchClasses,
+	archiveToolbarSelectVisibilityClasses,
 	archiveToolbarViewClasses,
 } from "@/variants/components/object/project/archive-toolbar/PArchiveToolbar.variants";
 
@@ -50,6 +51,7 @@ const { data } = Astro.props as PArchiveToolbarProps;
 						label={select.label}
 						options={select.options}
 						value={select.value}
+						class={archiveToolbarSelectVisibilityClasses[select.visibility ?? "all"]}
 						data-category-select={select.control === "category" ? "" : undefined}
 						data-platform-select={select.control === "platform" ? "" : undefined}
 						data-facet-select
