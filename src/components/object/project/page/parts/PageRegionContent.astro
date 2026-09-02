@@ -133,7 +133,10 @@ const groupMainRegions =
 		{region.props.mode === "faceted" && region.props.sidebar ? (
 			<LSidebar
 				label={region.props.sidebar.label}
-				mobilePosition={region.props.sidebar.mobilePosition}
+				mobilePosition={
+					region.props.sidebar.mobilePosition ??
+					(region.props.sidebar.cards ? "end" : "start")
+				}
 				sticky
 			>
 				<CColumns slot="sidebar" columns="one" gap="md">
