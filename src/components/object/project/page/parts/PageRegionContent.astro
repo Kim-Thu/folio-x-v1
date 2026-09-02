@@ -17,6 +17,7 @@ import PAdvertisement from "@/components/object/project/advertisement/PAdvertise
 import PArchiveToolbar from "@/components/object/project/archive-toolbar/PArchiveToolbar.astro";
 import PArticle from "@/components/object/project/article/PArticle.astro";
 import PCard from "@/components/object/project/card/PCard.astro";
+import PCardSkeleton from "@/components/object/project/card/PCardSkeleton.astro";
 import PCta from "@/components/object/project/cta/PCta.astro";
 import PEntryIndex from "@/components/object/project/entry-index/PEntryIndex.astro";
 import PFilterPanel from "@/components/object/project/filter-panel/PFilterPanel.astro";
@@ -147,7 +148,7 @@ const groupMainRegions =
 						<PAdvertisement {...region.props.sidebar.advertisement} />
 					)}
 				</CColumns>
-				<CColumns columns="one" gap="md" data-archive-results>
+				<CColumns columns="one" gap="md" data-archive-results aria-live="polite">
 					{region.props.result?.header && (
 						<PSectionHeader {...region.props.result.header} />
 					)}
@@ -159,6 +160,12 @@ const groupMainRegions =
 							{region.props.result.label}
 						</CText>
 					)}
+					<PCardSkeleton
+						count={region.props.pagination.pageSize}
+						template={region.props.cards.template}
+						columns={region.props.cards.columns}
+						gap={region.props.cards.gap}
+					/>
 					<PCard {...region.props.cards} />
 					<CText data-product-empty data-facet-empty hidden tone="muted">
 						{region.props.emptyLabel}
@@ -172,7 +179,13 @@ const groupMainRegions =
 				</CColumns>
 			</LSidebar>
 		) : (
-			<CColumns columns="one" gap="md">
+			<CColumns columns="one" gap="md" data-archive-results aria-live="polite">
+				<PCardSkeleton
+					count={region.props.pagination.pageSize}
+					template={region.props.cards.template}
+					columns={region.props.cards.columns}
+					gap={region.props.cards.gap}
+				/>
 				<PCard {...region.props.cards} />
 				<CText data-filter-empty hidden tone="muted">
 					{region.props.emptyLabel}
