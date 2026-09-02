@@ -17,6 +17,14 @@ const columns: CColumnsTemplate =
 			: items.length === 3
 				? "three"
 				: "four";
+const sizes =
+	columns === "four"
+		? "(min-width: 1024px) 25vw, (min-width: 640px) 50vw, 100vw"
+		: columns === "three"
+			? "(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw"
+			: columns === "two"
+				? "(min-width: 640px) 50vw, 100vw"
+				: "100vw";
 ---
 
 <CColumns {columns} gap="sm" aria-label={label}>
@@ -24,7 +32,7 @@ const columns: CColumnsTemplate =
 		items.map((item) => (
 			<CBox radius="md" overflow="hidden">
 				<CMedia ratio="video">
-					<CImage {...item} variant="fill" />
+					<CImage {...item} variant="fill" {sizes} />
 				</CMedia>
 			</CBox>
 		))
