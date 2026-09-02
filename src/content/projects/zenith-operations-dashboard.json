@@ -32,7 +32,6 @@
   "detail": {
     "role": "Dashboard design, frontend development",
     "duration": "2025",
-    "showBackAction": false,
     "features": [],
     "gallery": [],
     "results": [],
@@ -49,10 +48,6 @@
             "container": "site"
           },
           "content": {
-            "backAction": {
-              "label": "Back to projects",
-              "href": "/projects"
-            },
             "galleryLabel": "Project gallery",
             "previousImageLabel": "Previous image",
             "nextImageLabel": "Next image",

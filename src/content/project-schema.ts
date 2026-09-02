@@ -31,7 +31,6 @@ const projectHeaderSectionSchema = z.object({
 	template: z.literal("slider-aside"),
 	settings: sectionSettingsSchema,
 	content: z.object({
-		backAction: z.object({ label: z.string().min(1), href: z.string().min(1) }),
 		galleryLabel: z.string().min(1),
 		previousImageLabel: z.string().min(1),
 		nextImageLabel: z.string().min(1),
@@ -125,7 +124,6 @@ export const projectEntrySchema = z.object({
 		.object({
 			role: z.string().min(1).optional(),
 			duration: z.string().min(1).optional(),
-			showBackAction: z.boolean().optional(),
 			liveUrl: z.string().min(1).optional(),
 			sourceUrl: z.string().min(1).optional(),
 			features: z.array(

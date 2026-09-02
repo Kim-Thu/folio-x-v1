@@ -4,6 +4,7 @@ import type { LSectionProps } from "@/types/components/layout/LSection.types";
 import { cn } from "@/utils/cn";
 import {
 	sectionBaseClass,
+	sectionContentSpacingClasses,
 	sectionSpacingClasses,
 	sectionThemeClasses,
 } from "@/variants/components/layout/LSection.variants";
@@ -24,13 +25,20 @@ const classes = cn(
 	sectionSpacingClasses[spacing],
 	className,
 );
+const contentClasses = sectionContentSpacingClasses[spacing];
 ---
 
 <section {...attributes} class={classes}>
 	{container === "none" ? (
-		<slot />
+		contentClasses ? (
+			<div class={contentClasses}>
+				<slot />
+			</div>
+		) : (
+			<slot />
+		)
 	) : (
-		<LContainer size={container}>
+		<LContainer size={container} class={contentClasses}>
 			<slot />
 		</LContainer>
 	)}

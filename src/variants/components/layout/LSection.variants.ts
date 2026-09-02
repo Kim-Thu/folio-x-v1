@@ -17,7 +17,16 @@ export const sectionSpacingClasses: Record<LSectionSpacing, string> = {
 	compact: "py-8 md:py-12",
 	default: "py-16 md:py-24 lg:py-32",
 	none: "",
-	lead: "pt-24 pb-8 md:pt-28 md:pb-12",
+	lead: "pb-8 md:pb-12",
 	body: "pb-16 md:pb-24",
 	closing: "pb-12 md:pb-16",
+};
+
+export const sectionContentSpacingClasses: Record<LSectionSpacing, string> = {
+	compact: "",
+	default: "",
+	none: "",
+	lead: "pt-24 md:pt-28",
+	body: "",
+	closing: "",
 };

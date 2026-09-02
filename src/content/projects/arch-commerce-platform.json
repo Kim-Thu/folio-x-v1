@@ -55,10 +55,6 @@
             "container": "site"
           },
           "content": {
-            "backAction": {
-              "label": "Back to projects",
-              "href": "/projects"
-            },
             "galleryLabel": "Project gallery",
             "previousImageLabel": "Previous image",
             "nextImageLabel": "Next image",

@@ -48,7 +48,6 @@
   "detail": {
     "role": "Systems design, automation engineering",
     "duration": "2024",
-    "showBackAction": true,
     "sourceUrl": "https://github.com/Kim-Thu/folio-x-v1",
     "features": [],
     "gallery": [],
@@ -66,10 +65,6 @@
             "container": "site"
           },
           "content": {
-            "backAction": {
-              "label": "Back to projects",
-              "href": "/projects"
-            },
             "galleryLabel": "Project gallery",
             "previousImageLabel": "Previous image",
             "nextImageLabel": "Next image",

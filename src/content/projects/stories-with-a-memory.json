@@ -48,7 +48,6 @@
   "detail": {
     "role": "Product architecture, AI orchestration",
     "duration": "2025",
-    "showBackAction": true,
     "liveUrl": "https://example.com/ai-novel-flow",
     "features": [],
     "gallery": [],
@@ -66,10 +65,6 @@
             "container": "site"
           },
           "content": {
-            "backAction": {
-              "label": "Back to projects",
-              "href": "/projects"
-            },
             "galleryLabel": "Project gallery",
             "previousImageLabel": "Previous image",
             "nextImageLabel": "Next image",
