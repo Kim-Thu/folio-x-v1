@@ -88,7 +88,7 @@ export async function getWorkDetailPageData(
 		const frame = {
 			id: section.id,
 			theme: section.settings.theme,
-			spacing: section.settings.spacing,
+			spacing: section.type === "page-header" ? "lead" : section.settings.spacing,
 			container: section.settings.container,
 		};
 
