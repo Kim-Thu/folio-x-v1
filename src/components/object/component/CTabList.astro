@@ -15,30 +15,54 @@ const {
 	tabs,
 	tone = "dark",
 } = Astro.props as CTabListProps;
+
+const isNavigation = tabs.length > 0 && tabs.every((tab) => typeof tab.href === "string");
+const Root = isNavigation ? "nav" : "div";
+const resolveVariant = (isActive: boolean) =>
+	appearance === "archive"
+		? "tab"
+		: appearance === "underline"
+			? "text"
+			: isActive
+				? "primary"
+				: "outline";
 ---
 
-<div class={cn(tabListClasses, tabListAppearanceClasses[appearance])} role="group" aria-label={label}>
-	{tabs.map((tab) => (
-		<CButton
-			variant={
-				appearance === "archive"
-					? "tab"
-					: appearance === "underline"
-						? "text"
-						: tab.value === activeValue
-							? "primary"
-							: "outline"
-			}
-			size="sm"
-			{tone}
-			class={tabListButtonClasses[appearance]}
-			data-tab-control={tab.value}
-			data-tab-value={tab.value}
-			data-filter-value={tab.value}
-			aria-selected={tab.value === activeValue ? "true" : "false"}
-			aria-pressed={tab.value === activeValue ? "true" : "false"}
-			label={tab.label}
-			href={tab.href}
-		/>
-	))}
-</div>
+<Root
+	class={cn(tabListClasses, tabListAppearanceClasses[appearance])}
+	role={isNavigation ? undefined : "tablist"}
+	aria-label={label}
+>
+	{tabs.map((tab) => {
+		const isActive = tab.value === activeValue;
+		return isNavigation && tab.href ? (
+			<CButton
+				href={tab.href}
+				label={tab.label}
+				variant={resolveVariant(isActive)}
+				size="sm"
+				{tone}
+				class={tabListButtonClasses[appearance]}
+				data-tab-control={tab.value}
+				data-tab-value={tab.value}
+				data-filter-value={tab.value}
+				aria-current={isActive ? "page" : undefined}
+			/>
+		) : (
+			<CButton
+				label={tab.label}
+				variant={resolveVariant(isActive)}
+				size="sm"
+				{tone}
+				class={tabListButtonClasses[appearance]}
+				id={`tab-${tab.value}`}
+				role="tab"
+				tabindex={isActive ? 0 : -1}
+				data-tab-control={tab.value}
+				data-tab-value={tab.value}
+				data-filter-value={tab.value}
+				aria-selected={isActive}
+			/>
+		);
+	})}
+</Root>
