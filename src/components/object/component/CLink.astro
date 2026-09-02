@@ -14,8 +14,22 @@ const {
 	...attributes
 } = Astro.props;
 
-const external = isExternalUrl(href, Astro.site ?? Astro.url);
-const target = requestedTarget ?? (external ? "_blank" : undefined);
+const allowedProtocols = new Set(["http:", "https:", "mailto:", "tel:"]);
+let safeHref: string | undefined;
+
+try {
+	const resolvedUrl = new URL(href, Astro.site ?? Astro.url);
+	if (allowedProtocols.has(resolvedUrl.protocol)) safeHref = href;
+} catch {
+	safeHref = undefined;
+}
+
+const external = safeHref
+	? isExternalUrl(safeHref, Astro.site ?? Astro.url)
+	: false;
+const target = safeHref
+	? requestedTarget ?? (external ? "_blank" : undefined)
+	: undefined;
 const relValues = new Set(requestedRel?.split(/\s+/).filter(Boolean));
 
 if (target === "_blank") {
@@ -30,6 +44,6 @@ if (nofollow) {
 const rel = relValues.size > 0 ? [...relValues].join(" ") : undefined;
 ---
 
-<a {...attributes} href={href} class={cn(className)} target={target} rel={rel}>
+<a {...attributes} href={safeHref} class={cn(className)} target={target} rel={rel}>
 	<slot />
 </a>
