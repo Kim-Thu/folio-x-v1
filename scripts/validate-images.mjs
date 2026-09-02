@@ -2,6 +2,7 @@ import { readdir, readFile } from "node:fs/promises";
 import { extname, resolve } from "node:path";
 
 const outputDirectory = resolve("dist");
+const expectNetlifyImageCdn = process.env.NETLIFY === "true";
 
 async function findHtmlFiles(directory) {
 	const entries = await readdir(directory, { withFileTypes: true });
@@ -29,6 +30,7 @@ const isRasterUpload = (value) => {
 
 const htmlFiles = await findHtmlFiles(outputDirectory);
 const violations = [];
+let cmsImages = 0;
 let transformedImages = 0;
 
 for (const htmlFile of htmlFiles) {
@@ -39,8 +41,18 @@ for (const htmlFile of htmlFiles) {
 		const src = readAttribute(tag, "src");
 		if (!src || !isRasterUpload(src)) continue;
 
-		if (!src.startsWith("/.netlify/images?")) {
-			violations.push(`${htmlFile}: raw CMS upload image source: ${src}`);
+		cmsImages += 1;
+		const transformed = src.startsWith("/.netlify/images?");
+
+		if (!expectNetlifyImageCdn) {
+			if (transformed) {
+				violations.push(`${htmlFile}: local build unexpectedly depends on Netlify Image CDN: ${src}`);
+			}
+			continue;
+		}
+
+		if (!transformed) {
+			violations.push(`${htmlFile}: raw CMS upload image source in Netlify production path: ${src}`);
 			continue;
 		}
 
@@ -55,8 +67,13 @@ for (const htmlFile of htmlFiles) {
 				.map((candidate) => candidate.trim())
 				.filter(Boolean) ?? [];
 
-			if (candidates.length < 2 || !candidates.every((candidate) => /\s\d+w$/.test(candidate))) {
-				violations.push(`${htmlFile}: responsive CMS image is missing real width candidates: ${src}`);
+			if (
+				candidates.length < 2 ||
+				!candidates.every((candidate) => /\s\d+w$/.test(candidate))
+			) {
+				violations.push(
+					`${htmlFile}: responsive CMS image is missing real width candidates: ${src}`,
+				);
 			}
 
 			if (!sizes?.trim()) {
@@ -66,12 +83,20 @@ for (const htmlFile of htmlFiles) {
 	}
 }
 
-if (transformedImages === 0) {
-	throw new Error("No transformed CMS upload images were found in generated HTML.");
+if (cmsImages === 0) {
+	throw new Error("No CMS upload images were found in generated HTML.");
+}
+
+if (expectNetlifyImageCdn && transformedImages === 0) {
+	throw new Error("No transformed CMS upload images were found in the Netlify production path.");
 }
 
 if (violations.length > 0) {
 	throw new Error(`Responsive image validation failed:\n${violations.join("\n")}`);
 }
 
-console.log(`Validated ${transformedImages} transformed CMS images.`);
+console.log(
+	expectNetlifyImageCdn
+		? `Validated ${transformedImages} transformed CMS images for Netlify production.`
+		: `Validated ${cmsImages} CMS images with local source fallback.`,
+);
