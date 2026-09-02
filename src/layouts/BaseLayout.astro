@@ -57,6 +57,7 @@ const bodyClass = cn(
 	<body class={bodyClass} data-page-tone={tone}>
 		<CSkipLink href="#main-content">{skipToContent}</CSkipLink>
 		<PLoadingScreen {...loadingScreen} />
+		<CScrollToTop label={backToTop} {tone} />
 		<LHeader solid={!hasOverlayHeader} tone={tone}>
 			<PHeader tone={tone} {...header} />
 		</LHeader>
@@ -79,7 +80,6 @@ const bodyClass = cn(
 				</LSection>
 			</Fragment>
 		</LFooterReveal>
-		<CScrollToTop label={backToTop} {tone} />
 		<script src="@/scripts/main.ts"></script>
 	</body>
 </html>
