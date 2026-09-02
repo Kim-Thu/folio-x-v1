@@ -1,6 +1,8 @@
 import type { CSearchFieldProps } from "@/types/components/object/component/CSearchField.types";
 import type { CSelectOption } from "@/types/components/object/component/CSelect.types";
 
+export type PArchiveToolbarSelectVisibility = "all" | "mobile";
+
 export interface PArchiveToolbarData {
 	filter?: {
 		label: string;
@@ -14,6 +16,7 @@ export interface PArchiveToolbarData {
 		label: string;
 		options: CSelectOption[];
 		value?: string;
+		visibility?: PArchiveToolbarSelectVisibility;
 	}>;
 	sort: {
 		label: string;
