@@ -5,6 +5,7 @@ import type { CMetadataItem } from "@/types/components/object/component/CMetadat
 import { cn } from "@/utils/cn";
 import {
 	metadataCategoryLinkClasses,
+	metadataItemClasses,
 	metadataItemContentClasses,
 } from "@/variants/components/object/component/CMetadata.variants";
 
@@ -22,21 +23,21 @@ const linkClasses = cn(
 );
 ---
 
-<li>
+<li class={metadataItemClasses}>
 	{
 		item.href ? (
 			<CLink href={item.href} class={linkClasses}>
-				{showIcon && <CIcon name={item.icon!} size="sm" />}
+				{showIcon && <CIcon name={item.icon!} size="inline" />}
 				{showLabel && <span>{item.label}</span>}
 			</CLink>
 		) : item.type === "datetime" && item.datetime ? (
 			<time datetime={item.datetime} class={metadataItemContentClasses}>
-				{showIcon && <CIcon name={item.icon!} size="sm" />}
+				{showIcon && <CIcon name={item.icon!} size="inline" />}
 				{showLabel && <span>{item.label}</span>}
 			</time>
 		) : (
 			<span class={metadataItemContentClasses}>
-				{showIcon && <CIcon name={item.icon!} size="sm" />}
+				{showIcon && <CIcon name={item.icon!} size="inline" />}
 				{showLabel && <span>{item.label}</span>}
 			</span>
 		)
