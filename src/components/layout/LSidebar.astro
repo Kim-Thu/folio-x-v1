@@ -3,8 +3,10 @@ import type { LSidebarProps } from "@/types/components/layout/LSidebar.types";
 import { cn } from "@/utils/cn";
 import {
 	sidebarAsideClasses,
+	sidebarAsideMobilePositionClasses,
 	sidebarAsidePositionClasses,
 	sidebarContentClasses,
+	sidebarContentMobilePositionClasses,
 	sidebarContentPositionClasses,
 	sidebarLayoutClasses,
 	sidebarStickyClasses,
@@ -14,6 +16,7 @@ const {
 	class: className,
 	label,
 	position = "start",
+	mobilePosition = position,
 	sticky = false,
 	...attributes
 } = Astro.props as LSidebarProps;
@@ -23,10 +26,24 @@ const {
 	{...attributes}
 	class={cn(sidebarLayoutClasses, className)}
 >
-	<aside class={cn(sidebarAsideClasses, sidebarAsidePositionClasses[position], sticky && sidebarStickyClasses)} aria-label={label}>
+	<aside
+		class={cn(
+			sidebarAsideClasses,
+			sidebarAsideMobilePositionClasses[mobilePosition],
+			sidebarAsidePositionClasses[position],
+			sticky && sidebarStickyClasses,
+		)}
+		aria-label={label}
+	>
 		<slot name="sidebar" />
 	</aside>
-	<div class={cn(sidebarContentClasses, sidebarContentPositionClasses[position])}>
+	<div
+		class={cn(
+			sidebarContentClasses,
+			sidebarContentMobilePositionClasses[mobilePosition],
+			sidebarContentPositionClasses[position],
+		)}
+	>
 		<slot />
 	</div>
 </div>

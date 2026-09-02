@@ -1,3 +1,4 @@
+import type { LSidebarPosition } from "@/types/components/layout/LSidebar.types";
 import type { CPaginationProps } from "@/types/components/object/component/CPagination.types";
 import type { PAdvertisementProps } from "@/types/components/object/project/advertisement/PAdvertisement.types";
 import type { PArchiveToolbarProps } from "@/types/components/object/project/archive-toolbar/PArchiveToolbar.types";
@@ -13,6 +14,7 @@ export interface PageArchiveRegion extends PageRegionBase {
 		toolbar: PArchiveToolbarProps;
 		sidebar?: {
 			label: string;
+			mobilePosition?: LSidebarPosition;
 			filter: PFilterPanelProps;
 			advertisement?: PAdvertisementProps;
 			cards?: PCardProps;
