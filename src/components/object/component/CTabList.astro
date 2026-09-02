@@ -18,6 +18,14 @@ const {
 
 const isNavigation = tabs.length > 0 && tabs.every((tab) => typeof tab.href === "string");
 const Root = isNavigation ? "nav" : "div";
+const resolveVariant = (isActive: boolean) =>
+	appearance === "archive"
+		? "tab"
+		: appearance === "underline"
+			? "text"
+			: isActive
+				? "primary"
+				: "outline";
 ---
 
 <Root
@@ -27,30 +35,33 @@ const Root = isNavigation ? "nav" : "div";
 >
 	{tabs.map((tab) => {
 		const isActive = tab.value === activeValue;
-		return (
+		return isNavigation && tab.href ? (
 			<CButton
-				variant={
-					appearance === "archive"
-						? "tab"
-						: appearance === "underline"
-							? "text"
-							: isActive
-								? "primary"
-								: "outline"
-				}
+				href={tab.href}
+				label={tab.label}
+				variant={resolveVariant(isActive)}
 				size="sm"
 				{tone}
 				class={tabListButtonClasses[appearance]}
-				id={!isNavigation ? `tab-${tab.value}` : undefined}
-				role={!isNavigation ? "tab" : undefined}
-				tabindex={!isNavigation ? (isActive ? 0 : -1) : undefined}
 				data-tab-control={tab.value}
 				data-tab-value={tab.value}
 				data-filter-value={tab.value}
-				aria-selected={!isNavigation ? String(isActive) : undefined}
-				aria-current={isNavigation && isActive ? "page" : undefined}
+				aria-current={isActive ? "page" : undefined}
+			/>
+		) : (
+			<CButton
 				label={tab.label}
-				href={tab.href}
+				variant={resolveVariant(isActive)}
+				size="sm"
+				{tone}
+				class={tabListButtonClasses[appearance]}
+				id={`tab-${tab.value}`}
+				role="tab"
+				tabindex={isActive ? 0 : -1}
+				data-tab-control={tab.value}
+				data-tab-value={tab.value}
+				data-filter-value={tab.value}
+				aria-selected={String(isActive)}
 			/>
 		);
 	})}
