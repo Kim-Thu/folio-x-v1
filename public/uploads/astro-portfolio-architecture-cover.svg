@@ -1,0 +1,38 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1400" height="900" viewBox="0 0 1400 900" role="img" aria-labelledby="title desc">
+  <title id="title">Layered Astro portfolio architecture</title>
+  <desc id="desc">Abstract architecture cover showing content, composition, project patterns, components and layout layers connected vertically.</desc>
+  <rect width="1400" height="900" fill="#f5f7fa"/>
+  <rect x="90" y="90" width="1220" height="720" rx="40" fill="#ffffff" stroke="#d7dde5" stroke-width="2"/>
+  <g font-family="Arial, sans-serif" font-weight="700" text-anchor="middle">
+    <rect x="210" y="160" width="980" height="92" rx="24" fill="#121317"/>
+    <text x="700" y="216" font-size="30" fill="#ffffff">CONTENT + CMS CONTRACTS</text>
+
+    <rect x="260" y="290" width="880" height="92" rx="24" fill="#e9eef5" stroke="#c7d0dc" stroke-width="2"/>
+    <text x="700" y="346" font-size="30" fill="#121317">PAGE COMPOSITION</text>
+
+    <rect x="310" y="420" width="780" height="92" rx="24" fill="#d9e9ff" stroke="#9abce8" stroke-width="2"/>
+    <text x="700" y="476" font-size="30" fill="#12345a">PROJECT PATTERNS</text>
+
+    <rect x="360" y="550" width="680" height="92" rx="24" fill="#eef1f5" stroke="#cfd6df" stroke-width="2"/>
+    <text x="700" y="606" font-size="30" fill="#121317">COMPONENTS + LAYOUTS</text>
+
+    <rect x="410" y="680" width="580" height="70" rx="22" fill="#121317"/>
+    <text x="700" y="724" font-size="26" fill="#ffffff">HTML + OPTIONAL BEHAVIOR</text>
+  </g>
+  <g stroke="#6d7785" stroke-width="4" fill="none" stroke-linecap="round">
+    <path d="M700 252v38"/>
+    <path d="M700 382v38"/>
+    <path d="M700 512v38"/>
+    <path d="M700 642v38"/>
+  </g>
+  <g fill="#6d7785">
+    <path d="M692 282l8 12 8-12z"/>
+    <path d="M692 412l8 12 8-12z"/>
+    <path d="M692 542l8 12 8-12z"/>
+    <path d="M692 672l8 12 8-12z"/>
+  </g>
+  <g font-family="Arial, sans-serif" font-size="22" fill="#677281">
+    <text x="110" y="845">FOLIO X / ASTRO ARCHITECTURE</text>
+    <text x="1120" y="845" text-anchor="end">OWNERSHIP → CONTRACTS → RENDERING</text>
+  </g>
+</svg>
