@@ -4,10 +4,12 @@ import CGridItem from "@/components/object/component/CGridItem.astro";
 import CTOC from "@/components/object/component/CTOC.astro";
 import ArticleFlow from "@/components/object/project/article/templates/ArticleFlow.astro";
 import ArticleGrouped from "@/components/object/project/article/templates/ArticleGrouped.astro";
+import ArticleRichText from "@/components/object/project/article/templates/ArticleRichText.astro";
 import type {
 	PArticleFlowProps,
 	PArticleGroupedProps,
 	PArticleProps,
+	PArticleRichTextProps,
 } from "@/types/components/object/project/article/PArticle.types";
 
 const props = Astro.props as PArticleProps;
@@ -18,31 +20,33 @@ const tocPosition = toc?.position ?? "end";
 <CColumns columns={toc ? "twelve" : "one"} gap="xl">
 	{toc && tocPosition === "start" && (
 		<CGridItem as="aside" lgSpan={3}>
-		<CTOC
-			label={toc.label}
-			items={toc.items}
-			appearance={toc.appearance}
-			sticky={toc.sticky}
-		/>
+			<CTOC
+				label={toc.label}
+				items={toc.items}
+				appearance={toc.appearance}
+				sticky={toc.sticky}
+			/>
 		</CGridItem>
 	)}
 
 	<CGridItem lgSpan={toc ? 9 : "full"}>
-	{props.template === "flow" ? (
-		<ArticleFlow {...props as PArticleFlowProps} />
-	) : (
-		<ArticleGrouped {...props as PArticleGroupedProps} />
-	)}
+		{props.template === "flow" ? (
+			<ArticleFlow {...props as PArticleFlowProps} />
+		) : props.template === "rich-text" ? (
+			<ArticleRichText {...props as PArticleRichTextProps} />
+		) : (
+			<ArticleGrouped {...props as PArticleGroupedProps} />
+		)}
 	</CGridItem>
 
 	{toc && tocPosition === "end" && (
 		<CGridItem as="aside" lgSpan={3}>
-		<CTOC
-			label={toc.label}
-			items={toc.items}
-			appearance={toc.appearance}
-			sticky={toc.sticky}
-		/>
+			<CTOC
+				label={toc.label}
+				items={toc.items}
+				appearance={toc.appearance}
+				sticky={toc.sticky}
+			/>
 		</CGridItem>
 	)}
 </CColumns>

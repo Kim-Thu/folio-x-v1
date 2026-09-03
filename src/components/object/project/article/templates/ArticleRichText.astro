@@ -1,0 +1,10 @@
+---
+import type { PArticleRichTextProps } from "@/types/components/object/project/article/PArticle.types";
+import { articleRichTextClasses } from "@/variants/components/object/project/article/PArticle.variants";
+
+const { content: Content } = Astro.props as PArticleRichTextProps;
+---
+
+<article class={articleRichTextClasses}>
+	<Content />
+</article>

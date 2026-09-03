@@ -1,4 +1,4 @@
-import { getBlogDetailSettings, getInsights } from "@/data/cms";
+import { getBlogDetailSettings, getInsightEntry, getInsights } from "@/data/cms";
 import type { PageRegion } from "@/types/components/object/project/page/PageRegion.types";
 import type { InsightDetailPageData } from "@/types/components/pages/insight-detail/InsightDetailPage.types";
 import type { PPageHeaderEditorialData } from "@/types/components/object/project/page-header/PPageHeader.types";
@@ -7,6 +7,7 @@ import type {
 	InsightCardPresentation,
 } from "@/types/components/object/component/card/CCard.types";
 import type { PCardProps } from "@/types/components/object/project/card/PCard.types";
+import { render } from "astro:content";
 
 export async function getInsightDetailPaths() {
 	const insights = await getInsights();
@@ -19,13 +20,15 @@ export async function getInsightDetailPaths() {
 export async function getInsightDetailPageData(
 	slug: string,
 ): Promise<InsightDetailPageData> {
-	const [insights, presentation] = await Promise.all([
+	const [insights, presentation, entry] = await Promise.all([
 		getInsights(),
 		getBlogDetailSettings(),
+		getInsightEntry(slug),
 	]);
 	const post = insights.find((insight) => insight.slug === slug);
 	if (!post) throw new Error(`Unknown insight slug: ${slug}`);
 
+	const { Content, headings } = await render(entry);
 	const relatedPosts = insights
 		.filter((insight) => insight.slug !== slug)
 		.sort((a, b) => {
@@ -90,9 +93,9 @@ export async function getInsightDetailPageData(
 		},
 	};
 
-	const tocItems = post.content
-		.filter((node) => node.type === "heading")
-		.map((node) => ({ label: node.text, href: `#${node.id}` }));
+	const tocItems = headings
+		.filter((heading) => heading.depth === 2 || heading.depth === 3)
+		.map((heading) => ({ label: heading.text, href: `#${heading.slug}` }));
 
 	const relatedPresentation: InsightCardPresentation = {
 		routes: header.routes,
@@ -198,7 +201,7 @@ export async function getInsightDetailPageData(
 			section: false,
 			props: {
 				template: presentation.content.template,
-				content: post.content,
+				content: Content,
 			},
 		},
 	];

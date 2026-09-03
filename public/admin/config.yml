@@ -1641,8 +1641,8 @@ collections:
     label_singular: Blog post
     folder: src/content/blog
     create: true
-    extension: json
-    format: json
+    extension: md
+    format: frontmatter
     slug: "{{slug}}"
     identifier_field: slug
     summary: "{{title}} — {{category}}"
@@ -1660,37 +1660,9 @@ collections:
       - { label: Excerpt, name: excerpt, widget: text }
       - { label: Published at, name: publishedAt, widget: datetime, date_format: YYYY-MM-DD, time_format: false, format: YYYY-MM-DD }
       - { label: Author, name: author, widget: string }
-      - { label: Image URL, name: image, widget: string }
+      - { label: Cover image, name: image, widget: image }
       - { label: Image alt, name: imageAlt, widget: string }
-      - label: Content
-        name: content
-        widget: list
-        summary: "{{fields.type}} — {{fields.text}}"
-        types:
-          - label: Heading
-            name: heading
-            widget: object
-            fields:
-              - { label: Type, name: type, widget: hidden, default: heading }
-              - { label: ID, name: id, widget: string }
-              - { label: Level, name: level, widget: select, options: [2, 3] }
-              - { label: Text, name: text, widget: string }
-          - label: Paragraph
-            name: paragraph
-            widget: object
-            fields:
-              - { label: Type, name: type, widget: hidden, default: paragraph }
-              - { label: Text, name: text, widget: text }
-          - label: Image
-            name: image
-            widget: object
-            fields:
-              - { label: Type, name: type, widget: hidden, default: image }
-              - label: Image
-                name: image
-                widget: object
-                fields: *image_fields
-
+      - { label: Content, name: body, widget: markdown }
 
   - name: comics
     label: Comics

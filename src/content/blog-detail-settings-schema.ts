@@ -90,7 +90,7 @@ export const blogDetailSettingsSchema = z.object({
     }),
   }),
   content: z.object({
-    template: z.literal("flow"),
+    template: z.literal("rich-text"),
     columns: columnsSchema,
   }),
 });
