@@ -1,3 +1,5 @@
+import type { ComponentInstance } from "astro";
+
 import type { CImageData } from "@/types/components/object/component/CImage.types";
 import type { CFeatureData } from "@/types/components/object/component/CFeature.types";
 import type { CContentFlowItem } from "@/types/components/object/component/CContentFlow.types";
@@ -29,4 +31,13 @@ export interface PArticleFlowProps {
 	toc?: PArticleToc;
 }
 
-export type PArticleProps = PArticleGroupedProps | PArticleFlowProps;
+export interface PArticleRichTextProps {
+	content: ComponentInstance["default"];
+	template: "rich-text";
+	toc?: PArticleToc;
+}
+
+export type PArticleProps =
+	| PArticleGroupedProps
+	| PArticleFlowProps
+	| PArticleRichTextProps;
