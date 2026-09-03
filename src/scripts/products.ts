@@ -40,10 +40,6 @@ function initProductsRoot(root: HTMLElement): void {
 		className.includes("grid-cols-"),
 	);
 
-	const cardData = (card: HTMLElement): HTMLElement =>
-		card.querySelector<HTMLElement>("[data-card-view='grid'] [data-product-card]") ??
-		card;
-
 	const selectedCategory = (): string =>
 		root.querySelector<HTMLInputElement>(
 			'input[name="product-category"]:checked',
@@ -153,13 +149,6 @@ function initProductsRoot(root: HTMLElement): void {
 			grid.classList.remove("grid-cols-1");
 		}
 
-		cards.forEach((card) => {
-			const gridCard = card.querySelector<HTMLElement>("[data-card-view='grid']");
-			const listCard = card.querySelector<HTMLElement>("[data-card-view='list']");
-			if (gridCard) gridCard.hidden = view !== "grid";
-			if (listCard) listCard.hidden = view !== "list";
-		});
-
 		grid.dataset.view = view;
 	};
 
@@ -181,7 +170,7 @@ function initProductsRoot(root: HTMLElement): void {
 		const maxPrice = range ? Number(range.value) : Number.POSITIVE_INFINITY;
 
 		const visible = cards.filter((card) => {
-			const data = cardData(card).dataset;
+			const data = card.dataset;
 			const matchesTerm = !term || (data.title ?? "").includes(term);
 			const matchesCategory =
 				category === "all" || data.filterCategory === category;
@@ -207,8 +196,8 @@ function initProductsRoot(root: HTMLElement): void {
 
 		const sort = sortSelect?.value;
 		visible.sort((first, second) => {
-			const firstData = cardData(first).dataset;
-			const secondData = cardData(second).dataset;
+			const firstData = first.dataset;
+			const secondData = second.dataset;
 
 			if (sort === "price-low") {
 				return Number(firstData.price) - Number(secondData.price);
@@ -365,13 +354,7 @@ function initProductsRoot(root: HTMLElement): void {
 		.forEach((button) => {
 			button.addEventListener("click", () => {
 				const active = button.getAttribute("aria-pressed") === "true";
-				const item = button.closest<HTMLElement>("[data-product-item]");
-				const nextValue = String(!active);
-				(item ?? root)
-					.querySelectorAll<HTMLButtonElement>("[data-cart-button]")
-					.forEach((cartButton) => {
-						cartButton.setAttribute("aria-pressed", nextValue);
-					});
+				button.setAttribute("aria-pressed", String(!active));
 			});
 		});
 
