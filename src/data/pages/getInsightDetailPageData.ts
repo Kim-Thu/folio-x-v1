@@ -7,7 +7,54 @@ import type {
 	InsightCardPresentation,
 } from "@/types/components/object/component/card/CCard.types";
 import type { PCardProps } from "@/types/components/object/project/card/PCard.types";
-import { render } from "astro:content";
+
+function decodeHeadingText(value: string): string {
+	return value
+		.replace(/<[^>]+>/g, "")
+		.replace(/&amp;/g, "&")
+		.replace(/&lt;/g, "<")
+		.replace(/&gt;/g, ">")
+		.replace(/&quot;/g, '"')
+		.replace(/&#39;/g, "'")
+		.trim();
+}
+
+function createHeadingSlug(value: string): string {
+	return value
+		.normalize("NFD")
+		.replace(/[\u0300-\u036f]/g, "")
+		.toLowerCase()
+		.replace(/[^a-z0-9]+/g, "-")
+		.replace(/^-+|-+$/g, "") || "section";
+}
+
+function normalizeArticleContent(source: string): {
+	content: string;
+	tocItems: Array<{ label: string; href: string }>;
+} {
+	const usedIds = new Map<string, number>();
+	const tocItems: Array<{ label: string; href: string }> = [];
+
+	const content = source.replace(
+		/<h([23])([^>]*)>([\s\S]*?)<\/h\1>/gi,
+		(_match, level: string, rawAttributes: string, innerHtml: string) => {
+			const label = decodeHeadingText(innerHtml);
+			const existingId = rawAttributes.match(/\sid=(?:"([^"]+)"|'([^']+)')/i)?.slice(1).find(Boolean);
+			const baseId = existingId || createHeadingSlug(label);
+			const seen = usedIds.get(baseId) ?? 0;
+			usedIds.set(baseId, seen + 1);
+			const id = seen === 0 ? baseId : `${baseId}-${seen + 1}`;
+			const attributes = existingId
+				? rawAttributes.replace(/\sid=(?:"[^"]+"|'[^']+')/i, ` id="${id}"`)
+				: `${rawAttributes} id="${id}"`;
+
+			tocItems.push({ label, href: `#${id}` });
+			return `<h${level}${attributes}>${innerHtml}</h${level}>`;
+		},
+	);
+
+	return { content, tocItems };
+}
 
 export async function getInsightDetailPaths() {
 	const insights = await getInsights();
@@ -28,7 +75,7 @@ export async function getInsightDetailPageData(
 	const post = insights.find((insight) => insight.slug === slug);
 	if (!post) throw new Error(`Unknown insight slug: ${slug}`);
 
-	const { Content, headings } = await render(entry);
+	const { content, tocItems } = normalizeArticleContent(entry.data.content);
 	const relatedPosts = insights
 		.filter((insight) => insight.slug !== slug)
 		.sort((a, b) => {
@@ -93,9 +140,6 @@ export async function getInsightDetailPageData(
 		},
 	};
 
-	const tocItems = headings
-		.filter((heading) => heading.depth === 2 || heading.depth === 3)
-		.map((heading) => ({ label: heading.text, href: `#${heading.slug}` }));
 
 	const relatedPresentation: InsightCardPresentation = {
 		routes: header.routes,
@@ -201,7 +245,7 @@ export async function getInsightDetailPageData(
 			section: false,
 			props: {
 				template: presentation.content.template,
-				content: Content,
+				content,
 			},
 		},
 	];

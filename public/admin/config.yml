@@ -1641,8 +1641,8 @@ collections:
     label_singular: Blog post
     folder: src/content/blog
     create: true
-    extension: md
-    format: frontmatter
+    extension: json
+    format: json
     slug: "{{slug}}"
     identifier_field: slug
     summary: "{{title}} — {{category}}"
@@ -1662,7 +1662,7 @@ collections:
       - { label: Author, name: author, widget: string }
       - { label: Cover image, name: image, widget: image }
       - { label: Image alt, name: imageAlt, widget: string }
-      - { label: Content, name: body, widget: markdown }
+      - { label: Content, name: content, widget: text }
 
   - name: comics
     label: Comics
