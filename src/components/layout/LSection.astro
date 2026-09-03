@@ -28,7 +28,7 @@ const classes = cn(
 const contentClasses = sectionContentSpacingClasses[spacing];
 ---
 
-<section {...attributes} class={classes}>
+<section {...attributes} class={classes} data-reveal>
 	{container === "none" ? (
 		contentClasses ? (
 			<div class={contentClasses}>

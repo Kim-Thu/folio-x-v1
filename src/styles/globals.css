@@ -34,6 +34,27 @@ summary {
     --progress-value:0;
 }
 
+html[data-reveal-ready="true"] [data-reveal],
+html[data-reveal-ready="true"] [data-reveal-group] > * {
+    opacity:0;
+    transform:translate3d(0, 1rem, 0);
+    transition-property:opacity, transform;
+    transition-duration:var(--duration-reveal);
+    transition-timing-function:var(--ease-reveal);
+}
+
+html[data-reveal-ready="true"] [data-reveal][data-visible="true"],
+html[data-reveal-ready="true"] [data-reveal-group][data-visible="true"] > * {
+    opacity:1;
+    transform:translate3d(0, 0, 0);
+}
+
+html[data-reveal-ready="true"] [data-reveal-group][data-visible="true"] > :nth-child(2) { transition-delay:40ms; }
+html[data-reveal-ready="true"] [data-reveal-group][data-visible="true"] > :nth-child(3) { transition-delay:80ms; }
+html[data-reveal-ready="true"] [data-reveal-group][data-visible="true"] > :nth-child(4) { transition-delay:120ms; }
+html[data-reveal-ready="true"] [data-reveal-group][data-visible="true"] > :nth-child(5) { transition-delay:160ms; }
+html[data-reveal-ready="true"] [data-reveal-group][data-visible="true"] > :nth-child(n+6) { transition-delay:200ms; }
+
 @media (prefers-reduced-motion: reduce) {
     html {
         scroll-behavior:auto;
@@ -45,5 +66,12 @@ summary {
         animation-duration:0.01ms !important;
         animation-iteration-count:1 !important;
         transition-duration:0.01ms !important;
+    }
+
+    html[data-reveal-ready="true"] [data-reveal],
+    html[data-reveal-ready="true"] [data-reveal-group] > * {
+        opacity:1;
+        transform:none;
+        transition-delay:0ms;
     }
 }

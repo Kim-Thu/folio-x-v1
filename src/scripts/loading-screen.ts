@@ -4,6 +4,8 @@ const FADE_FALLBACK_DURATION = 600;
 const INITIAL_PROGRESS_LIMIT = 92;
 const LAST_TIP_STORAGE_KEY = "loading-screen:last-tip";
 
+export const LOADING_SCREEN_COMPLETE_EVENT = "loading-screen:complete";
+
 function selectRandomTip(tips: string[]): string | undefined {
 	if (tips.length === 0) return undefined;
 
@@ -57,6 +59,7 @@ export function initLoadingScreen(): void {
 		hasCleanedUp = true;
 		documentRoot.classList.remove("overflow-hidden");
 		screen.remove();
+		window.dispatchEvent(new Event(LOADING_SCREEN_COMPLETE_EVENT));
 	};
 
 	const renderValue = (value: number): void => {
