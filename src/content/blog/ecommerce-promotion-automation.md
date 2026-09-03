@@ -103,7 +103,7 @@ The following diagram stays deliberately at the level supported by the productio
 
 The same structure in Mermaid source is:
 
-```mermaid
+```
 mindmap
   root((Promotion setup))
     Before
