@@ -1,7 +1,11 @@
+import type { render } from "astro:content";
+
 import type { CImageData } from "@/types/components/object/component/CImage.types";
 import type { CFeatureData } from "@/types/components/object/component/CFeature.types";
 import type { CContentFlowItem } from "@/types/components/object/component/CContentFlow.types";
 import type { CTOCProps } from "@/types/components/object/component/CTOC.types";
+
+type RenderedMarkdownContent = Awaited<ReturnType<typeof render>>["Content"];
 
 export interface PArticleBlock {
 	id: string;
@@ -30,7 +34,7 @@ export interface PArticleFlowProps {
 }
 
 export interface PArticleRichTextProps {
-	content: unknown;
+	content: RenderedMarkdownContent;
 	template: "rich-text";
 	toc?: PArticleToc;
 }
