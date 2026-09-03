@@ -101,30 +101,7 @@ The following diagram stays deliberately at the level supported by the productio
 
 ![Mindmap showing repeated multi-store promotion setup, a centralized promotion module with validation and access control, Odoo and REST API integration context, and Marketing publishing in about fifteen minutes](/uploads/ecommerce-promotion-automation-mindmap.svg)
 
-The same structure in Mermaid source is:
-
-```
-mindmap
-  root((Promotion setup))
-    Before
-      Multiple storefronts
-      Repeated campaign entry
-      About 8 hours
-    Centralized module
-      Administration tool
-      Validation
-      Access control
-    System context
-      Odoo ERP
-      REST APIs
-      Stock, prices, promotions, orders
-    After
-      Marketing can publish
-      Centralized workflow
-      About 15 minutes
-```
-
-I keep the Mermaid source in the article because it describes the idea more clearly than invented implementation diagrams would. The rendered visual is a static SVG, so the page does not need to load a Mermaid runtime just to display one diagram.
+The diagram is generated from a Mermaid mindmap source recorded with this implementation. It keeps the visual explanation in the article without adding Mermaid as a runtime dependency or introducing inline syntax-highlighting styles into the generated page.
 
 ## The engineering decisions behind the result
 
