@@ -30,7 +30,7 @@ export interface PArticleFlowProps {
 }
 
 export interface PArticleRichTextProps {
-	content: any;
+	content: unknown;
 	template: "rich-text";
 	toc?: PArticleToc;
 }
