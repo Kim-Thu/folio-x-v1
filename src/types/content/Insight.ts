@@ -1,26 +1,5 @@
 import type { TaxonomyTerm } from "@/types/content/TaxonomyTerm";
 
-export type InsightContentNode =
-  | {
-      type: "heading";
-      id: string;
-      level: 2 | 3;
-      text: string;
-    }
-  | {
-      type: "paragraph";
-      text: string;
-    }
-  | {
-      type: "image";
-      image: {
-        src: string;
-        alt: string;
-        width: number;
-        height: number;
-      };
-    };
-
 export interface Insight {
   index: string;
   slug: string;
@@ -37,5 +16,4 @@ export interface Insight {
   author: string;
   image: string;
   imageAlt: string;
-  content: InsightContentNode[];
 }
