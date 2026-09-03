@@ -1,0 +1,62 @@
+name: Refresh CMS dependency lock
+
+on:
+  push:
+    branches:
+      - chore/101-cms-dev-dependencies
+
+permissions:
+  contents: write
+
+jobs:
+  refresh:
+    if: github.actor != 'github-actions[bot]'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          ref: chore/101-cms-dev-dependencies
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22.12.0
+          cache: npm
+
+      - name: Refresh CMS dependency lock
+        run: |
+          npm install --save-dev --package-lock-only decap-server@3.11.0
+          npm update fast-uri --package-lock-only
+
+      - name: Verify patched dependency
+        run: npm ls decap-server fast-uri
+
+      - name: Install from refreshed lockfile
+        run: npm ci
+
+      - name: Verify full audit
+        run: npm audit --audit-level=high
+
+      - name: Verify Astro build
+        run: npm run build
+
+      - name: Verify local CMS starts
+        shell: bash
+        run: |
+          set +e
+          timeout 5s npm run cms
+          status=$?
+          set -e
+          if [ "$status" -ne 124 ]; then
+            exit "$status"
+          fi
+
+      - name: Commit regenerated lockfile
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add package.json package-lock.json
+          git diff --cached --exit-code && exit 0
+          git commit -m "chore: upgrade local CMS dev dependencies"
+          git push origin HEAD:chore/101-cms-dev-dependencies
