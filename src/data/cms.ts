@@ -84,6 +84,14 @@ export async function getLabs(): Promise<Lab[]> {
 		.map(({ data }) => ({ ...data, href: `/labs/${data.slug}` }));
 }
 
+export async function getInsightEntry(slug: string): Promise<CollectionEntry<"blog">> {
+	const entries = await getCollection("blog");
+	const entry = entries.find(({ data }) => data.slug === slug);
+	if (!entry) throw new Error(`Unknown insight slug: ${slug}`);
+	assertEntrySlug(entry.id, entry.data.slug, "blog post");
+	return entry;
+}
+
 export async function getInsights(): Promise<Insight[]> {
 	const [entries, interfaceSettings] = await Promise.all([
 		getCollection("blog"),
@@ -123,7 +131,7 @@ export async function getPublications(collection: "comics" | "novels"): Promise<
 }
 
 function assertEntrySlug(id: string, slug: string, contentType: string): void {
-	const fileSlug = id.replace(/\.json$/, "").split("/").pop() ?? id;
+	const fileSlug = id.replace(/\.(json|md|mdx)$/, "").split("/").pop() ?? id;
 	if (fileSlug !== slug) {
 		throw new Error(`CMS ${contentType} slug "${slug}" must match its filename "${fileSlug}"`);
 	}
