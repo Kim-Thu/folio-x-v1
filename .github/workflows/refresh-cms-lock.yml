@@ -29,11 +29,11 @@ jobs:
           npm install --save-dev --package-lock-only decap-server@3.11.0
           npm update fast-uri --package-lock-only
 
-      - name: Verify patched dependency
-        run: npm ls decap-server fast-uri
-
       - name: Install from refreshed lockfile
         run: npm ci
+
+      - name: Verify patched dependency
+        run: npm ls decap-server fast-uri
 
       - name: Verify full audit
         run: npm audit --audit-level=high
